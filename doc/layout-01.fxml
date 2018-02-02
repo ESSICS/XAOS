@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="769.0" prefWidth="1059.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+      <StackPane BorderPane.alignment="CENTER">
+         <children>
+            <ToolBar prefHeight="40.0" />
+            <BorderPane>
+               <left>
+                  <HBox alignment="CENTER_LEFT" spacing="4.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <ToggleButton contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" mnemonicParsing="false" selected="true" style="-fx-padding: 4.3;">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+                                    <Image url="@left.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </ToggleButton>
+                        <ToggleButton contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" mnemonicParsing="false" selected="true" style="-fx-padding: 4.3;">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+                                    <Image url="@bottom.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </ToggleButton>
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets left="4.0" right="4.0" />
+                     </padding>
+                  </HBox>
+               </left>
+               <center>
+                  <HBox alignment="CENTER" spacing="4.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Button mnemonicParsing="false" text="Button" />
+                        <Button mnemonicParsing="false" text="Button" />
+                        <Button mnemonicParsing="false" text="Button" />
+                     </children>
+                     <padding>
+                        <Insets left="4.0" right="4.0" />
+                     </padding>
+                  </HBox>
+               </center>
+               <right>
+                  <HBox alignment="CENTER_RIGHT" spacing="4.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <ToggleButton contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" mnemonicParsing="false" selected="true" style="-fx-padding: 4.3;">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+                                    <Image url="@right.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </ToggleButton>
+                     </children>
+                     <padding>
+                        <Insets left="4.0" right="4.0" />
+                     </padding>
+                  </HBox>
+               </right>
+            </BorderPane>
+         </children>
+      </StackPane>
+   </top>
+   <center>
+      <SplitPane dividerPositions="0.2, 0.8" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <items>
+            <StackPane>
+               <children>
+                  <SplitPane dividerPositions="0.6" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+                    <items>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                           <children>
+                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="67.0" layoutY="198.0" text="left-bottom" />
+                           </children>
+                        </AnchorPane>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                           <children>
+                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="79.0" layoutY="129.0" text="left-top" />
+                           </children>
+                        </AnchorPane>
+                    </items>
+                  </SplitPane>
+               </children>
+            </StackPane>
+            <StackPane>
+               <children>
+                  <SplitPane dividerPositions="0.8" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+                    <items>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                           <children>
+                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="298.0" layoutY="268.0" text="main" />
+                           </children>
+                        </AnchorPane>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                           <children>
+                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="268.0" layoutY="59.0" text="center-bottom" />
+                           </children>
+                        </AnchorPane>
+                    </items>
+                  </SplitPane>
+               </children>
+            </StackPane>
+            <StackPane>
+               <children>
+                  <SplitPane dividerPositions="0.6" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+                    <items>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                           <children>
+                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="75.0" layoutY="198.0" text="right-top" />
+                           </children>
+                        </AnchorPane>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                           <children>
+                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="63.0" layoutY="129.0" text="right-bottom" />
+                           </children>
+                        </AnchorPane>
+                    </items>
+                  </SplitPane>
+               </children>
+            </StackPane>
+        </items>
+      </SplitPane>
+   </center>
+   <bottom>
+      <StackPane BorderPane.alignment="CENTER">
+         <children>
+            <ToolBar prefHeight="30.0" />
+            <BorderPane>
+               <center>
+                  <HBox alignment="CENTER_LEFT" spacing="4.0" BorderPane.alignment="CENTER">
+                     <padding>
+                        <Insets left="4.0" right="4.0" />
+                     </padding>
+                     <children>
+                        <Label text="Status Bar Messages" />
+                     </children>
+                  </HBox>
+               </center>
+               <right>
+                  <HBox alignment="CENTER_RIGHT" spacing="4.0" BorderPane.alignment="CENTER">
+                     <padding>
+                        <Insets left="4.0" right="4.0" />
+                     </padding>
+                     <children>
+                        <Separator orientation="VERTICAL" />
+                        <Label text="Status Bar States" />
+                     </children>
+                  </HBox>
+               </right>
+            </BorderPane>
+         </children>
+      </StackPane>
+   </bottom>
+</BorderPane>

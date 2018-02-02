@@ -4,3 +4,8 @@
 
 A JavaFX application framework based on [JacpFX](http://jacpfx.org) (Java Asynchronous Client Platform) made initially to create accelerator physics applications based on [Open XAL](https://github.com/openxal/openxal), an open source development environment used for creating accelerator physics applications, scripts and services.
 
+## Application Layout
+
+
+
+
