@@ -6,6 +6,7 @@ A JavaFX application framework based on [JacpFX](http://jacpfx.org) (Java Asynch
 
 ## Application Layout
 
+The framework will allow applications having the following generic layout.
 
-
+![layout-01](https://github.com/ESSICS/APPLICATION-FRAMEWORK/blob/master/doc/layout-01.png)
 
