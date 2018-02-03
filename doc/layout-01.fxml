@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
@@ -12,77 +11,47 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="769.0" prefWidth="1059.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="769.0" prefWidth="1059.0" stylesheets="@layout.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
    <top>
-      <StackPane BorderPane.alignment="CENTER">
-         <children>
-            <ToolBar prefHeight="40.0" />
-            <BorderPane>
-               <left>
-                  <HBox alignment="CENTER_LEFT" spacing="4.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <ToggleButton contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" mnemonicParsing="false" selected="true" style="-fx-padding: 4.3;">
-                           <graphic>
-                              <ImageView>
-                                 <image>
-                                    <Image url="@left.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </ToggleButton>
-                        <ToggleButton contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" mnemonicParsing="false" selected="true" style="-fx-padding: 4.3;">
-                           <graphic>
-                              <ImageView>
-                                 <image>
-                                    <Image url="@bottom.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </ToggleButton>
-                     </children>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <padding>
-                        <Insets left="4.0" right="4.0" />
-                     </padding>
-                  </HBox>
-               </left>
-               <center>
-                  <HBox alignment="CENTER" spacing="4.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <Button mnemonicParsing="false" text="Button" />
-                        <Button mnemonicParsing="false" text="Button" />
-                        <Button mnemonicParsing="false" text="Button" />
-                     </children>
-                     <padding>
-                        <Insets left="4.0" right="4.0" />
-                     </padding>
-                  </HBox>
-               </center>
-               <right>
-                  <HBox alignment="CENTER_RIGHT" spacing="4.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <ToggleButton contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" mnemonicParsing="false" selected="true" style="-fx-padding: 4.3;">
-                           <graphic>
-                              <ImageView>
-                                 <image>
-                                    <Image url="@right.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </ToggleButton>
-                     </children>
-                     <padding>
-                        <Insets left="4.0" right="4.0" />
-                     </padding>
-                  </HBox>
-               </right>
-            </BorderPane>
-         </children>
-      </StackPane>
+      <ToolBar prefHeight="40.0">
+         <items>
+            <ToggleButton contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" mnemonicParsing="false" selected="true" style="-fx-padding: 4.3;">
+               <graphic>
+                  <ImageView>
+                     <image>
+                        <Image url="@left.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </ToggleButton>
+            <ToggleButton contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" mnemonicParsing="false" selected="true" style="-fx-padding: 4.3;">
+               <graphic>
+                  <ImageView>
+                     <image>
+                        <Image url="@bottom.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </ToggleButton>
+            <Pane HBox.hgrow="ALWAYS" />
+            <Button mnemonicParsing="false" text="Button" />
+            <Button mnemonicParsing="false" text="Button" />
+            <Button mnemonicParsing="false" text="Button" />
+            <Pane HBox.hgrow="ALWAYS" />
+            <ToggleButton contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" mnemonicParsing="false" selected="true" style="-fx-padding: 4.3;">
+               <graphic>
+                  <ImageView>
+                     <image>
+                        <Image url="@right.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </ToggleButton>
+         </items>
+      </ToolBar>
    </top>
    <center>
       <SplitPane dividerPositions="0.2, 0.8" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -145,33 +114,13 @@
       </SplitPane>
    </center>
    <bottom>
-      <StackPane BorderPane.alignment="CENTER">
-         <children>
-            <ToolBar prefHeight="30.0" />
-            <BorderPane>
-               <center>
-                  <HBox alignment="CENTER_LEFT" spacing="4.0" BorderPane.alignment="CENTER">
-                     <padding>
-                        <Insets left="4.0" right="4.0" />
-                     </padding>
-                     <children>
-                        <Label text="Status Bar Messages" />
-                     </children>
-                  </HBox>
-               </center>
-               <right>
-                  <HBox alignment="CENTER_RIGHT" spacing="4.0" BorderPane.alignment="CENTER">
-                     <padding>
-                        <Insets left="4.0" right="4.0" />
-                     </padding>
-                     <children>
-                        <Separator orientation="VERTICAL" />
-                        <Label text="Status Bar States" />
-                     </children>
-                  </HBox>
-               </right>
-            </BorderPane>
-         </children>
-      </StackPane>
+      <ToolBar prefHeight="30.0">
+         <items>
+            <Label text="Status Bar Messages" />
+            <Pane HBox.hgrow="ALWAYS" />
+            <Separator orientation="VERTICAL" />
+            <Label text="Status Bar States" />
+         </items>
+      </ToolBar>
    </bottom>
 </BorderPane>
