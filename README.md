@@ -24,7 +24,7 @@ The framework will allow applications having a generic layout with the following
   where the application can register content to be displayed. Is some of the views are not used then
   will not be displayed. When displayed, the splitters will allow to resize them.
   
-- THe main view area used by the application to display its main content.
+- The main view area used by the application to display its main content.
 
 ![layout-01](https://github.com/ESSICS/APPLICATION-FRAMEWORK/blob/master/doc/layout-01.png)
 
