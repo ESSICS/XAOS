@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Circle?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="769.0" prefWidth="1059.0" stylesheets="@layout.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
    <top>
@@ -103,7 +104,7 @@
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                            <children>
-                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="72.0" layoutY="129.0" text="properties" />
+                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="41.0" layoutY="129.0" text="properties/inspector" />
                            </children>
                         </AnchorPane>
                     </items>
@@ -114,11 +115,17 @@
       </SplitPane>
    </center>
    <bottom>
-      <ToolBar prefHeight="30.0">
+      <ToolBar maxHeight="30.0" prefHeight="30.0">
          <items>
             <Label text="Status Bar Messages" />
             <Pane HBox.hgrow="ALWAYS" />
             <Separator orientation="VERTICAL" />
+            <StackPane>
+               <children>
+                  <Circle fill="#21ff94" radius="10.0" stroke="#1bbc38" strokeType="INSIDE" strokeWidth="0.5" />
+                  <Label alignment="CENTER" contentDisplay="TEXT_ONLY" text="5" textAlignment="CENTER" StackPane.alignment="CENTER" />
+               </children>
+            </StackPane>
             <Label text="Status Bar States" />
          </items>
       </ToolBar>
