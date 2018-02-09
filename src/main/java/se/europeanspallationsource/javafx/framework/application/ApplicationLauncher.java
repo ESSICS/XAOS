@@ -29,6 +29,9 @@ import se.europeanspallationsource.javafx.framework.application.workbench.Applic
  */
 public class ApplicationLauncher extends JacpFXApplicationLauncher {
 
+    public ApplicationLauncher( ) {
+    }
+
     @Override
     protected final String[] getBasePackages() {
         return new String[] { "se.europeanspallationsource.javafx.framework.application.workbench" };
