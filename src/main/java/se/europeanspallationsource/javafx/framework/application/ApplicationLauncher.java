@@ -43,7 +43,7 @@ public class ApplicationLauncher extends JacpFXApplicationLauncher {
     }
 
     /**
-     * Will be executed after JavaFX initialisation. Current implementation is
+     * Will be executed after JavaFX initialization. Current implementation is
      * empty, and can be safely overridden.
      *
      * @param stage The JavaFX {@link Stage}.

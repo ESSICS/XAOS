@@ -28,8 +28,9 @@ import org.jacpfx.api.util.ToolbarPosition;
 import org.jacpfx.rcp.componentLayout.FXComponentLayout;
 import org.jacpfx.rcp.components.menuBar.JACPMenuBar;
 import org.jacpfx.rcp.workbench.FXWorkbench;
+import se.europeanspallationsource.javafx.framework.application.utilities.Bundles;
 
-import static se.europeanspallationsource.javafx.framework.application.workbench.Configuration.PERSPECTIVE_MAIN;
+import static se.europeanspallationsource.javafx.framework.application.workbench.Constants.PERSPECTIVE_MAIN;
 
 
 /**
@@ -63,7 +64,7 @@ public class ApplicationWorkbench implements FXWorkbench {
         final JACPMenuBar menu = layout.getMenu();
 
 //  TODO:CR menus should be loaded dynamically, using a service.
-        Menu fileMenu = new Menu(Bundles.getLanguage().getString("menubar.file"));
+        Menu fileMenu = new Menu(Bundles.getLocalizedStrings().getString("menubar.file"));
 
         menu.getMenus().addAll(fileMenu);
 

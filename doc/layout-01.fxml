@@ -68,7 +68,7 @@
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                            <children>
-                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="42.0" layoutY="129.0" text="navigation/overview" />
+                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="45.0" layoutY="129.0" text="navigator/overview" />
                            </children>
                         </AnchorPane>
                     </items>
@@ -86,7 +86,7 @@
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                            <children>
-                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="291.0" layoutY="60.0" text="console" />
+                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="258.0" layoutY="60.0" text="console/messages" />
                            </children>
                         </AnchorPane>
                     </items>
@@ -104,7 +104,7 @@
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                            <children>
-                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="41.0" layoutY="129.0" text="properties/inspector" />
+                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="41.0" layoutY="129.0" text="inspector/properties" />
                            </children>
                         </AnchorPane>
                     </items>

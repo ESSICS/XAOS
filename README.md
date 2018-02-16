@@ -21,18 +21,34 @@ The framework will allow applications having a generic layout with the following
   Moreover, if no application specific buttons are added, the whole toolbar will not be displayed.
 
 - A status bar in the bottom area, where status message and other informations are displayed.
-  The status bar can be omitter it the application doesn't need it.
+  The status bar can be omitted it the application doesn't need it.
 
-- Peripheral views (`browser`, `navigation/overview`, `console`, `properties`, and `palette`),
-  where the application can register content to be displayed. Is some of the views are not used then
+- Peripheral views (`browser`, `navigator/overview`, `console/messages`, `palette`, and `inspector/properties`),
+  where the application can register content to be displayed. If some of the views are not used then
   will not be displayed. When displayed, the splitters will allow to resize them.
 
-- The main view area used by the application to display its main content.
+- The `main` view area used by the application to display its main content.
 
 ![layout-01](https://github.com/ESSICS/APPLICATION-FRAMEWORK/blob/master/doc/layout-01.png)
 
 
-### Outer Views
+### Outer View Areas
+
+The complete application is made of 6 view areas, where the `main` one is always visible.
+
+A view areas is visible only if at least one view is registered. The only exception is
+the `main` area, where views can be added dynamically, and no initial view is required.
 
 
-### Main View
+#### Browser View Area
+
+The `browser` view should be used to navigate high-level structures in order to
+find elements to be opened in dedicated views inside the `main` area.
+
+#### Navigator/Overview View Area
+
+This view area should be used to navigate the content of _selected_
+entities, or display an overview of a more detailed zone displayed in
+the currently visible `main` view.
+
+### Main View Area

@@ -80,6 +80,9 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <docfilessubdirs/>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
