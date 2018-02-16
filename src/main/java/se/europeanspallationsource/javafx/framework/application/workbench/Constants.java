@@ -68,6 +68,8 @@ package se.europeanspallationsource.javafx.framework.application.workbench;
  * entities, or display an overview of a more detailed zone displayed in
  * the currently visible <i>main</i> view.
  *
+ * ...
+ *
  *
  * @author claudio.rosati@esss.se
  */

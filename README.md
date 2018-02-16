@@ -51,4 +51,6 @@ This view area should be used to navigate the content of _selected_
 entities, or display an overview of a more detailed zone displayed in
 the currently visible `main` view.
 
+...
+
 ### Main View Area
