@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.javafx.framework.application.utilities;
+package se.europeanspallationsource.framework.javafx.application.utilities;
 
 
 import java.text.MessageFormat;

@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.javafx.framework.application;
+package se.europeanspallationsource.framework.javafx.application;
 
 
 import javafx.stage.Stage;
 import org.jacpfx.minimal.launcher.JacpFXApplicationLauncher;
 import org.jacpfx.rcp.workbench.FXWorkbench;
-import se.europeanspallationsource.javafx.framework.application.workbench.ApplicationWorkbench;
+import se.europeanspallationsource.framework.javafx.application.workbench.ApplicationWorkbench;
 
 
 /**
@@ -34,7 +34,7 @@ public class ApplicationLauncher extends JacpFXApplicationLauncher {
 
     @Override
     protected final String[] getBasePackages() {
-        return new String[] { "se.europeanspallationsource.javafx.framework.application.workbench" };
+        return new String[] { "se.europeanspallationsource.framework.javafx.application.workbench" };
     }
 
     @Override
