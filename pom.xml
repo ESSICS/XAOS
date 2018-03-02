@@ -54,6 +54,19 @@
                 <configuration>
                     <showDeprecation>true</showDeprecation>
                 </configuration>
+				<executions>
+					<execution>
+						<id>default-compile</id>
+						<configuration>
+						    <compilerArgument>-proc:none</compilerArgument>
+						</configuration>
+					</execution>
+					<execution>
+						<id>default-testCompile</id>
+						<configuration>
+						</configuration>
+					</execution>
+				</executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
