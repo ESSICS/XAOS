@@ -16,6 +16,8 @@
 package se.europeanspallationsource.framework.annotation;
 
 
+import java.lang.annotation.Documented;
+import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.util.ServiceLoader;
@@ -47,6 +49,8 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
  * @author claudio.rosati@esss.se
  * @see <a href="http://bits.netbeans.org/8.1/javadoc/org-openide-util-lookup/overview-summary.html">NetBeans Lookup API</a>
  */
+@Documented
+@Repeatable(ServiceProviders.class)
 @Retention( SOURCE )
 @Target( TYPE )
 public @interface ServiceProvider {

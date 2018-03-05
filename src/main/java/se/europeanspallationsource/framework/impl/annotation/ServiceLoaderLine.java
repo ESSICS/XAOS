@@ -33,7 +33,7 @@ import java.util.SortedSet;
  * @see <a href="http://bits.netbeans.org/8.1/javadoc/org-openide-util-lookup/overview-summary.html">NetBeans Lookup API</a>
  */
 @SuppressWarnings( "ClassWithoutLogger" )
-public class ServiceLoaderLine implements Comparable<ServiceLoaderLine> {
+class ServiceLoaderLine implements Comparable<ServiceLoaderLine> {
 
 	static final String ORDER = "# end-of-order="; // NOI18N
 
