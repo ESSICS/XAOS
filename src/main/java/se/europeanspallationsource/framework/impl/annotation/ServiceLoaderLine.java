@@ -35,7 +35,7 @@ import java.util.SortedSet;
 @SuppressWarnings( "ClassWithoutLogger" )
 public class ServiceLoaderLine implements Comparable<ServiceLoaderLine> {
 
-	private static final String ORDER = "#order="; // NOI18N
+	static final String ORDER = "# end-of-order="; // NOI18N
 
 	@SuppressWarnings( "NestedAssignment" )
 	public static void parse( Reader r, SortedSet<ServiceLoaderLine> lines ) throws IOException {

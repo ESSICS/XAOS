@@ -162,6 +162,14 @@
 
     <dependencies>
 
+        <!-- Apache - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>4.1</version>
+            <scope>compile</scope>
+        </dependency>
+
         <!-- JacpFX - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
         <dependency>
             <groupId>org.jacpfx</groupId>

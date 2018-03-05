@@ -55,8 +55,9 @@ import javax.lang.model.util.ElementFilter;
 import javax.tools.FileObject;
 import javax.tools.StandardLocation;
 import se.europeanspallationsource.framework.annotation.ServiceProvider;
+import se.europeanspallationsource.framework.annotation.ServiceProviders;
 
-import static javax.lang.model.SourceVersion.RELEASE_7;
+import static javax.lang.model.SourceVersion.RELEASE_8;
 import static javax.lang.model.element.ElementKind.CLASS;
 import static javax.lang.model.element.ElementKind.PACKAGE;
 import static javax.lang.model.element.Modifier.ABSTRACT;
@@ -74,9 +75,10 @@ import static javax.tools.StandardLocation.SOURCE_PATH;
  * @author claudio.rosati@esss.se
  * @see <a href="http://bits.netbeans.org/8.1/javadoc/org-openide-util-lookup/overview-summary.html">NetBeans Lookup API</a>
  */
-@SupportedSourceVersion( RELEASE_7 )
+@SupportedSourceVersion( RELEASE_8 )
 @SupportedAnnotationTypes( {
-	"se.europeanspallationsource.framework.annotation.ServiceProvider"
+	"se.europeanspallationsource.framework.annotation.ServiceProvider",
+	"se.europeanspallationsource.framework.annotation.ServiceProviders"
 } )
 @SuppressWarnings( "ClassWithoutLogger" )
 public class ServiceProviderProcessor extends AbstractProcessor {
@@ -267,8 +269,20 @@ public class ServiceProviderProcessor extends AbstractProcessor {
 
 			ServiceProvider sp = el.getAnnotation(ServiceProvider.class);
 
-			if ( !( sp == null ) ) {
+			if ( sp != null ) {
 				register(el, ServiceProvider.class, sp);
+			}
+
+		});
+
+		roundEnv.getElementsAnnotatedWith(ServiceProviders.class).forEach(( el ) -> {
+
+			ServiceProviders spp = el.getAnnotation(ServiceProviders.class);
+
+			if ( spp != null ) {
+				for ( ServiceProvider sp : spp.value() ) {
+					register(el, ServiceProviders.class, sp);
+				}
 			}
 
 		});
