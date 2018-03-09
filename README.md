@@ -53,4 +53,40 @@ the currently visible `main` view.
 
 ...
 
+
 ### Main View Area
+
+## Tools and Utilities
+
+### Service Providers
+
+The _ServiceProvider_ annotation will simplify providing service implementations,
+taking care of publishing them in the proper file inside the META-INF/service
+folder.
+
+```java
+package my.module;
+import my.module.spi.SomeService;
+import se.europeanspallationsource.framework.annotation.ServiceProvider;
+
+@ServiceProvider(service=SomeService.class)
+public class MyService implements SomeService {
+  ...
+}
+```
+
+
+
+## Using APPLICATION-FRAMEWORK
+
+### Maven
+
+```maven
+<dependency>
+	<groupId>se.europeanspallationsource</groupId>
+	<artifactId>framework.javafx.application</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<scope>compile</scope>
+</dependency>
+```
+
