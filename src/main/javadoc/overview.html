@@ -109,6 +109,34 @@ limitations under the License.
             the currently visible <i>main</i> view.
         </p>
 
+		<h2>Tools and Utilities</h2>
+
+		<h3>Service Providers</h3>
+
+		<p>
+			The {@link se.europeanspallationsource.framework.annotation.ServiceProvider} 
+			annotation will simplify providing service implementations, taking care of
+			publishing them in the proper file inside the <code>META-INF/service</code>
+			folder.
+		</p>
+
+<pre>
+  package my.module;
+  import my.module.spi.SomeService;
+  import se.europeanspallationsource.framework.annotation.ServiceProvider;
+
+  &#64;ServiceProvider(service=SomeService.class)
+  public class MyService implements SomeService {
+    ...
+  }
+</pre>
+
+		<p>
+			Moreover, the {@link se.europeanspallationsource.framework.annotation.ServiceLoaderUtilities}
+			class will complement the {@link java.util.ServiceLoader} one with
+			few more methods.
+		</p>
+
     </body>
 
 </html>

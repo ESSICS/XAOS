@@ -61,7 +61,7 @@ the currently visible `main` view.
 ### Service Providers
 
 The _ServiceProvider_ annotation will simplify providing service implementations,
-taking care of publishing them in the proper file inside the META-INF/service
+taking care of publishing them in the proper file inside the `META-INF/service`
 folder.
 
 ```java
@@ -75,7 +75,8 @@ public class MyService implements SomeService {
 }
 ```
 
-
+Moreover, the _ServiceLoaderUtilities_ class will complement the
+`java.util.ServiceLoader` one with few more methods.
 
 ## Using APPLICATION-FRAMEWORK
 
