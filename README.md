@@ -1,4 +1,4 @@
-# XAOS (χάος -- the primordial state of existence)
+# XAOS (χάος — the primordial state of existence)
 
 [![Apache License](https://img.shields.io/badge/license-Apache%20License%202.0-yellow.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
