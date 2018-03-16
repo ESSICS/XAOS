@@ -51,12 +51,42 @@ This view area should be used to navigate the content of _selected_
 entities, or display an overview of a more detailed zone displayed in
 the currently visible `main` view.
 
-...
+
+#### Console/Messages View Area
+
+The `console` view should be used to display messages from the application to the users,
+mirroring, for example, the standard System.out and System.err streams.
+
+
+#### Palette View Area
+
+The `palette` view area is where to display a set of (draggable or selectable)
+elements frequently used by the user.
+
+
+#### Inspector/Properties View Area
+
+This area should be used to display details of the element selected in the
+currently visible `main` view. Usually a table of name/value pairs is used to
+list the properties of the selected element, but other visualizations are
+possible too.
 
 
 ### Main View Area
 
+The `main` view area will contains one or more views (not necessarily "document-based") 
+showing the data the use will act upon. The views in the `main` area can be opened 
+from user's interaction in the `browser` and/or the `navigation` area, or 
+programmatically.
+
+
+### How View Are Displayed
+
+Inside the `main` and `console` view areas, views are displayed in a tab container.
+
+
 ## Tools and Utilities
+
 
 ### Service Providers
 
@@ -78,7 +108,9 @@ public class MyService implements SomeService {
 Moreover, the _ServiceLoaderUtilities_ class will complement the
 `java.util.ServiceLoader` one with few more methods.
 
+
 ## Using APPLICATION-FRAMEWORK
+
 
 ### Maven
 

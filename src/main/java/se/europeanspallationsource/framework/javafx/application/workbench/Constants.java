@@ -49,8 +49,6 @@ package se.europeanspallationsource.framework.javafx.application.workbench;
  *
  * <h3>Outer View Areas</h3>
  *
- * The complete application is made of 6 view areas, where the `main` one is
- * always visible.
  * <p>
  * A view area is visible only if at least one view is registered. The only
  * exception is the <i>main</i> area, where views can be added dynamically, and
