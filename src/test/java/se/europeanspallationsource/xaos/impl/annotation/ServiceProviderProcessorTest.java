@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.framework.impl.annotation;
+package se.europeanspallationsource.xaos.impl.annotation;
 
 
 import java.io.BufferedReader;
@@ -23,9 +23,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
-import se.europeanspallationsource.framework.annotation.ServiceLoaderUtilities;
-import se.europeanspallationsource.framework.annotation.ServiceProvider;
-import se.europeanspallationsource.framework.annotation.ServiceProviders;
+import se.europeanspallationsource.xaos.annotation.ServiceLoaderUtilities;
+import se.europeanspallationsource.xaos.annotation.ServiceProvider;
+import se.europeanspallationsource.xaos.annotation.ServiceProviders;
 
 import static org.junit.Assert.assertEquals;
 

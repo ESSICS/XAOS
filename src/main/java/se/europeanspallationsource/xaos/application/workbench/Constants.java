@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.framework.javafx.application.workbench;
+package se.europeanspallationsource.xaos.application.workbench;
 
 /**
  * Constants used for configuring the application layout.

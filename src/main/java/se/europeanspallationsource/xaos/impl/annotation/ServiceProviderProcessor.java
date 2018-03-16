@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.framework.impl.annotation;
+package se.europeanspallationsource.xaos.impl.annotation;
 
 
 import java.io.FileNotFoundException;
@@ -54,8 +54,8 @@ import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.ElementFilter;
 import javax.tools.FileObject;
 import javax.tools.StandardLocation;
-import se.europeanspallationsource.framework.annotation.ServiceProvider;
-import se.europeanspallationsource.framework.annotation.ServiceProviders;
+import se.europeanspallationsource.xaos.annotation.ServiceProvider;
+import se.europeanspallationsource.xaos.annotation.ServiceProviders;
 
 import static javax.lang.model.SourceVersion.RELEASE_8;
 import static javax.lang.model.element.ElementKind.CLASS;
@@ -77,8 +77,8 @@ import static javax.tools.StandardLocation.SOURCE_PATH;
  */
 @SupportedSourceVersion( RELEASE_8 )
 @SupportedAnnotationTypes( {
-	"se.europeanspallationsource.framework.annotation.ServiceProvider",
-	"se.europeanspallationsource.framework.annotation.ServiceProviders"
+	"se.europeanspallationsource.xaos.annotation.ServiceProvider",
+	"se.europeanspallationsource.xaos.annotation.ServiceProviders"
 } )
 @SuppressWarnings( "ClassWithoutLogger" )
 public class ServiceProviderProcessor extends AbstractProcessor {

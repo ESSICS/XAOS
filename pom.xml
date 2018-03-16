@@ -4,17 +4,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>se.europeanspallationsource</groupId>
-    <artifactId>framework.javafx.application</artifactId>
+    <artifactId>xaos</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>APPLICATION-FRAMEWORK</name>
+    <name>XAOS</name>
     <description>
         A JavaFX application framework based on JacpFX (Java Asynchronous
         Client Platform) made initially to create accelerator physics
         applications based on Open XAL, an open source development environment
         used for creating accelerator physics applications, scripts and services.
     </description>
-    <url>https://github.com/ESSICS/APPLICATION-FRAMEWORK</url>
+    <url>https://github.com/ESSICS/XAOS</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -40,9 +40,9 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git://github.com/ESSICS/APPLICATION-FRAMEWORK.git</connection>
-        <developerConnection>scm:git:ssh://github.com/ESSICS/APPLICATION-FRAMEWORK.git</developerConnection>
-        <url>https://github.com/ESSICS/APPLICATION-FRAMEWORK/tree/master</url>
+        <connection>scm:git:git://github.com/ESSICS/XAOS.git</connection>
+        <developerConnection>scm:git:ssh://github.com/ESSICS/XAOS.git</developerConnection>
+        <url>https://github.com/ESSICS/XAOS/tree/master</url>
     </scm>
 
     <build>

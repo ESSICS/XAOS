@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.framework.annotation;
+package se.europeanspallationsource.xaos.annotation;
 
 
 import java.util.ArrayList;

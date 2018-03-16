@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.framework.javafx.application.workbench;
+package se.europeanspallationsource.xaos.application.workbench;
 
 
 import javafx.event.Event;
@@ -28,9 +28,9 @@ import org.jacpfx.api.util.ToolbarPosition;
 import org.jacpfx.rcp.componentLayout.FXComponentLayout;
 import org.jacpfx.rcp.components.menuBar.JACPMenuBar;
 import org.jacpfx.rcp.workbench.FXWorkbench;
-import se.europeanspallationsource.framework.javafx.application.utilities.Bundles;
+import se.europeanspallationsource.xaos.application.utilities.Bundles;
 
-import static se.europeanspallationsource.framework.javafx.application.workbench.Constants.PERSPECTIVE_MAIN;
+import static se.europeanspallationsource.xaos.application.workbench.Constants.PERSPECTIVE_MAIN;
 
 
 /**
