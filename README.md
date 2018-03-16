@@ -29,7 +29,7 @@ The framework will allow applications having a generic layout with the following
 
 - The `main` view area used by the application to display its main content.
 
-![layout-01](https://github.com/ESSICS/APPLICATION-FRAMEWORK/blob/master/doc/layout-01.png)
+![layout-01](https://github.com/ESSICS/XAOS/blob/master/doc/layout-01.png)
 
 
 ### Outer View Areas
@@ -109,7 +109,7 @@ Moreover, the _ServiceLoaderUtilities_ class will complement the
 `java.util.ServiceLoader` one with few more methods.
 
 
-## Using APPLICATION-FRAMEWORK
+## Using XAOS
 
 
 ### Maven
