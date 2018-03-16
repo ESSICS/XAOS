@@ -117,7 +117,7 @@ Moreover, the _ServiceLoaderUtilities_ class will complement the
 ```maven
 <dependency>
 	<groupId>se.europeanspallationsource</groupId>
-	<artifactId>framework.javafx.application</artifactId>
+	<artifactId>xaos</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<scope>compile</scope>
 </dependency>
