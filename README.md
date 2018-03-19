@@ -1,6 +1,7 @@
 # XAOS (ΧΑΟΣ – the primordial state of existence)
 
-[![Maven Central](https://img.shields.io/maven-central/v/se.europeanspallationsource/xaos.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22se.europeanspallationsource%22)
+<!--[![Maven Central](https://img.shields.io/maven-central/v/se.europeanspallationsource/xaos.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22se.europeanspallationsource%22)-->
+[![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/se.europeanspallationsource/xaos.svg)](https://oss.sonatype.org/#nexus-search;quick~xaos)
 [![javadoc](https://www.javadoc.io/badge/se.europeanspallationsource/xaos.svg)](https://www.javadoc.io/doc/se.europeanspallationsource/xaos)
 [![Apache License](https://img.shields.io/badge/license-Apache%20License%202.0-yellow.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
