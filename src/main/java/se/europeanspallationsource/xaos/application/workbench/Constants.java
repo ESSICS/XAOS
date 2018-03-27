@@ -17,29 +17,26 @@ package se.europeanspallationsource.xaos.application.workbench;
 
 /**
  * Constants used for configuring the application layout.
- * <p>
- * The complete application is made of 6 view areas, where the <i>main</i> one is
- * always visible.
  *
  * <pre>
  * ┌───────────────────┬───────────────────────────────────────┬──────────────────┐
  * │                   │                                       │                  │
  * │                   │                                       │                  │
- * │                   │                                       │                  │
- * │         B         │                                       │        P         │
- * │      browser      │                                       │     palette      │
- * │                   │                                       │                  │
+ * │         B         │                                       │                  │
+ * │      browser      │                                       │                  │
+ * │                   │                                       │        P         │
+ * │                   │                                       │     palette      │
  * │                   │                   M                   │                  │
- * │                   │                 main                  │                  │
- * │                   │                                       │                  │
- * ├───────────────────┤                                       ├──────────────────┤
+ * ├───────────────────┤                 main                  │                  │
  * │                   │                                       │                  │
  * │                   │                                       │                  │
+ * │                   │                                       ├──────────────────┤
  * │                   │                                       │                  │
  * │                   │                                       │                  │
- * │         N         │                                       │        I         │
- * │     navigator     ├───────────────────────────────────────┤    inspector     │
- * │     overview      │                                       │    properties    │
+ * │         N         │                                       │                  │
+ * │     navigator     │                                       │        I         │
+ * │     overview      ├───────────────────────────────────────┤    inspector     │
+ * │                   │                                       │    properties    │
  * │                   │                   C                   │                  │
  * │                   │                console                │                  │
  * │                   │               messages                │                  │
@@ -47,32 +44,49 @@ package se.europeanspallationsource.xaos.application.workbench;
  * └───────────────────┴───────────────────────────────────────┴──────────────────┘
  * </pre>
  *
- * <h3>Outer View Areas</h3>
- *
  * <p>
- * A view area is visible only if at least one view is registered. The only
- * exception is the <i>main</i> area, where views can be added dynamically, and
- * no initial view is required.
+ * As explained in {@link ApplicationWorkbench}, perspective name is made of
+ * 8 character consisting of the first character of the registered View areas
+ * name, or "-" when not registered.
+ * </p>
  *
- * <h4>Browser View Area</h4>
- * 
- * The <i>browser</i> view should be used to navigate high-level structures in
- * order to find elements to be opened in dedicated views inside the <i>main</i>
- * area.
- *
- * <h4>Navigator/Overview View Area</h4>
- *
- * This view area should be used to navigate the content of <i>selected</i>
- * entities, or display an overview of a more detailed zone displayed in
- * the currently visible <i>main</i> view.
- *
- * ...
- *
+ * <pre>
+ *    ┌────────────────────────────┐
+ *    │      ┌─────────────────────│───────────┐
+ *    │      │      ┌──────────────│───────────│───────────┐
+ * ┌─────┐   │      │              │           │           │
+ * │     ├───────┐  │              │           │           │
+ * │  B  │       ├─────┐           │           │           │
+ * │     │       │     │           │           │           │
+ * ├─────┤   M   │  P  │           ▼           ▼           ▼
+ * │     │       │     │        ┌─────┬─────┬─────┬─────┬─────┬─────┐
+ * │     │       ├─────┤        │ B/- │ N/- │ M/- │ C/- │ P/- │ I/- │ Perspective Name
+ * │     │       │     │        └─────┴─────┴─────┴─────┴─────┴─────┘
+ * │  N  ├───────┤  I  │                 ▲           ▲           ▲
+ * │     │   C   │     │                 │           │           │
+ * │     │       ├─────┘                 │           │           │
+ * │     ├───────┘  │                    │           │           │
+ * └─────┘   │      │                    │           │           │
+ *    │      │      └────────────────────│───────────│───────────┘
+ *    │      └───────────────────────────│───────────┘
+ *    └──────────────────────────────────┘
+ * </pre>
  *
  * @author claudio.rosati@esss.se
  */
 public interface Constants {
 
-    String PERSPECTIVE_MAIN = "perspective.main";
+	String ID_WORKBENCH = "application.workbench";
+
+	String VIEW_BROWSER     = "B";
+	String VIEW_CONSOLE     = "C";
+	String VIEW_INSPECTOR   = "I";
+	String VIEW_MAIN        = "M";
+	String VIEW_MESSAGES    = "C";
+	String VIEW_NAVIGATOR   = "N";
+	String VIEW_NOT_PRESENT = "-";
+	String VIEW_OVERVIEW    = "N";
+	String VIEW_PALETTE     = "P";
+	String VIEW_PROPERTIES  = "I";
 
 }

@@ -23,7 +23,14 @@ import se.europeanspallationsource.xaos.application.workbench.ApplicationWorkben
 
 
 /**
- * The main entry point of the framework.
+ * The main entry point of the framework. Subclass should declare at least the
+ * following {@code main} method:
+ *
+ * <pre>
+ * public static void main( String[] args ) {
+ *   Application.launch(args);
+ * }
+ * </pre>
  *
  * @author claudio.rosati@esss.se
  */
@@ -34,7 +41,10 @@ public class ApplicationLauncher extends JacpFXApplicationLauncher {
 
     @Override
     protected final String[] getBasePackages() {
-        return new String[] { "se.europeanspallationsource.framework.javafx.application.workbench" };
+        return new String[] { 
+			"se.europeanspallationsource.xaos.application.perspective",
+			"se.europeanspallationsource.xaos.application.workbench",
+		};
     }
 
     @Override
@@ -44,7 +54,8 @@ public class ApplicationLauncher extends JacpFXApplicationLauncher {
 
     /**
      * Will be executed after JavaFX initialization. Current implementation is
-     * empty, and can be safely overridden.
+     * empty, and can be safely overridden, for example to attach stylesheets
+	 * to the {@code stage}.
      *
      * @param stage The JavaFX {@link Stage}.
      */

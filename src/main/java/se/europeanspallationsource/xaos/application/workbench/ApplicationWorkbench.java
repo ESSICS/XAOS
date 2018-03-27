@@ -30,11 +30,19 @@ import org.jacpfx.rcp.components.menuBar.JACPMenuBar;
 import org.jacpfx.rcp.workbench.FXWorkbench;
 import se.europeanspallationsource.xaos.application.utilities.Bundles;
 
-import static se.europeanspallationsource.xaos.application.workbench.Constants.PERSPECTIVE_MAIN;
+import static se.europeanspallationsource.xaos.application.workbench.Constants.ID_WORKBENCH;
+import static se.europeanspallationsource.xaos.application.workbench.Constants.VIEW_BROWSER;
+import static se.europeanspallationsource.xaos.application.workbench.Constants.VIEW_CONSOLE;
+import static se.europeanspallationsource.xaos.application.workbench.Constants.VIEW_INSPECTOR;
+import static se.europeanspallationsource.xaos.application.workbench.Constants.VIEW_MAIN;
+import static se.europeanspallationsource.xaos.application.workbench.Constants.VIEW_NAVIGATOR;
+import static se.europeanspallationsource.xaos.application.workbench.Constants.VIEW_NOT_PRESENT;
+import static se.europeanspallationsource.xaos.application.workbench.Constants.VIEW_PALETTE;
 
 
 /**
  * The application workbench, where perspectives are registered and installed.
+ *
  * <p>
  * The complete application is made of 6 view areas, where the <i>main</i> one is
  * always visible.
@@ -141,6 +149,8 @@ import static se.europeanspallationsource.xaos.application.workbench.Constants.P
  * │     ├───────┤  I  │ │     ├───────┤     │ │     ├───────┤     │ │     │       │  I  │ │     ├───────┤  I  │ │     ├───────┤  I  │
  * │     │   C   │     │ │     │   C   │     │ │     │   C   │     │ │     │       │     │ │     │   C   │     │ │     │   C   │     │
  * └─────┴───────┴─────┘ └─────┴───────┴─────┘ └─────┴───────┴─────┘ └─────┴───────┴─────┘ └─────┴───────┴─────┘ └─────┴───────┴─────┘
+ *        BNMCPI                BNMC-I                BNMCP-                BNM-PI                B-MCPI                -NMCPI
+ *
  *                       ┌─────┬───────┬─────┐ ┌─────┬───────┬─────┐                       ┌─────┬───────┬─────┐ ┌─────┬───────┬─────┐
  *                       │  B  │       │     │ │  B  │       │     │                       │     │       │     │ │     │       │     │
  *                       ├─────┤       │     │ ├─────┤       │     │                       │     │       │  P  │ │     │       │  P  │
@@ -150,6 +160,8 @@ import static se.europeanspallationsource.xaos.application.workbench.Constants.P
  *                       │     │       │     │ │     │       │     │                       │     │       │  I  │ │     │       │  I  │
  *                       │     │       │     │ │     │       │     │                       │     │       │     │ │     │       │     │
  *                       └─────┴───────┴─────┘ └─────┴───────┴─────┘                       └─────┴───────┴─────┘ └─────┴───────┴─────┘
+ *                              BNM--I                BNM-P-                                      B-M-PI                -NM-PI
+ *
  *                       ┌─────┬───────┬─────┐ ┌─────┬───────┬─────┐                       ┌─────┬───────┬─────┐ ┌─────┬───────┬─────┐
  *                       │     │       │     │ │     │       │     │                       │     │       │     │ │     │       │     │
  *                       │     │       │     │ │     │       │     │                       │     │       │     │ │     │       │     │
@@ -159,6 +171,8 @@ import static se.europeanspallationsource.xaos.application.workbench.Constants.P
  *                       │     ├───────┤     │ │     ├───────┤     │                       │     ├───────┤     │ │     ├───────┤     │
  *                       │     │   C   │     │ │     │   C   │     │                       │     │   C   │     │ │     │   C   │     │
  *                       └─────┴───────┴─────┘ └─────┴───────┴─────┘                       └─────┴───────┴─────┘ └─────┴───────┴─────┘
+ *                              -NMC-I                -NMCP-                                      B-MC-I                B-MCP-
+ *
  *                       ┌─────┬───────┬─────┐ ┌─────┬───────┬─────┐                       ┌─────┬───────┬─────┐ ┌─────┬───────┬─────┐
  *                       │     │       │     │ │     │       │     │                       │     │       │     │ │     │       │     │
  *                       │     │       │     │ │     │       │     │                       │     │       │     │ │     │       │     │
@@ -168,6 +182,8 @@ import static se.europeanspallationsource.xaos.application.workbench.Constants.P
  *                       │     │       │     │ │     │       │     │                       │     │       │     │ │     │       │     │
  *                       │     │       │     │ │     │       │     │                       │     │       │     │ │     │       │     │
  *                       └─────┴───────┴─────┘ └─────┴───────┴─────┘                       └─────┴───────┴─────┘ └─────┴───────┴─────┘
+ *                              -NM--I                -NM-P-                                      B-M--I                B-M-P-
+ *
  * ┌─────────────┬─────┐ ┌─────────────┬─────┐ ┌─────────────┬─────┐ ┌─────────────┬─────┐ ┌─────────────┬─────┐ ┌─────────────┬─────┐
  * │             │     │ │             │     │ │             │     │ │             │     │ │             │     │ │             │     │
  * │             │  P  │ │             │     │ │             │     │ │             │  P  │ │             │     │ │             │     │
@@ -177,6 +193,8 @@ import static se.europeanspallationsource.xaos.application.workbench.Constants.P
  * ├─────────────┤  I  │ ├─────────────┤     │ ├─────────────┤     │ │             │  I  │ │             │     │ │             │     │
  * │      C      │     │ │      C      │     │ │      C      │     │ │             │     │ │             │     │ │             │     │
  * └─────────────┴─────┘ └─────────────┴─────┘ └─────────────┴─────┘ └─────────────┴─────┘ └─────────────┴─────┘ └─────────────┴─────┘
+ *        --MCPI                --MC-I                --MCP-                --M-PI                --M--I                --M-P-
+ *
  * ┌─────┬─────────────┐ ┌─────┬─────────────┐ ┌─────┬─────────────┐ ┌─────┬─────────────┐ ┌─────┬─────────────┐ ┌─────┬─────────────┐
  * │  B  │             │ │     │             │ │     │             │ │  B  │             │ │     │             │ │     │             │
  * ├─────┤             │ │     │             │ │     │             │ ├─────┤             │ │     │             │ │     │             │
@@ -186,6 +204,8 @@ import static se.europeanspallationsource.xaos.application.workbench.Constants.P
  * │     ├─────────────┤ │     ├─────────────┤ │     ├─────────────┤ │     │             │ │     │             │ │     │             │
  * │     │      C      │ │     │      C      │ │     │      C      │ │     │             │ │     │             │ │     │             │
  * └─────┴─────────────┘ └─────┴─────────────┘ └─────┴─────────────┘ └─────┴─────────────┘ └─────┴─────────────┘ └─────┴─────────────┘
+ *        BNMC--                B-MC--                -NMC--                BNM---                B-M---                -NM---
+ *
  * ┌───────────────────┐ ┌───────────────────┐
  * │                   │ │                   │
  * │                   │ │                   │
@@ -195,32 +215,100 @@ import static se.europeanspallationsource.xaos.application.workbench.Constants.P
  * ├───────────────────┤ │                   │
  * │         C         │ │                   │
  * └───────────────────┘ └───────────────────┘
+ *        --MC--                --M---
  * </pre>
  * 
  * <p>
- * ...
+ * A perspective name is composed by the first character of the registered View
+ * areas name or "-" when not registered. The default (fallback) perspective will
+ * be the simplest one ({@code --M---}). The initial one (the one displayed at the
+ * very first launch of the application) will be the one containing all the
+ * registered views. The current perspective will be saved when the application
+ * quits, and restored on its next launch.
+ * </p>
+ * 
+ * <pre>
+ *    ┌────────────────────────────┐
+ *    │      ┌─────────────────────│───────────┐                                       
+ *    │      │      ┌──────────────│───────────│───────────┐                           
+ * ┌─────┐   │      │              │           │           │                           
+ * │     ├───────┐  │              │           │           │                           
+ * │  B  │       ├─────┐           │           │           │                           
+ * │     │       │     │           │           │           │                           
+ * ├─────┤   M   │  P  │           ▼           ▼           ▼                           
+ * │     │       │     │        ┌─────┬─────┬─────┬─────┬─────┬─────┐                  
+ * │     │       ├─────┤        │ B/- │ N/- │ M/- │ C/- │ P/- │ I/- │ Perspective Name 
+ * │     │       │     │        └─────┴─────┴─────┴─────┴─────┴─────┘                  
+ * │  N  ├───────┤  I  │                 ▲           ▲           ▲                     
+ * │     │   C   │     │                 │           │           │                     
+ * │     │       ├─────┘                 │           │           │                     
+ * │     ├───────┘  │                    │           │           │                     
+ * └─────┘   │      │                    │           │           │                     
+ *    │      │      └────────────────────│───────────│───────────┘                     
+ *    │      └───────────────────────────│───────────┘                                 
+ *    └──────────────────────────────────┘
+ * </pre>
+ *
+ * <p>
+ * The toolbar buttons showing the left, right and bottom view areas will be
+ * displayed depending on the registered views. If an application needs only
+ * the main view area ({@code --M---} perspective), then no buttons will be
+ * displayed.
  * </p>
  *
  * @author claudio.rosati@esss.se
  */
 @Workbench(
-     id = "application.workbench",
-     perspectives = { PERSPECTIVE_MAIN }
+     id = ID_WORKBENCH,
+     perspectives = { 
+		 VIEW_BROWSER     + VIEW_NAVIGATOR   + VIEW_MAIN + VIEW_CONSOLE     + VIEW_NOT_PRESENT + VIEW_INSPECTOR,	//	BNMC-I
+		 VIEW_BROWSER     + VIEW_NAVIGATOR   + VIEW_MAIN + VIEW_CONSOLE     + VIEW_NOT_PRESENT + VIEW_NOT_PRESENT,	//	BNMC--
+		 VIEW_BROWSER     + VIEW_NAVIGATOR   + VIEW_MAIN + VIEW_CONSOLE     + VIEW_PALETTE     + VIEW_INSPECTOR,	//	BNMCPI
+		 VIEW_BROWSER     + VIEW_NAVIGATOR   + VIEW_MAIN + VIEW_CONSOLE     + VIEW_PALETTE     + VIEW_NOT_PRESENT,	//	BNMCP-
+		 VIEW_BROWSER     + VIEW_NAVIGATOR   + VIEW_MAIN + VIEW_NOT_PRESENT + VIEW_NOT_PRESENT + VIEW_INSPECTOR,	//	BNM--I
+		 VIEW_BROWSER     + VIEW_NAVIGATOR   + VIEW_MAIN + VIEW_NOT_PRESENT + VIEW_NOT_PRESENT + VIEW_NOT_PRESENT,	//	BNM---
+		 VIEW_BROWSER     + VIEW_NAVIGATOR   + VIEW_MAIN + VIEW_NOT_PRESENT + VIEW_PALETTE     + VIEW_INSPECTOR,	//	BNM-PI
+		 VIEW_BROWSER     + VIEW_NAVIGATOR   + VIEW_MAIN + VIEW_NOT_PRESENT + VIEW_PALETTE     + VIEW_NOT_PRESENT,	//	BNM-P-
+		 VIEW_BROWSER     + VIEW_NOT_PRESENT + VIEW_MAIN + VIEW_CONSOLE     + VIEW_NOT_PRESENT + VIEW_INSPECTOR,	//	B-MC-I
+		 VIEW_BROWSER     + VIEW_NOT_PRESENT + VIEW_MAIN + VIEW_CONSOLE     + VIEW_NOT_PRESENT + VIEW_NOT_PRESENT,	//	B-MC--
+		 VIEW_BROWSER     + VIEW_NOT_PRESENT + VIEW_MAIN + VIEW_CONSOLE     + VIEW_PALETTE     + VIEW_INSPECTOR,	//	B-MCPI
+		 VIEW_BROWSER     + VIEW_NOT_PRESENT + VIEW_MAIN + VIEW_CONSOLE     + VIEW_PALETTE     + VIEW_NOT_PRESENT,	//	B-MCP-
+		 VIEW_BROWSER     + VIEW_NOT_PRESENT + VIEW_MAIN + VIEW_NOT_PRESENT + VIEW_NOT_PRESENT + VIEW_INSPECTOR,	//	B-M--I
+		 VIEW_BROWSER     + VIEW_NOT_PRESENT + VIEW_MAIN + VIEW_NOT_PRESENT + VIEW_NOT_PRESENT + VIEW_NOT_PRESENT,	//	B-M---
+		 VIEW_BROWSER     + VIEW_NOT_PRESENT + VIEW_MAIN + VIEW_NOT_PRESENT + VIEW_PALETTE     + VIEW_INSPECTOR,	//	B-M-PI
+		 VIEW_BROWSER     + VIEW_NOT_PRESENT + VIEW_MAIN + VIEW_NOT_PRESENT + VIEW_PALETTE     + VIEW_NOT_PRESENT,	//	B-M-P-
+		 VIEW_NOT_PRESENT + VIEW_NAVIGATOR   + VIEW_MAIN + VIEW_CONSOLE     + VIEW_NOT_PRESENT + VIEW_INSPECTOR,	//	-NMC-I
+		 VIEW_NOT_PRESENT + VIEW_NAVIGATOR   + VIEW_MAIN + VIEW_CONSOLE     + VIEW_NOT_PRESENT + VIEW_NOT_PRESENT,	//	-NMC--
+		 VIEW_NOT_PRESENT + VIEW_NAVIGATOR   + VIEW_MAIN + VIEW_CONSOLE     + VIEW_PALETTE     + VIEW_INSPECTOR,	//	-NMCPI
+		 VIEW_NOT_PRESENT + VIEW_NAVIGATOR   + VIEW_MAIN + VIEW_CONSOLE     + VIEW_PALETTE     + VIEW_NOT_PRESENT,	//	-NMCP-
+		 VIEW_NOT_PRESENT + VIEW_NAVIGATOR   + VIEW_MAIN + VIEW_NOT_PRESENT + VIEW_NOT_PRESENT + VIEW_INSPECTOR,	//	-NM--I
+		 VIEW_NOT_PRESENT + VIEW_NAVIGATOR   + VIEW_MAIN + VIEW_NOT_PRESENT + VIEW_NOT_PRESENT + VIEW_NOT_PRESENT,	//	-NM---
+		 VIEW_NOT_PRESENT + VIEW_NAVIGATOR   + VIEW_MAIN + VIEW_NOT_PRESENT + VIEW_PALETTE     + VIEW_INSPECTOR,	//	-NM-PI
+		 VIEW_NOT_PRESENT + VIEW_NAVIGATOR   + VIEW_MAIN + VIEW_NOT_PRESENT + VIEW_PALETTE     + VIEW_NOT_PRESENT,	//	-NM-P-
+		 VIEW_NOT_PRESENT + VIEW_NOT_PRESENT + VIEW_MAIN + VIEW_CONSOLE     + VIEW_NOT_PRESENT + VIEW_INSPECTOR,	//	--MC-I
+		 VIEW_NOT_PRESENT + VIEW_NOT_PRESENT + VIEW_MAIN + VIEW_CONSOLE     + VIEW_NOT_PRESENT + VIEW_NOT_PRESENT,	//	--MC--
+		 VIEW_NOT_PRESENT + VIEW_NOT_PRESENT + VIEW_MAIN + VIEW_CONSOLE     + VIEW_PALETTE     + VIEW_INSPECTOR,	//	--MCPI
+		 VIEW_NOT_PRESENT + VIEW_NOT_PRESENT + VIEW_MAIN + VIEW_CONSOLE     + VIEW_PALETTE     + VIEW_NOT_PRESENT,	//	--MCP-
+		 VIEW_NOT_PRESENT + VIEW_NOT_PRESENT + VIEW_MAIN + VIEW_NOT_PRESENT + VIEW_NOT_PRESENT + VIEW_INSPECTOR,	//	--M--I
+		 VIEW_NOT_PRESENT + VIEW_NOT_PRESENT + VIEW_MAIN + VIEW_NOT_PRESENT + VIEW_NOT_PRESENT + VIEW_NOT_PRESENT,	//	--M---
+		 VIEW_NOT_PRESENT + VIEW_NOT_PRESENT + VIEW_MAIN + VIEW_NOT_PRESENT + VIEW_PALETTE     + VIEW_INSPECTOR,	//	--M-PI
+		 VIEW_NOT_PRESENT + VIEW_NOT_PRESENT + VIEW_MAIN + VIEW_NOT_PRESENT + VIEW_PALETTE     + VIEW_NOT_PRESENT,	//	--M-P-
+	 }
 )
 public class ApplicationWorkbench implements FXWorkbench {
 
     @Override
     public void handleInitialLayout( Message<Event, Object> action, WorkbenchLayout<Node> layout, Stage stage ) {
 
-//  TODO: CR: Initial size should be declared through the ApplicationLauncher
-//            constructor's parameters, or using an @ApplicationInfo annotation.
-//            This values should then be saved into application properties, and
-//            updated when the application closes.
+//  TODO:CR Initial size should be declared through the ApplicationLauncher
+//          constructor's parameters, or using an @ApplicationInfo annotation.
+//          This values should then be saved into application properties, and
+//          updated when the application closes.
         layout.setWorkbenchXYSize(1024, 768);
         layout.registerToolBar(ToolbarPosition.NORTH);
         layout.setStyle(StageStyle.DECORATED);
         layout.setMenuEnabled(true);
-        
+		
     }
 
     @Override

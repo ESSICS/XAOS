@@ -86,6 +86,8 @@ programmatically.
 ### How View Are Displayed
 
 Inside the `main` and `console` view areas, views are displayed in a tab container.
+In the remaining view areas, the alternative between tab container or accordion can
+be chosen.
 
 
 ## Tools and Utilities
