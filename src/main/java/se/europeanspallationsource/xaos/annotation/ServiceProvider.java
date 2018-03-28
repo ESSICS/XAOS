@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 claudiorosati.
+ * Copyright 2018 European Spallation Source ERIC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,8 +31,11 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
  * implementation class with this annotation, you automatically register that
  * implementation to be loaded by {@link ServiceLoader}. The class must be
  * public and have a public no-argument constructor.
+ *
  * <p>
  * Example of usage:
+ * </p>
+ *
  * <pre>
  *   package my.module;
  *   import my.module.spi.SomeService;
@@ -41,10 +44,12 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
  *   &#64;ServiceProvider(service=SomeService.class)
  *   public class MyService implements SomeService {
  *     ...
- *   }
- * </pre>
+ *   }</pre>
+ *
+ * <p>
  * Would result in a resource file {@code META-INF/services/my.module.spi.SomeService}
  * containing the single line of text: {@code my.module.MyService}.
+ * </p>
  *
  * @author claudio.rosati@esss.se
  * @see <a href="http://bits.netbeans.org/8.1/javadoc/org-openide-util-lookup/overview-summary.html">NetBeans Lookup API</a>

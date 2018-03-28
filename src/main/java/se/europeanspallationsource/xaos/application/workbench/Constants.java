@@ -41,8 +41,7 @@ package se.europeanspallationsource.xaos.application.workbench;
  * │                   │                console                │                  │
  * │                   │               messages                │                  │
  * │                   │                                       │                  │
- * └───────────────────┴───────────────────────────────────────┴──────────────────┘
- * </pre>
+ * └───────────────────┴───────────────────────────────────────┴──────────────────┘</pre>
  *
  * <p>
  * As explained in {@link ApplicationWorkbench}, perspective name is made of
@@ -69,8 +68,7 @@ package se.europeanspallationsource.xaos.application.workbench;
  * └─────┘   │      │                    │           │           │
  *    │      │      └────────────────────│───────────│───────────┘
  *    │      └───────────────────────────│───────────┘
- *    └──────────────────────────────────┘
- * </pre>
+ *    └──────────────────────────────────┘</pre>
  *
  * @author claudio.rosati@esss.se
  */

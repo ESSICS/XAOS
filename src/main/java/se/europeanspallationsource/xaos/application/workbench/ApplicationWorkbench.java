@@ -71,8 +71,7 @@ import static se.europeanspallationsource.xaos.application.workbench.Constants.V
  * │                   │                console                │                  │
  * │                   │               messages                │                  │
  * │                   │                                       │                  │
- * └───────────────────┴───────────────────────────────────────┴──────────────────┘
- * </pre>
+ * └───────────────────┴───────────────────────────────────────┴──────────────────┘</pre>
  * 
  * <h3>Outer View Areas</h3>
  *
@@ -215,8 +214,7 @@ import static se.europeanspallationsource.xaos.application.workbench.Constants.V
  * ├───────────────────┤ │                   │
  * │         C         │ │                   │
  * └───────────────────┘ └───────────────────┘
- *        --MC--                --M---
- * </pre>
+ *        --MC--                --M---</pre>
  * 
  * <p>
  * A perspective name is composed by the first character of the registered View
@@ -246,8 +244,7 @@ import static se.europeanspallationsource.xaos.application.workbench.Constants.V
  * └─────┘   │      │                    │           │           │                     
  *    │      │      └────────────────────│───────────│───────────┘                     
  *    │      └───────────────────────────│───────────┘                                 
- *    └──────────────────────────────────┘
- * </pre>
+ *    └──────────────────────────────────┘</pre>
  *
  * <p>
  * The toolbar buttons showing the left, right and bottom view areas will be

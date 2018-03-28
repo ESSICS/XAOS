@@ -29,8 +29,7 @@ import se.europeanspallationsource.xaos.application.workbench.ApplicationWorkben
  * <pre>
  * public static void main( String[] args ) {
  *   Application.launch(args);
- * }
- * </pre>
+ * }</pre>
  *
  * @author claudio.rosati@esss.se
  */
