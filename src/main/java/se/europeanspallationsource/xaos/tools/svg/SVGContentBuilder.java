@@ -250,11 +250,9 @@ class SVGContentBuilder {
 
 	private ImageView buildImage( XMLEventReader reader, StartElement element ) {
 
-		Attribute widthAttribute = element.getAttributeByName(new QName("width"));
-		Attribute heightAttribute = element.getAttributeByName(new QName("height"));
 		Attribute hrefAttribute = element.getAttributeByName(new QName("href"));
 
-		if ( widthAttribute != null && heightAttribute != null && hrefAttribute != null ) {
+		if ( hrefAttribute != null ) {
 
 			URL imageUrl = null;
 
@@ -272,25 +270,42 @@ class SVGContentBuilder {
 			}
 
 			if ( imageUrl != null ) {
+
+				Attribute xAttribute = element.getAttributeByName(new QName("x"));
+				Attribute yAttribute = element.getAttributeByName(new QName("y"));
+				Attribute widthAttribute = element.getAttributeByName(new QName("width"));
+				Attribute heightAttribute = element.getAttributeByName(new QName("height"));
+
 				try {
 
-					double width = Double.parseDouble(widthAttribute.getValue());
-					double height = Double.parseDouble(heightAttribute.getValue());
-					Image image = new Image(imageUrl.toString(), width, height, true, true);
+					Image image = new Image(
+						imageUrl.toString(),
+						( widthAttribute  != null ) ? Double.parseDouble(widthAttribute.getValue())  : 0.0,
+						( heightAttribute != null ) ? Double.parseDouble(heightAttribute.getValue()) : 0.0,
+						true,
+						true
+					);
 
-					return new ImageView(image);
+					ImageView imageView = new ImageView(image);
+
+					imageView.setLayoutX(( xAttribute != null ) ? Double.parseDouble(xAttribute.getValue()) : 0.0);
+					imageView.setLayoutY(( yAttribute != null ) ? Double.parseDouble(yAttribute.getValue()) : 0.0);
+
+					return imageView;
 
 				} catch ( NumberFormatException ex ) {
 					LOGGER.warning(MessageFormat.format(
-						"An image's attribute cannot be parsed to double: width [{0}], height [{1}].",
-						widthAttribute.getValue(),
+						"An image's attribute cannot be parsed to double: x [{0}], y [{1}], width [{2}], height [{3}].",
+						( xAttribute != null )     ? xAttribute.getValue()     : "-",
+						( yAttribute != null )     ? yAttribute.getValue()     : "-",
+						( widthAttribute != null ) ? widthAttribute.getValue() : "-",
 						heightAttribute.getValue()
 					));
 				}
 			}
 
 		} else {
-			LOGGER.warning("An image's attribute is null: width, height, href.");
+			LOGGER.warning("An image's attribute is null: href.");
 		}
 
 		return null;
@@ -304,25 +319,21 @@ class SVGContentBuilder {
 		Attribute x2Attribute = element.getAttributeByName(new QName("x2"));
 		Attribute y2Attribute = element.getAttributeByName(new QName("y2"));
 
-		if ( x1Attribute != null && y1Attribute != null && x2Attribute != null && y2Attribute != null ) {
-			try {
-				return new Line(
-					Double.parseDouble(x1Attribute.getValue()),
-					Double.parseDouble(y1Attribute.getValue()),
-					Double.parseDouble(x2Attribute.getValue()),
-					Double.parseDouble(y2Attribute.getValue())
-				);
-			} catch ( NumberFormatException ex ) {
-				LOGGER.warning(MessageFormat.format(
-					"A line's attribute cannot be parsed to double: x1 [{0}], y1 [{1}], x2 [{2}], y2 [{3}].",
-					x1Attribute.getValue(),
-					y1Attribute.getValue(),
-					x2Attribute.getValue(),
-					y2Attribute.getValue()
-				));
-			}
-		} else {
-			LOGGER.warning("A line's attribute is null: x1, y1, x2, y2.");
+		try {
+			return new Line(
+				( x1Attribute != null ) ? Double.parseDouble(x1Attribute.getValue()) : 0.0,
+				( y1Attribute != null ) ? Double.parseDouble(y1Attribute.getValue()) : 0.0,
+				( x2Attribute != null ) ? Double.parseDouble(x2Attribute.getValue()) : 0.0,
+				( y2Attribute != null ) ? Double.parseDouble(y2Attribute.getValue()) : 0.0
+			);
+		} catch ( NumberFormatException ex ) {
+			LOGGER.warning(MessageFormat.format(
+				"A line's attribute cannot be parsed to double: x1 [{0}], y1 [{1}], x2 [{2}], y2 [{3}].",
+				( x1Attribute != null ) ? x1Attribute.getValue() : "-",
+				( y1Attribute != null ) ? y1Attribute.getValue() : "-",
+				( x2Attribute != null ) ? x2Attribute.getValue() : "-",
+				( y2Attribute != null ) ? y2Attribute.getValue() : "-"
+			));
 		}
 
 		return null;
@@ -590,29 +601,39 @@ class SVGContentBuilder {
 		Attribute yAttribute = element.getAttributeByName(new QName("y"));
 		Attribute widthAttribute = element.getAttributeByName(new QName("width"));
 		Attribute heightAttribute = element.getAttributeByName(new QName("height"));
+		Attribute rxAttribute = element.getAttributeByName(new QName("rx"));
+		Attribute ryAttribute = element.getAttributeByName(new QName("ry"));
 
-		if ( widthAttribute != null && heightAttribute != null ) {
-			try {
-				return new Rectangle(
-					( xAttribute != null ) ? Double.parseDouble(xAttribute.getValue()) : 0.0,
-					( yAttribute != null ) ? Double.parseDouble(yAttribute.getValue()) : 0.0,
-					Double.parseDouble(widthAttribute.getValue()),
-					Double.parseDouble(heightAttribute.getValue())
-				);
-			} catch ( NumberFormatException ex ) {
-				LOGGER.warning(MessageFormat.format(
-					"A rect's attribute cannot be parsed to double: x [{0}], y [{1}], width [{2}], height [{3}].",
-					( xAttribute != null ) ? xAttribute.getValue() : "-",
-					( yAttribute != null ) ? yAttribute.getValue() : "-",
-					widthAttribute.getValue(),
-					heightAttribute.getValue()
-				));
-			}
-		} else {
-			LOGGER.warning("A rect's attribute is null: width, height.");
+		try {
+
+			Rectangle rectangle = new Rectangle(
+				( xAttribute      != null ) ? Double.parseDouble(xAttribute.getValue())      : 0.0,
+				( yAttribute      != null ) ? Double.parseDouble(yAttribute.getValue())      : 0.0,
+				( widthAttribute  != null ) ? Double.parseDouble(widthAttribute.getValue())  : 0.0,
+				( heightAttribute != null ) ? Double.parseDouble(heightAttribute.getValue()) : 0.0
+			);
+
+			rectangle.setArcWidth(
+				( rxAttribute != null && !"auto".equalsIgnoreCase(rxAttribute.getValue()) ) ? Double.parseDouble(rxAttribute.getValue()) : 0.0
+			);
+			rectangle.setArcHeight(
+				( ryAttribute != null && !"auto".equalsIgnoreCase(ryAttribute.getValue()) ) ? Double.parseDouble(ryAttribute.getValue()) : 0.0
+			);
+
+			return rectangle;
+
+		} catch ( NumberFormatException ex ) {
+			LOGGER.warning(MessageFormat.format(
+				"A rect's attribute cannot be parsed to double: x [{0}], y [{1}], width [{2}], height [{3}], rx [{4}], ry [{5}].",
+				( xAttribute      != null ) ? xAttribute.getValue()      : "-",
+				( yAttribute      != null ) ? yAttribute.getValue()      : "-",
+				( widthAttribute  != null ) ? widthAttribute.getValue()  : "-",
+				( heightAttribute != null ) ? heightAttribute.getValue() : "-",
+				( rxAttribute     != null ) ? rxAttribute.getValue()     : "-",
+				( ryAttribute     != null ) ? ryAttribute.getValue()     : "-"
+			));
+			return null;
 		}
-
-		return null;
 
 	}
 
