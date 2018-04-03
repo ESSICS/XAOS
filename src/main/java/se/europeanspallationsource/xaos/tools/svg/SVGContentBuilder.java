@@ -187,42 +187,50 @@ class SVGContentBuilder {
 
 	}
 
-	private Shape buildCircle( StartElement element ) {
+	private Shape buildCircle( StartElement element ) throws NullPointerException, NumberFormatException {
+
 		Attribute cxAttribute = element.getAttributeByName(new QName("cx"));
 		Attribute cyAttribute = element.getAttributeByName(new QName("cy"));
 		Attribute radiusAttribute = element.getAttributeByName(new QName("r"));
 
-		Circle circle = new Circle(Double.parseDouble(cxAttribute.getValue()),
+		Circle circle = new Circle(
+			Double.parseDouble(cxAttribute.getValue()),
 			Double.parseDouble(cyAttribute.getValue()),
-			Double.parseDouble(radiusAttribute.getValue()));
+			Double.parseDouble(radiusAttribute.getValue())
+		);
 
 		return circle;
+
 	}
 
 	private Shape buildEllipse( StartElement element ) {
+
 		Attribute cxAttribute = element.getAttributeByName(new QName("cx"));
 		Attribute cyAttribute = element.getAttributeByName(new QName("cy"));
 		Attribute radiusXAttribute = element.getAttributeByName(new QName("rx"));
 		Attribute radiusYAttribute = element.getAttributeByName(new QName("ry"));
 
-		Ellipse ellipse = new Ellipse(Double.parseDouble(cxAttribute.getValue()),
+		Ellipse ellipse = new Ellipse(
+			Double.parseDouble(cxAttribute.getValue()),
 			Double.parseDouble(cyAttribute.getValue()),
 			Double.parseDouble(radiusXAttribute.getValue()),
-			Double.parseDouble(radiusYAttribute.getValue()));
+			Double.parseDouble(radiusYAttribute.getValue())
+		);
 
 		return ellipse;
+
 	}
 
-	private Group buildGroup( XMLEventReader reader, StartElement element )
-		throws IOException, XMLStreamException {
+	private Group buildGroup( XMLEventReader reader, StartElement element ) throws IOException, XMLStreamException {
+
 		Group group = new Group();
 		build(reader, group);
 
 		return group;
+
 	}
 
-	private ImageView buildImage( XMLEventReader reader, StartElement element )
-		throws IOException {
+	private ImageView buildImage( XMLEventReader reader, StartElement element ) throws IOException {
 		Attribute widthAttribute = element.getAttributeByName(new QName("width"));
 		double width = Double.parseDouble(widthAttribute.getValue());
 		Attribute heightAttribute = element.getAttributeByName(new QName("height"));
