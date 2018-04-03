@@ -152,7 +152,7 @@ class SVGContentBuilder {
 						node = buildText(reader, element);
 						break;
 					default:
-						LOGGER.log(Level.INFO, "Non Support Element: {0}", element);
+						LOGGER.warning(MessageFormat.format("Non Support Element: {0}", element));
 						break;
 				}
 
@@ -348,7 +348,6 @@ class SVGContentBuilder {
 		double x2 = Double.NaN;
 		double y2 = Double.NaN;
 		Transform transform = null;
-
 		@SuppressWarnings( "unchecked" )
 		Iterator<Attribute> it = element.getAttributes();
 
@@ -527,8 +526,8 @@ class SVGContentBuilder {
 
 	}
 
-	private void buildRadialGradient( XMLEventReader reader, StartElement element )
-		throws IOException, XMLStreamException {
+	private void buildRadialGradient( XMLEventReader reader, StartElement element ) throws IOException, XMLStreamException {
+
 		String id = null;
 		Double fx = null;
 		Double fy = null;
@@ -536,36 +535,57 @@ class SVGContentBuilder {
 		Double cy = null;
 		Double r = null;
 		Transform transform = null;
-
 		@SuppressWarnings( "unchecked" )
 		Iterator<Attribute> it = element.getAttributes();
+
 		while ( it.hasNext() ) {
+
 			Attribute attribute = it.next();
+
 			switch ( attribute.getName().getLocalPart() ) {
 				case "id":
 					id = attribute.getValue();
 					break;
 				case "gradientUnits":
-					String gradientUnits = attribute.getValue();
-					if ( !gradientUnits.equals("userSpaceOnUse") ) {
-						LOGGER.log(Level.INFO, "LinearGradient supports only userSpaceOnUse: {0}", element);
+					if ( !"userSpaceOnUse".equals(attribute.getValue()) ) {
+						LOGGER.warning(MessageFormat.format("RadialGradient supports only userSpaceOnUse: {0}", element));
 						return;
 					}
 					break;
 				case "fx":
-					fx = Double.valueOf(attribute.getValue());
+					try {
+						fx = Double.valueOf(attribute.getValue());
+					} catch ( NumberFormatException ex ) {
+						LOGGER.warning(MessageFormat.format("RadialGradient's fx attribute cannot be parsed to double [{0}].", attribute.getValue()));
+					}
 					break;
 				case "fy":
-					fy = Double.valueOf(attribute.getValue());
+					try {
+						fy = Double.valueOf(attribute.getValue());
+					} catch ( NumberFormatException ex ) {
+						LOGGER.warning(MessageFormat.format("RadialGradient's fy attribute cannot be parsed to double [{0}].", attribute.getValue()));
+					}
 					break;
 				case "cx":
-					cx = Double.valueOf(attribute.getValue());
+					try {
+						cx = Double.valueOf(attribute.getValue());
+					} catch ( NumberFormatException ex ) {
+						LOGGER.warning(MessageFormat.format("RadialGradient's cx attribute cannot be parsed to double [{0}].", attribute.getValue()));
+					}
 					break;
 				case "cy":
-					cy = Double.valueOf(attribute.getValue());
+					try {
+						cy = Double.valueOf(attribute.getValue());
+					} catch ( NumberFormatException ex ) {
+						LOGGER.warning(MessageFormat.format("RadialGradient's cy attribute cannot be parsed to double [{0}].", attribute.getValue()));
+					}
 					break;
 				case "r":
-					r = Double.valueOf(attribute.getValue());
+					try {
+						r = Double.valueOf(attribute.getValue());
+					} catch ( NumberFormatException ex ) {
+						LOGGER.warning(MessageFormat.format("RadialGradient's r attribute cannot be parsed to double [{0}].", attribute.getValue()));
+					}
 					break;
 				case "gradientTransform":
 					transform = extractTransform(attribute.getValue());
@@ -574,38 +594,39 @@ class SVGContentBuilder {
 					LOGGER.log(Level.INFO, "RadialGradient doesn''t supports: {0}", element);
 					break;
 			}
+
 		}
 
-		// Stop の読み込み
-		List<Stop> stops = buildStops(reader, "radialGradient");
-
 		if ( id != null && cx != null && cy != null && r != null ) {
+
+			List<Stop> stops = buildStops(reader, "radialGradient");
 			double fDistance = 0.0;
 			double fAngle = 0.0;
 
 			if ( transform != null && transform instanceof Affine ) {
+
 				double tempCx = cx;
 				double tempCy = cy;
 				double tempR = r;
-
 				Affine affine = (Affine) transform;
+
 				cx = tempCx * affine.getMxx() + tempCy * affine.getMxy() + affine.getTx();
 				cy = tempCx * affine.getMyx() + tempCy * affine.getMyy() + affine.getTy();
-
-				// これは多分違う
-				r = Math.sqrt(tempR * affine.getMxx() * tempR * affine.getMxx()
-					+ tempR * affine.getMyx() * tempR * affine.getMyx());
+				r = Math.sqrt(tempR * affine.getMxx() * tempR * affine.getMxx() + tempR * affine.getMyx() * tempR * affine.getMyx());
 
 				if ( fx != null && fy != null ) {
+
 					double tempFx = fx;
 					double tempFy = fy;
+
 					fx = tempFx * affine.getMxx() + tempFy * affine.getMxy() + affine.getTx();
 					fy = tempFx * affine.getMyx() + tempFy * affine.getMyy() + affine.getTy();
+
 				} else {
 					fAngle = Math.asin(affine.getMyx()) * 180.0 / Math.PI;
-					// これもかなり怪しい
 					fDistance = Math.sqrt(( cx - tempCx ) * ( cx - tempCx ) + ( cy - tempCy ) * ( cy - tempCy ));
 				}
+
 			}
 
 			if ( fx != null && fy != null ) {
@@ -613,9 +634,10 @@ class SVGContentBuilder {
 				fAngle = Math.atan2(cy - fy, cx - fx) * 180.0 / Math.PI;
 			}
 
-			RadialGradient gradient = new RadialGradient(fAngle, fDistance, cx, cy, r, false, CycleMethod.NO_CYCLE, stops);
-			gradients.put(id, gradient);
+			gradients.put(id, new RadialGradient(fAngle, fDistance, cx, cy, r, false, CycleMethod.NO_CYCLE, stops));
+
 		}
+
 	}
 
 	private Shape buildRect( StartElement element ) {
