@@ -223,8 +223,8 @@ class SVGContentBuilder {
 			return new Ellipse(
 				( cxAttribute != null ) ? Double.parseDouble(cxAttribute.getValue()) : 0.0,
 				( cyAttribute != null ) ? Double.parseDouble(cyAttribute.getValue()) : 0.0,
-				( rxAttribute != null && !"auto".equalsIgnoreCase(rxAttribute.getValue()) ) ? Double.parseDouble(rxAttribute.getValue()) : 0.0,
-				( ryAttribute != null && !"auto".equalsIgnoreCase(ryAttribute.getValue()) ) ? Double.parseDouble(ryAttribute.getValue()) : 0.0
+				( rxAttribute != null && !"auto".equals(rxAttribute.getValue()) ) ? Double.parseDouble(rxAttribute.getValue()) : 0.0,
+				( ryAttribute != null && !"auto".equals(ryAttribute.getValue()) ) ? Double.parseDouble(ryAttribute.getValue()) : 0.0
 			);
 		} catch ( NumberFormatException ex ) {
 			LOGGER.warning(MessageFormat.format(
@@ -296,10 +296,10 @@ class SVGContentBuilder {
 				} catch ( NumberFormatException ex ) {
 					LOGGER.warning(MessageFormat.format(
 						"An image's attribute cannot be parsed to double: x [{0}], y [{1}], width [{2}], height [{3}].",
-						( xAttribute != null )     ? xAttribute.getValue()     : "-",
-						( yAttribute != null )     ? yAttribute.getValue()     : "-",
-						( widthAttribute != null ) ? widthAttribute.getValue() : "-",
-						heightAttribute.getValue()
+						( xAttribute      != null ) ? xAttribute.getValue()      : "-",
+						( yAttribute      != null ) ? yAttribute.getValue()      : "-",
+						( widthAttribute  != null ) ? widthAttribute.getValue()  : "-",
+						( heightAttribute != null ) ? heightAttribute.getValue() : "-"
 					));
 				}
 			}
@@ -340,8 +340,8 @@ class SVGContentBuilder {
 
 	}
 
-	private void buildLinearGradient( XMLEventReader reader, StartElement element )
-		throws IOException, XMLStreamException {
+	private void buildLinearGradient( XMLEventReader reader, StartElement element ) throws IOException, XMLStreamException {
+
 		String id = null;
 		double x1 = Double.NaN;
 		double y1 = Double.NaN;
@@ -351,59 +351,82 @@ class SVGContentBuilder {
 
 		@SuppressWarnings( "unchecked" )
 		Iterator<Attribute> it = element.getAttributes();
+
 		while ( it.hasNext() ) {
+
 			Attribute attribute = it.next();
+
 			switch ( attribute.getName().getLocalPart() ) {
 				case "id":
 					id = attribute.getValue();
 					break;
 				case "gradientUnits":
-					String gradientUnits = attribute.getValue();
-					if ( !gradientUnits.equals("userSpaceOnUse") ) {
-						LOGGER.log(Level.INFO, "LinearGradient supports only userSpaceOnUse: {0}", element);
+					if ( !"userSpaceOnUse".equals(attribute.getValue()) ) {
+						LOGGER.warning(MessageFormat.format("LinearGradient supports only userSpaceOnUse: {0}", element));
 						return;
 					}
 					break;
 				case "x1":
-					x1 = Double.parseDouble(attribute.getValue());
+					try {
+						x1 = Double.parseDouble(attribute.getValue());
+					} catch ( NumberFormatException ex ) {
+						LOGGER.warning(MessageFormat.format("LinearGradient's x1 attribute cannot be parsed to double [{0}].", attribute.getValue()));
+					}
 					break;
 				case "y1":
-					y1 = Double.parseDouble(attribute.getValue());
+					try {
+						y1 = Double.parseDouble(attribute.getValue());
+					} catch ( NumberFormatException ex ) {
+						LOGGER.warning(MessageFormat.format("LinearGradient's y1 attribute cannot be parsed to double [{0}].", attribute.getValue()));
+					}
 					break;
 				case "x2":
-					x2 = Double.parseDouble(attribute.getValue());
+					try {
+						x2 = Double.parseDouble(attribute.getValue());
+					} catch ( NumberFormatException ex ) {
+						LOGGER.warning(MessageFormat.format("LinearGradient's x2 attribute cannot be parsed to double [{0}].", attribute.getValue()));
+					}
 					break;
 				case "y2":
-					y2 = Double.parseDouble(attribute.getValue());
+					try {
+						y2 = Double.parseDouble(attribute.getValue());
+					} catch ( NumberFormatException ex ) {
+						LOGGER.warning(MessageFormat.format("LinearGradient's y2 attribute cannot be parsed to double [{0}].", attribute.getValue()));
+					}
 					break;
 				case "gradientTransform":
 					transform = extractTransform(attribute.getValue());
 					break;
 				default:
-					LOGGER.log(Level.INFO, "LinearGradient doesn''t supports: {0}:{1}", new Object[] { attribute, element });
+					LOGGER.warning(MessageFormat.format("LinearGradient doesn''t supports: {0}:{1}", attribute, element));
 					break;
 			}
+
 		}
 
-		// Stop の読み込み
-		List<Stop> stops = buildStops(reader, "linearGradient");
-
 		if ( id != null && x1 != Double.NaN && y1 != Double.NaN && x2 != Double.NaN && y2 != Double.NaN ) {
+
+			List<Stop> stops = buildStops(reader, "linearGradient");
+
 			if ( transform != null && transform instanceof Affine ) {
+
 				double x1d = x1;
 				double y1d = y1;
 				double x2d = x2;
 				double y2d = y2;
 				Affine affine = (Affine) transform;
+
 				x1 = x1d * affine.getMxx() + y1d * affine.getMxy() + affine.getTx();
 				y1 = x1d * affine.getMyx() + y1d * affine.getMyy() + affine.getTy();
 				x2 = x2d * affine.getMxx() + y2d * affine.getMxy() + affine.getTx();
 				y2 = x2d * affine.getMyx() + y2d * affine.getMyy() + affine.getTy();
+
 			}
 
-			LinearGradient gradient = new LinearGradient(x1, y1, x2, y2, false, CycleMethod.NO_CYCLE, stops);
-			gradients.put(id, gradient);
+			gradients.put(id, new LinearGradient(x1, y1, x2, y2, false, CycleMethod.NO_CYCLE, stops));
+
 		}
+
 	}
 
 	private Shape buildPath( StartElement element ) {
@@ -614,10 +637,10 @@ class SVGContentBuilder {
 			);
 
 			rectangle.setArcWidth(
-				( rxAttribute != null && !"auto".equalsIgnoreCase(rxAttribute.getValue()) ) ? Double.parseDouble(rxAttribute.getValue()) : 0.0
+				( rxAttribute != null && !"auto".equals(rxAttribute.getValue()) ) ? Double.parseDouble(rxAttribute.getValue()) : 0.0
 			);
 			rectangle.setArcHeight(
-				( ryAttribute != null && !"auto".equalsIgnoreCase(ryAttribute.getValue()) ) ? Double.parseDouble(ryAttribute.getValue()) : 0.0
+				( ryAttribute != null && !"auto".equals(ryAttribute.getValue()) ) ? Double.parseDouble(ryAttribute.getValue()) : 0.0
 			);
 
 			return rectangle;
@@ -637,63 +660,100 @@ class SVGContentBuilder {
 
 	}
 
-	private List<Stop> buildStops( XMLEventReader reader, String kindOfGradient )
-		throws XMLStreamException {
-		List<Stop> stops = new ArrayList<>();
+	private List<Stop> buildStops( XMLEventReader reader, String kindOfGradient ) throws XMLStreamException {
 
-		while ( true ) {
-			XMLEvent event = reader.nextEvent();
-			if ( event.isEndElement() && event.asEndElement().getName().getLocalPart().equals(kindOfGradient) ) {
-				break;
-			} else if ( event.isStartElement() ) {
+		List<Stop> stops = new ArrayList<>(4);
+		XMLEvent event = reader.nextEvent();
+
+		while ( !event.isEndElement() || !event.asEndElement().getName().getLocalPart().equals(kindOfGradient) ) {
+			
+			if ( event.isStartElement() ) {
+
 				StartElement element = event.asStartElement();
-				if ( !element.getName().getLocalPart().equals("stop") ) {
-					LOGGER.log(Level.INFO, "LinearGradient doesn''t supports: {0}", element);
-					continue;
-				}
 
-				double offset = Double.NaN;
-				String color = null;
-				double opacity = 1.0;
+				if ( element.getName().getLocalPart().equals("stop") ) {
 
-				@SuppressWarnings( "unchecked" )
-				Iterator<Attribute> it = element.getAttributes();
-				while ( it.hasNext() ) {
+					double offset = Double.NaN;
+					String color = null;
+					double opacity = 1.0;
+					@SuppressWarnings( "unchecked" )
+					Iterator<Attribute> it = element.getAttributes();
 
-					Attribute attribute = it.next();
-					switch ( attribute.getName().getLocalPart() ) {
-						case "offset":
-							offset = Double.parseDouble(attribute.getValue());
-							break;
-						case "style":
-							String style = attribute.getValue();
-							StringTokenizer tokenizer = new StringTokenizer(style, ";");
-							while ( tokenizer.hasMoreTokens() ) {
-								String item = tokenizer.nextToken().trim();
-								if ( item.startsWith("stop-color") ) {
-									color = item.substring(11);
-								} else if ( item.startsWith("stop-opacity") ) {
-									opacity = Double.parseDouble(item.substring(13));
-								} else {
-									LOGGER.log(Level.INFO, "LinearGradient Stop doesn''t supports: {0} [{1}] ''{2}''", new Object[] { attribute, element, item });
+					while ( it.hasNext() ) {
+
+						Attribute attribute = it.next();
+
+						switch ( attribute.getName().getLocalPart() ) {
+							case "offset":
+								try {
+									offset = Double.parseDouble(attribute.getValue());
+								} catch ( NumberFormatException ex ) {
+									LOGGER.warning(MessageFormat.format(
+										"LinearGradient's stop offset attribute cannot be parsed to double [{0}].",
+										attribute.getValue()
+									));
 								}
-							}
-							break;
-						default:
-							LOGGER.log(Level.INFO, "LinearGradient Stop doesn''t supports: {0} [{1}]", new Object[] { attribute, element });
-							break;
-					}
-				}
+								break;
+							case "style": {
 
-				if ( offset != Double.NaN && color != null ) {
-					Color colour = Color.web(color, opacity);
-					Stop stop = new Stop(offset, colour);
-					stops.add(stop);
+									String style = attribute.getValue();
+									StringTokenizer tokenizer = new StringTokenizer(style, ";");
+
+									while ( tokenizer.hasMoreTokens() ) {
+
+										String item = tokenizer.nextToken().trim();
+
+										if ( item.startsWith("stop-color") ) {
+											color = item.substring(11);
+										} else if ( item.startsWith("stop-opacity") ) {
+											try {
+												opacity = Double.parseDouble(item.substring(13));
+											} catch ( NumberFormatException ex ) {
+												LOGGER.warning(MessageFormat.format(
+													"LinearGradient's stop style opacity attribute cannot be parsed to double [{0}].",
+													attribute.getValue()
+												));
+											}
+										} else {
+											LOGGER.warning(MessageFormat.format(
+												"LinearGradient's stop doesn''t supports: {0} [{1}] ''{2}''",
+												attribute,
+												element,
+												item
+											));
+										}
+										
+									}
+
+								}
+								break;
+							default:
+								LOGGER.warning(MessageFormat.format(
+									"LinearGradient's stop doesn''t supports: {0} [{1}]",
+									attribute,
+									element
+								));
+								break;
+						}
+
+					}
+
+					if ( offset != Double.NaN && color != null ) {
+						stops.add(new Stop(offset, Color.web(color, opacity)));
+					}
+
+				} else {
+					LOGGER.warning(MessageFormat.format("LinearGradient doesn''t supports: {0}", element));
 				}
+			
 			}
+
+			event = reader.nextEvent();
+
 		}
 
 		return stops;
+
 	}
 
 	private Shape buildText( XMLEventReader reader, StartElement element ) throws XMLStreamException {
@@ -749,37 +809,54 @@ class SVGContentBuilder {
 	}
 
 	private Transform extractTransform( String transforms ) {
-		Transform transform = null;
 
+		Transform transform = null;
 		StringTokenizer tokenizer = new StringTokenizer(transforms, ")");
 
 		while ( tokenizer.hasMoreTokens() ) {
-			String transformTxt = tokenizer.nextToken();
-			if ( transformTxt.startsWith("translate(") ) {
-				throw new UnsupportedOperationException("Transform:Translate");
-			} else if ( transformTxt.startsWith("scale(") ) {
-				throw new UnsupportedOperationException("Transform:Scale");
-			} else if ( transformTxt.startsWith("rotate(") ) {
-				throw new UnsupportedOperationException("Transform:Rotate");
-			} else if ( transformTxt.startsWith("skewX(") ) {
-				throw new UnsupportedOperationException("Transform:SkewX");
-			} else if ( transformTxt.startsWith("skewY(") ) {
-				throw new UnsupportedOperationException("Transform:SkewY");
-			} else if ( transformTxt.startsWith("matrix(") ) {
-				transformTxt = transformTxt.substring(7);
-				StringTokenizer tokenizer2 = new StringTokenizer(transformTxt, " ");
-				double mxx = Double.parseDouble(tokenizer2.nextToken());
-				double myx = Double.parseDouble(tokenizer2.nextToken());
-				double mxy = Double.parseDouble(tokenizer2.nextToken());
-				double myy = Double.parseDouble(tokenizer2.nextToken());
-				double tx = Double.parseDouble(tokenizer2.nextToken());
-				double ty = Double.parseDouble(tokenizer2.nextToken());
 
-				transform = Transform.affine(mxx, myx, mxy, myy, tx, ty);
+			String transformTxt = tokenizer.nextToken();
+
+//	TODO:CR Implements other types ot transformations.
+			if ( transformTxt.startsWith("translate(") ) {
+				throw new UnsupportedOperationException("transform:translate");
+			} else if ( transformTxt.startsWith("scale(") ) {
+				throw new UnsupportedOperationException("transform:scale");
+			} else if ( transformTxt.startsWith("rotate(") ) {
+				throw new UnsupportedOperationException("transform:rotate");
+			} else if ( transformTxt.startsWith("skewX(") ) {
+				throw new UnsupportedOperationException("transform:skewX");
+			} else if ( transformTxt.startsWith("skewY(") ) {
+				throw new UnsupportedOperationException("transform:skewY");
+			} else if ( transformTxt.startsWith("matrix(") ) {
+
+				transformTxt = transformTxt.substring(7);
+
+				StringTokenizer tokenizer2 = new StringTokenizer(transformTxt, " ");
+
+				try {
+
+					double mxx = Double.parseDouble(tokenizer2.nextToken());
+					double myx = Double.parseDouble(tokenizer2.nextToken());
+					double mxy = Double.parseDouble(tokenizer2.nextToken());
+					double myy = Double.parseDouble(tokenizer2.nextToken());
+					double tx = Double.parseDouble(tokenizer2.nextToken());
+					double ty = Double.parseDouble(tokenizer2.nextToken());
+
+					transform = Transform.affine(mxx, myx, mxy, myy, tx, ty);
+
+				} catch ( NumberFormatException ex ) {
+					LOGGER.warning(MessageFormat.format(
+						"Matrix transform contains value not parsed to double [{0}].",
+						transformTxt
+					));
+				}
+
 			}
 		}
 
 		return transform;
+
 	}
 
 	private void setOpacity( Node node, StartElement element ) {
