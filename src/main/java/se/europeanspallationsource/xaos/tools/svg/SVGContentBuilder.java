@@ -20,6 +20,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -187,19 +188,27 @@ class SVGContentBuilder {
 
 	}
 
-	private Shape buildCircle( StartElement element ) throws NullPointerException, NumberFormatException {
+	private Shape buildCircle( StartElement element ) {
 
 		Attribute cxAttribute = element.getAttributeByName(new QName("cx"));
 		Attribute cyAttribute = element.getAttributeByName(new QName("cy"));
-		Attribute radiusAttribute = element.getAttributeByName(new QName("r"));
+		Attribute rAttribute = element.getAttributeByName(new QName("r"));
 
-		Circle circle = new Circle(
-			Double.parseDouble(cxAttribute.getValue()),
-			Double.parseDouble(cyAttribute.getValue()),
-			Double.parseDouble(radiusAttribute.getValue())
-		);
-
-		return circle;
+		try {
+			return new Circle(
+				( cxAttribute != null ) ? Double.parseDouble(cxAttribute.getValue()) : 0.0,
+				( cyAttribute != null ) ? Double.parseDouble(cyAttribute.getValue()) : 0.0,
+				( rAttribute  != null ) ? Double.parseDouble(rAttribute.getValue())  : 0.0
+			);
+		} catch ( NumberFormatException ex ) {
+			LOGGER.warning(MessageFormat.format(
+				"A circle's attribute cannot be parsed to double: cx [{0}], cy [{1}], r [{2}].",
+				( cxAttribute != null ) ? cxAttribute.getValue() : "-",
+				( cyAttribute != null ) ? cyAttribute.getValue() : "-",
+				( rAttribute  != null ) ? rAttribute.getValue()  : "-"
+			));
+			return null;
+		}
 
 	}
 
@@ -207,17 +216,26 @@ class SVGContentBuilder {
 
 		Attribute cxAttribute = element.getAttributeByName(new QName("cx"));
 		Attribute cyAttribute = element.getAttributeByName(new QName("cy"));
-		Attribute radiusXAttribute = element.getAttributeByName(new QName("rx"));
-		Attribute radiusYAttribute = element.getAttributeByName(new QName("ry"));
+		Attribute rxAttribute = element.getAttributeByName(new QName("rx"));
+		Attribute ryAttribute = element.getAttributeByName(new QName("ry"));
 
-		Ellipse ellipse = new Ellipse(
-			Double.parseDouble(cxAttribute.getValue()),
-			Double.parseDouble(cyAttribute.getValue()),
-			Double.parseDouble(radiusXAttribute.getValue()),
-			Double.parseDouble(radiusYAttribute.getValue())
-		);
-
-		return ellipse;
+		try {
+			return new Ellipse(
+				( cxAttribute != null ) ? Double.parseDouble(cxAttribute.getValue()) : 0.0,
+				( cyAttribute != null ) ? Double.parseDouble(cyAttribute.getValue()) : 0.0,
+				( rxAttribute != null && !"auto".equalsIgnoreCase(rxAttribute.getValue()) ) ? Double.parseDouble(rxAttribute.getValue()) : 0.0,
+				( ryAttribute != null && !"auto".equalsIgnoreCase(ryAttribute.getValue()) ) ? Double.parseDouble(ryAttribute.getValue()) : 0.0
+			);
+		} catch ( NumberFormatException ex ) {
+			LOGGER.warning(MessageFormat.format(
+				"An ellipse's attribute cannot be parsed to double: cx [{0}], cy [{1}], rx [{2}], ry [{3}].",
+				( cxAttribute != null ) ? cxAttribute.getValue() : "-",
+				( cyAttribute != null ) ? cyAttribute.getValue() : "-",
+				( rxAttribute != null ) ? rxAttribute.getValue() : "-",
+				( ryAttribute != null ) ? ryAttribute.getValue() : "-"
+			));
+			return null;
+		}
 
 	}
 
@@ -230,44 +248,85 @@ class SVGContentBuilder {
 
 	}
 
-	private ImageView buildImage( XMLEventReader reader, StartElement element ) throws IOException {
+	private ImageView buildImage( XMLEventReader reader, StartElement element ) {
+
 		Attribute widthAttribute = element.getAttributeByName(new QName("width"));
-		double width = Double.parseDouble(widthAttribute.getValue());
 		Attribute heightAttribute = element.getAttributeByName(new QName("height"));
-		double height = Double.parseDouble(heightAttribute.getValue());
 		Attribute hrefAttribute = element.getAttributeByName(new QName("href"));
 
-		URL imageUrl = null;
-		try {
-			imageUrl = new URL(hrefAttribute.getValue());
-		} catch ( MalformedURLException ex ) {
-			try {
-				imageUrl = new URL(url, hrefAttribute.getValue());
-			} catch ( MalformedURLException ex1 ) {
-				LOGGER.log(Level.SEVERE, null, ex1);
-			}
-		}
-		Image image = new Image(imageUrl.toString(), width, height, true, true);
+		if ( widthAttribute != null && heightAttribute != null && hrefAttribute != null ) {
 
-		return new ImageView(image);
+			URL imageUrl = null;
+
+			try {
+				imageUrl = new URL(hrefAttribute.getValue());
+			} catch ( MalformedURLException ex1 ) {
+				try {
+					imageUrl = new URL(url, hrefAttribute.getValue());
+				} catch ( MalformedURLException ex2 ) {
+					LOGGER.warning(MessageFormat.format(
+						"Image's href attribute is not a valid URL [{0}].",
+						hrefAttribute.getValue()
+					));
+				}
+			}
+
+			if ( imageUrl != null ) {
+				try {
+
+					double width = Double.parseDouble(widthAttribute.getValue());
+					double height = Double.parseDouble(heightAttribute.getValue());
+					Image image = new Image(imageUrl.toString(), width, height, true, true);
+
+					return new ImageView(image);
+
+				} catch ( NumberFormatException ex ) {
+					LOGGER.warning(MessageFormat.format(
+						"An image's attribute cannot be parsed to double: width [{0}], height [{1}].",
+						widthAttribute.getValue(),
+						heightAttribute.getValue()
+					));
+				}
+			}
+
+		} else {
+			LOGGER.warning("An image's attribute is null: width, height, href.");
+		}
+
+		return null;
+
 	}
 
 	private Shape buildLine( StartElement element ) {
+
 		Attribute x1Attribute = element.getAttributeByName(new QName("x1"));
 		Attribute y1Attribute = element.getAttributeByName(new QName("y1"));
 		Attribute x2Attribute = element.getAttributeByName(new QName("x2"));
 		Attribute y2Attribute = element.getAttributeByName(new QName("y2"));
 
 		if ( x1Attribute != null && y1Attribute != null && x2Attribute != null && y2Attribute != null ) {
-			double x1 = Double.parseDouble(x1Attribute.getValue());
-			double y1 = Double.parseDouble(y1Attribute.getValue());
-			double x2 = Double.parseDouble(x2Attribute.getValue());
-			double y2 = Double.parseDouble(y2Attribute.getValue());
-
-			return new Line(x1, y1, x2, y2);
+			try {
+				return new Line(
+					Double.parseDouble(x1Attribute.getValue()),
+					Double.parseDouble(y1Attribute.getValue()),
+					Double.parseDouble(x2Attribute.getValue()),
+					Double.parseDouble(y2Attribute.getValue())
+				);
+			} catch ( NumberFormatException ex ) {
+				LOGGER.warning(MessageFormat.format(
+					"A line's attribute cannot be parsed to double: x1 [{0}], y1 [{1}], x2 [{2}], y2 [{3}].",
+					x1Attribute.getValue(),
+					y1Attribute.getValue(),
+					x2Attribute.getValue(),
+					y2Attribute.getValue()
+				));
+			}
 		} else {
-			return null;
+			LOGGER.warning("A line's attribute is null: x1, y1, x2, y2.");
 		}
+
+		return null;
+
 	}
 
 	private void buildLinearGradient( XMLEventReader reader, StartElement element )
@@ -337,48 +396,101 @@ class SVGContentBuilder {
 	}
 
 	private Shape buildPath( StartElement element ) {
+
 		Attribute dAttribute = element.getAttributeByName(new QName("d"));
 
-		SVGPath path = new SVGPath();
-		path.setContent(dAttribute.getValue());
+		if ( dAttribute != null ) {
 
-		return path;
+			SVGPath path = new SVGPath();
+
+			path.setContent(dAttribute.getValue());
+
+			return path;
+
+		} else {
+			LOGGER.warning("A path's attribute is null: d.");
+		}
+
+		return null;
+
 	}
 
 	private Shape buildPolygon( StartElement element ) {
+
 		Attribute pointsAttribute = element.getAttributeByName(new QName("points"));
-		Polygon polygon = new Polygon();
 
-		StringTokenizer tokenizer = new StringTokenizer(pointsAttribute.getValue(), " ");
-		while ( tokenizer.hasMoreTokens() ) {
-			String point = tokenizer.nextToken();
+		if ( pointsAttribute != null ) {
+			try {
 
-			StringTokenizer tokenizer2 = new StringTokenizer(point, ",");
-			Double x = Double.valueOf(tokenizer2.nextToken());
-			Double y = Double.valueOf(tokenizer2.nextToken());
+				Polygon polygon = new Polygon();
+				StringTokenizer tokenizer = new StringTokenizer(pointsAttribute.getValue(), " ");
 
-			polygon.getPoints().add(x);
-			polygon.getPoints().add(y);
+				while ( tokenizer.hasMoreTokens() ) {
+
+					String point = tokenizer.nextToken();
+					StringTokenizer tokenizer2 = new StringTokenizer(point, ",");
+					Double x = Double.valueOf(tokenizer2.nextToken());
+					Double y = Double.valueOf(tokenizer2.nextToken());
+
+					polygon.getPoints().add(x);
+					polygon.getPoints().add(y);
+
+				}
+
+				return polygon;
+				
+			} catch ( NumberFormatException ex ) {
+				LOGGER.warning(MessageFormat.format(
+					"A polygon's point coordinate cannot be parsed to double [{0}].",
+					pointsAttribute.getValue()
+				));
+			}
+
+		} else {
+			LOGGER.warning("A polygon's attribute is null: points.");
 		}
 
-		return polygon;
+		return null;
+
 	}
 
 	private Shape buildPolyline( StartElement element ) {
-		Polyline polyline = new Polyline();
+
 		Attribute pointsAttribute = element.getAttributeByName(new QName("points"));
 
-		StringTokenizer tokenizer = new StringTokenizer(pointsAttribute.getValue(), " ");
-		while ( tokenizer.hasMoreTokens() ) {
-			String points = tokenizer.nextToken();
-			StringTokenizer tokenizer2 = new StringTokenizer(points, ",");
-			double x = Double.parseDouble(tokenizer2.nextToken());
-			double y = Double.parseDouble(tokenizer2.nextToken());
-			polyline.getPoints().add(x);
-			polyline.getPoints().add(y);
+		if ( pointsAttribute != null ) {
+			try {
+
+				Polyline polyline = new Polyline();
+				StringTokenizer tokenizer = new StringTokenizer(pointsAttribute.getValue(), " ");
+
+				while ( tokenizer.hasMoreTokens() ) {
+
+					String points = tokenizer.nextToken();
+					StringTokenizer tokenizer2 = new StringTokenizer(points, ",");
+					double x = Double.parseDouble(tokenizer2.nextToken());
+					double y = Double.parseDouble(tokenizer2.nextToken());
+
+					polyline.getPoints().add(x);
+					polyline.getPoints().add(y);
+
+				}
+
+				return polyline;
+
+			} catch ( NumberFormatException ex ) {
+				LOGGER.warning(MessageFormat.format(
+					"A polyline's point coordinate cannot be parsed to double [{0}].",
+					pointsAttribute.getValue()
+				));
+			}
+
+		} else {
+			LOGGER.warning("A polyline's attribute is null: points.");
 		}
 
-		return polyline;
+		return null;
+
 	}
 
 	private void buildRadialGradient( XMLEventReader reader, StartElement element )
@@ -473,25 +585,35 @@ class SVGContentBuilder {
 	}
 
 	private Shape buildRect( StartElement element ) {
+
 		Attribute xAttribute = element.getAttributeByName(new QName("x"));
 		Attribute yAttribute = element.getAttributeByName(new QName("y"));
 		Attribute widthAttribute = element.getAttributeByName(new QName("width"));
 		Attribute heightAttribute = element.getAttributeByName(new QName("height"));
 
-		double x = 0.0;
-		double y = 0.0;
-
-		if ( xAttribute != null ) {
-			x = Double.parseDouble(xAttribute.getValue());
+		if ( widthAttribute != null && heightAttribute != null ) {
+			try {
+				return new Rectangle(
+					( xAttribute != null ) ? Double.parseDouble(xAttribute.getValue()) : 0.0,
+					( yAttribute != null ) ? Double.parseDouble(yAttribute.getValue()) : 0.0,
+					Double.parseDouble(widthAttribute.getValue()),
+					Double.parseDouble(heightAttribute.getValue())
+				);
+			} catch ( NumberFormatException ex ) {
+				LOGGER.warning(MessageFormat.format(
+					"A rect's attribute cannot be parsed to double: x [{0}], y [{1}], width [{2}], height [{3}].",
+					( xAttribute != null ) ? xAttribute.getValue() : "-",
+					( yAttribute != null ) ? yAttribute.getValue() : "-",
+					widthAttribute.getValue(),
+					heightAttribute.getValue()
+				));
+			}
+		} else {
+			LOGGER.warning("A rect's attribute is null: width, height.");
 		}
-		if ( yAttribute != null ) {
-			y = Double.parseDouble(yAttribute.getValue());
-		}
-		Rectangle rect = new Rectangle(x, y,
-			Double.parseDouble(widthAttribute.getValue()),
-			Double.parseDouble(heightAttribute.getValue()));
 
-		return rect;
+		return null;
+
 	}
 
 	private List<Stop> buildStops( XMLEventReader reader, String kindOfGradient )
@@ -553,29 +675,42 @@ class SVGContentBuilder {
 		return stops;
 	}
 
-	private Shape buildText( XMLEventReader reader, StartElement element )
-		throws XMLStreamException {
+	private Shape buildText( XMLEventReader reader, StartElement element ) throws XMLStreamException {
+
+		Font font = null;
 		Attribute fontFamilyAttribute = element.getAttributeByName(new QName("font-family"));
 		Attribute fontSizeAttribute = element.getAttributeByName(new QName("font-size"));
 
-		// TODO styleにfontの指定がある場合
-		Font font = null;
 		if ( fontFamilyAttribute != null && fontSizeAttribute != null ) {
-			font = Font.font(fontFamilyAttribute.getValue().replace("'", ""),
-				Double.parseDouble(fontSizeAttribute.getValue()));
+			try {
+				font = Font.font(
+					fontFamilyAttribute.getValue().replace("'", ""),
+					Double.parseDouble(fontSizeAttribute.getValue())
+				);
+			} catch ( NumberFormatException ex ) {
+				LOGGER.warning(MessageFormat.format(
+					"A text's attribute cannot be parsed to double: font-size [{0}].",
+					fontSizeAttribute.getValue()
+				));
+			}
 		}
 
 		XMLEvent event = reader.nextEvent();
+
 		if ( event.isCharacters() ) {
-			Text text = new Text(( (Characters) event ).getData());
+
+			Text text = new Text(((Characters) event).getData());
+
 			if ( font != null ) {
 				text.setFont(font);
 			}
 
 			return text;
+
 		} else {
 			throw new XMLStreamException("Illegal Element: " + event);
 		}
+
 	}
 
 	private Paint expressPaint( String value ) {
