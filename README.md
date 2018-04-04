@@ -128,3 +128,16 @@ Moreover, the _ServiceLoaderUtilities_ class will complement the
 </dependency>
 ```
 
+
+## Contributing XAOS
+
+
+The XAOS project on GitHub is using [Gitflow](https://blog.axosoft.com/gitflow/),
+development model introduced by [Vincent Driessen](http://nvie.com/posts/a-successful-git-branching-model/),
+here summarized:
+
+![Gitflow](http://nvie.com/img/git-model@2x.png)
+
+Who wants to contribute this projects must adopt the Gitflow model and
+[tools](https://github.com/nvie/gitflow).
+
