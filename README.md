@@ -123,7 +123,7 @@ Moreover, the _ServiceLoaderUtilities_ class will complement the
 <dependency>
 	<groupId>se.europeanspallationsource</groupId>
 	<artifactId>xaos</artifactId>
-	<version>0.2.0</version>
+	<version>0.3.0-SNAPSHOT</version>
 	<scope>compile</scope>
 </dependency>
 ```
