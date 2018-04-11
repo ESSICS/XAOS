@@ -26,7 +26,6 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,9 +41,8 @@ import static se.europeanspallationsource.xaos.tools.io.DirectoryWatcher.create;
 /**
  * @author claudio.rosati@esss.se
  */
+@SuppressWarnings({ "ClassWithoutLogger", "UseOfSystemOutOrSystemErr" })
 public class DirectoryWatcherTest {
-
-	private static final Logger LOGGER = Logger.getLogger(DirectoryWatcherTest.class.getName());
 
 	private Path dir_a;
 	private Path dir_a_c;
@@ -72,18 +70,18 @@ public class DirectoryWatcherTest {
 		file_b1 = Files.createTempFile(dir_b, "DW_b1_", ".test");
 		file_b2 = Files.createTempFile(dir_b, "DW_b2_", ".test");
 
-//		LOGGER.info(MessageFormat.format(
-//			"Testing 'DirectoryWatcher'\n"
-//			+ "\tcreated directories:\n"
-//			+ "\t\t{0}\n"
-//			+ "\t\t{1}\n"
-//			+ "\t\t{2}\n"
-//			+ "\t\t{3}\n"
-//			+ "\tcreated files:\n"
-//			+ "\t\t{4}\n"
-//			+ "\t\t{5}\n"
-//			+ "\t\t{6}\n"
-//			+ "\t\t{7}",
+//		System.out.println(MessageFormat.format(
+//			"  Testing 'DirectoryWatcher'\n"
+//			+ "    created directories:\n"
+//			+ "      {0}\n"
+//			+ "      {1}\n"
+//			+ "      {2}\n"
+//			+ "      {3}\n"
+//			+ "    created files:\n"
+//			+ "      {4}\n"
+//			+ "      {5}\n"
+//			+ "      {6}\n"
+//			+ "      {7}",
 //			root,
 //			dir_a,
 //			dir_a_c,
@@ -110,7 +108,7 @@ public class DirectoryWatcherTest {
 	@Test
 	public void testCreate() throws IOException {
 
-		LOGGER.info("Testing 'create'…");
+		System.out.println("  Testing 'create'...");
 
 		DirectoryWatcher watcher = create(executor);
 
@@ -143,7 +141,7 @@ public class DirectoryWatcherTest {
 	@Test
 	public void testIsShutdown() throws IOException {
 
-		LOGGER.info("Testing 'isShutdown'…");
+		System.out.println("  Testing 'isShutdown'...");
 
 		DirectoryWatcher watcher = create(executor);
 
@@ -163,7 +161,7 @@ public class DirectoryWatcherTest {
 	@Test
 	public void testShutdown() throws IOException {
 
-		LOGGER.info("Testing 'shutdown'…");
+		System.out.println("  Testing 'shutdown'...");
 
 		DirectoryWatcher watcher = create(executor);
 
@@ -187,7 +185,7 @@ public class DirectoryWatcherTest {
 	@Test
 	public void testWatch() throws IOException, InterruptedException {
 
-		LOGGER.info(MessageFormat.format("Testing ''watch'' [on {0}]…", root));
+		System.out.println(MessageFormat.format("  Testing ''watch'' [on {0}]...", root));
 
 		CountDownLatch createLatch = new CountDownLatch(1);
 		CountDownLatch deleteLatch = new CountDownLatch(1);
@@ -240,7 +238,7 @@ public class DirectoryWatcherTest {
 	@Test
 	public void testWatchOrStreamError() throws IOException, InterruptedException {
 
-		LOGGER.info(MessageFormat.format("Testing ''watchOrStreamError'' [on {0}]…", root));
+		System.out.println(MessageFormat.format("  Testing ''watchOrStreamError'' [on {0}]...", root));
 
 		CountDownLatch errorLatch = new CountDownLatch(1);
 		DirectoryWatcher watcher = create(executor);

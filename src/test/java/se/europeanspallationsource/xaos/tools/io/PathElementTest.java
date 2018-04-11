@@ -22,7 +22,6 @@ import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Logger;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -36,9 +35,8 @@ import static org.junit.Assert.assertTrue;
 /**
  * @author claudio.rosati@esss.se
  */
+@SuppressWarnings({ "ClassWithoutLogger", "UseOfSystemOutOrSystemErr" })
 public class PathElementTest {
-
-	private static final Logger LOGGER = Logger.getLogger(PathElementTest.class.getName());
 
 	private static Path dir_a;
 	private static Path dir_a_c;
@@ -61,18 +59,18 @@ public class PathElementTest {
 				file_b1 = Files.createTempFile(dir_b, "PE_b1_", ".test");
 				file_b2 = Files.createTempFile(dir_b, "PE_b2_", ".test");
 
-		LOGGER.info(MessageFormat.format(
-			"Testing 'PathElement'\n"
-			+ "\tcreated directories:\n"
-			+ "\t\t{0}\n"
-			+ "\t\t{1}\n"
-			+ "\t\t{2}\n"
-			+ "\t\t{3}\n"
-			+ "\tcreated files:\n"
-			+ "\t\t{4}\n"
-			+ "\t\t{5}\n"
-			+ "\t\t{6}\n"
-			+ "\t\t{7}",
+		System.out.println(MessageFormat.format(
+			"  Testing 'PathElement'\n"
+			+ "    created directories:\n"
+			+ "      {0}\n"
+			+ "      {1}\n"
+			+ "      {2}\n"
+			+ "      {3}\n"
+			+ "    created files:\n"
+			+ "      {4}\n"
+			+ "      {5}\n"
+			+ "      {6}\n"
+			+ "      {7}",
 			root,
 			dir_a,
 			dir_a_c,
@@ -96,7 +94,7 @@ public class PathElementTest {
 	@Test
 	public void testDirectory() {
 
-		LOGGER.info("Testing 'directory'…");
+		System.out.println("  Testing 'directory'...");
 
 		PathElement pe_root = PathElement.directory(root, Collections.emptyList());
 
@@ -129,7 +127,7 @@ public class PathElementTest {
 	@Test
 	public void testFile() throws IOException {
 
-		LOGGER.info("Testing 'file'…");
+		System.out.println("  Testing 'file'...");
 
 		PathElement pe_file_a = PathElement.file(file_a, Files.getLastModifiedTime(file_a));
 
@@ -169,7 +167,7 @@ public class PathElementTest {
 	@Test
 	public void testTree() throws IOException {
 
-		LOGGER.info("Testing 'tree'…");
+		System.out.println("  Testing 'tree'...");
 
 		PathElement pe_root = PathElement.tree(root);
 		List<PathElement> root_children = pe_root.getChildren();

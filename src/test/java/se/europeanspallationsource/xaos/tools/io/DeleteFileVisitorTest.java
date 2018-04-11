@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.MessageFormat;
-import java.util.logging.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,9 +30,8 @@ import static org.junit.Assert.assertTrue;
 /**
  * @author claudio.rosati@esss.se
  */
+@SuppressWarnings({ "ClassWithoutLogger", "UseOfSystemOutOrSystemErr" })
 public class DeleteFileVisitorTest {
-
-	private static final Logger LOGGER = Logger.getLogger(DeleteFileVisitorTest.class.getName());
 
 	private Path dir_a;
 	private Path dir_a_c;
@@ -56,18 +54,18 @@ public class DeleteFileVisitorTest {
 				file_b1 = Files.createTempFile(dir_b, "DFV_b1_", ".test");
 				file_b2 = Files.createTempFile(dir_b, "DFV_b2_", ".test");
 
-		LOGGER.info(MessageFormat.format(
-			"Testing 'DeleteFileVisitor'\n"
-			+ "\tcreated directories:\n"
-			+ "\t\t{0}\n"
-			+ "\t\t{1}\n"
-			+ "\t\t{2}\n"
-			+ "\t\t{3}\n"
-			+ "\tcreated files:\n"
-			+ "\t\t{4}\n"
-			+ "\t\t{5}\n"
-			+ "\t\t{6}\n"
-			+ "\t\t{7}",
+		System.out.println(MessageFormat.format(
+			"  Testing 'DeleteFileVisitor'\n"
+			+ "    created directories:\n"
+			+ "      {0}\n"
+			+ "      {1}\n"
+			+ "      {2}\n"
+			+ "      {3}\n"
+			+ "    created files:\n"
+			+ "      {4}\n"
+			+ "      {5}\n"
+			+ "      {6}\n"
+			+ "      {7}",
 			root,
 			dir_a,
 			dir_a_c,
@@ -83,7 +81,7 @@ public class DeleteFileVisitorTest {
 	@Test
 	public void testPostVisitDirectory() throws Exception {
 
-		LOGGER.info("Testing 'DeleteFileVisitor'…");
+		System.out.println("  Testing 'DeleteFileVisitor'...");
 
 		assertTrue(Files.exists(file_b2));
 		assertTrue(Files.exists(file_b1));
