@@ -18,8 +18,10 @@ package se.europeanspallationsource.xaos.tools.io;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NotDirectoryException;
 import java.nio.file.Path;
 import java.nio.file.StandardWatchEventKinds;
+import java.text.MessageFormat;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -179,12 +181,13 @@ public class DirectoryWatcherTest {
 	/**
 	 * Test of watch method, of class DirectoryWatcher.
 	 *
-	 * @throws java.lang.Exception
+	 * @throws java.io.IOException
+	 * @throws java.lang.InterruptedException
 	 */
 	@Test
-	public void testWatch() throws Exception {
+	public void testWatch() throws IOException, InterruptedException {
 
-		LOGGER.info("Testing 'watch'…");
+		LOGGER.info(MessageFormat.format("Testing ''watch'' [on {0}]…", root));
 
 		CountDownLatch createLatch = new CountDownLatch(1);
 		CountDownLatch deleteLatch = new CountDownLatch(1);
@@ -230,9 +233,30 @@ public class DirectoryWatcherTest {
 
 	/**
 	 * Test of watchOrStreamError method, of class DirectoryWatcher.
+	 *
+	 * @throws java.io.IOException
+	 * @throws java.lang.InterruptedException
 	 */
-//	@Test
-//	public void testWatchOrStreamError() {
-//	}
+	@Test
+	public void testWatchOrStreamError() throws IOException, InterruptedException {
+
+		LOGGER.info(MessageFormat.format("Testing ''watchOrStreamError'' [on {0}]…", root));
+
+		CountDownLatch errorLatch = new CountDownLatch(1);
+		DirectoryWatcher watcher = create(executor);
+
+		watcher.getErrorsStream().subscribe(throwable -> {
+			if ( throwable instanceof NotDirectoryException ) {
+				errorLatch.countDown();
+			}
+		});
+
+		watcher.watchOrStreamError(file_a);
+
+		if ( !errorLatch.await(1, TimeUnit.MINUTES) ) {
+			fail("File deletion not signalled in 1 minute.");
+		}
+
+	}
 
 }
