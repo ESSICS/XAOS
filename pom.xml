@@ -5,7 +5,7 @@
 
     <groupId>se.europeanspallationsource</groupId>
     <artifactId>xaos</artifactId>
-    <version>0.2.0</version>
+    <version>0.2.1</version>
     <packaging>jar</packaging>
     <name>XAOS</name>
     <description>
