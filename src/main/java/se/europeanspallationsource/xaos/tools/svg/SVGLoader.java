@@ -17,10 +17,9 @@ package se.europeanspallationsource.xaos.tools.svg;
 
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.MessageFormat;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.stream.XMLStreamException;
 
@@ -75,16 +74,32 @@ public class SVGLoader {
 			throw new NullPointerException("url");
 		}
 
-		SVGContent root = null;
 		SVGContentBuilder builder = new SVGContentBuilder(url);
 
-		try {
-			root = builder.build();
-		} catch ( IOException | XMLStreamException ex ) {
-			LOGGER.log(Level.SEVERE, MessageFormat.format("Unable to load SVG from URL: {0}", url.toExternalForm()), ex);
+		return builder.build();
+
+	}
+
+	/**
+	 * Load SVG file and convert it to JavaFX.
+	 *
+	 * @param stream The {@link InputStream} corresponding to the SVG file.
+	 * @return An {@link SVGContent} object.
+	 * @throws IOException          If the SVG file specified by {@code url}
+	 *                              cannot be read.
+	 * @throws XMLStreamException   If the resource specified by {@code url} is
+	 *                              not a proper SVG file.
+	 * @throws NullPointerException If {@code url} is null.
+	 */
+	public static SVGContent load( InputStream stream ) throws IOException, XMLStreamException {
+
+		if ( stream == null ) {
+			throw new NullPointerException("stream");
 		}
 
-		return root;
+		SVGContentBuilder builder = new SVGContentBuilder(stream);
+
+		return builder.build();
 
 	}
 

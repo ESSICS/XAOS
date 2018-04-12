@@ -16,9 +16,14 @@
 package se.europeanspallationsource.xaos.tools.svg;
 
 
+import java.io.IOException;
+import java.util.concurrent.TimeoutException;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javax.xml.stream.XMLStreamException;
+import org.junit.After;
 import org.junit.Test;
+import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
 
 import static org.testfx.assertions.api.Assertions.assertThat;
@@ -27,20 +32,31 @@ import static org.testfx.assertions.api.Assertions.assertThat;
 /**
  * @author claudio.rosati@esss.se
  */
-public class SVGLoaderTest extends ApplicationTest {
+@SuppressWarnings( "ClassWithoutLogger" )
+public class SVGFromInputStreamTest extends ApplicationTest {
 	
 	private SVGContent svgContent;
 
 	@Override
-	public void start( Stage stage ) throws Exception {
+	public void start( Stage stage ) throws IOException, XMLStreamException {
 
-		svgContent = SVGLoader.load(SVGLoaderTest.class.getResource("/svg/duke.svg"));
+		svgContent = SVGLoader.load(SVGFromInputStreamTest.class.getResourceAsStream("/svg/duke.svg"));
 
 		svgContent.setId("Loaded SVG Image");
 
 		stage.setScene(new Scene(svgContent));
 		stage.show();
 
+	}
+
+	@Override
+	public void stop() throws Exception {
+		super.stop(); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@After
+	public void tearDown() throws TimeoutException {
+		FxToolkit.cleanupStages();
 	}
 
 	@Test
