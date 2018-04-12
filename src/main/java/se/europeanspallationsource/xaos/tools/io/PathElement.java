@@ -34,7 +34,7 @@ import java.util.stream.Stream;
  * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX</a>
  */
 @SuppressWarnings( "ClassWithoutLogger" )
-class PathElement {
+public class PathElement {
 
 	private static final Comparator<Path> PATH_COMPARATOR = ( p, q ) -> {
 
@@ -51,6 +51,14 @@ class PathElement {
 
 	};
 
+	/**
+	 * Factory method returning a tree structure of {@link PathElement} instances
+	 * representing the content of the given {@code root} directory.
+	 *
+	 * @param root The pathname of the tree's root directory.
+	 * @return The {@link PathElement} of the tree rooted at the given {@link Path}.
+	 * @throws IOException If an I/O error occurs.
+	 */
 	public static PathElement tree( Path root ) throws IOException {
 
 		if ( Files.isDirectory(root) ) {
@@ -75,10 +83,26 @@ class PathElement {
 
 	}
 
+	/**
+	 * Factory method returning a {@link PathElement} instance representing a
+	 * directory.
+	 *
+	 * @param path     The directory pathname.
+	 * @param children The directory's children.
+	 * @return A{@link PathElement} instance representing a directory.
+	 */
 	static PathElement directory( Path path, List<PathElement> children ) {
 		return new PathElement(path, true, children, null);
 	}
 
+	/**
+	 * Factory method returning a {@link PathElement) instance representing a
+	 * file.
+	 *
+	 * @param path         The file pathname.
+	 * @param lastModified The date of last modification of the file.
+	 * @return A {@link PathElement) instance representing a file.
+	 */
 	static PathElement file( Path path, FileTime lastModified ) {
 		return new PathElement(path, false, Collections.emptyList(), lastModified);
 	}

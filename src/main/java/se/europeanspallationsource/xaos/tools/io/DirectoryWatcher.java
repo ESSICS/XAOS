@@ -22,6 +22,8 @@ import java.nio.file.Path;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
@@ -55,9 +57,9 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
  *     });
  *     key.reset();
  *   });
- * 
+ *
  *   Path root = ...
- * 
+ *
  *   watcher.watch(root);</pre>
  * <p>
  * <b>Note:</b> don't forget to call {@code key.reset()} on the event handling
@@ -77,7 +79,7 @@ public class DirectoryWatcher {
 	 * @return A newly created {@link DirectoryWatcher} instance.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	public static DirectoryWatcher create ( Executor eventThreadExecutor ) throws IOException {
+	public static DirectoryWatcher create( Executor eventThreadExecutor ) throws IOException {
 		return new DirectoryWatcher(eventThreadExecutor);
 	}
 
@@ -141,6 +143,33 @@ public class DirectoryWatcher {
 	}
 
 	/**
+	 * Returns a {@link CompletionStage} containing the tree structure of
+	 * {@link PathElement} instances representing the content of the given
+	 * {@code root} directory. The returned stage is completed exceptionally in
+	 * case an I/O error occurs.
+	 *
+	 * @param root The pathname of the tree's root directory.
+	 * @return A {@link CompletionStage} containing the tree structure of
+	 *         {@link PathElement} instances rooted at the given {@link Path},
+	 *         or completed exceptionally if an I/o error occurred.
+	 */
+	public CompletableFuture<PathElement> tree( Path root ) {
+
+		CompletableFuture<PathElement> future = new CompletableFuture<>();
+
+		executeOnIOThread(() -> {
+			try {
+				future.complete(PathElement.tree(root));
+			} catch ( IOException e ) {
+				future.completeExceptionally(e);
+			}
+		});
+
+		return future;
+
+	}
+
+	/**
 	 * Watches the given directory for entry create, delete, and modify events.
 	 *
 	 * @param dir The directory to be watched.
@@ -192,7 +221,7 @@ public class DirectoryWatcher {
 	}
 
 	private void executeOnIOThread( Runnable action ) throws RejectedExecutionException {
-		if ( isShutdown() ) {
+		if ( !isShutdown() ) {
 			executorQueue.add(action);
 			interrupt();
 		} else {
