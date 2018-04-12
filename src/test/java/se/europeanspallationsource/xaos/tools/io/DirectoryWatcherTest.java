@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.NotDirectoryException;
 import java.nio.file.Path;
 import java.nio.file.StandardWatchEventKinds;
+import java.nio.file.WatchKey;
 import java.text.MessageFormat;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -29,6 +30,7 @@ import java.util.concurrent.TimeUnit;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.reactfx.EventStream;
 
 import static java.nio.file.StandardOpenOption.APPEND;
 import static org.junit.Assert.assertFalse;
@@ -121,17 +123,41 @@ public class DirectoryWatcherTest {
 
 	/**
 	 * Test of getErrorsStream method, of class DirectoryWatcher.
+	 *
+	 * @throws java.io.IOException
 	 */
-//	@Test
-//	public void testGetErrorsStream() {
-//	}
+	@Test
+	public void testGetErrorsStream() throws IOException {
+
+		System.out.println("  Testing 'getErrorsStream'...");
+
+		DirectoryWatcher watcher = create(executor);
+		EventStream<Throwable> errorsStream = watcher.getErrorsStream();
+
+		assertNotNull(errorsStream);
+
+		watcher.shutdown();
+
+	}
 
 	/**
 	 * Test of getSignalledKeysStream method, of class DirectoryWatcher.
+	 *
+	 * @throws java.io.IOException
 	 */
-//	@Test
-//	public void testGetSignalledKeysStream() {
-//	}
+	@Test
+	public void testGetSignalledKeysStream() throws IOException {
+
+		System.out.println("  Testing 'getSignalledKeysStream'...");
+
+		DirectoryWatcher watcher = create(executor);
+		EventStream<WatchKey> signalledKeysStream = watcher.getSignalledKeysStream();
+
+		assertNotNull(signalledKeysStream);
+
+		watcher.shutdown();
+
+	}
 
 	/**
 	 * Test of isShutdown method, of class DirectoryWatcher.
@@ -254,6 +280,8 @@ public class DirectoryWatcherTest {
 		if ( !errorLatch.await(1, TimeUnit.MINUTES) ) {
 			fail("File deletion not signalled in 1 minute.");
 		}
+
+		watcher.shutdown();
 
 	}
 
