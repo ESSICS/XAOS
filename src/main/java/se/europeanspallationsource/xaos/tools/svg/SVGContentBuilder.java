@@ -18,6 +18,7 @@ package se.europeanspallationsource.xaos.tools.svg;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.MessageFormat;
@@ -74,11 +75,20 @@ class SVGContentBuilder {
 	private final Map<String, Paint> gradients;
 	private final SVGContent root;
 	private final URL url;
+	private final InputStream stream;
 
 	SVGContentBuilder( URL url ) {
 		this.url = url;
 		this.root = new SVGContent();
 		this.gradients = new HashMap<>(1);
+		this.stream = null;
+	}
+
+	SVGContentBuilder( InputStream stream ) {
+		this.url = null;
+		this.root = new SVGContent();
+		this.gradients = new HashMap<>(1);
+		this.stream = stream;
 	}
 
 	protected SVGContent build() throws IOException, XMLStreamException {
@@ -89,7 +99,7 @@ class SVGContentBuilder {
 		factory.setProperty("javax.xml.stream.isNamespaceAware", false);
 		factory.setProperty("javax.xml.stream.supportDTD", false);
 
-		try ( BufferedInputStream bufferedStream = new BufferedInputStream(url.openStream()) ) {
+		try ( BufferedInputStream bufferedStream = new BufferedInputStream(stream != null ? stream : url.openStream()) ) {
 
 			XMLEventReader reader = factory.createXMLEventReader(bufferedStream);
 
