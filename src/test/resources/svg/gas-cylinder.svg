@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" x="0px" y="0px" viewBox="0 0 17.875 61" style="enable-background:new 0 0 17.875 61;" xmlns="http://www.w3.org/2000/svg">
+  <style type="text/css">
+
+	.st0{
+	  fill:none;
+	  stroke:#000000;
+	  stroke-miterlimit:10;
+	}
+
+    <!-- @import url(mystyles.css); -->
+
+	.st1{fill:none;stroke:#770000;stroke-miterlimit:10;}
+
+  </style>
+  <g id="Layer_1">
+    <path class="st0" d="M14.25,11.125V5.812c0-2.934-2.378-5.312-5.312-5.312S3.625,2.878,3.625,5.812v5.312"/>
+    <path class="st1" d="M17.375,17.688c0-4.66-3.778-8.438-8.438-8.438S0.5,13.028,0.5,17.688V60.5h16.875V17.688z"/>
+  </g>
+</svg>
