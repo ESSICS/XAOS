@@ -28,6 +28,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.function.Consumer;
+import java.util.function.DoubleConsumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.Group;
@@ -59,6 +61,8 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.*;
+import org.apache.commons.collections4.bidimap.TreeBidiMap;
+import org.apache.commons.lang3.StringUtils;
 
 
 /**
@@ -71,11 +75,14 @@ import javax.xml.stream.events.*;
 class SVGContentBuilder {
 
 	private static final Logger LOGGER = Logger.getLogger(SVGContentBuilder.class.getName());
+	private static final String TYPE_KEY = "type";
 
 	private final Map<String, Paint> gradients;
 	private final SVGContent root;
-	private final URL url;
 	private final InputStream stream;
+	private StringBuilder styleBuilder = null;
+	private final Map<String, String> stylesMap = new TreeBidiMap<>();
+	private final URL url;
 
 	SVGContentBuilder( URL url ) {
 		this.url = url;
@@ -91,7 +98,7 @@ class SVGContentBuilder {
 		this.stream = stream;
 	}
 
-	protected SVGContent build() throws IOException, XMLStreamException {
+	SVGContent build() throws IOException, XMLStreamException {
 
 		XMLInputFactory factory = XMLInputFactory.newInstance();
 
@@ -112,6 +119,284 @@ class SVGContentBuilder {
 
 	}
 
+	private void applyDoubleAttribute (
+		String svgAttribute,	//	e.g. "opacity"
+		StartElement element,
+		List<String> stylesList,
+		DoubleConsumer consumer
+	) {
+
+		String value = attributeValueFromStyle(svgAttribute, stylesList);
+		Attribute attribute = element.getAttributeByName(new QName(svgAttribute));
+
+		if ( attribute != null ) {
+
+			String attributeValue = attribute.getValue();
+
+			if ( StringUtils.isNotBlank(attributeValue) ) {
+				value = attributeValue;
+			}
+
+		}
+
+		if ( StringUtils.isNotBlank(value) ) {
+			try {
+				consumer.accept(Double.parseDouble(value));
+			} catch ( NumberFormatException nfex ) {
+				LOGGER.warning(MessageFormat.format(
+					"''{0}'' cannot be parsed to double [{1}, {2}].",
+					svgAttribute,
+					element.getName().toString(),
+					value
+				));
+			}
+		}
+
+	}
+
+	private void applyPaintAttribute (
+		String svgAttribute,	//	e.g. "fill"
+		StartElement element,
+		List<String> stylesList,
+		Consumer<Paint> consumer
+	) {
+
+		String value = attributeValueFromStyle(svgAttribute, stylesList);
+		Attribute attribute = element.getAttributeByName(new QName(svgAttribute));
+
+		if ( attribute != null ) {
+
+			String attributeValue = attribute.getValue();
+
+			if ( StringUtils.isNotBlank(attributeValue) ) {
+				value = attributeValue;
+			}
+
+		}
+
+		if ( StringUtils.isNotBlank(value) ) {
+			consumer.accept(expressPaint(value));
+		}
+
+	}
+
+	private void applyStrokeLineCapAttribute (
+		StartElement element,
+		List<String> stylesList,
+		Consumer<StrokeLineCap> consumer
+	) {
+
+		String svgAttribute = "stroke-linecap";
+		String value = attributeValueFromStyle(svgAttribute, stylesList);
+		Attribute attribute = element.getAttributeByName(new QName(svgAttribute));
+
+		if ( attribute != null ) {
+
+			String attributeValue = attribute.getValue();
+
+			if ( StringUtils.isNotBlank(attributeValue) ) {
+				value = attributeValue;
+			}
+
+		}
+
+		if ( StringUtils.isNotBlank(value) ) {
+
+			StrokeLineCap linecap = StrokeLineCap.BUTT;
+
+			if ( "round".equals(value) ) {
+				linecap = StrokeLineCap.ROUND;
+			} else if ( "square".equals(value) ) {
+				linecap = StrokeLineCap.SQUARE;
+			} else if ( !"butt".equals(value) ) {
+				LOGGER.warning(MessageFormat.format(
+					"Unsupported stroke-linecap [{0}, {1}].",
+					element.getName().toString(),
+					value
+				));
+				return;
+			}
+
+			consumer.accept(linecap);
+
+		}
+
+	}
+
+	private void applyStrokeLineJoinAttribute (
+		StartElement element,
+		List<String> stylesList,
+		Consumer<StrokeLineJoin> consumer
+	) {
+
+		String svgAttribute = "stroke-linejoin";
+		String value = attributeValueFromStyle(svgAttribute, stylesList);
+		Attribute attribute = element.getAttributeByName(new QName(svgAttribute));
+
+		if ( attribute != null ) {
+
+			String attributeValue = attribute.getValue();
+
+			if ( StringUtils.isNotBlank(attributeValue) ) {
+				value = attributeValue;
+			}
+
+		}
+
+		if ( StringUtils.isNotBlank(value) ) {
+
+			StrokeLineJoin linejoin = StrokeLineJoin.MITER;
+
+			if ( "bevel".equals(value) ) {
+				linejoin = StrokeLineJoin.BEVEL;
+			} else if ( "round".equals(value) ) {
+				linejoin = StrokeLineJoin.ROUND;
+			} else if ( !"miter".equals(value) ) {
+				LOGGER.warning(MessageFormat.format(
+					"Unsupported stroke-linejoin [{0}, {1}].",
+					element.getName().toString(),
+					value
+				));
+				return;
+			}
+
+			consumer.accept(linejoin);
+
+		}
+
+	}
+
+	private void applyStyles( Node node, StartElement element ) {
+
+		List<String> stylesList = new ArrayList<>(1);
+		Attribute classAttribute = element.getAttributeByName(new QName("class"));
+
+		if ( classAttribute != null ) {
+
+			String[] classes = classAttribute.getValue().split(" ");
+
+			for ( String clazz : classes ) {
+
+				String key = "." + clazz;
+
+				if ( stylesMap.containsKey(key) ) {
+					stylesList.add(stylesMap.get(key));
+				} else {
+
+					key = node.getProperties().get(TYPE_KEY) + key;
+
+					if ( stylesMap.containsKey(key) ) {
+						stylesList.add(stylesMap.get(key));
+					} else if ( StringUtils.isNotBlank(node.getId()) ) {
+
+						key = "#" + node.getId();
+
+						if ( stylesMap.containsKey(key) ) {
+							stylesList.add(stylesMap.get(key));
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+
+		Attribute styleAttribute = element.getAttributeByName(new QName("style"));
+
+		if ( styleAttribute != null ) {
+
+			String style = styleAttribute.getValue();
+
+			if ( StringUtils.isNotBlank(style) ) {
+				stylesList.add(style);
+			}
+
+		}
+
+		if ( node instanceof Shape ) {
+
+			Shape shape = (Shape) node;
+
+			applyPaintAttribute("fill", element, stylesList, f -> shape.setFill(f));
+			applyPaintAttribute("stroke", element, stylesList, s -> shape.setStroke(s));
+			applyDoubleAttribute("stroke-width", element, stylesList, w -> shape.setStrokeWidth(w));
+			applyDoubleAttribute("stroke-miterlimit", element, stylesList, l -> shape.setStrokeMiterLimit(l));
+			applyStrokeLineCapAttribute(element, stylesList, c -> shape.setStrokeLineCap(c));
+			applyStrokeLineJoinAttribute(element, stylesList, j -> shape.setStrokeLineJoin(j));
+
+		}
+
+		applyDoubleAttribute("opacity", element, stylesList, o -> node.setOpacity(o));
+		applyTransformAttribute(element, stylesList, t -> node.getTransforms().add(t));
+
+	}
+
+	private void applyTransformAttribute (
+		StartElement element,
+		List<String> stylesList,
+		Consumer<Transform> consumer
+	) {
+
+		String svgAttribute = "transform";
+		String value = attributeValueFromStyle(svgAttribute, stylesList);
+		Attribute attribute = element.getAttributeByName(new QName(svgAttribute));
+
+		if ( attribute != null ) {
+
+			String attributeValue = attribute.getValue();
+
+			if ( StringUtils.isNotBlank(attributeValue) ) {
+				value = attributeValue;
+			}
+
+		}
+
+		if ( StringUtils.isNotBlank(value) ) {
+			try {
+				consumer.accept(extractTransform(value));
+			} catch ( UnsupportedOperationException uoex ) {
+				LOGGER.warning(MessageFormat.format(
+					"Unsupported ''{0}'' transform [{1}, {2}].",
+					uoex.getMessage(),
+					element.getName().toString(),
+					value
+				));
+			}
+		}
+
+	}
+
+	private String attributeValueFromStyle ( String attribute, List<String> stylesList ) {
+
+		String value = null;
+
+		for ( String style : stylesList ) {
+
+			String[] attributes = style.split(";");
+
+			for ( String attr : attributes ) {
+
+				String[] nameValue = StringUtils.stripAll(attr.split(":"));
+
+				if ( nameValue.length == 2 ) {
+
+					if ( nameValue[0].equals(attribute) ) {
+						value = nameValue[1];
+						break;
+					}
+
+				}
+
+			}
+
+		}
+
+		return value;
+
+	}
+
 	private void build( XMLEventReader reader, Group group ) throws IOException, XMLStreamException {
 
 		while ( reader.hasNext() ) {
@@ -122,8 +407,9 @@ class SVGContentBuilder {
 
 				StartElement element = (StartElement) event;
 				Node node = null;
+				String type = element.getName().toString();
 
-				switch ( element.getName().toString() ) {
+				switch ( type ) {
 					case "circle":
 						node = buildCircle(element);
 						break;
@@ -132,10 +418,10 @@ class SVGContentBuilder {
 						break;
 					case "g":
 					case "svg":
-						node = buildGroup(reader, element);
+						node = buildGroup(reader);
 						break;
 					case "image":
-						node = buildImage(reader, element);
+						node = buildImage(element);
 						break;
 					case "line":
 						node = buildLine(element);
@@ -158,6 +444,9 @@ class SVGContentBuilder {
 					case "rect":
 						node = buildRect(element);
 						break;
+					case "style":
+						styleBuilder = new StringBuilder(256);
+						break;
 					case "text":
 						node = buildText(reader, element);
 						break;
@@ -168,30 +457,43 @@ class SVGContentBuilder {
 
 				if ( node != null ) {
 
-					if ( node instanceof Shape ) {
-						setShapeStyle((Shape) node, element);
-					}
-
-					setOpacity(node, element);
-					setTransform(node, element);
-
 					Attribute idAttribute = element.getAttributeByName(new QName("id"));
 
 					if ( idAttribute != null ) {
-						root.putNode(idAttribute.getValue(), node);
-					}
 
+						String id = idAttribute.getValue();
+
+						node.setId(id);
+						root.putNode(id, node);
+
+					}
+					
+					node.getProperties().put(TYPE_KEY, type);
+					applyStyles(node, element);
 					group.getChildren().add(node);
 
 				}
+
 			} else if ( event.isEndElement() ) {
 
 				EndElement element = (EndElement) event;
 
-				if ( element.getName().toString().equals("g") ) {
-					return;
+				switch ( element.getName().toString() ) {
+					case "g":
+					case "svg":
+						return;
+					case "style":
+						parseStyleElement(styleBuilder.toString());
+						styleBuilder = null;
+						break;
+					default:
+						break;
 				}
 
+			} else if ( event.isCharacters() ) {
+				if ( styleBuilder != null ) {
+					styleBuilder.append(((Characters) event).getData());
+				}
 			}
 
 		}
@@ -249,7 +551,7 @@ class SVGContentBuilder {
 
 	}
 
-	private Group buildGroup( XMLEventReader reader, StartElement element ) throws IOException, XMLStreamException {
+	private Group buildGroup( XMLEventReader reader ) throws IOException, XMLStreamException {
 
 		Group group = new Group();
 		build(reader, group);
@@ -258,7 +560,7 @@ class SVGContentBuilder {
 
 	}
 
-	private ImageView buildImage( XMLEventReader reader, StartElement element ) {
+	private ImageView buildImage( StartElement element ) {
 
 		Attribute hrefAttribute = element.getAttributeByName(new QName("href"));
 
@@ -893,153 +1195,36 @@ class SVGContentBuilder {
 
 	}
 
-	private void setOpacity( Node node, StartElement element ) {
+	private void parseStyleElement( String styleElement ) {
 
-		Attribute opacityAttribute = element.getAttributeByName(new QName("opacity"));
+		String content = StringUtils.normalizeSpace(styleElement);
+		
+		//	@import rule not currently supported: skip it.
+		final String IMPORT = "@import";
 
-		if ( opacityAttribute != null ) {
-			try {
-				node.setOpacity(Double.parseDouble(opacityAttribute.getValue()));
-			} catch ( NumberFormatException ex ) {
-				LOGGER.warning(MessageFormat.format(
-					"Opacity cannot be parsed to double [{0}, {1}].",
-					element.getName().toString(),
-					opacityAttribute.getValue()
-				));
-			}
-		}
+		while ( content.contains(IMPORT) ) {
 
-	}
+			int start = content.indexOf(IMPORT);
+			int end = content.indexOf(';', start + IMPORT.length());
 
-	private void setShapeStyle( Shape shape, StartElement element ) {
-
-		Attribute fillAttribute = element.getAttributeByName(new QName("fill"));
-
-		if ( fillAttribute != null ) {
-			shape.setFill(expressPaint(fillAttribute.getValue()));
-		}
-
-		Attribute strokeAttribute = element.getAttributeByName(new QName("stroke"));
-
-		if ( strokeAttribute != null ) {
-			shape.setStroke(expressPaint(strokeAttribute.getValue()));
-		}
-
-		Attribute strokeWidthAttribute = element.getAttributeByName(new QName("stroke-width"));
-
-		if ( strokeWidthAttribute != null ) {
-			try {
-				shape.setStrokeWidth(Double.parseDouble(strokeWidthAttribute.getValue()));
-			} catch ( NumberFormatException ex ) {
-				LOGGER.warning(MessageFormat.format(
-					"Stroke width cannot be parsed to double [{0}, {1}].",
-					element.getName().toString(),
-					strokeWidthAttribute.getValue()
-				));
-			}
-		}
-
-		Attribute styleAttribute = element.getAttributeByName(new QName("style"));
-
-		if ( styleAttribute != null ) {
-
-			String styles = styleAttribute.getValue();
-			StringTokenizer tokenizer = new StringTokenizer(styles, ";");
-
-			while ( tokenizer.hasMoreTokens() ) {
-
-				String style = tokenizer.nextToken();
-				StringTokenizer tokenizer2 = new StringTokenizer(style, ":");
-				String styleName = tokenizer2.nextToken();
-				String styleValue = tokenizer2.nextToken();
-
-				switch ( styleName ) {
-					case "fill":
-						shape.setFill(expressPaint(styleValue));
-						break;
-					case "stroke":
-						shape.setStroke(expressPaint(styleValue));
-						break;
-					case "stroke-width":
-						try {
-							shape.setStrokeWidth(Double.parseDouble(styleValue));
-						} catch ( NumberFormatException ex ) {
-							LOGGER.warning(MessageFormat.format(
-								"Stroke width cannot be parsed to double [{0}, {1}].",
-								styleAttribute.getName(),
-								styleValue
-							));
-						}
-						break;
-					case "stroke-linecap":
-						StrokeLineCap linecap = StrokeLineCap.BUTT;
-
-						if ( "round".equals(styleValue) ) {
-							linecap = StrokeLineCap.ROUND;
-						} else if ( "square".equals(styleValue) ) {
-							linecap = StrokeLineCap.SQUARE;
-						} else if ( !"butt".equals(styleValue) ) {
-							LOGGER.warning(MessageFormat.format("No Support Style: {0} {1}", style, element));
-						}
-
-						shape.setStrokeLineCap(linecap);
-						break;
-					case "stroke-miterlimit":
-						try {
-							shape.setStrokeMiterLimit(Double.parseDouble(styleValue));
-						} catch ( NumberFormatException ex ) {
-							LOGGER.warning(MessageFormat.format(
-								"Stroke miter limit cannot be parsed to double [{0}, {1}].",
-								styleAttribute.getName(),
-								styleValue
-							));
-						}
-						break;
-					case "stroke-linejoin":
-						StrokeLineJoin linejoin = StrokeLineJoin.MITER;
-
-						if ( "bevel".equals(styleValue) ) {
-							linejoin = StrokeLineJoin.BEVEL;
-						} else if ( "round".equals(styleValue) ) {
-							linejoin = StrokeLineJoin.ROUND;
-						} else if ( !"miter".equals(styleValue) ) {
-							LOGGER.warning(MessageFormat.format("No Support Style: {0} {1}", style, element));
-						}
-
-						shape.setStrokeLineJoin(linejoin);
-						break;
-					case "opacity":
-						try {
-							shape.setOpacity(Double.parseDouble(styleValue));
-						} catch ( NumberFormatException ex ) {
-							LOGGER.warning(MessageFormat.format(
-								"Opacity cannot be parsed to double [{0}, {1}].",
-								styleAttribute.getName(),
-								styleValue
-							));
-						}
-						break;
-					default:
-						LOGGER.warning(MessageFormat.format("No Support Style: {0} {1}", style, element));
-						break;
-				}
-
+			if ( end == -1 ) {
+				content = "";
+			} else {
+				content = content.substring(0, start) + content.substring(1 + end);
 			}
 
 		}
 
-	}
+		//	Get the classes and store them;
+		String[] classes = content.split("\\}");
 
-	private void setTransform( Node node, StartElement element ) {
+		for ( String clazz : classes ) {
 
-		Attribute transformAttribute = element.getAttributeByName(new QName("transform"));
+			String[] nameValues = StringUtils.stripAll(clazz.split("\\{"));
 
-		if ( transformAttribute != null ) {
-
-			String transforms = transformAttribute.getValue();
-			Transform transform = extractTransform(transforms);
-
-			node.getTransforms().add(transform);
+			if ( nameValues.length == 2 ) {
+				stylesMap.put(nameValues[0], nameValues[1]);
+			}
 
 		}
 
