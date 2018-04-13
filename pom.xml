@@ -5,7 +5,7 @@
 
     <groupId>se.europeanspallationsource</groupId>
     <artifactId>xaos</artifactId>
-    <version>0.2.1</version>
+    <version>0.2.2</version>
     <packaging>jar</packaging>
     <name>XAOS</name>
     <description>
@@ -221,6 +221,11 @@
             <artifactId>testfx-junit</artifactId>
             <version>${textfx.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.7</version>
         </dependency>
     </dependencies>
 
