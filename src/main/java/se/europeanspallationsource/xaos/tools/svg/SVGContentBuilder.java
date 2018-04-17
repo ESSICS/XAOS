@@ -409,6 +409,9 @@ class SVGContentBuilder {
 				Node node = null;
 				String type = element.getName().toString();
 
+//	TODO:CR create a new attributes stack frame a populate it from what read for
+//			the current object.
+
 				switch ( type ) {
 					case "circle":
 						node = buildCircle(element);
@@ -469,6 +472,8 @@ class SVGContentBuilder {
 					}
 					
 					node.getProperties().put(TYPE_KEY, type);
+//	TODO:CR applyStyles remove an attributes stack frame from the stack and uses
+//			it to set the values.
 					applyStyles(node, element);
 					group.getChildren().add(node);
 
