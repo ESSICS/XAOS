@@ -114,6 +114,56 @@ Moreover, the _ServiceLoaderUtilities_ class will complement the
 `java.util.ServiceLoader` one with few more methods.
 
 
+### SVG Support
+
+XAOS supports SVG natively converting them in a JavaFX components graph, thus
+providing true vectorial rendering.
+
+The following simple test explains how to display SVGs with XAOS:
+
+```java
+import java.io.IOException;
+import java.util.concurrent.TimeoutException;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javax.xml.stream.XMLStreamException;
+import org.junit.After;
+import org.junit.Test;
+import org.testfx.api.FxToolkit;
+import org.testfx.framework.junit.ApplicationTest;
+
+import static org.testfx.assertions.api.Assertions.assertThat;
+
+public class SVGFromURLTest extends ApplicationTest {
+
+  private SVGContent svgContent;
+
+  @Override
+  public void start( Stage stage ) throws IOException, XMLStreamException {
+
+    svgContent = SVGLoader.load(SVGFromURLTest.class.getResource("/svg/duke.svg"));
+
+    svgContent.setId("Loaded SVG Image");
+
+    stage.setScene(new Scene(svgContent));
+    stage.show();
+
+  }
+
+  @After
+  public void tearDown() throws TimeoutException {
+    FxToolkit.cleanupStages();
+  }
+
+  @Test
+  public void testLoadDuke() {
+    assertThat(svgContent).hasAnyChild();
+  }
+
+}
+```
+
+
 ## Using XAOS
 
 
