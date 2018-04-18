@@ -60,7 +60,7 @@ public class SVGFromInputStreamTest extends ApplicationTest {
 	}
 
 	@Test
-	public void testLoadDuke() {
+	public void testLoadSVG() {
 		assertThat(svgContent).hasAnyChild();
 	}
 
