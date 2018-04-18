@@ -61,7 +61,7 @@ public class AtomTest extends ApplicationTest {
 	}
 
 	@Test
-	public void testLoadDuke() {
+	public void testLoadSVG() {
 		assertThat(svgContent).hasAnyChild();
 	}
 

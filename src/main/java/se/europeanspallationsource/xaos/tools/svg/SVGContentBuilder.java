@@ -22,14 +22,14 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.MessageFormat;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.util.function.Consumer;
-import java.util.function.DoubleConsumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.Group;
@@ -56,13 +56,28 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
-import javax.xml.namespace.QName;
+import javafx.scene.transform.Translate;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.*;
-import org.apache.commons.collections4.bidimap.TreeBidiMap;
+import javax.xml.stream.events.Attribute;
+import javax.xml.stream.events.Characters;
+import javax.xml.stream.events.EndElement;
+import javax.xml.stream.events.StartElement;
+import javax.xml.stream.events.XMLEvent;
 import org.apache.commons.lang3.StringUtils;
+
+import static se.europeanspallationsource.xaos.tools.svg.AttributesStackFrame.ATTR_FILL;
+import static se.europeanspallationsource.xaos.tools.svg.AttributesStackFrame.ATTR_ID;
+import static se.europeanspallationsource.xaos.tools.svg.AttributesStackFrame.ATTR_OPACITY;
+import static se.europeanspallationsource.xaos.tools.svg.AttributesStackFrame.ATTR_STROKE;
+import static se.europeanspallationsource.xaos.tools.svg.AttributesStackFrame.ATTR_STROKE_LINECAP;
+import static se.europeanspallationsource.xaos.tools.svg.AttributesStackFrame.ATTR_STROKE_LINEJOIN;
+import static se.europeanspallationsource.xaos.tools.svg.AttributesStackFrame.ATTR_STROKE_MITERLIMIT;
+import static se.europeanspallationsource.xaos.tools.svg.AttributesStackFrame.ATTR_STROKE_WIDTH;
+import static se.europeanspallationsource.xaos.tools.svg.AttributesStackFrame.ATTR_TRANSFORM;
+import static se.europeanspallationsource.xaos.tools.svg.AttributesStackFrame.getAttributeValue;
+import static se.europeanspallationsource.xaos.tools.svg.AttributesStackFrame.populateStyles;
 
 
 /**
@@ -77,11 +92,11 @@ class SVGContentBuilder {
 	private static final Logger LOGGER = Logger.getLogger(SVGContentBuilder.class.getName());
 	private static final String TYPE_KEY = "type";
 
+	private final Deque<AttributesStackFrame> attributesStack = new ArrayDeque<>(4);
 	private final Map<String, Paint> gradients;
 	private final SVGContent root;
 	private final InputStream stream;
 	private StringBuilder styleBuilder = null;
-	private final Map<String, String> stylesMap = new TreeBidiMap<>();
 	private final URL url;
 
 	SVGContentBuilder( URL url ) {
@@ -119,281 +134,23 @@ class SVGContentBuilder {
 
 	}
 
-	private void applyDoubleAttribute (
-		String svgAttribute,	//	e.g. "opacity"
-		StartElement element,
-		List<String> stylesList,
-		DoubleConsumer consumer
-	) {
-
-		String value = attributeValueFromStyle(svgAttribute, stylesList);
-		Attribute attribute = element.getAttributeByName(new QName(svgAttribute));
-
-		if ( attribute != null ) {
-
-			String attributeValue = attribute.getValue();
-
-			if ( StringUtils.isNotBlank(attributeValue) ) {
-				value = attributeValue;
-			}
-
-		}
-
-		if ( StringUtils.isNotBlank(value) ) {
-			try {
-				consumer.accept(Double.parseDouble(value));
-			} catch ( NumberFormatException nfex ) {
-				LOGGER.warning(MessageFormat.format(
-					"''{0}'' cannot be parsed to double [{1}, {2}].",
-					svgAttribute,
-					element.getName().toString(),
-					value
-				));
-			}
-		}
-
-	}
-
-	private void applyPaintAttribute (
-		String svgAttribute,	//	e.g. "fill"
-		StartElement element,
-		List<String> stylesList,
-		Consumer<Paint> consumer
-	) {
-
-		String value = attributeValueFromStyle(svgAttribute, stylesList);
-		Attribute attribute = element.getAttributeByName(new QName(svgAttribute));
-
-		if ( attribute != null ) {
-
-			String attributeValue = attribute.getValue();
-
-			if ( StringUtils.isNotBlank(attributeValue) ) {
-				value = attributeValue;
-			}
-
-		}
-
-		if ( StringUtils.isNotBlank(value) ) {
-			consumer.accept(expressPaint(value));
-		}
-
-	}
-
-	private void applyStrokeLineCapAttribute (
-		StartElement element,
-		List<String> stylesList,
-		Consumer<StrokeLineCap> consumer
-	) {
-
-		String svgAttribute = "stroke-linecap";
-		String value = attributeValueFromStyle(svgAttribute, stylesList);
-		Attribute attribute = element.getAttributeByName(new QName(svgAttribute));
-
-		if ( attribute != null ) {
-
-			String attributeValue = attribute.getValue();
-
-			if ( StringUtils.isNotBlank(attributeValue) ) {
-				value = attributeValue;
-			}
-
-		}
-
-		if ( StringUtils.isNotBlank(value) ) {
-
-			StrokeLineCap linecap = StrokeLineCap.BUTT;
-
-			if ( "round".equals(value) ) {
-				linecap = StrokeLineCap.ROUND;
-			} else if ( "square".equals(value) ) {
-				linecap = StrokeLineCap.SQUARE;
-			} else if ( !"butt".equals(value) ) {
-				LOGGER.warning(MessageFormat.format(
-					"Unsupported stroke-linecap [{0}, {1}].",
-					element.getName().toString(),
-					value
-				));
-				return;
-			}
-
-			consumer.accept(linecap);
-
-		}
-
-	}
-
-	private void applyStrokeLineJoinAttribute (
-		StartElement element,
-		List<String> stylesList,
-		Consumer<StrokeLineJoin> consumer
-	) {
-
-		String svgAttribute = "stroke-linejoin";
-		String value = attributeValueFromStyle(svgAttribute, stylesList);
-		Attribute attribute = element.getAttributeByName(new QName(svgAttribute));
-
-		if ( attribute != null ) {
-
-			String attributeValue = attribute.getValue();
-
-			if ( StringUtils.isNotBlank(attributeValue) ) {
-				value = attributeValue;
-			}
-
-		}
-
-		if ( StringUtils.isNotBlank(value) ) {
-
-			StrokeLineJoin linejoin = StrokeLineJoin.MITER;
-
-			if ( "bevel".equals(value) ) {
-				linejoin = StrokeLineJoin.BEVEL;
-			} else if ( "round".equals(value) ) {
-				linejoin = StrokeLineJoin.ROUND;
-			} else if ( !"miter".equals(value) ) {
-				LOGGER.warning(MessageFormat.format(
-					"Unsupported stroke-linejoin [{0}, {1}].",
-					element.getName().toString(),
-					value
-				));
-				return;
-			}
-
-			consumer.accept(linejoin);
-
-		}
-
-	}
-
-	private void applyStyles( Node node, StartElement element ) {
-
-		List<String> stylesList = new ArrayList<>(1);
-		Attribute classAttribute = element.getAttributeByName(new QName("class"));
-
-		if ( classAttribute != null ) {
-
-			String[] classes = classAttribute.getValue().split(" ");
-
-			for ( String clazz : classes ) {
-
-				String key = "." + clazz;
-
-				if ( stylesMap.containsKey(key) ) {
-					stylesList.add(stylesMap.get(key));
-				} else {
-
-					key = node.getProperties().get(TYPE_KEY) + key;
-
-					if ( stylesMap.containsKey(key) ) {
-						stylesList.add(stylesMap.get(key));
-					} else if ( StringUtils.isNotBlank(node.getId()) ) {
-
-						key = "#" + node.getId();
-
-						if ( stylesMap.containsKey(key) ) {
-							stylesList.add(stylesMap.get(key));
-						}
-
-					}
-
-				}
-
-			}
-
-		}
-
-		Attribute styleAttribute = element.getAttributeByName(new QName("style"));
-
-		if ( styleAttribute != null ) {
-
-			String style = styleAttribute.getValue();
-
-			if ( StringUtils.isNotBlank(style) ) {
-				stylesList.add(style);
-			}
-
-		}
+	private void applyStyles( Node node, AttributesStackFrame stackFrame ) {
 
 		if ( node instanceof Shape ) {
 
 			Shape shape = (Shape) node;
 
-			applyPaintAttribute("fill", element, stylesList, f -> shape.setFill(f));
-			applyPaintAttribute("stroke", element, stylesList, s -> shape.setStroke(s));
-			applyDoubleAttribute("stroke-width", element, stylesList, w -> shape.setStrokeWidth(w));
-			applyDoubleAttribute("stroke-miterlimit", element, stylesList, l -> shape.setStrokeMiterLimit(l));
-			applyStrokeLineCapAttribute(element, stylesList, c -> shape.setStrokeLineCap(c));
-			applyStrokeLineJoinAttribute(element, stylesList, j -> shape.setStrokeLineJoin(j));
+			stackFrame.consumeAttribute(ATTR_FILL, this::toPaint, f -> shape.setFill(f));
+			stackFrame.consumeAttribute(ATTR_STROKE, this::toPaint, s -> shape.setStroke(s));
+			stackFrame.consumeAttribute(ATTR_STROKE_WIDTH, Double::parseDouble, w -> shape.setStrokeWidth(w));
+			stackFrame.consumeAttribute(ATTR_STROKE_MITERLIMIT, Double::parseDouble, l -> shape.setStrokeMiterLimit(l));
+			stackFrame.consumeAttribute(ATTR_STROKE_LINECAP, this::toStrokeLineCap, c -> shape.setStrokeLineCap(c));
+			stackFrame.consumeAttribute(ATTR_STROKE_LINEJOIN, this::toStrokeLineJoin, j -> shape.setStrokeLineJoin(j));
 
 		}
 
-		applyDoubleAttribute("opacity", element, stylesList, o -> node.setOpacity(o));
-		applyTransformAttribute(element, stylesList, t -> node.getTransforms().add(t));
-
-	}
-
-	private void applyTransformAttribute (
-		StartElement element,
-		List<String> stylesList,
-		Consumer<Transform> consumer
-	) {
-
-		String svgAttribute = "transform";
-		String value = attributeValueFromStyle(svgAttribute, stylesList);
-		Attribute attribute = element.getAttributeByName(new QName(svgAttribute));
-
-		if ( attribute != null ) {
-
-			String attributeValue = attribute.getValue();
-
-			if ( StringUtils.isNotBlank(attributeValue) ) {
-				value = attributeValue;
-			}
-
-		}
-
-		if ( StringUtils.isNotBlank(value) ) {
-			try {
-				consumer.accept(extractTransform(value));
-			} catch ( UnsupportedOperationException uoex ) {
-				LOGGER.warning(MessageFormat.format(
-					"Unsupported ''{0}'' transform [{1}, {2}].",
-					uoex.getMessage(),
-					element.getName().toString(),
-					value
-				));
-			}
-		}
-
-	}
-
-	private String attributeValueFromStyle ( String attribute, List<String> stylesList ) {
-
-		String value = null;
-
-		for ( String style : stylesList ) {
-
-			String[] attributes = style.split(";");
-
-			for ( String attr : attributes ) {
-
-				String[] nameValue = StringUtils.stripAll(attr.split(":"));
-
-				if ( nameValue.length == 2 ) {
-
-					if ( nameValue[0].equals(attribute) ) {
-						value = nameValue[1];
-						break;
-					}
-
-				}
-
-			}
-
-		}
-
-		return value;
+		stackFrame.consumeAttribute(ATTR_OPACITY, Double::parseDouble, o -> node.setOpacity(o));
+		stackFrame.consumeAttribute(ATTR_TRANSFORM, this::toTransform, t -> node.getTransforms().add(t));
 
 	}
 
@@ -405,52 +162,70 @@ class SVGContentBuilder {
 
 			if ( event.isStartElement() ) {
 
-				StartElement element = (StartElement) event;
 				Node node = null;
+				StartElement element = (StartElement) event;
 				String type = element.getName().toString();
-
-//	TODO:CR create a new attributes stack frame a populate it from what read for
-//			the current object.
 
 				switch ( type ) {
 					case "circle":
+						attributesStack.push(attributesStack.peek().deriveAndPopulate(element));
 						node = buildCircle(element);
 						break;
 					case "ellipse":
+						attributesStack.push(attributesStack.peek().deriveAndPopulate(element));
 						node = buildEllipse(element);
 						break;
 					case "g":
-					case "svg":
+						attributesStack.push(attributesStack.peek().deriveAndPopulate(element));
 						node = buildGroup(reader);
 						break;
 					case "image":
+						attributesStack.push(attributesStack.peek().deriveAndPopulate(element));
 						node = buildImage(element);
 						break;
 					case "line":
+						attributesStack.push(attributesStack.peek().deriveAndPopulate(element));
 						node = buildLine(element);
 						break;
 					case "linearGradient":
 						buildLinearGradient(reader, element);
 						break;
 					case "path":
+						attributesStack.push(attributesStack.peek().deriveAndPopulate(element));
 						node = buildPath(element);
 						break;
 					case "polygon":
+						attributesStack.push(attributesStack.peek().deriveAndPopulate(element));
 						node = buildPolygon(element);
 						break;
 					case "polyline":
+						attributesStack.push(attributesStack.peek().deriveAndPopulate(element));
 						node = buildPolyline(element);
 						break;
 					case "radialGradient":
 						buildRadialGradient(reader, element);
 						break;
 					case "rect":
+						attributesStack.push(attributesStack.peek().deriveAndPopulate(element));
 						node = buildRect(element);
 						break;
 					case "style":
 						styleBuilder = new StringBuilder(256);
 						break;
+					case "svg": {
+
+						AttributesStackFrame stackFrame = new AttributesStackFrame();
+
+						attributesStack.push(stackFrame);
+						stackFrame.populate(element);
+
+						node = buildGroup(reader);
+
+						break;
+
+					}
 					case "text":
+						attributesStack.push(attributesStack.peek().deriveAndPopulate(element));
 						node = buildText(reader, element);
 						break;
 					default:
@@ -460,21 +235,16 @@ class SVGContentBuilder {
 
 				if ( node != null ) {
 
-					Attribute idAttribute = element.getAttributeByName(new QName("id"));
+					AttributesStackFrame stackFrame = attributesStack.peek();
+					String id = stackFrame.get(ATTR_ID);
 
-					if ( idAttribute != null ) {
-
-						String id = idAttribute.getValue();
-
+					if ( id != null ) {
 						node.setId(id);
 						root.putNode(id, node);
-
 					}
-					
+
 					node.getProperties().put(TYPE_KEY, type);
-//	TODO:CR applyStyles remove an attributes stack frame from the stack and uses
-//			it to set the values.
-					applyStyles(node, element);
+					applyStyles(node, stackFrame);
 					group.getChildren().add(node);
 
 				}
@@ -484,20 +254,35 @@ class SVGContentBuilder {
 				EndElement element = (EndElement) event;
 
 				switch ( element.getName().toString() ) {
+					case "circle":
+					case "ellipse":
+					case "image":
+					case "line":
+					case "path":
+					case "polygon":
+					case "polyline":
+					case "rect":
+					case "text":
+						attributesStack.pop();
+						break;
 					case "g":
-					case "svg":
+						attributesStack.pop();
 						return;
 					case "style":
-						parseStyleElement(styleBuilder.toString());
+						populateStyles(styleBuilder.toString());
 						styleBuilder = null;
 						break;
+					case "svg":
+						return;
+					case "linearGradient":
+					case "radialGradient":
 					default:
 						break;
 				}
 
 			} else if ( event.isCharacters() ) {
 				if ( styleBuilder != null ) {
-					styleBuilder.append(((Characters) event).getData());
+					styleBuilder.append(( (Characters) event ).getData());
 				}
 			}
 
@@ -507,22 +292,22 @@ class SVGContentBuilder {
 
 	private Shape buildCircle( StartElement element ) {
 
-		Attribute cxAttribute = element.getAttributeByName(new QName("cx"));
-		Attribute cyAttribute = element.getAttributeByName(new QName("cy"));
-		Attribute rAttribute = element.getAttributeByName(new QName("r"));
+		String cxAttribute = getAttributeValue("cx", element);
+		String cyAttribute = getAttributeValue("cy", element);
+		String rAttribute = getAttributeValue("r", element);
 
 		try {
 			return new Circle(
-				( cxAttribute != null ) ? Double.parseDouble(cxAttribute.getValue()) : 0.0,
-				( cyAttribute != null ) ? Double.parseDouble(cyAttribute.getValue()) : 0.0,
-				( rAttribute  != null ) ? Double.parseDouble(rAttribute.getValue())  : 0.0
+				( cxAttribute != null ) ? Double.parseDouble(cxAttribute) : 0.0,
+				( cyAttribute != null ) ? Double.parseDouble(cyAttribute) : 0.0,
+				( rAttribute != null ) ? Double.parseDouble(rAttribute) : 0.0
 			);
 		} catch ( NumberFormatException ex ) {
 			LOGGER.warning(MessageFormat.format(
 				"A circle's attribute cannot be parsed to double: cx [{0}], cy [{1}], r [{2}].",
-				( cxAttribute != null ) ? cxAttribute.getValue() : "-",
-				( cyAttribute != null ) ? cyAttribute.getValue() : "-",
-				( rAttribute  != null ) ? rAttribute.getValue()  : "-"
+				( cxAttribute != null ) ? cxAttribute : "-",
+				( cyAttribute != null ) ? cyAttribute : "-",
+				( rAttribute != null ) ? rAttribute : "-"
 			));
 			return null;
 		}
@@ -531,25 +316,25 @@ class SVGContentBuilder {
 
 	private Shape buildEllipse( StartElement element ) {
 
-		Attribute cxAttribute = element.getAttributeByName(new QName("cx"));
-		Attribute cyAttribute = element.getAttributeByName(new QName("cy"));
-		Attribute rxAttribute = element.getAttributeByName(new QName("rx"));
-		Attribute ryAttribute = element.getAttributeByName(new QName("ry"));
+		String cxAttribute = getAttributeValue("cx", element);
+		String cyAttribute = getAttributeValue("cy", element);
+		String rxAttribute = getAttributeValue("rx", element);
+		String ryAttribute = getAttributeValue("ry", element);
 
 		try {
 			return new Ellipse(
-				( cxAttribute != null ) ? Double.parseDouble(cxAttribute.getValue()) : 0.0,
-				( cyAttribute != null ) ? Double.parseDouble(cyAttribute.getValue()) : 0.0,
-				( rxAttribute != null && !"auto".equals(rxAttribute.getValue()) ) ? Double.parseDouble(rxAttribute.getValue()) : 0.0,
-				( ryAttribute != null && !"auto".equals(ryAttribute.getValue()) ) ? Double.parseDouble(ryAttribute.getValue()) : 0.0
+				( cxAttribute != null ) ? Double.parseDouble(cxAttribute) : 0.0,
+				( cyAttribute != null ) ? Double.parseDouble(cyAttribute) : 0.0,
+				( rxAttribute != null && !"auto".equals(rxAttribute) ) ? Double.parseDouble(rxAttribute) : 0.0,
+				( ryAttribute != null && !"auto".equals(ryAttribute) ) ? Double.parseDouble(ryAttribute) : 0.0
 			);
 		} catch ( NumberFormatException ex ) {
 			LOGGER.warning(MessageFormat.format(
 				"An ellipse's attribute cannot be parsed to double: cx [{0}], cy [{1}], rx [{2}], ry [{3}].",
-				( cxAttribute != null ) ? cxAttribute.getValue() : "-",
-				( cyAttribute != null ) ? cyAttribute.getValue() : "-",
-				( rxAttribute != null ) ? rxAttribute.getValue() : "-",
-				( ryAttribute != null ) ? ryAttribute.getValue() : "-"
+				( cxAttribute != null ) ? cxAttribute : "-",
+				( cyAttribute != null ) ? cyAttribute : "-",
+				( rxAttribute != null ) ? rxAttribute : "-",
+				( ryAttribute != null ) ? ryAttribute : "-"
 			));
 			return null;
 		}
@@ -567,56 +352,56 @@ class SVGContentBuilder {
 
 	private ImageView buildImage( StartElement element ) {
 
-		Attribute hrefAttribute = element.getAttributeByName(new QName("href"));
+		String hrefAttribute = getAttributeValue("href", element);
 
 		if ( hrefAttribute != null ) {
 
 			URL imageUrl = null;
 
 			try {
-				imageUrl = new URL(hrefAttribute.getValue());
+				imageUrl = new URL(hrefAttribute);
 			} catch ( MalformedURLException ex1 ) {
 				try {
-					imageUrl = new URL(url, hrefAttribute.getValue());
+					imageUrl = new URL(url, hrefAttribute);
 				} catch ( MalformedURLException ex2 ) {
 					LOGGER.warning(MessageFormat.format(
 						"Image's href attribute is not a valid URL [{0}].",
-						hrefAttribute.getValue()
+						hrefAttribute
 					));
 				}
 			}
 
 			if ( imageUrl != null ) {
 
-				Attribute xAttribute = element.getAttributeByName(new QName("x"));
-				Attribute yAttribute = element.getAttributeByName(new QName("y"));
-				Attribute widthAttribute = element.getAttributeByName(new QName("width"));
-				Attribute heightAttribute = element.getAttributeByName(new QName("height"));
+				String xAttribute = getAttributeValue("x", element);
+				String yAttribute = getAttributeValue("y", element);
+				String widthAttribute = getAttributeValue("width", element);
+				String heightAttribute = getAttributeValue("height", element);
 
 				try {
 
 					Image image = new Image(
 						imageUrl.toString(),
-						( widthAttribute  != null ) ? Double.parseDouble(widthAttribute.getValue())  : 0.0,
-						( heightAttribute != null ) ? Double.parseDouble(heightAttribute.getValue()) : 0.0,
+						( widthAttribute != null ) ? Double.parseDouble(widthAttribute) : 0.0,
+						( heightAttribute != null ) ? Double.parseDouble(heightAttribute) : 0.0,
 						true,
 						true
 					);
 
 					ImageView imageView = new ImageView(image);
 
-					imageView.setLayoutX(( xAttribute != null ) ? Double.parseDouble(xAttribute.getValue()) : 0.0);
-					imageView.setLayoutY(( yAttribute != null ) ? Double.parseDouble(yAttribute.getValue()) : 0.0);
+					imageView.setLayoutX(( xAttribute != null ) ? Double.parseDouble(xAttribute) : 0.0);
+					imageView.setLayoutY(( yAttribute != null ) ? Double.parseDouble(yAttribute) : 0.0);
 
 					return imageView;
 
 				} catch ( NumberFormatException ex ) {
 					LOGGER.warning(MessageFormat.format(
 						"An image's attribute cannot be parsed to double: x [{0}], y [{1}], width [{2}], height [{3}].",
-						( xAttribute      != null ) ? xAttribute.getValue()      : "-",
-						( yAttribute      != null ) ? yAttribute.getValue()      : "-",
-						( widthAttribute  != null ) ? widthAttribute.getValue()  : "-",
-						( heightAttribute != null ) ? heightAttribute.getValue() : "-"
+						( xAttribute != null ) ? xAttribute : "-",
+						( yAttribute != null ) ? yAttribute : "-",
+						( widthAttribute != null ) ? widthAttribute : "-",
+						( heightAttribute != null ) ? heightAttribute : "-"
 					));
 				}
 			}
@@ -631,25 +416,25 @@ class SVGContentBuilder {
 
 	private Shape buildLine( StartElement element ) {
 
-		Attribute x1Attribute = element.getAttributeByName(new QName("x1"));
-		Attribute y1Attribute = element.getAttributeByName(new QName("y1"));
-		Attribute x2Attribute = element.getAttributeByName(new QName("x2"));
-		Attribute y2Attribute = element.getAttributeByName(new QName("y2"));
+		String x1Attribute = getAttributeValue("x1", element);
+		String y1Attribute = getAttributeValue("y1", element);
+		String x2Attribute = getAttributeValue("x2", element);
+		String y2Attribute = getAttributeValue("y2", element);
 
 		try {
 			return new Line(
-				( x1Attribute != null ) ? Double.parseDouble(x1Attribute.getValue()) : 0.0,
-				( y1Attribute != null ) ? Double.parseDouble(y1Attribute.getValue()) : 0.0,
-				( x2Attribute != null ) ? Double.parseDouble(x2Attribute.getValue()) : 0.0,
-				( y2Attribute != null ) ? Double.parseDouble(y2Attribute.getValue()) : 0.0
+				( x1Attribute != null ) ? Double.parseDouble(x1Attribute) : 0.0,
+				( y1Attribute != null ) ? Double.parseDouble(y1Attribute) : 0.0,
+				( x2Attribute != null ) ? Double.parseDouble(x2Attribute) : 0.0,
+				( y2Attribute != null ) ? Double.parseDouble(y2Attribute) : 0.0
 			);
 		} catch ( NumberFormatException ex ) {
 			LOGGER.warning(MessageFormat.format(
 				"A line's attribute cannot be parsed to double: x1 [{0}], y1 [{1}], x2 [{2}], y2 [{3}].",
-				( x1Attribute != null ) ? x1Attribute.getValue() : "-",
-				( y1Attribute != null ) ? y1Attribute.getValue() : "-",
-				( x2Attribute != null ) ? x2Attribute.getValue() : "-",
-				( y2Attribute != null ) ? y2Attribute.getValue() : "-"
+				( x1Attribute != null ) ? x1Attribute : "-",
+				( y1Attribute != null ) ? y1Attribute : "-",
+				( x2Attribute != null ) ? x2Attribute : "-",
+				( y2Attribute != null ) ? y2Attribute : "-"
 			));
 		}
 
@@ -657,7 +442,8 @@ class SVGContentBuilder {
 
 	}
 
-	private void buildLinearGradient( XMLEventReader reader, StartElement element ) throws IOException, XMLStreamException {
+	private void buildLinearGradient( XMLEventReader reader, StartElement element )
+		throws IOException, XMLStreamException {
 
 		String id = null;
 		double x1 = Double.NaN;
@@ -711,7 +497,7 @@ class SVGContentBuilder {
 					}
 					break;
 				case "gradientTransform":
-					transform = extractTransform(attribute.getValue());
+					transform = toTransform(attribute.getValue());
 					break;
 				default:
 					LOGGER.warning(MessageFormat.format("LinearGradient doesn''t supports: {0}:{1}", attribute, element));
@@ -747,13 +533,13 @@ class SVGContentBuilder {
 
 	private Shape buildPath( StartElement element ) {
 
-		Attribute dAttribute = element.getAttributeByName(new QName("d"));
+		String dAttribute = getAttributeValue("d", element);
 
 		if ( dAttribute != null ) {
 
 			SVGPath path = new SVGPath();
 
-			path.setContent(dAttribute.getValue());
+			path.setContent(dAttribute);
 
 			return path;
 
@@ -767,13 +553,13 @@ class SVGContentBuilder {
 
 	private Shape buildPolygon( StartElement element ) {
 
-		Attribute pointsAttribute = element.getAttributeByName(new QName("points"));
+		String pointsAttribute = getAttributeValue("points", element);
 
 		if ( pointsAttribute != null ) {
 			try {
 
 				Polygon polygon = new Polygon();
-				StringTokenizer tokenizer = new StringTokenizer(pointsAttribute.getValue(), " ");
+				StringTokenizer tokenizer = new StringTokenizer(pointsAttribute, " ");
 
 				while ( tokenizer.hasMoreTokens() ) {
 
@@ -792,7 +578,7 @@ class SVGContentBuilder {
 			} catch ( NumberFormatException ex ) {
 				LOGGER.warning(MessageFormat.format(
 					"A polygon's point coordinate cannot be parsed to double [{0}].",
-					pointsAttribute.getValue()
+					pointsAttribute
 				));
 			}
 
@@ -806,13 +592,13 @@ class SVGContentBuilder {
 
 	private Shape buildPolyline( StartElement element ) {
 
-		Attribute pointsAttribute = element.getAttributeByName(new QName("points"));
+		String pointsAttribute = getAttributeValue("points", element);
 
 		if ( pointsAttribute != null ) {
 			try {
 
 				Polyline polyline = new Polyline();
-				StringTokenizer tokenizer = new StringTokenizer(pointsAttribute.getValue(), " ");
+				StringTokenizer tokenizer = new StringTokenizer(pointsAttribute, " ");
 
 				while ( tokenizer.hasMoreTokens() ) {
 
@@ -831,7 +617,7 @@ class SVGContentBuilder {
 			} catch ( NumberFormatException ex ) {
 				LOGGER.warning(MessageFormat.format(
 					"A polyline's point coordinate cannot be parsed to double [{0}].",
-					pointsAttribute.getValue()
+					pointsAttribute
 				));
 			}
 
@@ -843,7 +629,8 @@ class SVGContentBuilder {
 
 	}
 
-	private void buildRadialGradient( XMLEventReader reader, StartElement element ) throws IOException, XMLStreamException {
+	private void buildRadialGradient( XMLEventReader reader, StartElement element )
+		throws IOException, XMLStreamException {
 
 		String id = null;
 		Double fx = null;
@@ -905,7 +692,7 @@ class SVGContentBuilder {
 					}
 					break;
 				case "gradientTransform":
-					transform = extractTransform(attribute.getValue());
+					transform = toTransform(attribute.getValue());
 					break;
 				default:
 					LOGGER.log(Level.INFO, "RadialGradient doesn''t supports: {0}", element);
@@ -959,27 +746,27 @@ class SVGContentBuilder {
 
 	private Shape buildRect( StartElement element ) {
 
-		Attribute xAttribute = element.getAttributeByName(new QName("x"));
-		Attribute yAttribute = element.getAttributeByName(new QName("y"));
-		Attribute widthAttribute = element.getAttributeByName(new QName("width"));
-		Attribute heightAttribute = element.getAttributeByName(new QName("height"));
-		Attribute rxAttribute = element.getAttributeByName(new QName("rx"));
-		Attribute ryAttribute = element.getAttributeByName(new QName("ry"));
+		String xAttribute = getAttributeValue("x", element);
+		String yAttribute = getAttributeValue("y", element);
+		String widthAttribute = getAttributeValue("width", element);
+		String heightAttribute = getAttributeValue("height", element);
+		String rxAttribute = getAttributeValue("rx", element);
+		String ryAttribute = getAttributeValue("ry", element);
 
 		try {
 
 			Rectangle rectangle = new Rectangle(
-				( xAttribute      != null ) ? Double.parseDouble(xAttribute.getValue())      : 0.0,
-				( yAttribute      != null ) ? Double.parseDouble(yAttribute.getValue())      : 0.0,
-				( widthAttribute  != null ) ? Double.parseDouble(widthAttribute.getValue())  : 0.0,
-				( heightAttribute != null ) ? Double.parseDouble(heightAttribute.getValue()) : 0.0
+				( xAttribute != null ) ? Double.parseDouble(xAttribute) : 0.0,
+				( yAttribute != null ) ? Double.parseDouble(yAttribute) : 0.0,
+				( widthAttribute != null ) ? Double.parseDouble(widthAttribute) : 0.0,
+				( heightAttribute != null ) ? Double.parseDouble(heightAttribute) : 0.0
 			);
 
 			rectangle.setArcWidth(
-				( rxAttribute != null && !"auto".equals(rxAttribute.getValue()) ) ? Double.parseDouble(rxAttribute.getValue()) : 0.0
+				( rxAttribute != null && !"auto".equals(rxAttribute) ) ? Double.parseDouble(rxAttribute) : 0.0
 			);
 			rectangle.setArcHeight(
-				( ryAttribute != null && !"auto".equals(ryAttribute.getValue()) ) ? Double.parseDouble(ryAttribute.getValue()) : 0.0
+				( ryAttribute != null && !"auto".equals(ryAttribute) ) ? Double.parseDouble(ryAttribute) : 0.0
 			);
 
 			return rectangle;
@@ -987,19 +774,20 @@ class SVGContentBuilder {
 		} catch ( NumberFormatException ex ) {
 			LOGGER.warning(MessageFormat.format(
 				"A rect's attribute cannot be parsed to double: x [{0}], y [{1}], width [{2}], height [{3}], rx [{4}], ry [{5}].",
-				( xAttribute      != null ) ? xAttribute.getValue()      : "-",
-				( yAttribute      != null ) ? yAttribute.getValue()      : "-",
-				( widthAttribute  != null ) ? widthAttribute.getValue()  : "-",
-				( heightAttribute != null ) ? heightAttribute.getValue() : "-",
-				( rxAttribute     != null ) ? rxAttribute.getValue()     : "-",
-				( ryAttribute     != null ) ? ryAttribute.getValue()     : "-"
+				( xAttribute != null ) ? xAttribute : "-",
+				( yAttribute != null ) ? yAttribute : "-",
+				( widthAttribute != null ) ? widthAttribute : "-",
+				( heightAttribute != null ) ? heightAttribute : "-",
+				( rxAttribute != null ) ? rxAttribute : "-",
+				( ryAttribute != null ) ? ryAttribute : "-"
 			));
 			return null;
 		}
 
 	}
 
-	private List<Stop> buildStops( XMLEventReader reader, String kindOfGradient ) throws XMLStreamException {
+	private List<Stop> buildStops( XMLEventReader reader, String kindOfGradient )
+		throws XMLStreamException {
 
 		List<Stop> stops = new ArrayList<>(4);
 		XMLEvent event = reader.nextEvent();
@@ -1035,37 +823,37 @@ class SVGContentBuilder {
 								break;
 							case "style": {
 
-									String style = attribute.getValue();
-									StringTokenizer tokenizer = new StringTokenizer(style, ";");
+								String style = attribute.getValue();
+								StringTokenizer tokenizer = new StringTokenizer(style, ";");
 
-									while ( tokenizer.hasMoreTokens() ) {
+								while ( tokenizer.hasMoreTokens() ) {
 
-										String item = tokenizer.nextToken().trim();
+									String item = tokenizer.nextToken().trim();
 
-										if ( item.startsWith("stop-color") ) {
-											color = item.substring(11);
-										} else if ( item.startsWith("stop-opacity") ) {
-											try {
-												opacity = Double.parseDouble(item.substring(13));
-											} catch ( NumberFormatException ex ) {
-												LOGGER.warning(MessageFormat.format(
-													"LinearGradient's stop style opacity attribute cannot be parsed to double [{0}].",
-													attribute.getValue()
-												));
-											}
-										} else {
+									if ( item.startsWith("stop-color") ) {
+										color = item.substring(11);
+									} else if ( item.startsWith("stop-opacity") ) {
+										try {
+											opacity = Double.parseDouble(item.substring(13));
+										} catch ( NumberFormatException ex ) {
 											LOGGER.warning(MessageFormat.format(
-												"LinearGradient's stop doesn''t supports: {0} [{1}] ''{2}''",
-												attribute,
-												element,
-												item
+												"LinearGradient's stop style opacity attribute cannot be parsed to double [{0}].",
+												attribute.getValue()
 											));
 										}
-
+									} else {
+										LOGGER.warning(MessageFormat.format(
+											"LinearGradient's stop doesn''t supports: {0} [{1}] ''{2}''",
+											attribute,
+											element,
+											item
+										));
 									}
 
 								}
-								break;
+
+							}
+							break;
 							default:
 								LOGGER.warning(MessageFormat.format(
 									"LinearGradient's stop doesn''t supports: {0} [{1}]",
@@ -1095,22 +883,23 @@ class SVGContentBuilder {
 
 	}
 
-	private Shape buildText( XMLEventReader reader, StartElement element ) throws XMLStreamException {
+	private Shape buildText( XMLEventReader reader, StartElement element )
+		throws XMLStreamException {
 
 		Font font = null;
-		Attribute fontFamilyAttribute = element.getAttributeByName(new QName("font-family"));
-		Attribute fontSizeAttribute = element.getAttributeByName(new QName("font-size"));
+		String fontFamilyAttribute = getAttributeValue("font-family", element);
+		String fontSizeAttribute = getAttributeValue("font-size", element);
 
 		if ( fontFamilyAttribute != null && fontSizeAttribute != null ) {
 			try {
 				font = Font.font(
-					fontFamilyAttribute.getValue().replace("'", ""),
-					Double.parseDouble(fontSizeAttribute.getValue())
+					fontFamilyAttribute.replace("'", ""),
+					Double.parseDouble(fontSizeAttribute)
 				);
 			} catch ( NumberFormatException ex ) {
 				LOGGER.warning(MessageFormat.format(
 					"A text's attribute cannot be parsed to double: font-size [{0}].",
-					fontSizeAttribute.getValue()
+					fontSizeAttribute
 				));
 			}
 		}
@@ -1119,7 +908,7 @@ class SVGContentBuilder {
 
 		if ( event.isCharacters() ) {
 
-			Text text = new Text(((Characters) event).getData());
+			Text text = new Text(( (Characters) event ).getData());
 
 			if ( font != null ) {
 				text.setFont(font);
@@ -1133,9 +922,9 @@ class SVGContentBuilder {
 
 	}
 
-	private Paint expressPaint( String value ) {
+	private Paint toPaint( String value ) {
 
-		Paint paint = null;
+		Paint paint;
 
 		if ( !"none".equals(value) ) {
 			if ( value.startsWith("url(#") ) {
@@ -1143,95 +932,242 @@ class SVGContentBuilder {
 			} else {
 				paint = Color.web(value);
 			}
+		} else {
+			paint = Color.TRANSPARENT;
 		}
 
 		return paint;
 
 	}
 
-	private Transform extractTransform( String transforms ) {
+	private StrokeLineCap toStrokeLineCap( String value ) {
 
-		Transform transform = null;
-		StringTokenizer tokenizer = new StringTokenizer(transforms, ")");
+		StrokeLineCap linecap = StrokeLineCap.BUTT;
+
+		if ( StringUtils.isNotBlank(value) ) {
+			switch ( value ) {
+				case "round":
+					linecap = StrokeLineCap.ROUND;
+					break;
+				case "square":
+					linecap = StrokeLineCap.SQUARE;
+					break;
+				case "butt":
+					break;
+				default:
+					LOGGER.warning(MessageFormat.format(
+						"Unsupported stroke-linecap [{0}]: ''butt'' used instead.",
+						value
+					));
+					break;
+			}
+		}
+
+		return linecap;
+
+	}
+
+	private StrokeLineJoin toStrokeLineJoin( String value ) {
+
+		StrokeLineJoin linejoin = StrokeLineJoin.MITER;
+
+		if ( StringUtils.isNotBlank(value) ) {
+			switch ( value ) {
+				case "bevel":
+					linejoin = StrokeLineJoin.BEVEL;
+					break;
+				case "round":
+					linejoin = StrokeLineJoin.ROUND;
+					break;
+				case "miter":
+					break;
+				default:
+					LOGGER.warning(MessageFormat.format(
+						"Unsupported stroke-linejoin [{0}]: ''miter'' used instead.",
+						value
+					));
+					break;
+			}
+		}
+
+		return linejoin;
+
+	}
+
+	private Transform toTransform( String value ) {
+
+		Transform transform = new Translate();
+		StringTokenizer tokenizer = new StringTokenizer(value, ")");
 
 		while ( tokenizer.hasMoreTokens() ) {
 
 			String transformTxt = tokenizer.nextToken();
 
-//	TODO:CR Implements other types ot transformations.
 			if ( transformTxt.startsWith("translate(") ) {
-				throw new UnsupportedOperationException("transform:translate");
+
+				transformTxt = transformTxt.substring(1 + transformTxt.indexOf('('));
+
+				String[] tokens = StringUtils.split(transformTxt, ", ");
+
+				if ( tokens.length == 1 || tokens.length == 2 ) {
+					try {
+
+						double ty = 0.0;
+						double tx = Double.parseDouble(tokens[0]);
+
+						if ( tokens.length == 2 ) {
+							ty = Double.parseDouble(tokens[2]);
+						}
+
+						transform = transform.createConcatenation(Transform.translate(tx, ty));
+
+					} catch ( NumberFormatException ex ) {
+						LOGGER.warning(MessageFormat.format(
+							"''translate'' transform contains value not parsed to double [{0}].",
+							transformTxt
+						));
+					}
+				} else {
+					LOGGER.warning(MessageFormat.format(
+						"''translate'' transform doesn't contain the right number of elements [{0}].",
+						transformTxt
+					));
+				}
+
 			} else if ( transformTxt.startsWith("scale(") ) {
-				throw new UnsupportedOperationException("transform:scale");
+
+				transformTxt = transformTxt.substring(1 + transformTxt.indexOf('('));
+
+				String[] tokens = StringUtils.split(transformTxt, ", ");
+
+				if ( tokens.length == 1 || tokens.length == 2 ) {
+					try {
+
+						double sx = Double.parseDouble(tokens[0]);
+						double sy = sx;
+
+						if ( tokens.length == 2 ) {
+							sy = Double.parseDouble(tokens[2]);
+						}
+
+						transform = transform.createConcatenation(Transform.scale(sx, sy));
+
+					} catch ( NumberFormatException ex ) {
+						LOGGER.warning(MessageFormat.format(
+							"''scale'' transform contains value not parsed to double [{0}].",
+							transformTxt
+						));
+					}
+				} else {
+					LOGGER.warning(MessageFormat.format(
+						"''scale'' transform doesn't contain the right number of elements [{0}].",
+						transformTxt
+					));
+				}
+
 			} else if ( transformTxt.startsWith("rotate(") ) {
-				throw new UnsupportedOperationException("transform:rotate");
+
+				transformTxt = transformTxt.substring(1 + transformTxt.indexOf('('));
+
+				String[] tokens = StringUtils.split(transformTxt, ", ");
+
+				if ( tokens.length == 1 || tokens.length == 3 ) {
+					try {
+
+						double cx = 0.0;
+						double cy = 0.0;
+						double angle = Double.parseDouble(tokens[0]);
+
+						if ( tokens.length == 3 ) {
+							cx = Double.parseDouble(tokens[1]);
+							cy = Double.parseDouble(tokens[2]);
+						}
+
+						transform = transform.createConcatenation(Transform.rotate(angle, cx, cy));
+
+					} catch ( NumberFormatException ex ) {
+						LOGGER.warning(MessageFormat.format(
+							"''rotate'' transform contains value not parsed to double [{0}].",
+							transformTxt
+						));
+					}
+				} else {
+					LOGGER.warning(MessageFormat.format(
+						"''rotate'' transform doesn't contain the right number of elements [{0}].",
+						transformTxt
+					));
+				}
+
 			} else if ( transformTxt.startsWith("skewX(") ) {
-				throw new UnsupportedOperationException("transform:skewX");
-			} else if ( transformTxt.startsWith("skewY(") ) {
-				throw new UnsupportedOperationException("transform:skewY");
-			} else if ( transformTxt.startsWith("matrix(") ) {
 
-				transformTxt = transformTxt.substring(7);
-
-				StringTokenizer tokenizer2 = new StringTokenizer(transformTxt, " ");
+				transformTxt = transformTxt.substring(1 + transformTxt.indexOf('('));
 
 				try {
 
-					double mxx = Double.parseDouble(tokenizer2.nextToken());
-					double myx = Double.parseDouble(tokenizer2.nextToken());
-					double mxy = Double.parseDouble(tokenizer2.nextToken());
-					double myy = Double.parseDouble(tokenizer2.nextToken());
-					double tx = Double.parseDouble(tokenizer2.nextToken());
-					double ty = Double.parseDouble(tokenizer2.nextToken());
+					double angle = Double.parseDouble(transformTxt);
 
-					transform = Transform.affine(mxx, myx, mxy, myy, tx, ty);
+					transform = transform.createConcatenation(Transform.shear(Math.tan(Math.toRadians(angle)), 0.0));
 
 				} catch ( NumberFormatException ex ) {
 					LOGGER.warning(MessageFormat.format(
-						"Matrix transform contains value not parsed to double [{0}].",
+						"''skewX'' transform contains value not parsed to double [{0}].",
+						transformTxt
+					));
+				}
+
+			} else if ( transformTxt.startsWith("skewY(") ) {
+
+				transformTxt = transformTxt.substring(1 + transformTxt.indexOf('('));
+
+				try {
+
+					double angle = Double.parseDouble(transformTxt);
+
+					transform = transform.createConcatenation(Transform.shear(0.0, Math.tan(Math.toRadians(angle))));
+
+				} catch ( NumberFormatException ex ) {
+					LOGGER.warning(MessageFormat.format(
+						"''skewY'' transform contains value not parsed to double [{0}].",
+						transformTxt
+					));
+				}
+
+			} else if ( transformTxt.startsWith("matrix(") ) {
+
+				transformTxt = transformTxt.substring(1 + transformTxt.indexOf('('));
+
+				String[] tokens = StringUtils.split(transformTxt, ", ");
+
+				if ( tokens.length == 6 ) {
+					try {
+
+						double mxx = Double.parseDouble(tokens[0]);
+						double myx = Double.parseDouble(tokens[1]);
+						double mxy = Double.parseDouble(tokens[2]);
+						double myy = Double.parseDouble(tokens[3]);
+						double tx = Double.parseDouble(tokens[4]);
+						double ty = Double.parseDouble(tokens[5]);
+
+						transform = transform.createConcatenation(Transform.affine(mxx, myx, mxy, myy, tx, ty));
+
+					} catch ( NumberFormatException ex ) {
+						LOGGER.warning(MessageFormat.format(
+							"''matrix'' transform contains value not parsed to double [{0}].",
+							transformTxt
+						));
+					}
+				} else {
+					LOGGER.warning(MessageFormat.format(
+						"''matrix'' transform doesn't contain the right number of elements [{0}].",
 						transformTxt
 					));
 				}
 
 			}
+
 		}
 
 		return transform;
-
-	}
-
-	private void parseStyleElement( String styleElement ) {
-
-		String content = StringUtils.normalizeSpace(styleElement);
-		
-		//	@import rule not currently supported: skip it.
-		final String IMPORT = "@import";
-
-		while ( content.contains(IMPORT) ) {
-
-			int start = content.indexOf(IMPORT);
-			int end = content.indexOf(';', start + IMPORT.length());
-
-			if ( end == -1 ) {
-				content = "";
-			} else {
-				content = content.substring(0, start) + content.substring(1 + end);
-			}
-
-		}
-
-		//	Get the classes and store them;
-		String[] classes = content.split("\\}");
-
-		for ( String clazz : classes ) {
-
-			String[] nameValues = StringUtils.stripAll(clazz.split("\\{"));
-
-			if ( nameValues.length == 2 ) {
-				stylesMap.put(nameValues[0], nameValues[1]);
-			}
-
-		}
 
 	}
 
