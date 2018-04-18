@@ -55,7 +55,7 @@ public class SVGFromURLTest extends ApplicationTest {
 	}
 
 	@Test
-	public void testLoadDuke() {
+	public void testLoadSVG() {
 		assertThat(svgContent).hasAnyChild();
 	}
 
