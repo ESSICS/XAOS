@@ -18,9 +18,12 @@ package se.europeanspallationsource.xaos.tools.io;
 
 import java.io.IOException;
 import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
+import java.nio.file.attribute.FileAttribute;
+import java.nio.file.attribute.FileTime;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
@@ -101,6 +104,33 @@ public class DirectoryWatcher {
 
 		startIOThread();
 
+	}
+
+	/**
+	 * Create a new file using the given path name. One of the two given
+	 * {@link Consumer}s will be called on success or on failure.
+	 * <p>
+	 * {@link Files#createFile(java.nio.file.Path, java.nio.file.attribute.FileAttribute...)}
+	 * will be called to actually create the file.
+	 * </p><p>
+	 * <b>Note:</b> the operation is executed in by the {@link Executor} passed
+	 * to the {@link #create(java.util.concurrent.Executor) method, i.e. in a
+	 * different thread from the caller's one.
+	 * </p>
+	 *
+	 * @param filePath  The pathname of the file to be created.
+	 * @param onSuccess The {@link Consumer} called on success.
+	 * @param onError   The {@link Consumer} called on failure.
+	 * @param attrs     An optional list of file attributes to set atomically
+	 *                  when creating the file.
+	 */
+	public void createFile(
+		Path filePath,
+		Consumer<FileTime> onSuccess,
+		Consumer<Throwable> onError,
+		FileAttribute<?>... attrs
+	) {
+		executeIOOperation(() -> createFile(filePath, attrs), onSuccess, onError);
 	}
 
 	/**
@@ -193,6 +223,14 @@ public class DirectoryWatcher {
 		}
 	}
 
+	private FileTime createFile( Path file, FileAttribute<?>... attrs ) throws IOException {
+
+		Files.createFile(file, attrs);
+
+		return Files.getLastModifiedTime(file);
+
+	}
+
 	private void emitError( Throwable e ) {
 		executeOnEventThread(() -> errors.push(e));
 	}
@@ -216,8 +254,8 @@ public class DirectoryWatcher {
 		});
 	}
 
-	private void executeOnEventThread( Runnable action ) {
-		eventThreadExecutor.execute(action);
+	private void executeOnEventThread( Runnable task ) {
+		eventThreadExecutor.execute(task);
 	}
 
 	private void executeOnIOThread( Runnable action ) throws RejectedExecutionException {

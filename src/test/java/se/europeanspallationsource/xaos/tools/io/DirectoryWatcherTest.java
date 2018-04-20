@@ -17,6 +17,7 @@ package se.europeanspallationsource.xaos.tools.io;
 
 
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.NotDirectoryException;
 import java.nio.file.Path;
@@ -135,9 +136,36 @@ public class DirectoryWatcherTest {
 
 	/**
 	 * Test of createFile method, of class DirectoryWatcher.
+	 *
+	 * @throws java.io.IOException
 	 */
 	@Test
-	public void testCreateFile() {
+	public void testCreateFile() throws IOException {
+
+		System.out.println(MessageFormat.format("  Testing ''createFile'' [on {0}]...", root));
+
+		DirectoryWatcher watcher = create(executor);
+		Path toBeCreated = FileSystems.getDefault().getPath(dir_a.toString(), "created_file.txt");
+
+		watcher.createFile(
+			toBeCreated,
+			t -> assertNotNull(t),
+			e -> fail(MessageFormat.format("File not created: {0}", toBeCreated))
+		);
+
+		Path toFail = FileSystems.getDefault().getPath(dir_a.toString(), "non-exitent", "created_file.txt");
+
+		watcher.createFile(
+			toFail,
+			t -> fail(MessageFormat.format("File was created: {0}", toFail)),
+			e -> { 
+				assertNotNull(e);
+				assertTrue(e instanceof IOException);
+			}
+		);
+
+		watcher.shutdown();
+
 	}
 
 	/**
@@ -339,7 +367,7 @@ public class DirectoryWatcherTest {
 				assertEquals(file_b2, fileB2Element.getPath());
 				assertFalse(fileB2Element.isDirectory());
 
-			watcher.shutdown();
+		watcher.shutdown();
 
 
 	}
@@ -351,6 +379,7 @@ public class DirectoryWatcherTest {
 	 * @throws java.lang.InterruptedException
 	 */
 	@Test
+//	@Ignore
 	public void testWatch() throws IOException, InterruptedException {
 
 		System.out.println(MessageFormat.format("  Testing ''watch'' [on {0}]...", root));
