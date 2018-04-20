@@ -25,7 +25,7 @@ import org.junit.runners.Suite;
  */
 @RunWith( Suite.class )
 @Suite.SuiteClasses( {
-	ServiceProviderProcessor.class
+	ServiceProviderProcessorTest.class
 } )
 @SuppressWarnings( { "ClassMayBeInterface", "ClassWithoutLogger" } )
 public class AnnotationSuite {
