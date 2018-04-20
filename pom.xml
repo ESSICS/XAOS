@@ -5,7 +5,7 @@
 
     <groupId>se.europeanspallationsource</groupId>
     <artifactId>xaos</artifactId>
-    <version>0.2.3</version>
+    <version>0.2.4</version>
     <packaging>jar</packaging>
     <name>XAOS</name>
     <description>
@@ -227,6 +227,12 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.7</version>
         </dependency>
+		<dependency>
+			<groupId>org.testfx</groupId>
+			<artifactId>openjfx-monocle</artifactId>
+			<version>8u76-b04</version> <!-- jdk-9+181 for Java 9 -->
+			<scope>test</scope>
+		</dependency>
     </dependencies>
 
 </project>

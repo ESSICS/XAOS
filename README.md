@@ -173,7 +173,7 @@ public class SVGFromURLTest extends ApplicationTest {
 <dependency>
 	<groupId>se.europeanspallationsource</groupId>
 	<artifactId>xaos</artifactId>
-	<version>0.2.3</version>
+	<version>0.2.4</version>
 	<scope>compile</scope>
 </dependency>
 ```
@@ -191,3 +191,9 @@ here summarized:
 Who wants to contribute this projects must adopt the Gitflow model and
 [tools](https://github.com/nvie/gitflow).
 
+
+### Headless test
+
+XAOS uses [OpenJFX Monocle](https://github.com/TestFX/Monocle) to perform headless
+test when the Java property `headless` is set to true. This is the standard mechanism
+used to perform daily builds with Jenkins.
