@@ -20,6 +20,8 @@ import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import static se.europeanspallationsource.xaos.tools.HeadlessUtility.conditionallyHeadless;
+
 
 /**
  * @author claudio.rosati@esss.se
@@ -36,14 +38,7 @@ public class SvgSuite {
 
 	@BeforeClass
 	public static void setUpSuite() {
-		if ( Boolean.getBoolean("headless") ) {
-			System.setProperty("testfx.robot", "glass");
-			System.setProperty("testfx.headless", "true");
-			System.setProperty("prism.order", "sw");
-			System.setProperty("prism.text", "t2k");
-			System.setProperty("monocle.platform", "Headless");
-			System.setProperty("java.awt.headless", "true");
-		}
+		conditionallyHeadless();
 	}
 
 }
