@@ -16,6 +16,7 @@
 package se.europeanspallationsource.xaos.tools.svg;
 
 
+import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -30,7 +31,19 @@ import org.junit.runners.Suite;
 	SVGFromInputStreamTest.class,
 	SVGFromURLTest.class
 } )
-@SuppressWarnings( { "ClassMayBeInterface", "ClassWithoutLogger" } )
+@SuppressWarnings( { "ClassMayBeInterface", "ClassWithoutLogger", "UtilityClassWithoutPrivateConstructor" } )
 public class SvgSuite {
+
+	@BeforeClass
+	public static void setUpSuite() {
+		if ( Boolean.getBoolean("headless") ) {
+			System.setProperty("testfx.robot", "glass");
+			System.setProperty("testfx.headless", "true");
+			System.setProperty("prism.order", "sw");
+			System.setProperty("prism.text", "t2k");
+			System.setProperty("monocle.platform", "Headless");
+			System.setProperty("java.awt.headless", "true");
+		}
+	}
 
 }
