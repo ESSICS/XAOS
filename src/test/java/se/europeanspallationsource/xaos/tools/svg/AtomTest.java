@@ -31,12 +31,10 @@ import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javax.xml.stream.XMLStreamException;
 import org.junit.After;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.testfx.assertions.api.Assertions.assertThat;
 
 
@@ -46,17 +44,6 @@ import static org.testfx.assertions.api.Assertions.assertThat;
 @SuppressWarnings( "ClassWithoutLogger" )
 public class AtomTest extends ApplicationTest {
 	
-	@BeforeClass
-	public static void setUpClass() {
-		if ( Boolean.getBoolean("headless") ) {
-			System.setProperty("testfx.robot", "glass");
-			System.setProperty("testfx.headless", "true");
-			System.setProperty("prism.order", "sw");
-			System.setProperty("prism.text", "t2k");
-			System.setProperty("java.awt.headless", "true");
-		}
-	}
-
 	private SVGContent svgContent;
 
 	@Override

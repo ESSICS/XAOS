@@ -173,7 +173,7 @@ public class SVGFromURLTest extends ApplicationTest {
 <dependency>
 	<groupId>se.europeanspallationsource</groupId>
 	<artifactId>xaos</artifactId>
-	<version>0.2.4</version>
+	<version>0.2.5</version>
 	<scope>compile</scope>
 </dependency>
 ```
