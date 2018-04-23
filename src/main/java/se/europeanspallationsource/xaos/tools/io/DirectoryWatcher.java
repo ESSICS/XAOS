@@ -107,7 +107,52 @@ public class DirectoryWatcher {
 	}
 
 	/**
-	 * Create a new file using the given path name. One of the two given
+	 * Create a new directory by creating all nonexistent parent directories
+	 * first. One of the two given {@link Consumer}s will be called on success
+	 * or on failure.
+	 *
+	 * @param dir       The pathname of the file to be created.
+	 * @param onSuccess The {@link Consumer} called on success, where the passed
+	 *                  parameter is the new directory {@link Path}.
+	 * @param onError   The {@link Consumer} called on failure.
+	 * @param attrs     An optional list of file attributes to set atomically
+	 *                  when creating the directory.
+	 */
+	public void createDirectories(
+		Path dir,
+		Consumer<Path> onSuccess,
+		Consumer<Throwable> onError,
+		FileAttribute<?>... attrs
+	) {
+		executeIOOperation(() -> Files.createDirectories(dir, attrs), onSuccess, onError);
+	}
+
+	/**
+	 * Create a new directory using the given path. One of the two given
+	 * {@link Consumer}s will be called on success or on failure.
+	 * <p>
+	 * The {@link #createDirectories createDirectories} method should be used
+	 * where it is required to create all nonexistent parent directories first.
+	 * </p>
+	 *
+	 * @param dir       The pathname of the file to be created.
+	 * @param onSuccess The {@link Consumer} called on success, where the passed
+	 *                  parameter is the new directory {@link Path}.
+	 * @param onError   The {@link Consumer} called on failure.
+	 * @param attrs     An optional list of file attributes to set atomically
+	 *                  when creating the directory.
+	 */
+	public void createDirectory(
+		Path dir,
+		Consumer<Path> onSuccess,
+		Consumer<Throwable> onError,
+		FileAttribute<?>... attrs
+	) {
+		executeIOOperation(() -> Files.createDirectory(dir, attrs), onSuccess, onError);
+	}
+
+	/**
+	 * Create a new file using the given path. One of the two given
 	 * {@link Consumer}s will be called on success or on failure.
 	 * <p>
 	 * {@link Files#createFile(java.nio.file.Path, java.nio.file.attribute.FileAttribute...)}
@@ -118,33 +163,37 @@ public class DirectoryWatcher {
 	 * different thread from the caller's one.
 	 * </p>
 	 *
-	 * @param filePath  The pathname of the file to be created.
-	 * @param onSuccess The {@link Consumer} called on success.
+	 * @param file      The pathname of the file to be created.
+	 * @param onSuccess The {@link Consumer} called on success, where the passed
+	 *                  parameter is the new file timestamp.
 	 * @param onError   The {@link Consumer} called on failure.
 	 * @param attrs     An optional list of file attributes to set atomically
 	 *                  when creating the file.
 	 */
 	public void createFile(
-		Path filePath,
+		Path file,
 		Consumer<FileTime> onSuccess,
 		Consumer<Throwable> onError,
 		FileAttribute<?>... attrs
 	) {
-		executeIOOperation(() -> createFile(filePath, attrs), onSuccess, onError);
+		executeIOOperation(
+			() -> {
+
+				Files.createFile(file, attrs);
+
+				return Files.getLastModifiedTime(file);
+
+			},
+			onSuccess,
+			onError
+		);
 	}
 
 	/**
 	 * @return The {@link EventStream} of thrown errors.
 	 */
-	public EventStream<Throwable> getErrorsStream() {
+	public EventStream<Throwable> errorsStream() {
 		return errors;
-	}
-
-	/**
-	 * @return The {@link EventStream} of signalled {@link WatchKey}s.
-	 */
-	public EventStream<WatchKey> getSignalledKeysStream() {
-		return signalledKeys;
 	}
 
 	/**
@@ -170,6 +219,13 @@ public class DirectoryWatcher {
 
 		interrupt();
 
+	}
+
+	/**
+	 * @return The {@link EventStream} of signalled {@link WatchKey}s.
+	 */
+	public EventStream<WatchKey> signalledKeysStream() {
+		return signalledKeys;
 	}
 
 	/**
@@ -221,14 +277,6 @@ public class DirectoryWatcher {
 		} catch ( IOException e ) {
 			emitError(e);
 		}
-	}
-
-	private FileTime createFile( Path file, FileAttribute<?>... attrs ) throws IOException {
-
-		Files.createFile(file, attrs);
-
-		return Files.getLastModifiedTime(file);
-
 	}
 
 	private void emitError( Throwable e ) {

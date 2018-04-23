@@ -17,6 +17,7 @@ package se.europeanspallationsource.xaos.tools.io;
 
 
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.NotDirectoryException;
@@ -34,6 +35,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.reactfx.EventStream;
 
@@ -128,41 +130,169 @@ public class DirectoryWatcherTest {
 	}
 
 	/**
-	 * Test of createDirectory method, of class DirectoryWatcher.
+	 * Test of createDirectories method, of class DirectoryWatcher.
+	 *
+	 * @throws java.io.IOException
+	 * @throws java.lang.InterruptedException
 	 */
 	@Test
-	public void testCreateDirectory() {
+	public void testCreateDirectories() throws IOException, InterruptedException {
+
+		System.out.println(MessageFormat.format("  Testing ''createDirectories'' [on {0}]...", root));
+
+		CountDownLatch latch = new CountDownLatch(2);
+		DirectoryWatcher watcher = create(executor);
+		Path toBeCreated = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_x", "dir_a_y", "dir_a_z");
+
+		watcher.createDirectories(
+			toBeCreated,
+			p -> {
+				assertNotNull(p);
+				assertTrue(Files.exists(p));
+				assertTrue(Files.isDirectory(p));
+				latch.countDown();
+			},
+			e -> {
+				fail(MessageFormat.format("Directory not created: {0}", toBeCreated));
+				latch.countDown();
+			}
+		);
+
+		Path toFail = file_a;
+
+		watcher.createDirectories(
+			toFail,
+			p -> {
+				fail(MessageFormat.format("Directory was created: {0}", toFail));
+				latch.countDown();
+			},
+			e -> {
+				assertNotNull(e);
+				assertTrue(e instanceof FileAlreadyExistsException);
+				latch.countDown();
+			}
+		);
+
+		if ( !latch.await(1, TimeUnit.MINUTES) ) {
+			fail("Directories creation not completed in 1 minute.");
+		}
+
+		watcher.shutdown();
+
+	}
+
+	/**
+	 * Test of createDirectory method, of class DirectoryWatcher.
+	 *
+	 * @throws java.io.IOException
+	 * @throws java.lang.InterruptedException
+	 */
+	@Test
+	public void testCreateDirectory() throws IOException, InterruptedException {
+
+		System.out.println(MessageFormat.format("  Testing ''createDirectory'' [on {0}]...", root));
+
+		CountDownLatch latch = new CountDownLatch(3);
+		DirectoryWatcher watcher = create(executor);
+		Path toBeCreated = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_z");
+
+		watcher.createDirectory(
+			toBeCreated,
+			p -> {
+				assertNotNull(p);
+				assertTrue(Files.exists(p));
+				assertTrue(Files.isDirectory(p));
+				latch.countDown();
+			},
+			e -> {
+				fail(MessageFormat.format("Directory not created: {0}", toBeCreated));
+				latch.countDown();
+			}
+		);
+
+		Path toFail1 = dir_a_c;
+
+		watcher.createDirectory(
+			toFail1,
+			p -> {
+				fail(MessageFormat.format("Directory was created: {0}", toFail1));
+				latch.countDown();
+			},
+			e -> {
+				assertNotNull(e);
+				assertTrue(e instanceof FileAlreadyExistsException);
+				latch.countDown();
+			}
+		);
+
+		Path toFail2 = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_x", "dir_a_y", "dir_a_z");
+
+		watcher.createDirectory(
+			toFail2,
+			p -> {
+				fail(MessageFormat.format("Directory was created: {0}", toFail2));
+				latch.countDown();
+			},
+			e -> {
+				assertNotNull(e);
+				assertTrue(e instanceof IOException);
+				latch.countDown();
+			}
+		);
+
+		if ( !latch.await(1, TimeUnit.MINUTES) ) {
+			fail("Directory creation not completed in 1 minute.");
+		}
+
+		watcher.shutdown();
+
 	}
 
 	/**
 	 * Test of createFile method, of class DirectoryWatcher.
 	 *
 	 * @throws java.io.IOException
+	 * @throws java.lang.InterruptedException
 	 */
 	@Test
-	public void testCreateFile() throws IOException {
+	public void testCreateFile() throws IOException, InterruptedException {
 
 		System.out.println(MessageFormat.format("  Testing ''createFile'' [on {0}]...", root));
 
+		CountDownLatch latch = new CountDownLatch(2);
 		DirectoryWatcher watcher = create(executor);
 		Path toBeCreated = FileSystems.getDefault().getPath(dir_a.toString(), "created_file.txt");
 
 		watcher.createFile(
 			toBeCreated,
-			t -> assertNotNull(t),
-			e -> fail(MessageFormat.format("File not created: {0}", toBeCreated))
+			t -> {
+				assertNotNull(t);
+				latch.countDown();
+			},
+			e -> {
+				fail(MessageFormat.format("File not created: {0}", toBeCreated));
+				latch.countDown();
+			}
 		);
 
 		Path toFail = FileSystems.getDefault().getPath(dir_a.toString(), "non-exitent", "created_file.txt");
 
 		watcher.createFile(
 			toFail,
-			t -> fail(MessageFormat.format("File was created: {0}", toFail)),
+			t -> {
+				fail(MessageFormat.format("File was created: {0}", toFail));
+				latch.countDown();
+			},
 			e -> { 
 				assertNotNull(e);
 				assertTrue(e instanceof IOException);
+				latch.countDown();
 			}
 		);
+
+		if ( !latch.await(1, TimeUnit.MINUTES) ) {
+			fail("File creation not completed in 1 minute.");
+		}
 
 		watcher.shutdown();
 
@@ -193,7 +323,7 @@ public class DirectoryWatcherTest {
 		System.out.println("  Testing 'getErrorsStream'...");
 
 		DirectoryWatcher watcher = create(executor);
-		EventStream<Throwable> errorsStream = watcher.getErrorsStream();
+		EventStream<Throwable> errorsStream = watcher.errorsStream();
 
 		assertNotNull(errorsStream);
 
@@ -212,7 +342,7 @@ public class DirectoryWatcherTest {
 		System.out.println("  Testing 'getSignalledKeysStream'...");
 
 		DirectoryWatcher watcher = create(executor);
-		EventStream<WatchKey> signalledKeysStream = watcher.getSignalledKeysStream();
+		EventStream<WatchKey> signalledKeysStream = watcher.signalledKeysStream();
 
 		assertNotNull(signalledKeysStream);
 
@@ -379,7 +509,7 @@ public class DirectoryWatcherTest {
 	 * @throws java.lang.InterruptedException
 	 */
 	@Test
-//	@Ignore
+	@Ignore
 	public void testWatch() throws IOException, InterruptedException {
 
 		System.out.println(MessageFormat.format("  Testing ''watch'' [on {0}]...", root));
@@ -389,7 +519,7 @@ public class DirectoryWatcherTest {
 		CountDownLatch modifyLatch = new CountDownLatch(1);
 		DirectoryWatcher watcher = create(executor);
 
-		watcher.getSignalledKeysStream().subscribe(key -> {
+		watcher.signalledKeysStream().subscribe(key -> {
 			key.pollEvents().stream().forEach(e -> {
 				if ( StandardWatchEventKinds.ENTRY_CREATE.equals(e.kind()) ) {
 					createLatch.countDown();
@@ -440,7 +570,7 @@ public class DirectoryWatcherTest {
 		CountDownLatch errorLatch = new CountDownLatch(1);
 		DirectoryWatcher watcher = create(executor);
 
-		watcher.getErrorsStream().subscribe(throwable -> {
+		watcher.errorsStream().subscribe(throwable -> {
 			if ( throwable instanceof NotDirectoryException ) {
 				errorLatch.countDown();
 			}
