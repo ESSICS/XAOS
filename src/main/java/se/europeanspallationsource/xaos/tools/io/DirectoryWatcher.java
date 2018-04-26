@@ -159,7 +159,7 @@ public class DirectoryWatcher {
 	 * will be called to actually create the file.
 	 * </p><p>
 	 * <b>Note:</b> the operation is executed in by the {@link Executor} passed
-	 * to the {@link #create(java.util.concurrent.Executor) method, i.e. in a
+	 * to the {@link #create(java.util.concurrent.Executor)} method, i.e. in a
 	 * different thread from the caller's one.
 	 * </p>
 	 *
