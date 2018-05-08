@@ -339,14 +339,14 @@ public class DirectoryWatcher {
 				}
 				break;
 			} else {
-				processIOQueues();
+				processIOQueue();
 			}
 
 		}
 	}
 
 	@SuppressWarnings( "NestedAssignment" )
-	private void processIOQueues() {
+	private void processIOQueue() {
 
 		Runnable operation;
 
