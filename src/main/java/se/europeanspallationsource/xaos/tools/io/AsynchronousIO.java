@@ -18,19 +18,26 @@ package se.europeanspallationsource.xaos.tools.io;
 
 import java.nio.charset.Charset;
 import java.nio.file.Path;
+import java.nio.file.attribute.FileAttribute;
 import java.util.concurrent.CompletionStage;
 
 
 /**
  * Implementation of an {@link InitiatorAsynchronousIOFacility}.
  *
+ * @param <I> Type of the <i>initiator</i> of the I/O operation.
  * @author claudio.rosati@esss.se
  * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX</a>
  */
 public class AsynchronousIO<I> implements InitiatorAsynchronousIOFacility<I> {
 
 	@Override
-	public CompletionStage<Void> createDirectory( Path dir, I initiator ) {
+	public CompletionStage<Void> createDirectories( Path dir, I initiator, FileAttribute<?>... attrs ) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public CompletionStage<Void> createDirectory( Path dir, I initiator, FileAttribute<?>... attrs ) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 

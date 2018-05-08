@@ -17,6 +17,7 @@ package se.europeanspallationsource.xaos.tools.io;
 
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -39,7 +40,9 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.reactfx.EventStream;
 
+import static java.nio.charset.Charset.defaultCharset;
 import static java.nio.file.StandardOpenOption.APPEND;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -300,9 +303,85 @@ public class DirectoryWatcherTest {
 
 	/**
 	 * Test of delete method, of class DirectoryWatcher.
+	 *
+	 * @throws java.io.IOException
+	 * @throws java.lang.InterruptedException
 	 */
 	@Test
-	public void testDelete() {
+	public void testDelete() throws IOException, InterruptedException {
+
+		System.out.println(MessageFormat.format("  Testing ''delete'' [on {0}]...", root));
+
+		CountDownLatch latch = new CountDownLatch(5);
+		DirectoryWatcher watcher = create(executor);
+
+		watcher.delete(
+			file_b2,
+			t -> {
+				assertTrue(t);
+				latch.countDown();
+			},
+			e -> {
+				fail(MessageFormat.format("File not deleted: {0}", file_b2));
+				latch.countDown();
+			}
+		);
+		watcher.delete(
+			file_b2,
+			t -> {
+				assertFalse(t);
+				latch.countDown();
+			},
+			e -> {
+				fail(MessageFormat.format("File not deleted: {0}", file_b2));
+				latch.countDown();
+			}
+		);
+		watcher.delete(
+			dir_b,
+			t -> {
+				fail(MessageFormat.format("Non-empty directory was deleted: {0}", file_b2));
+				latch.countDown();
+			},
+			e -> {
+				assertNotNull(e);
+				assertTrue(e instanceof IOException);
+				latch.countDown();
+			}
+		);
+		watcher.delete(
+			file_b1,
+			t -> {
+				assertTrue(t);
+				latch.countDown();
+			},
+			e -> {
+				fail(MessageFormat.format("File not deleted: {0}", file_b2));
+				latch.countDown();
+			}
+		);
+		watcher.delete(
+			dir_b,
+			t -> {
+				assertTrue(t);
+				latch.countDown();
+			},
+			e -> {
+				fail(MessageFormat.format("Directory not deleted: {0}", file_b2));
+				latch.countDown();
+			}
+		);
+
+		if ( !latch.await(1, TimeUnit.MINUTES) ) {
+			fail("File deletion not completed in 1 minute.");
+		}
+
+		assertFalse(Files.exists(dir_b));
+		assertFalse(Files.exists(file_b1));
+		assertFalse(Files.exists(file_b2));
+
+		watcher.shutdown();
+
 	}
 
 	/**
@@ -588,16 +667,115 @@ public class DirectoryWatcherTest {
 
 	/**
 	 * Test of writeBinaryFile method, of class DirectoryWatcher.
+	 *
+	 * @throws java.io.IOException
+	 * @throws java.lang.InterruptedException
 	 */
 	@Test
-	public void testWriteBinaryFile() {
+	public void testWriteBinaryFile() throws IOException, InterruptedException {
+
+		System.out.println(MessageFormat.format("  Testing ''writeBinaryFile'' [on {0}]...", root));
+
+		byte[] content = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x03, 0x02, 0x01, 0x00 };
+		CountDownLatch latch = new CountDownLatch(2);
+		DirectoryWatcher watcher = create(executor);
+		Path toBeCreated = FileSystems.getDefault().getPath(dir_a.toString(), "created_file.txt");
+
+		watcher.writeBinaryFile(
+			toBeCreated,
+			content,
+			t -> {
+				assertNotNull(t);
+				latch.countDown();
+			},
+			e -> {
+				fail(MessageFormat.format("File not written: {0}", toBeCreated));
+				latch.countDown();
+			}
+		);
+
+		Path toFail = FileSystems.getDefault().getPath(dir_a.toString(), "non-exitent", "created_file.txt");
+
+		watcher.writeBinaryFile(
+			toFail,
+			content,
+			t -> {
+				fail(MessageFormat.format("File was written: {0}", toFail));
+				latch.countDown();
+			},
+			e -> {
+				assertNotNull(e);
+				assertTrue(e instanceof IOException);
+				latch.countDown();
+			}
+		);
+
+		if ( !latch.await(1, TimeUnit.MINUTES) ) {
+			fail("File creation not completed in 1 minute.");
+		}
+
+		assertArrayEquals(content, Files.readAllBytes(toBeCreated));
+
+		watcher.shutdown();
+
 	}
 
 	/**
 	 * Test of writeTextFile method, of class DirectoryWatcher.
+	 *
+	 * @throws java.io.IOException
+	 * @throws java.lang.InterruptedException
 	 */
 	@Test
-	public void testWriteTextFile() {
+	public void testWriteTextFile() throws IOException, InterruptedException {
+
+		System.out.println(MessageFormat.format("  Testing ''writeTextFile'' [on {0}]...", root));
+
+		String content = "First line of text.\nSecond line of text.";
+		Charset charset = defaultCharset();
+		CountDownLatch latch = new CountDownLatch(2);
+		DirectoryWatcher watcher = create(executor);
+		Path toBeCreated = FileSystems.getDefault().getPath(dir_a.toString(), "created_file.txt");
+
+		watcher.writeTextFile(
+			toBeCreated,
+			content,
+			charset,
+			t -> {
+				assertNotNull(t);
+				latch.countDown();
+			},
+			e -> {
+				fail(MessageFormat.format("File not written: {0}", toBeCreated));
+				latch.countDown();
+			}
+		);
+
+		Path toFail = FileSystems.getDefault().getPath(dir_a.toString(), "non-exitent", "created_file.txt");
+
+		watcher.writeTextFile(
+			toFail,
+			content,
+			charset,
+			t -> {
+				fail(MessageFormat.format("File was written: {0}", toFail));
+				latch.countDown();
+			},
+			e -> {
+				assertNotNull(e);
+				assertTrue(e instanceof IOException);
+				latch.countDown();
+			}
+		);
+
+		if ( !latch.await(1, TimeUnit.MINUTES) ) {
+			fail("File creation not completed in 1 minute.");
+		}
+
+		assertEquals(content, new String(Files.readAllBytes(toBeCreated), charset));
+
+		watcher.shutdown();
+
 	}
 
 }

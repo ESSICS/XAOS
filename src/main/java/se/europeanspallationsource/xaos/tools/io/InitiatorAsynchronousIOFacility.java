@@ -18,6 +18,7 @@ package se.europeanspallationsource.xaos.tools.io;
 
 import java.nio.charset.Charset;
 import java.nio.file.Path;
+import java.nio.file.attribute.FileAttribute;
 import java.util.concurrent.CompletionStage;
 
 
@@ -26,11 +27,25 @@ import java.util.concurrent.CompletionStage;
  * {@link AsynchronousIOFacility}, where each "file-system changing" operation
  * takes an extra argument: the <i>initiator</i> of the change.
  *
- * @author claudio.rosati@esss.se
  * @param <I> Type of the <i>initiator</i> of the I/O operation.
+ * @author claudio.rosati@esss.se
  * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX</a>
  */
 public interface InitiatorAsynchronousIOFacility<I> {
+
+	/**
+	 * Create a new directory by creating all nonexistent parent directories
+	 * first. If an I/O error occurs, the returned completion stage is completed
+	 * exceptionally with the encountered error.
+	 *
+	 * @param dir       The pathname of the file to be created.
+	 * @param attrs     An optional list of file attributes to set atomically
+	 *                  when creating the directory.
+	 * @param initiator The initiator of the operation.
+	 * @return An exceptionally completed {@link CompletionStage} in case of an
+	 *         exception is thrown.
+	 */
+	CompletionStage<Void> createDirectories( Path dir, I initiator, FileAttribute<?>... attrs );
 
 	/**
 	 * Creates a directory. If the directory already exists, or its parent
@@ -38,12 +53,14 @@ public interface InitiatorAsynchronousIOFacility<I> {
 	 * completion stage is completed exceptionally with the encountered error.
 	 *
 	 * @param dir       The pathname of the directory to be created.
+	 * @param attrs     An optional list of file attributes to set atomically
+	 *                  when creating the directory.
 	 * @param initiator The initiator of the operation.
 	 * @return An exceptionally completed {@link CompletionStage} in case the
 	 *         directory already exists, or its parent directory does not exist,
 	 *         or an exception is thrown.
 	 */
-	CompletionStage<Void> createDirectory( Path dir, I initiator );
+	CompletionStage<Void> createDirectory( Path dir, I initiator, FileAttribute<?>... attrs );
 
 	/**
 	 * Creates an empty file. If file already exists or an I/O error occurs,
@@ -131,8 +148,13 @@ public interface InitiatorAsynchronousIOFacility<I> {
 		return new AsynchronousIOFacility() {
 
 			@Override
-			public CompletionStage<Void> createDirectory( Path dir ) {
-				return InitiatorAsynchronousIOFacility.this.createDirectory(dir, initiator);
+			public CompletionStage<Void> createDirectories( Path dir, FileAttribute<?>... attrs ) {
+				return InitiatorAsynchronousIOFacility.this.createDirectories(dir, initiator, attrs);
+			}
+
+			@Override
+			public CompletionStage<Void> createDirectory( Path dir, FileAttribute<?>... attrs ) {
+				return InitiatorAsynchronousIOFacility.this.createDirectory(dir, initiator, attrs);
 			}
 
 			@Override

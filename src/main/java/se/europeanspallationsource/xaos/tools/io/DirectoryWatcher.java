@@ -17,6 +17,7 @@ package se.europeanspallationsource.xaos.tools.io;
 
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -34,6 +35,9 @@ import java.util.function.Consumer;
 import org.reactfx.EventSource;
 import org.reactfx.EventStream;
 
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
+import static java.nio.file.StandardOpenOption.WRITE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
@@ -190,6 +194,35 @@ public class DirectoryWatcher {
 	}
 
 	/**
+	 * Deletes a file or an empty directory. One of the two given
+	 * {@link Consumer}s will be called on success or on failure.
+	 * <p>
+	 * {@link Files#deleteIfExists(java.nio.file.Path)}
+	 * will be called to actually delete the file or empty directory.
+	 * </p><p>
+	 * <b>Note:</b> the operation is executed in by the {@link Executor} passed
+	 * to the {@link #create(java.util.concurrent.Executor)} method, i.e. in a
+	 * different thread from the caller's one.
+	 * </p>
+	 *
+	 * @param path Pathname of the file or directory to be deleted.
+	 * @param onSuccess The {@link Consumer} called on success, where the passed
+	 *                  parameter is {@link Boolean#TRUE} if the file was deleted
+	 *                  by this method; {@link Boolean#FALSE} if the file could
+	 *                  not be deleted because it did not exist.
+	 * @param onError   The {@link Consumer} called on failure.
+	 */
+	public void delete( Path path, Consumer<Boolean> onSuccess, Consumer<Throwable> onError ) {
+		executeIOOperation(
+			() -> {
+				return Files.deleteIfExists(path);
+			},
+			onSuccess,
+			onError
+		);
+	}
+
+	/**
 	 * @return The {@link EventStream} of thrown errors.
 	 */
 	public EventStream<Throwable> errorsStream() {
@@ -277,6 +310,83 @@ public class DirectoryWatcher {
 		} catch ( IOException e ) {
 			emitError(e);
 		}
+	}
+
+	/**
+	 * Writes a binary file filling it with the given {@code content}. One of
+	 * the two given {@link Consumer}s will be called on success or on failure.
+	 * <p>
+	 * {@link Files#write(java.nio.file.Path, java.lang.Iterable, java.nio.file.OpenOption...)}
+	 * will be called to actually write the file.
+	 * </p><p>
+	 * <b>Note:</b> the operation is executed in by the {@link Executor} passed
+	 * to the {@link #create(java.util.concurrent.Executor)} method, i.e. in a
+	 * different thread from the caller's one.
+	 * </p>
+	 *
+	 * @param file      The pathname of the file to be written.
+	 * @param content   The bytes to be written.
+	 * @param onSuccess The {@link Consumer} called on success, where the passed
+	 *                  parameter is the written file timestamp.
+	 * @param onError   The {@link Consumer} called on failure.
+	 */
+	public void writeBinaryFile(
+		Path file,
+		byte[] content,
+		Consumer<FileTime> onSuccess,
+		Consumer<Throwable> onError
+	) {
+		executeIOOperation(
+			() -> {
+
+				Files.write(file, content, CREATE, WRITE, TRUNCATE_EXISTING);
+
+				return Files.getLastModifiedTime(file);
+
+			},
+			onSuccess,
+			onError
+		);
+	}
+
+	/**
+	 * Writes a text file filling it with the given {@code content}. One of the
+	 * two given {@link Consumer}s will be called on success or on failure.
+	 * <p>
+	 * {@link Files#write(java.nio.file.Path, java.lang.Iterable, java.nio.file.OpenOption...)}
+	 * will be called to actually write the file.
+	 * </p><p>
+	 * <b>Note:</b> the operation is executed in by the {@link Executor} passed
+	 * to the {@link #create(java.util.concurrent.Executor)} method, i.e. in a
+	 * different thread from the caller's one.
+	 * </p>
+	 *
+	 * @param file      The pathname of the file to be written.
+	 * @param content   The {@link String} content to be written.
+	 * @param charset   The {@link Charset} to be used in writing the
+	 *                  {@code content} into the {@code  file}.
+	 * @param onSuccess The {@link Consumer} called on success, where the passed
+	 *                  parameter is the written file timestamp.
+	 * @param onError   The {@link Consumer} called on failure.
+	 */
+	public void writeTextFile(
+		Path file,
+		String content,
+		Charset charset,
+		Consumer<FileTime> onSuccess,
+		Consumer<Throwable> onError
+	) {
+		executeIOOperation(
+			() -> {
+
+				Files.write(file, content.getBytes(charset), CREATE, WRITE, TRUNCATE_EXISTING);
+
+				return Files.getLastModifiedTime(file);
+
+			},
+			onSuccess,
+			onError
+		);
 	}
 
 	private void emitError( Throwable e ) {

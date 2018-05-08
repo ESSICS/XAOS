@@ -18,6 +18,7 @@ package se.europeanspallationsource.xaos.tools.io;
 
 import java.nio.charset.Charset;
 import java.nio.file.Path;
+import java.nio.file.attribute.FileAttribute;
 import java.util.concurrent.CompletionStage;
 
 
@@ -30,16 +31,31 @@ import java.util.concurrent.CompletionStage;
 public interface AsynchronousIOFacility {
 
 	/**
+	 * Create a new directory by creating all nonexistent parent directories
+	 * first. If an I/O error occurs, the returned completion stage is completed
+	 * exceptionally with the encountered error.
+	 *
+	 * @param dir   The pathname of the file to be created.
+	 * @param attrs An optional list of file attributes to set atomically when
+	 *              creating the directory.
+	 * @return An exceptionally completed {@link CompletionStage} in case of an
+	 *         exception is thrown.
+	 */
+	CompletionStage<Void> createDirectories( Path dir, FileAttribute<?>... attrs );
+
+	/**
 	 * Creates a directory. If the directory already exists, or its parent
 	 * directory does not exist, or another I/O error occurs, the returned
 	 * completion stage is completed exceptionally with the encountered error.
 	 *
-	 * @param dir The pathname of the directory to be created.
+	 * @param dir   The pathname of the directory to be created.
+	 * @param attrs An optional list of file attributes to set atomically when
+	 *              creating the directory.
 	 * @return An exceptionally completed {@link CompletionStage} in case the
 	 *         directory already exists, or its parent directory does not exist,
 	 *         or an exception is thrown.
 	 */
-	CompletionStage<Void> createDirectory( Path dir );
+	CompletionStage<Void> createDirectory( Path dir, FileAttribute<?>... attrs );
 
 	/**
 	 * Creates an empty file. If file already exists or an I/O error occurs,
