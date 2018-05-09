@@ -79,7 +79,7 @@ public interface AsynchronousIOFacility {
 	CompletionStage<Void> delete( Path path );
 
 	/**
-	 * Deletes a file tree toothed at the given path. If an I/O error occurs,
+	 * Deletes a file tree rooted at the given path. If an I/O error occurs,
 	 * the returned completion stage is completed exceptionally with the
 	 * encountered error.
 	 *

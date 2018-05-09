@@ -23,6 +23,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.NotDirectoryException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchKey;
 import java.text.MessageFormat;
@@ -32,16 +33,19 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.reactfx.EventStream;
 
 import static java.nio.charset.Charset.defaultCharset;
 import static java.nio.file.StandardOpenOption.APPEND;
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
+import static java.nio.file.StandardOpenOption.WRITE;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -386,9 +390,50 @@ public class DirectoryWatcherTest {
 
 	/**
 	 * Test of deleteTree method, of class DirectoryWatcher.
+	 *
+	 * @throws java.io.IOException
+	 * @throws java.lang.InterruptedException
 	 */
 	@Test
-	public void testDeleteTree() {
+	public void testDeleteTree() throws IOException, InterruptedException {
+
+		System.out.println(MessageFormat.format("  Testing ''deleteTree'' [on {0}]...", root));
+
+		CountDownLatch latch = new CountDownLatch(2);
+		DirectoryWatcher watcher = create(executor);
+
+		watcher.deleteTree(
+			dir_a,
+			t -> {
+				latch.countDown();
+			},
+			e -> {
+				fail(MessageFormat.format("Tree not deleted: {0}", file_b2));
+				latch.countDown();
+			}
+		);
+		watcher.deleteTree(
+			Paths.get("a", "b", "c", "d", "e", "1", "2", "3", "4", "5"),
+			t -> {
+				latch.countDown();
+			},
+			e -> {
+				fail(MessageFormat.format("Tree not deleted: {0}", file_b2));
+				latch.countDown();
+			}
+		);
+
+		if ( !latch.await(1, TimeUnit.MINUTES) ) {
+			fail("File deletion not completed in 1 minute.");
+		}
+
+		assertFalse(Files.exists(file_a_c));
+		assertFalse(Files.exists(dir_a_c));
+		assertFalse(Files.exists(file_a));
+		assertFalse(Files.exists(dir_a));
+
+		watcher.shutdown();
+
 	}
 
 	/**
@@ -451,16 +496,208 @@ public class DirectoryWatcherTest {
 
 	/**
 	 * Test of readBinaryFile method, of class DirectoryWatcher.
+	 *
+	 * @throws java.io.IOException
+	 * @throws java.lang.InterruptedException
 	 */
 	@Test
-	public void testReadBinaryFile() {
+	public void testReadBinaryFile() throws IOException, InterruptedException {
+
+		System.out.println(MessageFormat.format("  Testing ''readBinaryFile'' [on {0}]...", root));
+
+		byte[] content = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x03, 0x02, 0x01, 0x00 };
+		CountDownLatch latch = new CountDownLatch(2);
+		DirectoryWatcher watcher = create(executor);
+
+		Files.write(file_b1, content);
+
+		watcher.readBinaryFile(
+			file_b1,
+			t -> {
+				assertArrayEquals(content, t);
+				latch.countDown();
+			},
+			e -> {
+				fail(MessageFormat.format("File not read: {0}", file_b1));
+				latch.countDown();
+			}
+		);
+
+		Path toFail = FileSystems.getDefault().getPath(dir_a.toString(), "non-exitent", "created_file.txt");
+
+		watcher.readBinaryFile(
+			toFail,
+			t -> {
+				fail(MessageFormat.format("File was read: {0}", toFail));
+				latch.countDown();
+			},
+			e -> {
+				assertNotNull(e);
+				assertTrue(e instanceof IOException);
+				latch.countDown();
+			}
+		);
+
+		if ( !latch.await(1, TimeUnit.MINUTES) ) {
+			fail("File creation not completed in 1 minute.");
+		}
+
+		watcher.shutdown();
+
 	}
 
 	/**
 	 * Test of readTextFile method, of class DirectoryWatcher.
+	 *
+	 * @throws java.io.IOException
+	 * @throws java.lang.InterruptedException
 	 */
 	@Test
-	public void testReadTextFile() {
+	public void testReadTextFile() throws IOException, InterruptedException {
+
+		System.out.println(MessageFormat.format("  Testing ''readTextFile'' [on {0}]...", root));
+
+		String content = "First line of text.\nSecond line of text.";
+		Charset charset = defaultCharset();
+		CountDownLatch latch = new CountDownLatch(2);
+		DirectoryWatcher watcher = create(executor);
+
+		Files.write(file_b1, content.getBytes(charset), CREATE, WRITE, TRUNCATE_EXISTING);
+
+		watcher.readTextFile(
+			file_b1,
+			charset,
+			t -> {
+				assertEquals(content, t);
+				latch.countDown();
+			},
+			e -> {
+				fail(MessageFormat.format("File not read: {0}", file_b1));
+				latch.countDown();
+			}
+		);
+
+		Path toFail = FileSystems.getDefault().getPath(dir_a.toString(), "non-exitent", "created_file.txt");
+
+		watcher.readTextFile(
+			toFail,
+			charset,
+			t -> {
+				fail(MessageFormat.format("File was read: {0}", toFail));
+				latch.countDown();
+			},
+			e -> {
+				assertNotNull(e);
+				assertTrue(e instanceof IOException);
+				latch.countDown();
+			}
+		);
+
+		if ( !latch.await(1, TimeUnit.MINUTES) ) {
+			fail("File creation not completed in 1 minute.");
+		}
+
+		watcher.shutdown();
+
+	}
+
+	/**
+	 * Test of writeBinaryFile and readBinaryFile method, of class DirectoryWatcher.
+	 *
+	 * @throws java.io.IOException
+	 * @throws java.lang.InterruptedException
+	 */
+	@Test
+	public void testReadWriteBinaryFile() throws IOException, InterruptedException {
+
+		System.out.println(MessageFormat.format("  Testing ''writeBinaryFile'' and ''readBinaryFile'' [on {0}]...", root));
+
+		byte[] content = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x03, 0x02, 0x01, 0x00 };
+		CountDownLatch latch = new CountDownLatch(2);
+		DirectoryWatcher watcher = create(executor);
+		Path readWriteFile = FileSystems.getDefault().getPath(dir_a.toString(), "created_file.txt");
+
+		watcher.writeBinaryFile(
+			readWriteFile,
+			content,
+			t -> {
+				assertNotNull(t);
+				latch.countDown();
+			},
+			e -> {
+				fail(MessageFormat.format("File not written: {0}", readWriteFile));
+				latch.countDown();
+			}
+		);
+		watcher.readBinaryFile(
+			readWriteFile,
+			t -> {
+				assertArrayEquals(content, t);
+				latch.countDown();
+			},
+			e -> {
+				fail(MessageFormat.format("File not read: {0}", file_b1));
+				latch.countDown();
+			}
+		);
+
+		if ( !latch.await(1, TimeUnit.MINUTES) ) {
+			fail("File creation not completed in 1 minute.");
+		}
+
+		watcher.shutdown();
+
+	}
+
+	/**
+	 * Test of writeTextFile and readTextFile methods, of class DirectoryWatcher.
+	 *
+	 * @throws java.io.IOException
+	 * @throws java.lang.InterruptedException
+	 */
+	@Test
+	public void testReadWriteTextFile() throws IOException, InterruptedException {
+
+		System.out.println(MessageFormat.format("  Testing ''writeTextFile'' and ''readTextFile'' [on {0}]...", root));
+
+		String content = "First line of text.\nSecond line of text.";
+		Charset charset = defaultCharset();
+		CountDownLatch latch = new CountDownLatch(2);
+		DirectoryWatcher watcher = create(executor);
+		Path readWriteFile = FileSystems.getDefault().getPath(dir_a.toString(), "created_file.txt");
+
+		watcher.writeTextFile(
+			readWriteFile,
+			content,
+			charset,
+			t -> {
+				assertNotNull(t);
+				latch.countDown();
+			},
+			e -> {
+				fail(MessageFormat.format("File not written: {0}", readWriteFile));
+				latch.countDown();
+			}
+		);
+		watcher.readTextFile(
+			readWriteFile,
+			charset,
+			t -> {
+				assertEquals(content, t);
+				latch.countDown();
+			},
+			e -> {
+				fail(MessageFormat.format("File not read: {0}", file_b1));
+				latch.countDown();
+			}
+		);
+
+		if ( !latch.await(1, TimeUnit.MINUTES) ) {
+			fail("File creation not completed in 1 minute.");
+		}
+
+		watcher.shutdown();
+
 	}
 
 	/**
@@ -468,8 +705,8 @@ public class DirectoryWatcherTest {
 	 *
 	 * @throws java.io.IOException
 	 */
-	@Test
-	public void testShutdown() throws IOException {
+	@Test(expected = RejectedExecutionException.class)
+	public void testShutdown() throws IOException, RejectedExecutionException {
 
 		System.out.println("  Testing 'shutdown'...");
 
@@ -477,13 +714,30 @@ public class DirectoryWatcherTest {
 
 		assertFalse(watcher.isShutdown());
 
-//	TODO:CR	Add an operation: it should proceed succesfully.
+		watcher.delete(
+			file_b2,
+			t -> {
+				assertTrue(t);
+			},
+			e -> {
+				fail(MessageFormat.format("File not deleted: {0}", file_b2));
+			}
+		);
+
 		watcher.shutdown();
 
 		assertTrue(watcher.isShutdown());
 
-//	TODO:CR	Add an operation: it should throw RejectedExecutionException.
-//
+		watcher.delete(
+			file_b1,
+			t -> {
+				fail("Operation has not been rejected.");
+			},
+			e -> {
+				fail("Operation has not been rejected.");
+			}
+		);
+
 	}
 
 	/**
@@ -588,7 +842,6 @@ public class DirectoryWatcherTest {
 	 * @throws java.lang.InterruptedException
 	 */
 	@Test
-	@Ignore
 	public void testWatch() throws IOException, InterruptedException {
 
 		System.out.println(MessageFormat.format("  Testing ''watch'' [on {0}]...", root));

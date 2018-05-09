@@ -17,7 +17,10 @@ package se.europeanspallationsource.xaos.tools.io;
 
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.charset.Charset;
+import java.nio.file.DirectoryStream;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -162,7 +165,7 @@ public class DirectoryWatcher {
 	 * {@link Files#createFile(java.nio.file.Path, java.nio.file.attribute.FileAttribute...)}
 	 * will be called to actually create the file.
 	 * </p><p>
-	 * <b>Note:</b> the operation is executed in by the {@link Executor} passed
+	 * <b>Note:</b> the operation is executed by the {@link Executor} passed
 	 * to the {@link #create(java.util.concurrent.Executor)} method, i.e. in a
 	 * different thread from the caller's one.
 	 * </p>
@@ -197,10 +200,10 @@ public class DirectoryWatcher {
 	 * Deletes a file or an empty directory. One of the two given
 	 * {@link Consumer}s will be called on success or on failure.
 	 * <p>
-	 * {@link Files#deleteIfExists(java.nio.file.Path)}
-	 * will be called to actually delete the file or empty directory.
+	 * {@link Files#delete(java.nio.file.Path)} will be called to actually
+	 * delete the file or empty directory.
 	 * </p><p>
-	 * <b>Note:</b> the operation is executed in by the {@link Executor} passed
+	 * <b>Note:</b> the operation is executed by the {@link Executor} passed
 	 * to the {@link #create(java.util.concurrent.Executor)} method, i.e. in a
 	 * different thread from the caller's one.
 	 * </p>
@@ -223,6 +226,25 @@ public class DirectoryWatcher {
 	}
 
 	/**
+	 * Deletes a file tree rooted at the given path. One of the two given
+	 * {@link Consumer}s will be called on success or on failure.
+	 *
+	 * @param root The path to the file tree root to be deleted.
+	 * @param onSuccess The {@link Consumer} called on success.
+	 * @param onError   The {@link Consumer} called on failure.
+	 */
+	public void deleteTree( Path root, Consumer<Void> onSuccess, Consumer<Throwable> onError ) {
+        executeIOOperation(
+			() -> {
+				deleteRecursively(root);
+				return null;
+			},
+			onSuccess,
+			onError
+		);
+    }
+
+ 	/**
 	 * @return The {@link EventStream} of thrown errors.
 	 */
 	public EventStream<Throwable> errorsStream() {
@@ -237,6 +259,70 @@ public class DirectoryWatcher {
 	 */
 	public final boolean isShutdown() {
 		return shutdown;
+	}
+
+	/**
+	 * Reads the contents of a binary file. One of the two given
+	 * {@link Consumer}s will be called on success or on failure.
+	 * <p>
+	 * {@link Files#readAllBytes(java.nio.file.Path)} will be called to actually
+	 * read the file.
+	 * </p><p>
+	 * <b>Note:</b> the operation is executed by the {@link Executor} passed
+	 * to the {@link #create(java.util.concurrent.Executor)} method, i.e. in a
+	 * different thread from the caller's one.
+	 * </p>
+	 *
+	 * @param file      The pathname of the file to be read.
+	 * @param onSuccess The {@link Consumer} called on success, where the passed
+	 *                  parameter are the read bytes from the file.
+	 * @param onError   The {@link Consumer} called on failure.
+	 */
+	public void readBinaryFile( Path file, Consumer<byte[]> onSuccess, Consumer<Throwable> onError ) {
+		executeIOOperation(
+			() -> Files.readAllBytes(file),
+			onSuccess,
+			onError
+		);
+	}
+
+	/**
+	 * Reads the contents of a text file. One of the two given
+	 * {@link Consumer}s will be called on success or on failure.
+	 * <p>
+	 * {@link Files#readAllBytes(java.nio.file.Path)} will be called to actually
+	 * read the file.
+	 * </p><p>
+	 * <b>Note:</b> the operation is executed by the {@link Executor} passed
+	 * to the {@link #create(java.util.concurrent.Executor)} method, i.e. in a
+	 * different thread from the caller's one.
+	 * </p>
+	 *
+	 * @param file      The pathname of the file to be read.
+	 * @param charset   The {@link Charset} to be used in reading the
+	 *                  from the {@code file}.
+	 * @param onSuccess The {@link Consumer} called on success, where the passed
+	 *                  parameter is the read string from the file.
+	 * @param onError   The {@link Consumer} called on failure.
+	 */
+	public void readTextFile(
+		Path file,
+		Charset charset,
+		Consumer<String> onSuccess,
+		Consumer<Throwable> onError
+	) {
+		executeIOOperation(
+			() -> { 
+
+				byte[] bytes = Files.readAllBytes(file);
+				CharBuffer chars = charset.decode(ByteBuffer.wrap(bytes));
+
+				return chars.toString();
+
+			},
+			onSuccess,
+			onError
+		);
 	}
 
 	/**
@@ -319,7 +405,7 @@ public class DirectoryWatcher {
 	 * {@link Files#write(java.nio.file.Path, java.lang.Iterable, java.nio.file.OpenOption...)}
 	 * will be called to actually write the file.
 	 * </p><p>
-	 * <b>Note:</b> the operation is executed in by the {@link Executor} passed
+	 * <b>Note:</b> the operation is executed by the {@link Executor} passed
 	 * to the {@link #create(java.util.concurrent.Executor)} method, i.e. in a
 	 * different thread from the caller's one.
 	 * </p>
@@ -356,7 +442,7 @@ public class DirectoryWatcher {
 	 * {@link Files#write(java.nio.file.Path, java.lang.Iterable, java.nio.file.OpenOption...)}
 	 * will be called to actually write the file.
 	 * </p><p>
-	 * <b>Note:</b> the operation is executed in by the {@link Executor} passed
+	 * <b>Note:</b> the operation is executed by the {@link Executor} passed
 	 * to the {@link #create(java.util.concurrent.Executor)} method, i.e. in a
 	 * different thread from the caller's one.
 	 * </p>
@@ -387,6 +473,24 @@ public class DirectoryWatcher {
 			onSuccess,
 			onError
 		);
+	}
+
+	private void deleteRecursively( Path root ) throws IOException {
+
+		if ( Files.exists(root) ) {
+
+			if ( Files.isDirectory(root) ) {
+				try ( DirectoryStream<Path> stream = Files.newDirectoryStream(root) ) {
+					for ( Path path : stream ) {
+						deleteRecursively(path);
+					}
+				}
+			}
+
+			Files.delete(root);
+
+		}
+
 	}
 
 	private void emitError( Throwable e ) {
