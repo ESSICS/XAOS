@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 claudiorosati.
+ * Copyright 2018 European Spallation Source ERIC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileAttribute;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.Executor;
 
 
 /**
@@ -30,6 +31,19 @@ import java.util.concurrent.CompletionStage;
  * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX</a>
  */
 public class AsynchronousIO<I> implements InitiatorAsynchronousIOFacility<I> {
+
+    private final Executor clientThreadExecutor;
+	private final DirectoryWatcher directoryWatcher;
+
+	public AsynchronousIO(
+		DirectoryWatcher directoryWatcher,
+//		LiveDirsModel<I, ?> model,
+		Executor clientThreadExecutor
+	) {
+		this.directoryWatcher = directoryWatcher;
+//		this.model = model;
+		this.clientThreadExecutor = clientThreadExecutor;
+	}
 
 	@Override
 	public CompletionStage<Void> createDirectories( Path dir, I initiator, FileAttribute<?>... attrs ) {
