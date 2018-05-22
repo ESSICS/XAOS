@@ -136,21 +136,21 @@ public class PathElementTest {
 		assertEquals(Files.getLastModifiedTime(file_a), pe_file_a.getLastModified());
 		assertFalse(pe_file_a.isDirectory());
 
-		PathElement pe_file_a_c = PathElement.file(file_a_c, Files.getLastModifiedTime(file_a));
+		PathElement pe_file_a_c = PathElement.file(file_a_c, Files.getLastModifiedTime(file_a_c));
 
 		assertEquals(file_a_c, pe_file_a_c.getPath());
 		assertEquals(Collections.emptyList(), pe_file_a_c.getChildren());
 		assertEquals(Files.getLastModifiedTime(file_a_c), pe_file_a_c.getLastModified());
 		assertFalse(pe_file_a_c.isDirectory());
 
-		PathElement pe_file_b1 = PathElement.file(file_b1, Files.getLastModifiedTime(file_a));
+		PathElement pe_file_b1 = PathElement.file(file_b1, Files.getLastModifiedTime(file_b1));
 
 		assertEquals(file_b1, pe_file_b1.getPath());
 		assertEquals(Collections.emptyList(), pe_file_b1.getChildren());
 		assertEquals(Files.getLastModifiedTime(file_b1), pe_file_b1.getLastModified());
 		assertFalse(pe_file_b1.isDirectory());
 
-		PathElement pe_file_b2 = PathElement.file(file_b2, Files.getLastModifiedTime(file_a));
+		PathElement pe_file_b2 = PathElement.file(file_b2, Files.getLastModifiedTime(file_b2));
 
 		assertEquals(file_b2, pe_file_b2.getPath());
 		assertEquals(Collections.emptyList(), pe_file_b2.getChildren());

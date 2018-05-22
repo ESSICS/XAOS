@@ -19,8 +19,11 @@ package se.europeanspallationsource.xaos.components;
 import java.nio.file.Path;
 import java.util.function.BiFunction;
 import javafx.scene.Node;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.TreeItem;
+import se.europeanspallationsource.xaos.application.utilities.CommonIcons;
+
+import static se.europeanspallationsource.xaos.application.utilities.CommonIcons.Glyph.FILE;
+import static se.europeanspallationsource.xaos.application.utilities.CommonIcons.Glyph.FOLDER;
 
 
 /**
@@ -69,19 +72,16 @@ public interface DirectoryModel<I, T> {
 
 	/**
 	 * Default graphic factory returning a folder icon for a directory and
-     * a document icon for a regular file.
+	 * a document icon for a regular file.
 	 */
 	@SuppressWarnings( "PublicInnerClass" )
 	class DefaultGraphicFactory implements GraphicFactory {
 
-//	TODO:CR Usare FontawesomeFX
-		private static final Image FOLDER_IMAGE = new Image(DefaultGraphicFactory.class.getResource("folder-16.png").toString());
-		private static final Image FILE_IMAGE = new Image(DefaultGraphicFactory.class.getResource("file-16.png").toString());
-
 		@Override
 		public Node createGraphic( Path path, boolean isDirectory ) {
-			return isDirectory ? new ImageView(FOLDER_IMAGE) : new ImageView(FILE_IMAGE);
+			return isDirectory ? CommonIcons.get(FOLDER) : CommonIcons.get(FILE);
 		}
+		
 	}
 
 	/**
