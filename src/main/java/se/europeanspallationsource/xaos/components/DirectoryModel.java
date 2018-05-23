@@ -20,6 +20,7 @@ import java.nio.file.Path;
 import java.util.function.BiFunction;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
+import org.reactfx.EventStream;
 import se.europeanspallationsource.xaos.application.utilities.CommonIcons;
 
 import static se.europeanspallationsource.xaos.application.utilities.CommonIcons.Glyph.FILE;
@@ -32,20 +33,70 @@ import static se.europeanspallationsource.xaos.application.utilities.CommonIcons
  * @param <I> Type of the initiator of changes to the model.
  * @param <T> Type of the object returned by {@link TreeItem#getValue()}.
  * @author claudio.rosati@esss.se
- * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX</a>
+ * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.DirectoryModel</a>
  */
 public interface DirectoryModel<I, T> {
 
 	/**
 	 * Graphic factory that always returns {@code null}.
 	 */
-	final GraphicFactory NO_GRAPHIC_FACTORY = ( path, isDirectory ) -> null;
+	static final GraphicFactory NO_GRAPHIC_FACTORY = ( path, isDirectory ) -> null;
 
 	/**
 	 * Graphic factory that returns a folder icon for a directory and
 	 * a document icon for a regular file.
 	 */
-	final GraphicFactory DEFAULT_GRAPHIC_FACTORY = new DefaultGraphicFactory();
+	static final GraphicFactory DEFAULT_GRAPHIC_FACTORY = new DefaultGraphicFactory();
+
+	/**
+	 * Indicates whether this directory model contains the given {@code path}.
+	 *
+	 * @param path The {@link Path} to be verified.
+	 * @return {@code true} if the given {@code path} is contained in this model.
+	 */
+	boolean contains( Path path );
+
+	/**
+	 * @return An observable stream of additions to the model.
+	 */
+	EventStream<Update<I>> creations();
+
+	/**
+	 * @return An observable stream of removals from the model.
+	 */
+	EventStream<Update<I>> deletions();
+
+	/**
+	 * Returns a tree item that can be used as a root of a {@link TreeView}.
+	 * <p>
+	 * The returned TreeItem does not contain any {@link Path} (its
+	 * {@link TreeItem#getValue()} method returns {@code null}), but its
+	 * children are roots of directory trees represented in this model.
+	 * As a consequence, the returned {@link TreeItem} shall be used with
+	 * {@link TreeView#showRootProperty()} set to {@code false}.
+	 * </p>
+	 *
+	 * @return A {@link TreeItem} object that can be used as a root of a
+	 *         {@link TreeView}.
+	 */
+	TreeItem<T> getRoot();
+
+	/**
+	 * @return An observable stream of file modifications in the model.
+	 */
+	EventStream<Update<I>> modifications();
+
+	/**
+	 * Sets graphic factory used to create graphics of {@link TreeItem}s
+	 * in this directory model.
+	 * <p>
+	 * {@link #DEFAULT_GRAPHIC_FACTORY} and {@link #NO_GRAPHIC_FACTORY} are
+	 * two factories already available.
+	 * </p>
+	 *
+	 * @param factory The new graphic factory instance.
+	 */
+	void setGraphicFactory( GraphicFactory factory );
 
 	/**
 	 * Types of updates to the director model.
@@ -81,7 +132,7 @@ public interface DirectoryModel<I, T> {
 		public Node createGraphic( Path path, boolean isDirectory ) {
 			return isDirectory ? CommonIcons.get(FOLDER) : CommonIcons.get(FILE);
 		}
-		
+
 	}
 
 	/**

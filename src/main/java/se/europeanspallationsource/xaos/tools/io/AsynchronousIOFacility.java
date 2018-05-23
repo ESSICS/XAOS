@@ -26,7 +26,7 @@ import java.util.concurrent.CompletionStage;
  * API for asynchronous file-system operations.
  *
  * @author claudio.rosati@esss.se
- * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX</a>
+ * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.IOFacility.java</a>
  */
 public interface AsynchronousIOFacility {
 

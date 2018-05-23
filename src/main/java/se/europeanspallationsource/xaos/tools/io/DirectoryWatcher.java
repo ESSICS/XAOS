@@ -77,7 +77,7 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
  * </p>
  *
  * @author claudio.rosati@esss.se
- * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX</a>
+ * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.DirWatcher</a>
  */
 @SuppressWarnings( "ClassWithoutLogger" )
 public class DirectoryWatcher {

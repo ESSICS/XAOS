@@ -28,7 +28,7 @@ import java.util.concurrent.Executor;
  *
  * @param <I> Type of the <i>initiator</i> of the I/O operation.
  * @author claudio.rosati@esss.se
- * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX</a>
+ * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.LiveDirsIO</a>
  */
 public class AsynchronousIO<I> implements InitiatorAsynchronousIOFacility<I> {
 
