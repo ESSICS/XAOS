@@ -247,7 +247,7 @@ public class DirectoryWatcher {
  	/**
 	 * @return The {@link EventStream} of thrown errors.
 	 */
-	public EventStream<Throwable> errorsStream() {
+	public EventStream<Throwable> errors() {
 		return errors;
 	}
 
@@ -343,7 +343,7 @@ public class DirectoryWatcher {
 	/**
 	 * @return The {@link EventStream} of signalled {@link WatchKey}s.
 	 */
-	public EventStream<WatchKey> signalledKeysStream() {
+	public EventStream<WatchKey> signalledKeys() {
 		return signalledKeys;
 	}
 

@@ -52,6 +52,30 @@ public class PathElement {
 	};
 
 	/**
+	 * Factory method returning a {@link PathElement} instance representing a
+	 * directory.
+	 *
+	 * @param path     The directory pathname.
+	 * @param children The directory's children.
+	 * @return A{@link PathElement} instance representing a directory.
+	 */
+	public static PathElement directory( Path path, List<PathElement> children ) {
+		return new PathElement(path, true, children, null);
+	}
+
+	/**
+	 * Factory method returning a {@link PathElement) instance representing a
+	 * file.
+	 *
+	 * @param path         The file pathname.
+	 * @param lastModified The date of last modification of the file.
+	 * @return A {@link PathElement) instance representing a file.
+	 */
+	public static PathElement file( Path path, FileTime lastModified ) {
+		return new PathElement(path, false, Collections.emptyList(), lastModified);
+	}
+
+	/**
 	 * Factory method returning a tree structure of {@link PathElement} instances
 	 * representing the content of the given {@code root} directory.
 	 *
@@ -81,30 +105,6 @@ public class PathElement {
 			return file(root, Files.getLastModifiedTime(root));
 		}
 
-	}
-
-	/**
-	 * Factory method returning a {@link PathElement} instance representing a
-	 * directory.
-	 *
-	 * @param path     The directory pathname.
-	 * @param children The directory's children.
-	 * @return A{@link PathElement} instance representing a directory.
-	 */
-	static PathElement directory( Path path, List<PathElement> children ) {
-		return new PathElement(path, true, children, null);
-	}
-
-	/**
-	 * Factory method returning a {@link PathElement) instance representing a
-	 * file.
-	 *
-	 * @param path         The file pathname.
-	 * @param lastModified The date of last modification of the file.
-	 * @return A {@link PathElement) instance representing a file.
-	 */
-	static PathElement file( Path path, FileTime lastModified ) {
-		return new PathElement(path, false, Collections.emptyList(), lastModified);
 	}
 
 	private final List<PathElement> children;

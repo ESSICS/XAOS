@@ -447,7 +447,7 @@ public class DirectoryWatcherTest {
 		System.out.println("  Testing 'getErrorsStream'...");
 
 		DirectoryWatcher watcher = create(executor);
-		EventStream<Throwable> errorsStream = watcher.errorsStream();
+		EventStream<Throwable> errorsStream = watcher.errors();
 
 		assertNotNull(errorsStream);
 
@@ -466,7 +466,7 @@ public class DirectoryWatcherTest {
 		System.out.println("  Testing 'getSignalledKeysStream'...");
 
 		DirectoryWatcher watcher = create(executor);
-		EventStream<WatchKey> signalledKeysStream = watcher.signalledKeysStream();
+		EventStream<WatchKey> signalledKeysStream = watcher.signalledKeys();
 
 		assertNotNull(signalledKeysStream);
 
@@ -851,7 +851,7 @@ public class DirectoryWatcherTest {
 		CountDownLatch modifyLatch = new CountDownLatch(1);
 		DirectoryWatcher watcher = create(executor);
 
-		watcher.signalledKeysStream().subscribe(key -> {
+		watcher.signalledKeys().subscribe(key -> {
 			key.pollEvents().stream().forEach(e -> {
 				if ( StandardWatchEventKinds.ENTRY_CREATE.equals(e.kind()) ) {
 					createLatch.countDown();
@@ -902,7 +902,7 @@ public class DirectoryWatcherTest {
 		CountDownLatch errorLatch = new CountDownLatch(1);
 		DirectoryWatcher watcher = create(executor);
 
-		watcher.errorsStream().subscribe(throwable -> {
+		watcher.errors().subscribe(throwable -> {
 			if ( throwable instanceof NotDirectoryException ) {
 				errorLatch.countDown();
 			}

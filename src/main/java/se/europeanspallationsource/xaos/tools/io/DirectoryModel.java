@@ -13,18 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.components;
+package se.europeanspallationsource.xaos.tools.io;
 
 
 import java.nio.file.Path;
-import java.util.function.BiFunction;
-import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import org.reactfx.EventStream;
-import se.europeanspallationsource.xaos.application.utilities.CommonIcons;
-
-import static se.europeanspallationsource.xaos.application.utilities.CommonIcons.Glyph.FILE;
-import static se.europeanspallationsource.xaos.application.utilities.CommonIcons.Glyph.FOLDER;
 
 
 /**
@@ -36,17 +31,6 @@ import static se.europeanspallationsource.xaos.application.utilities.CommonIcons
  * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.DirectoryModel</a>
  */
 public interface DirectoryModel<I, T> {
-
-	/**
-	 * Graphic factory that always returns {@code null}.
-	 */
-	static final GraphicFactory NO_GRAPHIC_FACTORY = ( path, isDirectory ) -> null;
-
-	/**
-	 * Graphic factory that returns a folder icon for a directory and
-	 * a document icon for a regular file.
-	 */
-	static final GraphicFactory DEFAULT_GRAPHIC_FACTORY = new DefaultGraphicFactory();
 
 	/**
 	 * Indicates whether this directory model contains the given {@code path}.
@@ -65,6 +49,11 @@ public interface DirectoryModel<I, T> {
 	 * @return An observable stream of removals from the model.
 	 */
 	EventStream<Update<I>> deletions();
+
+	/**
+	 * @return An observable stream of errors.
+	 */
+	EventStream<Throwable> errors();
 
 	/**
 	 * Returns a tree item that can be used as a root of a {@link TreeView}.
@@ -87,68 +76,46 @@ public interface DirectoryModel<I, T> {
 	EventStream<Update<I>> modifications();
 
 	/**
-	 * Sets graphic factory used to create graphics of {@link TreeItem}s
-	 * in this directory model.
-	 * <p>
-	 * {@link #DEFAULT_GRAPHIC_FACTORY} and {@link #NO_GRAPHIC_FACTORY} are
-	 * two factories already available.
-	 * </p>
-	 *
-	 * @param factory The new graphic factory instance.
+	 * API defining few reporting methods.
 	 */
-	void setGraphicFactory( GraphicFactory factory );
-
-	/**
-	 * Types of updates to the director model.
-	 */
-	@SuppressWarnings( "PublicInnerClass" )
-	enum UpdateType {
+	interface Reporter<I> {
 
 		/**
-		 * Indicates a new file/directory entry.
+		 * Report the creation of a file/directory element.
+		 *
+		 * @param baseDir      Base directory of the update.
+		 * @param relativePath Path relative to {@code baseDir} of the created
+		 *                     element.
+		 * @param initiator    The initiator of changes to the model.
 		 */
-		CREATION,
+		void reportCreation( Path baseDir, Path relativePath, I initiator );
 
 		/**
-		 * Indicates removal of a file/directory entry.
+		 * Report the removal of a file/directory element.
+		 *
+		 * @param baseDir      Base directory of the update.
+		 * @param relativePath Path relative to {@code baseDir} of the deleted
+		 *                     element.
+		 * @param initiator    The initiator of changes to the model.
 		 */
-		DELETION,
+		void reportDeletion( Path baseDir, Path relativePath, I initiator );
 
 		/**
-		 * Indicates file modification.
+		 * Report the modification of a file/directory element.
+		 *
+		 * @param <I>          Type of the initiator of changes to the model.
+		 * @param baseDir      Base directory of the update.
+		 * @param relativePath Path relative to {@code baseDir} of the modified
+		 *                     element.
 		 */
-		MODIFICATION,
+		void reportModification( Path baseDir, Path relativePath, I initiator );
 
-	}
-
-	/**
-	 * Default graphic factory returning a folder icon for a directory and
-	 * a document icon for a regular file.
-	 */
-	@SuppressWarnings( "PublicInnerClass" )
-	class DefaultGraphicFactory implements GraphicFactory {
-
-		@Override
-		public Node createGraphic( Path path, boolean isDirectory ) {
-			return isDirectory ? CommonIcons.get(FOLDER) : CommonIcons.get(FILE);
-		}
-
-	}
-
-	/**
-	 * Factory to create graphics for {@link TreeItem}s in a
-	 * {@link DirectoryModel}.
-	 */
-	@FunctionalInterface
-	@SuppressWarnings( "PublicInnerClass" )
-	interface GraphicFactory extends BiFunction<Path, Boolean, Node> {
-
-		Node createGraphic( Path path, boolean isDirectory );
-
-		@Override
-		default Node apply( Path path, Boolean isDirectory ) {
-			return createGraphic(path, isDirectory);
-		}
+		/**
+		 * Report an error.
+		 *
+		 * @param error The thrown exception.
+		 */
+		void reportError( Throwable error );
 
 	}
 
@@ -253,6 +220,29 @@ public interface DirectoryModel<I, T> {
 		public UpdateType getType() {
 			return type;
 		}
+
+	}
+
+	/**
+	 * Types of updates to the director model.
+	 */
+	@SuppressWarnings( "PublicInnerClass" )
+	enum UpdateType {
+
+		/**
+		 * Indicates a new file/directory entry.
+		 */
+		CREATION,
+
+		/**
+		 * Indicates removal of a file/directory entry.
+		 */
+		DELETION,
+
+		/**
+		 * Indicates file modification.
+		 */
+		MODIFICATION,
 
 	}
 

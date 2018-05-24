@@ -24,14 +24,14 @@ import java.util.concurrent.CompletionStage;
 
 /**
  * API for asynchronous file-system operations similar to
- * {@link AsynchronousIOFacility}, where each "file-system changing" operation
+ * {@link AsynchronousIO}, where each "file-system changing" operation
  * takes an extra argument: the <i>initiator</i> of the change.
  *
  * @param <I> Type of the <i>initiator</i> of the I/O operation.
  * @author claudio.rosati@esss.se
  * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.InitiatorTrackingIOFacility</a>
  */
-public interface InitiatorAsynchronousIOFacility<I> {
+public interface InitiatorAsynchronousIO<I> {
 
 	/**
 	 * Create a new directory by creating all nonexistent parent directories
@@ -137,59 +137,59 @@ public interface InitiatorAsynchronousIOFacility<I> {
 	}
 
 	/**
-	 * Returns an {@link AsynchronousIOFacility} that delegates all operations
+	 * Returns an {@link AsynchronousIO} that delegates all operations
 	 * to this facility with the given {@code initiator} of changes.
 	 *
 	 * @param initiator The initiator of the operation.
-	 * @return An {@link AsynchronousIOFacility} that delegates all operations
+	 * @return An {@link AsynchronousIO} that delegates all operations
 	 *         to this facility with the given {@code initiator} of changes.
 	 */
-	default AsynchronousIOFacility withInitiator( final I initiator ) {
-		return new AsynchronousIOFacility() {
+	default AsynchronousIO withInitiator( final I initiator ) {
+		return new AsynchronousIO() {
 
 			@Override
 			public CompletionStage<Void> createDirectories( Path dir, FileAttribute<?>... attrs ) {
-				return InitiatorAsynchronousIOFacility.this.createDirectories(dir, initiator, attrs);
+				return InitiatorAsynchronousIO.this.createDirectories(dir, initiator, attrs);
 			}
 
 			@Override
 			public CompletionStage<Void> createDirectory( Path dir, FileAttribute<?>... attrs ) {
-				return InitiatorAsynchronousIOFacility.this.createDirectory(dir, initiator, attrs);
+				return InitiatorAsynchronousIO.this.createDirectory(dir, initiator, attrs);
 			}
 
 			@Override
 			public CompletionStage<Void> createFile( Path file ) {
-				return InitiatorAsynchronousIOFacility.this.createFile(file, initiator);
+				return InitiatorAsynchronousIO.this.createFile(file, initiator);
 			}
 
 			@Override
 			public CompletionStage<Void> delete( Path fileOrDir ) {
-				return InitiatorAsynchronousIOFacility.this.delete(fileOrDir, initiator);
+				return InitiatorAsynchronousIO.this.delete(fileOrDir, initiator);
 			}
 
 			@Override
 			public CompletionStage<Void> deleteTree( Path root ) {
-				return InitiatorAsynchronousIOFacility.this.deleteTree(root, initiator);
+				return InitiatorAsynchronousIO.this.deleteTree(root, initiator);
 			}
 
 			@Override
 			public CompletionStage<byte[]> readBinaryFile( Path file ) {
-				return InitiatorAsynchronousIOFacility.this.readBinaryFile(file, initiator);
+				return InitiatorAsynchronousIO.this.readBinaryFile(file, initiator);
 			}
 
 			@Override
 			public CompletionStage<String> readTextFile( Path file, Charset charset ) {
-				return InitiatorAsynchronousIOFacility.this.readTextFile(file, charset, initiator);
+				return InitiatorAsynchronousIO.this.readTextFile(file, charset, initiator);
 			}
 
 			@Override
 			public CompletionStage<Void> writeBinaryFile( Path file, byte[] content ) {
-				return InitiatorAsynchronousIOFacility.this.writeBinaryFile(file, content, initiator);
+				return InitiatorAsynchronousIO.this.writeBinaryFile(file, content, initiator);
 			}
 
 			@Override
 			public CompletionStage<Void> writeTextFile( Path file, String content, Charset charset ) {
-				return InitiatorAsynchronousIOFacility.this.writeTextFile(file, content, charset, initiator);
+				return InitiatorAsynchronousIO.this.writeTextFile(file, content, charset, initiator);
 			}
 
 		};

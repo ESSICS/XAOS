@@ -20,74 +20,146 @@ import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileAttribute;
 import java.util.concurrent.CompletionStage;
-import java.util.concurrent.Executor;
 
 
 /**
- * Implementation of an {@link InitiatorAsynchronousIOFacility}.
+ * API for asynchronous file-system operations.
  *
- * @param <I> Type of the <i>initiator</i> of the I/O operation.
  * @author claudio.rosati@esss.se
- * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.LiveDirsIO</a>
+ * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.IOFacility.java</a>
  */
-public class AsynchronousIO<I> implements InitiatorAsynchronousIOFacility<I> {
+public interface AsynchronousIO {
 
-    private final Executor clientThreadExecutor;
-	private final DirectoryWatcher directoryWatcher;
+	/**
+	 * Create a new directory by creating all nonexistent parent directories
+	 * first. If an I/O error occurs, the returned completion stage is completed
+	 * exceptionally with the encountered error.
+	 *
+	 * @param dir   The pathname of the file to be created.
+	 * @param attrs An optional list of file attributes to set atomically when
+	 *              creating the directory.
+	 * @return An exceptionally completed {@link CompletionStage} in case of an
+	 *         exception is thrown.
+	 */
+	CompletionStage<Void> createDirectories( Path dir, FileAttribute<?>... attrs );
 
-	public AsynchronousIO(
-		DirectoryWatcher directoryWatcher,
-//		LiveDirsModel<I, ?> model,
-		Executor clientThreadExecutor
-	) {
-		this.directoryWatcher = directoryWatcher;
-//		this.model = model;
-		this.clientThreadExecutor = clientThreadExecutor;
+	/**
+	 * Creates a directory. If the directory already exists, or its parent
+	 * directory does not exist, or another I/O error occurs, the returned
+	 * completion stage is completed exceptionally with the encountered error.
+	 *
+	 * @param dir   The pathname of the directory to be created.
+	 * @param attrs An optional list of file attributes to set atomically when
+	 *              creating the directory.
+	 * @return An exceptionally completed {@link CompletionStage} in case the
+	 *         directory already exists, or its parent directory does not exist,
+	 *         or an exception is thrown.
+	 */
+	CompletionStage<Void> createDirectory( Path dir, FileAttribute<?>... attrs );
+
+	/**
+	 * Creates an empty file. If file already exists or an I/O error occurs,
+	 * the returned completion stage is completed exceptionally with the
+	 * encountered error.
+	 *
+	 * @param file The pathname of the file to be created.
+	 * @return An exceptionally completed {@link CompletionStage} in case the
+	 *         file already exists, or an exception is thrown.
+	 */
+	CompletionStage<Void> createFile( Path file );
+
+	/**
+	 * Deletes a file or an empty directory. If an I/O error occurs, the returned
+	 * completion stage is completed exceptionally with the encountered error.
+	 *
+	 * @param path Pathname of the file or directory to be deleted.
+	 * @return An exceptionally completed {@link CompletionStage} in case an
+	 *         exception is thrown.
+	 */
+	CompletionStage<Void> delete( Path path );
+
+	/**
+	 * Deletes a file tree rooted at the given path. If an I/O error occurs,
+	 * the returned completion stage is completed exceptionally with the
+	 * encountered error.
+	 *
+	 * @param root The path to the file tree root to be deleted.
+	 * @return An exceptionally completed {@link CompletionStage} in case an
+	 *         exception is thrown.
+	 */
+	CompletionStage<Void> deleteTree( Path root );
+
+	/**
+	 * Reads the contents of a binary file. The returned completion stage will
+	 * contain the read content as a byte array or, if an I/O error occurs, it
+	 * will be completed exceptionally with the encountered error.
+	 *
+	 * @param file The pathname of the file to be read.
+	 * @return A {@link CompletionStage} containing the read content as a byte
+	 *         array or, if an I/O error occurs, the encountered error.
+	 */
+	CompletionStage<byte[]> readBinaryFile( Path file );
+
+	/**
+	 * Reads the contents of a text file. The returned completion stage will
+	 * contain the read content as a string or, if an I/O error occurs, it will
+	 * be completed exceptionally with the encountered error.
+	 *
+	 * @param file    The pathname of the file to be read.
+	 * @param charset The {@link Charset} used.
+	 * @return A {@link CompletionStage} containing the read content as a string
+	 *         or, if an I/O error occurs, the encountered error.
+	 */
+	CompletionStage<String> readTextFile( Path file, Charset charset );
+
+	/**
+	 * Reads the contents of an UTF8-encoded file. The returned completion stage
+	 * will contain the read content as a string or, if an I/O error occurs, it
+	 * will be completed exceptionally with the encountered error.
+	 *
+	 * @param file The pathname of the file to be read.
+	 * @return A {@link CompletionStage} containing the read content as a string
+	 *         or, if an I/O error occurs, the encountered error.
+	 */
+	default CompletionStage<String> readUTF8File( Path file ) {
+		return readTextFile(file, Charset.forName("UTF-8"));
 	}
 
-	@Override
-	public CompletionStage<Void> createDirectories( Path dir, I initiator, FileAttribute<?>... attrs ) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
+	/**
+	 * Writes binary file to disk. If an I/O error occurs, the returned
+	 * completion stage is completed exceptionally with the encountered error.
+	 *
+	 * @param file    The pathname of the file to be created.
+	 * @param content The bytes to be written into the file.
+	 * @return An exceptionally completed {@link CompletionStage} in case an
+	 *         exception is thrown.
+	 */
+	CompletionStage<Void> writeBinaryFile( Path file, byte[] content );
 
-	@Override
-	public CompletionStage<Void> createDirectory( Path dir, I initiator, FileAttribute<?>... attrs ) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
+	/**
+	 * Writes the given string in a text file to disk. If an I/O error occurs,
+	 * the returned completion stage is completed exceptionally with the
+	 * encountered error.
+	 *
+	 * @param file    The pathname of the file to be created.
+	 * @param content The String to be written into the file.
+	 * @param charset The {@link Charset} used.
+	 * @return An exceptionally completed {@link CompletionStage} in case an
+	 *         exception is thrown.
+	 */
+	CompletionStage<Void> writeTextFile( Path file, String content, Charset charset );
 
-	@Override
-	public CompletionStage<Void> createFile( Path file, I initiator ) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-
-	@Override
-	public CompletionStage<Void> delete( Path path, I initiator ) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-
-	@Override
-	public CompletionStage<Void> deleteTree( Path root, I initiator ) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-
-	@Override
-	public CompletionStage<byte[]> readBinaryFile( Path file, I initiator ) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-
-	@Override
-	public CompletionStage<String> readTextFile( Path file, Charset charset, I initiator ) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-
-	@Override
-	public CompletionStage<Void> writeBinaryFile( Path file, byte[] content, I initiator ) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-
-	@Override
-	public CompletionStage<Void> writeTextFile( Path file, String content, Charset charset, I initiator ) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	/**
+	 * Writes UTF8-encoded text to disk. If an I/O error occurs, the returned
+	 * completion stage is completed exceptionally with the encountered error.
+	 *
+	 * @param file    The pathname of the file to be created.
+	 * @param content The String to be written into the file.
+	 * @return An exceptionally completed {@link CompletionStage} in case an
+	 *         exception is thrown.
+	 */
+	default CompletionStage<Void> writeUTF8File( Path file, String content ) {
+		return writeTextFile(file, content, Charset.forName("UTF-8"));
 	}
 
 }
