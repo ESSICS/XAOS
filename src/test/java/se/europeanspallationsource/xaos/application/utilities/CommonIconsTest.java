@@ -16,16 +16,13 @@
 package se.europeanspallationsource.xaos.application.utilities;
 
 
-import javafx.scene.text.Text;
+import javafx.scene.paint.Color;
 import org.junit.Test;
+import org.kordamp.ikonli.fontawesome5.FontAwesomeRegular;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 import static org.junit.Assert.assertEquals;
-import static se.europeanspallationsource.xaos.application.utilities.CommonIcons.Glyph.FILE;
-import static se.europeanspallationsource.xaos.application.utilities.CommonIcons.Glyph.FOLDER;
-import static se.europeanspallationsource.xaos.application.utilities.CommonIcons.Glyph.SQUARE_DOWN;
-import static se.europeanspallationsource.xaos.application.utilities.CommonIcons.Glyph.SQUARE_LEFT;
-import static se.europeanspallationsource.xaos.application.utilities.CommonIcons.Glyph.SQUARE_RIGHT;
-import static se.europeanspallationsource.xaos.application.utilities.CommonIcons.Glyph.SQUARE_UP;
+
 
 
 /**
@@ -42,16 +39,35 @@ public class CommonIconsTest {
 
 		System.out.println("  Testing ''get''...");
 
-		Text icon;
+		FontIcon icon;
 			
-		icon = CommonIcons.get(FILE);			assertEquals(FILE.unicode(), icon.getText());
-		icon = CommonIcons.get(FOLDER);			assertEquals(FOLDER.unicode(), icon.getText());
-		icon = CommonIcons.get(SQUARE_DOWN);	assertEquals(SQUARE_DOWN.unicode(), icon.getText());
-		icon = CommonIcons.get(SQUARE_LEFT);	assertEquals(SQUARE_LEFT.unicode(), icon.getText());
-		icon = CommonIcons.get(SQUARE_RIGHT);	assertEquals(SQUARE_RIGHT.unicode(), icon.getText());
-		icon = CommonIcons.get(SQUARE_UP);		assertEquals(SQUARE_UP.unicode(), icon.getText());
+		icon = CommonIcons.FILE.getIcon();			assertEquals(FontAwesomeRegular.FILE.getCode(), icon.getText().charAt(0));
+		icon = CommonIcons.FOLDER.getIcon();		assertEquals(FontAwesomeRegular.FOLDER.getCode(), icon.getText().charAt(0));
+		icon = CommonIcons.FOLDER_OPEN.getIcon();	assertEquals(FontAwesomeRegular.FOLDER_OPEN.getCode(), icon.getText().charAt(0));
+		icon = CommonIcons.SQUARE_DOWN.getIcon();	assertEquals(FontAwesomeRegular.CARET_SQUARE_DOWN.getCode(), icon.getText().charAt(0));
+		icon = CommonIcons.SQUARE_LEFT.getIcon();	assertEquals(FontAwesomeRegular.CARET_SQUARE_LEFT.getCode(), icon.getText().charAt(0));
+		icon = CommonIcons.SQUARE_RIGHT.getIcon();	assertEquals(FontAwesomeRegular.CARET_SQUARE_RIGHT.getCode(), icon.getText().charAt(0));
+		icon = CommonIcons.SQUARE_UP.getIcon();		assertEquals(FontAwesomeRegular.CARET_SQUARE_UP.getCode(), icon.getText().charAt(0));
 
     }
+
+	/**
+	 * Test of get method, of class CommonIcons, when a color is passed as parameter.
+	 */
+	@Test
+	public void testGetWithColor() {
+
+		System.out.println("  Testing ''get(color)''...");
+
+		FontIcon icon = CommonIcons.FILE.getIcon(Color.YELLOW);
+
+		assertEquals(Color.YELLOW, icon.getIconColor());
+
+		icon = CommonIcons.FOLDER.getIcon(Color.ORANGE);
+
+		assertEquals(Color.ORANGE, icon.getIconColor());
+
+	}
 
 	/**
 	 * Test of get method, of class CommonIcons, when null is passed as parameter.
@@ -61,7 +77,45 @@ public class CommonIconsTest {
 
 		System.out.println("  Testing ''get(null)''...");
 
-        CommonIcons.get(null);
+        CommonIcons.FILE.getIcon(null);
+
+	}
+
+	/**
+	 * Test of get method, of class CommonIcons, when a size is passed as parameter.
+	 */
+	@Test
+	public void testGetWithSize() {
+
+		System.out.println("  Testing ''get(size)''...");
+
+		FontIcon icon = CommonIcons.FILE.getIcon(33);
+
+		assertEquals(33L, icon.getIconSize());
+
+		icon = CommonIcons.FOLDER.getIcon(123);
+
+		assertEquals(123L, icon.getIconSize());
+
+	}
+
+	/**
+	 * Test of get method, of class CommonIcons, when size and color are passed as parameters.
+	 */
+	@Test
+	public void testGetWithSizeAndColor() {
+
+		System.out.println("  Testing ''get(size, color)''...");
+
+		FontIcon icon = CommonIcons.FILE.getIcon(33, Color.ALICEBLUE);
+
+		assertEquals(33L, icon.getIconSize());
+		assertEquals(Color.ALICEBLUE, icon.getIconColor());
+
+		icon = CommonIcons.FOLDER.getIcon(234, Color.AQUA);
+
+		assertEquals(234L, icon.getIconSize());
+		assertEquals(Color.AQUA, icon.getIconColor());
 
 	}
 

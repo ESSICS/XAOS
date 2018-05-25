@@ -64,12 +64,12 @@ public class PathElement {
 	}
 
 	/**
-	 * Factory method returning a {@link PathElement) instance representing a
+	 * Factory method returning a {@link PathElement} instance representing a
 	 * file.
 	 *
 	 * @param path         The file pathname.
 	 * @param lastModified The date of last modification of the file.
-	 * @return A {@link PathElement) instance representing a file.
+	 * @return A {@link PathElement} instance representing a file.
 	 */
 	public static PathElement file( Path path, FileTime lastModified ) {
 		return new PathElement(path, false, Collections.emptyList(), lastModified);

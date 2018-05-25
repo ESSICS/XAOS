@@ -103,10 +103,10 @@ public interface DirectoryModel<I, T> {
 		/**
 		 * Report the modification of a file/directory element.
 		 *
-		 * @param <I>          Type of the initiator of changes to the model.
 		 * @param baseDir      Base directory of the update.
 		 * @param relativePath Path relative to {@code baseDir} of the modified
 		 *                     element.
+		 * @param initiator    The initiator of changes to the model.
 		 */
 		void reportModification( Path baseDir, Path relativePath, I initiator );
 

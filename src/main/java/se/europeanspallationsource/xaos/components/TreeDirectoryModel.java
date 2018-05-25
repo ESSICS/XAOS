@@ -28,12 +28,11 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import org.reactfx.EventSource;
 import org.reactfx.EventStream;
-import se.europeanspallationsource.xaos.application.utilities.CommonIcons;
 import se.europeanspallationsource.xaos.tools.io.DirectoryModel;
 import se.europeanspallationsource.xaos.tools.io.PathElement;
 
-import static se.europeanspallationsource.xaos.application.utilities.CommonIcons.Glyph.FILE;
-import static se.europeanspallationsource.xaos.application.utilities.CommonIcons.Glyph.FOLDER;
+import static se.europeanspallationsource.xaos.application.utilities.CommonIcons.FILE;
+import static se.europeanspallationsource.xaos.application.utilities.CommonIcons.FOLDER;
 
 
 /**
@@ -271,7 +270,7 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 
 		@Override
 		public Node createGraphic( Path path, boolean isDirectory ) {
-			return isDirectory ? CommonIcons.get(FOLDER) : CommonIcons.get(FILE);
+			return isDirectory ? FOLDER.getIcon() : FILE.getIcon();
 		}
 
 	}
