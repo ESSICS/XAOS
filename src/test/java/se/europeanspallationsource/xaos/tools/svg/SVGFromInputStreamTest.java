@@ -35,16 +35,16 @@ import static org.testfx.assertions.api.Assertions.assertThat;
 @SuppressWarnings( "ClassWithoutLogger" )
 public class SVGFromInputStreamTest extends ApplicationTest {
 	
-	private SVGContent svgContent;
+	private SVG svg;
 
 	@Override
 	public void start( Stage stage ) throws IOException, XMLStreamException {
 
-		svgContent = SVGLoader.load(SVGFromInputStreamTest.class.getResourceAsStream("/svg/duke.svg"));
+		svg = SVG.load(SVGFromInputStreamTest.class.getResourceAsStream("/svg/duke.svg"));
 
-		svgContent.setId("Loaded SVG Image");
+		svg.setId("Loaded SVG Image");
 
-		stage.setScene(new Scene(svgContent));
+		stage.setScene(new Scene(svg));
 		stage.show();
 
 	}
@@ -61,7 +61,7 @@ public class SVGFromInputStreamTest extends ApplicationTest {
 
 	@Test
 	public void testLoadSVG() {
-		assertThat(svgContent).hasAnyChild();
+		assertThat(svg).hasAnyChild();
 	}
 
 }

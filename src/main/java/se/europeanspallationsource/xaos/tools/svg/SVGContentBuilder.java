@@ -81,7 +81,7 @@ import static se.europeanspallationsource.xaos.tools.svg.AttributesStackFrame.AT
 
 
 /**
- * Utility that parses the SVG stream and build a corresponding {@link SVGContent}
+ * Utility that parses the SVG stream and build a corresponding {@link SVG}
  * object.
  *
  * @author claudio.rosati@esss.se
@@ -95,7 +95,7 @@ class SVGContentBuilder {
 	private final Deque<AttributesStackFrame> attributesStack = new ArrayDeque<>(4);
 	private final Map<String, Paint> gradients;
 	private final Map<String, QName> qnames = new TreeMap<>();
-	private final SVGContent root;
+	private final SVG root;
 	private final InputStream stream;
 	private StringBuilder styleBuilder = null;
 	private final Map<String, String> styles = new TreeMap<>();
@@ -103,19 +103,19 @@ class SVGContentBuilder {
 
 	SVGContentBuilder( URL url ) {
 		this.url = url;
-		this.root = new SVGContent();
+		this.root = new SVG();
 		this.gradients = new HashMap<>(1);
 		this.stream = null;
 	}
 
 	SVGContentBuilder( InputStream stream ) {
 		this.url = null;
-		this.root = new SVGContent();
+		this.root = new SVG();
 		this.gradients = new HashMap<>(1);
 		this.stream = stream;
 	}
 
-	SVGContent build() throws IOException, XMLStreamException {
+	SVG build() throws IOException, XMLStreamException {
 
 		XMLInputFactory factory = XMLInputFactory.newInstance();
 
