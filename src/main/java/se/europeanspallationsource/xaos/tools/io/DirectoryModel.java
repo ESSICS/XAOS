@@ -77,6 +77,8 @@ public interface DirectoryModel<I, T> {
 
 	/**
 	 * API defining few reporting methods.
+	 *
+	 * @param <I> Type of the initiator of changes to the model.
 	 */
 	interface Reporter<I> {
 

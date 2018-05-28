@@ -199,7 +199,7 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	}
 
 	void addTopLevelDirectory( Path directory ) {
-		root.getChildren().add(new TreeItems.TopLevelDirectoryItem<>(injector.apply(directory), graphicFactory, projector, injector, reporter));
+		root.getChildren().add(new TreeDirectoryItems.TopLevelDirectoryItem<>(injector.apply(directory), graphicFactory, projector, injector, reporter));
 	}
 
 	void delete( Path path ) {
@@ -242,9 +242,9 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 		});
 	}
 
-	private List<TreeItems.TopLevelDirectoryItem<I, T>> getTopLevelAncestors( Path path, boolean verifyNonEmpty ) {
+	private List<TreeDirectoryItems.TopLevelDirectoryItem<I, T>> getTopLevelAncestors( Path path, boolean verifyNonEmpty ) {
 
-		List<TreeItems.TopLevelDirectoryItem<I, T>> roots = topLevelAncestorStream(path).collect(Collectors.toList());
+		List<TreeDirectoryItems.TopLevelDirectoryItem<I, T>> roots = topLevelAncestorStream(path).collect(Collectors.toList());
 
 		if ( verifyNonEmpty ) {
 			assert !roots.isEmpty() : "'path' resolved against a dir that was reported to be in the model, but does not have a top-level ancestor in the model.";
@@ -255,10 +255,10 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	}
 
 	@SuppressWarnings( "unchecked" )
-	private Stream<TreeItems.TopLevelDirectoryItem<I, T>> topLevelAncestorStream( Path path ) {
+	private Stream<TreeDirectoryItems.TopLevelDirectoryItem<I, T>> topLevelAncestorStream( Path path ) {
 		return root.getChildren().stream()
 			.filter(item -> path.startsWith(projector.apply(item.getValue())))
-			.map(item -> (TreeItems.TopLevelDirectoryItem<I, T>) item);
+			.map(item -> (TreeDirectoryItems.TopLevelDirectoryItem<I, T>) item);
 	}
 
 	/**

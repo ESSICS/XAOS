@@ -71,9 +71,6 @@ public class DirectoryWatcherTest {
 	private Path file_b2;
 	private Path root;
 
-	public DirectoryWatcherTest() {
-	}
-
 	@Before
 	public void setUp() throws IOException {
 

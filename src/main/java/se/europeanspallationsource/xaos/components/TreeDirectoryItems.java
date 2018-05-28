@@ -39,7 +39,7 @@ import se.europeanspallationsource.xaos.tools.io.PathElement;
  * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.PathItem</a>
  */
 @SuppressWarnings( "ClassWithoutLogger" )
-class TreeItems {
+class TreeDirectoryItems {
 
 	/**
 	 * @param <T>            Type of the object returned by {@link TreeItem#getValue()}.
@@ -92,7 +92,7 @@ class TreeItems {
 		return new TopLevelDirectoryItem<>(path, graphicFactory, projector, injector, reporter);
 	}
 
-	private TreeItems() {
+	private TreeDirectoryItems() {
 	}
 
 	@SuppressWarnings( "PackageVisibleInnerClass" )
@@ -108,7 +108,7 @@ class TreeItems {
 
 		}
 
-		DirectoryItem<T> addChildDirectory( Path dirName, TreeDirectoryModel.GraphicFactory graphicFactory ) {
+		public DirectoryItem<T> addChildDirectory( Path dirName, TreeDirectoryModel.GraphicFactory graphicFactory ) {
 
 			assert dirName.getNameCount() == 1;
 
@@ -121,7 +121,7 @@ class TreeItems {
 
 		}
 
-		FileItem<T> addChildFile( Path fileName, FileTime lastModified, TreeDirectoryModel.GraphicFactory graphicFactory ) {
+		public FileItem<T> addChildFile( Path fileName, FileTime lastModified, TreeDirectoryModel.GraphicFactory graphicFactory ) {
 
 			assert fileName.getNameCount() == 1;
 
@@ -134,12 +134,12 @@ class TreeItems {
 
 		}
 
-		final T inject( Path path ) {
+		public final T inject( Path path ) {
 			return injector.apply(path);
 		}
 
 		@Override
-		final boolean isDirectory() {
+		public final boolean isDirectory() {
 			return true;
 		}
 
@@ -214,11 +214,11 @@ class TreeItems {
 		}
 
 		@Override
-		final boolean isDirectory() {
+		final public boolean isDirectory() {
 			return false;
 		}
 
-		boolean updateModificationTime( FileTime lastModified ) {
+		public boolean updateModificationTime( FileTime lastModified ) {
 
 			if ( lastModified.compareTo(this.lastModified) > 0 ) {
 
@@ -245,11 +245,11 @@ class TreeItems {
 			this.child = child;
 		}
 
-		PathItem<T> getChild() {
+		public PathItem<T> getChild() {
 			return child;
 		}
 
-		DirectoryItem<T> getParent() {
+		public DirectoryItem<T> getParent() {
 			return parent;
 		}
 
@@ -268,24 +268,19 @@ class TreeItems {
 
 		}
 
-		@Override
-		public final boolean isLeaf() {
-			return !isDirectory();
-		}
-
-		DirectoryItem<T> asDirectoryItem() {
+		public DirectoryItem<T> asDirectoryItem() {
 			return (DirectoryItem<T>) this;
 		}
 
-		FileItem<T> asFileItem() {
+		public FileItem<T> asFileItem() {
 			return (FileItem<T>) this;
 		}
 
-		final Path getPath() {
+		public final Path getPath() {
 			return projector.apply(getValue());
 		}
 
-		PathItem<T> getRelativeChild( Path relativePath ) {
+		public PathItem<T> getRelativeChild( Path relativePath ) {
 
 			assert relativePath.getNameCount() == 1;
 
@@ -305,7 +300,12 @@ class TreeItems {
 
 		}
 
-		abstract boolean isDirectory();
+		public abstract boolean isDirectory();
+
+//		@Override
+//		public final boolean isLeaf() {
+//			return !isDirectory();
+//		}
 
 		protected final Function<T, Path> getProjector() {
 			return projector;
@@ -356,15 +356,15 @@ class TreeItems {
 
 		}
 
-		void addFile( Path relativePath, FileTime lastModified, I initiator ) {
+		public void addFile( Path relativePath, FileTime lastModified, I initiator ) {
 			updateFile(relativePath, lastModified, initiator);
 		}
 
-		boolean contains( Path relativePath ) {
+		public boolean contains( Path relativePath ) {
 			return resolve(relativePath) != null;
 		}
 
-		void remove( Path relativePath, I initiator ) {
+		public void remove( Path relativePath, I initiator ) {
 
 			PathItem<T> item = resolve(relativePath);
 
@@ -374,7 +374,7 @@ class TreeItems {
 
 		}
 
-		void sync( PathElement tree, I initiator ) {
+		public void sync( PathElement tree, I initiator ) {
 
 			Path path = tree.getPath();
 			Path relativePath = getPath().relativize(path);
@@ -402,7 +402,7 @@ class TreeItems {
 
 		}
 
-		void updateModificationTime( Path relativePath, FileTime lastModified, I initiator ) {
+		public void updateModificationTime( Path relativePath, FileTime lastModified, I initiator ) {
 			updateFile(relativePath, lastModified, initiator);
 		}
 
@@ -448,7 +448,7 @@ class TreeItems {
 		}
 
 		private void signalDeletionRecursively( TreeItem<T> node, I initiator ) {
-			node.getChildren().forEach(child ->  signalDeletionRecursively(child, initiator));
+			node.getChildren().forEach(child -> signalDeletionRecursively(child, initiator));
 			reporter.reportDeletion(getPath(), getPath().relativize(getProjector().apply(node.getValue())), initiator);
 		}
 
