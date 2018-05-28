@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.tools.svg;
+package se.europeanspallationsource.xaos.components;
 
 
+import se.europeanspallationsource.xaos.components.SVG;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 import javafx.geometry.Bounds;

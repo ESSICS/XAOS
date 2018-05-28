@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.tools.svg;
+package se.europeanspallationsource.xaos.components;
 
 
+import se.europeanspallationsource.xaos.components.SVG;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 import javafx.scene.Scene;
@@ -33,25 +34,20 @@ import static org.testfx.assertions.api.Assertions.assertThat;
  * @author claudio.rosati@esss.se
  */
 @SuppressWarnings( "ClassWithoutLogger" )
-public class SVGFromInputStreamTest extends ApplicationTest {
+public class SVGFromURLTest extends ApplicationTest {
 	
 	private SVG svg;
 
 	@Override
 	public void start( Stage stage ) throws IOException, XMLStreamException {
 
-		svg = SVG.load(SVGFromInputStreamTest.class.getResourceAsStream("/svg/duke.svg"));
+		svg = SVG.load(SVGFromURLTest.class.getResource("/svg/duke.svg"));
 
 		svg.setId("Loaded SVG Image");
 
 		stage.setScene(new Scene(svg));
 		stage.show();
 
-	}
-
-	@Override
-	public void stop() throws Exception {
-		super.stop(); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@After

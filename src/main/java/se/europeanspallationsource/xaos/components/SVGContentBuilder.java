@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.tools.svg;
+package se.europeanspallationsource.xaos.components;
 
 
 import java.io.BufferedInputStream;
@@ -69,15 +69,15 @@ import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import org.apache.commons.lang3.StringUtils;
 
-import static se.europeanspallationsource.xaos.tools.svg.AttributesStackFrame.ATTR_FILL;
-import static se.europeanspallationsource.xaos.tools.svg.AttributesStackFrame.ATTR_ID;
-import static se.europeanspallationsource.xaos.tools.svg.AttributesStackFrame.ATTR_OPACITY;
-import static se.europeanspallationsource.xaos.tools.svg.AttributesStackFrame.ATTR_STROKE;
-import static se.europeanspallationsource.xaos.tools.svg.AttributesStackFrame.ATTR_STROKE_LINECAP;
-import static se.europeanspallationsource.xaos.tools.svg.AttributesStackFrame.ATTR_STROKE_LINEJOIN;
-import static se.europeanspallationsource.xaos.tools.svg.AttributesStackFrame.ATTR_STROKE_MITERLIMIT;
-import static se.europeanspallationsource.xaos.tools.svg.AttributesStackFrame.ATTR_STROKE_WIDTH;
-import static se.europeanspallationsource.xaos.tools.svg.AttributesStackFrame.ATTR_TRANSFORM;
+import static se.europeanspallationsource.xaos.components.AttributesStackFrame.ATTR_FILL;
+import static se.europeanspallationsource.xaos.components.AttributesStackFrame.ATTR_ID;
+import static se.europeanspallationsource.xaos.components.AttributesStackFrame.ATTR_OPACITY;
+import static se.europeanspallationsource.xaos.components.AttributesStackFrame.ATTR_STROKE;
+import static se.europeanspallationsource.xaos.components.AttributesStackFrame.ATTR_STROKE_LINECAP;
+import static se.europeanspallationsource.xaos.components.AttributesStackFrame.ATTR_STROKE_LINEJOIN;
+import static se.europeanspallationsource.xaos.components.AttributesStackFrame.ATTR_STROKE_MITERLIMIT;
+import static se.europeanspallationsource.xaos.components.AttributesStackFrame.ATTR_STROKE_WIDTH;
+import static se.europeanspallationsource.xaos.components.AttributesStackFrame.ATTR_TRANSFORM;
 
 
 /**
