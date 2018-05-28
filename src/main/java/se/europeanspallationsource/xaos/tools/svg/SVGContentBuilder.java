@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.Group;
@@ -57,6 +58,7 @@ import javafx.scene.text.Text;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
+import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -76,8 +78,6 @@ import static se.europeanspallationsource.xaos.tools.svg.AttributesStackFrame.AT
 import static se.europeanspallationsource.xaos.tools.svg.AttributesStackFrame.ATTR_STROKE_MITERLIMIT;
 import static se.europeanspallationsource.xaos.tools.svg.AttributesStackFrame.ATTR_STROKE_WIDTH;
 import static se.europeanspallationsource.xaos.tools.svg.AttributesStackFrame.ATTR_TRANSFORM;
-import static se.europeanspallationsource.xaos.tools.svg.AttributesStackFrame.getAttributeValue;
-import static se.europeanspallationsource.xaos.tools.svg.AttributesStackFrame.populateStyles;
 
 
 /**
@@ -94,9 +94,11 @@ class SVGContentBuilder {
 
 	private final Deque<AttributesStackFrame> attributesStack = new ArrayDeque<>(4);
 	private final Map<String, Paint> gradients;
+	private final Map<String, QName> qnames = new TreeMap<>();
 	private final SVGContent root;
 	private final InputStream stream;
 	private StringBuilder styleBuilder = null;
+	private final Map<String, String> styles = new TreeMap<>();
 	private final URL url;
 
 	SVGContentBuilder( URL url ) {
@@ -132,6 +134,33 @@ class SVGContentBuilder {
 
 		return root;
 
+	}
+
+	/**
+	 * Return the string value of the named attribute inside the given
+	 * {@code element}.
+	 *
+	 * @param attributeName The name of the attribute whose value must be returned.
+	 * @param element       The {@link StartElement} possibly containing the
+	 *                      attribute whose name is given.
+	 * @return The found value or {@code null};
+	 */
+	String getAttributeValue( String attributeName, StartElement element ) {
+
+		Attribute attribute = element.getAttributeByName(getQName(attributeName));
+
+		return ( attribute != null ) ? StringUtils.trimToNull(attribute.getValue()) : null;
+
+	}
+
+	@SuppressWarnings( "ReturnOfCollectionOrArrayField" )
+	Map<String, QName> getQNames() {
+		return qnames;
+	}
+
+	@SuppressWarnings( "ReturnOfCollectionOrArrayField" )
+	Map<String, String> getStyles() {
+		return styles;
 	}
 
 	private void applyStyles( Node node, AttributesStackFrame stackFrame ) {
@@ -214,7 +243,7 @@ class SVGContentBuilder {
 						break;
 					case "svg": {
 
-						AttributesStackFrame stackFrame = new AttributesStackFrame();
+						AttributesStackFrame stackFrame = new AttributesStackFrame(this);
 
 						attributesStack.push(stackFrame);
 						stackFrame.populate(element);
@@ -918,6 +947,63 @@ class SVGContentBuilder {
 
 		} else {
 			throw new XMLStreamException("Illegal Element: " + event);
+		}
+
+	}
+
+	private QName getQName( String name ) {
+
+		QName qName = qnames.get(name);
+
+		if ( qName == null ) {
+
+			qName = new QName(name);
+
+			qnames.put(name, qName);
+
+		}
+
+		return qName;
+
+	}
+
+	/**
+	 * Parse the content of a style element populating the static map of styles,
+	 * later on used to populate the current frame.
+	 *
+	 * @param styleElement The string content of a style element.
+	 */
+	private void populateStyles( String styleElement ) {
+
+		String content = StringUtils.normalizeSpace(styleElement);
+
+		//	@import rule not currently supported: skip it.
+		final String IMPORT = "@import";
+
+		while ( content.contains(IMPORT) ) {
+
+			int start = content.indexOf(IMPORT);
+			int end = content.indexOf(';', start + IMPORT.length());
+
+			if ( end == -1 ) {
+				content = "";
+			} else {
+				content = content.substring(0, start) + content.substring(1 + end);
+			}
+
+		}
+
+		//	Get the classes and store them;
+		String[] classes = content.split("\\}");
+
+		for ( String clazz : classes ) {
+
+			String[] nameValues = StringUtils.stripAll(clazz.split("\\{"));
+
+			if ( nameValues.length == 2 ) {
+				styles.put(nameValues[0], nameValues[1]);
+			}
+
 		}
 
 	}
