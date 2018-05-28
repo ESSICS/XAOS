@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.tools.svg;
+package se.europeanspallationsource.xaos.components;
 
 
+import se.europeanspallationsource.xaos.components.SVG;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 import javafx.scene.Group;
@@ -40,16 +41,16 @@ import static org.testfx.assertions.api.Assertions.assertThat;
 @SuppressWarnings( "ClassWithoutLogger" )
 public class GasCylinderTest extends ApplicationTest {
 	
-	private SVGContent svgContent;
+	private SVG svg;
 
 	@Override
 	public void start( Stage stage ) throws IOException, XMLStreamException {
 
-		svgContent = SVGLoader.load(GasCylinderTest.class.getResource("/svg/gas-cylinder.svg"));
+		svg = SVG.load(GasCylinderTest.class.getResource("/svg/gas-cylinder.svg"));
 
-		svgContent.setId("Loaded SVG Image");
+		svg.setId("Loaded SVG Image");
 
-		stage.setScene(new Scene(svgContent));
+		stage.setScene(new Scene(svg));
 		stage.show();
 
 	}
@@ -62,10 +63,10 @@ public class GasCylinderTest extends ApplicationTest {
 	@Test
 	public void testLoadSVG() {
 
-		assertThat(svgContent).isExactlyInstanceOf(SVGContent.class);
-		assertThat(svgContent).hasExactlyNumChildren(1);
+		assertThat(svg).isExactlyInstanceOf(SVG.class);
+		assertThat(svg).hasExactlyNumChildren(1);
 
-		Node svgNode = svgContent.getChildren().get(0);
+		Node svgNode = svg.getChildren().get(0);
 
 		assertThat(svgNode).isExactlyInstanceOf(Group.class);
 		assertThat((Parent) svgNode).hasExactlyNumChildren(1);

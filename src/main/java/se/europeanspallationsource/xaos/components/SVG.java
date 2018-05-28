@@ -13,14 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.tools.svg;
+package se.europeanspallationsource.xaos.components;
 
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
+import javax.xml.stream.XMLStreamException;
 
 
 /**
@@ -33,9 +38,9 @@ import javafx.scene.shape.Rectangle;
  *
  * <pre>
  * URL url = ...;
- * SVGContent content SVGLoader.load(url);
+ * SVG svg = SVG.load(url);
  *
- * container.getChildren.add(content);</pre>
+ * container.getChildren.add(svg);</pre>
  *
  * <p>
  * The {@link #getNode(String)} method returns the {@link Node} object represented
@@ -86,7 +91,70 @@ import javafx.scene.shape.Rectangle;
  * @see <a href="https://github.com/skrb/SVGLoader">SVGLoader</a>
  */
 @SuppressWarnings( "ClassWithoutLogger" )
-public class SVGContent extends Group {
+public class SVG extends Group {
+
+	/**
+	 * Load SVG file and convert it to JavaFX.
+	 *
+	 * @param url The location of the SVG file.
+	 * @return An {@link SVG} object.
+	 * @throws MalformedURLException If {@code url} cannot be resolved to a
+	 *                               valid {@link URL}.
+	 * @throws IOException           If the SVG file specified by {@code url}
+	 *                               cannot be read.
+	 * @throws XMLStreamException    If the resource specified by {@code url} is
+	 *                               not a proper SVG file.
+	 * @throws NullPointerException  If {@code url} is null.
+	 */
+	public static SVG load( String url ) throws MalformedURLException, IOException, XMLStreamException {
+		return load(new URL(url));
+	}
+
+	/**
+	 * Load SVG file and convert it to JavaFX.
+	 *
+	 * @param url The location of the SVG file.
+	 * @return An {@link SVG} object.
+	 * @throws IOException          If the SVG file specified by {@code url}
+	 *                              cannot be read.
+	 * @throws XMLStreamException   If the resource specified by {@code url} is
+	 *                              not a proper SVG file.
+	 * @throws NullPointerException If {@code url} is null.
+	 */
+	public static SVG load( URL url ) throws IOException, XMLStreamException {
+
+		if ( url == null ) {
+			throw new NullPointerException("url");
+		}
+
+		SVGContentBuilder builder = new SVGContentBuilder(url);
+
+		return builder.build();
+
+	}
+
+	/**
+	 * Load SVG file and convert it to JavaFX.
+	 *
+	 * @param stream The {@link InputStream} corresponding to the SVG file.
+	 * @return An {@link SVG} object.
+	 * @throws IOException          If the SVG file specified by {@code url}
+	 *                              cannot be read.
+	 * @throws XMLStreamException   If the resource specified by {@code url} is
+	 *                              not a proper SVG file.
+	 * @throws NullPointerException If {@code url} is null.
+	 */
+	public static SVG load( InputStream stream ) throws IOException, XMLStreamException {
+
+		if ( stream == null ) {
+			throw new NullPointerException("stream");
+		}
+
+		SVGContentBuilder builder = new SVGContentBuilder(stream);
+
+		return builder.build();
+
+	}
 
 	private final Map<String, Group> groups = new HashMap<>(3);
 	private final Map<String, Node> nodes = new HashMap<>(1);
