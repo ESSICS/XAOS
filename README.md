@@ -90,28 +90,7 @@ In the remaining view areas, the alternative between tab container or accordion 
 be chosen.
 
 
-## Tools and Utilities
-
-
-### Service Providers
-
-The _ServiceProvider_ annotation will simplify providing service implementations,
-taking care of publishing them in the proper file inside the `META-INF/service`
-folder.
-
-```java
-package my.module;
-import my.module.spi.SomeService;
-import se.europeanspallationsource.framework.annotation.ServiceProvider;
-
-@ServiceProvider(service=SomeService.class)
-public class MyService implements SomeService {
-  ...
-}
-```
-
-Moreover, the _ServiceLoaderUtilities_ class will complement the
-`java.util.ServiceLoader` one with few more methods.
+## Components
 
 
 ### SVG Support
@@ -136,16 +115,16 @@ import static org.testfx.assertions.api.Assertions.assertThat;
 
 public class SVGFromURLTest extends ApplicationTest {
 
-  private SVGContent svgContent;
+  private SVG svg;
 
   @Override
   public void start( Stage stage ) throws IOException, XMLStreamException {
 
-    svgContent = SVGLoader.load(SVGFromURLTest.class.getResource("/svg/duke.svg"));
+    svg = SVG.load(SVGFromURLTest.class.getResource("/svg/duke.svg"));
 
-    svgContent.setId("Loaded SVG Image");
+    svg.setId("Loaded SVG Image");
 
-    stage.setScene(new Scene(svgContent));
+    stage.setScene(new Scene(svg));
     stage.show();
 
   }
@@ -162,6 +141,30 @@ public class SVGFromURLTest extends ApplicationTest {
 
 }
 ```
+
+
+## Tools and Utilities
+
+
+### Service Providers
+
+The _ServiceProvider_ annotation will simplify providing service implementations,
+taking care of publishing them in the proper file inside the `META-INF/service`
+folder.
+
+```java
+package my.module;
+import my.module.spi.SomeService;
+import se.europeanspallationsource.framework.annotation.ServiceProvider;
+
+@ServiceProvider(service=SomeService.class)
+public class MyService implements SomeService {
+  ...
+}
+```
+
+Moreover, the _ServiceLoaderUtilities_ class will complement the
+`java.util.ServiceLoader` one with few more methods.
 
 
 ## Using XAOS
