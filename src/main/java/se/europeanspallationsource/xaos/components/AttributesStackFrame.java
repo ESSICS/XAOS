@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.tools.svg;
+package se.europeanspallationsource.xaos.components;
 
 
 import java.text.MessageFormat;
@@ -27,8 +27,6 @@ import java.util.TreeSet;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.logging.Logger;
-import javax.xml.namespace.QName;
-import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.StartElement;
 import org.apache.commons.lang3.StringUtils;
 
@@ -53,9 +51,8 @@ class AttributesStackFrame {
 	static final String ATTR_TRANSFORM = "transform";
 
 	private static final Logger LOGGER = Logger.getLogger(AttributesStackFrame.class.getName());
-	private static final Map<String, QName> QNAMES = new TreeMap<>();
-	private static final Map<String, String> STYLES = new TreeMap<>();
-	private static final Set<String> SUPPORTED_ATTRIBUTES = new TreeSet<>(Arrays.asList(ATTR_FILL,
+	private static final Set<String> SUPPORTED_ATTRIBUTES = new TreeSet<>(Arrays.asList(
+		ATTR_FILL,
 		ATTR_OPACITY,
 		ATTR_STROKE,
 		ATTR_STROKE_LINECAP,
@@ -64,64 +61,6 @@ class AttributesStackFrame {
 		ATTR_STROKE_WIDTH,
 		ATTR_TRANSFORM
 	));
-
-	/**
-	 * Return the string value of the named attribute inside the given
-	 * {@code element}.
-	 *
-	 * @param attributeName The name of the attribute whose value must be returned.
-	 * @param element       The {@link StartElement} possibly containing the
-	 *                      attribute whose name is given.
-	 * @return The found value or {@code null};
-	 */
-	static String getAttributeValue( String attributeName, StartElement element ) {
-
-		Attribute attribute = element.getAttributeByName(getQName(attributeName));
-
-		return ( attribute != null ) ? StringUtils.trimToNull(attribute.getValue()) : null;
-
-	}
-
-	/**
-	 * Parse the content of a style element populating the static map of styles,
-	 * later on used to populate the current frame.
-	 *
-	 * @param styleElement The string content of a style element.
-	 */
-	static void populateStyles( String styleElement ) {
-
-		String content = StringUtils.normalizeSpace(styleElement);
-
-		//	@import rule not currently supported: skip it.
-		final String IMPORT = "@import";
-
-		while ( content.contains(IMPORT) ) {
-
-			int start = content.indexOf(IMPORT);
-			int end = content.indexOf(';', start + IMPORT.length());
-
-			if ( end == -1 ) {
-				content = "";
-			} else {
-				content = content.substring(0, start) + content.substring(1 + end);
-			}
-
-		}
-
-		//	Get the classes and store them;
-		String[] classes = content.split("\\}");
-
-		for ( String clazz : classes ) {
-
-			String[] nameValues = StringUtils.stripAll(clazz.split("\\{"));
-
-			if ( nameValues.length == 2 ) {
-				STYLES.put(nameValues[0], nameValues[1]);
-			}
-
-		}
-
-	}
 
 	private static String attributeValueFromStyle( String attribute, List<String> stylesList ) {
 
@@ -152,24 +91,21 @@ class AttributesStackFrame {
 
 	}
 
-	private static QName getQName( String name ) {
-
-		QName qName = QNAMES.get(name);
-
-		if ( qName == null ) {
-
-			qName = new QName(name);
-
-			QNAMES.put(name, qName);
-
-		}
-
-		return qName;
-
-	}
-
 	private final Map<String, Boolean> attributeInheritance = new TreeMap<>();
 	private final Map<String, String> attributeValues = new TreeMap<>();
+	private final SVGContentBuilder builder;
+
+	/**
+	 * Create a new instance of {@link AttributesStackFrame} with the current
+	 * {@link SVGContentBuilder} as parameter. It will be used to access the
+	 * frames-shared containers of {@code qnames} and {@code styles}, and to
+	 * get specific attribute values.
+	 *
+	 * @param builder The current  {@link SVGContentBuilder}.
+	 */
+	AttributesStackFrame( SVGContentBuilder builder ) {
+		this.builder = builder;
+	}
 
 	/**
 	 * Give the {@code consumer} the {@code attribute}'s value converted by the
@@ -225,7 +161,7 @@ class AttributesStackFrame {
 	@SuppressWarnings( "AccessingNonPublicFieldOfAnotherObject" )
 	AttributesStackFrame derive() {
 
-		AttributesStackFrame inheritedFrame = new AttributesStackFrame();
+		AttributesStackFrame inheritedFrame = new AttributesStackFrame(builder);
 
 		inheritedFrame.attributeValues.putAll(attributeValues);
 		attributeValues.keySet().forEach(a -> inheritedFrame.attributeInheritance.put(a, Boolean.FALSE));
@@ -298,7 +234,7 @@ class AttributesStackFrame {
 	void populate( StartElement element ) {
 
 		//	Get "id" first...
-		String idValue = getAttributeValue(ATTR_ID, element);
+		String idValue = builder.getAttributeValue(ATTR_ID, element);
 
 		if ( idValue != null ) {
 			put(ATTR_ID, idValue);
@@ -306,7 +242,7 @@ class AttributesStackFrame {
 
 		//	...then handle "class"...
 		List<String> stylesList = new ArrayList<>(1);
-		String classValue = getAttributeValue(ATTR_CLASS, element);
+		String classValue = builder.getAttributeValue(ATTR_CLASS, element);
 
 		if ( classValue != null ) {
 
@@ -315,21 +251,22 @@ class AttributesStackFrame {
 			for ( String clazz : classes ) {
 
 				String key = "." + clazz;
+				Map<String, String> styles = builder.getStyles();
 
-				if ( STYLES.containsKey(key) ) {
-					stylesList.add(STYLES.get(key));
+				if ( styles.containsKey(key) ) {
+					stylesList.add(styles.get(key));
 				} else {
 
 					key = element.getName().toString() + key;
 
-					if ( STYLES.containsKey(key) ) {
-						stylesList.add(STYLES.get(key));
+					if ( styles.containsKey(key) ) {
+						stylesList.add(styles.get(key));
 					} else if ( idValue != null ) {
 
 						key = "#" + idValue;
 
-						if ( STYLES.containsKey(key) ) {
-							stylesList.add(STYLES.get(key));
+						if ( styles.containsKey(key) ) {
+							stylesList.add(styles.get(key));
 						}
 
 					}
@@ -341,7 +278,7 @@ class AttributesStackFrame {
 		}
 
 		//	...then the "style" attribute...
-		String styleValue = getAttributeValue(ATTR_STYLE, element);
+		String styleValue = builder.getAttributeValue(ATTR_STYLE, element);
 
 		if ( styleValue != null ) {
 			stylesList.add(styleValue);
@@ -351,7 +288,7 @@ class AttributesStackFrame {
 		SUPPORTED_ATTRIBUTES.forEach(name -> {
 
 			String value = attributeValueFromStyle(name, stylesList);
-			String attributeValue = getAttributeValue(name, element);
+			String attributeValue = builder.getAttributeValue(name, element);
 
 			if ( attributeValue != null ) {
 				value = attributeValue;
