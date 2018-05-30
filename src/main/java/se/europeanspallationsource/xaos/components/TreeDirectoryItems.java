@@ -423,7 +423,10 @@ class TreeDirectoryItems {
 				case 0:
 					return new ParentChild<>(null, this);
 				case 1:
-					if ( getPath().resolve(relativePath).equals(getValue()) ) {
+
+					Path p = getPath();
+
+					if ( p.resolve(relativePath).equals(p) ) {
 						return new ParentChild<>(null, this);
 					} else {
 						return new ParentChild<>(this, getRelativeChild(relativePath.getName(0)));
@@ -448,8 +451,13 @@ class TreeDirectoryItems {
 		}
 
 		private void signalDeletionRecursively( TreeItem<T> node, I initiator ) {
+
 			node.getChildren().forEach(child -> signalDeletionRecursively(child, initiator));
-			reporter.reportDeletion(getPath(), getPath().relativize(getProjector().apply(node.getValue())), initiator);
+
+			Path p = getPath();
+
+			reporter.reportDeletion(p, p.relativize(getProjector().apply(node.getValue())), initiator);
+
 		}
 
 		private void syncChild( DirectoryItem<T> parent, Path childName, PathElement tree, I initiator ) {
