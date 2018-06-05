@@ -162,6 +162,10 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	 * {@link #DEFAULT_GRAPHIC_FACTORY} and {@link #NO_GRAPHIC_FACTORY} are
 	 * two factories already available.
 	 * </p>
+	 * <p>
+	 * {@link TreeItem}s created before this method is called will be displayed
+	 * using the previous graphic factory.
+	 * </p>
 	 *
 	 * @param factory The new graphic factory instance. If {@code null},
 	 *                {@link #DEFAULT_GRAPHIC_FACTORY} will be used.
@@ -224,8 +228,7 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 
 		Path path = tree.getPath();
 
-		topLevelAncestorStream(path).forEach(
-			ancestor -> ancestor.sync(tree, initiator));
+		topLevelAncestorStream(path).forEach(ancestor -> ancestor.sync(tree, initiator));
 
 	}
 

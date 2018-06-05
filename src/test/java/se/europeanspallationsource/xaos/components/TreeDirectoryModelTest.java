@@ -21,12 +21,16 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import javafx.scene.control.TreeItem;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import se.europeanspallationsource.xaos.tools.io.DeleteFileVisitor;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
 import static se.europeanspallationsource.xaos.tools.io.PathElement.tree;
 
 
@@ -90,28 +94,14 @@ public class TreeDirectoryModelTest {
 	 * Test of addDirectory method, of class TreeDirectoryModel.
 	 */
 	@Test
-	public void testAddDirectory_Path() {
-	}
-
-	/**
-	 * Test of addDirectory method, of class TreeDirectoryModel.
-	 */
-	@Test
-	public void testAddDirectory_Path_GenericType() {
+	public void testAddDirectory() {
 	}
 
 	/**
 	 * Test of addFile method, of class TreeDirectoryModel.
 	 */
 	@Test
-	public void testAddFile_3args() {
-	}
-
-	/**
-	 * Test of addFile method, of class TreeDirectoryModel.
-	 */
-	@Test
-	public void testAddFile_Path_FileTime() {
+	public void testAddFile() {
 	}
 
 	/**
@@ -193,46 +183,67 @@ public class TreeDirectoryModelTest {
 	 * Test of creations method, of class TreeDirectoryModel.
 	 *
 	 * @throws java.io.IOException
+	 * @throws java.lang.InterruptedException
 	 */
 	@Test
-	public void testCreations() throws IOException {
+	public void testCreations() throws IOException, InterruptedException {
 
 		System.out.println("  Testing 'creations'...");
 
+		CountDownLatch latch = new CountDownLatch(7);
 		TreeDirectoryModel<TreeDirectoryModelTest, String> model = new TreeDirectoryModel<>(
 			this,
 			s -> Paths.get(s),
 			p -> p != null ? p.toString() : null
 		);
 
-		model.creations().subscribe(u -> {
-			System.out.println("**** " + u.getType().name());
-		});
-
+		model.creations().subscribe(u -> latch.countDown());
 		model.addTopLevelDirectory(root);
 		model.sync(tree(root));
 
+		if ( !latch.await(1, TimeUnit.MINUTES) ) {
+			fail("Directory model synchronization not completed in 1 minute.");
+		}
+
 	}
 
 	/**
 	 * Test of delete method, of class TreeDirectoryModel.
 	 */
 	@Test
-	public void testDelete_Path() {
-	}
-
-	/**
-	 * Test of delete method, of class TreeDirectoryModel.
-	 */
-	@Test
-	public void testDelete_Path_GenericType() {
+	public void testDelete() {
 	}
 
 	/**
 	 * Test of deletions method, of class TreeDirectoryModel.
+	 * 
+	 * @throws java.io.IOException
+	 * @throws java.lang.InterruptedException
 	 */
 	@Test
-	public void testDeletions() {
+	public void testDeletions() throws IOException, InterruptedException {
+
+		System.out.println("  Testing 'deletions'...");
+
+		CountDownLatch latch = new CountDownLatch(4);
+		TreeDirectoryModel<TreeDirectoryModelTest, String> model = new TreeDirectoryModel<>(
+			this,
+			s -> Paths.get(s),
+			p -> p != null ? p.toString() : null
+		);
+
+		model.deletions().subscribe(u -> latch.countDown());
+		model.addTopLevelDirectory(root);
+		model.sync(tree(root));
+
+		Files.walkFileTree(dir_a, new DeleteFileVisitor());
+
+		model.sync(tree(root));
+
+		if ( !latch.await(1, TimeUnit.MINUTES) ) {
+			fail("Directory model synchronization not completed in 1 minute.");
+		}
+
 	}
 
 	/**
@@ -247,48 +258,75 @@ public class TreeDirectoryModelTest {
 	 */
 	@Test
 	public void testGetRoot() {
+
+		System.out.println("  Testing 'getRoot'...");
+
+		TreeDirectoryModel<TreeDirectoryModelTest, String> model = new TreeDirectoryModel<>(
+			this,
+			s -> Paths.get(s),
+			p -> p != null ? p.toString() : null
+		);
+
+		model.addTopLevelDirectory(dir_a);
+		model.addTopLevelDirectory(dir_b);
+
+		TreeItem<String> modelRoot = model.getRoot();
+
+		assertThat(modelRoot).isNotNull();
+		assertThat(modelRoot.getChildren()).size().isEqualTo(2);
+		assertThat(modelRoot.getChildren()).element(0)
+			.isInstanceOf(TreeDirectoryItems.TopLevelDirectoryItem.class)
+			.extracting("path").element(0).isEqualTo(dir_a);
+		assertThat(modelRoot.getChildren()).element(1)
+			.isInstanceOf(TreeDirectoryItems.TopLevelDirectoryItem.class)
+			.extracting("path").element(0).isEqualTo(dir_b);
+
 	}
 
 	/**
 	 * Test of modifications method, of class TreeDirectoryModel.
+	 *
+	 * @throws java.io.IOException
+	 * @throws java.lang.InterruptedException
 	 */
 	@Test
-	public void testModifications() {
-	}
+	public void testModifications() throws IOException, InterruptedException {
 
-	/**
-	 * Test of setGraphicFactory method, of class TreeDirectoryModel.
-	 */
-	@Test
-	public void testSetGraphicFactory() {
+		System.out.println("  Testing 'modifications'...");
+
+		CountDownLatch latch = new CountDownLatch(1);
+		TreeDirectoryModel<TreeDirectoryModelTest, String> model = new TreeDirectoryModel<>(
+			this,
+			s -> Paths.get(s),
+			p -> p != null ? p.toString() : null
+		);
+
+		model.modifications().subscribe(u -> latch.countDown());
+		model.addTopLevelDirectory(root);
+		model.sync(tree(root));
+
+		Files.write(file_b1, "Some text to be written.\n".getBytes());
+
+		model.sync(tree(root));
+
+		if ( !latch.await(1, TimeUnit.MINUTES) ) {
+			fail("Directory model synchronization not completed in 1 minute.");
+		}
+
 	}
 
 	/**
 	 * Test of sync method, of class TreeDirectoryModel.
 	 */
 	@Test
-	public void testSync_PathElement() {
-	}
-
-	/**
-	 * Test of sync method, of class TreeDirectoryModel.
-	 */
-	@Test
-	public void testSync_PathElement_GenericType() {
+	public void testSync() {
 	}
 
 	/**
 	 * Test of updateModificationTime method, of class TreeDirectoryModel.
 	 */
 	@Test
-	public void testUpdateModificationTime_3args() {
-	}
-
-	/**
-	 * Test of updateModificationTime method, of class TreeDirectoryModel.
-	 */
-	@Test
-	public void testUpdateModificationTime_Path_FileTime() {
+	public void testUpdateModificationTime() {
 	}
 
 }
