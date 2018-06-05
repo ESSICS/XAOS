@@ -21,8 +21,6 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,7 +39,6 @@ public class TreeDirectoryModelTest {
 	private Path dir_a;
 	private Path dir_a_c;
 	private Path dir_b;
-	private ExecutorService executor;
 	private Path file_a;
 	private Path file_a_c;
 	private Path file_b1;
@@ -51,7 +48,6 @@ public class TreeDirectoryModelTest {
 	@Before
 	public void setUp() throws IOException {
 
-		executor = Executors.newSingleThreadExecutor();
 		root = Files.createTempDirectory("TDM_");
 			dir_a = Files.createTempDirectory(root, "TDM_a_");
 				file_a = Files.createTempFile(dir_a, "TDM_a_", ".test");
@@ -88,7 +84,6 @@ public class TreeDirectoryModelTest {
 	@After
 	public void tearDown() throws IOException {
 		Files.walkFileTree(root, new DeleteFileVisitor());
-		executor.shutdown();
 	}
 
 	/**
