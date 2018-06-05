@@ -224,7 +224,8 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 
 		Path path = tree.getPath();
 
-		topLevelAncestorStream(path).forEach(ancestor -> ancestor.sync(tree, initiator));
+		topLevelAncestorStream(path).forEach(
+			ancestor -> ancestor.sync(tree, initiator));
 
 	}
 

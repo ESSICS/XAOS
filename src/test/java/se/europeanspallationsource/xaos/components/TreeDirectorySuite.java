@@ -25,7 +25,8 @@ import org.junit.runners.Suite;
  */
 @RunWith( Suite.class )
 @Suite.SuiteClasses( {
-	TreeDirectoryItemsTest.class
+	TreeDirectoryItemsTest.class,
+	TreeDirectoryModel.class
 } )
 @SuppressWarnings( { "ClassMayBeInterface", "ClassWithoutLogger", "UtilityClassWithoutPrivateConstructor" } )
 public class TreeDirectorySuite {

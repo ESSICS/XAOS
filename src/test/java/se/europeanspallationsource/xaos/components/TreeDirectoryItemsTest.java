@@ -21,8 +21,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
@@ -44,8 +42,7 @@ import static se.europeanspallationsource.xaos.tools.io.PathElement.tree;
 
 
 /**
- *
- * @author claudiorosati
+ * @author claudio.rosati@esss.se
  */
 @SuppressWarnings( { "ClassWithoutLogger", "UseOfSystemOutOrSystemErr" } )
 public class TreeDirectoryItemsTest {
@@ -53,7 +50,6 @@ public class TreeDirectoryItemsTest {
 	private Path dir_a;
 	private Path dir_a_c;
 	private Path dir_b;
-	private ExecutorService executor;
 	private Path file_a;
 	private Path file_a_c;
 	private Path file_b1;
@@ -63,7 +59,6 @@ public class TreeDirectoryItemsTest {
 	@Before
 	public void setUp() throws IOException {
 
-		executor = Executors.newSingleThreadExecutor();
 		root = Files.createTempDirectory("TDI_");
 			dir_a = Files.createTempDirectory(root, "TDI_a_");
 				file_a = Files.createTempFile(dir_a, "TDI_a_", ".test");
@@ -100,7 +95,6 @@ public class TreeDirectoryItemsTest {
 	@After
 	public void tearDown() throws IOException {
 		Files.walkFileTree(root, new DeleteFileVisitor());
-		executor.shutdown();
 	}
 
 	/**
@@ -193,7 +187,7 @@ public class TreeDirectoryItemsTest {
 	@Test
 	public void testCreateTopLevelDirectoryItem() throws IOException, InterruptedException {
 
-		System.out.println("  Testing 'testCreateTopLevelDirectoryItem'...");
+		System.out.println("  Testing 'createTopLevelDirectoryItem'...");
 
 		CountDownLatch creationLatch = new CountDownLatch(7);
 		PathElement element = tree(root);
