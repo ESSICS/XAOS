@@ -109,6 +109,67 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 		};
 	}
 
+	/**
+	 * Add a no-top-lever directory to the model.
+	 *
+	 * @param directory The {@link Path} to be added as a directory.
+	 */
+	public void addDirectory( Path directory ) {
+		addDirectory(directory, defaultInitiator);
+	}
+
+	/**
+	 * Add a no-top-lever directory to the model.
+	 *
+	 * @param directory The {@link Path} to be added as a directory.
+	 * @param initiator The initiator of changes to the model.
+	 */
+	public void addDirectory( Path directory, I initiator ) {
+		topLevelAncestorStream(directory).forEach(ancestor -> {
+
+			Path relativePath = ancestor.getPath().relativize(directory);
+
+			ancestor.addDirectory(relativePath, initiator);
+
+		});
+	}
+
+	/**
+	 * Add a file to the model.
+	 *
+	 * @param file         The {@link Path} to be added as a file.
+	 * @param lastModified The timestamp of the last modification to the file.
+	 */
+	public void addFile( Path file, FileTime lastModified ) {
+		addFile(file, lastModified, defaultInitiator);
+	}
+
+	/**
+	 * Add a file to the model.
+	 *
+	 * @param file         The {@link Path} to be added as a file.
+	 * @param lastModified The timestamp of the last modification to the file.
+	 * @param initiator    The initiator of changes to the model.
+	 */
+	public void addFile( Path file, FileTime lastModified, I initiator ) {
+		topLevelAncestorStream(file).forEach(ancestor -> {
+
+			Path relativePath = ancestor.getPath().relativize(file);
+
+			ancestor.addFile(relativePath, lastModified, initiator);
+
+		});
+	}
+
+	/**
+	 * Add a top-lever directory to the model.
+	 *
+	 * @param directory The {@link Path} to be added as a top-level directory.
+	 */
+	public void addTopLevelDirectory( Path directory ) {
+		root.getChildren().add(new TreeDirectoryItems.TopLevelDirectoryItem<>(injector.apply(directory), graphicFactory, projector, injector, reporter));
+	}
+
 	@Override
 	public boolean contains( Path path ) {
 		return topLevelAncestorStream(path).anyMatch(
@@ -133,6 +194,31 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	@Override
 	public EventStream<Update<I>> creations() {
 		return creations;
+	}
+
+	/**
+	 * Delete the given path from the model.
+	 *
+	 * @param path The {@link Path} to be removed.
+	 */
+	public void delete( Path path ) {
+		delete(path, defaultInitiator);
+	}
+
+	/**
+	 * Delete the given path from the model.
+	 *
+	 * @param path      The {@link Path} to be removed.
+	 * @param initiator The initiator of changes to the model.
+	 */
+	public void delete( Path path, I initiator ) {
+		getTopLevelAncestors(path, true).forEach(( ancestor ) -> {
+
+			Path relativePath = ancestor.getPath().relativize(path);
+
+			ancestor.remove(relativePath, initiator);
+
+		});
 	}
 
 	@Override
@@ -174,57 +260,18 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 		graphicFactory = factory != null ? factory : DEFAULT_GRAPHIC_FACTORY;
 	}
 
-	void addDirectory( Path path ) {
-		addDirectory(path, defaultInitiator);
-	}
-
-	void addDirectory( Path path, I initiator ) {
-		topLevelAncestorStream(path).forEach(ancestor -> {
-
-			Path relativePath = ancestor.getPath().relativize(path);
-
-			ancestor.addDirectory(relativePath, initiator);
-
-		});
-	}
-
-	void addFile( Path path, FileTime lastModified ) {
-		addFile(path, lastModified, defaultInitiator);
-	}
-
-	void addFile( Path path, FileTime lastModified, I initiator ) {
-		topLevelAncestorStream(path).forEach(ancestor -> {
-
-			Path relativePath = ancestor.getPath().relativize(path);
-
-			ancestor.addFile(relativePath, lastModified, initiator);
-
-		});
-	}
-
-	void addTopLevelDirectory( Path directory ) {
-		root.getChildren().add(new TreeDirectoryItems.TopLevelDirectoryItem<>(injector.apply(directory), graphicFactory, projector, injector, reporter));
-	}
-
-	void delete( Path path ) {
-		delete(path, defaultInitiator);
-	}
-
-	void delete( Path path, I initiator ) {
-		getTopLevelAncestors(path, true).forEach(( ancestor ) -> {
-
-			Path relativePath = ancestor.getPath().relativize(path);
-
-			ancestor.remove(relativePath, initiator);
-
-		});
-	}
-
-	void sync( PathElement tree ) {
+	/**
+	 * Synchronize the model with the given {@code tree} element. Missing items
+	 * will be added to the model. Items will be removed from the model if no
+	 * more existing. Files timestamps will be updated too.
+	 *
+	 * @param tree The {@link PathElement} used to synchronize the model.
+	 */
+	public void sync( PathElement tree ) {
 		sync(tree, defaultInitiator);
 	}
 
-	void sync( PathElement tree, I initiator ) {
+	public void sync( PathElement tree, I initiator ) {
 
 		Path path = tree.getPath();
 
@@ -232,11 +279,11 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 
 	}
 
-	void updateModificationTime( Path path, FileTime lastModified ) {
+	public void updateModificationTime( Path path, FileTime lastModified ) {
 		updateModificationTime(path, lastModified, defaultInitiator);
 	}
 
-	void updateModificationTime( Path path, FileTime lastModified, I initiator ) {
+	public void updateModificationTime( Path path, FileTime lastModified, I initiator ) {
 		getTopLevelAncestors(path, true).forEach(ancestor -> {
 
 			Path relativePath = ancestor.getPath().relativize(path);

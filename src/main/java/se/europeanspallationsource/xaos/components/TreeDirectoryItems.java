@@ -213,8 +213,12 @@ class TreeDirectoryItems {
 			this.lastModified = lastModified;
 		}
 
+		public final FileTime getLastModified() {
+			return lastModified;
+		}
+
 		@Override
-		final public boolean isDirectory() {
+		public final boolean isDirectory() {
 			return false;
 		}
 
@@ -315,7 +319,7 @@ class TreeDirectoryItems {
 
 			int len = relativePath.getNameCount();
 
-			if ( len == 0 ) {
+			if ( len == 0 || "".equals(relativePath.toString()) ) {
 				return this;
 			} else {
 
@@ -514,7 +518,7 @@ class TreeDirectoryItems {
 
 			PathItem<T> item = resolve(relativePath);
 
-			if ( item == null || item.isDirectory() ) {
+			if ( item == null || !item.isDirectory() ) {
 				sync(PathElement.file(getPath().resolve(relativePath), lastModified), initiator);
 			}
 
