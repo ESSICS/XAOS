@@ -33,12 +33,12 @@ import se.europeanspallationsource.xaos.tools.io.InitiatorAsynchronousIO;
  * @author claudio.rosati@esss.se
  * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.LiveDirsIO</a>
  */
-public class TreeDirectoruAsynchronousIO<I> implements InitiatorAsynchronousIO<I> {
+public class TreeDirectoryAsynchronousIO<I> implements InitiatorAsynchronousIO<I> {
 
     private final Executor clientThreadExecutor;
 	private final DirectoryWatcher directoryWatcher;
 
-	public TreeDirectoruAsynchronousIO(
+	public TreeDirectoryAsynchronousIO(
 		DirectoryWatcher directoryWatcher,
 //		LiveDirsModel<I, ?> model,
 		Executor clientThreadExecutor
