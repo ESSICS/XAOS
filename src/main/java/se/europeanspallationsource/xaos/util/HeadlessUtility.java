@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.tools;
+package se.europeanspallationsource.xaos.util;
 
 /**
  * Provides a methods to set headless JavaFX execution through the OpenJDK

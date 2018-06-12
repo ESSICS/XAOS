@@ -29,12 +29,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import se.europeanspallationsource.xaos.components.TreeDirectoryItems.FileItem;
-import se.europeanspallationsource.xaos.tools.io.DeleteFileVisitor;
+import se.europeanspallationsource.xaos.util.io.DeleteFileVisitor;
 
 import static java.nio.file.attribute.FileTime.from;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
-import static se.europeanspallationsource.xaos.tools.io.PathElement.tree;
+import static se.europeanspallationsource.xaos.util.io.PathElement.tree;
 
 
 /**

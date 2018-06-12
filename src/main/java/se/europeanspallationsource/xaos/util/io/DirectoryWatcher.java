@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.tools.io;
+package se.europeanspallationsource.xaos.util.io;
 
 
 import java.io.IOException;
@@ -208,7 +208,7 @@ public class DirectoryWatcher {
 	 * different thread from the caller's one.
 	 * </p>
 	 *
-	 * @param path Pathname of the file or directory to be deleted.
+	 * @param path      Pathname of the file or directory to be deleted.
 	 * @param onSuccess The {@link Consumer} called on success, where the passed
 	 *                  parameter is {@link Boolean#TRUE} if the file was deleted
 	 *                  by this method; {@link Boolean#FALSE} if the file could
@@ -229,12 +229,12 @@ public class DirectoryWatcher {
 	 * Deletes a file tree rooted at the given path. One of the two given
 	 * {@link Consumer}s will be called on success or on failure.
 	 *
-	 * @param root The path to the file tree root to be deleted.
+	 * @param root      The path to the file tree root to be deleted.
 	 * @param onSuccess The {@link Consumer} called on success.
 	 * @param onError   The {@link Consumer} called on failure.
 	 */
 	public void deleteTree( Path root, Consumer<Void> onSuccess, Consumer<Throwable> onError ) {
-        executeIOOperation(
+		executeIOOperation(
 			() -> {
 				deleteRecursively(root);
 				return null;
@@ -242,9 +242,9 @@ public class DirectoryWatcher {
 			onSuccess,
 			onError
 		);
-    }
+	}
 
- 	/**
+	/**
 	 * @return The {@link EventStream} of thrown errors.
 	 */
 	public EventStream<Throwable> errors() {
@@ -312,7 +312,7 @@ public class DirectoryWatcher {
 		Consumer<Throwable> onError
 	) {
 		executeIOOperation(
-			() -> { 
+			() -> {
 
 				byte[] bytes = Files.readAllBytes(file);
 				CharBuffer chars = charset.decode(ByteBuffer.wrap(bytes));
@@ -381,7 +381,26 @@ public class DirectoryWatcher {
 	 * @throws IOException If an I/O error occurs.
 	 */
 	public void watch( Path dir ) throws IOException {
+
+//	TODO:CR The returned key must be stored into a map keyed by the path
+//			registered in the watcher.
+
+//	TODO:CR When the path object (file or folder) is deleted, the key must
+//			be cancelled and deleted.
+
+//	TODO:CR When the watcher is closed, the map of keys must be cleared as well.
+
+//	TODO:CR Using the map of keys, the method isWatched(Path path) can be 
+//			created returning true if the given path is watched by this
+//			directory watcher.
+
+//	TODO:CR Using the isWatched(Path path) method, the watchUp(Path path) one
+//			can be created. It watches the given path and recursively all its
+//			parent until one of the parent is already watched, or the filesystem
+//			root. Similarly the watchUpOrStreamError(Path path) must be created.
+
 		dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+
 	}
 
 	/**

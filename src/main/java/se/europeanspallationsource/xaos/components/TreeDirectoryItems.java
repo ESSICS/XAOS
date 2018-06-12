@@ -28,8 +28,8 @@ import java.util.stream.Collectors;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
-import se.europeanspallationsource.xaos.tools.io.DirectoryModel;
-import se.europeanspallationsource.xaos.tools.io.PathElement;
+import se.europeanspallationsource.xaos.util.io.DirectoryModel;
+import se.europeanspallationsource.xaos.util.io.PathElement;
 
 
 /**

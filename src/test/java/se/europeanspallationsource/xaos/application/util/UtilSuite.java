@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.components;
+package se.europeanspallationsource.xaos.application.util;
 
 
 import org.junit.runner.RunWith;
@@ -25,11 +25,9 @@ import org.junit.runners.Suite;
  */
 @RunWith( Suite.class )
 @Suite.SuiteClasses( {
-	TreeDirectoryAsynchronousIOTest.class,
-	TreeDirectoryItemsTest.class,
-	TreeDirectoryModelTest.class
+	CommonIconsTest.class
 } )
 @SuppressWarnings( { "ClassMayBeInterface", "ClassWithoutLogger", "UtilityClassWithoutPrivateConstructor" } )
-public class TreeDirectorySuite {
+public class UtilSuite {
 
 }

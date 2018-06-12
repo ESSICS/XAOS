@@ -27,9 +27,9 @@ import javafx.scene.control.TreeItem;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import se.europeanspallationsource.xaos.tools.io.DeleteFileVisitor;
-import se.europeanspallationsource.xaos.tools.io.DirectoryModel;
-import se.europeanspallationsource.xaos.tools.io.PathElement;
+import se.europeanspallationsource.xaos.util.io.DeleteFileVisitor;
+import se.europeanspallationsource.xaos.util.io.DirectoryModel;
+import se.europeanspallationsource.xaos.util.io.PathElement;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
@@ -37,8 +37,8 @@ import static se.europeanspallationsource.xaos.components.TreeDirectoryItems.cre
 import static se.europeanspallationsource.xaos.components.TreeDirectoryItems.createFileItem;
 import static se.europeanspallationsource.xaos.components.TreeDirectoryItems.createTopLevelDirectoryItem;
 import static se.europeanspallationsource.xaos.components.TreeDirectoryModel.DEFAULT_GRAPHIC_FACTORY;
-import static se.europeanspallationsource.xaos.tools.io.PathElement.file;
-import static se.europeanspallationsource.xaos.tools.io.PathElement.tree;
+import static se.europeanspallationsource.xaos.util.io.PathElement.file;
+import static se.europeanspallationsource.xaos.util.io.PathElement.tree;
 
 
 /**

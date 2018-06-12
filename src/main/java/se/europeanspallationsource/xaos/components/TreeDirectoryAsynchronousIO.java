@@ -19,10 +19,15 @@ package se.europeanspallationsource.xaos.components;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileAttribute;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executor;
-import se.europeanspallationsource.xaos.tools.io.DirectoryWatcher;
-import se.europeanspallationsource.xaos.tools.io.InitiatorAsynchronousIO;
+import javafx.scene.control.TreeItem;
+import se.europeanspallationsource.xaos.util.io.DirectoryModel;
+import se.europeanspallationsource.xaos.util.io.DirectoryWatcher;
+import se.europeanspallationsource.xaos.util.io.InitiatorAsynchronousIO;
+
+import static se.europeanspallationsource.xaos.util.DefaultExecutorCompletionStage.wrap;
 
 
 /**
@@ -30,67 +35,202 @@ import se.europeanspallationsource.xaos.tools.io.InitiatorAsynchronousIO;
  * a {@link DirectoryModel} on each operation.
  *
  * @param <I> Type of the <i>initiator</i> of the I/O operation.
+ * @param <T> Type of the object returned by {@link TreeItem#getValue()}.
  * @author claudio.rosati@esss.se
  * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.LiveDirsIO</a>
  */
-public class TreeDirectoryAsynchronousIO<I> implements InitiatorAsynchronousIO<I> {
+@SuppressWarnings( "ClassWithoutLogger" )
+public class TreeDirectoryAsynchronousIO<I, T> implements InitiatorAsynchronousIO<I> {
 
-    private final Executor clientThreadExecutor;
+	private final Executor clientThreadExecutor;
 	private final DirectoryWatcher directoryWatcher;
+	private final TreeDirectoryModel<I, T> model;
 
 	public TreeDirectoryAsynchronousIO(
 		DirectoryWatcher directoryWatcher,
-//		LiveDirsModel<I, ?> model,
+		TreeDirectoryModel<I, T> model,
 		Executor clientThreadExecutor
 	) {
 		this.directoryWatcher = directoryWatcher;
-//		this.model = model;
+		this.model = model;
 		this.clientThreadExecutor = clientThreadExecutor;
 	}
 
 	@Override
 	public CompletionStage<Void> createDirectories( Path dir, I initiator, FileAttribute<?>... attrs ) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+		CompletableFuture<Void> created = new CompletableFuture<>();
+
+		directoryWatcher.createDirectories(
+			dir,
+			path -> {
+				if ( model.containsPrefixOf(path) ) {
+					model.addDirectory(path, initiator);
+					//	TODO:CR Only the completely created folder is watched,
+					//			not the intermediate ones.
+					//			The DirectoryWatcher.watchUpOrStreamError(Path path)
+					//			method should be used for watching the created path.
+					directoryWatcher.watchOrStreamError(path);
+				}
+				created.complete(null);
+			},
+			created::completeExceptionally,
+			attrs
+		);
+
+		return wrap(created, clientThreadExecutor);
+
 	}
 
 	@Override
 	public CompletionStage<Void> createDirectory( Path dir, I initiator, FileAttribute<?>... attrs ) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+		CompletableFuture<Void> created = new CompletableFuture<>();
+
+		directoryWatcher.createDirectory(
+			dir,
+			path -> {
+				if ( model.containsPrefixOf(path) ) {
+					model.addDirectory(path, initiator);
+					directoryWatcher.watchOrStreamError(path);
+				}
+				created.complete(null);
+			},
+			created::completeExceptionally,
+			attrs
+		);
+
+		return wrap(created, clientThreadExecutor);
+
 	}
 
 	@Override
-	public CompletionStage<Void> createFile( Path file, I initiator ) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	public CompletionStage<Void> createFile( Path file, I initiator, FileAttribute<?>... attrs ) {
+
+		CompletableFuture<Void> created = new CompletableFuture<>();
+
+		directoryWatcher.createFile(
+			file,
+			lastModified -> {
+				model.addFile(file, lastModified, initiator);
+				created.complete(null);
+			},
+			created::completeExceptionally,
+			attrs
+		);
+
+		return wrap(created, clientThreadExecutor);
+
 	}
 
 	@Override
 	public CompletionStage<Void> delete( Path path, I initiator ) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+		CompletableFuture<Void> deleted = new CompletableFuture<>();
+
+		directoryWatcher.delete(
+			path,
+			done -> {
+
+				if ( done ) {
+					model.delete(path, initiator);
+				}
+
+				deleted.complete(null);
+
+			},
+			deleted::completeExceptionally
+		);
+
+		return wrap(deleted, clientThreadExecutor);
+
 	}
 
 	@Override
 	public CompletionStage<Void> deleteTree( Path root, I initiator ) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+		CompletableFuture<Void> deleted = new CompletableFuture<>();
+
+		directoryWatcher.deleteTree(root,
+			dummy -> {
+				model.delete(root, initiator);
+				deleted.complete(null);
+			},
+			deleted::completeExceptionally
+		);
+
+		return wrap(deleted, clientThreadExecutor);
+
 	}
 
 	@Override
 	public CompletionStage<byte[]> readBinaryFile( Path file, I initiator ) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+		CompletableFuture<byte[]> read = new CompletableFuture<>();
+
+		directoryWatcher.readBinaryFile(
+			file,
+			read::complete,
+			read::completeExceptionally
+		);
+
+		return wrap(read, clientThreadExecutor);
+
 	}
 
 	@Override
 	public CompletionStage<String> readTextFile( Path file, Charset charset, I initiator ) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+		CompletableFuture<String> read = new CompletableFuture<>();
+
+		directoryWatcher.readTextFile(
+			file,
+			charset,
+			read::complete,
+			read::completeExceptionally
+		);
+
+		return wrap(read, clientThreadExecutor);
+
 	}
 
 	@Override
 	public CompletionStage<Void> writeBinaryFile( Path file, byte[] content, I initiator ) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+		CompletableFuture<Void> written = new CompletableFuture<>();
+
+		directoryWatcher.writeBinaryFile(
+			file,
+			content,
+			lastModified -> {
+				model.updateModificationTime(file, lastModified, initiator);
+				written.complete(null);
+			},
+			written::completeExceptionally
+		);
+
+		return wrap(written, clientThreadExecutor);
+
 	}
 
 	@Override
 	public CompletionStage<Void> writeTextFile( Path file, String content, Charset charset, I initiator ) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+		CompletableFuture<Void> written = new CompletableFuture<>();
+
+		directoryWatcher.writeTextFile(
+			file,
+			content,
+			charset,
+			lastModified -> {
+				model.updateModificationTime(file, lastModified, initiator);
+				written.complete(null);
+			},
+			written::completeExceptionally
+		);
+
+		return wrap(written, clientThreadExecutor);
+
 	}
 
 }

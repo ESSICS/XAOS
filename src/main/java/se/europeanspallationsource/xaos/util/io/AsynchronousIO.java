@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.tools.io;
+package se.europeanspallationsource.xaos.util.io;
 
 
 import java.nio.charset.Charset;
@@ -63,10 +63,12 @@ public interface AsynchronousIO {
 	 * encountered error.
 	 *
 	 * @param file The pathname of the file to be created.
+	 * @param attrs An optional list of file attributes to set atomically when
+	 *              creating the file.
 	 * @return An exceptionally completed {@link CompletionStage} in case the
 	 *         file already exists, or an exception is thrown.
 	 */
-	CompletionStage<Void> createFile( Path file );
+	CompletionStage<Void> createFile( Path file, FileAttribute<?>... attrs );
 
 	/**
 	 * Deletes a file or an empty directory. If an I/O error occurs, the returned

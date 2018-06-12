@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.tools.io;
+package se.europeanspallationsource.xaos.util.io;
 
 
 import java.nio.charset.Charset;
@@ -69,10 +69,12 @@ public interface InitiatorAsynchronousIO<I> {
 	 *
 	 * @param file      The pathname of the file to be created.
 	 * @param initiator The initiator of the operation.
+	 * @param attrs     An optional list of file attributes to set atomically
+	 *                  when creating the directory.
 	 * @return An exceptionally completed {@link CompletionStage} in case the
 	 *         file already exists, or an exception is thrown.
 	 */
-	CompletionStage<Void> createFile( Path file, I initiator );
+	CompletionStage<Void> createFile( Path file, I initiator, FileAttribute<?>... attrs );
 
 	/**
 	 * Deletes a file or an empty directory. If an I/O error occurs, the returned
@@ -158,7 +160,7 @@ public interface InitiatorAsynchronousIO<I> {
 			}
 
 			@Override
-			public CompletionStage<Void> createFile( Path file ) {
+			public CompletionStage<Void> createFile( Path file, FileAttribute<?>... attrs ) {
 				return InitiatorAsynchronousIO.this.createFile(file, initiator);
 			}
 

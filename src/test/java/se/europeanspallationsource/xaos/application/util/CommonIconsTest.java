@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.application.utilities;
+package se.europeanspallationsource.xaos.application.util;
 
 
 import javafx.scene.paint.Color;
 import org.junit.Test;
 import org.kordamp.ikonli.fontawesome5.FontAwesomeRegular;
 import org.kordamp.ikonli.javafx.FontIcon;
+import se.europeanspallationsource.xaos.application.util.CommonIcons;
 
 import static org.junit.Assert.assertEquals;
 

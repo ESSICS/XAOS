@@ -20,7 +20,7 @@ import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import static se.europeanspallationsource.xaos.tools.HeadlessUtility.conditionallyHeadless;
+import static se.europeanspallationsource.xaos.util.HeadlessUtility.conditionallyHeadless;
 
 
 /**

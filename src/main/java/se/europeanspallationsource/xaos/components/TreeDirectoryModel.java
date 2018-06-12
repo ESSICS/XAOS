@@ -28,11 +28,11 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import org.reactfx.EventSource;
 import org.reactfx.EventStream;
-import se.europeanspallationsource.xaos.tools.io.DirectoryModel;
-import se.europeanspallationsource.xaos.tools.io.PathElement;
+import se.europeanspallationsource.xaos.util.io.DirectoryModel;
+import se.europeanspallationsource.xaos.util.io.PathElement;
 
-import static se.europeanspallationsource.xaos.application.utilities.CommonIcons.FILE;
-import static se.europeanspallationsource.xaos.application.utilities.CommonIcons.FOLDER;
+import static se.europeanspallationsource.xaos.application.util.CommonIcons.FILE;
+import static se.europeanspallationsource.xaos.application.util.CommonIcons.FOLDER;
 
 
 /**
