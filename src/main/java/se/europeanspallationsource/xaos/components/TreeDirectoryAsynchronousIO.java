@@ -66,11 +66,7 @@ public class TreeDirectoryAsynchronousIO<I, T> implements InitiatorAsynchronousI
 			path -> {
 				if ( model.containsPrefixOf(path) ) {
 					model.addDirectory(path, initiator);
-					//	TODO:CR Only the completely created folder is watched,
-					//			not the intermediate ones.
-					//			The DirectoryWatcher.watchUpOrStreamError(Path path)
-					//			method should be used for watching the created path.
-					directoryWatcher.watchOrStreamError(path);
+					directoryWatcher.watchUpOrStreamError(path);
 				}
 				created.complete(null);
 			},

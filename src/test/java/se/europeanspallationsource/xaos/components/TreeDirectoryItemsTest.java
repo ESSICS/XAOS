@@ -210,7 +210,7 @@ public class TreeDirectoryItemsTest {
 				@Override
 				public void reportCreation( Path baseDir, Path relativePath, TreeDirectoryItemsTest initiator ) {
 					System.out.println(MessageFormat.format(
-						"\tCREATION [baseDir = {0}, relativePath = {1}].",
+						"    CREATION [baseDir = {0}, relativePath = {1}].",
 						baseDir,
 						relativePath
 					));
@@ -220,7 +220,7 @@ public class TreeDirectoryItemsTest {
 				@Override
 				public void reportDeletion( Path baseDir, Path relativePath, TreeDirectoryItemsTest initiator ) {
 					System.out.println(MessageFormat.format(
-						"\tDELETION [baseDir = {0}, relativePath = {1}].",
+						"    DELETION [baseDir = {0}, relativePath = {1}].",
 						baseDir,
 						relativePath
 					));
@@ -229,7 +229,7 @@ public class TreeDirectoryItemsTest {
 				@Override
 				public void reportError( Throwable error ) {
 					System.out.println(MessageFormat.format(
-						"\tERROR [error = {0}, message = {1}].",
+						"    ERROR [error = {0}, message = {1}].",
 						error.getClass().getName(),
 						error.getMessage()
 					));
@@ -238,7 +238,7 @@ public class TreeDirectoryItemsTest {
 				@Override
 				public void reportModification( Path baseDir, Path relativePath, TreeDirectoryItemsTest initiator ) {
 					System.out.println(MessageFormat.format(
-						"\tMODIFICATION [baseDir = {0}, relativePath = {1}].",
+						"    MODIFICATION [baseDir = {0}, relativePath = {1}].",
 						baseDir,
 						relativePath
 					));

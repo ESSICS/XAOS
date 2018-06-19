@@ -17,6 +17,7 @@ package se.europeanspallationsource.xaos.util.io;
 
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
@@ -24,10 +25,19 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardWatchEventKinds;
+import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.nio.file.attribute.FileAttribute;
 import java.nio.file.attribute.FileTime;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.WeakHashMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
@@ -35,6 +45,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.function.Consumer;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import org.reactfx.EventSource;
 import org.reactfx.EventStream;
 
@@ -49,14 +61,13 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 /**
  * Watches for changes in files and directories.
  * <p>
- * Usage:
- * </p>
+ * Usage:</p>
  * <pre>
  *   ExecutorService executor = Executors.newSingleThreadExecutor();
  *   DirectoryWatcher watcher = create(executor);
  *
- *   watcher.getSignalledKeysStream().subscribe(key -&gt; {
- *     key.pollEvents().stream().forEach(e -&gt; {
+ *   watcher.errors().subscribe(event -&gt; {
+ *     event.getEvents().stream().forEach(e -&gt; {
  *       if ( StandardWatchEventKinds.ENTRY_CREATE.equals(e.kind()) ) {
  *         ...
  *       } else if ( StandardWatchEventKinds.ENTRY_DELETE.equals(e.kind()) ) {
@@ -65,22 +76,18 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
  *         ...
  *       }
  *     });
- *     key.reset();
  *   });
  *
  *   Path root = ...
  *
  *   watcher.watch(root);</pre>
- * <p>
- * <b>Note:</b> don't forget to call {@code key.reset()} on the event handling
- * code. This step is critical if you want to receive further watch events.
- * </p>
  *
  * @author claudio.rosati@esss.se
  * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.DirWatcher</a>
  */
-@SuppressWarnings( "ClassWithoutLogger" )
 public class DirectoryWatcher {
+
+	private static final Logger LOGGER = Logger.getLogger(DirectoryWatcher.class.getName());
 
 	/**
 	 * Creates a {@link DirectoryWatcher} instance.
@@ -95,13 +102,14 @@ public class DirectoryWatcher {
 
 	private final EventSource<Throwable> errors = new EventSource<>();
 	private final Executor eventThreadExecutor;
+	private final EventSource<DirectoryEvent> events = new EventSource<>();
 	private final LinkedBlockingQueue<Runnable> executorQueue = new LinkedBlockingQueue<>();
 	private boolean interrupted = false;
 	private final Thread ioThread;
 	private boolean mayInterrupt = false;
 	private volatile boolean shutdown = false;
-	private final EventSource<WatchKey> signalledKeys = new EventSource<>();
 	private final WatchService watcher;
+	private final Map<WatchKey, WeakReference<Path>> watcherKeys = Collections.synchronizedMap(new WeakHashMap<>());
 
 	protected DirectoryWatcher( Executor eventThreadExecutor ) throws IOException {
 
@@ -218,7 +226,15 @@ public class DirectoryWatcher {
 	public void delete( Path path, Consumer<Boolean> onSuccess, Consumer<Throwable> onError ) {
 		executeIOOperation(
 			() -> {
-				return Files.deleteIfExists(path);
+
+				boolean deleted = Files.deleteIfExists(path);
+
+				if ( deleted ) {
+					removeWatcherKey(path);
+				}
+
+				return deleted;
+
 			},
 			onSuccess,
 			onError
@@ -252,13 +268,51 @@ public class DirectoryWatcher {
 	}
 
 	/**
+	 * @return The {@link EventStream} of signalled {@link DirectoryEvent}s.
+	 */
+	public EventStream<DirectoryEvent> events() {
+		return events;
+	}
+
+	/**
 	 * Returns {@code true} if this watcher was shutdown, meaning that no elements
-	 * will be posted to the errors and signalled keys streams.
+	 * will be posted to the errors and events streams.
 	 *
-	 * @return {@code true} if this watcher was shutdown,
+	 * @return {@code true} if this watcher was shutdown.
 	 */
 	public final boolean isShutdown() {
 		return shutdown;
+	}
+
+	/**
+	 * Returns {@code true} if this watcher was shutdown,  and the shutdown
+	 * process is completed (i.e. the I/O thread is terminated).
+	 *
+	 * @return {@code true} if this watcher's shutdown completed.
+	 */
+	public final boolean isShutdownComplete() {
+		return !ioThread.isAlive();
+	}
+
+	/**
+	 * Return whether the given {@link Path} is watched or not. A path is
+	 * watched if {@link #watch(Path)} or {@link #watchOrStreamError(Path)}
+	 * was invoked on it.
+	 *
+	 * @param dir The {@link Path} to be checked.
+	 * @return {@code true} if {@link #watch(Path)} or
+	 *         {@link #watchOrStreamError(Path)} was invoked on the given
+	 *         {@code dir}.
+	 */
+	public boolean isWatched ( final Path dir ) {
+		if ( dir == null ) {
+			return false;
+		} else {
+			return watcherKeys
+				.keySet()
+				.parallelStream()
+				.anyMatch(key -> key.isValid() && dir.equals(watcherKeys.get(key).get()));
+		}
 	}
 
 	/**
@@ -341,13 +395,6 @@ public class DirectoryWatcher {
 	}
 
 	/**
-	 * @return The {@link EventStream} of signalled {@link WatchKey}s.
-	 */
-	public EventStream<WatchKey> signalledKeys() {
-		return signalledKeys;
-	}
-
-	/**
 	 * Returns a {@link CompletionStage} containing the tree structure of
 	 * {@link PathElement} instances representing the content of the given
 	 * {@code root} directory. The returned stage is completed exceptionally in
@@ -375,36 +422,82 @@ public class DirectoryWatcher {
 	}
 
 	/**
-	 * Watches the given directory for entry create, delete, and modify events.
+	 * Unwatch the given directory {@link Path}.
+	 *
+	 * @param dir The directory to be unwatched.
+	 */
+	public void unwatch ( Path dir ) {
+		if ( dir != null ) {
+			removeWatcherKey(dir);
+		}
+	}
+
+	/**
+	 * Unwatch the given directory and all its parents.
+	 *
+	 * @param dir The directory to be watched.
+	 */
+	public void unwatchUp ( Path dir ) {
+		unwatchUp(dir, null);
+	}
+
+	/**
+	 * Unwatch the given directory and all its parents up to the given ancestor.
+	 *
+	 * @param dir The directory to be watched.
+	 * @param to  The {@code dir}'s ancestor {@link Path} (exclusive) where
+	 *            unwatching will be stopped. Can be {@code null}.
+	 */
+	public void unwatchUp ( Path dir, Path to ) {
+
+		if ( dir != null ) {
+
+			if ( to != null && !dir.startsWith(to) ) {
+				throw new IllegalArgumentException(
+					MessageFormat.format(
+						"'to' is not ancestor of 'dir' [to: {0}, dir: {1}].",
+						to.toString(),
+						dir.toString()
+					)
+				);
+			}
+
+			unwatch(dir);
+
+			Path parent = dir.getParent();
+
+			while ( parent != null && ( to == null || !to.equals(parent) ) ) {
+
+				unwatch(parent);
+
+				parent = parent.getParent();
+
+			}
+
+		}
+
+	}
+
+	/**
+	 * Watch the given directory for entry create, delete, and modify events.
 	 *
 	 * @param dir The directory to be watched.
 	 * @throws IOException If an I/O error occurs.
 	 */
 	public void watch( Path dir ) throws IOException {
 
-//	TODO:CR The returned key must be stored into a map keyed by the path
-//			registered in the watcher.
+		if ( dir != null ) {
 
-//	TODO:CR When the path object (file or folder) is deleted, the key must
-//			be cancelled and deleted.
+			WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
 
-//	TODO:CR When the watcher is closed, the map of keys must be cleared as well.
+			watcherKeys.put(key, new WeakReference<>(dir));
 
-//	TODO:CR Using the map of keys, the method isWatched(Path path) can be 
-//			created returning true if the given path is watched by this
-//			directory watcher.
-
-//	TODO:CR Using the isWatched(Path path) method, the watchUp(Path path) one
-//			can be created. It watches the given path and recursively all its
-//			parent until one of the parent is already watched, or the filesystem
-//			root. Similarly the watchUpOrStreamError(Path path) must be created.
-
-		dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+		}
 
 	}
 
 	/**
-	 * Watches the given directory for entry create, delete, and modify events.
+	 * Watch the given directory for entry create, delete, and modify events.
 	 * If an I/O error occurs, the exception is logged (emitted).
 	 *
 	 * @param dir The directory to be watched.
@@ -413,6 +506,91 @@ public class DirectoryWatcher {
 		try {
 			watch(dir);
 		} catch ( IOException e ) {
+			emitError(e);
+		}
+	}
+
+	/**
+	 * Watch the given directory and all its parents for entry create, delete,
+	 * and modify events.
+	 * <p>
+	 * This method is equivalent to calling {@link #watchUp(Path, Path)} passing
+	 * {@code null} to its second parameter.</p>
+	 *
+	 * @param dir The directory to be watched.
+	 * @throws IOException If an I/O error occurs.
+	 */
+	public void watchUp( Path dir ) throws IOException {
+		watchUp(dir, null);
+	}
+
+	/**
+	 * Watch the given directory and all its parents up to the given ancestor,
+	 * for entry create, delete, and modify events.
+	 *
+	 * @param dir The directory to be watched.
+	 * @param to  The {@code dir}'s ancestor {@link Path} (exclusive) where
+	 *            watching will be stopped. Can be {@code null}.
+	 * @throws IOException              If an I/O error occurs.
+	 * @throws IllegalArgumentException If {@code to} is not an ancestor of
+	 *                                  {@code dir}.
+	 */
+	public void watchUp( Path dir, Path to ) throws IOException, IllegalArgumentException {
+
+		if ( dir != null ) {
+
+			if ( to != null && !dir.startsWith(to) ) {
+				throw new IllegalArgumentException(
+					MessageFormat.format(
+						"'to' is not ancestor of 'dir' [to: {0}, dir: {1}].",
+						to.toString(),
+						dir.toString()
+					)
+				);
+			}
+
+			watch(dir);
+
+			Path parent = dir.getParent();
+
+			while ( parent != null && ( to == null || !to.equals(parent) ) ) {
+
+				watch(parent);
+
+				parent = parent.getParent();
+
+			}
+
+		}
+
+	}
+
+	/**
+	 * Watch the given directory and all its parents for entry create, delete,
+	 * and modify events. If an I/O error occurs, the exception is logged (emitted).
+	 * <p>
+	 * This method is equivalent to calling {@link #watchUpOrStreamError(Path, Path)}
+	 * passing {@code null} to its second parameter.</p>
+	 *
+	 * @param dir The directory to be watched.
+	 */
+	public void watchUpOrStreamError( Path dir ) {
+		watchUpOrStreamError(dir, null);
+	}
+
+	/**
+	 * Watch the given directory and all its parents up to the given ancestor,
+	 * for entry create, delete, and modify events. If an I/O error occurs, the
+	 * exception is logged (emitted).
+	 *
+	 * @param dir The directory to be watched.
+	 * @param to  The {@code dir}'s ancestor {@link Path} (exclusive) where
+	 *            watching will be stopped. Can be {@code null}.
+	 */
+	public void watchUpOrStreamError( Path dir, Path to ) {
+		try {
+			watchUp(dir, to);
+		} catch ( IOException | IllegalArgumentException e ) {
 			emitError(e);
 		}
 	}
@@ -507,6 +685,7 @@ public class DirectoryWatcher {
 			}
 
 			Files.delete(root);
+			removeWatcherKey(root);
 
 		}
 
@@ -516,8 +695,8 @@ public class DirectoryWatcher {
 		executeOnEventThread(() -> errors.push(e));
 	}
 
-	private void emitKey( WatchKey key ) {
-		executeOnEventThread(() -> signalledKeys.push(key));
+	private void emitEvent( DirectoryEvent event ) {
+		executeOnEventThread(() -> events.push(event));
 	}
 
 	@SuppressWarnings( { "UseSpecificCatch", "BroadCatchBlock", "TooBroadCatch" } )
@@ -527,10 +706,16 @@ public class DirectoryWatcher {
 
 				T result = operation.call();
 
-				executeOnEventThread(() -> onSuccess.accept(result));
+				if ( onSuccess != null ) {
+					executeOnEventThread(() -> onSuccess.accept(result));
+				}
 
 			} catch ( Throwable t ) {
-				executeOnEventThread(() -> onError.accept(t));
+				if ( onError != null ) {
+					executeOnEventThread(() -> onError.accept(t));
+				} else {
+					LOGGER.throwing(DirectoryWatcher.class.getName(), "executeIOOperation", t);
+				}
 			}
 		});
 	}
@@ -562,13 +747,33 @@ public class DirectoryWatcher {
 			WatchKey key = take();
 
 			if ( key != null ) {
-				emitKey(key);
+
+				DirectoryEvent event = new DirectoryEvent((Path) key.watchable(), key.pollEvents());
+
+				event.getEvents().stream().forEach(e -> {
+					if ( StandardWatchEventKinds.ENTRY_DELETE.equals(e.kind()) ) {
+
+						Path parent = (Path) key.watchable();
+						Path child = parent.resolve((Path) e.context());
+
+						if ( child != null && !parent.equals(child) ) {
+							removeWatcherKey(child);
+						}
+
+					}
+				});
+
+				key.reset();
+				emitEvent(event);
+
 			} else if ( isShutdown() ) {
 				try {
 					watcher.close();
 					break;
 				} catch ( IOException e ) {
 					emitError(e);
+				} finally {
+					watcherKeys.clear();
 				}
 				break;
 			} else {
@@ -589,6 +794,23 @@ public class DirectoryWatcher {
 			} catch ( Throwable t ) {
 				errors.push(t);
 			}
+		}
+
+	}
+
+	private void removeWatcherKey( final Path path ) {
+
+		Set<WatchKey> keys = watcherKeys
+			.keySet()
+			.parallelStream()
+			.filter(key -> key.isValid() && path.equals(watcherKeys.get(key).get()))
+			.collect(Collectors.toSet());
+
+		if ( keys != null && !keys.isEmpty() ) {
+			keys.forEach(key -> {
+				key.cancel();
+				watcherKeys.remove(key);
+			});
 		}
 
 	}
@@ -624,6 +846,43 @@ public class DirectoryWatcher {
 		} catch ( InterruptedException e ) {
 			return null;
 		}
+	}
+
+	/**
+	 * Contains the information about entry create, delete or modify occurred
+	 * to a watched directory.
+	 *
+	 * @author claudio.rosati@esss.se
+	 */
+	@SuppressWarnings( "PublicInnerClass" )
+	public static class DirectoryEvent {
+
+		private final List<WatchEvent<?>> events;
+		private final Path watchedPath;
+
+		private DirectoryEvent( Path watchedPath, List<WatchEvent<?>> events ) {
+			this.watchedPath = watchedPath;
+			this.events = Collections.unmodifiableList(new ArrayList<>(events));
+		}
+
+		/**
+		 * @return A {@link List} of the {@link WatchEvent}s occurred to the
+		 *         watched path.
+		 */
+		@SuppressWarnings( "ReturnOfCollectionOrArrayField" )
+		public List<WatchEvent<?>> getEvents() {
+			return events;
+		}
+
+		/**
+		 * @return The watched {@link Path}. It corresponds to what returned by
+		 * the {@link WatchKey#watchable()} method.
+		 */
+		public Path getWatchedPath() {
+			return watchedPath;
+		}
+
+
 	}
 
 }

@@ -97,7 +97,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.0.1</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -114,6 +114,7 @@
 					of the plugin will be release. 3.0.0 has problem with Java 10
 					because of an old dependency on commons-lang3.
 				-->
+			<!--
 				<dependencies>
 					<dependency>
 						<groupId>org.apache.commons</groupId>
@@ -122,6 +123,7 @@
 						<scope>compile</scope>
 					</dependency>
 				</dependencies>
+			-->
 				<!-- ======================================================= -->
             </plugin>
             <plugin>

@@ -246,7 +246,11 @@ public class DefaultExecutorCompletionStage<T> implements CompletionStage<T> {
 
 	@Override
 	public CompletableFuture<T> toCompletableFuture() {
-		throw new UnsupportedOperationException();
+		if ( original instanceof CompletableFuture ) {
+			return (CompletableFuture<T>) original;
+		} else {
+			throw new UnsupportedOperationException();
+		}
 	}
 
 	@Override

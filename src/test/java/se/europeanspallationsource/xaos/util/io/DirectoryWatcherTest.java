@@ -25,7 +25,6 @@ import java.nio.file.NotDirectoryException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardWatchEventKinds;
-import java.nio.file.WatchKey;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -434,14 +433,14 @@ public class DirectoryWatcherTest {
 	}
 
 	/**
-	 * Test of getErrorsStream method, of class DirectoryWatcher.
+	 * Test of errors method, of class DirectoryWatcher.
 	 *
 	 * @throws java.io.IOException
 	 */
 	@Test
-	public void testGetErrorsStream() throws IOException {
+	public void testErrors() throws IOException {
 
-		System.out.println("  Testing 'getErrorsStream'...");
+		System.out.println("  Testing 'errors'...");
 
 		DirectoryWatcher watcher = create(executor);
 		EventStream<Throwable> errorsStream = watcher.errors();
@@ -453,19 +452,19 @@ public class DirectoryWatcherTest {
 	}
 
 	/**
-	 * Test of getSignalledKeysStream method, of class DirectoryWatcher.
+	 * Test of events method, of class DirectoryWatcher.
 	 *
 	 * @throws java.io.IOException
 	 */
 	@Test
-	public void testGetSignalledKeysStream() throws IOException {
+	public void testEvents() throws IOException {
 
-		System.out.println("  Testing 'getSignalledKeysStream'...");
+		System.out.println("  Testing 'events'...");
 
 		DirectoryWatcher watcher = create(executor);
-		EventStream<WatchKey> signalledKeysStream = watcher.signalledKeys();
+		EventStream<DirectoryWatcher.DirectoryEvent> event = watcher.events();
 
-		assertNotNull(signalledKeysStream);
+		assertNotNull(event);
 
 		watcher.shutdown();
 
@@ -488,6 +487,97 @@ public class DirectoryWatcherTest {
 		watcher.shutdown();
 
 		assertTrue(watcher.isShutdown());
+
+	}
+
+	/**
+	 * Test of isShutdownComplete method, of class DirectoryWatcher.
+	 *
+	 * @throws java.io.IOException
+	 */
+	@Test
+	public void testIsShutdownComplete() throws IOException {
+
+		System.out.println("  Testing 'isShutdownComplete'...");
+
+		DirectoryWatcher watcher = create(executor);
+
+		assertFalse(watcher.isShutdown());
+		assertFalse(watcher.isShutdownComplete());
+
+		watcher.shutdown();
+
+		assertFalse(watcher.isShutdownComplete());
+		assertTrue(watcher.isShutdown());
+
+		long startTime = System.currentTimeMillis();
+		long currentTime = startTime;
+
+		while ( !watcher.isShutdownComplete() && startTime + 60000L > currentTime ) {
+			currentTime = System.currentTimeMillis();
+		}
+
+		assertTrue(watcher.isShutdownComplete());
+
+	}
+
+	/**
+	 * Test of isWatched method, of class DirectoryWatcher.
+	 *
+	 * @throws java.io.IOException
+	 * @throws java.lang.InterruptedException
+	 */
+	@Test
+	@SuppressWarnings( "CallToThreadYield" )
+	public void testIsWatched() throws IOException, InterruptedException {
+
+		System.out.println(MessageFormat.format("  Testing ''isWatched'' [on {0}]...", root));
+
+		DirectoryWatcher watcher = create(executor);
+
+		watcher.watch(dir_a);
+		assertTrue(watcher.isWatched(dir_a));
+
+		watcher.watch(dir_a_c);
+		assertTrue(watcher.isWatched(dir_a_c));
+
+		watcher.watch(dir_b);
+		assertTrue(watcher.isWatched(dir_b));
+
+		CountDownLatch latch = new CountDownLatch(1);
+
+		watcher.events().subscribe(event -> {
+			event.getEvents().stream().forEach(e -> {
+				if ( StandardWatchEventKinds.ENTRY_DELETE.equals(e.kind()) ) {
+					System.out.println("    Path deleted: " + e.context());
+					if ( dir_a_c.equals(event.getWatchedPath().resolve((Path) e.context())) ) {
+						latch.countDown();
+					}
+				}
+			});
+		});
+
+		Files.walkFileTree(dir_a_c, new DeleteFileVisitor());
+
+		if ( !latch.await(1, TimeUnit.MINUTES) ) {
+			fail("File deletion not signalled in 1 minute.");
+		}
+
+		assertFalse(watcher.isWatched(dir_a_c));
+
+		watcher.delete(
+			dir_a,
+			success -> assertFalse(watcher.isWatched(dir_a)),
+			null
+		);
+
+		watcher.shutdown();
+
+		while ( !watcher.isShutdownComplete() ) {
+			Thread.yield();
+		}
+
+		assertFalse(watcher.isWatched(dir_b));
 
 	}
 
@@ -829,6 +919,68 @@ public class DirectoryWatcherTest {
 
 		watcher.shutdown();
 
+	}
+
+	/**
+	 * Test of unwatch method, of class DirectoryWatcher.
+	 *
+	 * @throws java.io.IOException
+	 */
+	@Test
+	public void testUnwatch() throws IOException {
+
+		System.out.println(MessageFormat.format("  Testing ''unwatch'' [on {0}]...", root));
+
+		DirectoryWatcher watcher = create(executor);
+
+		watcher.watch(dir_a);
+		assertTrue(watcher.isWatched(dir_a));
+
+		watcher.watch(dir_a_c);
+		assertTrue(watcher.isWatched(dir_a_c));
+
+		watcher.watch(dir_b);
+		assertTrue(watcher.isWatched(dir_b));
+
+		watcher.unwatch(dir_a);
+		assertFalse(watcher.isWatched(dir_a));
+
+		watcher.unwatch(dir_a_c);
+		assertFalse(watcher.isWatched(dir_a_c));
+
+		watcher.unwatch(dir_b);
+		assertFalse(watcher.isWatched(dir_b));
+
+		watcher.shutdown();
+
+	}
+
+	/**
+	 * Test of watchUp and unwatchUp methods, of class DirectoryWatcher.
+	 *
+	 * @throws java.io.IOException
+	 */
+	@Test
+	public void testWatchUpAndUnwatchUp() throws IOException {
+
+		System.out.println(MessageFormat.format("  Testing ''watchUp'' and ''unwatchUp'' [on {0}]...", root));
+
+		DirectoryWatcher watcher = create(executor);
+
+		watcher.watchUp(dir_a_c, root);
+		assertTrue(watcher.isWatched(dir_a));
+		assertTrue(watcher.isWatched(dir_a_c));
+		assertFalse(watcher.isWatched(root));
+
+		watcher.watch(root);
+		assertTrue(watcher.isWatched(root));
+
+		watcher.unwatchUp(dir_a_c, root);
+		assertFalse(watcher.isWatched(dir_a));
+		assertFalse(watcher.isWatched(dir_a_c));
+		assertTrue(watcher.isWatched(root));
+
+		watcher.shutdown();
 
 	}
 
@@ -848,17 +1000,19 @@ public class DirectoryWatcherTest {
 		CountDownLatch modifyLatch = new CountDownLatch(1);
 		DirectoryWatcher watcher = create(executor);
 
-		watcher.signalledKeys().subscribe(key -> {
-			key.pollEvents().stream().forEach(e -> {
+		watcher.events().subscribe(event -> {
+			event.getEvents().stream().forEach(e -> {
 				if ( StandardWatchEventKinds.ENTRY_CREATE.equals(e.kind()) ) {
+					System.out.println("    File created: " + e.context());
 					createLatch.countDown();
 				} else if ( StandardWatchEventKinds.ENTRY_DELETE.equals(e.kind()) ) {
+					System.out.println("    File deleted: " + e.context());
 					deleteLatch.countDown();
 				} else if ( StandardWatchEventKinds.ENTRY_MODIFY.equals(e.kind()) ) {
+					System.out.println("    File modified: " + e.context());
 					modifyLatch.countDown();
 				}
 			});
-			key.reset();
 		});
 
 		watcher.watch(root);

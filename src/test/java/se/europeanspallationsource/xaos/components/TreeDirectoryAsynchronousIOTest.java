@@ -17,14 +17,23 @@ package se.europeanspallationsource.xaos.components;
 
 
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.MessageFormat;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import se.europeanspallationsource.xaos.util.io.DeleteFileVisitor;
+import se.europeanspallationsource.xaos.util.io.DirectoryWatcher;
+
+import static org.junit.Assert.assertTrue;
+import static se.europeanspallationsource.xaos.util.io.DirectoryWatcher.create;
 
 
 /**
@@ -95,9 +104,38 @@ public class TreeDirectoryAsynchronousIOTest {
 
 	/**
 	 * Test of createDirectory method, of class TreeDirectoryAsynchronousIO.
+	 *
+	 * @throws java.io.IOException
+	 * @throws java.lang.InterruptedException
+	 * @throws java.util.concurrent.ExecutionException
 	 */
 	@Test
-	public void testCreateDirectory() {
+	public void testCreateDirectory() throws IOException, InterruptedException, ExecutionException {
+
+		System.out.println(MessageFormat.format("  Testing ''createDirectory'' [on {0}]...", root));
+
+		DirectoryWatcher watcher = create(executor);
+		TreeDirectoryModel<TreeDirectoryAsynchronousIOTest, String> model = new TreeDirectoryModel<>(
+			this,
+			s -> Paths.get(s),
+			p -> p != null ? p.toString() : null
+		);
+		TreeDirectoryAsynchronousIO<TreeDirectoryAsynchronousIOTest, String> treeDAIO = new TreeDirectoryAsynchronousIO<>(
+			watcher,
+			model,
+			executor
+		);
+		Path toBeCreated = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_z");
+
+		model.addTopLevelDirectory(dir_a);
+
+		CompletionStage<Void> stage = treeDAIO.createDirectory(toBeCreated, this);
+
+		stage.toCompletableFuture().get();
+
+		assertTrue(Files.exists(toBeCreated));
+		assertTrue(Files.isDirectory(toBeCreated));
+
 	}
 
 	/**
