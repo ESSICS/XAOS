@@ -153,6 +153,7 @@ public class DirectoryWatcherTest {
 				assertNotNull(p);
 				assertTrue(Files.exists(p));
 				assertTrue(Files.isDirectory(p));
+				assertEquals(toBeCreated, p);
 				latch.countDown();
 			},
 			e -> {
@@ -205,6 +206,7 @@ public class DirectoryWatcherTest {
 				assertNotNull(p);
 				assertTrue(Files.exists(p));
 				assertTrue(Files.isDirectory(p));
+				assertEquals(toBeCreated, p);
 				latch.countDown();
 			},
 			e -> {
@@ -956,35 +958,6 @@ public class DirectoryWatcherTest {
 	}
 
 	/**
-	 * Test of watchUp and unwatchUp methods, of class DirectoryWatcher.
-	 *
-	 * @throws java.io.IOException
-	 */
-	@Test
-	public void testWatchUpAndUnwatchUp() throws IOException {
-
-		System.out.println(MessageFormat.format("  Testing ''watchUp'' and ''unwatchUp'' [on {0}]...", root));
-
-		DirectoryWatcher watcher = create(executor);
-
-		watcher.watchUp(dir_a_c, root);
-		assertTrue(watcher.isWatched(dir_a));
-		assertTrue(watcher.isWatched(dir_a_c));
-		assertFalse(watcher.isWatched(root));
-
-		watcher.watch(root);
-		assertTrue(watcher.isWatched(root));
-
-		watcher.unwatchUp(dir_a_c, root);
-		assertFalse(watcher.isWatched(dir_a));
-		assertFalse(watcher.isWatched(dir_a_c));
-		assertTrue(watcher.isWatched(root));
-
-		watcher.shutdown();
-
-	}
-
-	/**
 	 * Test of watch method, of class DirectoryWatcher.
 	 *
 	 * @throws java.io.IOException
@@ -1064,6 +1037,35 @@ public class DirectoryWatcherTest {
 		if ( !errorLatch.await(1, TimeUnit.MINUTES) ) {
 			fail("File deletion not signalled in 1 minute.");
 		}
+
+		watcher.shutdown();
+
+	}
+
+	/**
+	 * Test of watchUp and unwatchUp methods, of class DirectoryWatcher.
+	 *
+	 * @throws java.io.IOException
+	 */
+	@Test
+	public void testWatchUpAndUnwatchUp() throws IOException {
+
+		System.out.println(MessageFormat.format("  Testing ''watchUp'' and ''unwatchUp'' [on {0}]...", root));
+
+		DirectoryWatcher watcher = create(executor);
+
+		watcher.watchUp(dir_a_c, root);
+		assertTrue(watcher.isWatched(dir_a));
+		assertTrue(watcher.isWatched(dir_a_c));
+		assertFalse(watcher.isWatched(root));
+
+		watcher.watch(root);
+		assertTrue(watcher.isWatched(root));
+
+		watcher.unwatchUp(dir_a_c, root);
+		assertFalse(watcher.isWatched(dir_a));
+		assertFalse(watcher.isWatched(dir_a_c));
+		assertTrue(watcher.isWatched(root));
 
 		watcher.shutdown();
 

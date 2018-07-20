@@ -17,6 +17,7 @@ package se.europeanspallationsource.xaos.components;
 
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.attribute.FileTime;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -119,7 +120,7 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	}
 
 	/**
-	 * Add a no-top-lever directory to the model.
+	 * Add a no-top-level directory to the model.
 	 *
 	 * @param directory The {@link Path} to be added as a directory.
 	 * @param initiator The initiator of changes to the model.
@@ -129,7 +130,22 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 
 			Path relativePath = ancestor.getPath().relativize(directory);
 
-			ancestor.addDirectory(relativePath, initiator);
+			Path progressivePath = null;
+
+			for ( int i = 0; i < relativePath.getNameCount(); i++ ) {
+
+				if ( progressivePath == null ) {
+					progressivePath = relativePath.getName(i);
+				} else {
+					progressivePath = Paths.get(
+						progressivePath.toString(),
+						relativePath.getName(i).toString()
+					);
+				}
+
+				ancestor.addDirectory(progressivePath, initiator);
+
+			}
 
 		});
 	}
@@ -163,6 +179,12 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 
 	/**
 	 * Add a top-lever directory to the model.
+	 * <p>
+	 * <b>Note:</b> The model is not synchronized automatically with the
+	 * given {@code directory}. An explicit call to
+	 * {@link #sync(se.europeanspallationsource.xaos.util.io.PathElement)}, or
+	 * {@link #sync(se.europeanspallationsource.xaos.util.io.PathElement, java.lang.Object)}
+	 * has to be performed if synchronization is required.</p>
 	 *
 	 * @param directory The {@link Path} to be added as a top-level directory.
 	 */
