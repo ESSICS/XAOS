@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.impl.annotation;
+package se.europeanspallationsource.xaos.annotation.impl;
 
 
 import org.junit.runner.RunWith;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.components;
+package se.europeanspallationsource.xaos.components.tree;
 
 
 import java.io.IOException;
@@ -28,7 +28,7 @@ import javafx.scene.control.TreeItem;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import se.europeanspallationsource.xaos.components.TreeDirectoryItems.FileItem;
+import se.europeanspallationsource.xaos.components.tree.TreeDirectoryItems.FileItem;
 import se.europeanspallationsource.xaos.util.io.DeleteFileVisitor;
 
 import static java.nio.file.attribute.FileTime.from;

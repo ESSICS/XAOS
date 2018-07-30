@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.components;
+package se.europeanspallationsource.xaos.components.tree;
 
 
 import java.io.IOException;
@@ -33,10 +33,10 @@ import se.europeanspallationsource.xaos.util.io.PathElement;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
-import static se.europeanspallationsource.xaos.components.TreeDirectoryItems.createDirectoryItem;
-import static se.europeanspallationsource.xaos.components.TreeDirectoryItems.createFileItem;
-import static se.europeanspallationsource.xaos.components.TreeDirectoryItems.createTopLevelDirectoryItem;
-import static se.europeanspallationsource.xaos.components.TreeDirectoryModel.DEFAULT_GRAPHIC_FACTORY;
+import static se.europeanspallationsource.xaos.components.tree.TreeDirectoryItems.createDirectoryItem;
+import static se.europeanspallationsource.xaos.components.tree.TreeDirectoryItems.createFileItem;
+import static se.europeanspallationsource.xaos.components.tree.TreeDirectoryItems.createTopLevelDirectoryItem;
+import static se.europeanspallationsource.xaos.components.tree.TreeDirectoryModel.DEFAULT_GRAPHIC_FACTORY;
 import static se.europeanspallationsource.xaos.util.io.PathElement.file;
 import static se.europeanspallationsource.xaos.util.io.PathElement.tree;
 

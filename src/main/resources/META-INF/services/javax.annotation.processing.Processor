@@ -14,4 +14,4 @@
 #
 # @author claudio.rosati@esss.se
 
-se.europeanspallationsource.xaos.impl.annotation.ServiceProviderProcessor
+se.europeanspallationsource.xaos.annotation.impl.ServiceProviderProcessor

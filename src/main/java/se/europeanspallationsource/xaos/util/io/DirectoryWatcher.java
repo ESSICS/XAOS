@@ -63,10 +63,10 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
  * <p>
  * Usage:</p>
  * <pre>
- *   ExecutorService executor = Executors.newSingleThreadExecutor();
- *   DirectoryWatcher watcher = create(executor);
- *
- *   watcher.errors().subscribe(event -&gt; {
+   ExecutorService executor = Executors.newSingleThreadExecutor();
+   DirectoryWatcher watcher = build(executor);
+
+   watcher.errors().subscribe(event -&gt; {
  *     event.getEvents().stream().forEach(e -&gt; {
  *       if ( StandardWatchEventKinds.ENTRY_CREATE.equals(e.kind()) ) {
  *         ...
@@ -96,7 +96,7 @@ public class DirectoryWatcher {
 	 * @return A newly created {@link DirectoryWatcher} instance.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	public static DirectoryWatcher create( Executor eventThreadExecutor ) throws IOException {
+	public static DirectoryWatcher build( Executor eventThreadExecutor ) throws IOException {
 		return new DirectoryWatcher(eventThreadExecutor);
 	}
 
@@ -174,7 +174,7 @@ public class DirectoryWatcher {
 	 * will be called to actually create the file.
 	 * </p><p>
 	 * <b>Note:</b> the operation is executed by the {@link Executor} passed
-	 * to the {@link #create(java.util.concurrent.Executor)} method, i.e. in a
+	 * to the {@link #build(java.util.concurrent.Executor)} method, i.e. in a
 	 * different thread from the caller's one.
 	 * </p>
 	 *
@@ -212,7 +212,7 @@ public class DirectoryWatcher {
 	 * delete the file or empty directory.
 	 * </p><p>
 	 * <b>Note:</b> the operation is executed by the {@link Executor} passed
-	 * to the {@link #create(java.util.concurrent.Executor)} method, i.e. in a
+	 * to the {@link #build(java.util.concurrent.Executor)} method, i.e. in a
 	 * different thread from the caller's one.
 	 * </p>
 	 *
@@ -323,7 +323,7 @@ public class DirectoryWatcher {
 	 * read the file.
 	 * </p><p>
 	 * <b>Note:</b> the operation is executed by the {@link Executor} passed
-	 * to the {@link #create(java.util.concurrent.Executor)} method, i.e. in a
+	 * to the {@link #build(java.util.concurrent.Executor)} method, i.e. in a
 	 * different thread from the caller's one.
 	 * </p>
 	 *
@@ -348,7 +348,7 @@ public class DirectoryWatcher {
 	 * read the file.
 	 * </p><p>
 	 * <b>Note:</b> the operation is executed by the {@link Executor} passed
-	 * to the {@link #create(java.util.concurrent.Executor)} method, i.e. in a
+	 * to the {@link #build(java.util.concurrent.Executor)} method, i.e. in a
 	 * different thread from the caller's one.
 	 * </p>
 	 *
@@ -603,7 +603,7 @@ public class DirectoryWatcher {
 	 * will be called to actually write the file.
 	 * </p><p>
 	 * <b>Note:</b> the operation is executed by the {@link Executor} passed
-	 * to the {@link #create(java.util.concurrent.Executor)} method, i.e. in a
+	 * to the {@link #build(java.util.concurrent.Executor)} method, i.e. in a
 	 * different thread from the caller's one.
 	 * </p>
 	 *
@@ -640,7 +640,7 @@ public class DirectoryWatcher {
 	 * will be called to actually write the file.
 	 * </p><p>
 	 * <b>Note:</b> the operation is executed by the {@link Executor} passed
-	 * to the {@link #create(java.util.concurrent.Executor)} method, i.e. in a
+	 * to the {@link #build(java.util.concurrent.Executor)} method, i.e. in a
 	 * different thread from the caller's one.
 	 * </p>
 	 *
@@ -748,22 +748,23 @@ public class DirectoryWatcher {
 
 			if ( key != null ) {
 
-				DirectoryEvent event = new DirectoryEvent((Path) key.watchable(), key.pollEvents());
+				Path watchedPath = (Path) key.watchable();
+				List<WatchEvent<?>> polledEvents = key.pollEvents();
+				boolean reset = key.reset();
+				DirectoryEvent event = new DirectoryEvent(watchedPath, polledEvents, reset);
 
 				event.getEvents().stream().forEach(e -> {
 					if ( StandardWatchEventKinds.ENTRY_DELETE.equals(e.kind()) ) {
 
-						Path parent = (Path) key.watchable();
-						Path child = parent.resolve((Path) e.context());
+						Path child = watchedPath.resolve((Path) e.context());
 
-						if ( child != null && !parent.equals(child) ) {
+						if ( child != null && !watchedPath.equals(child) ) {
 							removeWatcherKey(child);
 						}
 
 					}
 				});
 
-				key.reset();
 				emitEvent(event);
 
 			} else if ( isShutdown() ) {
@@ -858,11 +859,13 @@ public class DirectoryWatcher {
 	public static class DirectoryEvent {
 
 		private final List<WatchEvent<?>> events;
+		private final boolean reset;
 		private final Path watchedPath;
 
-		private DirectoryEvent( Path watchedPath, List<WatchEvent<?>> events ) {
+		private DirectoryEvent( Path watchedPath, List<WatchEvent<?>> events, boolean reset ) {
 			this.watchedPath = watchedPath;
 			this.events = Collections.unmodifiableList(new ArrayList<>(events));
+			this.reset = reset;
 		}
 
 		/**
@@ -882,6 +885,13 @@ public class DirectoryWatcher {
 			return watchedPath;
 		}
 
+		/**
+		 * @return {@code true} if the {@link WatchKey} that generated this event
+		 *         was successfully reset.
+		 */
+		public boolean wasReset() {
+			return reset;
+		}
 
 	}
 

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.components;
+package se.europeanspallationsource.xaos.components.tree;
 
 
 import java.io.IOException;
@@ -44,7 +44,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static se.europeanspallationsource.xaos.util.io.DirectoryWatcher.create;
+import static se.europeanspallationsource.xaos.util.io.DirectoryWatcher.build;
 import static se.europeanspallationsource.xaos.util.io.PathElement.tree;
 
 
@@ -120,7 +120,7 @@ public class TreeDirectoryAsynchronousIOTest {
 
 		System.out.println(MessageFormat.format("  Testing ''createDirectories'' [on {0}]...", root));
 
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 		TreeDirectoryModel<TreeDirectoryAsynchronousIOTest, String> model = new TreeDirectoryModel<>(
 			this,
 			s -> Paths.get(s),
@@ -172,7 +172,7 @@ public class TreeDirectoryAsynchronousIOTest {
 
 		System.out.println(MessageFormat.format("  Testing ''createDirectory'' [on {0}]...", root));
 
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 		TreeDirectoryModel<TreeDirectoryAsynchronousIOTest, String> model = new TreeDirectoryModel<>(
 			this,
 			s -> Paths.get(s),
@@ -235,7 +235,7 @@ public class TreeDirectoryAsynchronousIOTest {
 
 		System.out.println(MessageFormat.format("  Testing ''createFile'' [on {0}]...", root));
 
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 		TreeDirectoryModel<TreeDirectoryAsynchronousIOTest, String> model = new TreeDirectoryModel<>(
 			this,
 			s -> Paths.get(s),
@@ -288,7 +288,7 @@ public class TreeDirectoryAsynchronousIOTest {
 
 		System.out.println(MessageFormat.format("  Testing ''delete'' [on {0}]...", root));
 
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 		TreeDirectoryModel<TreeDirectoryAsynchronousIOTest, String> model = new TreeDirectoryModel<>(
 			this,
 			s -> Paths.get(s),
@@ -350,7 +350,7 @@ public class TreeDirectoryAsynchronousIOTest {
 
 		System.out.println(MessageFormat.format("  Testing ''deleteTree'' [on {0}]...", root));
 
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 		TreeDirectoryModel<TreeDirectoryAsynchronousIOTest, String> model = new TreeDirectoryModel<>(
 			this,
 			s -> Paths.get(s),
@@ -397,7 +397,7 @@ public class TreeDirectoryAsynchronousIOTest {
 
 		System.out.println(MessageFormat.format("  Testing ''readBinaryFile'' [on {0}]...", root));
 
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 		TreeDirectoryModel<TreeDirectoryAsynchronousIOTest, String> model = new TreeDirectoryModel<>(
 			this,
 			s -> Paths.get(s),
@@ -451,7 +451,7 @@ public class TreeDirectoryAsynchronousIOTest {
 
 		System.out.println(MessageFormat.format("  Testing ''readTextFile'' [on {0}]...", root));
 
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 		TreeDirectoryModel<TreeDirectoryAsynchronousIOTest, String> model = new TreeDirectoryModel<>(
 			this,
 			s -> Paths.get(s),
@@ -505,7 +505,7 @@ public class TreeDirectoryAsynchronousIOTest {
 
 		System.out.println(MessageFormat.format("  Testing ''writeBinaryFile'' [on {0}]...", root));
 
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 		TreeDirectoryModel<TreeDirectoryAsynchronousIOTest, String> model = new TreeDirectoryModel<>(
 			this,
 			s -> Paths.get(s),
@@ -546,7 +546,7 @@ public class TreeDirectoryAsynchronousIOTest {
 
 		System.out.println(MessageFormat.format("  Testing ''writeBinaryFile'' [on {0}]...", root));
 
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 		TreeDirectoryModel<TreeDirectoryAsynchronousIOTest, String> model = new TreeDirectoryModel<>(
 			this,
 			s -> Paths.get(s),

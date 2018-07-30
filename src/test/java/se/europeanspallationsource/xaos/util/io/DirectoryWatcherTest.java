@@ -51,7 +51,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static se.europeanspallationsource.xaos.util.io.DirectoryWatcher.create;
+import static se.europeanspallationsource.xaos.util.io.DirectoryWatcher.build;
 
 
 /**
@@ -114,7 +114,7 @@ public class DirectoryWatcherTest {
 	}
 
 	/**
-	 * Test of create method, of class DirectoryWatcher.
+	 * Test of build method, of class DirectoryWatcher.
 	 *
 	 * @throws java.io.IOException
 	 */
@@ -123,7 +123,7 @@ public class DirectoryWatcherTest {
 
 		System.out.println("  Testing 'create'...");
 
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 
 		assertNotNull(watcher);
 		assertFalse(watcher.isShutdown());
@@ -144,7 +144,7 @@ public class DirectoryWatcherTest {
 		System.out.println(MessageFormat.format("  Testing ''createDirectories'' [on {0}]...", root));
 
 		CountDownLatch latch = new CountDownLatch(2);
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 		Path toBeCreated = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_x", "dir_a_y", "dir_a_z");
 
 		watcher.createDirectories(
@@ -197,7 +197,7 @@ public class DirectoryWatcherTest {
 		System.out.println(MessageFormat.format("  Testing ''createDirectory'' [on {0}]...", root));
 
 		CountDownLatch latch = new CountDownLatch(3);
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 		Path toBeCreated = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_z");
 
 		watcher.createDirectory(
@@ -265,7 +265,7 @@ public class DirectoryWatcherTest {
 		System.out.println(MessageFormat.format("  Testing ''createFile'' [on {0}]...", root));
 
 		CountDownLatch latch = new CountDownLatch(2);
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 		Path toBeCreated = FileSystems.getDefault().getPath(dir_a.toString(), "created_file.txt");
 
 		watcher.createFile(
@@ -315,7 +315,7 @@ public class DirectoryWatcherTest {
 		System.out.println(MessageFormat.format("  Testing ''delete'' [on {0}]...", root));
 
 		CountDownLatch latch = new CountDownLatch(5);
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 
 		watcher.delete(
 			file_b2,
@@ -398,7 +398,7 @@ public class DirectoryWatcherTest {
 		System.out.println(MessageFormat.format("  Testing ''deleteTree'' [on {0}]...", root));
 
 		CountDownLatch latch = new CountDownLatch(2);
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 
 		watcher.deleteTree(
 			dir_a,
@@ -444,7 +444,7 @@ public class DirectoryWatcherTest {
 
 		System.out.println("  Testing 'errors'...");
 
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 		EventStream<Throwable> errorsStream = watcher.errors();
 
 		assertNotNull(errorsStream);
@@ -463,7 +463,7 @@ public class DirectoryWatcherTest {
 
 		System.out.println("  Testing 'events'...");
 
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 		EventStream<DirectoryWatcher.DirectoryEvent> event = watcher.events();
 
 		assertNotNull(event);
@@ -482,7 +482,7 @@ public class DirectoryWatcherTest {
 
 		System.out.println("  Testing 'isShutdown'...");
 
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 
 		assertFalse(watcher.isShutdown());
 
@@ -502,7 +502,7 @@ public class DirectoryWatcherTest {
 
 		System.out.println("  Testing 'isShutdownComplete'...");
 
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 
 		assertFalse(watcher.isShutdown());
 		assertFalse(watcher.isShutdownComplete());
@@ -535,7 +535,7 @@ public class DirectoryWatcherTest {
 
 		System.out.println(MessageFormat.format("  Testing ''isWatched'' [on {0}]...", root));
 
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 
 		watcher.watch(dir_a);
 		assertTrue(watcher.isWatched(dir_a));
@@ -596,7 +596,7 @@ public class DirectoryWatcherTest {
 
 		byte[] content = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x03, 0x02, 0x01, 0x00 };
 		CountDownLatch latch = new CountDownLatch(2);
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 
 		Files.write(file_b1, content);
 
@@ -649,7 +649,7 @@ public class DirectoryWatcherTest {
 		String content = "First line of text.\nSecond line of text.";
 		Charset charset = defaultCharset();
 		CountDownLatch latch = new CountDownLatch(2);
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 
 		Files.write(file_b1, content.getBytes(charset), CREATE, WRITE, TRUNCATE_EXISTING);
 
@@ -703,7 +703,7 @@ public class DirectoryWatcherTest {
 
 		byte[] content = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x03, 0x02, 0x01, 0x00 };
 		CountDownLatch latch = new CountDownLatch(2);
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 		Path readWriteFile = FileSystems.getDefault().getPath(dir_a.toString(), "created_file.txt");
 
 		watcher.writeBinaryFile(
@@ -752,7 +752,7 @@ public class DirectoryWatcherTest {
 		String content = "First line of text.\nSecond line of text.";
 		Charset charset = defaultCharset();
 		CountDownLatch latch = new CountDownLatch(2);
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 		Path readWriteFile = FileSystems.getDefault().getPath(dir_a.toString(), "created_file.txt");
 
 		watcher.writeTextFile(
@@ -799,7 +799,7 @@ public class DirectoryWatcherTest {
 
 		System.out.println("  Testing 'shutdown'...");
 
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 
 		assertFalse(watcher.isShutdown());
 
@@ -839,7 +839,7 @@ public class DirectoryWatcherTest {
 
 		System.out.println(MessageFormat.format("  Testing ''tree'' [on {0}]...", root));
 
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 		CompletableFuture<PathElement> future = watcher.tree(root);
 
 		assertNotNull(future);
@@ -933,7 +933,7 @@ public class DirectoryWatcherTest {
 
 		System.out.println(MessageFormat.format("  Testing ''unwatch'' [on {0}]...", root));
 
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 
 		watcher.watch(dir_a);
 		assertTrue(watcher.isWatched(dir_a));
@@ -971,7 +971,7 @@ public class DirectoryWatcherTest {
 		CountDownLatch createLatch = new CountDownLatch(1);
 		CountDownLatch deleteLatch = new CountDownLatch(1);
 		CountDownLatch modifyLatch = new CountDownLatch(1);
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 
 		watcher.events().subscribe(event -> {
 			event.getEvents().stream().forEach(e -> {
@@ -1024,7 +1024,7 @@ public class DirectoryWatcherTest {
 		System.out.println(MessageFormat.format("  Testing ''watchOrStreamError'' [on {0}]...", root));
 
 		CountDownLatch errorLatch = new CountDownLatch(1);
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 
 		watcher.errors().subscribe(throwable -> {
 			if ( throwable instanceof NotDirectoryException ) {
@@ -1052,7 +1052,7 @@ public class DirectoryWatcherTest {
 
 		System.out.println(MessageFormat.format("  Testing ''watchUp'' and ''unwatchUp'' [on {0}]...", root));
 
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 
 		watcher.watchUp(dir_a_c, root);
 		assertTrue(watcher.isWatched(dir_a));
@@ -1084,7 +1084,7 @@ public class DirectoryWatcherTest {
 
 		byte[] content = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x03, 0x02, 0x01, 0x00 };
 		CountDownLatch latch = new CountDownLatch(2);
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 		Path toBeCreated = FileSystems.getDefault().getPath(dir_a.toString(), "created_file.txt");
 
 		watcher.writeBinaryFile(
@@ -1140,7 +1140,7 @@ public class DirectoryWatcherTest {
 		String content = "First line of text.\nSecond line of text.";
 		Charset charset = defaultCharset();
 		CountDownLatch latch = new CountDownLatch(2);
-		DirectoryWatcher watcher = create(executor);
+		DirectoryWatcher watcher = build(executor);
 		Path toBeCreated = FileSystems.getDefault().getPath(dir_a.toString(), "created_file.txt");
 
 		watcher.writeTextFile(

@@ -36,7 +36,7 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author claudio.rosati@esss.se
  */
-class AttributesStackFrame {
+class SVGAttributesStackFrame {
 
 	static final String ATTR_CLASS = "class";
 	static final String ATTR_FILL = "fill";
@@ -50,7 +50,7 @@ class AttributesStackFrame {
 	static final String ATTR_STYLE = "style";
 	static final String ATTR_TRANSFORM = "transform";
 
-	private static final Logger LOGGER = Logger.getLogger(AttributesStackFrame.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(SVGAttributesStackFrame.class.getName());
 	private static final Set<String> SUPPORTED_ATTRIBUTES = new TreeSet<>(Arrays.asList(
 		ATTR_FILL,
 		ATTR_OPACITY,
@@ -103,7 +103,7 @@ class AttributesStackFrame {
 	 *
 	 * @param builder The current  {@link SVGContentBuilder}.
 	 */
-	AttributesStackFrame( SVGContentBuilder builder ) {
+	SVGAttributesStackFrame( SVGContentBuilder builder ) {
 		this.builder = builder;
 	}
 
@@ -159,9 +159,9 @@ class AttributesStackFrame {
 	 *         from this frame.
 	 */
 	@SuppressWarnings( "AccessingNonPublicFieldOfAnotherObject" )
-	AttributesStackFrame derive() {
+	SVGAttributesStackFrame derive() {
 
-		AttributesStackFrame inheritedFrame = new AttributesStackFrame(builder);
+		SVGAttributesStackFrame inheritedFrame = new SVGAttributesStackFrame(builder);
 
 		inheritedFrame.attributeValues.putAll(attributeValues);
 		attributeValues.keySet().forEach(a -> inheritedFrame.attributeInheritance.put(a, Boolean.FALSE));
@@ -184,9 +184,9 @@ class AttributesStackFrame {
 	 *         from this frame and/or populated from the given {@code element}.
 	 */
 	@SuppressWarnings( "AccessingNonPublicFieldOfAnotherObject" )
-	AttributesStackFrame deriveAndPopulate( StartElement element ) {
+	SVGAttributesStackFrame deriveAndPopulate( StartElement element ) {
 
-		AttributesStackFrame inheritedFrame = derive();
+		SVGAttributesStackFrame inheritedFrame = derive();
 
 		inheritedFrame.populate(element);
 

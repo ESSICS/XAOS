@@ -69,15 +69,15 @@ import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import org.apache.commons.lang3.StringUtils;
 
-import static se.europeanspallationsource.xaos.components.AttributesStackFrame.ATTR_FILL;
-import static se.europeanspallationsource.xaos.components.AttributesStackFrame.ATTR_ID;
-import static se.europeanspallationsource.xaos.components.AttributesStackFrame.ATTR_OPACITY;
-import static se.europeanspallationsource.xaos.components.AttributesStackFrame.ATTR_STROKE;
-import static se.europeanspallationsource.xaos.components.AttributesStackFrame.ATTR_STROKE_LINECAP;
-import static se.europeanspallationsource.xaos.components.AttributesStackFrame.ATTR_STROKE_LINEJOIN;
-import static se.europeanspallationsource.xaos.components.AttributesStackFrame.ATTR_STROKE_MITERLIMIT;
-import static se.europeanspallationsource.xaos.components.AttributesStackFrame.ATTR_STROKE_WIDTH;
-import static se.europeanspallationsource.xaos.components.AttributesStackFrame.ATTR_TRANSFORM;
+import static se.europeanspallationsource.xaos.components.SVGAttributesStackFrame.ATTR_FILL;
+import static se.europeanspallationsource.xaos.components.SVGAttributesStackFrame.ATTR_ID;
+import static se.europeanspallationsource.xaos.components.SVGAttributesStackFrame.ATTR_OPACITY;
+import static se.europeanspallationsource.xaos.components.SVGAttributesStackFrame.ATTR_STROKE;
+import static se.europeanspallationsource.xaos.components.SVGAttributesStackFrame.ATTR_STROKE_LINECAP;
+import static se.europeanspallationsource.xaos.components.SVGAttributesStackFrame.ATTR_STROKE_LINEJOIN;
+import static se.europeanspallationsource.xaos.components.SVGAttributesStackFrame.ATTR_STROKE_MITERLIMIT;
+import static se.europeanspallationsource.xaos.components.SVGAttributesStackFrame.ATTR_STROKE_WIDTH;
+import static se.europeanspallationsource.xaos.components.SVGAttributesStackFrame.ATTR_TRANSFORM;
 
 
 /**
@@ -92,7 +92,7 @@ class SVGContentBuilder {
 	private static final Logger LOGGER = Logger.getLogger(SVGContentBuilder.class.getName());
 	private static final String TYPE_KEY = "type";
 
-	private final Deque<AttributesStackFrame> attributesStack = new ArrayDeque<>(4);
+	private final Deque<SVGAttributesStackFrame> attributesStack = new ArrayDeque<>(4);
 	private final Map<String, Paint> gradients;
 	private final Map<String, QName> qnames = new TreeMap<>();
 	private final SVG root;
@@ -163,7 +163,7 @@ class SVGContentBuilder {
 		return styles;
 	}
 
-	private void applyStyles( Node node, AttributesStackFrame stackFrame ) {
+	private void applyStyles( Node node, SVGAttributesStackFrame stackFrame ) {
 
 		if ( node instanceof Shape ) {
 
@@ -243,7 +243,7 @@ class SVGContentBuilder {
 						break;
 					case "svg": {
 
-						AttributesStackFrame stackFrame = new AttributesStackFrame(this);
+						SVGAttributesStackFrame stackFrame = new SVGAttributesStackFrame(this);
 
 						attributesStack.push(stackFrame);
 						stackFrame.populate(element);
@@ -264,7 +264,7 @@ class SVGContentBuilder {
 
 				if ( node != null ) {
 
-					AttributesStackFrame stackFrame = attributesStack.peek();
+					SVGAttributesStackFrame stackFrame = attributesStack.peek();
 					String id = stackFrame.get(ATTR_ID);
 
 					if ( id != null ) {

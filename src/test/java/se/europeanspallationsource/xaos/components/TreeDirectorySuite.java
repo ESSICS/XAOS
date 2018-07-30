@@ -18,6 +18,9 @@ package se.europeanspallationsource.xaos.components;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import se.europeanspallationsource.xaos.components.tree.TreeDirectoryAsynchronousIOTest;
+import se.europeanspallationsource.xaos.components.tree.TreeDirectoryItemsTest;
+import se.europeanspallationsource.xaos.components.tree.TreeDirectoryModelTest;
 
 
 /**
