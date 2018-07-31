@@ -22,12 +22,15 @@ import java.nio.file.Path;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchEvent.Kind;
 import java.nio.file.WatchService;
+import java.nio.file.attribute.FileTime;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executor;
 import java.util.function.Function;
 import javafx.application.Platform;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import org.reactfx.EventSource;
 import org.reactfx.EventStream;
 import org.reactfx.EventStreams;
@@ -103,6 +106,7 @@ import static se.europeanspallationsource.xaos.util.DefaultExecutorCompletionSta
  * @author claudio.rosati@esss.se
  * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.LiveDirsIO</a>
  */
+@SuppressWarnings( "ClassWithoutLogger" )
 public class TreeDirectoryMonitor<I, T> {
 
     /**
@@ -169,8 +173,8 @@ public class TreeDirectoryMonitor<I, T> {
 	) throws IOException {
         return new TreeDirectoryMonitor<I, T>(
 			externalInitiator,
-			Function.identity(),
-			Function.identity(),
+			projector,
+			injector,
 			clientThreadExecutor
 		);
     }
@@ -314,7 +318,7 @@ public class TreeDirectoryMonitor<I, T> {
 			List<WatchEvent<?>> events = event.getEvents();
         
 			if ( events.stream().anyMatch(evt -> evt.kind() == OVERFLOW) ) {
-				refreshOrLogError(dir);
+				refreshOrStreamError(dir);
 			} else {
 				events.forEach(evt -> processEvent(dir, (WatchEvent<Path>) evt));
 			}
@@ -331,16 +335,38 @@ public class TreeDirectoryMonitor<I, T> {
 		//	Context for directory entry event is the file name of entry.
         Path relChild = event.context();
         Path child = dir.resolve(relChild);
-
         Kind<Path> kind = event.kind();
 
 		if ( kind == ENTRY_MODIFY ) {
-			handleModification(child, externalInitiator);
+			try {
+
+				FileTime timestamp = Files.getLastModifiedTime(child);
+
+				model.updateModificationTime(child, timestamp, externalInitiator);
+
+			} catch ( IOException ex ) {
+				localErrors.push(ex);
+			}
 		} else if ( kind == ENTRY_CREATE ) {
 			if ( Files.isDirectory(child) ) {
-				handleDirCreation(child, externalInitiator);
+
+				if ( model.containsPrefixOf(child) ) {
+					model.addDirectory(child, externalInitiator);
+					directoryWatcher.watchOrStreamError(child);
+				}
+
+				refreshOrStreamError(child);
+
 			} else {
-				handleFileCreation(child, externalInitiator);
+				try {
+
+					FileTime timestamp = Files.getLastModifiedTime(child);
+
+					model.addFile(child, timestamp, externalInitiator);
+
+				} catch ( IOException e ) {
+					localErrors.push(e);
+				}
 			}
 		} else if ( kind == ENTRY_DELETE ) {
 			model.delete(child, externalInitiator);
@@ -348,6 +374,14 @@ public class TreeDirectoryMonitor<I, T> {
 			throw new AssertionError("Unreachable code.");
 		}
 
+	}
+
+	private void refreshOrStreamError( Path path ) {
+		refresh(path).whenComplete(( nothing, ex ) -> {
+			if ( ex != null ) {
+				localErrors.push(ex);
+			}
+		});
 	}
 
 	private void watchDirectory( PathElement tree ) {
