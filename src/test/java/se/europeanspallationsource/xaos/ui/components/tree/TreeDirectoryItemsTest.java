@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.components.tree;
+package se.europeanspallationsource.xaos.ui.components.tree;
 
 
 import java.io.IOException;
@@ -26,6 +26,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import se.europeanspallationsource.xaos.util.io.DeleteFileVisitor;
 import se.europeanspallationsource.xaos.util.io.DirectoryModel;
@@ -33,10 +34,10 @@ import se.europeanspallationsource.xaos.util.io.PathElement;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
-import static se.europeanspallationsource.xaos.components.tree.TreeDirectoryItems.createDirectoryItem;
-import static se.europeanspallationsource.xaos.components.tree.TreeDirectoryItems.createFileItem;
-import static se.europeanspallationsource.xaos.components.tree.TreeDirectoryItems.createTopLevelDirectoryItem;
-import static se.europeanspallationsource.xaos.components.tree.TreeDirectoryModel.DEFAULT_GRAPHIC_FACTORY;
+import static se.europeanspallationsource.xaos.ui.components.tree.TreeDirectoryItems.createDirectoryItem;
+import static se.europeanspallationsource.xaos.ui.components.tree.TreeDirectoryItems.createFileItem;
+import static se.europeanspallationsource.xaos.ui.components.tree.TreeDirectoryItems.createTopLevelDirectoryItem;
+import static se.europeanspallationsource.xaos.ui.components.tree.TreeDirectoryModel.DEFAULT_GRAPHIC_FACTORY;
 import static se.europeanspallationsource.xaos.util.io.PathElement.file;
 import static se.europeanspallationsource.xaos.util.io.PathElement.tree;
 
@@ -46,6 +47,11 @@ import static se.europeanspallationsource.xaos.util.io.PathElement.tree;
  */
 @SuppressWarnings( { "ClassWithoutLogger", "UseOfSystemOutOrSystemErr" } )
 public class TreeDirectoryItemsTest {
+
+	@BeforeClass
+	public static void setUpClass() {
+		System.out.println("---- TreeDirectoryItemsTest ------------------------------------");
+	}
 
 	private Path dir_a;
 	private Path dir_a_c;

@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.MessageFormat;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -32,6 +33,11 @@ import static org.junit.Assert.assertTrue;
  */
 @SuppressWarnings({ "ClassWithoutLogger", "UseOfSystemOutOrSystemErr" })
 public class DeleteFileVisitorTest {
+
+	@BeforeClass
+	public static void setUpClass() {
+		System.out.println("---- DeleteFileVisitorTest -------------------------------------");
+	}
 
 	private Path dir_a;
 	private Path dir_a_c;

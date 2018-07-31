@@ -50,6 +50,8 @@ public class PathElementTest {
 	@BeforeClass
 	public static void setUpClass() throws IOException {
 
+		System.out.println("---- PathElementTest -------------------------------------------");
+
 		root = Files.createTempDirectory("PE_");
 			dir_a = Files.createTempDirectory(root, "PE_a_");
 				file_a = Files.createTempFile(dir_a, "PE_a_", ".test");

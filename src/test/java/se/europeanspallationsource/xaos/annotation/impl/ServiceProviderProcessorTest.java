@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import se.europeanspallationsource.xaos.annotation.ServiceLoaderUtilities;
 import se.europeanspallationsource.xaos.annotation.ServiceProvider;
@@ -33,11 +34,15 @@ import static org.junit.Assert.assertEquals;
 /**
  * @author claudio.rosati@esss.se
  */
-@SuppressWarnings( "ClassWithoutLogger" )
+@SuppressWarnings( { "ClassWithoutLogger", "UseOfSystemOutOrSystemErr" } )
 public class ServiceProviderProcessorTest {
 
+	@BeforeClass
+	public static void setUpClass() {
+		System.out.println("---- ServiceProviderProcessorTest ------------------------------");
+	}
+
 	@Test
-	@SuppressWarnings( "UseOfSystemOutOrSystemErr" )
 	public void testBasicUsage() {
 
 		System.out.println("  Basic Usage");
@@ -50,7 +55,6 @@ public class ServiceProviderProcessorTest {
 	}
 
 	@Test
-	@SuppressWarnings( "UseOfSystemOutOrSystemErr" )
     public void testMultipleRegistrations() throws Exception {
 
 		System.out.println("  Multiple Registrations Usage");
@@ -67,7 +71,7 @@ public class ServiceProviderProcessorTest {
 	}
 
 	@Test
-	@SuppressWarnings( { "UseOfSystemOutOrSystemErr", "NestedAssignment" } )
+	@SuppressWarnings("NestedAssignment")
 	public void testOrder() throws Exception {
 
 		System.out.println("  Order Usage");

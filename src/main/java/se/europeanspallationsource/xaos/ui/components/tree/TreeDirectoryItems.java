@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.components.tree;
+package se.europeanspallationsource.xaos.ui.components.tree;
 
 
 import java.nio.file.Path;
@@ -306,6 +306,7 @@ class TreeDirectoryItems {
 
 		public abstract boolean isDirectory();
 
+//	TODO:CR To be removed?
 //		@Override
 //		public final boolean isLeaf() {
 //			return !isDirectory();

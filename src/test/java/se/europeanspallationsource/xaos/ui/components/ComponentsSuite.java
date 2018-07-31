@@ -13,14 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.components;
+package se.europeanspallationsource.xaos.ui.components;
 
 
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import se.europeanspallationsource.xaos.ui.components.tree.TreeDirectoryAsynchronousIOTest;
+import se.europeanspallationsource.xaos.ui.components.tree.TreeDirectoryItemsTest;
+import se.europeanspallationsource.xaos.ui.components.tree.TreeDirectoryModelTest;
 
-import static se.europeanspallationsource.xaos.util.HeadlessUtility.conditionallyHeadless;
+import static se.europeanspallationsource.xaos.ui.HeadlessUtility.conditionallyHeadless;
 
 
 /**
@@ -28,13 +31,19 @@ import static se.europeanspallationsource.xaos.util.HeadlessUtility.conditionall
  */
 @RunWith( Suite.class )
 @Suite.SuiteClasses( {
+	//	TreeDirectory
+	TreeDirectoryAsynchronousIOTest.class,
+	TreeDirectoryItemsTest.class,
+	TreeDirectoryModelTest.class,
+	TreeDirectoryMonitorTest.class,
+	//	SVG
 	AtomTest.class,
 	GasCylinderTest.class,
 	SVGFromInputStreamTest.class,
 	SVGFromURLTest.class
 } )
 @SuppressWarnings( { "ClassMayBeInterface", "ClassWithoutLogger", "UtilityClassWithoutPrivateConstructor" } )
-public class SvgSuite {
+public class ComponentsSuite {
 
 	@BeforeClass
 	public static void setUpSuite() {

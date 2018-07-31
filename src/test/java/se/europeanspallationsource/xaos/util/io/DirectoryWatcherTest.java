@@ -37,6 +37,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.reactfx.EventStream;
 
@@ -59,6 +60,11 @@ import static se.europeanspallationsource.xaos.util.io.DirectoryWatcher.build;
  */
 @SuppressWarnings( { "ClassWithoutLogger", "UseOfSystemOutOrSystemErr" } )
 public class DirectoryWatcherTest {
+
+	@BeforeClass
+	public static void setUpClass() {
+		System.out.println("---- DirectoryWatcherTest --------------------------------------");
+	}
 
 	private Path dir_a;
 	private Path dir_a_c;

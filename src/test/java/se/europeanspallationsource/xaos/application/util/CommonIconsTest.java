@@ -17,10 +17,10 @@ package se.europeanspallationsource.xaos.application.util;
 
 
 import javafx.scene.paint.Color;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.kordamp.ikonli.fontawesome5.FontAwesomeRegular;
 import org.kordamp.ikonli.javafx.FontIcon;
-import se.europeanspallationsource.xaos.application.util.CommonIcons;
 
 import static org.junit.Assert.assertEquals;
 
@@ -31,6 +31,11 @@ import static org.junit.Assert.assertEquals;
  */
 @SuppressWarnings( { "UseOfSystemOutOrSystemErr", "ClassWithoutLogger" } )
 public class CommonIconsTest {
+
+	@BeforeClass
+	public static void setUpClass() {
+		System.out.println("---- CommonIconsTest -------------------------------------------");
+	}
 
 	/**
 	 * Test of get method, of class CommonIcons.

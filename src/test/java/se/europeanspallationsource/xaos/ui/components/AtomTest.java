@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.components;
+package se.europeanspallationsource.xaos.ui.components;
 
 
-import se.europeanspallationsource.xaos.components.SVG;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 import javafx.geometry.Bounds;
@@ -32,20 +31,25 @@ import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javax.xml.stream.XMLStreamException;
 import org.junit.After;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.testfx.assertions.api.Assertions.assertThat;
 
 
 /**
  * @author claudio.rosati@esss.se
  */
-@SuppressWarnings( "ClassWithoutLogger" )
+@SuppressWarnings( { "ClassWithoutLogger", "UseOfSystemOutOrSystemErr" } )
 public class AtomTest extends ApplicationTest {
 	
+	@BeforeClass
+	public static void setUpClass() {
+		System.out.println("---- AtomTest --------------------------------------------------");
+	}
+
 	private SVG svg;
 
 	@Override
@@ -72,6 +76,8 @@ public class AtomTest extends ApplicationTest {
 
 	@Test
 	public void testLoadSVG() {
+
+		System.out.println("  Testing ''load''...");
 
 		assertThat(svg).isExactlyInstanceOf(SVG.class);
 		assertThat(svg).hasExactlyNumChildren(1);

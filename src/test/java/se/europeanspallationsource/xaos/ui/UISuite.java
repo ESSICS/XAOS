@@ -13,14 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.components;
+package se.europeanspallationsource.xaos.ui;
 
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-import se.europeanspallationsource.xaos.components.tree.TreeDirectoryAsynchronousIOTest;
-import se.europeanspallationsource.xaos.components.tree.TreeDirectoryItemsTest;
-import se.europeanspallationsource.xaos.components.tree.TreeDirectoryModelTest;
 
 
 /**
@@ -28,11 +25,16 @@ import se.europeanspallationsource.xaos.components.tree.TreeDirectoryModelTest;
  */
 @RunWith( Suite.class )
 @Suite.SuiteClasses( {
-	TreeDirectoryAsynchronousIOTest.class,
-	TreeDirectoryItemsTest.class,
-	TreeDirectoryModelTest.class
+	HeadlessUtilityTest.class,
+	TreeItemsTest.class
 } )
 @SuppressWarnings( { "ClassMayBeInterface", "ClassWithoutLogger", "UtilityClassWithoutPrivateConstructor" } )
-public class TreeDirectorySuite {
+public class UISuite {
 
+//	TODO:CR Is it needed?
+//	@BeforeClass
+//	public static void setUpSuite() {
+//		conditionallyHeadless();
+//	}
+	
 }

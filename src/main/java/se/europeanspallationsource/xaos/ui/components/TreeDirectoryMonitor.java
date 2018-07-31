@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.components;
+package se.europeanspallationsource.xaos.ui.components;
 
 
 import java.io.IOException;
@@ -34,8 +34,8 @@ import javafx.scene.control.TreeView;
 import org.reactfx.EventSource;
 import org.reactfx.EventStream;
 import org.reactfx.EventStreams;
-import se.europeanspallationsource.xaos.components.tree.TreeDirectoryAsynchronousIO;
-import se.europeanspallationsource.xaos.components.tree.TreeDirectoryModel;
+import se.europeanspallationsource.xaos.ui.components.tree.TreeDirectoryAsynchronousIO;
+import se.europeanspallationsource.xaos.ui.components.tree.TreeDirectoryModel;
 import se.europeanspallationsource.xaos.util.io.DirectoryWatcher;
 import se.europeanspallationsource.xaos.util.io.PathElement;
 

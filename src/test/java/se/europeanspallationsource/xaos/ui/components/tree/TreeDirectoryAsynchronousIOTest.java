@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.components.tree;
+package se.europeanspallationsource.xaos.ui.components.tree;
 
 
 import java.io.IOException;
@@ -32,6 +32,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import se.europeanspallationsource.xaos.util.io.DeleteFileVisitor;
 import se.europeanspallationsource.xaos.util.io.DirectoryWatcher;
@@ -53,6 +54,11 @@ import static se.europeanspallationsource.xaos.util.io.PathElement.tree;
  */
 @SuppressWarnings( { "ClassWithoutLogger", "UseOfSystemOutOrSystemErr" } )
 public class TreeDirectoryAsynchronousIOTest {
+
+	@BeforeClass
+	public static void setUpClass() {
+		System.out.println("---- TreeDirectoryAsynchronousIOTest ---------------------------");
+	}
 
 	private Path dir_a;
 	private Path dir_a_c;
