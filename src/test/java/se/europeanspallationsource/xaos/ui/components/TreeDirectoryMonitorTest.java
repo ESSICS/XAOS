@@ -27,8 +27,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -45,6 +43,8 @@ import org.testfx.framework.junit.ApplicationTest;
 import se.europeanspallationsource.xaos.ui.TreeItems;
 import se.europeanspallationsource.xaos.util.io.DeleteFileVisitor;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static se.europeanspallationsource.xaos.ui.components.TreeDirectoryMonitorTest.ChangeSource.EXTERNAL;
 import static se.europeanspallationsource.xaos.ui.components.TreeDirectoryMonitorTest.ChangeSource.INTERNAL;
@@ -78,14 +78,14 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 	public void setUp() throws IOException {
 
 		executor = Executors.newSingleThreadExecutor();
-		root = Files.createTempDirectory("TDAIO_");
-			dir_a = Files.createTempDirectory(root, "TDAIO_a_");
-				file_a = Files.createTempFile(dir_a, "TDAIO_a_", ".test");
-				dir_a_c = Files.createTempDirectory(dir_a, "TDAIO_a_c_");
-					file_a_c = Files.createTempFile(dir_a_c, "TDAIO_a_c_", ".test");
-			dir_b = Files.createTempDirectory(root, "TDAIO_b_");
-				file_b1 = Files.createTempFile(dir_b, "TDAIO_b1_", ".test");
-				file_b2 = Files.createTempFile(dir_b, "TDAIO_b2_", ".test");
+		root = Files.createTempDirectory("TDM_");
+			dir_a = Files.createTempDirectory(root, "TDM_a_");
+				file_a = Files.createTempFile(dir_a, "TDM_a_", ".test");
+				dir_a_c = Files.createTempDirectory(dir_a, "TDM_a_c_");
+					file_a_c = Files.createTempFile(dir_a_c, "TDM_a_c_", ".test");
+			dir_b = Files.createTempDirectory(root, "TDM_b_");
+				file_b1 = Files.createTempFile(dir_b, "TDM_b1_", ".test");
+				file_b2 = Files.createTempFile(dir_b, "TDM_b2_", ".test");
 
 //		System.out.println(MessageFormat.format(
 //			"  Testing 'DirectoryWatcher'\n"
@@ -119,29 +119,11 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 
 		rootItem.setExpanded(true);
 
-		view = new TreeView<>();
+		view = new TreeView<>(rootItem);
 
 		view.setId("tree");
 		view.setShowRoot(false);
-		view.setRoot(rootItem);
-		view.setCellFactory(treeView -> {
-			return new TreeCell<Path>() {
-				@Override
-				protected void updateItem( Path item, boolean empty ) {
-
-					super.updateItem(item, empty);
-
-					if ( !empty && item != null && getTreeItem() != null ) {
-						if ( getTreeItem().getParent() != rootItem ) {
-							setText(item.getFileName().toString());
-						} else {
-							setText(item.toString());
-						}
-					}
-
-				}
-			};
-		});
+		view.setCellFactory(TreeItems.defaultTreePathCellFactory());
 
 		stage.setOnCloseRequest(event -> monitor.dispose());
 		stage.setScene(new Scene(view, 800, 500));
@@ -150,7 +132,7 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 	}
 
 	@After
-	public void tearDown() throws TimeoutException, IOException {
+	public void tearDown() throws TimeoutException, IOException, InterruptedException {
 		FxToolkit.cleanupStages();
 		Files.walkFileTree(root, new DeleteFileVisitor());
 		executor.shutdown();
@@ -191,16 +173,20 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 
 		System.out.println(MessageFormat.format("  Testing ''io.createDirectory'' [on {0}]...", root));
 
-		CountDownLatch latch = new CountDownLatch(2);
+		Path toBeCreated = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_z");
+		CountDownLatch latch = new CountDownLatch(1);
 		EventHandler<TreeItem.TreeModificationEvent<Path>> eventHandler = event -> {
+
 			Platform.runLater(() -> TreeItems.expandAll(rootItem, true));
-			latch.countDown();
+
+			if ( event.wasAdded() && toBeCreated.equals(event.getAddedChildren().get(0).getValue()) ) {
+				latch.countDown();
+			}
+
 		};
 
 		rootItem.addEventHandler(TreeItem.childrenModificationEvent(), eventHandler);
 		monitor.addTopLevelDirectory(root);
-
-		Path toBeCreated = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_z");
 
 		executor.execute(() -> {
 			try {
@@ -214,6 +200,21 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 			fail("Directory creation not completed in 1 minute.");
 		}
 
+		assertTrue(monitor.model().contains(toBeCreated));
+		assertFalse(
+			monitor.model()
+				.getRoot()
+				.getChildren()
+				.filtered(ti -> dir_a.equals(ti.getValue()))
+				.get(0)
+				.getChildren()
+				.filtered(ti -> toBeCreated.equals(ti.getValue()))
+				.isEmpty()
+		);
+
+
+
+//Thread.sleep(50000);
 //	TODO:CR check the TreeItem corresponding to the new folder exists.
 
 	}

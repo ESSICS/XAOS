@@ -16,9 +16,7 @@
 package se.europeanspallationsource.xaos.ui;
 
 
-import java.io.IOException;
 import javafx.scene.control.TreeItem;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -36,13 +34,16 @@ public class TreeItemsTest {
 		System.out.println("---- TreeItemsTest ---------------------------------------------");
 	}
 
-	private TreeItem<String> root;
-
-	@Before
+	/**
+	 * Test of expandAll method, of class TreeItems.
+	 */
+	@Test
 	@SuppressWarnings( "unchecked" )
-	public void setUp() throws IOException {
+	public void testExpandAll() {
 
-		root = new TreeItem<>("root");
+		System.out.println("  Testing ''expandAll''...");
+
+		TreeItem<String> root = new TreeItem<>("root");
 
 		root.setExpanded(true);
 		root.getChildren().addAll(
@@ -71,16 +72,6 @@ public class TreeItemsTest {
 		root.getChildren().get(1).setExpanded(false);
 		root.getChildren().get(2).setExpanded(false);
 		root.getChildren().get(2).getChildren().get(1).setExpanded(true);
-
-	}
-
-	/**
-	 * Test of expandAll method, of class TreeItems.
-	 */
-	@Test
-	public void testExpandAll() {
-
-		System.out.println("  Testing ''expandAll''...");
 
 		assertThat(root).hasFieldOrPropertyWithValue("expanded", true);
 		assertThat(root.getChildren().get(0)).hasFieldOrPropertyWithValue("expanded", true);

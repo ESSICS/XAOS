@@ -16,8 +16,12 @@
 package se.europeanspallationsource.xaos.ui;
 
 
+import java.nio.file.Path;
 import java.util.logging.Logger;
+import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
+import javafx.util.Callback;
 
 
 /**
@@ -28,6 +32,49 @@ import javafx.scene.control.TreeItem;
 public class TreeItems {
 
 	private static final Logger LOGGER = Logger.getLogger(TreeItems.class.getName());
+
+	/**
+	 * Returns a cell factory to be used in {@link TreeView}s whose type
+	 * parameter is {@link Path}.
+	 * <p>
+	 * The returned {@link TreeCell}s will show the full path name if the
+	 * corresponding {@link TreeItem} is a direct child of the view's root node
+	 * (the one returned by {@link TreeView#getRoot()}</p>, otherwise only the
+	 * last portion of the path name is displayed (the one returned by
+	 * {@link Path#getFileName()}.
+	 *
+	 * @return A cell factory to be used in {@link TreeView}s whose type
+	 *         parameter is {@link Path}.
+	 */
+	public static Callback<TreeView<Path>, TreeCell<Path>> defaultTreePathCellFactory() {
+		return treeView -> {
+			return new TreeCell<Path>() {
+				@Override
+				protected void updateItem( Path item, boolean empty ) {
+
+					super.updateItem(item, empty);
+
+					if ( empty || item == null ) {
+						setText(null);
+						setGraphic(null);
+					} else {
+
+						TreeItem<Path> treeItem = getTreeItem();
+
+						if ( treeItem.getParent() != getTreeView().getRoot() ) {
+							setText(item.getFileName().toString());
+						} else {
+							setText(item.toString());
+						}
+
+						setGraphic(treeItem.getGraphic());
+
+					}
+
+				}
+			};
+		};
+	}
 
 	/**
 	 * Expands/collapses the node and all its non-leaf children recursively.
