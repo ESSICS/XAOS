@@ -21,8 +21,6 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.CountDownLatch;
@@ -40,6 +38,7 @@ import javafx.stage.Stage;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
@@ -47,7 +46,6 @@ import se.europeanspallationsource.xaos.ui.TreeItems;
 import se.europeanspallationsource.xaos.util.io.DeleteFileVisitor;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static se.europeanspallationsource.xaos.ui.components.TreeDirectoryMonitorTest.ChangeSource.EXTERNAL;
@@ -147,6 +145,7 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 	 *
 	 * @throws java.lang.InterruptedException
 	 */
+@Ignore
 	@Test
 	public void testAddTopLevelDirectory() throws InterruptedException {
 
@@ -173,6 +172,7 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 	 * @throws java.lang.InterruptedException
 	 * @throws java.io.IOException
 	 */
+@Ignore
 	@Test
 	public void testCreateDirectories() throws InterruptedException, IOException {
 
@@ -261,6 +261,7 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 	 * @throws java.lang.InterruptedException
 	 * @throws java.io.IOException
 	 */
+@Ignore
 	@Test
 	public void testCreateDirectory() throws InterruptedException, IOException {
 
@@ -328,6 +329,85 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 
 		assertTrue(monitor.model().contains(toBeExternallyCreated));
 		assertThat(view.getTreeItem(2).getValue()).isEqualTo(toBeExternallyCreated);
+		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(0);
+		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(1);
+
+	}
+
+	/**
+	 * Test of creating a file.
+	 *
+	 * @throws java.lang.InterruptedException
+	 * @throws java.io.IOException
+	 */
+@Ignore
+	@Test
+	public void testCreateFile() throws InterruptedException, IOException {
+
+		System.out.println(MessageFormat.format("  Testing file creation [on {0}]...", root));
+
+		Queue<ChangeSource> sources = new ConcurrentLinkedDeque<>();
+		Path toBeInternallyCreated = FileSystems.getDefault().getPath(dir_a.toString(), "created_file_internal.txt");
+		CountDownLatch latchInternal = new CountDownLatch(1);
+		Path toBeExternallyCreated = FileSystems.getDefault().getPath(dir_a.toString(), "created_file_external.txt");
+		CountDownLatch latchExternal = new CountDownLatch(1);
+		EventHandler<TreeItem.TreeModificationEvent<Path>> eventHandler = event -> {
+			Platform.runLater(() -> {
+
+				TreeItems.expandAll(rootItem, true);
+
+				if ( event.wasAdded() ) {
+
+					if ( toBeInternallyCreated.equals(event.getAddedChildren().get(0).getValue()) ) {
+						latchInternal.countDown();
+					}
+
+					if ( toBeExternallyCreated.equals(event.getAddedChildren().get(0).getValue()) ) {
+						latchExternal.countDown();
+					}
+
+				}
+
+			});
+		};
+
+		rootItem.addEventHandler(TreeItem.childrenModificationEvent(), eventHandler);
+		monitor.addTopLevelDirectory(root);
+		monitor.model().creations().subscribe(u -> {
+			if ( toBeInternallyCreated.equals(u.getPath())
+			  || toBeExternallyCreated.equals(u.getPath()) ) {
+				sources.offer(u.getInitiator());
+			}
+		});
+
+		//	INTERNAL creation.
+		executor.execute(() -> {
+			try {
+				monitor.io().createFile(toBeInternallyCreated, INTERNAL).toCompletableFuture().get();
+			} catch ( InterruptedException | ExecutionException ex ) {
+				fail(ex.getMessage());
+			}
+		});
+
+		if ( !latchInternal.await(1, TimeUnit.MINUTES) ) {
+			fail("Directory creation not completed in 1 minute.");
+		}
+
+		assertTrue(monitor.model().contains(toBeInternallyCreated));
+		assertThat(view.getTreeItem(4).getValue()).isEqualTo(toBeInternallyCreated);
+		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(1);
+		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(0);
+
+		//	EXTERNAL creation.
+		sources.clear();
+		Files.createFile(toBeExternallyCreated);
+
+		if ( !latchExternal.await(1, TimeUnit.MINUTES) ) {
+			fail("Directory creation not completed in 1 minute.");
+		}
+
+		assertTrue(monitor.model().contains(toBeExternallyCreated));
+		assertThat(view.getTreeItem(4).getValue()).isEqualTo(toBeExternallyCreated);
 		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(0);
 		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(1);
 
