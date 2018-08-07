@@ -164,13 +164,91 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 	}
 
 	/**
-	 * Test of creating a directory.
+	 * Test of creating directories.
 	 * 
 	 * @throws java.lang.InterruptedException
 	 * @throws java.io.IOException
 	 */
 	@Test
-	public void testIOCreateDirectory() throws InterruptedException, IOException {
+	public void testCreateDirectories() throws InterruptedException, IOException {
+
+		System.out.println(MessageFormat.format("  Testing directories creation [on {0}]...", root));
+
+		//	INTERNAL creation.
+		Path toBeInternallyCreated1 = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_y");
+		Path toBeInternallyCreated2 = FileSystems.getDefault().getPath(toBeInternallyCreated1.toString(), "dir_a_z");
+		CountDownLatch latchInternal = new CountDownLatch(2);
+		EventHandler<TreeItem.TreeModificationEvent<Path>> eventHandler = event -> {
+			Platform.runLater(() -> { 
+				
+				TreeItems.expandAll(rootItem, true);
+
+				if ( event.wasAdded()
+				  && ( toBeInternallyCreated1.equals(event.getAddedChildren().get(0).getValue())
+					|| toBeInternallyCreated2.equals(event.getAddedChildren().get(0).getValue()) ) ) {
+					latchInternal.countDown();
+				}
+
+			});
+		};
+
+		rootItem.addEventHandler(TreeItem.childrenModificationEvent(), eventHandler);
+		monitor.addTopLevelDirectory(root);
+
+		executor.execute(() -> {
+			try {
+				monitor.io().createDirectories(toBeInternallyCreated2, INTERNAL).toCompletableFuture().get();
+			} catch ( InterruptedException | ExecutionException ex ) {
+				fail(ex.getMessage());
+			}
+		});
+
+		if ( !latchInternal.await(1, TimeUnit.MINUTES) ) {
+			fail("Directory creation not completed in 1 minute.");
+		}
+
+		assertTrue(monitor.model().contains(toBeInternallyCreated1));
+		assertTrue(monitor.model().contains(toBeInternallyCreated2));
+		assertThat(view.getTreeItem(2).getValue()).isEqualTo(toBeInternallyCreated1);
+		assertThat(view.getTreeItem(3).getValue()).isEqualTo(toBeInternallyCreated2);
+
+		//	EXTERNAL creation.
+		Path toBeExternallyCreated1 = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_w");
+		Path toBeExternallyCreated2 = FileSystems.getDefault().getPath(toBeExternallyCreated1.toString(), "dir_a_x");
+
+		CountDownLatch latchExternal = new CountDownLatch(1);
+
+		monitor.model().creations().subscribeFor(2, u -> {
+			if ( !u.getInitiator().equals(EXTERNAL) ) {
+				fail("Wrong initiatir: should have been INTERNAL, was " + u.getInitiator());
+			} else {
+				latchExternal.countDown();
+			}
+		});
+
+		Files.createDirectories(toBeExternallyCreated2);
+
+		if ( !latchExternal.await(1, TimeUnit.MINUTES) ) {
+			fail("Directory creation not completed in 1 minute.");
+		}
+
+Thread.sleep(10000);
+
+		assertTrue(monitor.model().contains(toBeExternallyCreated1));
+		assertTrue(monitor.model().contains(toBeExternallyCreated2));
+		assertThat(view.getTreeItem(2).getValue()).isEqualTo(toBeExternallyCreated1);
+		assertThat(view.getTreeItem(3).getValue()).isEqualTo(toBeExternallyCreated2);
+
+	}
+
+	/**
+	 * Test of creating a directory.
+	 *
+	 * @throws java.lang.InterruptedException
+	 * @throws java.io.IOException
+	 */
+	@Test
+	public void testCreateDirectory() throws InterruptedException, IOException {
 
 		System.out.println(MessageFormat.format("  Testing directory creation [on {0}]...", root));
 
@@ -178,13 +256,15 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 		Path toBeInternallyCreated = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_z");
 		CountDownLatch latchInternal = new CountDownLatch(1);
 		EventHandler<TreeItem.TreeModificationEvent<Path>> eventHandler = event -> {
+			Platform.runLater(() -> { 
 
-			Platform.runLater(() -> TreeItems.expandAll(rootItem, true));
+				TreeItems.expandAll(rootItem, true);
 
-			if ( event.wasAdded() && toBeInternallyCreated.equals(event.getAddedChildren().get(0).getValue()) ) {
-				latchInternal.countDown();
-			}
+				if ( event.wasAdded() && toBeInternallyCreated.equals(event.getAddedChildren().get(0).getValue()) ) {
+					latchInternal.countDown();
+				}
 
+			});
 		};
 
 		rootItem.addEventHandler(TreeItem.childrenModificationEvent(), eventHandler);
