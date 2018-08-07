@@ -17,6 +17,7 @@ package se.europeanspallationsource.xaos.ui.components;
 
 
 import java.io.IOException;
+import java.nio.file.DirectoryStream;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -420,6 +421,7 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 	 * @throws java.lang.InterruptedException
 	 * @throws java.io.IOException
 	 */
+@Ignore
 	@Test
 	@SuppressWarnings( "CallToThreadYield" )
 	public void testDelete() throws InterruptedException, IOException {
@@ -462,7 +464,7 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 			}
 		});
 
-		//	INTERNAL creation.
+		//	INTERNAL deletion.
 		executor.execute(() -> {
 			try {
 				monitor.io().delete(file_a_c, INTERNAL).toCompletableFuture().get();
@@ -482,7 +484,7 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(2);
 		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(0);
 
-		//	EXTERNAL creation.
+		//	EXTERNAL deletion.
 		sources.clear();
 		Files.delete(file_a);
 
@@ -501,6 +503,118 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 		assertThat(view.getTreeItem(1).getValue()).isEqualTo(dir_b);
 		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(0);
 		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(2);
+
+	}
+
+	/**
+	 * Test of deleting a tree.
+	 *
+	 * @throws java.lang.InterruptedException
+	 * @throws java.io.IOException
+	 */
+	@Test
+	public void testDeleteTree() throws InterruptedException, IOException {
+
+		System.out.println(MessageFormat.format("  Testing tree deletion [on {0}]...", root));
+
+		Queue<ChangeSource> sources = new ConcurrentLinkedDeque<>();
+		CountDownLatch latchInternal = new CountDownLatch(1);
+		CountDownLatch latchExternal = new CountDownLatch(4);
+		EventHandler<TreeItem.TreeModificationEvent<Path>> eventHandler = event -> {
+			Platform.runLater(() -> {
+
+				TreeItems.expandAll(rootItem, true);
+
+				if ( event.wasRemoved() ) {
+
+					if ( dir_b.equals(event.getRemovedChildren().get(0).getValue()) ) {
+						latchInternal.countDown();
+					}
+
+					if ( dir_a.equals(event.getRemovedChildren().get(0).getValue())
+					  || file_a.equals(event.getRemovedChildren().get(0).getValue())
+					  || dir_a_c.equals(event.getRemovedChildren().get(0).getValue())
+					  || file_a_c.equals(event.getRemovedChildren().get(0).getValue()) ) {
+						latchExternal.countDown();
+					}
+
+				}
+
+			});
+		};
+
+		rootItem.addEventHandler(TreeItem.childrenModificationEvent(), eventHandler);
+		monitor.addTopLevelDirectory(root);
+		monitor.model().deletions().subscribe(u -> {
+			if ( dir_b.equals(u.getPath())
+			  || dir_a.equals(u.getPath())
+			  || file_a.equals(u.getPath())
+			  || dir_a_c.equals(u.getPath())
+			  || file_a_c.equals(u.getPath()) ) {
+				sources.offer(u.getInitiator());
+			}
+		});
+
+		//	INTERNAL deletion.
+		executor.execute(() -> {
+			try {
+				monitor.io().deleteTree(dir_b, INTERNAL).toCompletableFuture().get();
+			} catch ( InterruptedException | ExecutionException ex ) {
+				fail(ex.getMessage());
+			}
+		});
+
+		if ( !latchInternal.await(1, TimeUnit.MINUTES) ) {
+			fail("Tree deletion not completed in 1 minute.");
+		}
+
+		assertFalse(monitor.model().contains(dir_b));
+		assertFalse(monitor.model().contains(file_b1));
+		assertFalse(monitor.model().contains(file_b2));
+		assertThat(view.getExpandedItemCount()).isEqualTo(5);
+		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(1);
+		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(0);
+
+		//	EXTERNAL deletion.
+		sources.clear();
+		deleteRecursively(dir_a, latchExternal);
+
+		if ( !latchExternal.await(3, TimeUnit.MINUTES) ) {
+			fail("Tree deletion not completed in 3 minutes.");
+		}
+
+		assertFalse(monitor.model().contains(dir_a));
+		assertFalse(monitor.model().contains(file_a));
+		assertFalse(monitor.model().contains(dir_a_c));
+		assertFalse(monitor.model().contains(file_a_c));
+		assertThat(view.getExpandedItemCount()).isEqualTo(1);
+		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(0);
+		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(4);
+
+	}
+
+	@SuppressWarnings( "CallToThreadYield" )
+	private void deleteRecursively( Path root, CountDownLatch latch ) throws IOException {
+
+		if ( Files.exists(root) ) {
+
+			if ( Files.isDirectory(root) ) {
+				try ( DirectoryStream<Path> stream = Files.newDirectoryStream(root) ) {
+					for ( Path path : stream ) {
+						deleteRecursively(path, latch);
+					}
+				}
+			}
+
+			long count = latch.getCount();
+
+			Files.delete(root);
+
+			while ( latch.getCount() == count ) {
+				Thread.yield();
+			}
+
+		}
 
 	}
 
