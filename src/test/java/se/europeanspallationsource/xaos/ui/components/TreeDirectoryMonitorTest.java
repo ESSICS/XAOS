@@ -46,6 +46,7 @@ import se.europeanspallationsource.xaos.ui.TreeItems;
 import se.europeanspallationsource.xaos.util.io.DeleteFileVisitor;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static se.europeanspallationsource.xaos.ui.components.TreeDirectoryMonitorTest.ChangeSource.EXTERNAL;
@@ -390,7 +391,7 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 		});
 
 		if ( !latchInternal.await(1, TimeUnit.MINUTES) ) {
-			fail("Directory creation not completed in 1 minute.");
+			fail("File creation not completed in 1 minute.");
 		}
 
 		assertTrue(monitor.model().contains(toBeInternallyCreated));
@@ -403,13 +404,103 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 		Files.createFile(toBeExternallyCreated);
 
 		if ( !latchExternal.await(1, TimeUnit.MINUTES) ) {
-			fail("Directory creation not completed in 1 minute.");
+			fail("File creation not completed in 1 minute.");
 		}
 
 		assertTrue(monitor.model().contains(toBeExternallyCreated));
 		assertThat(view.getTreeItem(4).getValue()).isEqualTo(toBeExternallyCreated);
 		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(0);
 		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(1);
+
+	}
+
+	/**
+	 * Test of deleting a file and a directory.
+	 *
+	 * @throws java.lang.InterruptedException
+	 * @throws java.io.IOException
+	 */
+	@Test
+	@SuppressWarnings( "CallToThreadYield" )
+	public void testDelete() throws InterruptedException, IOException {
+
+		System.out.println(MessageFormat.format("  Testing file and directory deletion [on {0}]...", root));
+
+		Queue<ChangeSource> sources = new ConcurrentLinkedDeque<>();
+		CountDownLatch latchInternal = new CountDownLatch(2);
+		CountDownLatch latchExternal = new CountDownLatch(2);
+		EventHandler<TreeItem.TreeModificationEvent<Path>> eventHandler = event -> {
+			Platform.runLater(() -> {
+
+				TreeItems.expandAll(rootItem, true);
+
+				if ( event.wasRemoved() ) {
+
+					if ( dir_a_c.equals(event.getRemovedChildren().get(0).getValue())
+					  || file_a_c.equals(event.getRemovedChildren().get(0).getValue()) ) {
+						latchInternal.countDown();
+					}
+
+					if ( dir_a.equals(event.getRemovedChildren().get(0).getValue())
+					  || file_a.equals(event.getRemovedChildren().get(0).getValue()) ) {
+						latchExternal.countDown();
+					}
+
+				}
+
+			});
+		};
+
+		rootItem.addEventHandler(TreeItem.childrenModificationEvent(), eventHandler);
+		monitor.addTopLevelDirectory(root);
+		monitor.model().deletions().subscribe(u -> {
+			if ( dir_a_c.equals(u.getPath())
+			  || file_a_c.equals(u.getPath())
+			  || dir_a.equals(u.getPath())
+			  || file_a.equals(u.getPath()) ) {
+				sources.offer(u.getInitiator());
+			}
+		});
+
+		//	INTERNAL creation.
+		executor.execute(() -> {
+			try {
+				monitor.io().delete(file_a_c, INTERNAL).toCompletableFuture().get();
+				monitor.io().delete(dir_a_c, INTERNAL).toCompletableFuture().get();
+			} catch ( InterruptedException | ExecutionException ex ) {
+				fail(ex.getMessage());
+			}
+		});
+
+		if ( !latchInternal.await(1, TimeUnit.MINUTES) ) {
+			fail("Directory and file deletion not completed in 1 minute.");
+		}
+
+		assertFalse(monitor.model().contains(file_a_c));
+		assertFalse(monitor.model().contains(dir_a_c));
+		assertThat(view.getTreeItem(3).getValue()).isEqualTo(dir_b);
+		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(2);
+		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(0);
+
+		//	EXTERNAL creation.
+		sources.clear();
+		Files.delete(file_a);
+
+		while ( latchExternal.getCount() > 1 ) {
+			Thread.yield();
+		}
+
+		Files.delete(dir_a);
+
+		if ( !latchExternal.await(1, TimeUnit.MINUTES) ) {
+			fail("Directory and file deletion not completed in 1 minute.");
+		}
+
+		assertFalse(monitor.model().contains(file_a));
+		assertFalse(monitor.model().contains(dir_a));
+		assertThat(view.getTreeItem(1).getValue()).isEqualTo(dir_b);
+		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(0);
+		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(2);
 
 	}
 
