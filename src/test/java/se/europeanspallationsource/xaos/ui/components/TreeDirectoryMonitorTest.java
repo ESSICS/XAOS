@@ -21,6 +21,10 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -174,19 +178,30 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 
 		System.out.println(MessageFormat.format("  Testing directories creation [on {0}]...", root));
 
-		//	INTERNAL creation.
+		Queue<ChangeSource> sources = new ConcurrentLinkedDeque<>();
 		Path toBeInternallyCreated1 = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_y");
 		Path toBeInternallyCreated2 = FileSystems.getDefault().getPath(toBeInternallyCreated1.toString(), "dir_a_z");
 		CountDownLatch latchInternal = new CountDownLatch(2);
+		Path toBeExternallyCreated1 = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_w");
+		Path toBeExternallyCreated2 = FileSystems.getDefault().getPath(toBeExternallyCreated1.toString(), "dir_a_x");
+		CountDownLatch latchExternal = new CountDownLatch(2);
 		EventHandler<TreeItem.TreeModificationEvent<Path>> eventHandler = event -> {
 			Platform.runLater(() -> { 
 				
 				TreeItems.expandAll(rootItem, true);
 
-				if ( event.wasAdded()
-				  && ( toBeInternallyCreated1.equals(event.getAddedChildren().get(0).getValue())
-					|| toBeInternallyCreated2.equals(event.getAddedChildren().get(0).getValue()) ) ) {
-					latchInternal.countDown();
+				if ( event.wasAdded() ) {
+
+					if ( toBeInternallyCreated1.equals(event.getAddedChildren().get(0).getValue())
+					  || toBeInternallyCreated2.equals(event.getAddedChildren().get(0).getValue()) ) {
+						latchInternal.countDown();
+					}
+
+					if ( toBeExternallyCreated1.equals(event.getAddedChildren().get(0).getValue())
+					  || toBeExternallyCreated2.equals(event.getAddedChildren().get(0).getValue()) ) {
+						latchExternal.countDown();
+					}
+
 				}
 
 			});
@@ -194,7 +209,16 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 
 		rootItem.addEventHandler(TreeItem.childrenModificationEvent(), eventHandler);
 		monitor.addTopLevelDirectory(root);
+		monitor.model().creations().subscribe(u -> {
+			if ( toBeInternallyCreated1.equals(u.getPath())
+			  || toBeInternallyCreated2.equals(u.getPath())
+			  || toBeExternallyCreated1.equals(u.getPath())
+			  || toBeExternallyCreated2.equals(u.getPath()) ) {
+				sources.offer(u.getInitiator());
+			}
+		});
 
+		//	INTERNAL creation.
 		executor.execute(() -> {
 			try {
 				monitor.io().createDirectories(toBeInternallyCreated2, INTERNAL).toCompletableFuture().get();
@@ -211,33 +235,23 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 		assertTrue(monitor.model().contains(toBeInternallyCreated2));
 		assertThat(view.getTreeItem(2).getValue()).isEqualTo(toBeInternallyCreated1);
 		assertThat(view.getTreeItem(3).getValue()).isEqualTo(toBeInternallyCreated2);
+		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(2);
+		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(0);
 
 		//	EXTERNAL creation.
-		Path toBeExternallyCreated1 = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_w");
-		Path toBeExternallyCreated2 = FileSystems.getDefault().getPath(toBeExternallyCreated1.toString(), "dir_a_x");
-
-		CountDownLatch latchExternal = new CountDownLatch(1);
-
-		monitor.model().creations().subscribeFor(2, u -> {
-			if ( !u.getInitiator().equals(EXTERNAL) ) {
-				fail("Wrong initiatir: should have been INTERNAL, was " + u.getInitiator());
-			} else {
-				latchExternal.countDown();
-			}
-		});
-
+		sources.clear();
 		Files.createDirectories(toBeExternallyCreated2);
 
 		if ( !latchExternal.await(1, TimeUnit.MINUTES) ) {
 			fail("Directory creation not completed in 1 minute.");
 		}
 
-Thread.sleep(10000);
-
 		assertTrue(monitor.model().contains(toBeExternallyCreated1));
 		assertTrue(monitor.model().contains(toBeExternallyCreated2));
 		assertThat(view.getTreeItem(2).getValue()).isEqualTo(toBeExternallyCreated1);
 		assertThat(view.getTreeItem(3).getValue()).isEqualTo(toBeExternallyCreated2);
+		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(0);
+		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(2);
 
 	}
 
@@ -252,16 +266,26 @@ Thread.sleep(10000);
 
 		System.out.println(MessageFormat.format("  Testing directory creation [on {0}]...", root));
 
-		//	INTERNAL creation.
+		Queue<ChangeSource> sources = new ConcurrentLinkedDeque<>();
 		Path toBeInternallyCreated = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_z");
 		CountDownLatch latchInternal = new CountDownLatch(1);
+		Path toBeExternallyCreated = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_y");
+		CountDownLatch latchExternal = new CountDownLatch(1);
 		EventHandler<TreeItem.TreeModificationEvent<Path>> eventHandler = event -> {
 			Platform.runLater(() -> { 
 
 				TreeItems.expandAll(rootItem, true);
 
-				if ( event.wasAdded() && toBeInternallyCreated.equals(event.getAddedChildren().get(0).getValue()) ) {
-					latchInternal.countDown();
+				if ( event.wasAdded() ) {
+
+					if ( toBeInternallyCreated.equals(event.getAddedChildren().get(0).getValue()) ) {
+						latchInternal.countDown();
+					}
+
+					if ( toBeExternallyCreated.equals(event.getAddedChildren().get(0).getValue()) ) {
+						latchExternal.countDown();
+					}
+
 				}
 
 			});
@@ -269,7 +293,14 @@ Thread.sleep(10000);
 
 		rootItem.addEventHandler(TreeItem.childrenModificationEvent(), eventHandler);
 		monitor.addTopLevelDirectory(root);
+		monitor.model().creations().subscribe(u -> {
+			if ( toBeInternallyCreated.equals(u.getPath())
+			  || toBeExternallyCreated.equals(u.getPath()) ) {
+				sources.offer(u.getInitiator());
+			}
+		});
 
+		//	INTERNAL creation.
 		executor.execute(() -> {
 			try {
 				monitor.io().createDirectory(toBeInternallyCreated, INTERNAL).toCompletableFuture().get();
@@ -284,20 +315,11 @@ Thread.sleep(10000);
 
 		assertTrue(monitor.model().contains(toBeInternallyCreated));
 		assertThat(view.getTreeItem(2).getValue()).isEqualTo(toBeInternallyCreated);
+		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(1);
+		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(0);
 
 		//	EXTERNAL creation.
-		Path toBeExternallyCreated = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_y");
-
-		CountDownLatch latchExternal = new CountDownLatch(1);
-
-		monitor.model().creations().subscribeForOne(u -> {
-			if ( !u.getInitiator().equals(EXTERNAL) ) {
-				fail("Wrong initiatir: should have been INTERNAL, was " + u.getInitiator());
-			} else {
-				latchExternal.countDown();
-			}
-		});
-
+		sources.clear();
 		Files.createDirectory(toBeExternallyCreated);
 
 		if ( !latchExternal.await(1, TimeUnit.MINUTES) ) {
@@ -306,6 +328,8 @@ Thread.sleep(10000);
 
 		assertTrue(monitor.model().contains(toBeExternallyCreated));
 		assertThat(view.getTreeItem(2).getValue()).isEqualTo(toBeExternallyCreated);
+		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(0);
+		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(1);
 
 	}
 
