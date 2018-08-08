@@ -16,6 +16,11 @@
 package se.europeanspallationsource.xaos.ui;
 
 
+import java.text.MessageFormat;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.Properties;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -31,9 +36,35 @@ import static se.europeanspallationsource.xaos.ui.HeadlessUtility.headless;
 @SuppressWarnings( { "ClassWithoutLogger", "UseOfSystemOutOrSystemErr" } )
 public class HeadlessUtilityTest {
 
+	private static final Properties originalProperties = new Properties();
+
 	@BeforeClass
 	public static void setUpClass() {
+
 		System.out.println("---- HeadlessUtilityTest ---------------------------------------");
+		System.out.println("  Saving original properties...");
+
+		originalProperties.putAll(System.getProperties());
+//		originalProperties
+//			.entrySet()
+//			.stream()
+//			.sorted(( e1, e2 ) -> String.CASE_INSENSITIVE_ORDER.compare(e1.getKey().toString(), e2.getKey().toString()))
+//			.forEach(e -> System.out.println(MessageFormat.format("    {0} = {1}", e.getKey(), e.getValue())));
+
+	}
+
+	@AfterClass
+	public static void tearDownClass() {
+
+		System.out.println("  Restoring original properties...");
+
+		System.setProperties(originalProperties);
+//		System.getProperties()
+//			.entrySet()
+//			.stream()
+//			.sorted(( e1, e2 ) -> String.CASE_INSENSITIVE_ORDER.compare(e1.getKey().toString(), e2.getKey().toString()))
+//			.forEach(e -> System.out.println(MessageFormat.format("    {0} = {1}", e.getKey(), e.getValue())));
+
 	}
 
 	@Before

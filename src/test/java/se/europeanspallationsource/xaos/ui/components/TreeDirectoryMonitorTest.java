@@ -147,7 +147,6 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 	 *
 	 * @throws java.lang.InterruptedException
 	 */
-@Ignore
 	@Test
 	public void testAddTopLevelDirectory() throws InterruptedException {
 
@@ -174,7 +173,6 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 	 * @throws java.lang.InterruptedException
 	 * @throws java.io.IOException
 	 */
-@Ignore
 	@Test
 	public void testCreateDirectories() throws InterruptedException, IOException {
 
@@ -263,7 +261,6 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 	 * @throws java.lang.InterruptedException
 	 * @throws java.io.IOException
 	 */
-@Ignore
 	@Test
 	public void testCreateDirectory() throws InterruptedException, IOException {
 
@@ -342,7 +339,6 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 	 * @throws java.lang.InterruptedException
 	 * @throws java.io.IOException
 	 */
-@Ignore
 	@Test
 	public void testCreateFile() throws InterruptedException, IOException {
 
@@ -421,7 +417,6 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 	 * @throws java.lang.InterruptedException
 	 * @throws java.io.IOException
 	 */
-@Ignore
 	@Test
 	@SuppressWarnings( "CallToThreadYield" )
 	public void testDelete() throws InterruptedException, IOException {
