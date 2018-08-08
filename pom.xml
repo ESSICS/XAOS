@@ -18,6 +18,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!--<cache2k-version>1.0.2.Final</cache2k-version>-->
+		<ikonli-version>2.1.1</ikonli-version>
         <jacp.version>3.0-SNAPSHOT</jacp.version>
         <textfx.version>4.0.13-alpha</textfx.version>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -95,7 +97,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.0.1</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -107,6 +109,22 @@
                 <configuration>
                     <docfilessubdirs/>
                 </configuration>
+				<!-- =======================================================
+					TODO:CR This dependency has to be removed once a new version
+					of the plugin will be release. 3.0.0 has problem with Java 10
+					because of an old dependency on commons-lang3.
+				-->
+			<!--
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.commons</groupId>
+						<artifactId>commons-lang3</artifactId>
+						<version>3.7</version>
+						<scope>compile</scope>
+					</dependency>
+				</dependencies>
+			-->
+				<!-- ======================================================= -->
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -180,6 +198,12 @@
             <version>4.1</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.7</version>
+            <scope>compile</scope>
+        </dependency>
 
         <!-- JacpFX - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
         <dependency>
@@ -207,8 +231,52 @@
             <scope>compile</scope>
         </dependency>
 
-        <!-- Unit Test  - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+		<!-- cache2k - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<!--
+		<dependency>
+			<groupId>org.cache2k</groupId>
+			<artifactId>cache2k-api</artifactId>
+			<version>${cache2k-version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.cache2k</groupId>
+			<artifactId>cache2k-all</artifactId>
+			<version>${cache2k-version}</version>
+			<scope>runtime</scope>
+		</dependency>
+-->
+
+		<!-- ikonli-javafx  - -  - - - - - - - - - - - - - - - - - - - - - -  -->
         <dependency>
+            <groupId>org.kordamp.ikonli</groupId>
+            <artifactId>ikonli-javafx</artifactId>
+            <version>${ikonli-version}</version>
+            <scope>compile</scope>
+        </dependency>
+		<dependency>
+			<groupId>org.kordamp.ikonli</groupId>
+			<artifactId>ikonli-fontawesome5-pack</artifactId>
+			<version>${ikonli-version}</version>
+            <scope>compile</scope>
+		</dependency>
+
+		<!-- Other Dependencies  - - - - - - - - - - - - - - - - - - - - - -  -->
+        <dependency>
+            <groupId>org.reactfx</groupId>
+            <artifactId>reactfx</artifactId>
+            <version>2.0-M5</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Unit Test  - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>3.10.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
@@ -232,18 +300,12 @@
             <version>${textfx.version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.7</version>
-        </dependency>
 		<dependency>
 			<groupId>org.testfx</groupId>
 			<artifactId>openjfx-monocle</artifactId>
 			<version>8u76-b04</version> <!-- jdk-9+181 for Java 9 -->
 			<scope>test</scope>
 		</dependency>
-
-	</dependencies>
+    </dependencies>
 
 </project>

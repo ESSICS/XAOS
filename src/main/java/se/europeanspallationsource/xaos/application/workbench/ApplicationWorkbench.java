@@ -28,7 +28,7 @@ import org.jacpfx.api.util.ToolbarPosition;
 import org.jacpfx.rcp.componentLayout.FXComponentLayout;
 import org.jacpfx.rcp.components.menuBar.JACPMenuBar;
 import org.jacpfx.rcp.workbench.FXWorkbench;
-import se.europeanspallationsource.xaos.application.utilities.Bundles;
+import se.europeanspallationsource.xaos.application.util.Bundles;
 
 import static se.europeanspallationsource.xaos.application.workbench.Constants.ID_WORKBENCH;
 import static se.europeanspallationsource.xaos.application.workbench.Constants.VIEW_BROWSER;
