@@ -59,14 +59,15 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 
 
 /**
- * Watches for changes in files and directories.
+ * Watches for changes in files and directories, and allows for standard
+ * operations on both files and directories.
  * <p>
  * Usage:</p>
  * <pre>
-   ExecutorService executor = Executors.newSingleThreadExecutor();
-   DirectoryWatcher watcher = build(executor);
-
-   watcher.errors().subscribe(event -&gt; {
+ *   ExecutorService executor = Executors.newSingleThreadExecutor();
+ *   DirectoryWatcher watcher = build(executor);
+ *
+ *   watcher.events().subscribe(event -&gt; {
  *     event.getEvents().stream().forEach(e -&gt; {
  *       if ( StandardWatchEventKinds.ENTRY_CREATE.equals(e.kind()) ) {
  *         ...

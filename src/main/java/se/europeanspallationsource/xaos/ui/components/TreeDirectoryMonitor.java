@@ -56,7 +56,7 @@ import static se.europeanspallationsource.xaos.util.DefaultExecutorCompletionSta
  *   <li>The application can distinguish file-system changes made via the
  *     I/O facility ({@link TreeDirectoryAsynchronousIO}) from external ones.</li>
  * </ul>
- * <p>The directory model can be used directly as a model for {@link TreeView}</p>
+ * <p>The directory model can be used directly as a model for {@link TreeView}s.</p>
  * <p><b>Usage:</b></p>
  * <pre>
  *   public class UsageExample extends Application {

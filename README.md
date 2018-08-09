@@ -101,6 +101,9 @@ providing true vectorial rendering.
 The following simple test explains how to display SVGs with XAOS:
 
 ```java
+package se.europeanspallationsource.xaos.ui.components;
+
+
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 import javafx.scene.Scene;
@@ -143,6 +146,18 @@ public class SVGFromURLTest extends ApplicationTest {
 ```
 
 
+### Tree Directory Monitor
+
+TreeDirectoryMonitor combines a DirectoryWatcher, a TreeDirectoryModel, and a
+TreeDirectoryAsynchronousIO. The added value of this combination is that the
+tree model is updated automatically to reflect the current state of the
+file-system, and the application can distinguish file-system changes made via
+the I/O facility (TreeDirectoryAsynchronousIO) from external ones.
+
+The directory model can be used directly as a model for TreeViews.
+
+
+
 ## Tools and Utilities
 
 
@@ -155,7 +170,7 @@ folder.
 ```java
 package my.module;
 import my.module.spi.SomeService;
-import se.europeanspallationsource.framework.annotation.ServiceProvider;
+import se.europeanspallationsource.xaos.annotation.ServiceProvider;
 
 @ServiceProvider(service=SomeService.class)
 public class MyService implements SomeService {
@@ -165,6 +180,45 @@ public class MyService implements SomeService {
 
 Moreover, the _ServiceLoaderUtilities_ class will complement the
 `java.util.ServiceLoader` one with few more methods.
+
+
+### IO Utilities
+
+
+#### Delete File Visitor
+
+It allows to delete recursively a folder.
+
+```java
+Files.walkFileTree(rootDirectory, new DeleteFileVisitor());
+```
+
+
+#### Directory Watcher
+
+Watches for changes in files and directories, and allows for standard operations
+on both files and directories.
+
+```java
+ExecutorService executor = Executors.newSingleThreadExecutor();
+DirectoryWatcher watcher = build(executor);
+
+watcher.events().subscribe(event -> {
+  event.getEvents().stream().forEach(e -> {
+	if ( StandardWatchEventKinds.ENTRY_CREATE.equals(e.kind()) ) {
+	  ...
+	} else if ( StandardWatchEventKinds.ENTRY_DELETE.equals(e.kind()) ) {
+	  ...
+	} else if ( StandardWatchEventKinds.ENTRY_MODIFY.equals(e.kind()) ) {
+	  ...
+	}
+  });
+});
+
+Path root = ...
+
+watcher.watch(root);
+```
 
 
 ## Using XAOS
