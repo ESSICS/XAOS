@@ -13,32 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.application.util;
+package se.europeanspallationsource.xaos.ui;
 
 
 import javafx.scene.paint.Color;
 import org.kordamp.ikonli.Ikon;
-import org.kordamp.ikonli.fontawesome5.FontAwesomeRegular;
+import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import static org.kordamp.ikonli.javafx.FontIcon.of;
 
 
 /**
- * Provider of common icons used in various part.
+ * Provider of common icons.
  *
  * @author claudio.rosati@esss.se
  */
 @SuppressWarnings( "ClassWithoutLogger" )
 public enum CommonIcons {
 
-	FILE(FontAwesomeRegular.FILE),
-	FOLDER(FontAwesomeRegular.FOLDER),
-	FOLDER_OPEN(FontAwesomeRegular.FOLDER_OPEN),
-	SQUARE_DOWN(FontAwesomeRegular.CARET_SQUARE_DOWN),
-	SQUARE_LEFT(FontAwesomeRegular.CARET_SQUARE_LEFT),
-	SQUARE_RIGHT(FontAwesomeRegular.CARET_SQUARE_RIGHT),
-	SQUARE_UP(FontAwesomeRegular.CARET_SQUARE_UP);
+	FILE(FontAwesomeSolid.FILE),
+	FOLDER(FontAwesomeSolid.FOLDER),
+	FOLDER_OPEN(FontAwesomeSolid.FOLDER_OPEN),
+	LINK(FontAwesomeSolid.LINK),
+	SQUARE_DOWN(FontAwesomeSolid.CARET_SQUARE_DOWN),
+	SQUARE_LEFT(FontAwesomeSolid.CARET_SQUARE_LEFT),
+	SQUARE_RIGHT(FontAwesomeSolid.CARET_SQUARE_RIGHT),
+	SQUARE_UP(FontAwesomeSolid.CARET_SQUARE_UP);
 
 	private final Ikon ikon;
 

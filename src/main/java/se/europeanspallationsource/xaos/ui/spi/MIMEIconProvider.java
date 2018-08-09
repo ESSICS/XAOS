@@ -13,29 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.ui;
+package se.europeanspallationsource.xaos.ui.spi;
 
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import javafx.scene.Node;
+import javax.activation.MimeType;
 
 
 /**
+ * Provides icons (i.e. {@link Node}s) for a given MIME type.
+ *
  * @author claudio.rosati@esss.se
  */
-@RunWith( Suite.class )
-@Suite.SuiteClasses( {
-	CommonIconsTest.class,
-	HeadlessUtilityTest.class,
-	TreeItemsTest.class
-} )
-@SuppressWarnings( { "ClassMayBeInterface", "ClassWithoutLogger", "UtilityClassWithoutPrivateConstructor" } )
-public class UISuite {
+public interface MIMEIconProvider {
 
-//	TODO:CR Is it needed?
-//	@BeforeClass
-//	public static void setUpSuite() {
-//		conditionallyHeadless();
-//	}
-	
+	/**
+	 * Return an icon (i.e. a {@link Node} for the given MIME type.
+	 *
+	 * @param mime The MIME type for which a graphical representation is needed.
+	 * @return An icon as a {@link Node} instance, or {@code null}.
+	 */
+	public Node iconFor( MimeType mime );
+
 }

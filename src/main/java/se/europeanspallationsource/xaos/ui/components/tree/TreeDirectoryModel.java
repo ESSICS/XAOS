@@ -32,8 +32,8 @@ import org.reactfx.EventStream;
 import se.europeanspallationsource.xaos.util.io.DirectoryModel;
 import se.europeanspallationsource.xaos.util.io.PathElement;
 
-import static se.europeanspallationsource.xaos.application.util.CommonIcons.FILE;
-import static se.europeanspallationsource.xaos.application.util.CommonIcons.FOLDER;
+import static se.europeanspallationsource.xaos.ui.CommonIcons.FILE;
+import static se.europeanspallationsource.xaos.ui.CommonIcons.FOLDER;
 
 
 /**

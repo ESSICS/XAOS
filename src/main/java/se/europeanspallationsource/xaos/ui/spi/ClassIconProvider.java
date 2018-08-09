@@ -13,21 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.application.util;
+package se.europeanspallationsource.xaos.ui.spi;
 
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import javafx.scene.Node;
 
 
 /**
+ * Provides icons (i.e. {@link Node}s) for a given {@link Class}.
+ *
  * @author claudio.rosati@esss.se
  */
-@RunWith( Suite.class )
-@Suite.SuiteClasses( {
-	CommonIconsTest.class
-} )
-@SuppressWarnings( { "ClassMayBeInterface", "ClassWithoutLogger", "UtilityClassWithoutPrivateConstructor" } )
-public class UtilSuite {
+public interface ClassIconProvider {
+
+	/**
+	 * Return an icon (i.e. a {@link Node} for the given {@link Class}.
+	 *
+	 * @param clazz The {@link Class} for which a graphical representation is
+	 *              needed.
+	 * @return An icon as a {@link Node} instance, or {@code null}.
+	 */
+	public Node iconFor( Class<?> clazz );
 
 }
