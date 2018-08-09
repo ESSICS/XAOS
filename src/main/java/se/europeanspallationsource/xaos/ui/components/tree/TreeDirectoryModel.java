@@ -339,7 +339,7 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	 * a document icon for a regular file.
 	 */
 	@SuppressWarnings( "PublicInnerClass" )
-	private static class DefaultGraphicFactory implements GraphicFactory {
+	public static class DefaultGraphicFactory implements GraphicFactory {
 
 		@Override
 		public Node createGraphic( Path path, boolean isDirectory ) {

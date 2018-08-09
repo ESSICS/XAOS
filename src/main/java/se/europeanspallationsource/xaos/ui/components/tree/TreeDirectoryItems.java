@@ -39,9 +39,11 @@ import se.europeanspallationsource.xaos.util.io.PathElement;
  * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.PathItem</a>
  */
 @SuppressWarnings( "ClassWithoutLogger" )
-class TreeDirectoryItems {
+public class TreeDirectoryItems {
 
 	/**
+	 * Creates a new instance of {@link DirectoryItem} for the given parameters.
+	 *
 	 * @param <T>            Type of the object returned by {@link TreeItem#getValue()}.
 	 * @param path           The value of this {@link TreeItem}.
 	 * @param graphicFactory The factory class used to get an "icon" representing
@@ -54,11 +56,13 @@ class TreeDirectoryItems {
 	 *                       {@link TreeItem}.
 	 * @return A new instance of{@link DirectoryItem}.
 	 */
-	static <T> DirectoryItem<T> createDirectoryItem( T path, TreeDirectoryModel.GraphicFactory graphicFactory, Function<T, Path> projector, Function<Path, T> injector ) {
+	public static <T> DirectoryItem<T> createDirectoryItem( T path, TreeDirectoryModel.GraphicFactory graphicFactory, Function<T, Path> projector, Function<Path, T> injector ) {
 		return new DirectoryItem<>(path, graphicFactory.createGraphic(projector.apply(path), true), projector, injector);
 	}
 
 	/**
+	 * Creates a new instance of {@link FileItem} for the given parameters.
+	 *
 	 * @param <T>            Type of the object returned by {@link TreeItem#getValue()}.
 	 * @param path           The value of this {@link TreeItem}.
 	 * @param lastModified   The date of last modification for this item.
@@ -69,11 +73,13 @@ class TreeDirectoryItems {
 	 *                       corresponding {@link Path}.
 	 * @return A new instance of{@link FileItem}.
 	 */
-	static <T> FileItem<T> createFileItem( T path, FileTime lastModified, TreeDirectoryModel.GraphicFactory graphicFactory, Function<T, Path> projector ) {
+	public static <T> FileItem<T> createFileItem( T path, FileTime lastModified, TreeDirectoryModel.GraphicFactory graphicFactory, Function<T, Path> projector ) {
 		return new FileItem<>(path, lastModified, graphicFactory.createGraphic(projector.apply(path), false), projector);
 	}
 
 	/**
+	 * Creates a new instance of {@link TopLevelDirectoryItem} for the given parameters.
+	 *
 	 * @param <I>            Type of the initiator of changes to the model.
 	 * @param <T>            Type of the object returned by {@link TreeItem#getValue()}.
 	 * @param path           The value of this {@link TreeItem}.
@@ -88,15 +94,20 @@ class TreeDirectoryItems {
 	 * @param reporter       The object reporting changes in the model.
 	 * @return A new instance of{@link TopLevelDirectoryItem}.
 	 */
-	static <I, T> TopLevelDirectoryItem<I, T> createTopLevelDirectoryItem( T path, TreeDirectoryModel.GraphicFactory graphicFactory, Function<T, Path> projector, Function<Path, T> injector, DirectoryModel.Reporter<I> reporter ) {
+	public static <I, T> TopLevelDirectoryItem<I, T> createTopLevelDirectoryItem( T path, TreeDirectoryModel.GraphicFactory graphicFactory, Function<T, Path> projector, Function<Path, T> injector, DirectoryModel.Reporter<I> reporter ) {
 		return new TopLevelDirectoryItem<>(path, graphicFactory, projector, injector, reporter);
 	}
 
 	private TreeDirectoryItems() {
 	}
 
-	@SuppressWarnings( "PackageVisibleInnerClass" )
-	static class DirectoryItem<T> extends PathItem<T> {
+	/**
+	 * A {@link TreeItem} representing a directory.
+	 *
+	 * @param <T> Type of the object returned by {@link TreeItem#getValue()}.
+	 */
+	@SuppressWarnings( { "PackageVisibleInnerClass", "PublicInnerClass" } )
+	public static class DirectoryItem<T> extends PathItem<T> {
 
 		private final Function<Path, T> injector;
 
@@ -108,25 +119,19 @@ class TreeDirectoryItems {
 
 		}
 
-		public DirectoryItem<T> addChildDirectory( Path dirName, TreeDirectoryModel.GraphicFactory graphicFactory ) {
+		/**
+		 * Adds a new child representing a directory to this item.
+		 *
+		 * @param dir            The directory {@link Path}.
+		 * @param graphicFactory The factory returning a suitable icon.
+		 * @return The child {@link DirectoryItem}.
+		 */
+		public DirectoryItem<T> addChildDirectory( Path dir, TreeDirectoryModel.GraphicFactory graphicFactory ) {
 
-			assert dirName.getNameCount() == 1;
+			assert dir.getNameCount() == 1;
 
-			int i = getDirectoryInsertionIndex(dirName.toString());
-			DirectoryItem<T> child = createDirectoryItem(inject(getPath().resolve(dirName)), graphicFactory, getProjector(), getInjector());
-
-			getChildren().add(i, child);
-
-			return child;
-
-		}
-
-		public FileItem<T> addChildFile( Path fileName, FileTime lastModified, TreeDirectoryModel.GraphicFactory graphicFactory ) {
-
-			assert fileName.getNameCount() == 1;
-
-			int i = getFileInsertionIndex(fileName.toString());
-			FileItem<T> child = createFileItem(inject(getPath().resolve(fileName)), lastModified, graphicFactory, getProjector());
+			int i = getDirectoryInsertionIndex(dir.toString());
+			DirectoryItem<T> child = createDirectoryItem(inject(getPath().resolve(dir)), graphicFactory, getProjector(), getInjector());
 
 			getChildren().add(i, child);
 
@@ -134,6 +139,42 @@ class TreeDirectoryItems {
 
 		}
 
+		/**
+		 * Adds a new child representing a directory to this item.
+		 *
+		 * @param file           The file {@link Path}.
+		 * @param lastModified   The file's last modification time.
+		 * @param graphicFactory The factory returning a suitable icon.
+		 * @return The child {@link FileItem}.
+		 */
+		public FileItem<T> addChildFile( Path file, FileTime lastModified, TreeDirectoryModel.GraphicFactory graphicFactory ) {
+
+			assert file.getNameCount() == 1;
+
+			int i = getFileInsertionIndex(file.toString());
+			FileItem<T> child = createFileItem(inject(getPath().resolve(file)), lastModified, graphicFactory, getProjector());
+
+			getChildren().add(i, child);
+
+			return child;
+
+		}
+
+		/**
+		 * @return A {@link Function} converting a {@link Path} into the object
+		 *         used as value in the corresponding{@link TreeItem}.
+		 */
+		public final Function<Path, T> getInjector() {
+			return injector;
+		}
+
+		/**
+		 * Applies {@link #getInjector()} to the given {@link Path}.
+		 *
+		 * @param path The {@link Path} to be converted.
+		 * @return The value obtained applying {@link #getInjector()} to the
+		 *         given {@link Path}.
+		 */
 		public final T inject( Path path ) {
 			return injector.apply(path);
 		}
@@ -141,10 +182,6 @@ class TreeDirectoryItems {
 		@Override
 		public final boolean isDirectory() {
 			return true;
-		}
-
-		protected final Function<Path, T> getInjector() {
-			return injector;
 		}
 
 		private int getDirectoryInsertionIndex( String dirName ) {
@@ -201,8 +238,13 @@ class TreeDirectoryItems {
 
 	}
 
-	@SuppressWarnings( "PackageVisibleInnerClass" )
-	static class FileItem<T> extends PathItem<T> {
+	/**
+	 * A {@link TreeItem} representing a file.
+	 *
+	 * @param <T> Type of the object returned by {@link TreeItem#getValue()}.
+	 */
+	@SuppressWarnings( { "PackageVisibleInnerClass", "PublicInnerClass" } )
+	public static class FileItem<T> extends PathItem<T> {
 
 		private FileTime lastModified;
 
@@ -213,6 +255,10 @@ class TreeDirectoryItems {
 			this.lastModified = lastModified;
 		}
 
+		/**
+		 * @return The last modification time for the file associated with this
+		 *         item.
+		 */
 		public final FileTime getLastModified() {
 			return lastModified;
 		}
@@ -222,6 +268,13 @@ class TreeDirectoryItems {
 			return false;
 		}
 
+		/**
+		 * Updates the modification time associated with the file path.
+		 *
+		 * @param lastModified The new modification time.
+		 * @return {@code true} if the given value is greater than the current
+		 *         one.
+		 */
 		public boolean updateModificationTime( FileTime lastModified ) {
 
 			if ( lastModified.compareTo(this.lastModified) > 0 ) {
@@ -238,29 +291,13 @@ class TreeDirectoryItems {
 
 	}
 
-	@SuppressWarnings( "PackageVisibleInnerClass" )
-	static class ParentChild<T> {
-
-		private final PathItem<T> child;
-		private final DirectoryItem<T> parent;
-
-		ParentChild( DirectoryItem<T> parent, PathItem<T> child ) {
-			this.parent = parent;
-			this.child = child;
-		}
-
-		public PathItem<T> getChild() {
-			return child;
-		}
-
-		public DirectoryItem<T> getParent() {
-			return parent;
-		}
-
-	}
-
-	@SuppressWarnings( "PackageVisibleInnerClass" )
-	static abstract class PathItem<T> extends TreeItem<T> {
+	/**
+	 * An abstract class representing a {@link TreeItem} for a given {@link Path}.
+	 *
+	 * @param <T> Type of the object returned by {@link TreeItem#getValue()}.
+	 */
+	@SuppressWarnings( { "PackageVisibleInnerClass", "PublicInnerClass" } )
+	public static abstract class PathItem<T> extends TreeItem<T> {
 
 		private final Function<T, Path> projector;
 
@@ -272,18 +309,43 @@ class TreeDirectoryItems {
 
 		}
 
+		/**
+		 * @return {@code (DirectoryItem<T>) this}.
+		 */
 		public DirectoryItem<T> asDirectoryItem() {
 			return (DirectoryItem<T>) this;
 		}
 
+		/**
+		 * @return {@code (FileItem<T>) this}.
+		 */
 		public FileItem<T> asFileItem() {
 			return (FileItem<T>) this;
 		}
 
+		/**
+		 * @return The {@link Path} obtained projecting the value of this
+		 *         {@link TreeItem}.
+		 */
 		public final Path getPath() {
 			return projector.apply(getValue());
 		}
 
+		/**
+		 * @return The {@link Function} converting the object returned by
+		 *         {@link TreeItem#getValue()}) into the corresponding
+		 *         {@link Path}.
+		 */
+		public final Function<T, Path> getProjector() {
+			return projector;
+		}
+
+		/**
+		 * @param relativePath The relative {@link Path} for which the
+		 *                     corresponding {@link PathItem} object must be
+		 *                     returned.
+		 * @return A {@link PathItem} object for the given relative {@link Path}.
+		 */
 		public PathItem<T> getRelativeChild( Path relativePath ) {
 
 			assert relativePath.getNameCount() == 1;
@@ -304,6 +366,9 @@ class TreeDirectoryItems {
 
 		}
 
+		/**
+		 * @return {@code true} if this item represents a directory.
+		 */
 		public abstract boolean isDirectory();
 
 //	TODO:CR To be removed?
@@ -311,10 +376,6 @@ class TreeDirectoryItems {
 //		public final boolean isLeaf() {
 //			return !isDirectory();
 //		}
-
-		protected final Function<T, Path> getProjector() {
-			return projector;
-		}
 
 		protected PathItem<T> resolve( Path relativePath ) {
 
@@ -339,8 +400,15 @@ class TreeDirectoryItems {
 
 	}
 
-	@SuppressWarnings( "PackageVisibleInnerClass" )
-	static class TopLevelDirectoryItem<I, T> extends DirectoryItem<T> {
+	/**
+	 * A {@link TreeItem} representing a top-level directory, i.e. the root
+	 * directory for the tree model.
+	 *
+	 * @param <I> Type of the initiator of changes to the model.
+	 * @param <T> Type of the object returned by {@link TreeItem#getValue()}.
+	 */
+	@SuppressWarnings( { "PackageVisibleInnerClass", "PublicInnerClass" } )
+	public static class TopLevelDirectoryItem<I, T> extends DirectoryItem<T> {
 
 		private final TreeDirectoryModel.GraphicFactory graphicFactory;
 		private final DirectoryModel.Reporter<I> reporter;
@@ -351,6 +419,12 @@ class TreeDirectoryItems {
 			this.reporter = reporter;
 		}
 
+		/**
+		 * Adds a directory to the model rooted at this item.
+		 *
+		 * @param relativePath The directory {@link Path}.
+		 * @param initiator    The initiator of changes to the model.
+		 */
 		public void addDirectory( Path relativePath, I initiator ) {
 
 			PathItem<T> item = resolve(relativePath);
@@ -361,14 +435,33 @@ class TreeDirectoryItems {
 
 		}
 
+		/**
+		 * Adds a file to the model rooted at this item.
+		 *
+		 * @param relativePath The file {@link Path}.
+		 * @param lastModified The file's last modification time.
+		 * @param initiator    The initiator of changes to the model.
+		 */
 		public void addFile( Path relativePath, FileTime lastModified, I initiator ) {
 			updateFile(relativePath, lastModified, initiator);
 		}
 
+		/**
+		 * @param relativePath The {@link Path} to be checked.
+		 * @return {@code true} if the given {@link Path} is contained in the
+		 *         model rooted at this item.
+		 */
 		public boolean contains( Path relativePath ) {
 			return resolve(relativePath) != null;
 		}
 
+		/**
+		 * Removes the given {@link Path} from the model rooted at this item.
+		 *
+		 * @param relativePath The {@link Path} to be removed from the model
+		 *                     rooted at this item.
+		 * @param initiator    The initiator of changes to the model.
+		 */
 		public void remove( Path relativePath, I initiator ) {
 
 			PathItem<T> item = resolve(relativePath);
@@ -379,6 +472,13 @@ class TreeDirectoryItems {
 
 		}
 
+		/**
+		 * Adds to the model rooted at this item all the subdirectories and
+		 * files represented by the {@code tree} element.
+		 *
+ 		 * @param tree      The element to be synchronized.
+		 * @param initiator The initiator of changes to the model.
+		 */
 		public void sync( PathElement tree, I initiator ) {
 
 			Path path = tree.getPath();
@@ -407,6 +507,14 @@ class TreeDirectoryItems {
 
 		}
 
+		/**
+		 * Updates the modification time for the item associated to the given
+		 * {@link Path}.
+		 *
+		 * @param relativePath The path whose associated item must be updated.
+		 * @param lastModified The new modification time.
+		 * @param initiator    The initiator of changes to the model.
+		 */
 		public void updateModificationTime( Path relativePath, FileTime lastModified, I initiator ) {
 			updateFile(relativePath, lastModified, initiator);
 		}
@@ -523,6 +631,27 @@ class TreeDirectoryItems {
 				sync(PathElement.file(getPath().resolve(relativePath), lastModified), initiator);
 			}
 
+		}
+
+	}
+
+	@SuppressWarnings( "PackageVisibleInnerClass" )
+	static class ParentChild<T> {
+
+		private final PathItem<T> child;
+		private final DirectoryItem<T> parent;
+
+		ParentChild( DirectoryItem<T> parent, PathItem<T> child ) {
+			this.parent = parent;
+			this.child = child;
+		}
+
+		public PathItem<T> getChild() {
+			return child;
+		}
+
+		public DirectoryItem<T> getParent() {
+			return parent;
 		}
 
 	}
