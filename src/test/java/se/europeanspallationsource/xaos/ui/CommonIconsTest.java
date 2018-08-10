@@ -47,14 +47,16 @@ public class CommonIconsTest {
 
 		FontIcon icon;
 			
-		icon = CommonIcons.FILE.getIcon();				assertEquals(FontAwesome.FILE_O.getCode(), icon.getText().charAt(0));
-		icon = CommonIcons.FOLDER_COLLAPSED.getIcon();	assertEquals(FontAwesome.FOLDER_O.getCode(), icon.getText().charAt(0));
-		icon = CommonIcons.FOLDER_EXPANDED.getIcon();	assertEquals(FontAwesome.FOLDER_OPEN_O.getCode(), icon.getText().charAt(0));
-		icon = CommonIcons.LINK.getIcon();				assertEquals(FontAwesome.LINK.getCode(), icon.getText().charAt(0));
-		icon = CommonIcons.SQUARE_DOWN.getIcon();		assertEquals(FontAwesome.CARET_SQUARE_O_DOWN.getCode(), icon.getText().charAt(0));
-		icon = CommonIcons.SQUARE_LEFT.getIcon();		assertEquals(FontAwesome.CARET_SQUARE_O_LEFT.getCode(), icon.getText().charAt(0));
+		icon = CommonIcons.FILE.getIcon();				assertEquals(FontAwesome.FILE_O.getCode(),               icon.getText().charAt(0));
+		icon = CommonIcons.FILE_EXECUTABLE.getIcon();	assertEquals(FontAwesome.PLAY_CIRCLE_O.getCode(),        icon.getText().charAt(0));
+		icon = CommonIcons.FILE_HIDDEN.getIcon();		assertEquals(FontAwesome.FILE.getCode(),                 icon.getText().charAt(0));
+		icon = CommonIcons.FILE_LINK.getIcon();			assertEquals(FontAwesome.LINK.getCode(),                 icon.getText().charAt(0));
+		icon = CommonIcons.FOLDER_COLLAPSED.getIcon();	assertEquals(FontAwesome.FOLDER_O.getCode(),             icon.getText().charAt(0));
+		icon = CommonIcons.FOLDER_EXPANDED.getIcon();	assertEquals(FontAwesome.FOLDER_OPEN_O.getCode(),        icon.getText().charAt(0));
+		icon = CommonIcons.SQUARE_DOWN.getIcon();		assertEquals(FontAwesome.CARET_SQUARE_O_DOWN.getCode(),  icon.getText().charAt(0));
+		icon = CommonIcons.SQUARE_LEFT.getIcon();		assertEquals(FontAwesome.CARET_SQUARE_O_LEFT.getCode(),  icon.getText().charAt(0));
 		icon = CommonIcons.SQUARE_RIGHT.getIcon();		assertEquals(FontAwesome.CARET_SQUARE_O_RIGHT.getCode(), icon.getText().charAt(0));
-		icon = CommonIcons.SQUARE_UP.getIcon();			assertEquals(FontAwesome.CARET_SQUARE_O_UP.getCode(), icon.getText().charAt(0));
+		icon = CommonIcons.SQUARE_UP.getIcon();			assertEquals(FontAwesome.CARET_SQUARE_O_UP.getCode(),    icon.getText().charAt(0));
 
     }
 

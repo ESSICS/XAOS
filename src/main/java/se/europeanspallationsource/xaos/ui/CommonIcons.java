@@ -33,9 +33,11 @@ import static org.kordamp.ikonli.javafx.FontIcon.of;
 public enum CommonIcons {
 
 	FILE(FontAwesome.FILE_O),
+	FILE_EXECUTABLE(FontAwesome.PLAY_CIRCLE_O),
+	FILE_HIDDEN(FontAwesome.FILE),
+	FILE_LINK(FontAwesome.LINK),
 	FOLDER_COLLAPSED(FontAwesome.FOLDER_O),
 	FOLDER_EXPANDED(FontAwesome.FOLDER_OPEN_O),
-	LINK(FontAwesome.LINK),
 	SQUARE_DOWN(FontAwesome.CARET_SQUARE_O_DOWN),
 	SQUARE_LEFT(FontAwesome.CARET_SQUARE_O_LEFT),
 	SQUARE_RIGHT(FontAwesome.CARET_SQUARE_O_RIGHT),

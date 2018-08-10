@@ -38,15 +38,19 @@ public class Icons {
 	 */
 	public static Node iconFor( Path path ) {
 
-		Iterator<FileExtensionIconProvider> iterator = ServiceLoader.load(FileExtensionIconProvider.class).iterator();
+		if ( path != null ) {
 
-		while ( iterator.hasNext() ) {
+			Iterator<FileExtensionIconProvider> iterator = ServiceLoader.load(FileExtensionIconProvider.class).iterator();
 
-			FileExtensionIconProvider provider = iterator.next();
-			Node icon = provider.iconFor(path);
+			while ( iterator.hasNext() ) {
 
-			if ( icon != null ) {
-				return icon;
+				FileExtensionIconProvider provider = iterator.next();
+				Node icon = provider.iconFor(FileExtensionIconProvider.extensionFor(path));
+
+				if ( icon != null ) {
+					return icon;
+				}
+
 			}
 
 		}

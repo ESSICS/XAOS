@@ -20,11 +20,6 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import javafx.scene.Node;
-import se.europeanspallationsource.xaos.ui.CommonIcons;
-
-import static se.europeanspallationsource.xaos.ui.CommonIcons.FILE;
-import static se.europeanspallationsource.xaos.ui.CommonIcons.FOLDER_COLLAPSED;
-import static se.europeanspallationsource.xaos.ui.CommonIcons.LINK;
 
 
 /**
@@ -40,69 +35,46 @@ public interface FileExtensionIconProvider {
 	 *
 	 * @param extension File extension for which a graphical representation is
 	 *                  needed. Implementation should discard the first character
-	 *                  if equal to '.'.
+	 *                  if equal to '.'. Can be {@code null}.
 	 * @return An icon as a {@link Node} instance, or {@code null}.
 	 */
 	public Node iconFor( String extension );
 
 	/**
-	 * @param path The {@link Path} for which a graphical representation is
-	 *             needed.
-	 * @return {@code null} if the given {@link Path} is {@code null},
-	 *         {@link CommonIcons#FOLDER} if the given path is a folder,
-	 *         {@link CommonIcons#LINK} if it is a symbolic link,
-	 *         {@link CommonIcons#FILE} if the given path is a file but it has
-	 *         no extension, {@link #iconFor(String)} otherwise.
+	 * @param path The {@link Path} for which the extension must be returned.
+	 * @return The extension for the given {@link Path}, or {@code null} if it
+	 *         is {@code null}, is not a file or it has no extension.
 	 */
-	default public Node iconFor( Path path ) {
-		if ( path == null ) {
-			return null;
-		} else if ( Files.isDirectory(path) ) {
-			return FOLDER_COLLAPSED.getIcon();
-		} else if ( Files.isSymbolicLink(path) ) {
-			return LINK.getIcon();
-		} else {
+	static public String extensionFor( Path path ) {
+
+		if ( path != null && !Files.isDirectory(path) && !Files.isSymbolicLink(path) ) {
 
 			String name = path.getFileName().toString();
 			int lastDotIndex = name.lastIndexOf('.');
 
 			if ( lastDotIndex != -1 && lastDotIndex < name.length() - 1 ) {
-				return iconFor(name.substring(lastDotIndex + 1));
-			} else {
-				return FILE.getIcon();
+				return name.substring(lastDotIndex + 1);
 			}
 
 		}
+
+		return null;
+
 	}
 
 	/**
-	 * @param path The {@link File} for which a graphical representation is
-	 *             needed.
-	 * @return {@code null} if the given {@link File} is {@code null},
-	 *         {@link CommonIcons#FOLDER} if the given path is a folder,
-	 *         {@link CommonIcons#LINK} if it is a symbolic link,
-	 *         {@link CommonIcons#FILE} if the given path is a file but it has
-	 *         no extension, {@link #iconFor(String)} otherwise.
+	 * @param file The {@link File} for which the extension must be returned.
+	 * @return {@link #extensionFor(java.nio.file.Path)} calling
+	 *         {@link File#toPath()} on the given parameter.
 	 */
-	default public Node iconFor( File path ) {
-		if ( path == null ) {
-			return null;
-		} else if ( path.isDirectory() ) {
-			return FOLDER_COLLAPSED.getIcon();
-		} else if ( Files.isSymbolicLink(path.toPath()) ) {
-			return LINK.getIcon();
-		} else {
+	static public String extensionFor( File file ) {
 
-			String name = path.getName();
-			int lastDotIndex = name.lastIndexOf('.');
-
-			if ( lastDotIndex != -1 && lastDotIndex < name.length() - 1 ) {
-				return iconFor(name.substring(lastDotIndex + 1));
-			} else {
-				return FILE.getIcon();
-			}
-
+		if ( file != null ) {
+			return extensionFor(file.toPath());
 		}
+
+		return null;
+
 	}
 
 }

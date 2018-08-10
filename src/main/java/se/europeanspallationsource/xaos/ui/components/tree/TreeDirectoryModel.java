@@ -16,11 +16,16 @@
 package se.europeanspallationsource.xaos.ui.components.tree;
 
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.FileTime;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.function.Function;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javafx.scene.Node;
@@ -28,11 +33,15 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import org.reactfx.EventSource;
 import org.reactfx.EventStream;
+import se.europeanspallationsource.xaos.ui.Icons;
 import se.europeanspallationsource.xaos.util.TriFunction;
 import se.europeanspallationsource.xaos.util.io.DirectoryModel;
 import se.europeanspallationsource.xaos.util.io.PathElement;
 
 import static se.europeanspallationsource.xaos.ui.CommonIcons.FILE;
+import static se.europeanspallationsource.xaos.ui.CommonIcons.FILE_EXECUTABLE;
+import static se.europeanspallationsource.xaos.ui.CommonIcons.FILE_HIDDEN;
+import static se.europeanspallationsource.xaos.ui.CommonIcons.FILE_LINK;
 import static se.europeanspallationsource.xaos.ui.CommonIcons.FOLDER_COLLAPSED;
 import static se.europeanspallationsource.xaos.ui.CommonIcons.FOLDER_EXPANDED;
 
@@ -342,11 +351,35 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	@SuppressWarnings( "PublicInnerClass" )
 	public static class DefaultGraphicFactory implements GraphicFactory {
 
+		private static final Logger LOGGER = Logger.getLogger(DefaultGraphicFactory.class.getName());
+
 		@Override
 		public Node createGraphic( Path path, boolean isDirectory, boolean isExpanded ) {
-			return isDirectory
-				   ? ( isExpanded ? FOLDER_EXPANDED.getIcon() : FOLDER_COLLAPSED.getIcon() )
-				   : FILE.getIcon();
+			if ( isDirectory ) {
+				return isExpanded ? FOLDER_EXPANDED.getIcon() : FOLDER_COLLAPSED.getIcon();
+			} else if ( Files.isSymbolicLink(path) ) {
+				return FILE_LINK.getIcon();
+			} else if ( Files.isExecutable(path) ) {
+				return FILE_EXECUTABLE.getIcon();
+			} else {
+				
+				boolean hidden = false;
+				
+				try {
+					hidden = Files.isHidden(path);
+				} catch ( IOException ex ) {
+					LOGGER.log(
+						Level.WARNING, 
+						MessageFormat.format("Unable to check if the given path is hidden [{0}].", path.toString()), 
+						ex
+					);
+				}
+				
+				return hidden
+					   ? FILE_HIDDEN.getIcon()
+					   : Icons.iconFor(path, FILE.getIcon());
+				
+			}
 		}
 
 	}
