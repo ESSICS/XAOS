@@ -18,7 +18,7 @@ package se.europeanspallationsource.xaos.ui;
 
 import javafx.scene.paint.Color;
 import org.kordamp.ikonli.Ikon;
-import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
+import org.kordamp.ikonli.fontawesome.FontAwesome;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import static org.kordamp.ikonli.javafx.FontIcon.of;
@@ -32,14 +32,14 @@ import static org.kordamp.ikonli.javafx.FontIcon.of;
 @SuppressWarnings( "ClassWithoutLogger" )
 public enum CommonIcons {
 
-	FILE(FontAwesomeSolid.FILE),
-	FOLDER(FontAwesomeSolid.FOLDER),
-	FOLDER_OPEN(FontAwesomeSolid.FOLDER_OPEN),
-	LINK(FontAwesomeSolid.LINK),
-	SQUARE_DOWN(FontAwesomeSolid.CARET_SQUARE_DOWN),
-	SQUARE_LEFT(FontAwesomeSolid.CARET_SQUARE_LEFT),
-	SQUARE_RIGHT(FontAwesomeSolid.CARET_SQUARE_RIGHT),
-	SQUARE_UP(FontAwesomeSolid.CARET_SQUARE_UP);
+	FILE(FontAwesome.FILE_O),
+	FOLDER_COLLAPSED(FontAwesome.FOLDER_O),
+	FOLDER_EXPANDED(FontAwesome.FOLDER_OPEN_O),
+	LINK(FontAwesome.LINK),
+	SQUARE_DOWN(FontAwesome.CARET_SQUARE_O_DOWN),
+	SQUARE_LEFT(FontAwesome.CARET_SQUARE_O_LEFT),
+	SQUARE_RIGHT(FontAwesome.CARET_SQUARE_O_RIGHT),
+	SQUARE_UP(FontAwesome.CARET_SQUARE_O_UP);
 
 	private final Ikon ikon;
 

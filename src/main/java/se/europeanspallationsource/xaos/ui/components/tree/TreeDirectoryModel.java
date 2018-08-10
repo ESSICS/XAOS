@@ -20,7 +20,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.FileTime;
 import java.util.List;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -29,11 +28,13 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import org.reactfx.EventSource;
 import org.reactfx.EventStream;
+import se.europeanspallationsource.xaos.util.TriFunction;
 import se.europeanspallationsource.xaos.util.io.DirectoryModel;
 import se.europeanspallationsource.xaos.util.io.PathElement;
 
 import static se.europeanspallationsource.xaos.ui.CommonIcons.FILE;
-import static se.europeanspallationsource.xaos.ui.CommonIcons.FOLDER;
+import static se.europeanspallationsource.xaos.ui.CommonIcons.FOLDER_COLLAPSED;
+import static se.europeanspallationsource.xaos.ui.CommonIcons.FOLDER_EXPANDED;
 
 
 /**
@@ -56,7 +57,7 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	/**
 	 * Graphic factory that always returns {@code null}.
 	 */
-	public static final GraphicFactory NO_GRAPHIC_FACTORY = ( path, isDirectory ) -> null;
+	public static final GraphicFactory NO_GRAPHIC_FACTORY = ( p, d, e ) -> null;
 
 	private final EventSource<Update<I>> creations = new EventSource<>();
 	private final I defaultInitiator;
@@ -342,8 +343,10 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	public static class DefaultGraphicFactory implements GraphicFactory {
 
 		@Override
-		public Node createGraphic( Path path, boolean isDirectory ) {
-			return isDirectory ? FOLDER.getIcon() : FILE.getIcon();
+		public Node createGraphic( Path path, boolean isDirectory, boolean isExpanded ) {
+			return isDirectory
+				   ? ( isExpanded ? FOLDER_EXPANDED.getIcon() : FOLDER_COLLAPSED.getIcon() )
+				   : FILE.getIcon();
 		}
 
 	}
@@ -354,13 +357,23 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	 */
 	@FunctionalInterface
 	@SuppressWarnings( "PublicInnerClass" )
-	public interface GraphicFactory extends BiFunction<Path, Boolean, Node> {
+	public interface GraphicFactory extends TriFunction<Path, Boolean, Boolean, Node> {
 
-		Node createGraphic( Path path, boolean isDirectory );
+		/**
+		 * Creates a graphics {@link Node} for the given {@link Path}.
+		 *
+		 * @param path        The {@link Path} needing a graphical representation.
+		 * @param isDirectory The returned graphics must represent a node.
+		 * @param isExpanded  If {@code isDirectory} is {@code true}, then this
+		 *                    parameter tells if the directory must be represented
+		 *                    as expanded or collapsed.
+		 * @return The graphical representation for the given {@link Path}.
+		 */
+		Node createGraphic( Path path, boolean isDirectory, boolean isExpanded );
 
 		@Override
-		default Node apply( Path path, Boolean isDirectory ) {
-			return createGraphic(path, isDirectory);
+		default Node apply( Path path, Boolean isDirectory, Boolean isExpanded ) {
+			return createGraphic(path, isDirectory, isExpanded);
 		}
 
 	}

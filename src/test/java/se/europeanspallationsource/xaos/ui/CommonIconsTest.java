@@ -19,7 +19,7 @@ package se.europeanspallationsource.xaos.ui;
 import javafx.scene.paint.Color;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.kordamp.ikonli.fontawesome5.FontAwesomeRegular;
+import org.kordamp.ikonli.fontawesome.FontAwesome;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import static org.junit.Assert.assertEquals;
@@ -47,13 +47,14 @@ public class CommonIconsTest {
 
 		FontIcon icon;
 			
-		icon = CommonIcons.FILE.getIcon();			assertEquals(FontAwesomeRegular.FILE.getCode(), icon.getText().charAt(0));
-		icon = CommonIcons.FOLDER.getIcon();		assertEquals(FontAwesomeRegular.FOLDER.getCode(), icon.getText().charAt(0));
-		icon = CommonIcons.FOLDER_OPEN.getIcon();	assertEquals(FontAwesomeRegular.FOLDER_OPEN.getCode(), icon.getText().charAt(0));
-		icon = CommonIcons.SQUARE_DOWN.getIcon();	assertEquals(FontAwesomeRegular.CARET_SQUARE_DOWN.getCode(), icon.getText().charAt(0));
-		icon = CommonIcons.SQUARE_LEFT.getIcon();	assertEquals(FontAwesomeRegular.CARET_SQUARE_LEFT.getCode(), icon.getText().charAt(0));
-		icon = CommonIcons.SQUARE_RIGHT.getIcon();	assertEquals(FontAwesomeRegular.CARET_SQUARE_RIGHT.getCode(), icon.getText().charAt(0));
-		icon = CommonIcons.SQUARE_UP.getIcon();		assertEquals(FontAwesomeRegular.CARET_SQUARE_UP.getCode(), icon.getText().charAt(0));
+		icon = CommonIcons.FILE.getIcon();				assertEquals(FontAwesome.FILE_O.getCode(), icon.getText().charAt(0));
+		icon = CommonIcons.FOLDER_COLLAPSED.getIcon();	assertEquals(FontAwesome.FOLDER_O.getCode(), icon.getText().charAt(0));
+		icon = CommonIcons.FOLDER_EXPANDED.getIcon();	assertEquals(FontAwesome.FOLDER_OPEN_O.getCode(), icon.getText().charAt(0));
+		icon = CommonIcons.LINK.getIcon();				assertEquals(FontAwesome.LINK.getCode(), icon.getText().charAt(0));
+		icon = CommonIcons.SQUARE_DOWN.getIcon();		assertEquals(FontAwesome.CARET_SQUARE_O_DOWN.getCode(), icon.getText().charAt(0));
+		icon = CommonIcons.SQUARE_LEFT.getIcon();		assertEquals(FontAwesome.CARET_SQUARE_O_LEFT.getCode(), icon.getText().charAt(0));
+		icon = CommonIcons.SQUARE_RIGHT.getIcon();		assertEquals(FontAwesome.CARET_SQUARE_O_RIGHT.getCode(), icon.getText().charAt(0));
+		icon = CommonIcons.SQUARE_UP.getIcon();			assertEquals(FontAwesome.CARET_SQUARE_O_UP.getCode(), icon.getText().charAt(0));
 
     }
 
@@ -69,7 +70,7 @@ public class CommonIconsTest {
 
 		assertEquals(Color.YELLOW, icon.getIconColor());
 
-		icon = CommonIcons.FOLDER.getIcon(Color.ORANGE);
+		icon = CommonIcons.FOLDER_COLLAPSED.getIcon(Color.ORANGE);
 
 		assertEquals(Color.ORANGE, icon.getIconColor());
 
@@ -99,7 +100,7 @@ public class CommonIconsTest {
 
 		assertEquals(33L, icon.getIconSize());
 
-		icon = CommonIcons.FOLDER.getIcon(123);
+		icon = CommonIcons.FOLDER_COLLAPSED.getIcon(123);
 
 		assertEquals(123L, icon.getIconSize());
 
@@ -118,7 +119,7 @@ public class CommonIconsTest {
 		assertEquals(33L, icon.getIconSize());
 		assertEquals(Color.ALICEBLUE, icon.getIconColor());
 
-		icon = CommonIcons.FOLDER.getIcon(234, Color.AQUA);
+		icon = CommonIcons.FOLDER_COLLAPSED.getIcon(234, Color.AQUA);
 
 		assertEquals(234L, icon.getIconSize());
 		assertEquals(Color.AQUA, icon.getIconColor());

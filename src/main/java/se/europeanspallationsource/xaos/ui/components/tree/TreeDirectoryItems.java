@@ -25,6 +25,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import javafx.beans.binding.Bindings;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
@@ -57,7 +58,7 @@ public class TreeDirectoryItems {
 	 * @return A new instance of{@link DirectoryItem}.
 	 */
 	public static <T> DirectoryItem<T> createDirectoryItem( T path, TreeDirectoryModel.GraphicFactory graphicFactory, Function<T, Path> projector, Function<Path, T> injector ) {
-		return new DirectoryItem<>(path, graphicFactory.createGraphic(projector.apply(path), true), projector, injector);
+		return new DirectoryItem<>(path, graphicFactory.createGraphic(projector.apply(path), true, false), graphicFactory.createGraphic(projector.apply(path), true, true), projector, injector);
 	}
 
 	/**
@@ -74,7 +75,7 @@ public class TreeDirectoryItems {
 	 * @return A new instance of{@link FileItem}.
 	 */
 	public static <T> FileItem<T> createFileItem( T path, FileTime lastModified, TreeDirectoryModel.GraphicFactory graphicFactory, Function<T, Path> projector ) {
-		return new FileItem<>(path, lastModified, graphicFactory.createGraphic(projector.apply(path), false), projector);
+		return new FileItem<>(path, lastModified, graphicFactory.createGraphic(projector.apply(path), false, false), projector);
 	}
 
 	/**
@@ -111,11 +112,22 @@ public class TreeDirectoryItems {
 
 		private final Function<Path, T> injector;
 
-		protected DirectoryItem( T path, Node graphic, Function<T, Path> projector, Function<Path, T> injector ) {
+		protected DirectoryItem(
+			T path,
+			final Node closeGraphic,
+			final Node openGraphic,
+			Function<T, Path> projector,
+			Function<Path, T> injector
+		) {
 
-			super(path, graphic, projector);
+			super(path, projector);
 
 			this.injector = injector;
+
+			graphicProperty().bind(Bindings.createObjectBinding(
+				() -> isExpanded() ? openGraphic : closeGraphic,
+				expandedProperty()
+			));
 
 		}
 
@@ -301,6 +313,14 @@ public class TreeDirectoryItems {
 
 		private final Function<T, Path> projector;
 
+		protected PathItem( T path, Function<T, Path> projector ) {
+
+			super(path);
+
+			this.projector = projector;
+
+		}
+
 		protected PathItem( T path, Node graphic, Function<T, Path> projector ) {
 
 			super(path, graphic);
@@ -414,7 +434,7 @@ public class TreeDirectoryItems {
 		private final DirectoryModel.Reporter<I> reporter;
 
 		protected TopLevelDirectoryItem( T path, TreeDirectoryModel.GraphicFactory graphicFactory, Function<T, Path> projector, Function<Path, T> injector, DirectoryModel.Reporter<I> reporter ) {
-			super(path, graphicFactory.createGraphic(projector.apply(path), true), projector, injector);
+			super(path, graphicFactory.createGraphic(projector.apply(path), true, false), graphicFactory.createGraphic(projector.apply(path), true, true), projector, injector);
 			this.graphicFactory = graphicFactory;
 			this.reporter = reporter;
 		}

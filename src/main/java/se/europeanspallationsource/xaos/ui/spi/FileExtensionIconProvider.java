@@ -23,7 +23,7 @@ import javafx.scene.Node;
 import se.europeanspallationsource.xaos.ui.CommonIcons;
 
 import static se.europeanspallationsource.xaos.ui.CommonIcons.FILE;
-import static se.europeanspallationsource.xaos.ui.CommonIcons.FOLDER;
+import static se.europeanspallationsource.xaos.ui.CommonIcons.FOLDER_COLLAPSED;
 import static se.europeanspallationsource.xaos.ui.CommonIcons.LINK;
 
 
@@ -58,7 +58,7 @@ public interface FileExtensionIconProvider {
 		if ( path == null ) {
 			return null;
 		} else if ( Files.isDirectory(path) ) {
-			return FOLDER.getIcon();
+			return FOLDER_COLLAPSED.getIcon();
 		} else if ( Files.isSymbolicLink(path) ) {
 			return LINK.getIcon();
 		} else {
@@ -88,7 +88,7 @@ public interface FileExtensionIconProvider {
 		if ( path == null ) {
 			return null;
 		} else if ( path.isDirectory() ) {
-			return FOLDER.getIcon();
+			return FOLDER_COLLAPSED.getIcon();
 		} else if ( Files.isSymbolicLink(path.toPath()) ) {
 			return LINK.getIcon();
 		} else {

@@ -19,7 +19,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!--<cache2k-version>1.0.2.Final</cache2k-version>-->
-		<ikonli-version>2.1.1</ikonli-version>
+		<ikonli-version>2.3.0</ikonli-version>
         <jacp.version>3.0-SNAPSHOT</jacp.version>
         <textfx.version>4.0.13-alpha</textfx.version>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -256,7 +256,7 @@
         </dependency>
 		<dependency>
 			<groupId>org.kordamp.ikonli</groupId>
-			<artifactId>ikonli-fontawesome5-pack</artifactId>
+			<artifactId>ikonli-fontawesome-pack</artifactId>
 			<version>${ikonli-version}</version>
             <scope>compile</scope>
 		</dependency>
