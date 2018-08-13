@@ -17,7 +17,6 @@ package se.europeanspallationsource.xaos.ui.spi;
 
 
 import javafx.scene.Node;
-import javax.activation.MimeType;
 
 
 /**
@@ -25,7 +24,7 @@ import javax.activation.MimeType;
  *
  * @author claudio.rosati@esss.se
  */
-public interface MIMEIconProvider {
+public interface MIMETypeIconProvider {
 
 	/**
 	 * Return an icon (i.e. a {@link Node} for the given MIME type.
@@ -33,6 +32,6 @@ public interface MIMEIconProvider {
 	 * @param mime The MIME type for which a graphical representation is needed.
 	 * @return An icon as a {@link Node} instance, or {@code null}.
 	 */
-	public Node iconFor( MimeType mime );
+	public Node iconFor( String mime );
 
 }

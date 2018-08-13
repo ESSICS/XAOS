@@ -32,11 +32,11 @@ import se.europeanspallationsource.xaos.ui.spi.FileExtensionIconProvider;
  *
  * @author claudio.rosati@esss.se
  */
-@ServiceProvider( service = FileExtensionIconProvider.class )
 @SuppressWarnings( "ClassWithoutLogger" )
+@ServiceProvider( service = FileExtensionIconProvider.class )
 public class DefaultFileExtensionIconProvider implements FileExtensionIconProvider {
 
-	private static final Map<String, Node> iconsMap;
+	private static final Map<String, Node> ICONS_MAP;
 
 	/**
 	 * static initializer.
@@ -489,7 +489,7 @@ public class DefaultFileExtensionIconProvider implements FileExtensionIconProvid
 		map.put("wri", icon);
 		map.put("xlr", icon);
 
-		iconsMap = Collections.unmodifiableMap(map);
+		ICONS_MAP = Collections.unmodifiableMap(map);
 
 	}
 
@@ -500,7 +500,7 @@ public class DefaultFileExtensionIconProvider implements FileExtensionIconProvid
 			return null;
 		}
 
-		return iconsMap.get(extension.toLowerCase());
+		return ICONS_MAP.get(extension.toLowerCase());
 
 	}
 

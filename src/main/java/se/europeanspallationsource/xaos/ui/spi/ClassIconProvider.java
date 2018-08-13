@@ -20,19 +20,19 @@ import javafx.scene.Node;
 
 
 /**
- * Provides icons (i.e. {@link Node}s) for a given {@link Class}.
+ * Provides icons (i.e. {@link Node}s) for a given {@link Class} name.
  *
  * @author claudio.rosati@esss.se
  */
 public interface ClassIconProvider {
 
 	/**
-	 * Return an icon (i.e. a {@link Node} for the given {@link Class}.
+	 * Return an icon (i.e. a {@link Node} for the given {@link Class} name.
 	 *
-	 * @param clazz The {@link Class} for which a graphical representation is
-	 *              needed.
+	 * @param clazz The full class name (the one returned by {@link Class#getName()})
+	 *              for which a graphical representation is needed.
 	 * @return An icon as a {@link Node} instance, or {@code null}.
 	 */
-	public Node iconFor( Class<?> clazz );
+	public Node iconFor( String clazz );
 
 }
