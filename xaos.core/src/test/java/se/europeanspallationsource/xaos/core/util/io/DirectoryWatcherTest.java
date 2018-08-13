@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.util.io;
+package se.europeanspallationsource.xaos.core.util.io;
 
 
 import java.io.IOException;
@@ -52,7 +52,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static se.europeanspallationsource.xaos.util.io.DirectoryWatcher.build;
+import static se.europeanspallationsource.xaos.core.util.io.DirectoryWatcher.build;
 
 
 /**

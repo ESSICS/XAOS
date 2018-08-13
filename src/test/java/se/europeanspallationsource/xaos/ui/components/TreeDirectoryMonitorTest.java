@@ -44,7 +44,7 @@ import org.junit.Test;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
 import se.europeanspallationsource.xaos.ui.TreeItems;
-import se.europeanspallationsource.xaos.util.io.DeleteFileVisitor;
+import se.europeanspallationsource.xaos.core.util.io.DeleteFileVisitor;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;

@@ -34,9 +34,9 @@ import javafx.scene.control.TreeView;
 import org.reactfx.EventSource;
 import org.reactfx.EventStream;
 import se.europeanspallationsource.xaos.ui.Icons;
-import se.europeanspallationsource.xaos.util.TriFunction;
-import se.europeanspallationsource.xaos.util.io.DirectoryModel;
-import se.europeanspallationsource.xaos.util.io.PathElement;
+import se.europeanspallationsource.xaos.core.util.TriFunction;
+import se.europeanspallationsource.xaos.core.util.io.DirectoryModel;
+import se.europeanspallationsource.xaos.core.util.io.PathElement;
 
 import static se.europeanspallationsource.xaos.ui.CommonIcons.FILE;
 import static se.europeanspallationsource.xaos.ui.CommonIcons.FILE_EXECUTABLE;

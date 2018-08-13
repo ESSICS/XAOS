@@ -28,9 +28,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import se.europeanspallationsource.xaos.util.io.DeleteFileVisitor;
-import se.europeanspallationsource.xaos.util.io.DirectoryModel;
-import se.europeanspallationsource.xaos.util.io.PathElement;
+import se.europeanspallationsource.xaos.core.util.io.DeleteFileVisitor;
+import se.europeanspallationsource.xaos.core.util.io.DirectoryModel;
+import se.europeanspallationsource.xaos.core.util.io.PathElement;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
@@ -38,8 +38,8 @@ import static se.europeanspallationsource.xaos.ui.components.tree.TreeDirectoryI
 import static se.europeanspallationsource.xaos.ui.components.tree.TreeDirectoryItems.createFileItem;
 import static se.europeanspallationsource.xaos.ui.components.tree.TreeDirectoryItems.createTopLevelDirectoryItem;
 import static se.europeanspallationsource.xaos.ui.components.tree.TreeDirectoryModel.DEFAULT_GRAPHIC_FACTORY;
-import static se.europeanspallationsource.xaos.util.io.PathElement.file;
-import static se.europeanspallationsource.xaos.util.io.PathElement.tree;
+import static se.europeanspallationsource.xaos.core.util.io.PathElement.file;
+import static se.europeanspallationsource.xaos.core.util.io.PathElement.tree;
 
 
 /**

@@ -34,8 +34,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import se.europeanspallationsource.xaos.util.io.DeleteFileVisitor;
-import se.europeanspallationsource.xaos.util.io.DirectoryWatcher;
+import se.europeanspallationsource.xaos.core.util.io.DeleteFileVisitor;
+import se.europeanspallationsource.xaos.core.util.io.DirectoryWatcher;
 
 import static java.nio.charset.Charset.defaultCharset;
 import static java.nio.file.StandardOpenOption.CREATE;
@@ -45,8 +45,8 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static se.europeanspallationsource.xaos.util.io.DirectoryWatcher.build;
-import static se.europeanspallationsource.xaos.util.io.PathElement.tree;
+import static se.europeanspallationsource.xaos.core.util.io.DirectoryWatcher.build;
+import static se.europeanspallationsource.xaos.core.util.io.PathElement.tree;
 
 
 /**

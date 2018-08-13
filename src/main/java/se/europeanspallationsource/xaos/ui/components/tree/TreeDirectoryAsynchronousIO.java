@@ -23,11 +23,11 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executor;
 import javafx.scene.control.TreeItem;
-import se.europeanspallationsource.xaos.util.io.DirectoryModel;
-import se.europeanspallationsource.xaos.util.io.DirectoryWatcher;
-import se.europeanspallationsource.xaos.util.io.InitiatorAsynchronousIO;
+import se.europeanspallationsource.xaos.core.util.io.DirectoryModel;
+import se.europeanspallationsource.xaos.core.util.io.DirectoryWatcher;
+import se.europeanspallationsource.xaos.core.util.io.InitiatorAsynchronousIO;
 
-import static se.europeanspallationsource.xaos.util.DefaultExecutorCompletionStage.wrap;
+import static se.europeanspallationsource.xaos.core.util.DefaultExecutorCompletionStage.wrap;
 
 
 /**

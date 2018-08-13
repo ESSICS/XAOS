@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<!--
+Copyright 2018 European Spallation Source ERIC.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html>
+
+    <head>
+        <title>XAOS Tools API Specification</title>
+    </head>
+    
+    <body>
+
+        <p>
+            XAOS (ΧΑΟΣ – the primordial state of existence) is a JavaFX 
+			application framework.
+        </p>
+        <p>
+            The framework was initially conceived to create accelerator physics
+            applications based on <a href="https://github.com/openxal/openxal" target="_blank"><em>Open XAL</em></a>,
+            an open source development environment used for creating accelerator
+            physics applications, scripts and services.
+        </p>
+		<p>
+			The framework is compose by 3 modules: <i>Core</i>, <i>UI</i> and
+			<i>Tools</i>. The XAOS Core module provides non-UI classes part of
+			the framework. Any non graphical application can use this module.
+		</p>
+        <p>
+            The project is hosted in the <a href="https://github.com/ESSICS/XAOS" target="_blank"><em>XAOS</em></a>
+            GitHub repository.
+        </p>
+
+		<h2>Tools and Utilities</h2>
+
+		<h3>Directory Watcher</h3>
+
+		<p>
+			The {@link se.europeanspallationsource.xaos.core.util.io.DirectoryWatcher}
+			class allows watching for changes in files and directories. Moreover
+			it allows also for standard operations on both files and directories.
+		</p>
+
+<pre>
+  ExecutorService executor = Executors.newSingleThreadExecutor();
+  DirectoryWatcher watcher = build(executor);
+
+  watcher.events().subscribe(event -&gt; {
+    event.getEvents().stream().forEach(e -&gt; {
+      if ( StandardWatchEventKinds.ENTRY_CREATE.equals(e.kind()) ) {
+        ...
+      } else if ( StandardWatchEventKinds.ENTRY_DELETE.equals(e.kind()) ) {
+        ...
+      } else if ( StandardWatchEventKinds.ENTRY_MODIFY.equals(e.kind()) ) {
+        ...
+      }
+    });
+  });
+
+  Path root = ...
+
+  watcher.watch(root);
+</pre>
+
+    </body>
+
+</html>

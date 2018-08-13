@@ -36,14 +36,14 @@ import org.reactfx.EventStream;
 import org.reactfx.EventStreams;
 import se.europeanspallationsource.xaos.ui.components.tree.TreeDirectoryAsynchronousIO;
 import se.europeanspallationsource.xaos.ui.components.tree.TreeDirectoryModel;
-import se.europeanspallationsource.xaos.util.io.DirectoryWatcher;
-import se.europeanspallationsource.xaos.util.io.PathElement;
+import se.europeanspallationsource.xaos.core.util.io.DirectoryWatcher;
+import se.europeanspallationsource.xaos.core.util.io.PathElement;
 
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
-import static se.europeanspallationsource.xaos.util.DefaultExecutorCompletionStage.wrap;
+import static se.europeanspallationsource.xaos.core.util.DefaultExecutorCompletionStage.wrap;
 
 
 /**

@@ -29,8 +29,8 @@ import javafx.beans.binding.Bindings;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
-import se.europeanspallationsource.xaos.util.io.DirectoryModel;
-import se.europeanspallationsource.xaos.util.io.PathElement;
+import se.europeanspallationsource.xaos.core.util.io.DirectoryModel;
+import se.europeanspallationsource.xaos.core.util.io.PathElement;
 
 
 /**
