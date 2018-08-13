@@ -26,6 +26,18 @@
 
     <dependencies>
 
+        <!-- XAOS - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>xaos.tools</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>xaos.core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- Apache - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -123,6 +135,7 @@
 			<version>8u76-b04</version> <!-- jdk-9+181 for Java 9 -->
 			<scope>test</scope>
 		</dependency>
-    </dependencies>
+
+	</dependencies>
 
 </project>
