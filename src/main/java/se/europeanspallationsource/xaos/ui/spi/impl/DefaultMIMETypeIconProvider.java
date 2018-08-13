@@ -23,7 +23,7 @@ import javafx.scene.Node;
 import org.apache.commons.lang3.StringUtils;
 import org.kordamp.ikonli.fontawesome.FontAwesome;
 import org.kordamp.ikonli.javafx.FontIcon;
-import se.europeanspallationsource.xaos.annotation.ServiceProvider;
+import se.europeanspallationsource.xaos.tools.annotation.ServiceProvider;
 import se.europeanspallationsource.xaos.ui.spi.MIMETypeIconProvider;
 
 

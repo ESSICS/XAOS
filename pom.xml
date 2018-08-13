@@ -1,30 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
+	<modelVersion>4.0.0</modelVersion>
 
-    <groupId>se.europeanspallationsource</groupId>
+	<groupId>se.europeanspallationsource</groupId>
     <artifactId>xaos</artifactId>
     <version>0.3.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
     <name>XAOS</name>
     <description>
-        A JavaFX application framework based on JacpFX (Java Asynchronous
-        Client Platform) made initially to create accelerator physics
-        applications based on Open XAL, an open source development environment
-        used for creating accelerator physics applications, scripts and services.
+        A JavaFX application framework made initially to create accelerator
+		physics applications based on Open XAL, an open source development
+		environment  used for creating accelerator physics applications, scripts
+		and services.
     </description>
     <url>https://github.com/ESSICS/XAOS</url>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<!--<cache2k-version>1.0.2.Final</cache2k-version>-->
-		<ikonli-version>2.3.0</ikonli-version>
-        <jacp.version>3.0-SNAPSHOT</jacp.version>
-        <textfx.version>4.0.13-alpha</textfx.version>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
 
     <licenses>
         <license>
@@ -48,6 +38,18 @@
         <url>https://github.com/ESSICS/XAOS/tree/master</url>
     </scm>
 
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <modules>
+        <module>xaos.core</module>
+        <module>xaos.ui</module>
+        <module>xaos.tools</module>
+    </modules>
+
     <build>
         <plugins>
             <plugin>
@@ -61,7 +63,6 @@
 					<execution>
 						<id>default-compile</id>
 						<configuration>
-							<compilerArgument>-proc:none</compilerArgument>
 						</configuration>
 					</execution>
 					<execution>
@@ -191,84 +192,6 @@
 
     <dependencies>
 
-        <!-- Apache - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-collections4</artifactId>
-            <version>4.2</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.7</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <!-- JacpFX - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-        <dependency>
-            <groupId>org.jacpfx</groupId>
-            <artifactId>jacpfx.API</artifactId>
-            <version>${jacp.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jacpfx</groupId>
-            <artifactId>jacpfx.JavaFX</artifactId>
-            <version>${jacp.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jacpfx</groupId>
-            <artifactId>jacpfx.JavaFXControls</artifactId>
-            <version>${jacp.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jacpfx</groupId>
-            <artifactId>jacpfx.JavaFXLauncher</artifactId>
-            <version>${jacp.version}</version>
-            <scope>compile</scope>
-        </dependency>
-
-		<!-- cache2k - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-<!--
-		<dependency>
-			<groupId>org.cache2k</groupId>
-			<artifactId>cache2k-api</artifactId>
-			<version>${cache2k-version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.cache2k</groupId>
-			<artifactId>cache2k-all</artifactId>
-			<version>${cache2k-version}</version>
-			<scope>runtime</scope>
-		</dependency>
--->
-
-		<!-- ikonli-javafx  - -  - - - - - - - - - - - - - - - - - - - - - -  -->
-        <dependency>
-            <groupId>org.kordamp.ikonli</groupId>
-            <artifactId>ikonli-javafx</artifactId>
-            <version>${ikonli-version}</version>
-            <scope>compile</scope>
-        </dependency>
-		<dependency>
-			<groupId>org.kordamp.ikonli</groupId>
-			<artifactId>ikonli-fontawesome-pack</artifactId>
-			<version>${ikonli-version}</version>
-            <scope>compile</scope>
-		</dependency>
-
-		<!-- Other Dependencies  - - - - - - - - - - - - - - - - - - - - - -  -->
-        <dependency>
-            <groupId>org.reactfx</groupId>
-            <artifactId>reactfx</artifactId>
-            <version>2.0-M5</version>
-            <scope>compile</scope>
-        </dependency>
-
         <!-- Unit Test  - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 		<dependency>
 			<groupId>org.assertj</groupId>
@@ -288,24 +211,7 @@
             <version>1.3</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.testfx</groupId>
-            <artifactId>testfx-core</artifactId>
-            <version>${textfx.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testfx</groupId>
-            <artifactId>testfx-junit</artifactId>
-            <version>${textfx.version}</version>
-            <scope>test</scope>
-        </dependency>
-		<dependency>
-			<groupId>org.testfx</groupId>
-			<artifactId>openjfx-monocle</artifactId>
-			<version>8u76-b04</version> <!-- jdk-9+181 for Java 9 -->
-			<scope>test</scope>
-		</dependency>
+		
     </dependencies>
 
 </project>

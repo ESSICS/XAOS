@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.annotation.impl;
+package se.europeanspallationsource.xaos.tools.annotation.impl;
 
 
 import java.io.FileNotFoundException;
@@ -54,8 +54,8 @@ import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.ElementFilter;
 import javax.tools.FileObject;
 import javax.tools.StandardLocation;
-import se.europeanspallationsource.xaos.annotation.ServiceProvider;
-import se.europeanspallationsource.xaos.annotation.ServiceProviders;
+import se.europeanspallationsource.xaos.tools.annotation.ServiceProvider;
+import se.europeanspallationsource.xaos.tools.annotation.ServiceProviders;
 
 import static javax.lang.model.SourceVersion.RELEASE_8;
 import static javax.lang.model.element.ElementKind.CLASS;
@@ -77,8 +77,8 @@ import static javax.tools.StandardLocation.SOURCE_PATH;
  */
 @SupportedSourceVersion( RELEASE_8 )
 @SupportedAnnotationTypes( {
-	"se.europeanspallationsource.xaos.annotation.ServiceProvider",
-	"se.europeanspallationsource.xaos.annotation.ServiceProviders"
+	"se.europeanspallationsource.xaos.tools.annotation.ServiceProvider",
+	"se.europeanspallationsource.xaos.tools.annotation.ServiceProviders"
 } )
 @SuppressWarnings( "ClassWithoutLogger" )
 public class ServiceProviderProcessor extends AbstractProcessor {
@@ -96,7 +96,7 @@ public class ServiceProviderProcessor extends AbstractProcessor {
 
 		if ( processingEnv == null || annotated == null || !annotated.getKind().isClass() ) {
 			return Collections.emptyList();
-		} else if ( annotation == null || !"se.europeanspallationsource.framework.annotation.ServiceProvider".contentEquals(( (QualifiedNameable) annotation.getAnnotationType().asElement() ).getQualifiedName()) ) {
+		} else if ( annotation == null || !"se.europeanspallationsource.xaos.tools.annotation.ServiceProvider".contentEquals(( (QualifiedNameable) annotation.getAnnotationType().asElement() ).getQualifiedName()) ) {
 			return Collections.emptyList();
 		} else if ( !"service".contentEquals(attr.getSimpleName()) ) {
 			return Collections.emptyList();

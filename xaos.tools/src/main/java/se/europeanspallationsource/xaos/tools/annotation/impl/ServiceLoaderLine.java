@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.annotation.impl;
+package se.europeanspallationsource.xaos.tools.annotation.impl;
 
 
 import java.io.BufferedReader;

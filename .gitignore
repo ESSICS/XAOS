@@ -1,3 +1,6 @@
 /.projectKnowledge/
 /target/
 /nbproject/
+/xaos.tools/target/
+/xaos.core/target/
+/xaos.ui/target/

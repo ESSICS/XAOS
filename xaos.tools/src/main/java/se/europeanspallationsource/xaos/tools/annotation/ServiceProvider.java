@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.annotation;
+package se.europeanspallationsource.xaos.tools.annotation;
 
 
 import java.lang.annotation.Documented;
@@ -39,7 +39,7 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
  * <pre>
  *   package my.module;
  *   import my.module.spi.SomeService;
- *   import se.europeanspallationsource.xaos.annotation.ServiceProvider;
+ *   import se.europeanspallationsource.xaos.tools.annotation.ServiceProvider;
  *
  *   &#64;ServiceProvider(service=SomeService.class)
  *   public class MyService implements SomeService {
