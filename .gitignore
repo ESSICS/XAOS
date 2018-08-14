@@ -4,3 +4,6 @@
 /xaos.tools/target/
 /xaos.core/target/
 /xaos.ui/target/
+/xaos.tools.module/target/
+/xaos.core.module/target/
+/xaos.ui.module/target/

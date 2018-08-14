@@ -45,9 +45,10 @@
     </properties>
 
     <modules>
-        <module>xaos.tools</module>
-        <module>xaos.core</module>
-        <module>xaos.ui</module>
+        <module>xaos.tools.module</module>
+        <module>xaos.core.module</module>
+        <module>xaos.ui.module</module>
+        <module>xaos.app.module</module>
     </modules>
 
     <build>
