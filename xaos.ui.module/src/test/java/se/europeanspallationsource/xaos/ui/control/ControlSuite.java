@@ -40,5 +40,5 @@ import se.europeanspallationsource.xaos.ui.control.tree.TreeDirectoryModelTest;
 	SVGFromURLTest.class
 } )
 @SuppressWarnings( { "ClassMayBeInterface", "ClassWithoutLogger", "UtilityClassWithoutPrivateConstructor" } )
-public class ComponentsSuite {
+public class ControlSuite {
 }

@@ -111,22 +111,6 @@
                 <configuration>
                     <docfilessubdirs/>
                 </configuration>
-				<!-- =======================================================
-					TODO:CR This dependency has to be removed once a new version
-					of the plugin will be release. 3.0.0 has problem with Java 10
-					because of an old dependency on commons-lang3.
-				-->
-			<!--
-				<dependencies>
-					<dependency>
-						<groupId>org.apache.commons</groupId>
-						<artifactId>commons-lang3</artifactId>
-						<version>3.7</version>
-						<scope>compile</scope>
-					</dependency>
-				</dependencies>
-			-->
-				<!-- ======================================================= -->
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
