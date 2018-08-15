@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.application;
+package se.europeanspallationsource.xaos.app;
 
 
 import javafx.stage.Stage;
 import org.jacpfx.minimal.launcher.JacpFXApplicationLauncher;
 import org.jacpfx.rcp.workbench.FXWorkbench;
-import se.europeanspallationsource.xaos.application.workbench.ApplicationWorkbench;
+import se.europeanspallationsource.xaos.app.workbench.ApplicationWorkbench;
 
 
 /**

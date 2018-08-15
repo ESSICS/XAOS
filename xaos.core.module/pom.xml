@@ -13,7 +13,7 @@
     <packaging>jar</packaging>
     <name>XAOS Core</name>
 	<description>
-		Non graphical portion of the XAOS application framework.
+		Non graphical portion of the XAOS framework.
 	</description>
     <url>https://github.com/ESSICS/XAOS</url>
 

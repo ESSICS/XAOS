@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<!--
+Copyright 2018 European Spallation Source ERIC.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html>
+
+    <head>
+        <title>XAOS Tools API Specification</title>
+    </head>
+    
+    <body>
+
+        <p>
+            XAOS (ΧΑΟΣ – the primordial state of existence) is a JavaFX 
+			application framework.
+        </p>
+        <p>
+            The framework was initially conceived to create accelerator physics
+            applications based on <a href="https://github.com/openxal/openxal" target="_blank"><em>Open XAL</em></a>,
+            an open source development environment used for creating accelerator
+            physics applications, scripts and services.
+        </p>
+		<p>
+			The framework is compose by a series modules: the <i>XAOS UI</i>
+			module provides JavaFX-based controls and tools suitable for other
+			projects too.
+		</p>
+        <p>
+            The project is hosted in the <a href="https://github.com/ESSICS/XAOS" target="_blank"><em>XAOS</em></a>
+            GitHub repository.
+        </p>
+
+		<h2>Icons and Icon Providers</h2>
+
+		<p>
+			The {@link se.europeanspallationsource.xaos.ui.CommonIcons} provides
+			a set of common icons used, for example, by file browsers based on
+			{@link javafx.scene.control.TreeView}.
+		</p>
+		<p>
+			Moreover the {@link se.europeanspallationsource.xaos.ui.Icons} class
+			allows for run-time discovery of key-mapped icons provided by
+			implementations of the services defined inside the
+			{@code se.europeanspallationsource.xaos.ui.spi} package.
+		</p>
+
+		<h2>Controls</h2>
+
+		<h3>SVG Support</h3>
+
+		<p>
+			XAOS supports SVG natively converting them in a JavaFX controls
+			graph, thus providing true vectorial rendering.
+		</p>
+		<p>
+			The following simple test explains how to display SVGs with XAOS:
+		</p>
+
+		<h3>Tree Directory Monitor</h3>
+
+		<p>
+			{@link se.europeanspallationsource.xaos.ui.control.TreeDirectoryMonitor}
+			combines a {@link se.europeanspallationsource.xaos.core.util.io.DirectoryWatcher},
+			a {@link se.europeanspallationsource.xaos.ui.control.tree.TreeDirectoryModel},
+			and a {@link se.europeanspallationsource.xaos.ui.control.tree.TreeDirectoryAsynchronousIO}.
+			The added value of this combination is that the tree model is updated
+			automatically to reflect the current state of the file-system, and
+			the application can distinguish file-system changes made via the I/O
+			facility from external ones.
+		</p>
+		<p>
+			The directory model can be used directly as a model for
+			{@link javafx.scene.control.TreeView}s.
+		</p>
+
+<pre>
+  public class SVGFromURLTest extends ApplicationTest {
+
+    private SVG svg;
+
+    @Override
+    public void start( Stage stage ) throws IOException, XMLStreamException {
+
+      svg = SVG.load(SVGFromURLTest.class.getResource("/svg/duke.svg"));
+
+      svg.setId("Loaded SVG Image");
+
+      stage.setScene(new Scene(svg));
+      stage.show();
+
+    }
+
+    @After
+    public void tearDown() throws TimeoutException {
+      FxToolkit.cleanupStages();
+    }
+
+    @Test
+    public void testLoadDuke() {
+      assertThat(svgContent).hasAnyChild();
+    }
+
+  }
+</pre>
+
+    </body>
+
+</html>

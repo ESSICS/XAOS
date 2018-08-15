@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.application.util;
+package se.europeanspallationsource.xaos.app.util;
 
 
 import java.text.MessageFormat;

@@ -23,9 +23,8 @@ limitations under the License.
     <body>
 
         <p>
-            XAOS (ΧΑΟΣ – the primordial state of existence) is a JavaFX application
-			framework based on <a href="http://jacpfx.org" target="_blank"><em>JacpFX</em></a>
-            (Java Asynchronous Client Platform).
+            XAOS (ΧΑΟΣ – the primordial state of existence) is a JavaFX
+			application framework.
         </p>
         <p>
             The framework was initially conceived to create accelerator physics
@@ -34,8 +33,8 @@ limitations under the License.
             physics applications, scripts and services.
         </p>
         <p>
-            The project is hosted in the <a href="https://github.com/ESSICS/XAOS" target="_blank"><em>XAOS</em></a>
-            GitHub repository.
+			The framework is compose by a series modules: the <i>XAOS App</i>
+			module provides JavaFX-based application framework.
         </p>
 
         <h2>Application Layout</h2>
@@ -149,34 +148,6 @@ limitations under the License.
 			Inside the <i>main</i> and <i>console</i> view areas, views are displayed
 			in a tab container. In the remaining view areas, the alternative between
 			tab container or accordion can be chosen.
-		</p>
-
-		<h2>Tools and Utilities</h2>
-
-		<h3>Service Providers</h3>
-
-		<p>
-			The {@link se.europeanspallationsource.xaos.annotation.ServiceProvider}
-			annotation will simplify providing service implementations, taking care of
-			publishing them in the proper file inside the <code>META-INF/service</code>
-			folder.
-		</p>
-
-<pre>
-  package my.module;
-  import my.module.spi.SomeService;
-  import se.europeanspallationsource.framework.annotation.ServiceProvider;
-
-  &#64;ServiceProvider(service=SomeService.class)
-  public class MyService implements SomeService {
-    ...
-  }
-</pre>
-
-		<p>
-			Moreover, the {@link se.europeanspallationsource.xaos.annotation.ServiceLoaderUtilities}
-			class will complement the {@link java.util.ServiceLoader} one with
-			few more methods.
 		</p>
 
     </body>

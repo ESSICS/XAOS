@@ -13,8 +13,8 @@
     <packaging>jar</packaging>
     <name>XAOS UI</name>
 	<description>
-		JavaFX-based portion of the XAOS application framework, containing
-		the JavaFX-based controls and tools suitable for other projects too.
+		JavaFX-based portion of the XAOS framework, containing the JavaFX-based
+		controls and tools suitable for other projects too.
 	</description>
     <url>https://github.com/ESSICS/XAOS</url>
 

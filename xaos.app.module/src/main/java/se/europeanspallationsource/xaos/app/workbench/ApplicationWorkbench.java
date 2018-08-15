@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.application.workbench;
+package se.europeanspallationsource.xaos.app.workbench;
 
 
 import javafx.event.Event;
@@ -28,16 +28,16 @@ import org.jacpfx.api.util.ToolbarPosition;
 import org.jacpfx.rcp.componentLayout.FXComponentLayout;
 import org.jacpfx.rcp.components.menuBar.JACPMenuBar;
 import org.jacpfx.rcp.workbench.FXWorkbench;
-import se.europeanspallationsource.xaos.application.util.Bundles;
+import se.europeanspallationsource.xaos.app.util.Bundles;
 
-import static se.europeanspallationsource.xaos.application.workbench.Constants.ID_WORKBENCH;
-import static se.europeanspallationsource.xaos.application.workbench.Constants.VIEW_BROWSER;
-import static se.europeanspallationsource.xaos.application.workbench.Constants.VIEW_CONSOLE;
-import static se.europeanspallationsource.xaos.application.workbench.Constants.VIEW_INSPECTOR;
-import static se.europeanspallationsource.xaos.application.workbench.Constants.VIEW_MAIN;
-import static se.europeanspallationsource.xaos.application.workbench.Constants.VIEW_NAVIGATOR;
-import static se.europeanspallationsource.xaos.application.workbench.Constants.VIEW_NOT_PRESENT;
-import static se.europeanspallationsource.xaos.application.workbench.Constants.VIEW_PALETTE;
+import static se.europeanspallationsource.xaos.app.workbench.Constants.ID_WORKBENCH;
+import static se.europeanspallationsource.xaos.app.workbench.Constants.VIEW_BROWSER;
+import static se.europeanspallationsource.xaos.app.workbench.Constants.VIEW_CONSOLE;
+import static se.europeanspallationsource.xaos.app.workbench.Constants.VIEW_INSPECTOR;
+import static se.europeanspallationsource.xaos.app.workbench.Constants.VIEW_MAIN;
+import static se.europeanspallationsource.xaos.app.workbench.Constants.VIEW_NAVIGATOR;
+import static se.europeanspallationsource.xaos.app.workbench.Constants.VIEW_NOT_PRESENT;
+import static se.europeanspallationsource.xaos.app.workbench.Constants.VIEW_PALETTE;
 
 
 /**
