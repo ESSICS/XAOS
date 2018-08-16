@@ -457,6 +457,7 @@ public class DefaultFileExtensionIconProvider implements FileExtensionIconProvid
 		map.put("inf", icon);
 		map.put("log", icon);
 		map.put("me", icon);
+		map.put("readme", icon);
 		map.put("text", icon);
 		map.put("txt", icon);
 
