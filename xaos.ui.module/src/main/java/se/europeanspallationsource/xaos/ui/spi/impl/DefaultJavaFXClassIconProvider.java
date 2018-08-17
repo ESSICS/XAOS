@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.Node;
@@ -40,14 +41,15 @@ import se.europeanspallationsource.xaos.ui.spi.ClassIconProvider;
 @ServiceProvider( service = ClassIconProvider.class )
 public class DefaultJavaFXClassIconProvider implements ClassIconProvider {
 
-	private static final Map<String, Node> ICONS_MAP;
+	private static final Map<String, Node> ICONS_MAP = new ConcurrentHashMap<>(120);
+	private static final Map<String, String> RESOURCES_MAP;
 
 	/**
 	 * static initializer.
 	 */
 	static {
 
-		Map<String, Node> map = new HashMap<>(120);
+		Map<String, String> map = new HashMap<>(120);
 
 		try (
 			InputStream in = getResourceAsStream("se/europeanspallationsource/xaos/ui/spi/icons/fxcomponents");
@@ -57,15 +59,16 @@ public class DefaultJavaFXClassIconProvider implements ClassIconProvider {
 			String resource;
 
 			while ( ( resource = br.readLine() ) != null ) {
-				System.out.println("--- " + resource);
-//				filenames.add(resource);
+				if ( !resource.contains("@") ) {
+					map.put(resource, "se/europeanspallationsource/xaos/ui/spi/icons/fxcomponents/" + resource);
+				}
 			}
 
 		} catch ( IOException ex ) {
 			Logger.getLogger(DefaultJavaFXClassIconProvider.class.getName()).log(Level.SEVERE, null, ex);
 		}
 
-		ICONS_MAP = Collections.unmodifiableMap(map);
+		RESOURCES_MAP = Collections.unmodifiableMap(map);
 
 	}
 
@@ -85,6 +88,9 @@ public class DefaultJavaFXClassIconProvider implements ClassIconProvider {
 		if ( StringUtils.isBlank(clazz) ) {
 			return null;
 		}
+
+//	TODO:CR	Load icons if not present in ICONS_MAP but existing in RESOURCES_MAP.
+
 
 		return ICONS_MAP.get(clazz);
 

@@ -225,7 +225,6 @@ public class DefaultMIMETypeIconProvider implements MIMETypeIconProvider {
 		map.put("text/xml", icon);
 		map.put("text/xml-external-parsed-entity", icon);
 
-
 		//	Database files...
 		icon = FontIcon.of(FontAwesome.DATABASE);
 
@@ -430,7 +429,7 @@ public class DefaultMIMETypeIconProvider implements MIMETypeIconProvider {
 			return null;
 		}
 
-		return ICONS_MAP.get(mime.toLowerCase());
+		return ICONS_MAP.get(mime);
 
 	}
 
