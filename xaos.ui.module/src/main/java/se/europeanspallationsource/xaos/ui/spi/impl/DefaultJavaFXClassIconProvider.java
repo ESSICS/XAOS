@@ -27,6 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.Node;
+import javafx.scene.image.ImageView;
 import org.apache.commons.lang3.StringUtils;
 import se.europeanspallationsource.xaos.tools.annotation.ServiceProvider;
 import se.europeanspallationsource.xaos.ui.spi.ClassIconProvider;
@@ -37,7 +38,7 @@ import se.europeanspallationsource.xaos.ui.spi.ClassIconProvider;
  *
  * @author claudio.rosati@esss.se
  */
-@SuppressWarnings( "ClassWithoutLogger" )
+@SuppressWarnings( { "ClassWithoutLogger", "NestedAssignment" } )
 @ServiceProvider( service = ClassIconProvider.class )
 public class DefaultJavaFXClassIconProvider implements ClassIconProvider {
 
@@ -88,11 +89,28 @@ public class DefaultJavaFXClassIconProvider implements ClassIconProvider {
 		if ( StringUtils.isBlank(clazz) ) {
 			return null;
 		}
+		
+		Node node = null;
 
-//	TODO:CR	Load icons if not present in ICONS_MAP but existing in RESOURCES_MAP.
+		if ( ICONS_MAP.containsKey(clazz) ) {
+			node = ICONS_MAP.get(clazz);
+		} else if ( clazz.startsWith("javafx.") ) {
 
+			String simpleName = clazz.substring(1 + clazz.lastIndexOf('.'));
 
-		return ICONS_MAP.get(clazz);
+			if ( StringUtils.isNotBlank(simpleName) ) {
+
+				String resource = RESOURCES_MAP.get(simpleName);
+
+				if ( resource != null ) {
+					node = new ImageView(getClass().getResource(resource).toString());
+				}
+
+			}
+
+		}
+
+		return node;
 
 	}
 
