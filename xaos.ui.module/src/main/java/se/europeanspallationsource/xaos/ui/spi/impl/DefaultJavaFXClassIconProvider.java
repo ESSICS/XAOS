@@ -103,7 +103,11 @@ public class DefaultJavaFXClassIconProvider implements ClassIconProvider {
 				String resource = RESOURCES_MAP.get(simpleName);
 
 				if ( resource != null ) {
+
 					node = new ImageView(getClass().getResource(resource).toString());
+
+					ICONS_MAP.put(clazz, node);
+
 				}
 
 			}
