@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>se.europeanspallationsource</groupId>
+		<artifactId>xaos</artifactId>
+		<version>0.3.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>xaos.ui</artifactId>
+	<packaging>jar</packaging>
+	<name>XAOS UI</name>
+	<description>
+		JavaFX-based portion of the XAOS framework, containing the JavaFX-based
+		controls and tools suitable for other projects too.
+	</description>
+	<url>https://github.com/ESSICS/XAOS</url>
+
+	<properties>
+		<ikonli-version>2.3.0</ikonli-version>
+		<textfx.version>4.0.13-alpha</textfx.version>
+	</properties>
+
+	<dependencies>
+
+		<!-- XAOS - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>xaos.tools</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>xaos.core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!-- Apache - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.8</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<!-- ikonli-javafx  - -  - - - - - - - - - - - - - - - - - - - - - -  -->
+		<dependency>
+			<groupId>org.kordamp.ikonli</groupId>
+			<artifactId>ikonli-javafx</artifactId>
+			<version>${ikonli-version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.kordamp.ikonli</groupId>
+			<artifactId>ikonli-fontawesome-pack</artifactId>
+			<version>${ikonli-version}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<!-- Test - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+		<dependency>
+			<groupId>org.testfx</groupId>
+			<artifactId>testfx-core</artifactId>
+			<version>${textfx.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testfx</groupId>
+			<artifactId>testfx-junit</artifactId>
+			<version>${textfx.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.github.classgraph</groupId>
+			<artifactId>classgraph</artifactId>
+			<version>4.0.6</version>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+</project>

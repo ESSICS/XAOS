@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<!--
+Copyright 2018 European Spallation Source ERIC.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html>
+
+    <head>
+        <title>XAOS API Specification</title>
+    </head>
+    
+    <body>
+
+        <p>
+            XAOS (ΧΑΟΣ – the primordial state of existence) is a JavaFX
+			application framework.
+        </p>
+        <p>
+            The framework was initially conceived to create accelerator physics
+            applications based on <a href="https://github.com/openxal/openxal" target="_blank"><em>Open XAL</em></a>,
+            an open source development environment used for creating accelerator
+            physics applications, scripts and services.
+        </p>
+        <p>
+			The framework is compose by a series modules: the <i>XAOS App</i>
+			module provides JavaFX-based application framework.
+        </p>
+
+        <h2>Application Layout</h2>
+
+        <p>
+            The framework will allow applications having a generic layout with
+            the following components:
+        </p>
+        <ul>
+            <li>
+                A toolbar in the top area, with 3 groups of buttons:
+                <ul style="list-style-type:square">
+                    <li>On the left, the buttons controlling the display of the left and bottom views;</li>
+                    <li>On the right, the button controlling the display of the right view;</li>
+                    <li>On the center, application specific buttons.</li>
+                </ul>
+                If the application will not use outer views, the corresponding
+                buttons will not be displayed. Moreover, if no application
+                specific buttons are added, the whole toolbar will not be
+                displayed.
+            </li>
+            <li>
+                A status bar in the bottom area, where status message and other
+                informations are displayed. The status bar can be omitted it the
+                application doesn't need it.
+            </li>
+            <li>
+                Peripheral views (<i>browser</i>, <i>navigator/overview</i>,
+                <i>console/messages</i>, <i>palette</i>, and <i>inspector/properties</i>),
+                where the application can register content to be displayed. If
+                some of the views are not used then will not be displayed. When
+                displayed, the splitters will allow to resize them.
+            </li>
+            <li>
+                The main view area used by the application to display its main
+                content.
+            </li>
+        </ul>
+        <p style="text-align:center">
+            <br>
+            <img src="doc-files/layout-01.png" alt="Application Layout." height="600">
+            <br>
+        </p>
+
+        <h3>Outer View Areas</h3>
+
+        <p>
+            The complete application is made of 6 view areas, where the <i>main</i>
+            one is always visible.
+        </p>
+
+        <p>
+            A view area is visible only if at least one view is registered. The only
+            exception is the <i>main</i> area, where views can be added dynamically,
+            and no initial view is required.
+        </p>
+
+        <h4>Browser View Area</h4>
+
+        <p>
+            The <i>browser</i> view should be used to navigate high-level structures
+            in order to find elements to be opened in dedicated views inside the
+            <i>main</i> area.
+        </p>
+    
+        <h4>Navigator/Overview View Area</h4>
+
+        <p>
+            This view area should be used to navigate the content of <i>selected</i>
+            entities, or display an overview of a more detailed zone displayed in
+            the currently visible <i>main</i> view.
+        </p>
+
+		<h4>Console/Messages View Area</h4>
+
+		<p>
+			The <i>console</i> view area should be used to display messages from
+			the application to the users, mirroring, for example, the standard
+			<code>System.out</code> and <code>System.err</code> streams.
+		</p>
+
+		<h4>Palette View Area</h4>
+
+		<p>
+			The <i>palette</i> view area is where to display a set of (draggable or 
+			selectable) elements frequently used by the user.
+		</p>
+
+		<h4>Inspector/Properties View Area</h4>
+
+		<p>
+			This area should be used to display details of the element selected in
+			the currently visible <i>main</i> view. Usually a table of name/value
+			pairs is used to list the properties of the selected element, but
+			other visualizations are possible too.
+		</p>
+
+		<h3>Main View Area</h3>
+
+		<p>
+			The <i>main</i> view area will contains one or more views (not
+			necessarily "document-based") showing the data the use will act upon.
+			The views in the <i>main</i> area can be opened from user's interaction
+			in the <i>browser</i> and/or the <i>navigation</i> area, or
+			programmatically.
+		</p>
+
+		<h3>How View Are Displayed</h3>
+
+		<p>
+			Inside the <i>main</i> and <i>console</i> view areas, views are displayed
+			in a tab container. In the remaining view areas, the alternative between
+			tab container or accordion can be chosen.
+		</p>
+
+    </body>
+
+</html>
