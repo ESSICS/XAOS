@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.ui.control;
+package se.europeanspallationsource.xaos.ui.control.svg;
 
 
 import java.io.BufferedInputStream;
@@ -69,15 +69,15 @@ import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import org.apache.commons.lang3.StringUtils;
 
-import static se.europeanspallationsource.xaos.ui.control.SVGAttributesStackFrame.ATTR_FILL;
-import static se.europeanspallationsource.xaos.ui.control.SVGAttributesStackFrame.ATTR_ID;
-import static se.europeanspallationsource.xaos.ui.control.SVGAttributesStackFrame.ATTR_OPACITY;
-import static se.europeanspallationsource.xaos.ui.control.SVGAttributesStackFrame.ATTR_STROKE;
-import static se.europeanspallationsource.xaos.ui.control.SVGAttributesStackFrame.ATTR_STROKE_LINECAP;
-import static se.europeanspallationsource.xaos.ui.control.SVGAttributesStackFrame.ATTR_STROKE_LINEJOIN;
-import static se.europeanspallationsource.xaos.ui.control.SVGAttributesStackFrame.ATTR_STROKE_MITERLIMIT;
-import static se.europeanspallationsource.xaos.ui.control.SVGAttributesStackFrame.ATTR_STROKE_WIDTH;
-import static se.europeanspallationsource.xaos.ui.control.SVGAttributesStackFrame.ATTR_TRANSFORM;
+import static se.europeanspallationsource.xaos.ui.control.svg.SVGAttributesStackFrame.ATTR_FILL;
+import static se.europeanspallationsource.xaos.ui.control.svg.SVGAttributesStackFrame.ATTR_ID;
+import static se.europeanspallationsource.xaos.ui.control.svg.SVGAttributesStackFrame.ATTR_OPACITY;
+import static se.europeanspallationsource.xaos.ui.control.svg.SVGAttributesStackFrame.ATTR_STROKE;
+import static se.europeanspallationsource.xaos.ui.control.svg.SVGAttributesStackFrame.ATTR_STROKE_LINECAP;
+import static se.europeanspallationsource.xaos.ui.control.svg.SVGAttributesStackFrame.ATTR_STROKE_LINEJOIN;
+import static se.europeanspallationsource.xaos.ui.control.svg.SVGAttributesStackFrame.ATTR_STROKE_MITERLIMIT;
+import static se.europeanspallationsource.xaos.ui.control.svg.SVGAttributesStackFrame.ATTR_STROKE_WIDTH;
+import static se.europeanspallationsource.xaos.ui.control.svg.SVGAttributesStackFrame.ATTR_TRANSFORM;
 
 
 /**

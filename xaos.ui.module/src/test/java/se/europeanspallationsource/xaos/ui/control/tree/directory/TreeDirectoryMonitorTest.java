@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.ui.control;
+package se.europeanspallationsource.xaos.ui.control.tree.directory;
 
 
-import se.europeanspallationsource.xaos.ui.control.TreeDirectoryMonitor;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.FileSystems;
@@ -40,19 +39,18 @@ import javafx.stage.Stage;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
-import se.europeanspallationsource.xaos.ui.TreeItems;
 import se.europeanspallationsource.xaos.core.util.io.DeleteFileVisitor;
+import se.europeanspallationsource.xaos.ui.control.tree.TreeItems;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static se.europeanspallationsource.xaos.ui.control.TreeDirectoryMonitorTest.ChangeSource.EXTERNAL;
-import static se.europeanspallationsource.xaos.ui.control.TreeDirectoryMonitorTest.ChangeSource.INTERNAL;
+import static se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryMonitorTest.ChangeSource.EXTERNAL;
+import static se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryMonitorTest.ChangeSource.INTERNAL;
 
 
 /**

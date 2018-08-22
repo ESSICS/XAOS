@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.ui;
+package se.europeanspallationsource.xaos.ui.control.svg;
 
 
 import org.junit.runner.RunWith;
@@ -25,10 +25,12 @@ import org.junit.runners.Suite;
  */
 @RunWith( Suite.class )
 @Suite.SuiteClasses( {
-	CommonIconsTest.class,
-	IconsTest.class,
-	TreeItemsTest.class
+	//	SVG
+	AtomTest.class,
+	GasCylinderTest.class,
+	SVGFromInputStreamTest.class,
+	SVGFromURLTest.class
 } )
 @SuppressWarnings( { "ClassMayBeInterface", "ClassWithoutLogger", "UtilityClassWithoutPrivateConstructor" } )
-public class UISuite {
+public class SVGSuite {
 }

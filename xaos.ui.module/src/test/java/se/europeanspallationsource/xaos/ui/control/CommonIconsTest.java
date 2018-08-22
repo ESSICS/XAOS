@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.ui;
+package se.europeanspallationsource.xaos.ui.control;
 
 
+import se.europeanspallationsource.xaos.ui.control.CommonIcons;
 import javafx.scene.paint.Color;
 import org.junit.BeforeClass;
 import org.junit.Test;

@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.ui;
+package se.europeanspallationsource.xaos.ui.control;
 
 
+import se.europeanspallationsource.xaos.ui.control.Icons;
 import io.github.classgraph.ClassGraph;
 import java.io.File;
 import java.text.MessageFormat;

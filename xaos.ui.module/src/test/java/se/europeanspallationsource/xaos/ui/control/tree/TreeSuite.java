@@ -13,11 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.ui.control;
+package se.europeanspallationsource.xaos.ui.control.tree;
 
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryAsynchronousIOTest;
+import se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryItemsTest;
+import se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryModelTest;
+import se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryMonitorTest;
 
 
 /**
@@ -25,9 +29,14 @@ import org.junit.runners.Suite;
  */
 @RunWith( Suite.class )
 @Suite.SuiteClasses( {
-	CommonIconsTest.class,
-	IconsTest.class
+	//	tree
+	TreeItemsTest.class,
+	//	tree directory
+	TreeDirectoryAsynchronousIOTest.class,
+	TreeDirectoryItemsTest.class,
+	TreeDirectoryModelTest.class,
+	TreeDirectoryMonitorTest.class,
 } )
 @SuppressWarnings( { "ClassMayBeInterface", "ClassWithoutLogger", "UtilityClassWithoutPrivateConstructor" } )
-public class ControlSuite {
+public class TreeSuite {
 }

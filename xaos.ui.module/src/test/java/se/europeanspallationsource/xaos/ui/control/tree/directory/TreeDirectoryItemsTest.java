@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.ui.control.tree;
+package se.europeanspallationsource.xaos.ui.control.tree.directory;
 
 
-import se.europeanspallationsource.xaos.ui.control.tree.TreeDirectoryItems;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,12 +34,12 @@ import se.europeanspallationsource.xaos.core.util.io.PathElement;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
-import static se.europeanspallationsource.xaos.ui.control.tree.TreeDirectoryItems.createDirectoryItem;
-import static se.europeanspallationsource.xaos.ui.control.tree.TreeDirectoryItems.createFileItem;
-import static se.europeanspallationsource.xaos.ui.control.tree.TreeDirectoryItems.createTopLevelDirectoryItem;
-import static se.europeanspallationsource.xaos.ui.control.tree.TreeDirectoryModel.DEFAULT_GRAPHIC_FACTORY;
 import static se.europeanspallationsource.xaos.core.util.io.PathElement.file;
 import static se.europeanspallationsource.xaos.core.util.io.PathElement.tree;
+import static se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryItems.createDirectoryItem;
+import static se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryItems.createFileItem;
+import static se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryItems.createTopLevelDirectoryItem;
+import static se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryModel.DEFAULT_GRAPHIC_FACTORY;
 
 
 /**

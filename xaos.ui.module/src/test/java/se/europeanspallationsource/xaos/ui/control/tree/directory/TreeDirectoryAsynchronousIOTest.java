@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.ui.control.tree;
+package se.europeanspallationsource.xaos.ui.control.tree.directory;
 
 
-import se.europeanspallationsource.xaos.ui.control.tree.TreeDirectoryModel;
-import se.europeanspallationsource.xaos.ui.control.tree.TreeDirectoryAsynchronousIO;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.DirectoryNotEmptyException;

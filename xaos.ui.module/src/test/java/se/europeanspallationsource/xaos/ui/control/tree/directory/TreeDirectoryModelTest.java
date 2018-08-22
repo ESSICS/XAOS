@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.ui.control.tree;
+package se.europeanspallationsource.xaos.ui.control.tree.directory;
 
 
-import se.europeanspallationsource.xaos.ui.control.tree.TreeDirectoryItems;
-import se.europeanspallationsource.xaos.ui.control.tree.TreeDirectoryModel;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -31,8 +29,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import se.europeanspallationsource.xaos.ui.control.tree.TreeDirectoryItems.FileItem;
 import se.europeanspallationsource.xaos.core.util.io.DeleteFileVisitor;
+import se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryItems.FileItem;
 
 import static java.nio.file.attribute.FileTime.from;
 import static org.assertj.core.api.Assertions.assertThat;

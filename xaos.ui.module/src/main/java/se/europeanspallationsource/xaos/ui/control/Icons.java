@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.ui;
+package se.europeanspallationsource.xaos.ui.control;
 
 
 import java.io.File;

@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.ui.control;
+package se.europeanspallationsource.xaos.ui.control.svg;
 
 
-import se.europeanspallationsource.xaos.ui.control.SVG;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 import javafx.scene.Group;
@@ -33,6 +32,7 @@ import org.junit.Test;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.testfx.assertions.api.Assertions.assertThat;
 
 
