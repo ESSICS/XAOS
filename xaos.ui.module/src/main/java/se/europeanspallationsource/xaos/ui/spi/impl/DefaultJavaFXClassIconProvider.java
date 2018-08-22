@@ -27,6 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.apache.commons.lang3.StringUtils;
 import se.europeanspallationsource.xaos.tools.annotation.ServiceProvider;
@@ -53,7 +54,7 @@ public class DefaultJavaFXClassIconProvider implements ClassIconProvider {
 		Map<String, String> map = new HashMap<>(120);
 
 		try (
-			InputStream in = getResourceAsStream("se/europeanspallationsource/xaos/ui/spi/icons/fxcomponents");
+			InputStream in = getResourceAsStream("icons/fxcomponents");
 			BufferedReader br = new BufferedReader(new InputStreamReader(in))
 		) {
 
@@ -61,7 +62,10 @@ public class DefaultJavaFXClassIconProvider implements ClassIconProvider {
 
 			while ( ( resource = br.readLine() ) != null ) {
 				if ( !resource.contains("@") ) {
-					map.put(resource, "se/europeanspallationsource/xaos/ui/spi/icons/fxcomponents/" + resource);
+					map.put(
+						resource.substring(0, resource.lastIndexOf('.')),
+						"icons/fxcomponents/" + resource
+					);
 				}
 			}
 
@@ -104,7 +108,7 @@ public class DefaultJavaFXClassIconProvider implements ClassIconProvider {
 
 				if ( resource != null ) {
 
-					node = new ImageView(getClass().getResource(resource).toString());
+					node = new ImageView(new Image(getResourceAsStream(resource)));
 
 					ICONS_MAP.put(clazz, node);
 

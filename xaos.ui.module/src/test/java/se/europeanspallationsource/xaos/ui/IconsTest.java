@@ -16,10 +16,119 @@
 package se.europeanspallationsource.xaos.ui;
 
 
+import io.github.classgraph.ClassGraph;
 import java.io.File;
+import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
+import javafx.embed.swing.SwingNode;
+import javafx.scene.AmbientLight;
+import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.ParallelCamera;
+import javafx.scene.PerspectiveCamera;
+import javafx.scene.PointLight;
+import javafx.scene.SubScene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.chart.AreaChart;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.BubbleChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.Chart;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.PieChart;
+import javafx.scene.chart.ScatterChart;
+import javafx.scene.chart.StackedAreaChart;
+import javafx.scene.chart.StackedBarChart;
+import javafx.scene.control.Accordion;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.CustomMenuItem;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.DialogPane;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.Pagination;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.RadioMenuItem;
+import javafx.scene.control.ScrollBar;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Separator;
+import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.Slider;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SplitMenuButton;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToolBar;
+import javafx.scene.control.Tooltip;
+import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.TreeTableView;
+import javafx.scene.control.TreeView;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.media.MediaView;
+import javafx.scene.shape.Arc;
+import javafx.scene.shape.ArcTo;
+import javafx.scene.shape.Box;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.ClosePath;
+import javafx.scene.shape.CubicCurve;
+import javafx.scene.shape.CubicCurveTo;
+import javafx.scene.shape.Cylinder;
+import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.HLineTo;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MeshView;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Polyline;
+import javafx.scene.shape.QuadCurve;
+import javafx.scene.shape.QuadCurveTo;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.SVGPath;
+import javafx.scene.shape.Sphere;
+import javafx.scene.shape.VLineTo;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
+import javafx.scene.web.HTMLEditor;
+import javafx.scene.web.WebView;
+import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.kordamp.ikonli.fontawesome.FontAwesome;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -44,9 +153,156 @@ public class IconsTest {
 	@Test
 	public void testIconForClass_String() {
 
-		System.out.println("  Testing ''iconForFileExtension''...");
+		System.out.println("  Testing ''iconForClass''...");
 
-		Icons.iconForClass("xxx");
+		Set<String> supportedClasses = new HashSet<>(Arrays.asList(
+			Accordion.class.getName(),
+			AmbientLight.class.getName(),
+			AnchorPane.class.getName(),
+			Arc.class.getName(),
+			ArcTo.class.getName(),
+			AreaChart.class.getName(),
+			BarChart.class.getName(),
+			BorderPane.class.getName(),
+			Box.class.getName(),
+			BubbleChart.class.getName(),
+			Button.class.getName(),
+			ButtonBar.class.getName(),
+			Canvas.class.getName(),
+			CategoryAxis.class.getName(),
+			Chart.class.getName(),
+			CheckBox.class.getName(),
+			CheckMenuItem.class.getName(),
+			ChoiceBox.class.getName(),
+			Circle.class.getName(),
+			ClosePath.class.getName(),
+			ColorPicker.class.getName(),
+			ComboBox.class.getName(),
+			ContextMenu.class.getName(),
+			CubicCurve.class.getName(),
+			CubicCurveTo.class.getName(),
+			CustomMenuItem.class.getName(),
+			Cylinder.class.getName(),
+			DatePicker.class.getName(),
+			DialogPane.class.getName(),
+			Ellipse.class.getName(),
+			FlowPane.class.getName(),
+			GridPane.class.getName(),
+			Group.class.getName(),
+			HBox.class.getName(),
+			HLineTo.class.getName(),
+			HTMLEditor.class.getName(),
+			Hyperlink.class.getName(),
+			ImageView.class.getName(),
+			Label.class.getName(),
+			Line.class.getName(),
+			LineChart.class.getName(),
+			LineTo.class.getName(),
+			ListView.class.getName(),
+			MediaView.class.getName(),
+			Menu.class.getName(),
+			MenuBar.class.getName(),
+			MenuButton.class.getName(),
+			MenuItem.class.getName(),
+			MeshView.class.getName(),
+			MoveTo.class.getName(),
+			Node.class.getName(),
+			NumberAxis.class.getName(),
+			Pagination.class.getName(),
+			Pane.class.getName(),
+			ParallelCamera.class.getName(),
+			PasswordField.class.getName(),
+			Path.class.getName(),
+			PerspectiveCamera.class.getName(),
+			PieChart.class.getName(),
+			PointLight.class.getName(),
+			Polygon.class.getName(),
+			Polyline.class.getName(),
+			ProgressBar.class.getName(),
+			ProgressIndicator.class.getName(),
+			QuadCurve.class.getName(),
+			QuadCurveTo.class.getName(),
+			RadioButton.class.getName(),
+			RadioMenuItem.class.getName(),
+			Rectangle.class.getName(),
+			Region.class.getName(),
+			SVGPath.class.getName(),
+			ScatterChart.class.getName(),
+			ScrollBar.class.getName(),
+			ScrollPane.class.getName(),
+			Separator.class.getName(),
+			SeparatorMenuItem.class.getName(),
+			Slider.class.getName(),
+			Sphere.class.getName(),
+			Spinner.class.getName(),
+			SplitMenuButton.class.getName(),
+			SplitPane.class.getName(),
+			StackPane.class.getName(),
+			StackedAreaChart.class.getName(),
+			StackedBarChart.class.getName(),
+			SubScene.class.getName(),
+			SwingNode.class.getName(),
+			Tab.class.getName(),
+			TabPane.class.getName(),
+			TableColumn.class.getName(),
+			TableView.class.getName(),
+			Text.class.getName(),
+			TextArea.class.getName(),
+			TextField.class.getName(),
+			TextFlow.class.getName(),
+			TitledPane.class.getName(),
+			ToggleButton.class.getName(),
+			ToolBar.class.getName(),
+			Tooltip.class.getName(),
+			TreeTableColumn.class.getName(),
+			TreeTableView.class.getName(),
+			TreeView.class.getName(),
+			VBox.class.getName(),
+			VLineTo.class.getName(),
+			WebView.class.getName()
+		));
+
+		Package[] packages = Package.getPackages();
+		Set<String> packageNames = new TreeSet<>();
+
+		for ( Package p : packages ) {
+			packageNames.add(p.getName());
+		}
+
+		Set<String> classNames = new TreeSet<>();
+
+		packageNames
+			.stream()
+			.filter(packageName -> packageName.startsWith("java"))
+			.forEach(packageName -> {
+				System.out.println(MessageFormat.format("    Collecting classes from package {0}...", packageName));
+				classNames.addAll(
+					new ClassGraph()
+						.enableSystemPackages()
+						.whitelistPackages(packageName)
+						.scan()
+						.getAllClasses()
+						.getNames()
+				);
+			});
+
+		classNames.forEach(className -> {
+			if ( supportedClasses.contains(className) ) {
+				supportedClasses.remove(className);
+				assertThat(Icons.iconForClass(className)).isNotNull().isInstanceOf(ImageView.class);
+			} else {
+				assertThat(Icons.iconFor(className)).isNull();
+			}
+		});
+
+		if ( !supportedClasses.isEmpty() ) {
+			System.out.println(MessageFormat.format("    {0} unmatched classes:", supportedClasses.size()));
+			supportedClasses
+				.stream()
+				.sorted()
+				.forEach(n -> System.out.println(MessageFormat.format("      {0}", n)));
+			Assert.fail(MessageFormat.format("{0} unmatched classes:", supportedClasses.size()));
+		}
 
 	}
 
@@ -54,7 +310,6 @@ public class IconsTest {
 	 * Test of iconForFileExtension method, of class Icons.
 	 */
 	@Test
-@Ignore
 	public void testIconForFileExtension() {
 
 		System.out.println("  Testing ''iconForFileExtension''...");
@@ -540,9 +795,7 @@ public class IconsTest {
 	 * Test of iconForMIMEType method, of class Icons.
 	 */
 	@Test
-@Ignore
 	public void testIconForMIMEType() {
-
 
 		System.out.println("  Testing ''iconForMIMEType''...");
 
@@ -913,15 +1166,12 @@ public class IconsTest {
 //		icon = FontIcon.of(FontAwesome.FILE_POWERPOINT_O);
 //
 //		assertThat(Icons.iconForMIMEType("xxx/xxx")).isEqualToComparingFieldByFieldRecursively(icon);
-
 		//	--------------------------------------------------------------------
 //		System.out.println("    Spreadsheet files...");
 //
 //		icon = FontIcon.of(FontAwesome.FILE_EXCEL_O);
 //
 //		assertThat(Icons.iconForMIMEType("xxx/xxx")).isEqualToComparingFieldByFieldRecursively(icon);
-
-
 		//	--------------------------------------------------------------------
 		System.out.println("    Text files...");
 
@@ -955,14 +1205,147 @@ public class IconsTest {
 	 * Test of iconFor method, of class Icons.
 	 */
 	@Test
+	@SuppressWarnings( { "UseSpecificCatch", "BroadCatchBlock", "TooBroadCatch" } )
 	public void testIconFor_Class() {
+
+		System.out.println("  Testing ''iconFor(Class)''...");
+
+		Set<Class<?>> supportedClasses = new HashSet<>(Arrays.asList(
+			Accordion.class, 
+			AmbientLight.class,
+			AnchorPane.class,
+			Arc.class, 
+			ArcTo.class,
+			AreaChart.class,
+			BarChart.class, 
+			BorderPane.class,
+			Box.class,
+			BubbleChart.class, 
+			Button.class,
+			ButtonBar.class,
+			Canvas.class, 
+			CategoryAxis.class,
+			Chart.class,
+			CheckBox.class, 
+			CheckMenuItem.class,
+			ChoiceBox.class,
+			Circle.class, 
+			ClosePath.class,
+			ColorPicker.class,
+			ComboBox.class, 
+			ContextMenu.class,
+			CubicCurve.class,
+			CubicCurveTo.class, 
+			CustomMenuItem.class,
+			Cylinder.class,
+			DatePicker.class,
+			DialogPane.class,
+			Ellipse.class,
+			FlowPane.class,
+			GridPane.class,
+			Group.class,
+			HBox.class, 
+			HLineTo.class,
+			HTMLEditor.class,
+			Hyperlink.class,
+			ImageView.class,
+			Label.class, 
+			Line.class,
+			LineChart.class,
+			LineTo.class,
+			ListView.class,
+			MediaView.class, 
+			Menu.class,
+			MenuBar.class,
+			MenuButton.class, 
+			MenuItem.class,
+			MeshView.class,
+			MoveTo.class,
+			Node.class,
+			NumberAxis.class,
+			Pagination.class, 
+			Pane.class,
+			ParallelCamera.class,
+			PasswordField.class, 
+			Path.class,
+			PerspectiveCamera.class,
+			PieChart.class, 
+			PointLight.class,
+			Polygon.class,
+			Polyline.class, 
+			ProgressBar.class,
+			ProgressIndicator.class,
+			QuadCurve.class,
+			QuadCurveTo.class,
+			RadioButton.class, 
+			RadioMenuItem.class,
+			Rectangle.class,
+			Region.class,
+			SVGPath.class, 
+			ScatterChart.class,
+			ScrollBar.class,
+			ScrollPane.class, 
+			Separator.class,
+			SeparatorMenuItem.class,
+			Slider.class, 
+			Sphere.class,
+			Spinner.class,
+			SplitMenuButton.class, 
+			SplitPane.class,
+			StackPane.class,
+			StackedAreaChart.class, 
+			StackedBarChart.class,
+			SubScene.class,
+			SwingNode.class,
+			Tab.class, 
+			TabPane.class,
+			TableColumn.class,
+			TableView.class, 
+			Text.class,
+			TextArea.class,
+			TextField.class, 
+			TextFlow.class,
+			TitledPane.class,
+			ToggleButton.class, 
+			ToolBar.class,
+			Tooltip.class,
+			TreeTableColumn.class, 
+			TreeTableView.class,
+			TreeView.class,
+			VBox.class, 
+			VLineTo.class,
+			WebView.class
+		));
+
+		//	Testing Object.clas...
+		assertThat(Icons.iconFor(Object.class)).isNull();
+
+		//	Testing all other classes...
+		new HashSet<Class<?>>(supportedClasses).forEach(type -> {
+			if ( supportedClasses.contains(type) ) {
+				supportedClasses.remove(type);
+				assertThat(Icons.iconFor(type)).isNotNull().isInstanceOf(ImageView.class);
+			} else {
+				assertThat(Icons.iconFor(type)).isNull();
+			}
+		});
+
+		if ( !supportedClasses.isEmpty() ) {
+			System.out.println(MessageFormat.format("    {0} unmatched classes:", supportedClasses.size()));
+			supportedClasses
+				.stream()
+				.map(c -> c.getName())
+				.sorted()
+				.forEach(n -> System.out.println(MessageFormat.format("      {0}", n)));
+			Assert.fail(MessageFormat.format("{0} unmatched classes:", supportedClasses.size()));
+		}
+
 	}
 
 	/**
 	 * Test of iconFor method, of class Icons.
 	 */
 	@Test
-@Ignore
 	public void testIconFor_File() {
 
 		System.out.println("  Testing ''iconFor(File)''...");
@@ -1068,11 +1451,9 @@ public class IconsTest {
 	 * Test of iconFor method, of class Icons.
 	 */
 	@Test
-@Ignore
 	public void testIconFor_Object() {
 
 		//	No default provider, so null is the only result possible.
-
 		System.out.println("  Testing ''iconFor(Object)''...");
 
 		assertThat(Icons.iconFor("txt")).isNull();
@@ -1085,7 +1466,6 @@ public class IconsTest {
 	 * Test of iconFor method, of class Icons.
 	 */
 	@Test
-@Ignore
 	public void testIconFor_Path() {
 
 		System.out.println("  Testing ''iconFor(Path)''...");
