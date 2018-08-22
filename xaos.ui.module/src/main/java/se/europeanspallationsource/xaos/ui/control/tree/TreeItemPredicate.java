@@ -31,6 +31,7 @@ import javafx.scene.control.TreeItem;
  * @param <T> The type of the {@link TreeItem#getValue() value} property within
  *            {@link TreeItem}.
  * @author claudio.rosati@esss.se
+ * @see <a href="http://www.kware.net/?p=204">Filtering a JavaFX TreeView</a>
  */
 @FunctionalInterface
 public interface TreeItemPredicate<T> {
