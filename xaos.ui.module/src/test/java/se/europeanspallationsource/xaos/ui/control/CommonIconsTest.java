@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 claudiorosati.
+ * Copyright 2018 European Spallation Source ERIC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 package se.europeanspallationsource.xaos.ui.control;
 
 
-import se.europeanspallationsource.xaos.ui.control.CommonIcons;
 import javafx.scene.paint.Color;
 import org.junit.BeforeClass;
 import org.junit.Test;
