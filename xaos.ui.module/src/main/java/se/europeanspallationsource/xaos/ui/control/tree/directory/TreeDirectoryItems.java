@@ -391,11 +391,10 @@ public class TreeDirectoryItems {
 		 */
 		public abstract boolean isDirectory();
 
-//	TODO:CR To be removed?
-//		@Override
-//		public final boolean isLeaf() {
-//			return !isDirectory();
-//		}
+		@Override
+		public final boolean isLeaf() {
+			return !isDirectory();
+		}
 
 		protected PathItem<T> resolve( Path relativePath ) {
 
