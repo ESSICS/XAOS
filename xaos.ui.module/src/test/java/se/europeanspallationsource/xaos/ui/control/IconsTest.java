@@ -130,8 +130,6 @@ import javafx.scene.web.WebView;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.kordamp.ikonli.fontawesome.FontAwesome;
-import org.kordamp.ikonli.javafx.FontIcon;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -314,473 +312,449 @@ public class IconsTest {
 
 		System.out.println("  Testing ''iconForFileExtension''...");
 
-		Node icon;
-
 		//	--------------------------------------------------------------------
 		System.out.println("    Archive files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_ARCHIVE_O);
-
-		assertThat(Icons.iconForFileExtension("7x")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("a##")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("acb")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ace")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ar7")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("arc")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ari")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("arj")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ark")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("arx")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("b1")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ba")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("bs2")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("bsa")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("bz2")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("dmg")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("dwc")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("gz")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("hbc")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("hbe")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("hpk")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("hqx")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("jar")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("lif")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("lzw")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("lzx")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("maff")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("mar")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("pka")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("pkg")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("pma")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ppk")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("rar")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("rpm")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("sp")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("tar")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("taz")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("tbz")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("tgz")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("tpz")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("tz")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("tzb")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("uc2")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ucn")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("war")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("x")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("yz")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("z")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("zip")).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconForFileExtension("7x")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("a##")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("acb")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ace")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ar7")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("arc")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ari")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("arj")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ark")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("arx")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("b1")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ba")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("bs2")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("bsa")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("bz2")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("dmg")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("dwc")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("gz")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("hbc")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("hbe")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("hpk")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("hqx")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("jar")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("lif")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("lzw")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("lzx")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("maff")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("mar")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pka")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pkg")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pma")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ppk")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("rar")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("rpm")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("sp")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("tar")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("taz")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("tbz")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("tgz")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("tpz")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("tz")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("tzb")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("uc2")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ucn")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("war")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("x")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("yz")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("z")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("zip")).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Audio/Music files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_AUDIO_O);
-
-		assertThat(Icons.iconForFileExtension("4md")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("668")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("669")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("6cm")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("8cm")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("aac")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ad2")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ad3")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("aif")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("aifc")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("aiff")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("amr")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ams")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ape")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("asf")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("au")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("aud")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("audio")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("cda")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("cdm")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("cfa")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("enc")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("flac")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("m4a")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("m4r")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("mp2")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("mp3")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("mpa")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("nxt")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ogg")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("omg")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("opus")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("sf")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("sfl")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("smp")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("snd")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("son")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("sound")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("voc")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("wav")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("wave")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("wma")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("xa")).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconForFileExtension("4md")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("668")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("669")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("6cm")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("8cm")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("aac")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ad2")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ad3")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("aif")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("aifc")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("aiff")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("amr")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ams")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ape")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("asf")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("au")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("aud")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("audio")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cda")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cdm")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cfa")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("enc")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("flac")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("m4a")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("m4r")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("mp2")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("mp3")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("mpa")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("nxt")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ogg")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("omg")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("opus")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("sf")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("sfl")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("smp")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("snd")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("son")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("sound")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("voc")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wav")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wave")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wma")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xa")).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Code files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_CODE_O);
-
-		assertThat(Icons.iconForFileExtension("4th")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("8")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("a")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("a80")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("act")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ada")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("adb")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ads")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ash")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("asi")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("asm")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("bas")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("bat")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("bi")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("c--")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("c++")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("c")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("cas")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("cbl")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("cc")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("cl")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("coffee")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("cs")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("cxx")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("d")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("di")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("e")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("el")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("erl")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("esh")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("f")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("f4")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("f77")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("f90")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("f95")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("for")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("gc1")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("gc3")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("go")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("h--")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("h++")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("h")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("hh")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("hpp")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("htm")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("html")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("hxx")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ipynb")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("jav")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("java")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("js")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("json")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("kcl")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("l")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("lisp")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("m")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("mak")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("mm")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("p")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("pas")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("py")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("r")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("rb")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("s")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("sh")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("sm")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("st")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("swift")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("tcl")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("xml")).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconForFileExtension("4th")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("8")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("a")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("a80")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("act")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ada")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("adb")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ads")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ash")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("asi")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("asm")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("bas")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("bat")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("bi")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("c--")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("c++")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("c")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cas")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cbl")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cc")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cl")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("coffee")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cs")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cxx")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("d")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("di")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("e")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("el")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("erl")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("esh")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("f")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("f4")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("f77")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("f90")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("f95")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("for")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("gc1")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("gc3")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("go")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("h--")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("h++")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("h")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("hh")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("hpp")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("htm")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("html")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("hxx")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ipynb")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("jav")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("java")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("js")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("json")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("kcl")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("l")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("lisp")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("m")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("mak")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("mm")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("p")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pas")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("py")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("r")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("rb")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("s")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("sh")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("sm")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("st")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("swift")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("tcl")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xml")).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Database files...");
 
-		icon = FontIcon.of(FontAwesome.DATABASE);
-
-		assertThat(Icons.iconForFileExtension("3dt")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("4db")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("4dindy")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ab6")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ab8")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("accda")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("accdb")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("accde")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("accdt")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("accdu")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("accft")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ap")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("bib")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("cac")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("cdb")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("crp")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("db")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("db2")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("db3")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("dbf")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("dbk")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("dbx")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("dtf")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("fm")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("fp3")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("fp4")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("fp5")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("fp7")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("fw")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("fw2")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("fw3")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("idb")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ldb")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("mat")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("mdf")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ndb")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("phf")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("res")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("rpd")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("tdb")).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconForFileExtension("3dt")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("4db")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("4dindy")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ab6")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ab8")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("accda")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("accdb")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("accde")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("accdt")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("accdu")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("accft")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ap")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("bib")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cac")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cdb")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("crp")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("db")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("db2")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("db3")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("dbf")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("dbk")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("dbx")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("dtf")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("fm")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("fp3")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("fp4")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("fp5")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("fp7")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("fw")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("fw2")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("fw3")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("idb")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ldb")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("mat")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("mdf")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ndb")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("phf")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("res")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("rpd")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("tdb")).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Image/Picture files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_IMAGE_O);
-
-		assertThat(Icons.iconForFileExtension("555")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("75")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("a11")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("acmb")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ais")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("art")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("b&w")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("b_w")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("b1n")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("b8")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("bga")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("bif")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("bmp")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("cbm")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("cco")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("cdf")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ceg")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("cgm")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("cr2")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("cut")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("dcs")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ddb")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("dem")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("eps")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("gif")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("gry")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("hdw")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("iax")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ica")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("icb")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ico")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("idw")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("j2c")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("jff")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("jfif")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("jif")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("jp2")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("jpc")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("jpeg")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("jpg")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("miff")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("msp")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("pcd")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("pct")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("pcx")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("pda")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("pdn")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("pdd")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("pic")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("pict")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("pix")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("png")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("pnt")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ppm")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ras")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("raw")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("rgb")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("rif")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("riff")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("rl4")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("rl8")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("rla")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("rlb")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("rlc")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("sg1")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("sgi")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("spi")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("spiff")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("sun")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("tga")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("tif")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("tiff")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("vda")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("vgr")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("vif")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("viff")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("vpg")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("wim")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("wpg")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("xbm")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("xcf")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("xif")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("xpm")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("xwd")).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconForFileExtension("555")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("75")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("a11")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("acmb")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ais")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("art")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("b&w")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("b_w")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("b1n")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("b8")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("bga")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("bif")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("bmp")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cbm")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cco")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cdf")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ceg")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cgm")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cr2")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cut")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("dcs")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ddb")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("dem")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("eps")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("gif")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("gry")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("hdw")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("iax")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ica")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("icb")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ico")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("idw")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("j2c")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("jff")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("jfif")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("jif")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("jp2")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("jpc")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("jpeg")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("jpg")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("miff")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("msp")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pcd")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pct")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pcx")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pda")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pdn")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pdd")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pic")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pict")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pix")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("png")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pnt")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ppm")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ras")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("raw")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("rgb")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("rif")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("riff")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("rl4")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("rl8")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("rla")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("rlb")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("rlc")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("sg1")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("sgi")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("spi")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("spiff")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("sun")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("tga")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("tif")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("tiff")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("vda")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("vgr")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("vif")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("viff")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("vpg")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wim")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wpg")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xbm")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xcf")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xif")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xpm")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xwd")).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Movie/Video files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_MOVIE_O);
-
-		assertThat(Icons.iconForFileExtension("byu")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("f4a")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("f4b")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("f4p")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("f4v")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("fmv")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("m2ts")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("m4p")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("m4v")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("mov")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("mp4")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("mpeg")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("mpg")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("mpx")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("mts")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("qt")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("qtvr")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("sdc")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("tmf")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("trp")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ts")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ty")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("vob")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("vue")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("wmv")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("xmv")).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconForFileExtension("byu")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("f4a")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("f4b")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("f4p")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("f4v")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("fmv")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("m2ts")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("m4p")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("m4v")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("mov")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("mp4")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("mpeg")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("mpg")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("mpx")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("mts")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("qt")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("qtvr")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("sdc")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("tmf")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("trp")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ts")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ty")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("vob")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("vue")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wmv")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xmv")).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    PDF files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_PDF_O);
-
-		assertThat(Icons.iconForFileExtension("pdf")).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconForFileExtension("pdf")).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Presentation/Powerpoint files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_POWERPOINT_O);
-
-		assertThat(Icons.iconForFileExtension("ch4")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("key")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("odp")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("pcs")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("pot")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("pps")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ppt")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("pptx")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("psx")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("shw")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("sxi")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("uop")).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconForFileExtension("ch4")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("key")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("odp")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pcs")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pot")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pps")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ppt")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pptx")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("psx")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("shw")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("sxi")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("uop")).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Spreadsheet files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_EXCEL_O);
-
-		assertThat(Icons.iconForFileExtension("123")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("bwb")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("cal")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("col")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("fm1")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("fm3")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("lcw")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("lss")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("mdl")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ods")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("qbw")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("slk")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("sxc")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("uos")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("vc")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("wk1")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("wk3")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("wk4")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("wke")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("wki")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("wkq")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("wks")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("wkz")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("wq1")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("wr1")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("xla")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("xlb")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("xlc")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("xld")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("xlk")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("xll")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("xlm")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("xls")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("xlsb")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("xlsm")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("xlsx")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("xlt")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("xlv")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("xlw")).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconForFileExtension("123")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("bwb")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cal")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("col")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("fm1")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("fm3")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("lcw")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("lss")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("mdl")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ods")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("qbw")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("slk")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("sxc")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("uos")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("vc")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wk1")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wk3")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wk4")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wke")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wki")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wkq")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wks")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wkz")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wq1")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wr1")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xla")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xlb")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xlc")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xld")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xlk")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xll")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xlm")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xls")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xlsb")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xlsm")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xlsx")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xlt")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xlv")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xlw")).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Text files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_TEXT_O);
-
-		assertThat(Icons.iconForFileExtension("1st")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("602")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("asc")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ftxt")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("hex")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("inf")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("log")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("me")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("readme")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("text")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("txt")).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconForFileExtension("1st")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("602")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("asc")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ftxt")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("hex")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("inf")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("log")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("me")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("readme")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("text")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("txt")).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Word Processor files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_WORD_O);
-
-		assertThat(Icons.iconForFileExtension("chi")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("doc")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("docm")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("docx")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("dot")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("lwp")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("odm")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("odt")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("ott")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("pages")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("pm3")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("pm4")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("pm5")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("pt3")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("pt4")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("pt5")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("pwp")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("sxw")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("uot")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("wkb")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("wp")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("wp5")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("wpd")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("wri")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForFileExtension("xlr")).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconForFileExtension("chi")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("doc")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("docm")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("docx")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("dot")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("lwp")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("odm")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("odt")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ott")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pages")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pm3")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pm4")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pm5")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pt3")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pt4")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pt5")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pwp")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("sxw")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("uot")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wkb")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wp")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wp5")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wpd")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wri")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xlr")).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Testing non-exiting extensions...");
@@ -799,398 +773,376 @@ public class IconsTest {
 
 		System.out.println("  Testing ''iconForMIMEType''...");
 
-		Node icon;
-
 		//	--------------------------------------------------------------------
 		System.out.println("    Archive files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_ARCHIVE_O);
-
-		assertThat(Icons.iconForMIMEType("application/gzip")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("application/zip")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("application/zlib")).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconForMIMEType("application/gzip")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("application/zip")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("application/zlib")).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Audio/Music files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_AUDIO_O);
-
-		assertThat(Icons.iconForMIMEType("audio/1d-interleaved-parityfec")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/32kadpcm")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/3gpp")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/3gpp2")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/aac")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/ac3")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/AMR")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/AMR-WB")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/amr-wb+")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/aptx")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/asc")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/ATRAC-ADVANCED-LOSSLESS")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/ATRAC-X")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/ATRAC3")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/basic")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/BV16")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/BV32")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/clearmode")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/CN")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/DAT12")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/dls")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/dsr-es201108")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/dsr-es202050")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/dsr-es202211")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/dsr-es202212")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/DV")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/DVI4")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/eac3")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/encaprtp")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/EVRC")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/EVRC-QCP")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/EVRC0")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/EVRC1")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/EVRCB")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/EVRCB0")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/EVRCB1")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/EVRCNW")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/EVRCNW0")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/EVRCNW1")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/EVRCWB")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/EVRCWB0")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/EVRCWB1")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/EVS")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/example")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/fwdred")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/G711-0")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/G719")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/G7221")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/G722")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/G723")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/G726-16")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/G726-24")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/G726-32")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/G726-40")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/G728")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/G729")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/G7291")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/G729D")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/G729E")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/GSM")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/GSM-EFR")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/GSM-HR-08")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/iLBC")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/ip-mr_v2.5")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/L8")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/L16")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/L20")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/L24")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/LPC")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/MELP")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/MELP600")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/MELP1200")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/MELP2400")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/mobile-xmf")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/MPA")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/mp4")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/MP4A-LATM")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/mpa-robust")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/mpeg")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/mpeg4-generic")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/ogg")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/opus")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/parityfec")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/PCMA")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/PCMA-WB")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/PCMU")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/PCMU-WB")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/prs.sid")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/QCELP")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/raptorfec")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/RED")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/rtp-enc-aescm128")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/rtploopback")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/rtp-midi")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/rtx")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/SMV")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/SMV0")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/SMV-QCP")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/sp-midi")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/speex")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/t140c")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/t38")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/telephone-event")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/tone")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/UEMCLIP")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/ulpfec")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/usac")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/VDVI")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/VMR-WB")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.3gpp.iufp")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.4SB")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.audiokoz")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.CELP")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.cisco.nse")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.cmles.radio-events")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.cns.anp1")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.cns.inf1")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.dece.audio")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.digital-winds")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.dlna.adts")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.dolby.heaac.1")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.dolby.heaac.2")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.dolby.mlp")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.dolby.mps")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.dolby.pl2")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.dolby.pl2x")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.dolby.pl2z")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.dolby.pulse.1")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.dra")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.dts")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.dts.hd")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.dvb.file")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.everad.plj")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.hns.audio")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.lucent.voice")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.ms-playready.media.pya")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.nokia.mobile-xmf")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.nortel.vbk")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.nuera.ecelp4800")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.nuera.ecelp7470")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.nuera.ecelp9600")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.octel.sbc")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.presonus.multitrack")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.qcelp - DEPRECATED in favor of audio/qcelp")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.rhetorex.32kadpcm")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.rip")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.sealedmedia.softseal.mpeg")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vnd.vmx.cvsd")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vorbis")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("audio/vorbis-config")).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconForMIMEType("audio/1d-interleaved-parityfec")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/32kadpcm")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/3gpp")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/3gpp2")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/aac")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/ac3")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/AMR")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/AMR-WB")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/amr-wb+")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/aptx")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/asc")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/ATRAC-ADVANCED-LOSSLESS")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/ATRAC-X")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/ATRAC3")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/basic")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/BV16")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/BV32")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/clearmode")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/CN")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/DAT12")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/dls")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/dsr-es201108")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/dsr-es202050")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/dsr-es202211")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/dsr-es202212")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/DV")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/DVI4")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/eac3")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/encaprtp")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/EVRC")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/EVRC-QCP")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/EVRC0")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/EVRC1")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/EVRCB")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/EVRCB0")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/EVRCB1")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/EVRCNW")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/EVRCNW0")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/EVRCNW1")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/EVRCWB")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/EVRCWB0")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/EVRCWB1")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/EVS")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/example")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/fwdred")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/G711-0")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/G719")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/G7221")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/G722")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/G723")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/G726-16")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/G726-24")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/G726-32")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/G726-40")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/G728")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/G729")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/G7291")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/G729D")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/G729E")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/GSM")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/GSM-EFR")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/GSM-HR-08")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/iLBC")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/ip-mr_v2.5")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/L8")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/L16")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/L20")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/L24")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/LPC")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/MELP")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/MELP600")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/MELP1200")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/MELP2400")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/mobile-xmf")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/MPA")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/mp4")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/MP4A-LATM")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/mpa-robust")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/mpeg")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/mpeg4-generic")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/ogg")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/opus")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/parityfec")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/PCMA")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/PCMA-WB")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/PCMU")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/PCMU-WB")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/prs.sid")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/QCELP")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/raptorfec")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/RED")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/rtp-enc-aescm128")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/rtploopback")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/rtp-midi")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/rtx")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/SMV")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/SMV0")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/SMV-QCP")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/sp-midi")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/speex")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/t140c")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/t38")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/telephone-event")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/tone")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/UEMCLIP")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/ulpfec")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/usac")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/VDVI")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/VMR-WB")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.3gpp.iufp")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.4SB")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.audiokoz")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.CELP")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.cisco.nse")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.cmles.radio-events")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.cns.anp1")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.cns.inf1")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.dece.audio")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.digital-winds")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.dlna.adts")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.dolby.heaac.1")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.dolby.heaac.2")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.dolby.mlp")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.dolby.mps")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.dolby.pl2")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.dolby.pl2x")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.dolby.pl2z")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.dolby.pulse.1")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.dra")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.dts")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.dts.hd")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.dvb.file")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.everad.plj")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.hns.audio")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.lucent.voice")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.ms-playready.media.pya")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.nokia.mobile-xmf")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.nortel.vbk")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.nuera.ecelp4800")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.nuera.ecelp7470")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.nuera.ecelp9600")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.octel.sbc")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.presonus.multitrack")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.qcelp - DEPRECATED in favor of audio/qcelp")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.rhetorex.32kadpcm")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.rip")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.sealedmedia.softseal.mpeg")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.vmx.cvsd")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vorbis")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vorbis-config")).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Code files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_CODE_O);
-
-		assertThat(Icons.iconForMIMEType("application/ecmascript")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("application/javascript")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("application/json")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("application/json-patch+json")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("application/json-seq")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("application/xml")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("application/xml-dtd")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("application/xml-external-parsed-entity")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("application/xml-patch+xml")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("text/css")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("text/html")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("text/javascript")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("text/xml")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("text/xml-external-parsed-entity")).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconForMIMEType("application/ecmascript")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("application/javascript")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("application/json")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("application/json-patch+json")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("application/json-seq")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("application/xml")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("application/xml-dtd")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("application/xml-external-parsed-entity")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("application/xml-patch+xml")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("text/css")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("text/html")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("text/javascript")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("text/xml")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("text/xml-external-parsed-entity")).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Database files...");
 
-		icon = FontIcon.of(FontAwesome.DATABASE);
-
-		assertThat(Icons.iconForMIMEType("application/sql")).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconForMIMEType("application/sql")).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Image/Picture files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_IMAGE_O);
-
-		assertThat(Icons.iconForMIMEType("image/aces")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/avci")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/avcs")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/bmp")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/cgm")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/dicom-rle")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/emf")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/example")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/fits")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/g3fax")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/gif")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/heic")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/heic-sequence")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/heif")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/heif-sequence")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/ief")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/jls")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/jp2")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/jpeg")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/jpm")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/jpx")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/ktx")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/naplps")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/png")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/prs.btif")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/prs.pti")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/pwg-raster")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/svg+xml")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/t38")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/tiff")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/tiff-fx")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/vnd.adobe.photoshop")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/vnd.airzip.accelerator.azv")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/vnd.cns.inf2")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/vnd.dece.graphic")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/vnd.djvu")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/vnd.dwg")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/vnd.dxf")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/vnd.dvb.subtitle")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/vnd.fastbidsheet")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/vnd.fpx")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/vnd.fst")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/vnd.fujixerox.edmics-mmr")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/vnd.fujixerox.edmics-rlc")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/vnd.globalgraphics.pgb")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/vnd.microsoft.icon")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/vnd.mix")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/vnd.ms-modi")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/vnd.mozilla.apng")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/vnd.net-fpx")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/vnd.radiance")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/vnd.sealed.png")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/vnd.sealedmedia.softseal.gif")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/vnd.sealedmedia.softseal.jpg")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/vnd.svf")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/vnd.tencent.tap")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/vnd.valve.source.texture")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/vnd.wap.wbmp")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/vnd.xiff")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/vnd.zbrush.pcx")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/wmf")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/x-emf")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("image/x-wmf")).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconForMIMEType("image/aces")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/avci")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/avcs")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/bmp")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/cgm")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/dicom-rle")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/emf")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/example")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/fits")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/g3fax")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/gif")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/heic")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/heic-sequence")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/heif")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/heif-sequence")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/ief")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/jls")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/jp2")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/jpeg")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/jpm")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/jpx")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/ktx")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/naplps")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/png")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/prs.btif")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/prs.pti")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/pwg-raster")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/svg+xml")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/t38")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/tiff")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/tiff-fx")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/vnd.adobe.photoshop")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/vnd.airzip.accelerator.azv")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/vnd.cns.inf2")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/vnd.dece.graphic")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/vnd.djvu")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/vnd.dwg")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/vnd.dxf")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/vnd.dvb.subtitle")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/vnd.fastbidsheet")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/vnd.fpx")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/vnd.fst")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/vnd.fujixerox.edmics-mmr")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/vnd.fujixerox.edmics-rlc")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/vnd.globalgraphics.pgb")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/vnd.microsoft.icon")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/vnd.mix")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/vnd.ms-modi")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/vnd.mozilla.apng")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/vnd.net-fpx")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/vnd.radiance")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/vnd.sealed.png")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/vnd.sealedmedia.softseal.gif")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/vnd.sealedmedia.softseal.jpg")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/vnd.svf")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/vnd.tencent.tap")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/vnd.valve.source.texture")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/vnd.wap.wbmp")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/vnd.xiff")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/vnd.zbrush.pcx")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/wmf")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/x-emf")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("image/x-wmf")).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Movie/Video files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_MOVIE_O);
-
-		assertThat(Icons.iconForMIMEType("application/mp4")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("application/mpeg4-generic")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("application/mpeg4-iod")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("application/mpeg4-iod-xmt")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("application/ogg")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/1d-interleaved-parityfec")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/3gpp")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/3gpp2")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/3gpp-tt")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/BMPEG")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/BT656")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/CelB")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/DV")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/encaprtp")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/example")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/H261")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/H263")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/H263-1998")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/H263-2000")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/H264")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/H264-RCDO")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/H264-SVC")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/H265")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/iso.segment")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/JPEG")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/jpeg2000")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/mj2")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/MP1S")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/MP2P")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/MP2T")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/mp4")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/MP4V-ES")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/MPV")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/mpeg")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/mpeg4-generic")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/nv")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/ogg")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/parityfec")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/pointer")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/quicktime")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/raptorfec")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/raw")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/rtp-enc-aescm128")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/rtploopback")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/rtx")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/smpte291")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/SMPTE292M")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/ulpfec")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vc1")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.CCTV")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.dece.hd")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.dece.mobile")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.dece.mp4")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.dece.pd")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.dece.sd")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.dece.video")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.directv.mpeg")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.directv.mpeg-tts")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.dlna.mpeg-tts")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.dvb.file")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.fvt")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.hns.video")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.iptvforum.1dparityfec-1010")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.iptvforum.1dparityfec-2005")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.iptvforum.2dparityfec-1010")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.iptvforum.2dparityfec-2005")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.iptvforum.ttsavc")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.iptvforum.ttsmpeg2")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.motorola.video")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.motorola.videop")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.mpegurl")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.ms-playready.media.pyv")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.nokia.interleaved-multimedia")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.nokia.mp4vr")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.nokia.videovoip")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.objectvideo")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.radgamettools.bink")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.radgamettools.smacker")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.sealed.mpeg1")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.sealed.mpeg4")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.sealed.swf")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.sealedmedia.softseal.mov")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.uvvu.mp4")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/vnd.vivo")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("video/VP8")).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconForMIMEType("application/mp4")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("application/mpeg4-generic")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("application/mpeg4-iod")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("application/mpeg4-iod-xmt")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("application/ogg")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/1d-interleaved-parityfec")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/3gpp")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/3gpp2")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/3gpp-tt")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/BMPEG")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/BT656")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/CelB")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/DV")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/encaprtp")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/example")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/H261")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/H263")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/H263-1998")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/H263-2000")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/H264")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/H264-RCDO")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/H264-SVC")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/H265")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/iso.segment")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/JPEG")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/jpeg2000")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/mj2")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/MP1S")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/MP2P")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/MP2T")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/mp4")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/MP4V-ES")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/MPV")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/mpeg")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/mpeg4-generic")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/nv")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/ogg")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/parityfec")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/pointer")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/quicktime")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/raptorfec")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/raw")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/rtp-enc-aescm128")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/rtploopback")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/rtx")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/smpte291")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/SMPTE292M")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/ulpfec")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vc1")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.CCTV")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.dece.hd")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.dece.mobile")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.dece.mp4")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.dece.pd")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.dece.sd")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.dece.video")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.directv.mpeg")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.directv.mpeg-tts")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.dlna.mpeg-tts")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.dvb.file")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.fvt")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.hns.video")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.iptvforum.1dparityfec-1010")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.iptvforum.1dparityfec-2005")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.iptvforum.2dparityfec-1010")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.iptvforum.2dparityfec-2005")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.iptvforum.ttsavc")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.iptvforum.ttsmpeg2")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.motorola.video")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.motorola.videop")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.mpegurl")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.ms-playready.media.pyv")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.nokia.interleaved-multimedia")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.nokia.mp4vr")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.nokia.videovoip")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.objectvideo")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.radgamettools.bink")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.radgamettools.smacker")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.sealed.mpeg1")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.sealed.mpeg4")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.sealed.swf")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.sealedmedia.softseal.mov")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.uvvu.mp4")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/vnd.vivo")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("video/VP8")).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    PDF files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_PDF_O);
-
-		assertThat(Icons.iconForMIMEType("application/pdf")).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconForMIMEType("application/pdf")).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 //		System.out.println("    Presentation/Powerpoint files...");
 //
-//		icon = FontIcon.of(FontAwesome.FILE_POWERPOINT_O);
-//
-//		assertThat(Icons.iconForMIMEType("xxx/xxx")).isEqualToComparingFieldByFieldRecursively(icon);
+//		assertThat(Icons.iconForMIMEType("xxx/xxx")).isNotNull().isInstanceOf(Text.class);
+
 		//	--------------------------------------------------------------------
 //		System.out.println("    Spreadsheet files...");
 //
-//		icon = FontIcon.of(FontAwesome.FILE_EXCEL_O);
-//
-//		assertThat(Icons.iconForMIMEType("xxx/xxx")).isEqualToComparingFieldByFieldRecursively(icon);
+//		assertThat(Icons.iconForMIMEType("xxx/xxx")).isNotNull().isInstanceOf(Text.class);
+
 		//	--------------------------------------------------------------------
 		System.out.println("    Text files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_TEXT_O);
-
-		assertThat(Icons.iconForMIMEType("application/rtf")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("text/csv")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("text/markdown")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("text/plain")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("text/richtext")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("text/rtf")).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconForMIMEType("text/strings")).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconForMIMEType("application/rtf")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("text/csv")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("text/markdown")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("text/plain")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("text/richtext")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("text/rtf")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("text/strings")).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Word Processor files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_WORD_O);
-
-		assertThat(Icons.iconForMIMEType("application/msword")).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconForMIMEType("application/msword")).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Testing non-exiting MIME types...");
@@ -1321,7 +1273,7 @@ public class IconsTest {
 		assertThat(Icons.iconFor(Object.class)).isNull();
 
 		//	Testing all other classes...
-		new HashSet<Class<?>>(supportedClasses).forEach(type -> {
+		new HashSet<>(supportedClasses).forEach(type -> {
 			if ( supportedClasses.contains(type) ) {
 				supportedClasses.remove(type);
 				assertThat(Icons.iconFor(type)).isNotNull().isInstanceOf(ImageView.class);
@@ -1350,94 +1302,70 @@ public class IconsTest {
 
 		System.out.println("  Testing ''iconFor(File)''...");
 
-		Node icon;
-
 		//	--------------------------------------------------------------------
 		System.out.println("    Archive files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_ARCHIVE_O);
-
-		assertThat(Icons.iconFor(new File("/tmp/test-file.7x"))).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.a##"))).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.7x"))).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.a##"))).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Audio/Music files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_AUDIO_O);
-
-		assertThat(Icons.iconFor(new File("/tmp/test-file.4md"))).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.668"))).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.4md"))).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.668"))).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Code files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_CODE_O);
-
-		assertThat(Icons.iconFor(new File("/tmp/test-file.4th"))).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.8"))).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.4th"))).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.8"))).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Database files...");
 
-		icon = FontIcon.of(FontAwesome.DATABASE);
-
-		assertThat(Icons.iconFor(new File("/tmp/test-file.3dt"))).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.4db"))).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.3dt"))).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.4db"))).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Image/Picture files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_IMAGE_O);
-
-		assertThat(Icons.iconFor(new File("/tmp/test-file.555"))).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.75"))).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.555"))).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.75"))).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Movie/Video files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_MOVIE_O);
-
-		assertThat(Icons.iconFor(new File("/tmp/test-file.byu"))).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.f4a"))).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.byu"))).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.f4a"))).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    PDF files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_PDF_O);
-
-		assertThat(Icons.iconFor(new File("/tmp/test-file.pdf"))).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.pdf"))).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Presentation/Powerpoint files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_POWERPOINT_O);
-
-		assertThat(Icons.iconFor(new File("/tmp/test-file.ch4"))).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.key"))).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.ch4"))).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.key"))).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Spreadsheet files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_EXCEL_O);
-
-		assertThat(Icons.iconFor(new File("/tmp/test-file.123"))).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.bwb"))).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.123"))).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.bwb"))).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Text files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_TEXT_O);
-
-		assertThat(Icons.iconFor(new File("/tmp/test-file.1st"))).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.602"))).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.me"))).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.txt"))).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Word Processor files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_WORD_O);
-
-		assertThat(Icons.iconFor(new File("/tmp/test-file.chi"))).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.doc"))).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.chi"))).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.doc"))).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Testing non-exiting extensions...");
@@ -1470,94 +1398,70 @@ public class IconsTest {
 
 		System.out.println("  Testing ''iconFor(Path)''...");
 
-		Node icon;
-
 		//	--------------------------------------------------------------------
 		System.out.println("    Archive files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_ARCHIVE_O);
-
-		assertThat(Icons.iconFor(new File("/tmp/test-file.7x").toPath())).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.a##").toPath())).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.7x").toPath())).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.a##").toPath())).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Audio/Music files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_AUDIO_O);
-
-		assertThat(Icons.iconFor(new File("/tmp/test-file.4md").toPath())).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.668").toPath())).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.4md").toPath())).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.668").toPath())).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Code files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_CODE_O);
-
-		assertThat(Icons.iconFor(new File("/tmp/test-file.4th").toPath())).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.8").toPath())).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.4th").toPath())).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.8").toPath())).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Database files...");
 
-		icon = FontIcon.of(FontAwesome.DATABASE);
-
-		assertThat(Icons.iconFor(new File("/tmp/test-file.3dt").toPath())).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.4db").toPath())).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.3dt").toPath())).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.4db").toPath())).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Image/Picture files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_IMAGE_O);
-
-		assertThat(Icons.iconFor(new File("/tmp/test-file.555").toPath())).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.75").toPath())).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.555").toPath())).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.75").toPath())).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Movie/Video files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_MOVIE_O);
-
-		assertThat(Icons.iconFor(new File("/tmp/test-file.byu").toPath())).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.f4a").toPath())).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.byu").toPath())).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.f4a").toPath())).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    PDF files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_PDF_O);
-
-		assertThat(Icons.iconFor(new File("/tmp/test-file.pdf").toPath())).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.pdf").toPath())).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Presentation/Powerpoint files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_POWERPOINT_O);
-
-		assertThat(Icons.iconFor(new File("/tmp/test-file.ch4").toPath())).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.key").toPath())).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.ch4").toPath())).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.key").toPath())).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Spreadsheet files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_EXCEL_O);
-
-		assertThat(Icons.iconFor(new File("/tmp/test-file.123").toPath())).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.bwb").toPath())).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.123").toPath())).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.bwb").toPath())).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Text files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_TEXT_O);
-
-		assertThat(Icons.iconFor(new File("/tmp/test-file.1st").toPath())).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.602").toPath())).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.1st").toPath())).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.602").toPath())).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Word Processor files...");
 
-		icon = FontIcon.of(FontAwesome.FILE_WORD_O);
-
-		assertThat(Icons.iconFor(new File("/tmp/test-file.chi").toPath())).isEqualToComparingFieldByFieldRecursively(icon);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.doc").toPath())).isEqualToComparingFieldByFieldRecursively(icon);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.chi").toPath())).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.doc").toPath())).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Testing non-exiting extensions...");

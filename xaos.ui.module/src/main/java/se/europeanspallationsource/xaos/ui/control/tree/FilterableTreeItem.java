@@ -23,11 +23,13 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.CheckBoxTreeItem;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.cell.CheckBoxTreeCell;
+import se.europeanspallationsource.xaos.tools.lang.Reflections;
 
 
 /**
@@ -72,38 +74,38 @@ public class FilterableTreeItem<T> extends CheckBoxTreeItem<T> {
 
 		filteredList.predicateProperty().bind(Bindings.createObjectBinding(() -> {
 
-				Predicate<TreeItem<T>> p = child -> {
+			Predicate<TreeItem<T>> p = child -> {
 
-					//	It should never happen...
-					if ( child == null ) {
-						LOGGER.warning("Predicate invoked with a null parameter.");
-						return false;
-					}
+				//	It should never happen...
+				if ( child == null ) {
+					LOGGER.warning("Predicate invoked with a null parameter.");
+					return false;
+				}
 
-					//	Set the predicate of child items to force filtering.
-					if ( child instanceof FilterableTreeItem ) {
-						((FilterableTreeItem<T>) child).setPredicate(getPredicate());
-					}
+				//	Set the predicate of child items to force filtering.
+				if ( child instanceof FilterableTreeItem ) {
+					( (FilterableTreeItem<T>) child ).setPredicate(getPredicate());
+				}
 
-					//	If there is no predicate, keep this tree item.
-					if ( getPredicate() == null ) {
-						return true;
-					}
+				//	If there is no predicate, keep this tree item.
+				if ( getPredicate() == null ) {
+					return true;
+				}
 
-					//	If child is not a leaf (usually meaning it has children),
-					//	keep this tree item.
-					if ( !child.isLeaf() ) {
-						return true;
-					}
+				//	If child is not a leaf (usually meaning it has children),
+				//	keep this tree item.
+				if ( !child.isLeaf() ) {
+					return true;
+				}
 
-					//	Otherwise ask the TreeItemPredicate.
-					return getPredicate().test(this, child.getValue());
+				//	Otherwise ask the TreeItemPredicate.
+				return getPredicate().test(this, child.getValue());
 
-				};
+			};
 
-				return p;
-				
-			},
+			return p;
+
+		},
 			this.predicate)
 		);
 
@@ -111,9 +113,9 @@ public class FilterableTreeItem<T> extends CheckBoxTreeItem<T> {
 
 	}
 
-    /*
-     * ---- predicate ----------------------------------------------------------
-     */
+	/*
+	 * ---- predicate ----------------------------------------------------------
+	 */
 	private ObjectProperty<TreeItemPredicate<T>> predicate = new SimpleObjectProperty<>();
 
 	public final ObjectProperty<TreeItemPredicate<T>> predicateProperty() {
@@ -135,27 +137,27 @@ public class FilterableTreeItem<T> extends CheckBoxTreeItem<T> {
 	 *
 	 * @return underlying list of children
 	 */
+	@SuppressWarnings( "ReturnOfCollectionOrArrayField" )
 	public ObservableList<TreeItem<T>> getInternalChildren() {
 		return this.sourceList;
 	}
 
-
-
-
-
-
-
 	/**
-	 * Set the hidden private field {@link TreeItem#children} through reflection and hook the hidden
-	 * {@link ListChangeListener} in {@link TreeItem#childrenListener} to the list
+	 * Set the hidden private field {@link TreeItem#children} through reflection and
+	 * hook the hidden {@link ListChangeListener} in {@link TreeItem#childrenListener}
+	 * to the list.
 	 *
 	 * @param list the list to set
 	 */
-	@SuppressWarnings( { "unchecked", "javadoc" } )
 	protected final void setHiddenFieldChildren( ObservableList<TreeItem<T>> list ) {
-		ReflectionUtil.setFieldValue(this, "children", list); //$NON-NLS-1$
-		Object childrenListener = ReflectionUtil.getFieldValue(this, "childrenListener"); //$NON-NLS-1$
-		list.addListener((ListChangeListener<? super TreeItem<T>>) childrenListener);
+
+		Reflections.setFieldValue(this, "children", list);
+
+		@SuppressWarnings( "unchecked" )
+		ListChangeListener<? super TreeItem<T>> childrenListener = (ListChangeListener<? super TreeItem<T>>) Reflections.getFieldValue(this, "childrenListener");
+
+		list.addListener(childrenListener);
+
 	}
 
 }

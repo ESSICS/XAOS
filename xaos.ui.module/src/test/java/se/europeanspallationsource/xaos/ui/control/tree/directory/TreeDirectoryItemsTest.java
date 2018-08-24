@@ -133,7 +133,7 @@ public class TreeDirectoryItemsTest {
 		assertThat(dItem)
 			.isInstanceOf(TreeDirectoryItems.DirectoryItem.class)
 			.hasFieldOrPropertyWithValue("directory", true)
-			.hasFieldOrPropertyWithValue("leaf", true)
+			.hasFieldOrPropertyWithValue("leaf", false)
 			.hasFieldOrPropertyWithValue("path", dir_a);
 
 		dItem.asDirectoryItem().addChildFile(
@@ -256,7 +256,7 @@ public class TreeDirectoryItemsTest {
 		assertThat(rootItem)
 			.isInstanceOf(TreeDirectoryItems.TopLevelDirectoryItem.class)
 			.hasFieldOrPropertyWithValue("directory", true)
-			.hasFieldOrPropertyWithValue("leaf", true)
+			.hasFieldOrPropertyWithValue("leaf", false)
 			.hasFieldOrPropertyWithValue("path", root);
 
 		rootItem.sync(element, this);
