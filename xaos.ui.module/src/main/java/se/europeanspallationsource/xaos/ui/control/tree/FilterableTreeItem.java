@@ -26,8 +26,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.scene.Node;
 import javafx.scene.control.CheckBoxTreeItem;
 import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.CheckBoxTreeCell;
 import se.europeanspallationsource.xaos.tools.lang.Reflections;
 
@@ -62,12 +64,67 @@ public class FilterableTreeItem<T> extends CheckBoxTreeItem<T> {
 	 * filtering sorting it is necessary to set the {@link TreeItemPredicate}. If no
 	 * predicate is set, then the tree item will attempt so bind itself to the
 	 * predicate of its parent.
+	 */
+	public FilterableTreeItem() {
+		this((T) null, null, false, false);
+	}
+
+	/**
+	 * Creates a new {@link FilterableTreeItem} with filtered children. To enable
+	 * filtering sorting it is necessary to set the {@link TreeItemPredicate}. If no
+	 * predicate is set, then the tree item will attempt so bind itself to the
+	 * predicate of its parent.
 	 *
 	 * @param value The value of the tree item.
 	 */
 	public FilterableTreeItem( T value ) {
+		this(value, null, false, false);
+	}
 
-		super(value);
+	/**
+	 * Creates a new {@link FilterableTreeItem} with filtered children.To enable
+	 * filtering sorting it is necessary to set the {@link TreeItemPredicate}.If no
+	 * predicate is set, then the tree item will attempt so bind itself to the
+	 * predicate of its parent.
+	 *
+	 * @param value   The value of the tree item.
+	 * @param graphic The {@link Node} to show in the {@link TreeView} next to
+	 *                this tree item.
+	 */
+	public FilterableTreeItem( T value, Node graphic ) {
+		this(value, graphic, false, false);
+	}
+
+	/**
+	 * Creates a new {@link FilterableTreeItem} with filtered children.To enable
+	 * filtering sorting it is necessary to set the {@link TreeItemPredicate}.If no
+	 * predicate is set, then the tree item will attempt so bind itself to the
+	 * predicate of its parent.
+	 *
+	 * @param value    The value of the tree item.
+	 * @param graphic  The {@link Node} to show in the {@link TreeView} next to
+	 *                 this tree item.
+	 * @param selected The initial value of the {@link #selectedProperty()}.
+	 */
+	public FilterableTreeItem( T value, Node graphic, boolean selected ) {
+		this(value, graphic, selected, false);
+	}
+
+	/**
+	 * Creates a new {@link FilterableTreeItem} with filtered children.To enable
+	 * filtering sorting it is necessary to set the {@link TreeItemPredicate}.If no
+	 * predicate is set, then the tree item will attempt so bind itself to the
+	 * predicate of its parent.
+	 *
+	 * @param value       The value of the tree item.
+	 * @param graphic     The {@link Node} to show in the {@link TreeView} next to
+	 *                    this tree item.
+	 * @param selected    The initial value of the {@link #selectedProperty()}.
+	 * @param independent The initial value of the {@link #independentProperty()}.
+	 */
+	public FilterableTreeItem( T value, Node graphic, boolean selected, boolean independent ) {
+
+		super(value, graphic, selected, independent);
 
 		unfilteredList = FXCollections.observableArrayList();
 		filteredList = new FilteredList<>(this.unfilteredList);
