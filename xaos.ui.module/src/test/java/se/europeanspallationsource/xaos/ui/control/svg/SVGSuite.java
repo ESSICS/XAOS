@@ -13,25 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.ui.spi;
+package se.europeanspallationsource.xaos.ui.control.svg;
 
 
-import javafx.scene.Node;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 
 
 /**
- * Provides icons (i.e. {@link Node}s) for a given MIME type.
- *
  * @author claudio.rosati@esss.se
  */
-public interface MIMETypeIconProvider {
-
-	/**
-	 * Return an icon (i.e. a {@link Node} for the given MIME type.
-	 *
-	 * @param mime The MIME type for which a graphical representation is needed.
-	 * @return An icon as a {@link Node} instance, or {@code null}.
-	 */
-	public Node iconFor( String mime );
-
+@RunWith( Suite.class )
+@Suite.SuiteClasses( {
+	//	SVG
+	AtomTest.class,
+	GasCylinderTest.class,
+	SVGFromInputStreamTest.class,
+	SVGFromURLTest.class
+} )
+@SuppressWarnings( { "ClassMayBeInterface", "ClassWithoutLogger", "UtilityClassWithoutPrivateConstructor" } )
+public class SVGSuite {
 }
