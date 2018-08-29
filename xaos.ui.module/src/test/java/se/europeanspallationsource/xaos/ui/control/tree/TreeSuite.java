@@ -30,6 +30,7 @@ import se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryM
 @RunWith( Suite.class )
 @Suite.SuiteClasses( {
 	//	tree
+	FilterableTreeItemTest.class,
 	TreeItemsTest.class,
 	//	tree directory
 	TreeDirectoryAsynchronousIOTest.class,

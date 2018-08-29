@@ -55,7 +55,7 @@ public class FilterableTreeItem<T> extends CheckBoxTreeItem<T> {
 	private static final Logger LOGGER = Logger.getLogger(FilterableTreeItem.class.getName());
 
 	final private FilteredList<TreeItem<T>> filteredList;
-	final private ObservableList<TreeItem<T>> sourceList;
+	final private ObservableList<TreeItem<T>> unfilteredList;
 
 	/**
 	 * Creates a new {@link FilterableTreeItem} with filtered children. To enable
@@ -69,8 +69,8 @@ public class FilterableTreeItem<T> extends CheckBoxTreeItem<T> {
 
 		super(value);
 
-		sourceList = FXCollections.observableArrayList();
-		filteredList = new FilteredList<>(this.sourceList);
+		unfilteredList = FXCollections.observableArrayList();
+		filteredList = new FilteredList<>(this.unfilteredList);
 
 		filteredList.predicateProperty().bind(Bindings.createObjectBinding(() -> {
 
@@ -135,11 +135,11 @@ public class FilterableTreeItem<T> extends CheckBoxTreeItem<T> {
 	/**
 	 * Returns the list of children that is backing the filtered list.
 	 *
-	 * @return underlying list of children
+	 * @return The underlying list of children.
 	 */
 	@SuppressWarnings( "ReturnOfCollectionOrArrayField" )
-	public ObservableList<TreeItem<T>> getInternalChildren() {
-		return this.sourceList;
+	public ObservableList<TreeItem<T>> getUnfilteredChildren() {
+		return this.unfilteredList;
 	}
 
 	/**
