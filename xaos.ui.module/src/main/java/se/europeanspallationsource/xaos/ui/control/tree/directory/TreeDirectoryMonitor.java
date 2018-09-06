@@ -87,6 +87,7 @@ import static se.europeanspallationsource.xaos.core.util.DefaultExecutorCompleti
  * 
  *         // Stop DirectoryWatcher's thread.
  *         primaryStage.setOnCloseRequest(val -&gt; dirmon.dispose());
+ *
  *       } catch (IOException e) {
  *         e.printStackTrace();
  *       }
