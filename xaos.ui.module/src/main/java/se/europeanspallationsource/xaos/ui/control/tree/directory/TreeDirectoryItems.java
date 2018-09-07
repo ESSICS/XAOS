@@ -31,7 +31,6 @@ import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import se.europeanspallationsource.xaos.core.util.io.DirectoryModel;
 import se.europeanspallationsource.xaos.core.util.io.PathElement;
-import se.europeanspallationsource.xaos.ui.control.tree.FilterableTreeItem;
 
 
 /**
@@ -146,7 +145,7 @@ public class TreeDirectoryItems {
 			int i = getDirectoryInsertionIndex(dir.toString());
 			DirectoryItem<T> child = createDirectoryItem(inject(getPath().resolve(dir)), graphicFactory, getProjector(), getInjector());
 
-			getUnfilteredChildren().add(i, child);
+			getChildren().add(i, child);
 
 			return child;
 
@@ -167,7 +166,7 @@ public class TreeDirectoryItems {
 			int i = getFileInsertionIndex(file.toString());
 			FileItem<T> child = createFileItem(inject(getPath().resolve(file)), lastModified, graphicFactory, getProjector());
 
-			getUnfilteredChildren().add(i, child);
+			getChildren().add(i, child);
 
 			return child;
 
@@ -199,7 +198,7 @@ public class TreeDirectoryItems {
 
 		private int getDirectoryInsertionIndex( String dirName ) {
 
-			ObservableList<TreeItem<T>> children = getUnfilteredChildren();
+			ObservableList<TreeItem<T>> children = getChildren();
 			int n = children.size();
 
 			for ( int i = 0; i < n; ++i ) {
@@ -226,7 +225,7 @@ public class TreeDirectoryItems {
 
 		private int getFileInsertionIndex( String fileName ) {
 
-			ObservableList<TreeItem<T>> children = getUnfilteredChildren();
+			ObservableList<TreeItem<T>> children = getChildren();
 			int n = children.size();
 
 			for ( int i = 0; i < n; ++i ) {
@@ -310,7 +309,7 @@ public class TreeDirectoryItems {
 	 * @param <T> Type of the object returned by {@link TreeItem#getValue()}.
 	 */
 	@SuppressWarnings( { "PackageVisibleInnerClass", "PublicInnerClass" } )
-	public static abstract class PathItem<T> extends FilterableTreeItem<T> {
+	public static abstract class PathItem<T> extends TreeItem<T> {
 
 		private final Function<T, Path> projector;
 
@@ -373,7 +372,7 @@ public class TreeDirectoryItems {
 
 			Path childValue = getPath().resolve(relativePath);
 
-			for ( TreeItem<T> ch : getUnfilteredChildren() ) {
+			for ( TreeItem<T> ch : getChildren() ) {
 
 				PathItem<T> pathCh = (PathItem<T>) ch;
 
@@ -546,11 +545,7 @@ public class TreeDirectoryItems {
 			TreeItem<T> parent = node.getParent();
 
 			if ( parent != null ) {
-				if ( parent instanceof FilterableTreeItem ) {
-					((FilterableTreeItem) parent).getUnfilteredChildren().remove(node);
-				} else {
-					parent.getChildren().remove(node);
-				}
+				parent.getChildren().remove(node);
 			}
 
 		}
@@ -598,11 +593,7 @@ public class TreeDirectoryItems {
 
 			if ( node != null ) {
 
-				if ( node  instanceof FilterableTreeItem ) {
-					((FilterableTreeItem<T>) node).getUnfilteredChildren().forEach(child -> signalDeletionRecursively(child, initiator));
-				} else {
-					node.getChildren().forEach(child -> signalDeletionRecursively(child, initiator));
-				}
+				node.getChildren().forEach(child -> signalDeletionRecursively(child, initiator));
 
 				Path p = getPath();
 
@@ -650,7 +641,7 @@ public class TreeDirectoryItems {
 		private void syncContent( DirectoryItem<T> dir, PathElement tree, I initiator ) {
 
 			Set<Path> desiredChildren = tree.getChildren().stream().map(element -> element.getPath()).collect(Collectors.toSet());
-			ArrayList<TreeItem<T>> actualChildren = new ArrayList<>(dir.getUnfilteredChildren());
+			ArrayList<TreeItem<T>> actualChildren = new ArrayList<>(dir.getChildren());
 
 			//	Remove undesired children
 			actualChildren.stream()

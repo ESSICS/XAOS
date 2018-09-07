@@ -84,6 +84,8 @@ import static se.europeanspallationsource.xaos.core.util.DefaultExecutorCompleti
  *         // Set directory to watch.
  *         dirmon.addTopLevelDirectory(Paths.get(System.getProperty("user.home"), "Documents").toAbsolutePath());
  *         view.setRoot(dirmon.model().getRoot());
+ *         view.setShowRoot(false);
+ *         view.setCellFactory(TreeItems.defaultTreePathCellFactory());
  * 
  *         // Stop DirectoryWatcher's thread.
  *         primaryStage.setOnCloseRequest(val -&gt; dirmon.dispose());
@@ -209,13 +211,13 @@ public class TreeDirectoryMonitor<I, T> {
 	) throws IOException {
 
 		this.externalInitiator = externalInitiator;
-        this.model = new TreeDirectoryModel<>(externalInitiator, projector, injector);
-        this.clientThreadExecutor = clientThreadExecutor;
-        this.directoryWatcher = DirectoryWatcher.build(clientThreadExecutor);
-        this.io = new TreeDirectoryAsynchronousIO<>(directoryWatcher, model, clientThreadExecutor);
+		this.model = new TreeDirectoryModel<>(externalInitiator, projector, injector);
+		this.clientThreadExecutor = clientThreadExecutor;
+		this.directoryWatcher = DirectoryWatcher.build(clientThreadExecutor);
+		this.io = new TreeDirectoryAsynchronousIO<>(directoryWatcher, model, clientThreadExecutor);
 
-        this.directoryWatcher.events().subscribe(this::processDirectoryEvent);
-        this.errors = EventStreams.merge(directoryWatcher.errors(), model.errors(), localErrors);
+		this.directoryWatcher.events().subscribe(this::processDirectoryEvent);
+		this.errors = EventStreams.merge(directoryWatcher.errors(), model.errors(), localErrors);
 
     }
 
