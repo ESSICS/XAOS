@@ -25,7 +25,6 @@ import org.junit.runners.Suite;
  */
 @RunWith( Suite.class )
 @Suite.SuiteClasses( {
-	CommonIconsTest.class,
 	IconsTest.class
 } )
 @SuppressWarnings( { "ClassMayBeInterface", "ClassWithoutLogger", "UtilityClassWithoutPrivateConstructor" } )

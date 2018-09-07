@@ -98,6 +98,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaView;
 import javafx.scene.shape.Arc;
@@ -130,8 +131,21 @@ import javafx.scene.web.WebView;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.kordamp.ikonli.fontawesome.FontAwesome;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertNull;
+import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FILE;
+import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FILE_EXECUTABLE;
+import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FILE_HIDDEN;
+import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FILE_LINK;
+import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FOLDER_COLLAPSED;
+import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FOLDER_EXPANDED;
+import static se.europeanspallationsource.xaos.ui.control.CommonIcons.SQUARE_DOWN;
+import static se.europeanspallationsource.xaos.ui.control.CommonIcons.SQUARE_LEFT;
+import static se.europeanspallationsource.xaos.ui.control.CommonIcons.SQUARE_RIGHT;
+import static se.europeanspallationsource.xaos.ui.control.CommonIcons.SQUARE_UP;
+import static se.europeanspallationsource.xaos.ui.control.Icons.DEFAULT_SIZE;
 
 
 /**
@@ -248,6 +262,7 @@ public class IconsTest {
 			TextArea.class.getName(),
 			TextField.class.getName(),
 			TextFlow.class.getName(),
+			TilePane.class.getName(),
 			TitledPane.class.getName(),
 			ToggleButton.class.getName(),
 			ToolBar.class.getName(),
@@ -287,9 +302,9 @@ public class IconsTest {
 		classNames.forEach(className -> {
 			if ( supportedClasses.contains(className) ) {
 				supportedClasses.remove(className);
-				assertThat(Icons.iconForClass(className)).isNotNull().isInstanceOf(ImageView.class);
+				assertThat(Icons.iconForClass(className, DEFAULT_SIZE)).isNotNull().isInstanceOf(ImageView.class);
 			} else {
-				assertThat(Icons.iconFor(className)).isNull();
+				assertNull("Icon for " + className, Icons.iconForClass(className, DEFAULT_SIZE));
 			}
 		});
 
@@ -315,453 +330,453 @@ public class IconsTest {
 		//	--------------------------------------------------------------------
 		System.out.println("    Archive files...");
 
-		assertThat(Icons.iconForFileExtension("7x")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("a##")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("acb")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ace")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ar7")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("arc")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ari")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("arj")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ark")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("arx")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("b1")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ba")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("bs2")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("bsa")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("bz2")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("dmg")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("dwc")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("gz")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("hbc")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("hbe")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("hpk")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("hqx")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("jar")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("lif")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("lzw")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("lzx")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("maff")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("mar")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("pka")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("pkg")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("pma")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ppk")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("rar")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("rpm")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("sp")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("tar")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("taz")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("tbz")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("tgz")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("tpz")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("tz")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("tzb")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("uc2")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ucn")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("war")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("x")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("yz")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("z")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("zip")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("7x",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("a##",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("acb",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ace",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ar7",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("arc",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ari",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("arj",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ark",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("arx",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("b1",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ba",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("bs2",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("bsa",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("bz2",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("dmg",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("dwc",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("gz",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("hbc",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("hbe",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("hpk",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("hqx",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("jar",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("lif",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("lzw",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("lzx",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("maff",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("mar",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pka",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pkg",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pma",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ppk",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("rar",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("rpm",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("sp",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("tar",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("taz",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("tbz",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("tgz",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("tpz",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("tz",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("tzb",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("uc2",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ucn",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("war",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("x",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("yz",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("z",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("zip",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Audio/Music files...");
 
-		assertThat(Icons.iconForFileExtension("4md")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("668")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("669")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("6cm")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("8cm")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("aac")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ad2")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ad3")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("aif")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("aifc")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("aiff")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("amr")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ams")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ape")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("asf")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("au")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("aud")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("audio")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("cda")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("cdm")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("cfa")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("enc")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("flac")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("m4a")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("m4r")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("mp2")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("mp3")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("mpa")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("nxt")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ogg")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("omg")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("opus")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("sf")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("sfl")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("smp")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("snd")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("son")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("sound")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("voc")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("wav")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("wave")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("wma")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("xa")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("4md",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("668",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("669",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("6cm",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("8cm",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("aac",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ad2",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ad3",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("aif",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("aifc",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("aiff",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("amr",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ams",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ape",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("asf",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("au",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("aud",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("audio",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cda",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cdm",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cfa",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("enc",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("flac",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("m4a",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("m4r",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("mp2",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("mp3",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("mpa",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("nxt",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ogg",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("omg",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("opus",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("sf",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("sfl",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("smp",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("snd",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("son",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("sound",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("voc",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wav",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wave",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wma",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xa",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Code files...");
 
-		assertThat(Icons.iconForFileExtension("4th")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("8")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("a")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("a80")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("act")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ada")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("adb")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ads")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ash")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("asi")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("asm")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("bas")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("bat")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("bi")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("c--")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("c++")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("c")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("cas")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("cbl")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("cc")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("cl")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("coffee")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("cs")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("cxx")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("d")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("di")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("e")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("el")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("erl")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("esh")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("f")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("f4")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("f77")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("f90")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("f95")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("for")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("gc1")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("gc3")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("go")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("h--")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("h++")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("h")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("hh")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("hpp")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("htm")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("html")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("hxx")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ipynb")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("jav")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("java")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("js")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("json")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("kcl")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("l")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("lisp")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("m")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("mak")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("mm")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("p")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("pas")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("py")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("r")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("rb")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("s")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("sh")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("sm")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("st")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("swift")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("tcl")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("xml")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("4th",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("8",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("a",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("a80",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("act",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ada",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("adb",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ads",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ash",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("asi",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("asm",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("bas",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("bat",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("bi",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("c--",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("c++",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("c",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cas",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cbl",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cc",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cl",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("coffee",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cs",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cxx",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("d",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("di",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("e",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("el",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("erl",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("esh",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("f",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("f4",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("f77",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("f90",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("f95",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("for",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("gc1",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("gc3",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("go",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("h--",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("h++",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("h",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("hh",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("hpp",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("htm",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("html",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("hxx",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ipynb",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("jav",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("java",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("js",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("json",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("kcl",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("l",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("lisp",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("m",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("mak",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("mm",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("p",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pas",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("py",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("r",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("rb",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("s",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("sh",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("sm",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("st",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("swift",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("tcl",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xml",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Database files...");
 
-		assertThat(Icons.iconForFileExtension("3dt")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("4db")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("4dindy")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ab6")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ab8")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("accda")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("accdb")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("accde")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("accdt")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("accdu")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("accft")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ap")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("bib")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("cac")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("cdb")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("crp")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("db")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("db2")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("db3")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("dbf")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("dbk")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("dbx")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("dtf")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("fm")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("fp3")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("fp4")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("fp5")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("fp7")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("fw")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("fw2")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("fw3")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("idb")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ldb")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("mat")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("mdf")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ndb")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("phf")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("res")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("rpd")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("tdb")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("3dt",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("4db",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("4dindy",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ab6",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ab8",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("accda",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("accdb",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("accde",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("accdt",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("accdu",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("accft",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ap",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("bib",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cac",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cdb",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("crp",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("db",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("db2",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("db3",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("dbf",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("dbk",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("dbx",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("dtf",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("fm",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("fp3",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("fp4",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("fp5",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("fp7",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("fw",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("fw2",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("fw3",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("idb",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ldb",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("mat",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("mdf",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ndb",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("phf",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("res",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("rpd",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("tdb",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Image/Picture files...");
 
-		assertThat(Icons.iconForFileExtension("555")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("75")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("a11")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("acmb")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ais")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("art")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("b&w")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("b_w")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("b1n")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("b8")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("bga")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("bif")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("bmp")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("cbm")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("cco")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("cdf")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ceg")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("cgm")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("cr2")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("cut")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("dcs")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ddb")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("dem")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("eps")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("gif")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("gry")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("hdw")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("iax")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ica")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("icb")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ico")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("idw")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("j2c")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("jff")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("jfif")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("jif")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("jp2")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("jpc")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("jpeg")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("jpg")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("miff")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("msp")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("pcd")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("pct")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("pcx")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("pda")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("pdn")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("pdd")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("pic")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("pict")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("pix")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("png")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("pnt")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ppm")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ras")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("raw")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("rgb")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("rif")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("riff")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("rl4")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("rl8")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("rla")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("rlb")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("rlc")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("sg1")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("sgi")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("spi")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("spiff")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("sun")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("tga")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("tif")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("tiff")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("vda")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("vgr")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("vif")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("viff")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("vpg")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("wim")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("wpg")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("xbm")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("xcf")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("xif")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("xpm")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("xwd")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("555",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("75",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("a11",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("acmb",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ais",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("art",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("b&w",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("b_w",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("b1n",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("b8",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("bga",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("bif",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("bmp",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cbm",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cco",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cdf",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ceg",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cgm",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cr2",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cut",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("dcs",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ddb",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("dem",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("eps",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("gif",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("gry",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("hdw",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("iax",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ica",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("icb",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ico",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("idw",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("j2c",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("jff",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("jfif",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("jif",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("jp2",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("jpc",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("jpeg",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("jpg",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("miff",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("msp",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pcd",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pct",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pcx",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pda",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pdn",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pdd",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pic",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pict",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pix",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("png",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pnt",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ppm",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ras",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("raw",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("rgb",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("rif",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("riff",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("rl4",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("rl8",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("rla",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("rlb",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("rlc",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("sg1",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("sgi",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("spi",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("spiff",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("sun",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("tga",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("tif",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("tiff",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("vda",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("vgr",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("vif",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("viff",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("vpg",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wim",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wpg",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xbm",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xcf",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xif",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xpm",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xwd",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Movie/Video files...");
 
-		assertThat(Icons.iconForFileExtension("byu")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("f4a")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("f4b")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("f4p")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("f4v")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("fmv")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("m2ts")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("m4p")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("m4v")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("mov")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("mp4")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("mpeg")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("mpg")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("mpx")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("mts")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("qt")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("qtvr")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("sdc")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("tmf")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("trp")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ts")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ty")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("vob")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("vue")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("wmv")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("xmv")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("byu",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("f4a",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("f4b",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("f4p",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("f4v",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("fmv",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("m2ts",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("m4p",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("m4v",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("mov",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("mp4",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("mpeg",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("mpg",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("mpx",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("mts",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("qt",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("qtvr",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("sdc",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("tmf",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("trp",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ts",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ty",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("vob",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("vue",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wmv",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xmv",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    PDF files...");
 
-		assertThat(Icons.iconForFileExtension("pdf")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pdf",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Presentation/Powerpoint files...");
 
-		assertThat(Icons.iconForFileExtension("ch4")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("key")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("odp")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("pcs")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("pot")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("pps")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ppt")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("pptx")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("psx")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("shw")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("sxi")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("uop")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ch4",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("key",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("odp",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pcs",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pot",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pps",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ppt",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pptx",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("psx",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("shw",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("sxi",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("uop",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Spreadsheet files...");
 
-		assertThat(Icons.iconForFileExtension("123")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("bwb")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("cal")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("col")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("fm1")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("fm3")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("lcw")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("lss")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("mdl")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ods")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("qbw")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("slk")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("sxc")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("uos")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("vc")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("wk1")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("wk3")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("wk4")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("wke")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("wki")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("wkq")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("wks")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("wkz")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("wq1")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("wr1")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("xla")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("xlb")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("xlc")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("xld")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("xlk")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("xll")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("xlm")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("xls")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("xlsb")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("xlsm")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("xlsx")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("xlt")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("xlv")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("xlw")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("123",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("bwb",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("cal",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("col",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("fm1",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("fm3",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("lcw",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("lss",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("mdl",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ods",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("qbw",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("slk",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("sxc",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("uos",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("vc",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wk1",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wk3",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wk4",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wke",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wki",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wkq",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wks",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wkz",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wq1",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wr1",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xla",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xlb",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xlc",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xld",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xlk",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xll",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xlm",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xls",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xlsb",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xlsm",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xlsx",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xlt",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xlv",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xlw",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Text files...");
 
-		assertThat(Icons.iconForFileExtension("1st")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("602")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("asc")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ftxt")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("hex")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("inf")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("log")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("me")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("readme")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("text")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("txt")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("1st",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("602",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("asc",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ftxt",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("hex",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("inf",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("log",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("me",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("readme",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("text",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("txt",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Word Processor files...");
 
-		assertThat(Icons.iconForFileExtension("chi")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("doc")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("docm")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("docx")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("dot")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("lwp")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("odm")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("odt")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("ott")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("pages")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("pm3")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("pm4")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("pm5")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("pt3")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("pt4")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("pt5")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("pwp")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("sxw")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("uot")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("wkb")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("wp")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("wp5")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("wpd")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("wri")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForFileExtension("xlr")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("chi",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("doc",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("docm",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("docx",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("dot",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("lwp",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("odm",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("odt",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("ott",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pages",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pm3",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pm4",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pm5",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pt3",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pt4",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pt5",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("pwp",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("sxw",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("uot",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wkb",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wp",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wp5",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wpd",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("wri",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForFileExtension("xlr",DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Testing non-exiting extensions...");
 
-		assertThat(Icons.iconForFileExtension("qqq")).isNull();
-		assertThat(Icons.iconForFileExtension("xxx")).isNull();
-		assertThat(Icons.iconForFileExtension("777")).isNull();
+		assertThat(Icons.iconForFileExtension("qqq",DEFAULT_SIZE)).isNull();
+		assertThat(Icons.iconForFileExtension("xxx",DEFAULT_SIZE)).isNull();
+		assertThat(Icons.iconForFileExtension("777",DEFAULT_SIZE)).isNull();
 
 	}
 
@@ -1270,15 +1285,15 @@ public class IconsTest {
 		));
 
 		//	Testing Object.clas...
-		assertThat(Icons.iconFor(Object.class)).isNull();
+		assertThat(Icons.iconFor(Object.class, DEFAULT_SIZE)).isNull();
 
 		//	Testing all other classes...
 		new HashSet<>(supportedClasses).forEach(type -> {
 			if ( supportedClasses.contains(type) ) {
 				supportedClasses.remove(type);
-				assertThat(Icons.iconFor(type)).isNotNull().isInstanceOf(ImageView.class);
+				assertThat(Icons.iconFor(type, DEFAULT_SIZE)).isNotNull().isInstanceOf(ImageView.class);
 			} else {
-				assertThat(Icons.iconFor(type)).isNull();
+				assertThat(Icons.iconFor(type, DEFAULT_SIZE)).isNull();
 			}
 		});
 
@@ -1305,73 +1320,73 @@ public class IconsTest {
 		//	--------------------------------------------------------------------
 		System.out.println("    Archive files...");
 
-		assertThat(Icons.iconFor(new File("/tmp/test-file.7x"))).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.a##"))).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.7x"), DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.a##"),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Audio/Music files...");
 
-		assertThat(Icons.iconFor(new File("/tmp/test-file.4md"))).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.668"))).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.4md"),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.668"),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Code files...");
 
-		assertThat(Icons.iconFor(new File("/tmp/test-file.4th"))).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.8"))).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.4th"),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.8"),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Database files...");
 
-		assertThat(Icons.iconFor(new File("/tmp/test-file.3dt"))).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.4db"))).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.3dt"),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.4db"),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Image/Picture files...");
 
-		assertThat(Icons.iconFor(new File("/tmp/test-file.555"))).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.75"))).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.555"),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.75"),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Movie/Video files...");
 
-		assertThat(Icons.iconFor(new File("/tmp/test-file.byu"))).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.f4a"))).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.byu"),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.f4a"),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    PDF files...");
 
-		assertThat(Icons.iconFor(new File("/tmp/test-file.pdf"))).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.pdf"),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Presentation/Powerpoint files...");
 
-		assertThat(Icons.iconFor(new File("/tmp/test-file.ch4"))).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.key"))).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.ch4"),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.key"),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Spreadsheet files...");
 
-		assertThat(Icons.iconFor(new File("/tmp/test-file.123"))).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.bwb"))).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.123"),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.bwb"),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Text files...");
 
-		assertThat(Icons.iconFor(new File("/tmp/test-file.me"))).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.txt"))).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.me"),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.txt"),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Word Processor files...");
 
-		assertThat(Icons.iconFor(new File("/tmp/test-file.chi"))).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.doc"))).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.chi"),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.doc"),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Testing non-exiting extensions...");
 
-		assertThat(Icons.iconFor(new File("/tmp/test-file.qqq"))).isNull();
-		assertThat(Icons.iconFor(new File("/tmp/test-file.xxx"))).isNull();
+		assertThat(Icons.iconFor(new File("/tmp/test-file.qqq"),DEFAULT_SIZE)).isNull();
+		assertThat(Icons.iconFor(new File("/tmp/test-file.xxx"),DEFAULT_SIZE)).isNull();
 
 	}
 
@@ -1384,9 +1399,51 @@ public class IconsTest {
 		//	No default provider, so null is the only result possible.
 		System.out.println("  Testing ''iconFor(Object)''...");
 
-		assertThat(Icons.iconFor("txt")).isNull();
-		assertThat(Icons.iconFor(new Object())).isNull();
-		assertThat(Icons.iconFor(this)).isNull();
+
+		assertThat(Icons.iconFor(FILE, DEFAULT_SIZE))
+			.isNotNull()
+			.isInstanceOf(Text.class)
+			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.FILE_O.getCode()));
+		assertThat(Icons.iconFor(FILE_EXECUTABLE, DEFAULT_SIZE))
+			.isNotNull()
+			.isInstanceOf(Text.class)
+			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.PLAY_CIRCLE_O.getCode()));
+		assertThat(Icons.iconFor(FILE_HIDDEN, DEFAULT_SIZE))
+			.isNotNull()
+			.isInstanceOf(Text.class)
+			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.FILE.getCode()));
+		assertThat(Icons.iconFor(FILE_LINK, DEFAULT_SIZE))
+			.isNotNull()
+			.isInstanceOf(Text.class)
+			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.LINK.getCode()));
+		assertThat(Icons.iconFor(FOLDER_COLLAPSED, DEFAULT_SIZE))
+			.isNotNull()
+			.isInstanceOf(Text.class)
+			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.FOLDER_O.getCode()));
+		assertThat(Icons.iconFor(FOLDER_EXPANDED, DEFAULT_SIZE))
+			.isNotNull()
+			.isInstanceOf(Text.class)
+			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.FOLDER_OPEN_O.getCode()));
+		assertThat(Icons.iconFor(SQUARE_DOWN, DEFAULT_SIZE))
+			.isNotNull()
+			.isInstanceOf(Text.class)
+			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.CARET_SQUARE_O_DOWN.getCode()));
+		assertThat(Icons.iconFor(SQUARE_LEFT, DEFAULT_SIZE))
+			.isNotNull()
+			.isInstanceOf(Text.class)
+			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.CARET_SQUARE_O_LEFT.getCode()));
+		assertThat(Icons.iconFor(SQUARE_RIGHT, DEFAULT_SIZE))
+			.isNotNull()
+			.isInstanceOf(Text.class)
+			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.CARET_SQUARE_O_RIGHT.getCode()));
+		assertThat(Icons.iconFor(SQUARE_UP, DEFAULT_SIZE))
+			.isNotNull()
+			.isInstanceOf(Text.class)
+			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.CARET_SQUARE_O_UP.getCode()));
+
+		assertThat(Icons.iconFor("txt", DEFAULT_SIZE)).isNull();
+		assertThat(Icons.iconFor(new Object(), DEFAULT_SIZE)).isNull();
+		assertThat(Icons.iconFor(this, DEFAULT_SIZE)).isNull();
 
 	}
 
@@ -1401,73 +1458,73 @@ public class IconsTest {
 		//	--------------------------------------------------------------------
 		System.out.println("    Archive files...");
 
-		assertThat(Icons.iconFor(new File("/tmp/test-file.7x").toPath())).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.a##").toPath())).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.7x").toPath(),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.a##").toPath(),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Audio/Music files...");
 
-		assertThat(Icons.iconFor(new File("/tmp/test-file.4md").toPath())).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.668").toPath())).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.4md").toPath(),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.668").toPath(),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Code files...");
 
-		assertThat(Icons.iconFor(new File("/tmp/test-file.4th").toPath())).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.8").toPath())).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.4th").toPath(),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.8").toPath(),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Database files...");
 
-		assertThat(Icons.iconFor(new File("/tmp/test-file.3dt").toPath())).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.4db").toPath())).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.3dt").toPath(),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.4db").toPath(),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Image/Picture files...");
 
-		assertThat(Icons.iconFor(new File("/tmp/test-file.555").toPath())).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.75").toPath())).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.555").toPath(),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.75").toPath(),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Movie/Video files...");
 
-		assertThat(Icons.iconFor(new File("/tmp/test-file.byu").toPath())).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.f4a").toPath())).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.byu").toPath(),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.f4a").toPath(),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    PDF files...");
 
-		assertThat(Icons.iconFor(new File("/tmp/test-file.pdf").toPath())).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.pdf").toPath(),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Presentation/Powerpoint files...");
 
-		assertThat(Icons.iconFor(new File("/tmp/test-file.ch4").toPath())).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.key").toPath())).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.ch4").toPath(),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.key").toPath(),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Spreadsheet files...");
 
-		assertThat(Icons.iconFor(new File("/tmp/test-file.123").toPath())).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.bwb").toPath())).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.123").toPath(),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.bwb").toPath(),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Text files...");
 
-		assertThat(Icons.iconFor(new File("/tmp/test-file.1st").toPath())).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.602").toPath())).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.1st").toPath(),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.602").toPath(),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Word Processor files...");
 
-		assertThat(Icons.iconFor(new File("/tmp/test-file.chi").toPath())).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconFor(new File("/tmp/test-file.doc").toPath())).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.chi").toPath(),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconFor(new File("/tmp/test-file.doc").toPath(),DEFAULT_SIZE)).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Testing non-exiting extensions...");
 
-		assertThat(Icons.iconFor(new File("/tmp/test-file.qqq").toPath())).isNull();
-		assertThat(Icons.iconFor(new File("/tmp/test-file.xxx").toPath())).isNull();
+		assertThat(Icons.iconFor(new File("/tmp/test-file.qqq").toPath(),DEFAULT_SIZE)).isNull();
+		assertThat(Icons.iconFor(new File("/tmp/test-file.xxx").toPath(),DEFAULT_SIZE)).isNull();
 
 	}
 

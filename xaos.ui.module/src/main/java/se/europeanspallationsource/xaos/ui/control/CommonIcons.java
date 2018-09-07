@@ -16,53 +16,24 @@
 package se.europeanspallationsource.xaos.ui.control;
 
 
-import javafx.scene.paint.Color;
-import org.kordamp.ikonli.Ikon;
-import org.kordamp.ikonli.fontawesome.FontAwesome;
-import org.kordamp.ikonli.javafx.FontIcon;
-
-import static org.kordamp.ikonli.javafx.FontIcon.of;
-
-
 /**
- * Provider of common icons.
+ * Keys to be used with {@link Icons#iconFor(Object, int)} to obtain the common
+ * icons.
  *
  * @author claudio.rosati@esss.se
  */
 @SuppressWarnings( "ClassWithoutLogger" )
 public enum CommonIcons {
 
-	FILE(FontAwesome.FILE_O),
-	FILE_EXECUTABLE(FontAwesome.PLAY_CIRCLE_O),
-	FILE_HIDDEN(FontAwesome.FILE),
-	FILE_LINK(FontAwesome.LINK),
-	FOLDER_COLLAPSED(FontAwesome.FOLDER_O),
-	FOLDER_EXPANDED(FontAwesome.FOLDER_OPEN_O),
-	SQUARE_DOWN(FontAwesome.CARET_SQUARE_O_DOWN),
-	SQUARE_LEFT(FontAwesome.CARET_SQUARE_O_LEFT),
-	SQUARE_RIGHT(FontAwesome.CARET_SQUARE_O_RIGHT),
-	SQUARE_UP(FontAwesome.CARET_SQUARE_O_UP);
-
-	private final Ikon ikon;
-
-	private CommonIcons( Ikon ikon ) {
-		this.ikon = ikon;
-	}
-
-	public FontIcon getIcon() {
-		return of(ikon);
-	}
-
-	public FontIcon getIcon( int size ) {
-		return of(ikon, size);
-	}
-
-	public FontIcon getIcon( Color color ) {
-		return of(ikon, color);
-	}
-
-	public FontIcon getIcon( int size, Color color ) {
-		return of(ikon, size, color);
-	}
+	FILE,
+	FILE_EXECUTABLE,
+	FILE_HIDDEN,
+	FILE_LINK,
+	FOLDER_COLLAPSED,
+	FOLDER_EXPANDED,
+	SQUARE_DOWN,
+	SQUARE_LEFT,
+	SQUARE_RIGHT,
+	SQUARE_UP;
 
 }

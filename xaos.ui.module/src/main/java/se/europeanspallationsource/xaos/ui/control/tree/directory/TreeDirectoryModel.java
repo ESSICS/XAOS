@@ -44,6 +44,7 @@ import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FILE_HIDDE
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FILE_LINK;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FOLDER_COLLAPSED;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FOLDER_EXPANDED;
+import static se.europeanspallationsource.xaos.ui.control.Icons.DEFAULT_SIZE;
 
 
 /**
@@ -356,11 +357,11 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 		@Override
 		public Node createGraphic( Path path, boolean isDirectory, boolean isExpanded ) {
 			if ( isDirectory ) {
-				return isExpanded ? FOLDER_EXPANDED.getIcon() : FOLDER_COLLAPSED.getIcon();
+				return isExpanded ? Icons.iconFor(FOLDER_EXPANDED, DEFAULT_SIZE) : Icons.iconFor(FOLDER_COLLAPSED, DEFAULT_SIZE);
 			} else if ( Files.isSymbolicLink(path) ) {
-				return FILE_LINK.getIcon();
+				return Icons.iconFor(FILE_LINK, DEFAULT_SIZE);
 			} else if ( Files.isExecutable(path) ) {
-				return FILE_EXECUTABLE.getIcon();
+				return Icons.iconFor(FILE_EXECUTABLE, DEFAULT_SIZE);
 			} else {
 				
 				boolean hidden = false;
@@ -376,8 +377,8 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 				}
 				
 				return hidden
-					   ? FILE_HIDDEN.getIcon()
-					   : Icons.iconFor(path, FILE.getIcon());
+					   ?	 Icons.iconFor(FILE_HIDDEN, DEFAULT_SIZE)
+					   : Icons.iconFor(path, DEFAULT_SIZE, Icons.iconFor(FILE, DEFAULT_SIZE));
 				
 			}
 		}

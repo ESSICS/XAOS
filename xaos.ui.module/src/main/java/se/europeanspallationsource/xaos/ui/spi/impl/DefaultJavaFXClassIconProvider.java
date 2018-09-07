@@ -23,7 +23,6 @@ import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.Node;
@@ -43,7 +42,6 @@ import se.europeanspallationsource.xaos.ui.spi.ClassIconProvider;
 @ServiceProvider( service = ClassIconProvider.class )
 public class DefaultJavaFXClassIconProvider implements ClassIconProvider {
 
-	private static final Map<String, Node> ICONS_MAP = new ConcurrentHashMap<>(120);
 	private static final Map<String, String> RESOURCES_MAP;
 
 	/**
@@ -88,17 +86,15 @@ public class DefaultJavaFXClassIconProvider implements ClassIconProvider {
 	}
 
 	@Override
-	public Node iconFor( String clazz ) {
+	public Node iconFor( String clazz, int size ) {
 
-		if ( StringUtils.isBlank(clazz) ) {
+		if ( StringUtils.isBlank(clazz) || size <= 0 ) {
 			return null;
 		}
 		
-		Node node = null;
+		ImageView node = null;
 
-		if ( ICONS_MAP.containsKey(clazz) ) {
-			node = ICONS_MAP.get(clazz);
-		} else if ( clazz.startsWith("javafx.") ) {
+		if ( clazz.startsWith("javafx.") ) {
 
 			String simpleName = clazz.substring(1 + clazz.lastIndexOf('.'));
 
@@ -110,7 +106,15 @@ public class DefaultJavaFXClassIconProvider implements ClassIconProvider {
 
 					node = new ImageView(new Image(getResourceAsStream(resource)));
 
-					ICONS_MAP.put(clazz, node);
+					node.setPreserveRatio(true);
+
+					Image image = node.getImage();
+
+					if ( image.getWidth() > image.getHeight() ) {
+						node.setFitWidth(size);
+					} else {
+						node.setFitHeight(size);
+					}
 
 				}
 
