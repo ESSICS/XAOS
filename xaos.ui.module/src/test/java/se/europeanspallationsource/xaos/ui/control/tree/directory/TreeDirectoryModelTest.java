@@ -116,7 +116,7 @@ public class TreeDirectoryModelTest {
 		assertThat(model.contains(dir_a)).isFalse();
 		assertThat(model.contains(dir_a_c)).isFalse();
 
-		model.addTopLevelDirectory(root);
+		model.addTopLevelDirectory(root, false);
 		model.addDirectory(dir_a);
 		model.addDirectory(dir_a_c);
 
@@ -145,7 +145,7 @@ public class TreeDirectoryModelTest {
 		assertThat(model.contains(dir_a_c)).isFalse();
 		assertThat(model.contains(file_a_c)).isFalse();
 
-		model.addTopLevelDirectory(root);
+		model.addTopLevelDirectory(root, false);
 		model.addDirectory(dir_a);
 		model.addDirectory(dir_a_c);
 		model.addFile(file_a_c, Files.getLastModifiedTime(file_a_c));
@@ -172,7 +172,7 @@ public class TreeDirectoryModelTest {
 
 		assertThat(model.contains(root)).isFalse();
 
-		model.addTopLevelDirectory(root);
+		model.addTopLevelDirectory(root, false);
 
 		assertThat(model.contains(root)).isTrue();
 
@@ -198,7 +198,7 @@ public class TreeDirectoryModelTest {
 		//	No roots in the model.
 		assertThat(model.contains(file_a_c)).isFalse();
 
-		model.addTopLevelDirectory(root);
+		model.addTopLevelDirectory(root, false);
 
 		//	Roots not yet synchronized.
 		assertThat(model.contains(file_a_c)).isFalse();
@@ -236,7 +236,7 @@ public class TreeDirectoryModelTest {
 		//	No roots in the model.
 		assertThat(model.contains(file_a_c)).isFalse();
 
-		model.addTopLevelDirectory(root);
+		model.addTopLevelDirectory(root, false);
 		model.sync(tree(root));
 
 		//	Roots synchronized, not both dir_a_c and file_a_c are in the model.
@@ -265,7 +265,7 @@ public class TreeDirectoryModelTest {
 		);
 
 		model.creations().subscribe(u -> latch.countDown());
-		model.addTopLevelDirectory(root);
+		model.addTopLevelDirectory(root, false);
 		model.sync(tree(root));
 
 		if ( !latch.await(1, TimeUnit.MINUTES) ) {
@@ -294,7 +294,7 @@ public class TreeDirectoryModelTest {
 		assertThat(model.contains(dir_a_c)).isFalse();
 		assertThat(model.contains(file_a_c)).isFalse();
 
-		model.addTopLevelDirectory(dir_a);
+		model.addTopLevelDirectory(dir_a, false);
 		model.addDirectory(dir_a_c);
 		model.addFile(file_a_c, Files.getLastModifiedTime(file_a_c));
 
@@ -355,7 +355,7 @@ public class TreeDirectoryModelTest {
 		);
 
 		model.deletions().subscribe(u -> latch.countDown());
-		model.addTopLevelDirectory(root);
+		model.addTopLevelDirectory(root, false);
 		model.sync(tree(root));
 
 		Files.walkFileTree(dir_a, new DeleteFileVisitor());
@@ -387,7 +387,7 @@ public class TreeDirectoryModelTest {
 		);
 
 		model.errors().subscribe(u -> latch.countDown());
-		model.addTopLevelDirectory(root);
+		model.addTopLevelDirectory(root, false);
 		model.sync(tree(dir_a_c));
 
 		model = new TreeDirectoryModel<>(
@@ -397,7 +397,7 @@ public class TreeDirectoryModelTest {
 		);
 
 		model.errors().subscribe(u -> latch.countDown());
-		model.addTopLevelDirectory(file_a);
+		model.addTopLevelDirectory(file_a, false);
 		model.sync(tree(file_a));
 
 		if ( !latch.await(1, TimeUnit.MINUTES) ) {
@@ -420,8 +420,8 @@ public class TreeDirectoryModelTest {
 			p -> p != null ? p.toString() : null
 		);
 
-		model.addTopLevelDirectory(dir_a);
-		model.addTopLevelDirectory(dir_b);
+		model.addTopLevelDirectory(dir_a, false);
+		model.addTopLevelDirectory(dir_b, false);
 
 		TreeItem<String> modelRoot = model.getRoot();
 
@@ -455,7 +455,7 @@ public class TreeDirectoryModelTest {
 		);
 
 		model.modifications().subscribe(u -> latch.countDown());
-		model.addTopLevelDirectory(root);
+		model.addTopLevelDirectory(root, false);
 		model.sync(tree(root));
 
 		//	Give some time before the actual modification.
@@ -491,7 +491,7 @@ public class TreeDirectoryModelTest {
 		assertThat(model.contains(dir_a_c)).isFalse();
 		assertThat(model.contains(file_a_c)).isFalse();
 
-		model.addTopLevelDirectory(dir_a);
+		model.addTopLevelDirectory(dir_a, false);
 		model.sync(tree(dir_a));
 
 		assertThat(model.contains(dir_a)).isTrue();
@@ -551,7 +551,7 @@ public class TreeDirectoryModelTest {
 		assertThat(model.contains(dir_a_c)).isFalse();
 		assertThat(model.contains(file_a_c)).isFalse();
 
-		model.addTopLevelDirectory(root);
+		model.addTopLevelDirectory(root, false);
 		model.addDirectory(dir_a);
 		model.addDirectory(dir_a_c);
 

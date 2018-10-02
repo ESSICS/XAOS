@@ -31,6 +31,7 @@ import org.junit.Test;
 import se.europeanspallationsource.xaos.core.util.io.DeleteFileVisitor;
 import se.europeanspallationsource.xaos.core.util.io.DirectoryModel;
 import se.europeanspallationsource.xaos.core.util.io.PathElement;
+import se.europeanspallationsource.xaos.ui.control.tree.TreeItems;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
@@ -191,9 +192,9 @@ public class TreeDirectoryItemsTest {
 	 * @throws java.lang.InterruptedException
 	 */
 	@Test
-	public void testCreateTopLevelDirectoryItem() throws IOException, InterruptedException {
+	public void testCreateTopLevelDirectoryItemNoSOE() throws IOException, InterruptedException {
 
-		System.out.println("  Testing 'createTopLevelDirectoryItem'...");
+		System.out.println("  Testing 'createTopLevelDirectoryItem' (synchOnExpand: false)...");
 
 		CountDownLatch creationLatch = new CountDownLatch(7);
 		PathElement element = tree(root);
@@ -250,7 +251,8 @@ public class TreeDirectoryItemsTest {
 					));
 				}
 
-			}
+			},
+			false
 		);
 
 		assertThat(rootItem)
@@ -264,6 +266,170 @@ public class TreeDirectoryItemsTest {
 		if ( !creationLatch.await(1, TimeUnit.MINUTES) ) {
 			fail("Directory model synchronization not completed in 1 minute.");
 		}
+
+		assertThat(rootItem.getChildren().size()).isNotEqualTo(0);
+
+		ObservableList<TreeItem<PathElement>> children_root = rootItem.getChildren();
+
+		assertThat(children_root).size().isEqualTo(2);
+
+			TreeItem<PathElement> child_dir_a = children_root.get(0);
+
+			assertThat(child_dir_a)
+				.isInstanceOf(TreeDirectoryItems.DirectoryItem.class)
+				.hasFieldOrPropertyWithValue("directory", true)
+				.hasFieldOrPropertyWithValue("leaf", false)
+				.hasFieldOrPropertyWithValue("path", dir_a);
+
+			ObservableList<TreeItem<PathElement>> children_dir_a = child_dir_a.getChildren();
+
+			assertThat(children_dir_a).size().isEqualTo(2);
+
+				TreeItem<PathElement> child_dir_a_c = children_dir_a.get(0);
+
+				assertThat(child_dir_a_c)
+					.isInstanceOf(TreeDirectoryItems.DirectoryItem.class)
+					.hasFieldOrPropertyWithValue("directory", true)
+					.hasFieldOrPropertyWithValue("leaf", false)
+					.hasFieldOrPropertyWithValue("path", dir_a_c);
+
+				ObservableList<TreeItem<PathElement>> children_dir_a_c = child_dir_a_c.getChildren();
+
+				assertThat(children_dir_a_c).size().isEqualTo(1);
+
+					TreeItem<PathElement> child_file_a_c = children_dir_a_c.get(0);
+
+					assertThat(child_file_a_c)
+						.isInstanceOf(TreeDirectoryItems.FileItem.class)
+						.hasFieldOrPropertyWithValue("directory", false)
+						.hasFieldOrPropertyWithValue("leaf", true)
+						.hasFieldOrPropertyWithValue("path", file_a_c);
+
+				TreeItem<PathElement> child_file_a = children_dir_a.get(1);
+
+				assertThat(child_file_a)
+					.isInstanceOf(TreeDirectoryItems.FileItem.class)
+					.hasFieldOrPropertyWithValue("directory", false)
+					.hasFieldOrPropertyWithValue("leaf", true)
+					.hasFieldOrPropertyWithValue("path", file_a);
+
+			TreeItem<PathElement> child_dir_b = children_root.get(1);
+
+			assertThat(child_dir_b)
+				.isInstanceOf(TreeDirectoryItems.DirectoryItem.class)
+				.hasFieldOrPropertyWithValue("directory", true)
+				.hasFieldOrPropertyWithValue("leaf", false)
+				.hasFieldOrPropertyWithValue("path", dir_b);
+
+			ObservableList<TreeItem<PathElement>> children_dir_b = child_dir_b.getChildren();
+
+			assertThat(children_dir_b).size().isEqualTo(2);
+
+				TreeItem<PathElement> child_file_b1 = children_dir_b.get(0);
+
+				assertThat(child_file_b1)
+					.isInstanceOf(TreeDirectoryItems.FileItem.class)
+					.hasFieldOrPropertyWithValue("directory", false)
+					.hasFieldOrPropertyWithValue("leaf", true)
+					.hasFieldOrPropertyWithValue("path", file_b1);
+
+				TreeItem<PathElement> child_file_b2 = children_dir_b.get(1);
+
+				assertThat(child_file_b2)
+					.isInstanceOf(TreeDirectoryItems.FileItem.class)
+					.hasFieldOrPropertyWithValue("directory", false)
+					.hasFieldOrPropertyWithValue("leaf", true)
+					.hasFieldOrPropertyWithValue("path", file_b2);
+
+	}
+
+	/**
+	 * Test of createTopLevelDirectoryItem method, of class TreeDirectoryItems.
+	 *
+	 * @throws java.io.IOException
+	 * @throws java.lang.InterruptedException
+	 */
+	@Test
+	public void testCreateTopLevelDirectoryItemSOE() throws IOException, InterruptedException {
+
+		System.out.println("  Testing 'createTopLevelDirectoryItem' (synchOnExpand: true)...");
+
+		CountDownLatch creationLatch = new CountDownLatch(7);
+		PathElement element = tree(root);
+		TreeDirectoryItems.TopLevelDirectoryItem<TreeDirectoryItemsTest, PathElement> rootItem = createTopLevelDirectoryItem(
+			element,
+			DEFAULT_GRAPHIC_FACTORY,
+			PathElement::getPath,
+			path -> {
+				try {
+					return Files.isDirectory(path)
+						   ? tree(path)
+						   : file(path, Files.getLastModifiedTime(path));
+				} catch ( IOException ex ) {
+					ex.printStackTrace(System.err);
+					return null;
+				}
+			},
+			new DirectoryModel.Reporter<TreeDirectoryItemsTest>() {
+
+				@Override
+				public void reportCreation( Path baseDir, Path relativePath, TreeDirectoryItemsTest initiator ) {
+					System.out.println(MessageFormat.format(
+						"    CREATION [baseDir = {0}, relativePath = {1}].",
+						baseDir,
+						relativePath
+					));
+					creationLatch.countDown();
+				}
+
+				@Override
+				public void reportDeletion( Path baseDir, Path relativePath, TreeDirectoryItemsTest initiator ) {
+					System.out.println(MessageFormat.format(
+						"    DELETION [baseDir = {0}, relativePath = {1}].",
+						baseDir,
+						relativePath
+					));
+				}
+
+				@Override
+				public void reportError( Throwable error ) {
+					System.out.println(MessageFormat.format(
+						"    ERROR [error = {0}, message = {1}].",
+						error.getClass().getName(),
+						error.getMessage()
+					));
+				}
+
+				@Override
+				public void reportModification( Path baseDir, Path relativePath, TreeDirectoryItemsTest initiator ) {
+					System.out.println(MessageFormat.format(
+						"    MODIFICATION [baseDir = {0}, relativePath = {1}].",
+						baseDir,
+						relativePath
+					));
+				}
+
+			},
+			true
+		);
+
+		assertThat(rootItem)
+			.isInstanceOf(TreeDirectoryItems.TopLevelDirectoryItem.class)
+			.hasFieldOrPropertyWithValue("directory", true)
+			.hasFieldOrPropertyWithValue("leaf", false)
+			.hasFieldOrPropertyWithValue("path", root);
+
+		rootItem.sync(element, this);
+
+		assertThat(rootItem.getChildren().size()).isEqualTo(0);
+
+		TreeItems.expandAll(rootItem, true);
+
+		if ( !creationLatch.await(1, TimeUnit.MINUTES) ) {
+			fail("Directory model synchronization not completed in 1 minute.");
+		}
+
+		assertThat(rootItem.getChildren().size()).isNotEqualTo(0);
 
 		ObservableList<TreeItem<PathElement>> children_root = rootItem.getChildren();
 

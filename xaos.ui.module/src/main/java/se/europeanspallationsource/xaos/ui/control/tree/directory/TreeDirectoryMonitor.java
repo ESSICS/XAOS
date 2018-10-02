@@ -225,9 +225,11 @@ public class TreeDirectoryMonitor<I, T> {
 	 * Adds a directory to watch. The directory will be added to the directory
 	 * model and watched for changes.
 	 *
-	 * @param dir The directory to be watched and viewed.
+	 * @param dir           The directory to be watched and viewed.
+	 * @param synchOnExpand If (@code true}, then folder synchronization is
+	 *                      performed only when the tree item is expanded.
 	 */
-	public void addTopLevelDirectory( Path dir ) {
+	public void addTopLevelDirectory( Path dir, boolean synchOnExpand ) {
 
 		if ( !dir.isAbsolute() ) {
 			throw new IllegalArgumentException(MessageFormat.format(
@@ -238,12 +240,13 @@ public class TreeDirectoryMonitor<I, T> {
 
 		try {
 
+//	TODO:CR Remove commented lines?
 //	Not needed: already in refresh(dir).
 //			if ( !directoryWatcher.isWatched(dir) ) {
 //				directoryWatcher.watch(dir);
 //			}
 
-			model.addTopLevelDirectory(dir);
+			model.addTopLevelDirectory(dir, synchOnExpand);
 			refresh(dir);
 			
 //		} catch ( IOException e ) {

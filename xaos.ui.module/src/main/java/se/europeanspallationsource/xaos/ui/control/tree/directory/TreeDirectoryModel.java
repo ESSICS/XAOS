@@ -197,10 +197,19 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	 * or {@link #sync(se.europeanspallationsource.xaos.core.util.io.PathElement, java.lang.Object)}
 	 * has to be performed if synchronization is required.</p>
 	 *
-	 * @param directory The {@link Path} to be added as a top-level directory.
+	 * @param directory     The {@link Path} to be added as a top-level directory.
+	 * @param synchOnExpand If (@code true}, then folder synchronization is
+	 *                      performed only when the tree item is expanded.
 	 */
-	public void addTopLevelDirectory( Path directory ) {
-		root.getChildren().add(new TreeDirectoryItems.TopLevelDirectoryItem<>(injector.apply(directory), graphicFactory, projector, injector, reporter));
+	public void addTopLevelDirectory( Path directory, boolean synchOnExpand ) {
+		root.getChildren().add(new TreeDirectoryItems.TopLevelDirectoryItem<>(
+			injector.apply(directory),
+			graphicFactory,
+			projector,
+			injector,
+			reporter,
+			synchOnExpand
+		));
 	}
 
 	@Override

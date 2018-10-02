@@ -138,7 +138,7 @@ public class TreeDirectoryAsynchronousIOTest {
 			executor
 		);
 
-		model.addTopLevelDirectory(dir_a);
+		model.addTopLevelDirectory(dir_a, false);
 
 		Path toBeCreated = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_x", "dir_a_y", "dir_a_z");
 		CompletionStage<Void> stage = treeDAIO.createDirectories(toBeCreated, this);
@@ -190,7 +190,7 @@ public class TreeDirectoryAsynchronousIOTest {
 			executor
 		);
 
-		model.addTopLevelDirectory(dir_a);
+		model.addTopLevelDirectory(dir_a, false);
 
 		Path toBeCreated = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_z");
 		CompletionStage<Void> stage = treeDAIO.createDirectory(toBeCreated, this);
@@ -253,7 +253,7 @@ public class TreeDirectoryAsynchronousIOTest {
 			executor
 		);
 
-		model.addTopLevelDirectory(dir_a);
+		model.addTopLevelDirectory(dir_a, false);
 
 		Path toBeCreated = FileSystems.getDefault().getPath(dir_a.toString(), "created_file.txt");
 		CompletionStage<Void> stage = treeDAIO.createFile(toBeCreated, this);
@@ -306,7 +306,7 @@ public class TreeDirectoryAsynchronousIOTest {
 			executor
 		);
 
-		model.addTopLevelDirectory(root);
+		model.addTopLevelDirectory(root, false);
 		model.sync(tree(root));
 
 		assertTrue(model.contains(dir_a));
@@ -368,7 +368,7 @@ public class TreeDirectoryAsynchronousIOTest {
 			executor
 		);
 
-		model.addTopLevelDirectory(root);
+		model.addTopLevelDirectory(root, false);
 		model.sync(tree(root));
 
 		assertTrue(model.contains(dir_a));
@@ -415,7 +415,7 @@ public class TreeDirectoryAsynchronousIOTest {
 			executor
 		);
 
-		model.addTopLevelDirectory(root);
+		model.addTopLevelDirectory(root, false);
 		model.sync(tree(root));
 
 		byte[] content = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x03, 0x02, 0x01, 0x00 };
@@ -469,7 +469,7 @@ public class TreeDirectoryAsynchronousIOTest {
 			executor
 		);
 
-		model.addTopLevelDirectory(root);
+		model.addTopLevelDirectory(root, false);
 		model.sync(tree(root));
 
 		String content = "First line of text.\nSecond line of text.";
@@ -523,7 +523,7 @@ public class TreeDirectoryAsynchronousIOTest {
 			executor
 		);
 
-		model.addTopLevelDirectory(root);
+		model.addTopLevelDirectory(root, false);
 		model.sync(tree(root));
 
 		byte[] content = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x03, 0x02, 0x01, 0x00 };
@@ -564,7 +564,7 @@ public class TreeDirectoryAsynchronousIOTest {
 			executor
 		);
 
-		model.addTopLevelDirectory(root);
+		model.addTopLevelDirectory(root, false);
 		model.sync(tree(root));
 
 		String content = "First line of text.\nSecond line of text.";

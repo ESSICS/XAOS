@@ -158,7 +158,7 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 		};
 
 		rootItem.addEventHandler(TreeItem.childrenModificationEvent(), eventHandler);
-		executor.execute(() -> monitor.addTopLevelDirectory(root));
+		executor.execute(() -> monitor.addTopLevelDirectory(root, false));
 
 		if ( !latch.await(1, TimeUnit.MINUTES) ) {
 			fail("Root node addition not completed in 1 minute.");
@@ -207,7 +207,7 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 		};
 
 		rootItem.addEventHandler(TreeItem.childrenModificationEvent(), eventHandler);
-		monitor.addTopLevelDirectory(root);
+		monitor.addTopLevelDirectory(root, false);
 		monitor.model().creations().subscribe(u -> {
 			if ( toBeInternallyCreated1.equals(u.getPath())
 			  || toBeInternallyCreated2.equals(u.getPath())
@@ -291,7 +291,7 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 		};
 
 		rootItem.addEventHandler(TreeItem.childrenModificationEvent(), eventHandler);
-		monitor.addTopLevelDirectory(root);
+		monitor.addTopLevelDirectory(root, false);
 		monitor.model().creations().subscribe(u -> {
 			if ( toBeInternallyCreated.equals(u.getPath())
 			  || toBeExternallyCreated.equals(u.getPath()) ) {
@@ -369,7 +369,7 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 		};
 
 		rootItem.addEventHandler(TreeItem.childrenModificationEvent(), eventHandler);
-		monitor.addTopLevelDirectory(root);
+		monitor.addTopLevelDirectory(root, false);
 		monitor.model().creations().subscribe(u -> {
 			if ( toBeInternallyCreated.equals(u.getPath())
 			  || toBeExternallyCreated.equals(u.getPath()) ) {
@@ -448,7 +448,7 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 		};
 
 		rootItem.addEventHandler(TreeItem.childrenModificationEvent(), eventHandler);
-		monitor.addTopLevelDirectory(root);
+		monitor.addTopLevelDirectory(root, false);
 		monitor.model().deletions().subscribe(u -> {
 			if ( dir_a_c.equals(u.getPath())
 			  || file_a_c.equals(u.getPath())
@@ -538,7 +538,7 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 		};
 
 		rootItem.addEventHandler(TreeItem.childrenModificationEvent(), eventHandler);
-		monitor.addTopLevelDirectory(root);
+		monitor.addTopLevelDirectory(root, false);
 		monitor.model().deletions().subscribe(u -> {
 			if ( dir_b.equals(u.getPath())
 			  || dir_a.equals(u.getPath())

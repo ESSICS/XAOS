@@ -27,6 +27,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import javafx.beans.binding.Bindings;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import se.europeanspallationsource.xaos.core.util.io.DirectoryModel;
@@ -57,8 +58,19 @@ public class TreeDirectoryItems {
 	 *                       {@link TreeItem}.
 	 * @return A new instance of{@link DirectoryItem}.
 	 */
-	public static <T> DirectoryItem<T> createDirectoryItem( T path, TreeDirectoryModel.GraphicFactory graphicFactory, Function<T, Path> projector, Function<Path, T> injector ) {
-		return new DirectoryItem<>(path, graphicFactory.createGraphic(projector.apply(path), true, false), graphicFactory.createGraphic(projector.apply(path), true, true), projector, injector);
+	public static <T> DirectoryItem<T> createDirectoryItem(
+		T path,
+		TreeDirectoryModel.GraphicFactory graphicFactory,
+		Function<T, Path> projector,
+		Function<Path, T> injector
+	) {
+		return new DirectoryItem<>(
+			path,
+			graphicFactory.createGraphic(projector.apply(path), true, false),
+			graphicFactory.createGraphic(projector.apply(path), true, true),
+			projector,
+			injector
+		);
 	}
 
 	/**
@@ -74,8 +86,17 @@ public class TreeDirectoryItems {
 	 *                       corresponding {@link Path}.
 	 * @return A new instance of{@link FileItem}.
 	 */
-	public static <T> FileItem<T> createFileItem( T path, FileTime lastModified, TreeDirectoryModel.GraphicFactory graphicFactory, Function<T, Path> projector ) {
-		return new FileItem<>(path, lastModified, graphicFactory.createGraphic(projector.apply(path), false, false), projector);
+	public static <T> FileItem<T> createFileItem( T path, 
+		FileTime lastModified,
+		TreeDirectoryModel.GraphicFactory graphicFactory,
+		Function<T, Path> projector
+	) {
+		return new FileItem<>(
+			path,
+			lastModified,
+			graphicFactory.createGraphic(projector.apply(path), false, false),
+			projector
+		);
 	}
 
 	/**
@@ -93,10 +114,26 @@ public class TreeDirectoryItems {
 	 *                       the object used as value in the corresponding
 	 *                       {@link TreeItem}.
 	 * @param reporter       The object reporting changes in the model.
+	 * @param synchOnExpand  If (@code true}, then folder synchronization is
+	 *                       performed only when the tree item is expanded.
 	 * @return A new instance of{@link TopLevelDirectoryItem}.
 	 */
-	public static <I, T> TopLevelDirectoryItem<I, T> createTopLevelDirectoryItem( T path, TreeDirectoryModel.GraphicFactory graphicFactory, Function<T, Path> projector, Function<Path, T> injector, DirectoryModel.Reporter<I> reporter ) {
-		return new TopLevelDirectoryItem<>(path, graphicFactory, projector, injector, reporter);
+	public static <I, T> TopLevelDirectoryItem<I, T> createTopLevelDirectoryItem(
+		T path,
+		TreeDirectoryModel.GraphicFactory graphicFactory,
+		Function<T, Path> projector,
+		Function<Path, T> injector,
+		DirectoryModel.Reporter<I> reporter,
+		boolean synchOnExpand
+	) {
+		return new TopLevelDirectoryItem<>(
+			path,
+			graphicFactory,
+			projector,
+			injector,
+			reporter,
+			synchOnExpand
+		);
 	}
 
 	private TreeDirectoryItems() {
@@ -431,11 +468,20 @@ public class TreeDirectoryItems {
 
 		private final TreeDirectoryModel.GraphicFactory graphicFactory;
 		private final DirectoryModel.Reporter<I> reporter;
+		private final boolean synchOnExpand;
 
-		protected TopLevelDirectoryItem( T path, TreeDirectoryModel.GraphicFactory graphicFactory, Function<T, Path> projector, Function<Path, T> injector, DirectoryModel.Reporter<I> reporter ) {
+		protected TopLevelDirectoryItem(
+			T path,
+			TreeDirectoryModel.GraphicFactory graphicFactory,
+			Function<T, Path> projector,
+			Function<Path, T> injector,
+			DirectoryModel.Reporter<I> reporter,
+			boolean synchOnExpand
+		) {
 			super(path, graphicFactory.createGraphic(projector.apply(path), true, false), graphicFactory.createGraphic(projector.apply(path), true, true), projector, injector);
 			this.graphicFactory = graphicFactory;
 			this.reporter = reporter;
+			this.synchOnExpand = synchOnExpand;
 		}
 
 		/**
@@ -536,6 +582,21 @@ public class TreeDirectoryItems {
 		 */
 		public void updateModificationTime( Path relativePath, FileTime lastModified, I initiator ) {
 			updateFile(relativePath, lastModified, initiator);
+		}
+
+		private void performSyncContent( DirectoryItem<T> dir, PathElement tree, I initiator ) {
+
+			Set<Path> desiredChildren = tree.getChildren().stream().map(element -> element.getPath()).collect(Collectors.toSet());
+			ArrayList<TreeItem<T>> actualChildren = new ArrayList<>(dir.getChildren());
+
+			//	Remove undesired children
+			actualChildren.stream()
+				.filter(child -> !desiredChildren.contains(getProjector().apply(child.getValue())))
+				.forEachOrdered(child -> removeNode(child, null));
+
+			//	Synchronize desired children
+			tree.getChildren().forEach(child -> sync(child, initiator));
+
 		}
 
 		private void removeNode( TreeItem<T> node, I initiator ) {
@@ -639,18 +700,17 @@ public class TreeDirectoryItems {
 		}
 
 		private void syncContent( DirectoryItem<T> dir, PathElement tree, I initiator ) {
-
-			Set<Path> desiredChildren = tree.getChildren().stream().map(element -> element.getPath()).collect(Collectors.toSet());
-			ArrayList<TreeItem<T>> actualChildren = new ArrayList<>(dir.getChildren());
-
-			//	Remove undesired children
-			actualChildren.stream()
-				.filter(child -> !desiredChildren.contains(getProjector().apply(child.getValue())))
-				.forEachOrdered(child -> removeNode(child, null));
-
-			//	Synchronize desired children
-			tree.getChildren().forEach(child -> sync(child, initiator));
-
+			if ( !synchOnExpand || dir.isExpanded() ) {
+				performSyncContent(dir, tree, initiator);
+			} else {
+				dir.addEventHandler(TreeItem.<T>branchExpandedEvent(), new EventHandler<TreeModificationEvent<T>>() {
+					@Override
+					public void handle( TreeModificationEvent<T> event ) {
+						dir.removeEventHandler(TreeItem.<T>branchExpandedEvent(), this);
+						performSyncContent(dir, tree, initiator);
+					}
+				});
+			}
 		}
 
 		private void updateFile( Path relativePath, FileTime lastModified, I initiator ) {
