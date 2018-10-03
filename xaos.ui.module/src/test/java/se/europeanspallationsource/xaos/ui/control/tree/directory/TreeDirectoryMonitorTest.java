@@ -587,6 +587,90 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 
 	}
 
+	/**
+	 * Test of navigation capabilities.
+	 *
+	 * @throws java.lang.InterruptedException
+	 */
+	@Test
+	public void testNavigationSOE() throws InterruptedException {
+
+		System.out.println("  Testing browser navigation (synchOnExpand: true)...");
+
+		monitor.addTopLevelDirectory(root, true);
+
+		assertThat(rootItem.getChildren().size()).isEqualTo(1);
+
+		//	---- root ----------------------------------------------------------
+		TreeItem<Path> rItem = rootItem.getChildren().get(0);
+
+		assertThat(rItem).hasFieldOrPropertyWithValue("value", root);
+		assertThat(rItem.getChildren().size()).isEqualTo(0);
+
+		executor.execute(() -> rItem.setExpanded(true));
+
+		Thread.sleep(3000L);
+
+		assertThat(rItem.getChildren().size()).isEqualTo(2);
+
+		//	---- dir_a ---------------------------------------------------------
+		TreeItem<Path> aItem = rItem.getChildren().get(0);
+
+		assertThat(aItem).hasFieldOrPropertyWithValue("value", dir_a);
+		assertThat(aItem.getChildren().size()).isEqualTo(0);
+
+		executor.execute(() -> aItem.setExpanded(true));
+
+		Thread.sleep(3000L);
+
+		assertThat(aItem.getChildren().size()).isEqualTo(2);
+
+		//	---- dir_a_c ---------------------------------------------------------
+		TreeItem<Path> acItem = aItem.getChildren().get(0);
+
+		assertThat(acItem).hasFieldOrPropertyWithValue("value", dir_a_c);
+		assertThat(acItem.getChildren().size()).isEqualTo(0);
+
+		executor.execute(() -> acItem.setExpanded(true));
+
+		Thread.sleep(3000L);
+
+		assertThat(acItem.getChildren().size()).isEqualTo(1);
+
+		//	---- file_a_c --------------------------------------------------------
+		TreeItem<Path> acfItem = acItem.getChildren().get(0);
+
+		assertThat(acfItem).hasFieldOrPropertyWithValue("value", file_a_c);
+
+		//	---- file_a --------------------------------------------------------
+		TreeItem<Path> afItem = aItem.getChildren().get(1);
+
+		assertThat(afItem).hasFieldOrPropertyWithValue("value", file_a);
+
+		//	---- dir_b ---------------------------------------------------------
+		TreeItem<Path> bItem = rItem.getChildren().get(1);
+
+		assertThat(bItem).hasFieldOrPropertyWithValue("value", dir_b);
+		assertThat(bItem.getChildren().size()).isEqualTo(0);
+
+		executor.execute(() -> bItem.setExpanded(true));
+
+		Thread.sleep(3000L);
+
+		assertThat(bItem.getChildren().size()).isEqualTo(2);
+
+		//	---- file_b1 -------------------------------------------------------
+		TreeItem<Path> b1Item = bItem.getChildren().get(0);
+
+		assertThat(b1Item).hasFieldOrPropertyWithValue("value", file_b1);
+
+		//	---- file_b2 -------------------------------------------------------
+		TreeItem<Path> b2Item = bItem.getChildren().get(1);
+
+		assertThat(b2Item).hasFieldOrPropertyWithValue("value", file_b2);
+
+	}
+
 	@SuppressWarnings( "CallToThreadYield" )
 	private void deleteRecursively( Path root, CountDownLatch latch ) throws IOException {
 
