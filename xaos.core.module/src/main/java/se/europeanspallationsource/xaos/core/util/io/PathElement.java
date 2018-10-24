@@ -20,11 +20,16 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
+import java.text.MessageFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Stream;
+
+import static java.nio.file.attribute.FileTime.from;
 
 
 /**
@@ -35,6 +40,8 @@ import java.util.stream.Stream;
  */
 @SuppressWarnings( "ClassWithoutLogger" )
 public class PathElement {
+
+	private static final Logger LOGGER = Logger.getLogger(PathElement.class.getName());
 
 	private static final Comparator<Path> PATH_COMPARATOR = ( p, q ) -> {
 
@@ -81,9 +88,9 @@ public class PathElement {
 	 *
 	 * @param root The pathname of the tree's root directory.
 	 * @return The {@link PathElement} of the tree rooted at the given {@link Path}.
-	 * @throws IOException If an I/O error occurs.
+	 *         Can be {@code null} if an I/O error occurs.
 	 */
-	public static PathElement tree( Path root ) throws IOException {
+	public static PathElement tree( Path root ) {
 
 		if ( Files.isDirectory(root) ) {
 
@@ -91,6 +98,14 @@ public class PathElement {
 
 			try ( Stream<Path> dirStream = Files.list(root) ) {
 				childPaths = dirStream.sorted(PATH_COMPARATOR).toArray(Path[]::new);
+			} catch ( IOException ex ) {
+				LOGGER.warning(MessageFormat.format(
+					"Exception getting files list for \"{0}\" [{1}: {2}].",
+					root.toString(),
+					ex.getClass().getSimpleName(),
+					ex.getMessage()
+				));
+				childPaths = new Path[] {};
 			}
 
 			List<PathElement> children = new ArrayList<>(childPaths.length);
@@ -102,7 +117,26 @@ public class PathElement {
 			return directory(root, children);
 
 		} else {
-			return file(root, Files.getLastModifiedTime(root));
+
+			FileTime ft;
+
+			try {
+				ft = Files.getLastModifiedTime(root);
+			} catch ( IOException ex ) {
+
+				LOGGER.warning(MessageFormat.format(
+					"Exception getting the last modified time for \"{0}\": using \"now\" instead [{1}: {2}].",
+					root.toString(),
+					ex.getClass().getSimpleName(),
+					ex.getMessage()
+				));
+
+				ft = from(Instant.now());
+
+			}
+
+			return file(root, ft);
+
 		}
 
 	}
