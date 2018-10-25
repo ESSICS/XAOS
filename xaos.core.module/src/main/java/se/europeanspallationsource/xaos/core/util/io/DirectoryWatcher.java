@@ -399,7 +399,7 @@ public class DirectoryWatcher {
 	 * Returns a {@link CompletionStage} containing the tree structure of
 	 * {@link PathElement} instances representing the content of the given
 	 * {@code root} directory. The returned stage is completed exceptionally in
-	 * case an I/O error occurs.
+	 * case an error occurs.
 	 *
 	 * @param root The pathname of the tree's root directory.
 	 * @return A {@link CompletionStage} containing the tree structure of
@@ -413,7 +413,7 @@ public class DirectoryWatcher {
 		executeOnIOThread(() -> {
 			try {
 				future.complete(PathElement.tree(root));
-			} catch ( IOException e ) {
+			} catch ( Exception e ) {
 				future.completeExceptionally(e);
 			}
 		});

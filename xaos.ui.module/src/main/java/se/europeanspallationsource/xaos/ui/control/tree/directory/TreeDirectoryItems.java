@@ -23,9 +23,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.WeakChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -45,6 +47,10 @@ public class TreeDirectoryItems {
 
 	/**
 	 * Creates a new instance of {@link DirectoryItem} for the given parameters.
+	 * <p>
+	 * Note that the {@link DirectoryItem#addChildDirectory(Path, TreeDirectoryModel.GraphicFactory)}
+	 * method will pass the given {@code onCollapse} and {@code onExpand} parameter
+	 * to the newly created {@link DirectoryItem}.</p>
 	 *
 	 * @param <T>            Type of the object returned by {@link TreeItem#getValue()}.
 	 * @param path           The value of this {@link TreeItem}.
@@ -56,20 +62,28 @@ public class TreeDirectoryItems {
 	 * @param injector       A {@link Function} converting a {@link Path} into
 	 *                       the object used as value in the corresponding
 	 *                       {@link TreeItem}.
+	 * @param onCollapse     A {@link Consumer} to be invoked when this item
+	 *                       is collapsed. Can be {@code null}.
+	 * @param onExpand       A {@link Consumer} to be invoked when this item
+	 *                       is expanded. Can be {@code null}.
 	 * @return A new instance of{@link DirectoryItem}.
 	 */
 	public static <T> DirectoryItem<T> createDirectoryItem(
 		T path,
 		TreeDirectoryModel.GraphicFactory graphicFactory,
 		Function<T, Path> projector,
-		Function<Path, T> injector
+		Function<Path, T> injector,
+		Consumer<? super DirectoryItem<T>> onCollapse,
+		Consumer<? super DirectoryItem<T>> onExpand
 	) {
 		return new DirectoryItem<>(
 			path,
 			graphicFactory.createGraphic(projector.apply(path), true, false),
 			graphicFactory.createGraphic(projector.apply(path), true, true),
 			projector,
-			injector
+			injector,
+			onCollapse,
+			onExpand
 		);
 	}
 
@@ -101,6 +115,10 @@ public class TreeDirectoryItems {
 
 	/**
 	 * Creates a new instance of {@link TopLevelDirectoryItem} for the given parameters.
+	 * <p>
+	 * Note that the {@link TopLevelDirectoryItem#addChildDirectory(Path, TreeDirectoryModel.GraphicFactory)}
+	 * method will pass the given {@code onCollapse} and {@code onExpand} parameter
+	 * to the newly created {@link DirectoryItem}.</p>
 	 *
 	 * @param <I>            Type of the initiator of changes to the model.
 	 * @param <T>            Type of the object returned by {@link TreeItem#getValue()}.
@@ -116,6 +134,10 @@ public class TreeDirectoryItems {
 	 * @param reporter       The object reporting changes in the model.
 	 * @param synchOnExpand  If (@code true}, then folder synchronization is
 	 *                       performed only when the tree item is expanded.
+	 * @param onCollapse     A {@link Consumer} to be invoked when this item
+	 *                       is collapsed. Can be {@code null}.
+	 * @param onExpand       A {@link Consumer} to be invoked when this item
+	 *                       is expanded. Can be {@code null}.
 	 * @return A new instance of{@link TopLevelDirectoryItem}.
 	 */
 	public static <I, T> TopLevelDirectoryItem<I, T> createTopLevelDirectoryItem(
@@ -124,7 +146,9 @@ public class TreeDirectoryItems {
 		Function<T, Path> projector,
 		Function<Path, T> injector,
 		DirectoryModel.Reporter<I> reporter,
-		boolean synchOnExpand
+		boolean synchOnExpand,
+		Consumer<? super DirectoryItem<T>> onCollapse,
+		Consumer<? super DirectoryItem<T>> onExpand
 	) {
 		return new TopLevelDirectoryItem<>(
 			path,
@@ -147,24 +171,76 @@ public class TreeDirectoryItems {
 	@SuppressWarnings( { "PackageVisibleInnerClass", "PublicInnerClass" } )
 	public static class DirectoryItem<T> extends PathItem<T> {
 
+		private final ChangeListener<? super Boolean> expandedPropertyListener;
 		private final Function<Path, T> injector;
+		private final Consumer<? super DirectoryItem<T>> onCollapse;
+		private final Consumer<? super DirectoryItem<T>> onExpand;
 
+		/**
+		 * Creates a new instance of {@link DirectoryItem} for the given parameters.
+		 * <p>
+		 * Note that the {@link #addChildDirectory(Path, TreeDirectoryModel.GraphicFactory)}
+		 * method will pass the given {@code onCollapse} and {@code onExpand} 
+		 * parameter to the newly created {@link DirectoryItem}.</p>
+		 *
+		 * @param path             The value of this {@link TreeItem}.
+		 * @param collapsedGraphic The graphic {@link Node} to be used when this
+		 *                         item is collapsed.
+		 * @param expandedGraphic  The graphic {@link Node} to be used when this
+		 *                         item is expanded.
+		 * @param projector        A {@link Function} converting the object returned
+		 *                         by {@link TreeItem#getValue()}) into the
+		 *                         corresponding {@link Path}.
+		 * @param injector         A {@link Function} converting a {@link Path} into
+		 *                         the object used as value in the corresponding
+		 *                         {@link TreeItem}.
+		 * @param onCollapse       A {@link Consumer} to be invoked when this item
+		 *                         is collapsed. Can be {@code null}.
+		 * @param onExpand         A {@link Consumer} to be invoked when this item
+		 *                         is expanded. Can be {@code null}.
+		 */
 		protected DirectoryItem(
 			T path,
-			final Node closeGraphic,
-			final Node openGraphic,
+			final Node collapsedGraphic,
+			final Node expandedGraphic,
 			Function<T, Path> projector,
-			Function<Path, T> injector
+			Function<Path, T> injector,
+			final Consumer<? super DirectoryItem<T>> onCollapse,
+			final Consumer<? super DirectoryItem<T>> onExpand
 		) {
 
 			super(path, projector);
 
 			this.injector = injector;
+			this.onCollapse = onCollapse;
+			this.onExpand = onExpand;
+			this.expandedPropertyListener = ( observable, wasExpanded, isExpanded ) -> {
 
-			graphicProperty().bind(Bindings.createObjectBinding(
-				() -> isExpanded() ? openGraphic : closeGraphic,
-				expandedProperty()
-			));
+				if ( isExpanded ) {
+
+					setGraphic(expandedGraphic);
+
+					Consumer<? super DirectoryItem<T>> onExpnd = getOnExpand();
+
+					if ( onExpnd != null ) {
+						onExpnd.accept(DirectoryItem.this);
+					}
+
+				} else {
+
+					setGraphic(collapsedGraphic);
+
+					Consumer<? super DirectoryItem<T>> onCllps = getOnCollapse();
+
+					if ( onCllps != null ) {
+						onCllps.accept(DirectoryItem.this);
+					}
+
+				}
+
+			};
+
+			expandedProperty().addListener(new WeakChangeListener<>(expandedPropertyListener));
 
 		}
 
@@ -180,7 +256,14 @@ public class TreeDirectoryItems {
 			assert dir.getNameCount() == 1;
 
 			int i = getDirectoryInsertionIndex(dir.toString());
-			DirectoryItem<T> child = createDirectoryItem(inject(getPath().resolve(dir)), graphicFactory, getProjector(), getInjector());
+			DirectoryItem<T> child = createDirectoryItem(
+				inject(getPath().resolve(dir)),
+				graphicFactory,
+				getProjector(),
+				getInjector(),
+				getOnCollapse(),
+				getOnExpand()
+			);
 
 			getChildren().add(i, child);
 
@@ -215,6 +298,22 @@ public class TreeDirectoryItems {
 		 */
 		public final Function<Path, T> getInjector() {
 			return injector;
+		}
+
+		/**
+		 * @return The {@link Consumer} invoked when this item is collapsed.
+		 *         Can be {@code null}.
+		 */
+		public Consumer<? super DirectoryItem<T>> getOnCollapse() {
+			return onCollapse;
+		}
+
+		/**
+		 * @return The {@link Consumer} invoked when this item is expanded.
+		 *         Can be {@code null}.
+		 */
+		public Consumer<? super DirectoryItem<T>> getOnExpand() {
+			return onExpand;
 		}
 
 		/**
@@ -470,13 +569,40 @@ public class TreeDirectoryItems {
 		private final DirectoryModel.Reporter<I> reporter;
 		private final boolean synchOnExpand;
 
+		/**
+		 * Creates a new instance of {@link TopLevelDirectoryItem} for the given
+		 * parameters.
+		 * <p>
+		 * Note that the {@link TopLevelDirectoryItem#addChildDirectory(Path, TreeDirectoryModel.GraphicFactory)}
+		 * method will pass the given {@code onCollapse} and {@code onExpand} parameter
+		 * to the newly created {@link DirectoryItem}.</p>
+		 *
+		 * @param path           The value of this {@link TreeItem}.
+		 * @param graphicFactory The factory class used to get an "icon" representing
+		 *                       the created item.
+		 * @param projector      A {@link Function} converting the object returned
+		 *                       by {@link TreeItem#getValue()}) into the
+		 *                       corresponding {@link Path}.
+		 * @param injector       A {@link Function} converting a {@link Path} into
+		 *                       the object used as value in the corresponding
+		 *                       {@link TreeItem}.
+		 * @param reporter       The object reporting changes in the model.
+		 * @param synchOnExpand  If (@code true}, then folder synchronization is
+		 *                       performed only when the tree item is expanded.
+		 * @param onCollapse     A {@link Consumer} to be invoked when this item
+		 *                       is collapsed. Can be {@code null}.
+		 * @param onExpand       A {@link Consumer} to be invoked when this item
+		 *                       is expanded. Can be {@code null}.
+		 */
 		protected TopLevelDirectoryItem(
 			T path,
 			TreeDirectoryModel.GraphicFactory graphicFactory,
 			Function<T, Path> projector,
 			Function<Path, T> injector,
 			DirectoryModel.Reporter<I> reporter,
-			boolean synchOnExpand
+			boolean synchOnExpand,
+			final Consumer<? super DirectoryItem<T>> onCollapse,
+			final Consumer<? super DirectoryItem<T>> onExpand
 		) {
 			super(path, graphicFactory.createGraphic(projector.apply(path), true, false), graphicFactory.createGraphic(projector.apply(path), true, true), projector, injector);
 			this.graphicFactory = graphicFactory;
@@ -703,6 +829,7 @@ public class TreeDirectoryItems {
 			if ( !synchOnExpand || dir.isExpanded() ) {
 				performSyncContent(dir, tree, initiator);
 			} else {
+//	TODO:CR usare un WeakEventHandler?
 				dir.addEventHandler(TreeItem.<T>branchExpandedEvent(), new EventHandler<TreeModificationEvent<T>>() {
 					@Override
 					public void handle( TreeModificationEvent<T> event ) {

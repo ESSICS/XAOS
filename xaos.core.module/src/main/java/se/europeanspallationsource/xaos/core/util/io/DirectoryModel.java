@@ -80,6 +80,7 @@ public interface DirectoryModel<I, T> {
 	 *
 	 * @param <I> Type of the initiator of changes to the model.
 	 */
+	@SuppressWarnings( "PublicInnerClass" )
 	interface Reporter<I> {
 
 		/**

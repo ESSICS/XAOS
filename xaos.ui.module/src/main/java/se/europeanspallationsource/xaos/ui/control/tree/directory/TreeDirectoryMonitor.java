@@ -172,7 +172,7 @@ public class TreeDirectoryMonitor<I, T> {
 		Function<Path, T> injector,
 		Executor clientThreadExecutor
 	) throws IOException {
-        return new TreeDirectoryMonitor<I, T>(
+        return new TreeDirectoryMonitor<>(
 			externalInitiator,
 			projector,
 			injector,

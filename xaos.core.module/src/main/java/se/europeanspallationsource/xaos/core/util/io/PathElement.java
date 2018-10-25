@@ -112,6 +112,7 @@ public class PathElement {
 
 			for ( Path p : childPaths ) {
 				children.add(tree(p));
+				children.add(tree(p));
 			}
 
 			return directory(root, children);
