@@ -156,7 +156,9 @@ public class TreeDirectoryItems {
 			projector,
 			injector,
 			reporter,
-			synchOnExpand
+			synchOnExpand,
+			onCollapse,
+			onExpand
 		);
 	}
 
@@ -604,10 +606,21 @@ public class TreeDirectoryItems {
 			final Consumer<? super DirectoryItem<T>> onCollapse,
 			final Consumer<? super DirectoryItem<T>> onExpand
 		) {
-			super(path, graphicFactory.createGraphic(projector.apply(path), true, false), graphicFactory.createGraphic(projector.apply(path), true, true), projector, injector);
+
+			super(
+				path,
+				graphicFactory.createGraphic(projector.apply(path), true, false),
+				graphicFactory.createGraphic(projector.apply(path), true, true),
+				projector,
+				injector,
+				onCollapse,
+				onExpand
+			);
+
 			this.graphicFactory = graphicFactory;
 			this.reporter = reporter;
 			this.synchOnExpand = synchOnExpand;
+
 		}
 
 		/**
@@ -829,7 +842,6 @@ public class TreeDirectoryItems {
 			if ( !synchOnExpand || dir.isExpanded() ) {
 				performSyncContent(dir, tree, initiator);
 			} else {
-//	TODO:CR usare un WeakEventHandler?
 				dir.addEventHandler(TreeItem.<T>branchExpandedEvent(), new EventHandler<TreeModificationEvent<T>>() {
 					@Override
 					public void handle( TreeModificationEvent<T> event ) {

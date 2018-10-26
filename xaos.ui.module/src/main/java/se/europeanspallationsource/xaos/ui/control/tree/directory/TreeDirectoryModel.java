@@ -212,9 +212,13 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 			projector,
 			injector,
 			reporter,
-			synchOnExpand
+			synchOnExpand,
+//	TODO:CR Add code to synch the directory watcher.
+			null,
+			null
 		));
 	}
+//	TODO:CR Add an overloaded "addTopLevelDirectory" with 2 new parameters: onCollapse and onExpand.
 
 	@Override
 	public boolean contains( Path path ) {

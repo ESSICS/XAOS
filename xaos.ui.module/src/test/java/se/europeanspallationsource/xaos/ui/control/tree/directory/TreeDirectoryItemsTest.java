@@ -128,7 +128,10 @@ public class TreeDirectoryItemsTest {
 					ex.printStackTrace(System.err);
 					return null;
 				}
-			}
+			},
+//	TODO:CR Add onCollapse and onExpand tests.
+			null,
+			null
 		);
 
 		assertThat(dItem)
@@ -207,7 +210,7 @@ public class TreeDirectoryItemsTest {
 					return Files.isDirectory(path)
 						   ? tree(path)
 						   : file(path, Files.getLastModifiedTime(path));
-				} catch ( IOException ex ) {
+				} catch ( Exception ex ) {
 					ex.printStackTrace(System.err);
 					return null;
 				}
@@ -252,7 +255,10 @@ public class TreeDirectoryItemsTest {
 				}
 
 			},
-			false
+			false,
+//	TODO:CR Add onCollapse and onExpand tests.
+			null,
+			null
 		);
 
 		assertThat(rootItem)
@@ -365,7 +371,7 @@ public class TreeDirectoryItemsTest {
 					return Files.isDirectory(path)
 						   ? tree(path)
 						   : file(path, Files.getLastModifiedTime(path));
-				} catch ( IOException ex ) {
+				} catch ( Exception ex ) {
 					ex.printStackTrace(System.err);
 					return null;
 				}
@@ -410,7 +416,10 @@ public class TreeDirectoryItemsTest {
 				}
 
 			},
-			true
+			true,
+//	TODO:CR Add onCollapse and onExpand tests.
+			null,
+			null
 		);
 
 		assertThat(rootItem)
