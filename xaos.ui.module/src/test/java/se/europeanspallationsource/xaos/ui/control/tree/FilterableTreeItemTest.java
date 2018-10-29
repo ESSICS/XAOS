@@ -68,7 +68,7 @@ public class FilterableTreeItemTest {
 	@SuppressWarnings("unchecked")
 	public void testPredicate() {
 
-		System.out.println("  Testing ''setPredicate''...");
+		System.out.println("  Testing 'setPredicate'...");
 
 		FilterableTreeItem<String> root = new FilterableTreeItem<>("Root");
 		FilterableTreeItem<String> parentA = new FilterableTreeItem<>("Parent A");

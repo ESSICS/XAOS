@@ -149,7 +149,7 @@ import static se.europeanspallationsource.xaos.ui.control.Icons.DEFAULT_SIZE;
 
 
 /**
- * @author claudiorosati
+ * @author claudio.rosati@esss.se
  */
 @SuppressWarnings( { "UseOfSystemOutOrSystemErr", "ClassWithoutLogger" } )
 public class IconsTest {
@@ -165,7 +165,7 @@ public class IconsTest {
 	@Test
 	public void testIconForClass_String() {
 
-		System.out.println("  Testing ''iconForClass''...");
+		System.out.println("  Testing 'iconForClass'...");
 
 		Set<String> supportedClasses = new HashSet<>(Arrays.asList(
 			Accordion.class.getName(),
@@ -325,7 +325,7 @@ public class IconsTest {
 	@Test
 	public void testIconForFileExtension() {
 
-		System.out.println("  Testing ''iconForFileExtension''...");
+		System.out.println("  Testing 'iconForFileExtension'...");
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Archive files...");
@@ -786,7 +786,7 @@ public class IconsTest {
 	@Test
 	public void testIconForMIMEType() {
 
-		System.out.println("  Testing ''iconForMIMEType''...");
+		System.out.println("  Testing 'iconForMIMEType'...");
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Archive files...");
@@ -1175,7 +1175,7 @@ public class IconsTest {
 	@SuppressWarnings( { "UseSpecificCatch", "BroadCatchBlock", "TooBroadCatch" } )
 	public void testIconFor_Class() {
 
-		System.out.println("  Testing ''iconFor(Class)''...");
+		System.out.println("  Testing 'iconFor(Class)'...");
 
 		Set<Class<?>> supportedClasses = new HashSet<>(Arrays.asList(
 			Accordion.class, 
@@ -1315,7 +1315,7 @@ public class IconsTest {
 	@Test
 	public void testIconFor_File() {
 
-		System.out.println("  Testing ''iconFor(File)''...");
+		System.out.println("  Testing 'iconFor(File)'...");
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Archive files...");
@@ -1397,7 +1397,7 @@ public class IconsTest {
 	public void testIconFor_Object() {
 
 		//	No default provider, so null is the only result possible.
-		System.out.println("  Testing ''iconFor(Object)''...");
+		System.out.println("  Testing 'iconFor(Object)'...");
 
 
 		assertThat(Icons.iconFor(FILE, DEFAULT_SIZE))
@@ -1453,7 +1453,7 @@ public class IconsTest {
 	@Test
 	public void testIconFor_Path() {
 
-		System.out.println("  Testing ''iconFor(Path)''...");
+		System.out.println("  Testing 'iconFor(Path)'...");
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Archive files...");

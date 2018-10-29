@@ -32,6 +32,7 @@ import se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryM
 	//	tree
 	FilterableTreeItemTest.class,
 	TreeItemsTest.class,
+	TreeItemWalkerTest.class,
 	//	tree directory
 	TreeDirectoryAsynchronousIOTest.class,
 	TreeDirectoryItemsTest.class,

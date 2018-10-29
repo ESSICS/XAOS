@@ -67,7 +67,7 @@ public class SVGFromInputStreamTest extends ApplicationTest {
 
 	@Test
 	public void testLoadSVG() {
-		System.out.println("  Testing ''load''...");
+		System.out.println("  Testing 'load'...");
 		assertThat(svg).hasAnyChild();
 	}
 

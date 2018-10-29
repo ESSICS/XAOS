@@ -108,12 +108,15 @@ public class TreeDirectoryItemsTest {
 	 * Test of createDirectoryItem method, of class TreeDirectoryItems.
 	 *
 	 * @throws java.io.IOException
+	 * @throws java.lang.InterruptedException
 	 */
 	@Test
-	public void testCreateDirectoryItem() throws IOException {
+	public void testCreateDirectoryItem() throws IOException, InterruptedException {
 
 		System.out.println("  Testing 'createDirectoryItem'...");
 
+		CountDownLatch expandedLatch = new CountDownLatch(2);
+		CountDownLatch collapsedLatch = new CountDownLatch(2);
 		PathElement element = tree(dir_a);
 		TreeDirectoryItems.PathItem<PathElement> dItem = createDirectoryItem(
 			element,
@@ -129,9 +132,8 @@ public class TreeDirectoryItemsTest {
 					return null;
 				}
 			},
-//	TODO:CR Add onCollapse and onExpand tests.
-			null,
-			null
+			di -> collapsedLatch.countDown(),
+			di -> expandedLatch.countDown()
 		);
 
 		assertThat(dItem)
@@ -145,6 +147,10 @@ public class TreeDirectoryItemsTest {
 			Files.getLastModifiedTime(file_a),
 			DEFAULT_GRAPHIC_FACTORY
 		);
+		dItem.asDirectoryItem().addChildDirectory(
+			dir_a_c.getFileName(),
+			DEFAULT_GRAPHIC_FACTORY
+		);
 
 		assertThat(dItem)
 			.isInstanceOf(TreeDirectoryItems.DirectoryItem.class)
@@ -152,13 +158,37 @@ public class TreeDirectoryItemsTest {
 			.hasFieldOrPropertyWithValue("leaf", false)
 			.hasFieldOrPropertyWithValue("path", dir_a);
 
-		TreeItem<PathElement> fItem = dItem.getChildren().get(0);
+		//	Directories first.
+		TreeItem<PathElement> fItem = dItem.getChildren().get(1);
 
 		assertThat(fItem)
 			.isInstanceOf(TreeDirectoryItems.FileItem.class)
 			.hasFieldOrPropertyWithValue("directory", false)
 			.hasFieldOrPropertyWithValue("leaf", true)
 			.hasFieldOrPropertyWithValue("path", file_a);
+
+		//	Directories first.
+		TreeItem<PathElement> sdItem = dItem.getChildren().get(0);
+
+		assertThat(sdItem)
+			.isInstanceOf(TreeDirectoryItems.DirectoryItem.class)
+			.hasFieldOrPropertyWithValue("directory", true)
+			.hasFieldOrPropertyWithValue("leaf", false)
+			.hasFieldOrPropertyWithValue("path", dir_a_c);
+
+		dItem.setExpanded(true);
+		sdItem.setExpanded(true);
+
+		if ( !expandedLatch.await(1, TimeUnit.MINUTES) ) {
+			fail("Directory expansion not completed in 1 minute.");
+		}
+
+		dItem.setExpanded(false);
+		sdItem.setExpanded(false);
+
+		if ( !collapsedLatch.await(1, TimeUnit.MINUTES) ) {
+			fail("Directory collapse not completed in 1 minute.");
+		}
 
 	}
 
@@ -199,6 +229,8 @@ public class TreeDirectoryItemsTest {
 
 		System.out.println("  Testing 'createTopLevelDirectoryItem' (synchOnExpand: false)...");
 
+		CountDownLatch expandedLatch = new CountDownLatch(4);
+		CountDownLatch collapsedLatch = new CountDownLatch(4);
 		CountDownLatch creationLatch = new CountDownLatch(7);
 		PathElement element = tree(root);
 		TreeDirectoryItems.TopLevelDirectoryItem<TreeDirectoryItemsTest, PathElement> rootItem = createTopLevelDirectoryItem(
@@ -259,6 +291,8 @@ public class TreeDirectoryItemsTest {
 //	TODO:CR Add onCollapse and onExpand tests.
 			null,
 			null
+//			di -> collapsedLatch.countDown(),
+//			di -> expandedLatch.countDown()
 		);
 
 		assertThat(rootItem)
