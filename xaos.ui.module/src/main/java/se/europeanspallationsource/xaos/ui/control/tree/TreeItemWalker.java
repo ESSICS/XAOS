@@ -38,7 +38,9 @@ import javafx.util.Pair;
  * A new instance has to be created instead.</p>
  * <p>
  * <b>Important Note #2:</b> {@link TreeItem}s added to the tree being walked
- * will be walked only if they are part of the sub-tree not yet visited.</p>
+ * will be walked only if they are part of the sub-tree not yet visited.
+ * Generally speaking no changes should be done to the tree structure during a
+ * walk.</p>
  *
  * @author claudio.rosati@esss.se
  * @param <T> The type of the {@link TreeItem}s.
@@ -221,6 +223,23 @@ public class TreeItemWalker<T> {
 		TreeItem<T> next = stack.peek().getKey();
 
 		updateStack();
+
+//	----------------------------------------------------------------------------
+//	The following is a possible alternative that seems easier and more direct, 
+//	allowing to get rid of the Pair class. Nevertheless, the current one has a
+//	better memory footprint, keeping the stack size at minimum, even if a node
+//	has a lot of children, because only one at time is in the stack.
+//	----------------------------------------------------------------------------
+//		TreeItem<T> next = stack.pop().getKey();
+//
+//		ObservableList<TreeItem<T>> children = next.getChildren();
+//
+//		if ( !children.isEmpty() ) {
+//			for ( int i = children.size() - 1; i >= 0; i-- ) {
+//				stack.push(new Pair<>(children.get(i), -1));
+//			}
+//		}
+//	----------------------------------------------------------------------------
 
 		return next;
 

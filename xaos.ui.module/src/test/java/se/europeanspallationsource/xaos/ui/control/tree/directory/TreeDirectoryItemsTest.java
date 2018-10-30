@@ -242,7 +242,7 @@ public class TreeDirectoryItemsTest {
 					return Files.isDirectory(path)
 						   ? tree(path)
 						   : file(path, Files.getLastModifiedTime(path));
-				} catch ( Exception ex ) {
+				} catch ( IOException ex ) {
 					ex.printStackTrace(System.err);
 					return null;
 				}
@@ -288,11 +288,8 @@ public class TreeDirectoryItemsTest {
 
 			},
 			false,
-//	TODO:CR Add onCollapse and onExpand tests.
-			null,
-			null
-//			di -> collapsedLatch.countDown(),
-//			di -> expandedLatch.countDown()
+			di -> collapsedLatch.countDown(),
+			di -> expandedLatch.countDown()
 		);
 
 		assertThat(rootItem)
@@ -381,6 +378,18 @@ public class TreeDirectoryItemsTest {
 					.hasFieldOrPropertyWithValue("leaf", true)
 					.hasFieldOrPropertyWithValue("path", file_b2);
 
+		TreeItems.expandAll(rootItem, true);
+
+		if ( !expandedLatch.await(1, TimeUnit.MINUTES) ) {
+			fail("Directory expansion not completed in 1 minute.");
+		}
+
+		TreeItems.expandAll(rootItem, false);
+
+		if ( !collapsedLatch.await(1, TimeUnit.MINUTES) ) {
+			fail("Directory collapse not completed in 1 minute.");
+		}
+
 	}
 
 	/**
@@ -394,6 +403,8 @@ public class TreeDirectoryItemsTest {
 
 		System.out.println("  Testing 'createTopLevelDirectoryItem' (synchOnExpand: true)...");
 
+		CountDownLatch expandedLatch = new CountDownLatch(4);
+		CountDownLatch collapsedLatch = new CountDownLatch(4);
 		CountDownLatch creationLatch = new CountDownLatch(7);
 		PathElement element = tree(root);
 		TreeDirectoryItems.TopLevelDirectoryItem<TreeDirectoryItemsTest, PathElement> rootItem = createTopLevelDirectoryItem(
@@ -405,7 +416,7 @@ public class TreeDirectoryItemsTest {
 					return Files.isDirectory(path)
 						   ? tree(path)
 						   : file(path, Files.getLastModifiedTime(path));
-				} catch ( Exception ex ) {
+				} catch ( IOException ex ) {
 					ex.printStackTrace(System.err);
 					return null;
 				}
@@ -451,9 +462,8 @@ public class TreeDirectoryItemsTest {
 
 			},
 			true,
-//	TODO:CR Add onCollapse and onExpand tests.
-			null,
-			null
+			di -> collapsedLatch.countDown(),
+			di -> expandedLatch.countDown()
 		);
 
 		assertThat(rootItem)
@@ -545,6 +555,16 @@ public class TreeDirectoryItemsTest {
 					.hasFieldOrPropertyWithValue("directory", false)
 					.hasFieldOrPropertyWithValue("leaf", true)
 					.hasFieldOrPropertyWithValue("path", file_b2);
+
+		if ( !expandedLatch.await(1, TimeUnit.MINUTES) ) {
+			fail("Directory expansion not completed in 1 minute.");
+		}
+
+		TreeItems.expandAll(rootItem, false);
+
+		if ( !collapsedLatch.await(1, TimeUnit.MINUTES) ) {
+			fail("Directory collapse not completed in 1 minute.");
+		}
 
 	}
 

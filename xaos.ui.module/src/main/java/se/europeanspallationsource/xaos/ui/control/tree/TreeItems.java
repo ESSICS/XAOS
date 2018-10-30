@@ -95,7 +95,19 @@ public class TreeItems {
 	 */
 	public static <T> TreeItem<T> expandAll( final TreeItem<T> node, final boolean expand ) {
 
-		TreeItemWalker.visit(node, n -> n.setExpanded(expand));
+		if ( node != null && !node.isLeaf() ) {
+			node.setExpanded(expand);
+			node.getChildren().forEach(n -> expandAll(n, expand));
+		}
+
+//	----------------------------------------------------------------------------
+//	The following implementation is not working because "setExpanded" is called
+//	after the stack update, so if expanding/collapsing changes the number of
+//	children, that is lost. In the current implementation, "getChildren" is
+//	called after "setExpanded", so any changes are kept in account.
+//	----------------------------------------------------------------------------
+//		TreeItemWalker.visit(node, n -> n.setExpanded(expand));
+//	----------------------------------------------------------------------------
 
 		return node;
 
@@ -117,7 +129,7 @@ public class TreeItems {
 	 */
 	public static <T> TreeView<T> expandAll( final TreeView<T> tree, final boolean expand ) {
 
-		TreeItemWalker.visit(tree, n -> n.setExpanded(expand));
+		expandAll(tree.getRoot(), expand);
 
 		return tree;
 
@@ -139,7 +151,7 @@ public class TreeItems {
 	 */
 	public static <T> TreeTableView<T> expandAll( final TreeTableView<T> treeTable, final boolean expand ) {
 
-		TreeItemWalker.visit(treeTable, n -> n.setExpanded(expand));
+		expandAll(treeTable.getRoot(), expand);
 
 		return treeTable;
 
