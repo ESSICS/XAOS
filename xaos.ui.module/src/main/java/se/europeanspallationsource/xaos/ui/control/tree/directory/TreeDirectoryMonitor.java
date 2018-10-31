@@ -230,6 +230,7 @@ public class TreeDirectoryMonitor<I, T> {
 	 *                      performed only when the tree item is expanded.
 	 */
 	public void addTopLevelDirectory( Path dir, boolean synchOnExpand ) {
+//	TODO:CR Add an overloaded "addTopLevelDirectory" with 2 new parameters: onCollapse and onExpand.
 
 		if ( !dir.isAbsolute() ) {
 			throw new IllegalArgumentException(MessageFormat.format(
@@ -246,6 +247,7 @@ public class TreeDirectoryMonitor<I, T> {
 //				directoryWatcher.watch(dir);
 //			}
 
+//	TODO:CR Add code to synch the directory watcher.
 			model.addTopLevelDirectory(dir, synchOnExpand);
 			refresh(dir);
 			

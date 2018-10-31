@@ -12,7 +12,7 @@
 
 	<artifactId>xaos.app</artifactId>
     <packaging>jar</packaging>
-    <name>XAOS App</name>
+    <name>XAOS - App</name>
 	<description>
 		JavaFX-based portion of the XAOS framework, containing the JavaFX-based
 		application framework.

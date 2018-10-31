@@ -22,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.FileTime;
+import java.util.Collections;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import javafx.scene.control.TreeItem;
@@ -30,11 +31,12 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import se.europeanspallationsource.xaos.core.util.io.DeleteFileVisitor;
-import se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryItems.FileItem;
+import se.europeanspallationsource.xaos.ui.control.tree.TreeItems;
 
 import static java.nio.file.attribute.FileTime.from;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
+import static se.europeanspallationsource.xaos.core.util.io.PathElement.directory;
 import static se.europeanspallationsource.xaos.core.util.io.PathElement.tree;
 
 
@@ -160,9 +162,9 @@ public class TreeDirectoryModelTest {
 	 * Test of addTopLevelDirectory method, of class TreeDirectoryModel.
 	 */
 	@Test
-	public void testAddTopLevelDirectory() {
+	public void testAddTopLevelDirectoryNoCallback() {
 
-		System.out.println("  Testing 'addTopLevelDirectory'...");
+		System.out.println("  Testing 'addTopLevelDirectory (no callback)'...");
 
 		TreeDirectoryModel<TreeDirectoryModelTest, String> model = new TreeDirectoryModel<>(
 			this,
@@ -175,6 +177,51 @@ public class TreeDirectoryModelTest {
 		model.addTopLevelDirectory(root, false);
 
 		assertThat(model.contains(root)).isTrue();
+
+	}
+
+	/**
+	 * Test of addTopLevelDirectory method, of class TreeDirectoryModel.
+	 * 
+	 * @throws java.lang.InterruptedException
+	 */
+	@Test
+	public void testAddTopLevelDirectoryWithCallback() throws InterruptedException {
+
+		System.out.println("  Testing 'addTopLevelDirectory (with callbacks)'...");
+
+		CountDownLatch expandedLatch = new CountDownLatch(4);
+		CountDownLatch collapsedLatch = new CountDownLatch(4);
+		TreeDirectoryModel<TreeDirectoryModelTest, String> model = new TreeDirectoryModel<>(
+			this,
+			s -> Paths.get(s),
+			p -> p != null ? p.toString() : null
+		);
+
+		assertThat(model.contains(root)).isFalse();
+
+		model.addTopLevelDirectory(
+			root,
+			true,
+			di -> collapsedLatch.countDown(),
+			di -> expandedLatch.countDown()
+		);
+//		model.sync(tree(root), this);
+		model.sync(directory(root, Collections.emptyList()), this);
+
+		assertThat(model.contains(root)).isTrue();
+
+		TreeItems.expandAll(model.getRoot(), true);
+
+		if ( !expandedLatch.await(15, TimeUnit.SECONDS) ) {
+			fail("Directory expansion not completed in 15 seconds.");
+		}
+
+		TreeItems.expandAll(model.getRoot(), false);
+
+		if ( !collapsedLatch.await(15, TimeUnit.SECONDS) ) {
+			fail("Directory collapse not completed in 15 seconds.");
+		}
 
 	}
 
@@ -571,7 +618,7 @@ public class TreeDirectoryModelTest {
 			.getChildren().get(0);	//	         file: file_a_c
 
 		assertThat(item)
-			.isInstanceOf(FileItem.class)
+			.isInstanceOf(TreeDirectoryItems.FileItem.class)
 			.extracting("lastModified").element(0).isEqualTo(lastModifiedTime1);
 		
 		FileTime lastModifiedTime2 = from(lastModifiedTime1.toInstant().plusSeconds(123L));
@@ -581,7 +628,7 @@ public class TreeDirectoryModelTest {
 		model.updateModificationTime(file_a_c, lastModifiedTime2);
 
 		assertThat(item)
-			.isInstanceOf(FileItem.class)
+			.isInstanceOf(TreeDirectoryItems.FileItem.class)
 			.extracting("lastModified").element(0).isEqualTo(lastModifiedTime2);
 
 	}

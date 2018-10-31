@@ -179,15 +179,15 @@ public class TreeDirectoryItemsTest {
 		dItem.setExpanded(true);
 		sdItem.setExpanded(true);
 
-		if ( !expandedLatch.await(1, TimeUnit.MINUTES) ) {
-			fail("Directory expansion not completed in 1 minute.");
+		if ( !expandedLatch.await(15, TimeUnit.SECONDS) ) {
+			fail("Directory expansion not completed in 15 seconds.");
 		}
 
 		dItem.setExpanded(false);
 		sdItem.setExpanded(false);
 
-		if ( !collapsedLatch.await(1, TimeUnit.MINUTES) ) {
-			fail("Directory collapse not completed in 1 minute.");
+		if ( !collapsedLatch.await(15, TimeUnit.SECONDS) ) {
+			fail("Directory collapse not completed in 15 seconds.");
 		}
 
 	}
@@ -380,14 +380,14 @@ public class TreeDirectoryItemsTest {
 
 		TreeItems.expandAll(rootItem, true);
 
-		if ( !expandedLatch.await(1, TimeUnit.MINUTES) ) {
-			fail("Directory expansion not completed in 1 minute.");
+		if ( !expandedLatch.await(15, TimeUnit.SECONDS) ) {
+			fail("Directory expansion not completed in 15 seconds.");
 		}
 
 		TreeItems.expandAll(rootItem, false);
 
-		if ( !collapsedLatch.await(1, TimeUnit.MINUTES) ) {
-			fail("Directory collapse not completed in 1 minute.");
+		if ( !collapsedLatch.await(15, TimeUnit.SECONDS) ) {
+			fail("Directory collapse not completed in 15 seconds.");
 		}
 
 	}
@@ -556,14 +556,14 @@ public class TreeDirectoryItemsTest {
 					.hasFieldOrPropertyWithValue("leaf", true)
 					.hasFieldOrPropertyWithValue("path", file_b2);
 
-		if ( !expandedLatch.await(1, TimeUnit.MINUTES) ) {
-			fail("Directory expansion not completed in 1 minute.");
+		if ( !expandedLatch.await(15, TimeUnit.SECONDS) ) {
+			fail("Directory expansion not completed in 15 seconds.");
 		}
 
 		TreeItems.expandAll(rootItem, false);
 
-		if ( !collapsedLatch.await(1, TimeUnit.MINUTES) ) {
-			fail("Directory collapse not completed in 1 minute.");
+		if ( !collapsedLatch.await(15, TimeUnit.SECONDS) ) {
+			fail("Directory collapse not completed in 15 seconds.");
 		}
 
 	}

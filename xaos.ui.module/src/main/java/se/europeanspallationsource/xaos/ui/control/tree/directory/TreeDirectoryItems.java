@@ -47,9 +47,41 @@ public class TreeDirectoryItems {
 
 	/**
 	 * Creates a new instance of {@link DirectoryItem} for the given parameters.
+	 *
+	 * @param <T>            Type of the object returned by {@link TreeItem#getValue()}.
+	 * @param path           The value of this {@link TreeItem}.
+	 * @param graphicFactory The factory class used to get an "icon" representing
+	 *                       the created item.
+	 * @param projector      A {@link Function} converting the object returned
+	 *                       by {@link TreeItem#getValue()}) into the
+	 *                       corresponding {@link Path}.
+	 * @param injector       A {@link Function} converting a {@link Path} into
+	 *                       the object used as value in the corresponding
+	 *                       {@link TreeItem}.
+	 * @return A new instance of{@link DirectoryItem}.
+	 */
+	public static <T> DirectoryItem<T> createDirectoryItem(
+		T path,
+		TreeDirectoryModel.GraphicFactory graphicFactory,
+		Function<T, Path> projector,
+		Function<Path, T> injector
+	) {
+		return new DirectoryItem<>(
+			path,
+			graphicFactory.createGraphic(projector.apply(path), true, false),
+			graphicFactory.createGraphic(projector.apply(path), true, true),
+			projector,
+			injector,
+			null,
+			null
+		);
+	}
+
+	/**
+	 * Creates a new instance of {@link DirectoryItem} for the given parameters.
 	 * <p>
 	 * Note that the {@link DirectoryItem#addChildDirectory(Path, TreeDirectoryModel.GraphicFactory)}
-	 * method will pass the given {@code onCollapse} and {@code onExpand} parameter
+	 * method will pass the given {@code onCollapse} and {@code onExpand} parameters
 	 * to the newly created {@link DirectoryItem}.</p>
 	 *
 	 * @param <T>            Type of the object returned by {@link TreeItem#getValue()}.
@@ -115,9 +147,48 @@ public class TreeDirectoryItems {
 
 	/**
 	 * Creates a new instance of {@link TopLevelDirectoryItem} for the given parameters.
+	 *
+	 * @param <I>            Type of the initiator of changes to the model.
+	 * @param <T>            Type of the object returned by {@link TreeItem#getValue()}.
+	 * @param path           The value of this {@link TreeItem}.
+	 * @param graphicFactory The factory class used to get an "icon" representing
+	 *                       the created item.
+	 * @param projector      A {@link Function} converting the object returned
+	 *                       by {@link TreeItem#getValue()}) into the
+	 *                       corresponding {@link Path}.
+	 * @param injector       A {@link Function} converting a {@link Path} into
+	 *                       the object used as value in the corresponding
+	 *                       {@link TreeItem}.
+	 * @param reporter       The object reporting changes in the model.
+	 * @param synchOnExpand  If (@code true}, then folder synchronization is
+	 *                       performed only when the tree item is expanded.
+	 * @return A new instance of{@link TopLevelDirectoryItem}.
+	 */
+	public static <I, T> TopLevelDirectoryItem<I, T> createTopLevelDirectoryItem(
+		T path,
+		TreeDirectoryModel.GraphicFactory graphicFactory,
+		Function<T, Path> projector,
+		Function<Path, T> injector,
+		DirectoryModel.Reporter<I> reporter,
+		boolean synchOnExpand
+	) {
+		return new TopLevelDirectoryItem<>(
+			path,
+			graphicFactory,
+			projector,
+			injector,
+			reporter,
+			synchOnExpand,
+			null,
+			null
+		);
+	}
+
+	/**
+	 * Creates a new instance of {@link TopLevelDirectoryItem} for the given parameters.
 	 * <p>
 	 * Note that the {@link TopLevelDirectoryItem#addChildDirectory(Path, TreeDirectoryModel.GraphicFactory)}
-	 * method will pass the given {@code onCollapse} and {@code onExpand} parameter
+	 * method will pass the given {@code onCollapse} and {@code onExpand} parameters
 	 * to the newly created {@link DirectoryItem}.</p>
 	 *
 	 * @param <I>            Type of the initiator of changes to the model.

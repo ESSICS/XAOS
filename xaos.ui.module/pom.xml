@@ -11,7 +11,7 @@
 
 	<artifactId>xaos.ui</artifactId>
 	<packaging>jar</packaging>
-	<name>XAOS UI</name>
+	<name>XAOS - UI</name>
 	<description>
 		JavaFX-based portion of the XAOS framework, containing the JavaFX-based
 		controls and tools suitable for other projects too.

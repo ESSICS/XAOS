@@ -23,6 +23,7 @@ import java.nio.file.Paths;
 import java.nio.file.attribute.FileTime;
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -213,12 +214,49 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 			injector,
 			reporter,
 			synchOnExpand,
-//	TODO:CR Add code to synch the directory watcher.
 			null,
 			null
 		));
 	}
-//	TODO:CR Add an overloaded "addTopLevelDirectory" with 2 new parameters: onCollapse and onExpand.
+
+	/**
+	 * Add a top-lever directory to the model.
+	 * <p>
+	 * <b>Note:</b> The model is not synchronized automatically with the
+	 * given {@code directory}. An explicit call to
+	 * {@link #sync(se.europeanspallationsource.xaos.core.util.io.PathElement)},
+	 * or {@link #sync(se.europeanspallationsource.xaos.core.util.io.PathElement, java.lang.Object)}
+	 * has to be performed if synchronization is required.</p>
+	 * <p>
+	 * <b>Note:</b> {@link #addDirectory(Path)} and {@link #addDirectory(Path, Object)}
+	 * methods will pass the given {@code onCollapse} and {@code onExpand} parameters
+	 * to the newly created {@link DirectoryItem}.</p>
+	 *
+	 * @param directory     The {@link Path} to be added as a top-level directory.
+	 * @param synchOnExpand If (@code true}, then folder synchronization is
+	 *                      performed only when the tree item is expanded.
+	 * @param onCollapse    A {@link Consumer} to be invoked when this item
+	 *                      is collapsed. Can be {@code null}.
+	 * @param onExpand      A {@link Consumer} to be invoked when this item
+	 *                      is expanded. Can be {@code null}.
+	 */
+	public void addTopLevelDirectory(
+		Path directory,
+		boolean synchOnExpand,
+		Consumer<? super TreeDirectoryItems.DirectoryItem<T>> onCollapse,
+		Consumer<? super TreeDirectoryItems.DirectoryItem<T>> onExpand
+	) {
+		root.getChildren().add(TreeDirectoryItems.createTopLevelDirectoryItem(
+			injector.apply(directory),
+			graphicFactory,
+			projector,
+			injector,
+			reporter,
+			synchOnExpand,
+			onCollapse,
+			onExpand
+		));
+	}
 
 	@Override
 	public boolean contains( Path path ) {
