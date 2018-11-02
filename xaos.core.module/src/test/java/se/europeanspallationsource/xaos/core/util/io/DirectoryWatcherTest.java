@@ -26,15 +26,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardWatchEventKinds;
 import java.text.MessageFormat;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -835,99 +831,100 @@ public class DirectoryWatcherTest {
 
 	}
 
-	/**
-	 * Test of tree method, of class DirectoryWatcher.
-	 *
-	 * @throws java.io.IOException
-	 */
-	@Test
-	public void testTree() throws IOException {
-
-		System.out.println(MessageFormat.format("  Testing ''tree'' [on {0}]...", root));
-
-		DirectoryWatcher watcher = build(executor);
-		CompletableFuture<PathElement> future = watcher.tree(root);
-
-		assertNotNull(future);
-
-		PathElement rootElement = null;
-
-		try {
-			rootElement = future.get(1, TimeUnit.MINUTES);
-		} catch ( InterruptedException | ExecutionException | TimeoutException ex ) {
-			fail(MessageFormat.format("Unable to get tree: {0} [{1}].", ex.getClass().getName(), ex.getMessage()));
-		}
-
-		assertNotNull(rootElement);
-
-		assertEquals(root, rootElement.getPath());
-		assertTrue(rootElement.isDirectory());
-
-		List<PathElement> rootChildren = rootElement.getChildren();
-
-		assertNotNull(rootChildren);
-		assertEquals(2, rootChildren.size());
-
-			PathElement dirAElement = rootChildren.get(0);
-
-			assertNotNull(dirAElement);
-			assertEquals(dir_a, dirAElement.getPath());
-			assertTrue(dirAElement.isDirectory());
-
-			List<PathElement> dirAChildren = dirAElement.getChildren();
-
-			assertNotNull(dirAChildren);
-			assertEquals(2, dirAChildren.size());
-
-				PathElement dirACElement = dirAChildren.get(0);
-				
-				assertNotNull(dirACElement);
-				assertEquals(dir_a_c, dirACElement.getPath());
-				assertTrue(dirACElement.isDirectory());
-				
-					List<PathElement> dirACChildren = dirACElement.getChildren();
-					
-					assertNotNull(dirACChildren);
-					assertEquals(1, dirACChildren.size());
-					
-					PathElement fileACElement = dirACChildren.get(0);
-					
-					assertNotNull(fileACElement);
-					assertEquals(file_a_c, fileACElement.getPath());
-					assertFalse(fileACElement.isDirectory());
-
-				PathElement fileAElement = dirAChildren.get(1);
-
-				assertNotNull(fileAElement);
-				assertEquals(file_a, fileAElement.getPath());
-				assertFalse(fileAElement.isDirectory());
-
-			PathElement dirBElement = rootChildren.get(1);
-
-			assertNotNull(dirBElement);
-			assertEquals(dir_b, dirBElement.getPath());
-			assertTrue(dirBElement.isDirectory());
-
-			List<PathElement> dirBChildren = dirBElement.getChildren();
-
-			assertNotNull(dirBChildren);
-			assertEquals(2, dirBChildren.size());
-
-				PathElement fileB1Element = dirBChildren.get(0);
-
-				assertNotNull(fileB1Element);
-				assertEquals(file_b1, fileB1Element.getPath());
-				assertFalse(fileB1Element.isDirectory());
-
-				PathElement fileB2Element = dirBChildren.get(1);
-
-				assertNotNull(fileB2Element);
-				assertEquals(file_b2, fileB2Element.getPath());
-				assertFalse(fileB2Element.isDirectory());
-
-		watcher.shutdown();
-
-	}
+//	TODO:CR to be removed
+//	/**
+//	 * Test of tree method, of class DirectoryWatcher.
+//	 *
+//	 * @throws java.io.IOException
+//	 */
+//	@Test
+//	public void testTree() throws IOException {
+//
+//		System.out.println(MessageFormat.format("  Testing ''tree'' [on {0}]...", root));
+//
+//		DirectoryWatcher watcher = build(executor);
+//		CompletableFuture<PathElement> future = watcher.tree(root);
+//
+//		assertNotNull(future);
+//
+//		PathElement rootElement = null;
+//
+//		try {
+//			rootElement = future.get(1, TimeUnit.MINUTES);
+//		} catch ( InterruptedException | ExecutionException | TimeoutException ex ) {
+//			fail(MessageFormat.format("Unable to get tree: {0} [{1}].", ex.getClass().getName(), ex.getMessage()));
+//		}
+//
+//		assertNotNull(rootElement);
+//
+//		assertEquals(root, rootElement.getPath());
+//		assertTrue(rootElement.isDirectory());
+//
+//		List<PathElement> rootChildren = rootElement.getChildren();
+//
+//		assertNotNull(rootChildren);
+//		assertEquals(2, rootChildren.size());
+//
+//			PathElement dirAElement = rootChildren.get(0);
+//
+//			assertNotNull(dirAElement);
+//			assertEquals(dir_a, dirAElement.getPath());
+//			assertTrue(dirAElement.isDirectory());
+//
+//			List<PathElement> dirAChildren = dirAElement.getChildren();
+//
+//			assertNotNull(dirAChildren);
+//			assertEquals(2, dirAChildren.size());
+//
+//				PathElement dirACElement = dirAChildren.get(0);
+//
+//				assertNotNull(dirACElement);
+//				assertEquals(dir_a_c, dirACElement.getPath());
+//				assertTrue(dirACElement.isDirectory());
+//
+//					List<PathElement> dirACChildren = dirACElement.getChildren();
+//
+//					assertNotNull(dirACChildren);
+//					assertEquals(1, dirACChildren.size());
+//
+//					PathElement fileACElement = dirACChildren.get(0);
+//
+//					assertNotNull(fileACElement);
+//					assertEquals(file_a_c, fileACElement.getPath());
+//					assertFalse(fileACElement.isDirectory());
+//
+//				PathElement fileAElement = dirAChildren.get(1);
+//
+//				assertNotNull(fileAElement);
+//				assertEquals(file_a, fileAElement.getPath());
+//				assertFalse(fileAElement.isDirectory());
+//
+//			PathElement dirBElement = rootChildren.get(1);
+//
+//			assertNotNull(dirBElement);
+//			assertEquals(dir_b, dirBElement.getPath());
+//			assertTrue(dirBElement.isDirectory());
+//
+//			List<PathElement> dirBChildren = dirBElement.getChildren();
+//
+//			assertNotNull(dirBChildren);
+//			assertEquals(2, dirBChildren.size());
+//
+//				PathElement fileB1Element = dirBChildren.get(0);
+//
+//				assertNotNull(fileB1Element);
+//				assertEquals(file_b1, fileB1Element.getPath());
+//				assertFalse(fileB1Element.isDirectory());
+//
+//				PathElement fileB2Element = dirBChildren.get(1);
+//
+//				assertNotNull(fileB2Element);
+//				assertEquals(file_b2, fileB2Element.getPath());
+//				assertFalse(fileB2Element.isDirectory());
+//
+//		watcher.shutdown();
+//
+//	}
 
 	/**
 	 * Test of unwatch method, of class DirectoryWatcher.

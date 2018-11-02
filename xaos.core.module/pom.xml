@@ -19,8 +19,17 @@
 
     <dependencies>
 
+        <!-- JavaFX - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+			<version>11</version>
+            <scope>compile</scope>
+		</dependency>
+
         <!-- Apache - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<!--        <dependency>
+<!--
+		<dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
             <version>4.2</version>
@@ -31,7 +40,8 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.8</version>
             <scope>compile</scope>
-        </dependency>-->
+        </dependency>
+-->
 
 		<!-- Other Dependencies  - - - - - - - - - - - - - - - - - - - - - -  -->
         <dependency>

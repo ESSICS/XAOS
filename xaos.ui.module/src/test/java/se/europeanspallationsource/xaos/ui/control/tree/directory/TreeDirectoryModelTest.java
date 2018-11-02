@@ -206,7 +206,7 @@ public class TreeDirectoryModelTest {
 			di -> collapsedLatch.countDown(),
 			di -> expandedLatch.countDown()
 		);
-//		model.sync(tree(root), this);
+		model.sync(tree(root), this);
 		model.sync(directory(root, Collections.emptyList()), this);
 
 		assertThat(model.contains(root)).isTrue();

@@ -13,22 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.core.util.io;
 
+module xaos.core {
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+	requires java.logging;
 
+	requires javafx.base;
+	requires javafx.controls;
+	requires javafx.graphics;
 
-/**
- * @author claudio.rosati@esss.se
- */
-@RunWith( Suite.class )
-@Suite.SuiteClasses( {
-	DeleteFileVisitorTest.class,
-	DirectoryWatcherTest.class
-} )
-@SuppressWarnings( { "ClassMayBeInterface", "ClassWithoutLogger" } )
-public class IOSuite {
+	requires reactfx;
 
 }
