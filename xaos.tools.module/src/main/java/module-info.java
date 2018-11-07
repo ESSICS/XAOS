@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-module xaos.core {
+module xaos.tools {
 
-	requires java.logging;
+	requires java.compiler;
+	requires org.apache.commons.collections4;
 
-	//	The following javafx modules are required by the reactfx one.
-	requires javafx.base;
-	requires javafx.controls;
-	requires javafx.graphics;
-	requires reactfx;
+	exports se.europeanspallationsource.xaos.tools.annotation;
+	exports se.europeanspallationsource.xaos.tools.lang;
 
-	exports se.europeanspallationsource.xaos.core.util;
-	exports se.europeanspallationsource.xaos.core.util.io;
+	uses javax.annotation.processing.Processor;
+
+	provides javax.annotation.processing.Processor
+		with se.europeanspallationsource.xaos.tools.annotation.impl.ServiceProviderProcessor;
 
 }

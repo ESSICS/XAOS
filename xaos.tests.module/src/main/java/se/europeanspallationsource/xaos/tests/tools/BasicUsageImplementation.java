@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-module xaos.core {
+package se.europeanspallationsource.xaos.tests.tools;
 
-	requires java.logging;
 
-	//	The following javafx modules are required by the reactfx one.
-	requires javafx.base;
-	requires javafx.controls;
-	requires javafx.graphics;
-	requires reactfx;
+import se.europeanspallationsource.xaos.tools.annotation.ServiceProvider;
 
-	exports se.europeanspallationsource.xaos.core.util;
-	exports se.europeanspallationsource.xaos.core.util.io;
+
+/**
+ * @author claudio.rosati@esss.se
+ */
+@ServiceProvider( service = BasicUsageInterface.class )
+@SuppressWarnings( "ClassMayBeInterface" )
+public class BasicUsageImplementation implements BasicUsageInterface {
 
 }

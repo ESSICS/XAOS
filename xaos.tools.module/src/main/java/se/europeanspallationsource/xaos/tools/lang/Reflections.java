@@ -74,7 +74,7 @@ public class Reflections {
 	public static Object getFieldValue( Field field, Object object ) throws RuntimeException {
 		try {
 
-			if ( !field.isAccessible() ) {
+			if ( !field.canAccess(object)) {
 				field.setAccessible(true);
 			}
 
@@ -160,7 +160,7 @@ public class Reflections {
 	public static Object invokeMethod( Method method, Object object, Object... parameters ) throws RuntimeException {
 		try {
 
-			if ( !method.isAccessible() ) {
+			if ( !method.canAccess(object)) {
 				method.setAccessible(true);
 			}
 
@@ -209,7 +209,7 @@ public class Reflections {
 	public static void setFieldValue( Field field, Object object, Object value ) throws RuntimeException {
 		try {
 
-			if ( !field.isAccessible() ) {
+			if ( !field.canAccess(object)) {
 				field.setAccessible(true);
 			}
 

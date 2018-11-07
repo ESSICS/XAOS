@@ -10,3 +10,7 @@
 /xaos.app.module/target/
 /xaos.ui.module/nbproject/
 /xaos.tools.module/nbproject/
+/xaos.test.module/nbproject/
+/xaos.test.module/target/
+/xaos.tests.module/nbproject/
+/xaos.tests.module/target/

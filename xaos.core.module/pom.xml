@@ -20,10 +20,23 @@
     <dependencies>
 
         <!-- JavaFX - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+		<!-- The following javafx modules are required by the reactfx one. -->
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-base</artifactId>
+			<version>${javafx.version}</version>
+            <scope>compile</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-controls</artifactId>
-			<version>11</version>
+			<version>${javafx.version}</version>
+            <scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-graphics</artifactId>
+			<version>${javafx.version}</version>
             <scope>compile</scope>
 		</dependency>
 

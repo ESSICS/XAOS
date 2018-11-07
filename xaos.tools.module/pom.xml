@@ -19,10 +19,11 @@
 
     <build>
         <plugins>
+			<!-- ADDED TO DISABLE ANNOTATION PROCESSING -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
+                <version>3.8.0</version>
                 <configuration>
                     <showDeprecation>true</showDeprecation>
                 </configuration>
@@ -30,7 +31,9 @@
 					<execution>
 						<id>default-compile</id>
 						<configuration>
-							<compilerArgument>-proc:none</compilerArgument>
+							<compilerArgs>
+								<arg>-proc:none</arg>
+							</compilerArgs>
 						</configuration>
 					</execution>
 					<execution>
