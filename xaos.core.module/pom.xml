@@ -24,37 +24,21 @@
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-base</artifactId>
-			<version>${javafx.version}</version>
+			<version>11.0.1</version>
             <scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-controls</artifactId>
-			<version>${javafx.version}</version>
+			<version>11.0.1</version>
             <scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-graphics</artifactId>
-			<version>${javafx.version}</version>
+			<version>11.0.1</version>
             <scope>compile</scope>
 		</dependency>
-
-        <!-- Apache - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<!--
-		<dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-collections4</artifactId>
-            <version>4.2</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.8</version>
-            <scope>compile</scope>
-        </dependency>
--->
 
 		<!-- Other Dependencies  - - - - - - - - - - - - - - - - - - - - - -  -->
         <dependency>

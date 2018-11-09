@@ -18,23 +18,38 @@
 	</description>
 	<url>https://github.com/ESSICS/XAOS</url>
 
-	<properties>
-		<ikonli-version>2.3.0</ikonli-version>
-		<textfx.version>4.0.13-alpha</textfx.version>
-	</properties>
-
 	<dependencies>
 
-		<!-- XAOS - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <!-- JavaFX - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>xaos.tools</artifactId>
-			<version>${project.version}</version>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-base</artifactId>
+			<version>11.0.1</version>
+            <scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>xaos.core</artifactId>
-			<version>${project.version}</version>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+			<version>11.0.1</version>
+            <scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-graphics</artifactId>
+			<version>11.0.1</version>
+            <scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-swing</artifactId>
+			<version>11.0.1</version>
+            <scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-web</artifactId>
+			<version>11.0.1</version>
+            <scope>compile</scope>
 		</dependency>
 
 		<!-- Apache - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -48,28 +63,46 @@
 		<!-- ikonli-javafx  - -  - - - - - - - - - - - - - - - - - - - - - -  -->
 		<dependency>
 			<groupId>org.kordamp.ikonli</groupId>
+			<artifactId>ikonli-core</artifactId>
+			<version>11.0.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.kordamp.ikonli</groupId>
 			<artifactId>ikonli-javafx</artifactId>
-			<version>${ikonli-version}</version>
+			<version>11.0.0</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.kordamp.ikonli</groupId>
 			<artifactId>ikonli-fontawesome-pack</artifactId>
-			<version>${ikonli-version}</version>
+			<version>11.0.0</version>
 			<scope>compile</scope>
+		</dependency>
+
+		<!-- XAOS - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>xaos.tools</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>xaos.core</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 
 		<!-- Test - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 		<dependency>
 			<groupId>org.testfx</groupId>
 			<artifactId>testfx-core</artifactId>
-			<version>${textfx.version}</version>
+			<version>4.0.15-alpha</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.testfx</groupId>
 			<artifactId>testfx-junit</artifactId>
-			<version>${textfx.version}</version>
+			<version>4.0.15-alpha</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

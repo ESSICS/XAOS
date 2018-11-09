@@ -1,0 +1,4 @@
+--patch-module
+xaos.tests=_
+--add-reads
+xaos.tests=ALL-UNNAMED

@@ -40,8 +40,6 @@
 
 	<properties>
 		<java.release>11</java.release>
-		<java.version>11.0.1</java.version>
-		<javafx.version>11.0.1</javafx.version>
 		<maven.compiler.source>${java.release}</maven.compiler.source>
 		<maven.compiler.target>${java.release}</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -54,7 +52,7 @@
 		    OTHERWISE ALL MODULES WILL NOT BE DEPLOYED (see nexus-staging-maven-plugin
 			and how skipNexusStagingDeployMojo works).
 		-->
-		<module>xaos.tests.module</module>
+		<module>xaos.tools.tests.module</module>
 		<module>xaos.core.module</module>
 		<module>xaos.ui.module</module>
 		<module>xaos.app.module</module>

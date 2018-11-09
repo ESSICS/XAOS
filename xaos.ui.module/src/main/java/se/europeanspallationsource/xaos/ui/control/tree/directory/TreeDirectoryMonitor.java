@@ -35,13 +35,11 @@ import org.reactfx.EventSource;
 import org.reactfx.EventStream;
 import org.reactfx.EventStreams;
 import se.europeanspallationsource.xaos.core.util.io.DirectoryWatcher;
-import se.europeanspallationsource.xaos.core.util.io.PathElement;
 
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
-import static se.europeanspallationsource.xaos.core.util.DefaultExecutorCompletionStage.wrap;
 
 
 /**
@@ -249,7 +247,7 @@ public class TreeDirectoryMonitor<I, T> {
 
 //	TODO:CR Add code to synch the directory watcher.
 			model.addTopLevelDirectory(dir, synchOnExpand);
-			refresh(dir);
+//			refresh(dir);
 			
 //		} catch ( IOException e ) {
 		} catch ( Exception e ) {
@@ -303,16 +301,16 @@ public class TreeDirectoryMonitor<I, T> {
 	 * @return A {@link CompletionStage} completed exceptionally if an I/o
 	 *         error occurred.
 	 */
-	public CompletionStage<Void> refresh( Path path ) {
-		return wrap(directoryWatcher.tree(path), clientThreadExecutor)
-			.thenAcceptAsync(
-				tree -> {
-					model.sync(tree);
-					watchDirectory(tree);
-				},
-				clientThreadExecutor
-			);
-	}
+//	public CompletionStage<Void> refresh( Path path ) {
+//		return wrap(directoryWatcher.tree(path), clientThreadExecutor)
+//			.thenAcceptAsync(
+//				tree -> {
+//					model.sync(tree);
+//					watchDirectory(tree);
+//				},
+//				clientThreadExecutor
+//			);
+//	}
 
 	@SuppressWarnings( "unchecked" )
     private void processDirectoryEvent ( DirectoryWatcher.DirectoryEvent event ) {
@@ -383,27 +381,27 @@ public class TreeDirectoryMonitor<I, T> {
 	}
 
 	private void refreshOrStreamError( Path path ) {
-		refresh(path).whenComplete(( nothing, ex ) -> {
-			if ( ex != null ) {
-				localErrors.push(ex);
-			}
-		});
+//		refresh(path).whenComplete(( nothing, ex ) -> {
+//			if ( ex != null ) {
+//				localErrors.push(ex);
+//			}
+//		});
 	}
 
-	private void watchDirectory( PathElement tree ) {
-
-		if ( tree.isDirectory() ) {
-
-			Path path = tree.getPath();
-			
-			if ( !directoryWatcher.isWatched(path) ) {
-				directoryWatcher.watchOrStreamError(path);
-			}
-
-			tree.getChildren().forEach(child -> watchDirectory(child));
-
-		}
-
-	}
+//	private void watchDirectory( PathElement tree ) {
+//
+//		if ( tree.isDirectory() ) {
+//
+//			Path path = tree.getPath();
+//
+//			if ( !directoryWatcher.isWatched(path) ) {
+//				directoryWatcher.watchOrStreamError(path);
+//			}
+//
+//			tree.getChildren().forEach(child -> watchDirectory(child));
+//
+//		}
+//
+//	}
 
 }

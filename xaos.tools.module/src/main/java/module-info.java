@@ -14,6 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/**
+ * @author claudio.rosati@esss.se
+ */
 module xaos.tools {
 
 	requires java.compiler;

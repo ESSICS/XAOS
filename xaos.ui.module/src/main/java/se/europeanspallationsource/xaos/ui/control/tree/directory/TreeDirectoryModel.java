@@ -35,9 +35,8 @@ import javafx.scene.control.TreeView;
 import org.reactfx.EventSource;
 import org.reactfx.EventStream;
 import se.europeanspallationsource.xaos.core.util.TriFunction;
-import se.europeanspallationsource.xaos.core.util.io.DirectoryModel;
-import se.europeanspallationsource.xaos.core.util.io.PathElement;
 import se.europeanspallationsource.xaos.ui.control.Icons;
+import se.europeanspallationsource.xaos.ui.control.tree.DirectoryModel;
 
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FILE;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FILE_EXECUTABLE;
@@ -198,22 +197,18 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	 * <p>
 	 * <b>Note:</b> The model is not synchronized automatically with the
 	 * given {@code directory}. An explicit call to
-	 * {@link #sync(se.europeanspallationsource.xaos.core.util.io.PathElement)},
-	 * or {@link #sync(se.europeanspallationsource.xaos.core.util.io.PathElement, java.lang.Object)}
+	 * {@link #sync(Path)}, or {@link #sync(Path, java.lang.Object)}
 	 * has to be performed if synchronization is required.</p>
 	 *
-	 * @param directory     The {@link Path} to be added as a top-level directory.
-	 * @param synchOnExpand If (@code true}, then folder synchronization is
-	 *                      performed only when the tree item is expanded.
+	 * @param directory The {@link Path} to be added as a top-level directory.
 	 */
-	public void addTopLevelDirectory( Path directory, boolean synchOnExpand ) {
+	public void addTopLevelDirectory( Path directory ) {
 		root.getChildren().add(TreeDirectoryItems.createTopLevelDirectoryItem(
 			injector.apply(directory),
 			graphicFactory,
 			projector,
 			injector,
 			reporter,
-			synchOnExpand,
 			null,
 			null
 		));
@@ -224,25 +219,21 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	 * <p>
 	 * <b>Note:</b> The model is not synchronized automatically with the
 	 * given {@code directory}. An explicit call to
-	 * {@link #sync(se.europeanspallationsource.xaos.core.util.io.PathElement)},
-	 * or {@link #sync(se.europeanspallationsource.xaos.core.util.io.PathElement, java.lang.Object)}
-	 * has to be performed if synchronization is required.</p>
+	 * {@link #sync(Path)}, or {@link #sync(Path, java.lang.Object)}
+	 * has to be performed if synchronization is required.
 	 * <p>
 	 * <b>Note:</b> {@link #addDirectory(Path)} and {@link #addDirectory(Path, Object)}
 	 * methods will pass the given {@code onCollapse} and {@code onExpand} parameters
 	 * to the newly created {@link DirectoryItem}.</p>
 	 *
-	 * @param directory     The {@link Path} to be added as a top-level directory.
-	 * @param synchOnExpand If (@code true}, then folder synchronization is
-	 *                      performed only when the tree item is expanded.
-	 * @param onCollapse    A {@link Consumer} to be invoked when this item
-	 *                      is collapsed. Can be {@code null}.
-	 * @param onExpand      A {@link Consumer} to be invoked when this item
-	 *                      is expanded. Can be {@code null}.
+	 * @param directory  The {@link Path} to be added as a top-level directory.
+	 * @param onCollapse A {@link Consumer} to be invoked when this item is
+	 *                   collapsed. Can be {@code null}.
+	 * @param onExpand   A {@link Consumer} to be invoked when this item is
+	 *                   expanded. Can be {@code null}.
 	 */
 	public void addTopLevelDirectory(
 		Path directory,
-		boolean synchOnExpand,
 		Consumer<? super TreeDirectoryItems.DirectoryItem<T>> onCollapse,
 		Consumer<? super TreeDirectoryItems.DirectoryItem<T>> onExpand
 	) {
@@ -252,7 +243,6 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 			projector,
 			injector,
 			reporter,
-			synchOnExpand,
 			onCollapse,
 			onExpand
 		));
@@ -349,28 +339,55 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	}
 
 	/**
-	 * Synchronize the model with the given {@code tree} element. Missing items
-	 * will be added to the model. Items will be removed from the model if no
-	 * more existing. Files timestamps will be updated too.
+	 * Synchronize the model with the given {@code directory} element. Missing 
+	 * items will be added to the model for the expanded tree items, and a
+	 * callback is registered to update the collapsed tree items when will 
+	 * expand. Items will be removed from the model if no more existing. Files
+	 * timestamps will be updated too.
 	 *
-	 * @param tree The {@link PathElement} used to synchronize the model.
+	 * @param directory The {@link Path} used to synchronize the model.
 	 */
-	public void sync( PathElement tree ) {
-		sync(tree, defaultInitiator);
+	public void sync( Path directory ) {
+		sync(directory, defaultInitiator);
 	}
 
-	public void sync( PathElement tree, I initiator ) {
+	/**
+	 * Synchronize the model with the given {@code directory} element. Missing
+	 * items will be added to the model for the expanded tree items, and a
+	 * callback is registered to update the collapsed tree items when will
+	 * expand. Items will be removed from the model if no more existing. Files
+	 * timestamps will be updated too.
+	 *
+	 * @param directory The {@link Path} used to synchronize the model.
+	 * @param initiator The initiator of changes to the model.
+	 */
+	public void sync( Path directory, I initiator ) {
 
-		Path path = tree.getPath();
+		Path path = directory;
 
-		topLevelAncestorStream(path).forEach(ancestor -> ancestor.sync(tree, initiator));
+		topLevelAncestorStream(path).forEach(ancestor -> ancestor.sync(directory, initiator));
 
 	}
 
+	/**
+	 * Updates the modification time for the item associated to the given
+	 * {@link Path}.
+	 *
+	 * @param path         The path whose associated item must be updated.
+	 * @param lastModified The new modification time.
+	 */
 	public void updateModificationTime( Path path, FileTime lastModified ) {
 		updateModificationTime(path, lastModified, defaultInitiator);
 	}
 
+	/**
+	 * Updates the modification time for the item associated to the given
+	 * {@link Path}.
+	 *
+	 * @param path         The path whose associated item must be updated.
+	 * @param lastModified The new modification time.
+	 * @param initiator    The initiator of changes to the model.
+	 */
 	public void updateModificationTime( Path path, FileTime lastModified, I initiator ) {
 		getTopLevelAncestors(path, true).forEach(ancestor -> {
 

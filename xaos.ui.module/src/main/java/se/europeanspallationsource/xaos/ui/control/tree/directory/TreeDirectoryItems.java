@@ -16,24 +16,31 @@
 package se.europeanspallationsource.xaos.ui.control.tree.directory;
 
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
 import java.text.MessageFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.WeakChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
-import se.europeanspallationsource.xaos.core.util.io.DirectoryModel;
-import se.europeanspallationsource.xaos.core.util.io.PathElement;
+import se.europeanspallationsource.xaos.ui.control.tree.DirectoryModel;
+
+import static java.nio.file.attribute.FileTime.from;
 
 
 /**
@@ -46,6 +53,22 @@ import se.europeanspallationsource.xaos.core.util.io.PathElement;
 public class TreeDirectoryItems {
 
 	/**
+	 * The default {@link Function} converting a {@link Path} into the object
+	 * used as value in the corresponding {@link TreeItem} when the
+	 * {@link TreeIten} generic type is just {@link Path}.
+	 */
+	public static final Function<Path, Path> DEFAULT_INJECTOR = p -> p;
+
+	/**
+	 * The default {@link Function} converting the object returned by
+	 * {@link TreeItem#getValue()} into the corresponding {@link Path} when
+	 * the {@link TreeIten} generic type is just {@link Path}.
+	 */
+	public static final Function<Path, Path> DEFAULT_PROJECTOR = v -> v;
+
+	private static final Logger LOGGER = Logger.getLogger(TreeDirectoryItems.class.getName());
+
+	/**
 	 * Creates a new instance of {@link DirectoryItem} for the given parameters.
 	 *
 	 * @param <T>            Type of the object returned by {@link TreeItem#getValue()}.
@@ -53,7 +76,7 @@ public class TreeDirectoryItems {
 	 * @param graphicFactory The factory class used to get an "icon" representing
 	 *                       the created item.
 	 * @param projector      A {@link Function} converting the object returned
-	 *                       by {@link TreeItem#getValue()}) into the
+	 *                       by {@link TreeItem#getValue()} into the
 	 *                       corresponding {@link Path}.
 	 * @param injector       A {@link Function} converting a {@link Path} into
 	 *                       the object used as value in the corresponding
@@ -89,7 +112,7 @@ public class TreeDirectoryItems {
 	 * @param graphicFactory The factory class used to get an "icon" representing
 	 *                       the created item.
 	 * @param projector      A {@link Function} converting the object returned
-	 *                       by {@link TreeItem#getValue()}) into the
+	 *                       by {@link TreeItem#getValue()} into the
 	 *                       corresponding {@link Path}.
 	 * @param injector       A {@link Function} converting a {@link Path} into
 	 *                       the object used as value in the corresponding
@@ -128,7 +151,7 @@ public class TreeDirectoryItems {
 	 * @param graphicFactory The factory class used to get an "icon" representing
 	 *                       the created item.
 	 * @param projector      A {@link Function} converting the object returned
-	 *                       by {@link TreeItem#getValue()}) into the
+	 *                       by {@link TreeItem#getValue()} into the
 	 *                       corresponding {@link Path}.
 	 * @return A new instance of{@link FileItem}.
 	 */
@@ -154,14 +177,12 @@ public class TreeDirectoryItems {
 	 * @param graphicFactory The factory class used to get an "icon" representing
 	 *                       the created item.
 	 * @param projector      A {@link Function} converting the object returned
-	 *                       by {@link TreeItem#getValue()}) into the
+	 *                       by {@link TreeItem#getValue()} into the
 	 *                       corresponding {@link Path}.
 	 * @param injector       A {@link Function} converting a {@link Path} into
 	 *                       the object used as value in the corresponding
 	 *                       {@link TreeItem}.
 	 * @param reporter       The object reporting changes in the model.
-	 * @param synchOnExpand  If (@code true}, then folder synchronization is
-	 *                       performed only when the tree item is expanded.
 	 * @return A new instance of{@link TopLevelDirectoryItem}.
 	 */
 	public static <I, T> TopLevelDirectoryItem<I, T> createTopLevelDirectoryItem(
@@ -169,8 +190,7 @@ public class TreeDirectoryItems {
 		TreeDirectoryModel.GraphicFactory graphicFactory,
 		Function<T, Path> projector,
 		Function<Path, T> injector,
-		DirectoryModel.Reporter<I> reporter,
-		boolean synchOnExpand
+		DirectoryModel.Reporter<I> reporter
 	) {
 		return new TopLevelDirectoryItem<>(
 			path,
@@ -178,7 +198,6 @@ public class TreeDirectoryItems {
 			projector,
 			injector,
 			reporter,
-			synchOnExpand,
 			null,
 			null
 		);
@@ -197,14 +216,12 @@ public class TreeDirectoryItems {
 	 * @param graphicFactory The factory class used to get an "icon" representing
 	 *                       the created item.
 	 * @param projector      A {@link Function} converting the object returned
-	 *                       by {@link TreeItem#getValue()}) into the
+	 *                       by {@link TreeItem#getValue()} into the
 	 *                       corresponding {@link Path}.
 	 * @param injector       A {@link Function} converting a {@link Path} into
 	 *                       the object used as value in the corresponding
 	 *                       {@link TreeItem}.
 	 * @param reporter       The object reporting changes in the model.
-	 * @param synchOnExpand  If (@code true}, then folder synchronization is
-	 *                       performed only when the tree item is expanded.
 	 * @param onCollapse     A {@link Consumer} to be invoked when this item
 	 *                       is collapsed. Can be {@code null}.
 	 * @param onExpand       A {@link Consumer} to be invoked when this item
@@ -217,7 +234,6 @@ public class TreeDirectoryItems {
 		Function<T, Path> projector,
 		Function<Path, T> injector,
 		DirectoryModel.Reporter<I> reporter,
-		boolean synchOnExpand,
 		Consumer<? super DirectoryItem<T>> onCollapse,
 		Consumer<? super DirectoryItem<T>> onExpand
 	) {
@@ -227,7 +243,6 @@ public class TreeDirectoryItems {
 			projector,
 			injector,
 			reporter,
-			synchOnExpand,
 			onCollapse,
 			onExpand
 		);
@@ -262,7 +277,7 @@ public class TreeDirectoryItems {
 		 * @param expandedGraphic  The graphic {@link Node} to be used when this
 		 *                         item is expanded.
 		 * @param projector        A {@link Function} converting the object returned
-		 *                         by {@link TreeItem#getValue()}) into the
+		 *                         by {@link TreeItem#getValue()} into the
 		 *                         corresponding {@link Path}.
 		 * @param injector         A {@link Function} converting a {@link Path} into
 		 *                         the object used as value in the corresponding
@@ -562,7 +577,7 @@ public class TreeDirectoryItems {
 
 		/**
 		 * @return The {@link Function} converting the object returned by
-		 *         {@link TreeItem#getValue()}) into the corresponding
+		 *         {@link TreeItem#getValue()} into the corresponding
 		 *         {@link Path}.
 		 */
 		public final Function<T, Path> getProjector() {
@@ -638,9 +653,60 @@ public class TreeDirectoryItems {
 	@SuppressWarnings( { "PackageVisibleInnerClass", "PublicInnerClass" } )
 	public static class TopLevelDirectoryItem<I, T> extends DirectoryItem<T> {
 
+		private static final Comparator<Path> PATH_COMPARATOR = ( p, q ) -> {
+
+			boolean pd = Files.isDirectory(p);
+			boolean qd = Files.isDirectory(q);
+
+			if ( pd && !qd ) {
+				return -1;
+			} else if ( !pd && qd ) {
+				return 1;
+			} else {
+				return p.getFileName().toString().compareToIgnoreCase(q.getFileName().toString());
+			}
+
+		};
+
+		private static List<Path> childrenOf ( Path dir ) {
+			try ( Stream<Path> dirStream = Files.list(dir) ) {
+				return dirStream.sorted(PATH_COMPARATOR).collect(Collectors.toList());
+			} catch ( IOException ex ) {
+				LOGGER.warning(MessageFormat.format(
+					"Exception getting files list for \"{0}\" [{1}: {2}].",
+					dir.toString(),
+					ex.getClass().getSimpleName(),
+					ex.getMessage()
+				));
+				return Collections.emptyList();
+			}
+		}
+
+		private static FileTime fileTime ( Path file ) {
+
+			FileTime ft;
+
+			try {
+				ft = Files.getLastModifiedTime(file);
+			} catch ( IOException ex ) {
+
+				LOGGER.warning(MessageFormat.format(
+					"Exception getting the last modified time for \"{0}\": using \"now\" instead [{1}: {2}].",
+					file.toString(),
+					ex.getClass().getSimpleName(),
+					ex.getMessage()
+				));
+
+				ft = from(Instant.now());
+
+			}
+
+			return ft;
+
+		}
+
 		private final TreeDirectoryModel.GraphicFactory graphicFactory;
 		private final DirectoryModel.Reporter<I> reporter;
-		private final boolean synchOnExpand;
 
 		/**
 		 * Creates a new instance of {@link TopLevelDirectoryItem} for the given
@@ -654,14 +720,12 @@ public class TreeDirectoryItems {
 		 * @param graphicFactory The factory class used to get an "icon" representing
 		 *                       the created item.
 		 * @param projector      A {@link Function} converting the object returned
-		 *                       by {@link TreeItem#getValue()}) into the
+		 *                       by {@link TreeItem#getValue()} into the
 		 *                       corresponding {@link Path}.
 		 * @param injector       A {@link Function} converting a {@link Path} into
 		 *                       the object used as value in the corresponding
 		 *                       {@link TreeItem}.
 		 * @param reporter       The object reporting changes in the model.
-		 * @param synchOnExpand  If (@code true}, then folder synchronization is
-		 *                       performed only when the tree item is expanded.
 		 * @param onCollapse     A {@link Consumer} to be invoked when this item
 		 *                       is collapsed. Can be {@code null}.
 		 * @param onExpand       A {@link Consumer} to be invoked when this item
@@ -673,7 +737,6 @@ public class TreeDirectoryItems {
 			Function<T, Path> projector,
 			Function<Path, T> injector,
 			DirectoryModel.Reporter<I> reporter,
-			boolean synchOnExpand,
 			final Consumer<? super DirectoryItem<T>> onCollapse,
 			final Consumer<? super DirectoryItem<T>> onExpand
 		) {
@@ -690,7 +753,6 @@ public class TreeDirectoryItems {
 
 			this.graphicFactory = graphicFactory;
 			this.reporter = reporter;
-			this.synchOnExpand = synchOnExpand;
 
 		}
 
@@ -705,7 +767,7 @@ public class TreeDirectoryItems {
 			PathItem<T> item = resolve(relativePath);
 
 			if ( item == null || !item.isDirectory() ) {
-				sync(PathElement.directory(getPath().resolve(relativePath), Collections.emptyList()), initiator);
+				sync(getPath().resolve(relativePath), initiator);
 			}
 
 		}
@@ -749,37 +811,13 @@ public class TreeDirectoryItems {
 
 		/**
 		 * Adds to the model rooted at this item all the subdirectories and
-		 * files represented by the {@code tree} element.
+		 * files rooted at the given {@link Path} element.
 		 *
- 		 * @param tree      The element to be synchronized.
+ 		 * @param root      The path to be synchronized.
 		 * @param initiator The initiator of changes to the model.
 		 */
-		public void sync( PathElement tree, I initiator ) {
-
-			Path path = tree.getPath();
-			Path relativePath = getPath().relativize(path);
-			ParentChild<T> pc = resolveInParent(relativePath);
-			DirectoryItem<T> parent = pc.getParent();
-			PathItem<T> item = pc.getChild();
-
-			if ( parent != null ) {
-				syncChild(parent, relativePath.getFileName(), tree, initiator);
-			} else if ( item == null ) {
-				//	Neither path nor its parent present in model.
-				report(new NoSuchElementException(MessageFormat.format("Parent directory for {0} does not exist within {1}.", relativePath, getValue())));
-			} else {
-
-				//	Resolved to top-level dir.
-				assert item == this;
-
-				if ( tree.isDirectory() ) {
-					syncContent(this, tree, initiator);
-				} else {
-					report(new IllegalArgumentException(MessageFormat.format("Cannot replace top-level directory {0} with a file.", getValue())));
-				}
-
-			}
-
+		public void sync( Path root, I initiator ) {
+			sync(root, initiator, null);
 		}
 
 		/**
@@ -794,9 +832,9 @@ public class TreeDirectoryItems {
 			updateFile(relativePath, lastModified, initiator);
 		}
 
-		private void performSyncContent( DirectoryItem<T> dir, PathElement tree, I initiator ) {
+		private void performSyncContent( DirectoryItem<T> dir, Path root, I initiator ) {
 
-			Set<Path> desiredChildren = tree.getChildren().stream().map(element -> element.getPath()).collect(Collectors.toSet());
+			List<Path> desiredChildren = childrenOf(root);
 			ArrayList<TreeItem<T>> actualChildren = new ArrayList<>(dir.getChildren());
 
 			//	Remove undesired children
@@ -805,7 +843,7 @@ public class TreeDirectoryItems {
 				.forEachOrdered(child -> removeNode(child, null));
 
 			//	Synchronize desired children
-			tree.getChildren().forEach(child -> sync(child, initiator));
+			desiredChildren.forEach(child -> sync(child, initiator));
 
 		}
 
@@ -874,34 +912,71 @@ public class TreeDirectoryItems {
 
 		}
 
-		private void syncChild( DirectoryItem<T> parent, Path childName, PathElement tree, I initiator ) {
+		/**
+		 * Adds to the model rooted at this item all the subdirectories and
+		 * files rooted at the given {@link Path} element.
+		 *
+ 		 * @param root         The path to be synchronized.
+		 * @param initiator    The initiator of changes to the model.
+		 * @param lastModified The last modification time for {@code root} it
+		 *                     it is a file and not a directory.
+		 */
+		private void sync( Path root, I initiator, FileTime lastModified ) {
+
+			Path relativePath = getPath().relativize(root);
+			ParentChild<T> pc = resolveInParent(relativePath);
+			DirectoryItem<T> parent = pc.getParent();
+			PathItem<T> item = pc.getChild();
+
+			if ( parent != null ) {
+				syncChild(parent, relativePath.getFileName(), root, initiator, lastModified);
+			} else if ( item == null ) {
+				//	Neither path nor its parent present in model.
+				report(new NoSuchElementException(MessageFormat.format("Parent directory for {0} does not exist within {1}.", relativePath, getValue())));
+			} else {
+
+				//	Resolved to top-level dir.
+				assert item == this;
+
+				if ( Files.isDirectory(root) ) {
+					syncContent(this, root, initiator);
+				} else {
+					report(new IllegalArgumentException(MessageFormat.format("Cannot replace top-level directory {0} with a file.", getValue())));
+				}
+
+			}
+
+		}
+
+		private void syncChild( DirectoryItem<T> parent, Path childName, Path root, I initiator, FileTime lastModified ) {
 
 			PathItem<T> child = parent.getRelativeChild(childName);
+			boolean isFolder = Files.isDirectory(root);
 
-			if ( child != null && child.isDirectory() != tree.isDirectory() ) {
+			if ( child != null && child.isDirectory() != isFolder ) {
 				removeNode(child, null);
 			}
 
 			if ( child == null ) {
-				if ( tree.isDirectory() ) {
+				if ( isFolder ) {
 
 					DirectoryItem<T> directoryChild = parent.addChildDirectory(childName, graphicFactory);
 
 					reporter.reportCreation(getPath(), getPath().relativize(directoryChild.getPath()), initiator);
-					syncContent(directoryChild, tree, initiator);
+					syncContent(directoryChild, root, initiator);
 
 				} else {
 
-					FileItem<T> fileChild = parent.addChildFile(childName, tree.getLastModified(), graphicFactory);
+					FileItem<T> fileChild = parent.addChildFile(childName, lastModified != null ? lastModified : fileTime(root), graphicFactory);
 
 					reporter.reportCreation(getPath(), getPath().relativize(fileChild.getPath()), initiator);
 
 				}
 			} else {
 				if ( child.isDirectory() ) {
-					syncContent(child.asDirectoryItem(), tree, initiator);
+					syncContent(child.asDirectoryItem(), root, initiator);
 				} else {
-					if ( child.asFileItem().updateModificationTime(tree.getLastModified()) ) {
+					if ( child.asFileItem().updateModificationTime(lastModified != null ? lastModified : fileTime(root)) ) {
 						reporter.reportModification(getPath(), getPath().relativize(child.getPath()), initiator);
 					}
 				}
@@ -909,15 +984,15 @@ public class TreeDirectoryItems {
 
 		}
 
-		private void syncContent( DirectoryItem<T> dir, PathElement tree, I initiator ) {
-			if ( !synchOnExpand || dir.isExpanded() ) {
-				performSyncContent(dir, tree, initiator);
+		private void syncContent( DirectoryItem<T> dir, Path root, I initiator ) {
+			if ( dir.isExpanded() ) {
+				performSyncContent(dir, root, initiator);
 			} else {
 				dir.addEventHandler(TreeItem.<T>branchExpandedEvent(), new EventHandler<TreeModificationEvent<T>>() {
 					@Override
 					public void handle( TreeModificationEvent<T> event ) {
 						dir.removeEventHandler(TreeItem.<T>branchExpandedEvent(), this);
-						performSyncContent(dir, tree, initiator);
+						performSyncContent(dir, root, initiator);
 					}
 				});
 			}
@@ -928,7 +1003,7 @@ public class TreeDirectoryItems {
 			PathItem<T> item = resolve(relativePath);
 
 			if ( item == null || !item.isDirectory() ) {
-				sync(PathElement.file(getPath().resolve(relativePath), lastModified), initiator);
+				sync(getPath().resolve(relativePath), initiator, lastModified);
 			}
 
 		}

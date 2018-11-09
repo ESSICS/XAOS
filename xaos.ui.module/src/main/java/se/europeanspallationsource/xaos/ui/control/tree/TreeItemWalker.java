@@ -19,6 +19,7 @@ package se.europeanspallationsource.xaos.ui.control.tree;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Objects;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -164,9 +165,20 @@ public class TreeItemWalker<T> {
 	}
 
 	/**
+	 * The current tree depth.
+	 */
+	private int depth = 0;
+
+	/**
+	 * The depth offset for the next step.
+	 */
+	private int offset = 0;
+
+	/**
 	 * The walk state stack.
 	 */
 	private final Deque<Pair<TreeItem<T>, Integer>> stack = new ArrayDeque<>(8);
+
 
 	/**
 	 * Initialize the walker with the given root item.
@@ -240,6 +252,16 @@ public class TreeItemWalker<T> {
 //			}
 //		}
 //	----------------------------------------------------------------------------
+
+		depth += offset;
+
+		if ( Objects.equals(next, stack.peek().getKey().getParent()) ) {
+			offset = 1;
+		} else if ( Objects.equals(next.getParent(), stack.peek().getKey().getParent()) ) {
+			offset = 0;
+		} else {
+			offset = -1;
+		}
 
 		return next;
 

@@ -29,14 +29,13 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import se.europeanspallationsource.xaos.core.util.io.DeleteFileVisitor;
-import se.europeanspallationsource.xaos.core.util.io.DirectoryModel;
-import se.europeanspallationsource.xaos.core.util.io.PathElement;
+import se.europeanspallationsource.xaos.ui.control.tree.DirectoryModel;
 import se.europeanspallationsource.xaos.ui.control.tree.TreeItems;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
-import static se.europeanspallationsource.xaos.core.util.io.PathElement.file;
-import static se.europeanspallationsource.xaos.core.util.io.PathElement.tree;
+import static se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryItems.DEFAULT_INJECTOR;
+import static se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryItems.DEFAULT_PROJECTOR;
 import static se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryItems.createDirectoryItem;
 import static se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryItems.createFileItem;
 import static se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryItems.createTopLevelDirectoryItem;
@@ -65,7 +64,6 @@ public class TreeDirectoryItemsTest {
 
 	@Before
 	public void setUp() throws IOException {
-
 		root = Files.createTempDirectory("TDI_");
 			dir_a = Files.createTempDirectory(root, "TDI_a_");
 				file_a = Files.createTempFile(dir_a, "TDI_a_", ".test");
@@ -74,29 +72,6 @@ public class TreeDirectoryItemsTest {
 			dir_b = Files.createTempDirectory(root, "TDI_b_");
 				file_b1 = Files.createTempFile(dir_b, "TDI_b1_", ".test");
 				file_b2 = Files.createTempFile(dir_b, "TDI_b2_", ".test");
-
-//		System.out.println(MessageFormat.format(
-//			"  Testing 'DirectoryWatcher'\n"
-//			+ "    created directories:\n"
-//			+ "      {0}\n"
-//			+ "      {1}\n"
-//			+ "      {2}\n"
-//			+ "      {3}\n"
-//			+ "    created files:\n"
-//			+ "      {4}\n"
-//			+ "      {5}\n"
-//			+ "      {6}\n"
-//			+ "      {7}",
-//			root,
-//			dir_a,
-//			dir_a_c,
-//			dir_b,
-//			file_a,
-//			file_a_c,
-//			file_b1,
-//			file_b2
-//		));
-//
 	}
 
 	@After
@@ -117,21 +92,11 @@ public class TreeDirectoryItemsTest {
 
 		CountDownLatch expandedLatch = new CountDownLatch(2);
 		CountDownLatch collapsedLatch = new CountDownLatch(2);
-		PathElement element = tree(dir_a);
-		TreeDirectoryItems.PathItem<PathElement> dItem = createDirectoryItem(
-			element,
+		TreeDirectoryItems.PathItem<Path> dItem = createDirectoryItem(
+			dir_a,
 			DEFAULT_GRAPHIC_FACTORY,
-			PathElement::getPath,
-			path -> {
-				try {
-					return Files.isDirectory(path)
-						   ? tree(path)
-						   : file(path, Files.getLastModifiedTime(path));
-				} catch ( IOException ex ) {
-					ex.printStackTrace(System.err);
-					return null;
-				}
-			},
+			DEFAULT_PROJECTOR,
+			DEFAULT_INJECTOR,
 			di -> collapsedLatch.countDown(),
 			di -> expandedLatch.countDown()
 		);
@@ -159,7 +124,7 @@ public class TreeDirectoryItemsTest {
 			.hasFieldOrPropertyWithValue("path", dir_a);
 
 		//	Directories first.
-		TreeItem<PathElement> fItem = dItem.getChildren().get(1);
+		TreeItem<Path> fItem = dItem.getChildren().get(1);
 
 		assertThat(fItem)
 			.isInstanceOf(TreeDirectoryItems.FileItem.class)
@@ -168,7 +133,7 @@ public class TreeDirectoryItemsTest {
 			.hasFieldOrPropertyWithValue("path", file_a);
 
 		//	Directories first.
-		TreeItem<PathElement> sdItem = dItem.getChildren().get(0);
+		TreeItem<Path> sdItem = dItem.getChildren().get(0);
 
 		assertThat(sdItem)
 			.isInstanceOf(TreeDirectoryItems.DirectoryItem.class)
@@ -202,12 +167,11 @@ public class TreeDirectoryItemsTest {
 
 		System.out.println("  Testing 'createFileItem'...");
 
-		PathElement element = file(file_a_c, Files.getLastModifiedTime(file_a_c));
-		TreeItem<PathElement> item = createFileItem(
-			element,
-			element.getLastModified(),
+		TreeItem<Path> item = createFileItem(
+			file_a_c,
+			Files.getLastModifiedTime(file_a_c),
 			DEFAULT_GRAPHIC_FACTORY,
-			PathElement::getPath
+			DEFAULT_PROJECTOR
 		);
 
 		assertThat(item)
@@ -225,28 +189,18 @@ public class TreeDirectoryItemsTest {
 	 * @throws java.lang.InterruptedException
 	 */
 	@Test
-	public void testCreateTopLevelDirectoryItemNoSOE() throws IOException, InterruptedException {
+	public void testCreateTopLevelDirectoryItem() throws IOException, InterruptedException {
 
-		System.out.println("  Testing 'createTopLevelDirectoryItem' (synchOnExpand: false)...");
+		System.out.println("  Testing 'createTopLevelDirectoryItem'...");
 
 		CountDownLatch expandedLatch = new CountDownLatch(4);
 		CountDownLatch collapsedLatch = new CountDownLatch(4);
 		CountDownLatch creationLatch = new CountDownLatch(7);
-		PathElement element = tree(root);
-		TreeDirectoryItems.TopLevelDirectoryItem<TreeDirectoryItemsTest, PathElement> rootItem = createTopLevelDirectoryItem(
-			element,
+		TreeDirectoryItems.TopLevelDirectoryItem<TreeDirectoryItemsTest, Path> rootItem = createTopLevelDirectoryItem(
+			root,
 			DEFAULT_GRAPHIC_FACTORY,
-			PathElement::getPath,
-			path -> {
-				try {
-					return Files.isDirectory(path)
-						   ? tree(path)
-						   : file(path, Files.getLastModifiedTime(path));
-				} catch ( IOException ex ) {
-					ex.printStackTrace(System.err);
-					return null;
-				}
-			},
+			DEFAULT_PROJECTOR,
+			DEFAULT_INJECTOR,
 			new DirectoryModel.Reporter<TreeDirectoryItemsTest>() {
 
 				@Override
@@ -287,7 +241,6 @@ public class TreeDirectoryItemsTest {
 				}
 
 			},
-			false,
 			di -> collapsedLatch.countDown(),
 			di -> expandedLatch.countDown()
 		);
@@ -298,181 +251,7 @@ public class TreeDirectoryItemsTest {
 			.hasFieldOrPropertyWithValue("leaf", false)
 			.hasFieldOrPropertyWithValue("path", root);
 
-		rootItem.sync(element, this);
-
-		if ( !creationLatch.await(1, TimeUnit.MINUTES) ) {
-			fail("Directory model synchronization not completed in 1 minute.");
-		}
-
-		assertThat(rootItem.getChildren().size()).isNotEqualTo(0);
-
-		ObservableList<TreeItem<PathElement>> children_root = rootItem.getChildren();
-
-		assertThat(children_root).size().isEqualTo(2);
-
-			TreeItem<PathElement> child_dir_a = children_root.get(0);
-
-			assertThat(child_dir_a)
-				.isInstanceOf(TreeDirectoryItems.DirectoryItem.class)
-				.hasFieldOrPropertyWithValue("directory", true)
-				.hasFieldOrPropertyWithValue("leaf", false)
-				.hasFieldOrPropertyWithValue("path", dir_a);
-
-			ObservableList<TreeItem<PathElement>> children_dir_a = child_dir_a.getChildren();
-
-			assertThat(children_dir_a).size().isEqualTo(2);
-
-				TreeItem<PathElement> child_dir_a_c = children_dir_a.get(0);
-
-				assertThat(child_dir_a_c)
-					.isInstanceOf(TreeDirectoryItems.DirectoryItem.class)
-					.hasFieldOrPropertyWithValue("directory", true)
-					.hasFieldOrPropertyWithValue("leaf", false)
-					.hasFieldOrPropertyWithValue("path", dir_a_c);
-
-				ObservableList<TreeItem<PathElement>> children_dir_a_c = child_dir_a_c.getChildren();
-
-				assertThat(children_dir_a_c).size().isEqualTo(1);
-
-					TreeItem<PathElement> child_file_a_c = children_dir_a_c.get(0);
-
-					assertThat(child_file_a_c)
-						.isInstanceOf(TreeDirectoryItems.FileItem.class)
-						.hasFieldOrPropertyWithValue("directory", false)
-						.hasFieldOrPropertyWithValue("leaf", true)
-						.hasFieldOrPropertyWithValue("path", file_a_c);
-
-				TreeItem<PathElement> child_file_a = children_dir_a.get(1);
-
-				assertThat(child_file_a)
-					.isInstanceOf(TreeDirectoryItems.FileItem.class)
-					.hasFieldOrPropertyWithValue("directory", false)
-					.hasFieldOrPropertyWithValue("leaf", true)
-					.hasFieldOrPropertyWithValue("path", file_a);
-
-			TreeItem<PathElement> child_dir_b = children_root.get(1);
-
-			assertThat(child_dir_b)
-				.isInstanceOf(TreeDirectoryItems.DirectoryItem.class)
-				.hasFieldOrPropertyWithValue("directory", true)
-				.hasFieldOrPropertyWithValue("leaf", false)
-				.hasFieldOrPropertyWithValue("path", dir_b);
-
-			ObservableList<TreeItem<PathElement>> children_dir_b = child_dir_b.getChildren();
-
-			assertThat(children_dir_b).size().isEqualTo(2);
-
-				TreeItem<PathElement> child_file_b1 = children_dir_b.get(0);
-
-				assertThat(child_file_b1)
-					.isInstanceOf(TreeDirectoryItems.FileItem.class)
-					.hasFieldOrPropertyWithValue("directory", false)
-					.hasFieldOrPropertyWithValue("leaf", true)
-					.hasFieldOrPropertyWithValue("path", file_b1);
-
-				TreeItem<PathElement> child_file_b2 = children_dir_b.get(1);
-
-				assertThat(child_file_b2)
-					.isInstanceOf(TreeDirectoryItems.FileItem.class)
-					.hasFieldOrPropertyWithValue("directory", false)
-					.hasFieldOrPropertyWithValue("leaf", true)
-					.hasFieldOrPropertyWithValue("path", file_b2);
-
-		TreeItems.expandAll(rootItem, true);
-
-		if ( !expandedLatch.await(15, TimeUnit.SECONDS) ) {
-			fail("Directory expansion not completed in 15 seconds.");
-		}
-
-		TreeItems.expandAll(rootItem, false);
-
-		if ( !collapsedLatch.await(15, TimeUnit.SECONDS) ) {
-			fail("Directory collapse not completed in 15 seconds.");
-		}
-
-	}
-
-	/**
-	 * Test of createTopLevelDirectoryItem method, of class TreeDirectoryItems.
-	 *
-	 * @throws java.io.IOException
-	 * @throws java.lang.InterruptedException
-	 */
-	@Test
-	public void testCreateTopLevelDirectoryItemSOE() throws IOException, InterruptedException {
-
-		System.out.println("  Testing 'createTopLevelDirectoryItem' (synchOnExpand: true)...");
-
-		CountDownLatch expandedLatch = new CountDownLatch(4);
-		CountDownLatch collapsedLatch = new CountDownLatch(4);
-		CountDownLatch creationLatch = new CountDownLatch(7);
-		PathElement element = tree(root);
-		TreeDirectoryItems.TopLevelDirectoryItem<TreeDirectoryItemsTest, PathElement> rootItem = createTopLevelDirectoryItem(
-			element,
-			DEFAULT_GRAPHIC_FACTORY,
-			PathElement::getPath,
-			path -> {
-				try {
-					return Files.isDirectory(path)
-						   ? tree(path)
-						   : file(path, Files.getLastModifiedTime(path));
-				} catch ( IOException ex ) {
-					ex.printStackTrace(System.err);
-					return null;
-				}
-			},
-			new DirectoryModel.Reporter<TreeDirectoryItemsTest>() {
-
-				@Override
-				public void reportCreation( Path baseDir, Path relativePath, TreeDirectoryItemsTest initiator ) {
-					System.out.println(MessageFormat.format(
-						"    CREATION [baseDir = {0}, relativePath = {1}].",
-						baseDir,
-						relativePath
-					));
-					creationLatch.countDown();
-				}
-
-				@Override
-				public void reportDeletion( Path baseDir, Path relativePath, TreeDirectoryItemsTest initiator ) {
-					System.out.println(MessageFormat.format(
-						"    DELETION [baseDir = {0}, relativePath = {1}].",
-						baseDir,
-						relativePath
-					));
-				}
-
-				@Override
-				public void reportError( Throwable error ) {
-					System.out.println(MessageFormat.format(
-						"    ERROR [error = {0}, message = {1}].",
-						error.getClass().getName(),
-						error.getMessage()
-					));
-				}
-
-				@Override
-				public void reportModification( Path baseDir, Path relativePath, TreeDirectoryItemsTest initiator ) {
-					System.out.println(MessageFormat.format(
-						"    MODIFICATION [baseDir = {0}, relativePath = {1}].",
-						baseDir,
-						relativePath
-					));
-				}
-
-			},
-			true,
-			di -> collapsedLatch.countDown(),
-			di -> expandedLatch.countDown()
-		);
-
-		assertThat(rootItem)
-			.isInstanceOf(TreeDirectoryItems.TopLevelDirectoryItem.class)
-			.hasFieldOrPropertyWithValue("directory", true)
-			.hasFieldOrPropertyWithValue("leaf", false)
-			.hasFieldOrPropertyWithValue("path", root);
-
-		rootItem.sync(element, this);
+		rootItem.sync(root, this);
 
 		assertThat(rootItem.getChildren().size()).isEqualTo(0);
 
@@ -484,11 +263,11 @@ public class TreeDirectoryItemsTest {
 
 		assertThat(rootItem.getChildren().size()).isNotEqualTo(0);
 
-		ObservableList<TreeItem<PathElement>> children_root = rootItem.getChildren();
+		ObservableList<TreeItem<Path>> children_root = rootItem.getChildren();
 
 		assertThat(children_root).size().isEqualTo(2);
 
-			TreeItem<PathElement> child_dir_a = children_root.get(0);
+			TreeItem<Path> child_dir_a = children_root.get(0);
 
 			assertThat(child_dir_a)
 				.isInstanceOf(TreeDirectoryItems.DirectoryItem.class)
@@ -496,11 +275,11 @@ public class TreeDirectoryItemsTest {
 				.hasFieldOrPropertyWithValue("leaf", false)
 				.hasFieldOrPropertyWithValue("path", dir_a);
 
-			ObservableList<TreeItem<PathElement>> children_dir_a = child_dir_a.getChildren();
+			ObservableList<TreeItem<Path>> children_dir_a = child_dir_a.getChildren();
 
 			assertThat(children_dir_a).size().isEqualTo(2);
 
-				TreeItem<PathElement> child_dir_a_c = children_dir_a.get(0);
+				TreeItem<Path> child_dir_a_c = children_dir_a.get(0);
 
 				assertThat(child_dir_a_c)
 					.isInstanceOf(TreeDirectoryItems.DirectoryItem.class)
@@ -508,11 +287,11 @@ public class TreeDirectoryItemsTest {
 					.hasFieldOrPropertyWithValue("leaf", false)
 					.hasFieldOrPropertyWithValue("path", dir_a_c);
 
-				ObservableList<TreeItem<PathElement>> children_dir_a_c = child_dir_a_c.getChildren();
+				ObservableList<TreeItem<Path>> children_dir_a_c = child_dir_a_c.getChildren();
 
 				assertThat(children_dir_a_c).size().isEqualTo(1);
 
-					TreeItem<PathElement> child_file_a_c = children_dir_a_c.get(0);
+					TreeItem<Path> child_file_a_c = children_dir_a_c.get(0);
 
 					assertThat(child_file_a_c)
 						.isInstanceOf(TreeDirectoryItems.FileItem.class)
@@ -520,7 +299,7 @@ public class TreeDirectoryItemsTest {
 						.hasFieldOrPropertyWithValue("leaf", true)
 						.hasFieldOrPropertyWithValue("path", file_a_c);
 
-				TreeItem<PathElement> child_file_a = children_dir_a.get(1);
+				TreeItem<Path> child_file_a = children_dir_a.get(1);
 
 				assertThat(child_file_a)
 					.isInstanceOf(TreeDirectoryItems.FileItem.class)
@@ -528,7 +307,7 @@ public class TreeDirectoryItemsTest {
 					.hasFieldOrPropertyWithValue("leaf", true)
 					.hasFieldOrPropertyWithValue("path", file_a);
 
-			TreeItem<PathElement> child_dir_b = children_root.get(1);
+			TreeItem<Path> child_dir_b = children_root.get(1);
 
 			assertThat(child_dir_b)
 				.isInstanceOf(TreeDirectoryItems.DirectoryItem.class)
@@ -536,11 +315,11 @@ public class TreeDirectoryItemsTest {
 				.hasFieldOrPropertyWithValue("leaf", false)
 				.hasFieldOrPropertyWithValue("path", dir_b);
 
-			ObservableList<TreeItem<PathElement>> children_dir_b = child_dir_b.getChildren();
+			ObservableList<TreeItem<Path>> children_dir_b = child_dir_b.getChildren();
 
 			assertThat(children_dir_b).size().isEqualTo(2);
 
-				TreeItem<PathElement> child_file_b1 = children_dir_b.get(0);
+				TreeItem<Path> child_file_b1 = children_dir_b.get(0);
 
 				assertThat(child_file_b1)
 					.isInstanceOf(TreeDirectoryItems.FileItem.class)
@@ -548,7 +327,7 @@ public class TreeDirectoryItemsTest {
 					.hasFieldOrPropertyWithValue("leaf", true)
 					.hasFieldOrPropertyWithValue("path", file_b1);
 
-				TreeItem<PathElement> child_file_b2 = children_dir_b.get(1);
+				TreeItem<Path> child_file_b2 = children_dir_b.get(1);
 
 				assertThat(child_file_b2)
 					.isInstanceOf(TreeDirectoryItems.FileItem.class)
