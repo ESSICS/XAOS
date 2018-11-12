@@ -22,8 +22,11 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.FileTime;
+import java.text.MessageFormat;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import javafx.scene.control.TreeItem;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -33,6 +36,7 @@ import se.europeanspallationsource.xaos.core.util.io.DeleteFileVisitor;
 import se.europeanspallationsource.xaos.ui.control.tree.TreeItemWalker;
 import se.europeanspallationsource.xaos.ui.control.tree.TreeItems;
 
+import static java.nio.file.attribute.FileTime.from;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
@@ -47,7 +51,7 @@ public class TreeDirectoryModelTest {
 	 * Enable/disable the {@link #printTree(TreeDirectoryModel, String)}. For
 	 * more verbose output set it to {@code true}.
 	 */
-	private static final boolean PRINT_TREE_ENABLED = Boolean.getBoolean("xaos.extended.test.printout");
+	private static final boolean VERBOSE = Boolean.getBoolean("xaos.test.verbose");
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -302,89 +306,101 @@ public class TreeDirectoryModelTest {
 	 * @throws java.io.IOException
 	 * @throws java.lang.InterruptedException
 	 */
-//	@Test
-//	public void testCreations() throws IOException, InterruptedException {
-//
-//		System.out.println("  Testing 'creations'...");
-//
-//		CountDownLatch latch = new CountDownLatch(7);
-//		TreeDirectoryModel<TreeDirectoryModelTest, String> model = new TreeDirectoryModel<>(
-//			this,
-//			s -> Paths.get(s),
-//			p -> p != null ? p.toString() : null
-//		);
-//
-//		model.creations().subscribe(u -> latch.countDown());
-//		model.addTopLevelDirectory(root, false);
-//		model.sync(tree(root));
-//
-//		if ( !latch.await(1, TimeUnit.MINUTES) ) {
-//			fail("Directory model synchronization not completed in 1 minute.");
-//		}
-//
-//	}
+	@Test
+	public void testCreations() throws IOException, InterruptedException {
+
+		System.out.println("  Testing 'creations'...");
+
+		CountDownLatch latch = new CountDownLatch(7);
+		TreeDirectoryModel<TreeDirectoryModelTest, String> model = new TreeDirectoryModel<>(
+			this,
+			s -> Paths.get(s),
+			p -> p != null ? p.toString() : null
+		);
+
+		model.creations().subscribe(u -> latch.countDown());
+		model.addTopLevelDirectory(root);
+		model.sync(root);
+		
+		TreeItems.expandAll(model.getRoot(), true);
+		printTree(model, "After adding top directory, sync and tree expansion:");
+
+		if ( !latch.await(1, TimeUnit.MINUTES) ) {
+			fail("Directory model synchronization not completed in 1 minute.");
+		}
+
+	}
 
 	/**
 	 * Test of delete method, of class TreeDirectoryModel.
 	 * 
 	 * @throws java.io.IOException
 	 */
-//	@Test( expected = AssertionError.class )
-//	public void testDelete() throws IOException {
-//
-//		System.out.println("  Testing 'delete'...");
-//
-//		TreeDirectoryModel<TreeDirectoryModelTest, String> model = new TreeDirectoryModel<>(
-//			this,
-//			s -> Paths.get(s),
-//			p -> p != null ? p.toString() : null
-//		);
-//
-//		assertThat(model.contains(dir_a)).isFalse();
-//		assertThat(model.contains(dir_a_c)).isFalse();
-//		assertThat(model.contains(file_a_c)).isFalse();
-//
-//		model.addTopLevelDirectory(dir_a, false);
-//		model.addDirectory(dir_a_c);
-//		model.addFile(file_a_c, Files.getLastModifiedTime(file_a_c));
-//
-//		assertThat(model.contains(dir_a)).isTrue();
-//		assertThat(model.contains(dir_a_c)).isTrue();
-//		assertThat(model.contains(file_a_c)).isTrue();
-//
-//		model.delete(file_a_c);
-//
-//		assertThat(model.contains(dir_a)).isTrue();
-//		assertThat(model.contains(dir_a_c)).isTrue();
-//		assertThat(model.contains(file_a_c)).isFalse();
-//
-//		model.delete(file_a_c);
-//
-//		assertThat(model.contains(dir_a)).isTrue();
-//		assertThat(model.contains(dir_a_c)).isTrue();
-//		assertThat(model.contains(file_a_c)).isFalse();
-//
-//		model.addFile(file_a_c, Files.getLastModifiedTime(file_a_c));
-//
-//		assertThat(model.contains(dir_a)).isTrue();
-//		assertThat(model.contains(dir_a_c)).isTrue();
-//		assertThat(model.contains(file_a_c)).isTrue();
-//
-//		model.delete(dir_a_c);
-//
-//		assertThat(model.contains(dir_a)).isTrue();
-//		assertThat(model.contains(dir_a_c)).isFalse();
-//		assertThat(model.contains(file_a_c)).isFalse();
-//
-//		//	file_b2 is outside of the tree rooted at dir_a
-//		//	  => java.lang.AssertionError is thrown
-//		model.delete(file_b2);
-//
-//		assertThat(model.contains(dir_a)).isTrue();
-//		assertThat(model.contains(dir_a_c)).isFalse();
-//		assertThat(model.contains(file_a_c)).isFalse();
-//
-//	}
+	@Test( expected = AssertionError.class )
+	public void testDelete() throws IOException {
+
+		System.out.println("  Testing 'delete'...");
+
+		TreeDirectoryModel<TreeDirectoryModelTest, String> model = new TreeDirectoryModel<>(
+			this,
+			s -> Paths.get(s),
+			p -> p != null ? p.toString() : null
+		);
+
+		assertThat(model.contains(dir_a)).isFalse();
+		assertThat(model.contains(dir_a_c)).isFalse();
+		assertThat(model.contains(file_a_c)).isFalse();
+
+		model.addTopLevelDirectory(dir_a);
+		model.addDirectory(dir_a_c);
+		model.addFile(file_a_c, Files.getLastModifiedTime(file_a_c));
+		printTree(model, "After adding directories and file:");
+
+		assertThat(model.contains(dir_a)).isTrue();
+		assertThat(model.contains(dir_a_c)).isTrue();
+		assertThat(model.contains(file_a_c)).isTrue();
+
+		model.delete(file_a_c);
+		printTree(model, "After file removal:");
+
+		assertThat(model.contains(dir_a)).isTrue();
+		assertThat(model.contains(dir_a_c)).isTrue();
+		assertThat(model.contains(file_a_c)).isFalse();
+
+		model.delete(file_a_c);
+		printTree(model, "After removal ot he same file again:");
+
+		assertThat(model.contains(dir_a)).isTrue();
+		assertThat(model.contains(dir_a_c)).isTrue();
+		assertThat(model.contains(file_a_c)).isFalse();
+
+		model.addFile(file_a_c, Files.getLastModifiedTime(file_a_c));
+		printTree(model, "After adding back the removed file:");
+
+		assertThat(model.contains(dir_a)).isTrue();
+		assertThat(model.contains(dir_a_c)).isTrue();
+		assertThat(model.contains(file_a_c)).isTrue();
+
+		model.delete(dir_a_c);
+		printTree(model, "After directory removal:");
+
+		assertThat(model.contains(dir_a)).isTrue();
+		assertThat(model.contains(dir_a_c)).isFalse();
+		assertThat(model.contains(file_a_c)).isFalse();
+
+		//	file_b2 is outside of the tree rooted at dir_a
+		//	  => java.lang.AssertionError is thrown
+		model.delete(file_b2);
+
+		//	The following code should never be executed
+		System.out.println("ERROR: The following code should never be executed!");
+		printTree(model, "After removal of a file not in the model:");
+
+		assertThat(model.contains(dir_a)).isTrue();
+		assertThat(model.contains(dir_a_c)).isFalse();
+		assertThat(model.contains(file_a_c)).isFalse();
+
+	}
 
 	/**
 	 * Test of deletions method, of class TreeDirectoryModel.
@@ -392,31 +408,35 @@ public class TreeDirectoryModelTest {
 	 * @throws java.io.IOException
 	 * @throws java.lang.InterruptedException
 	 */
-//	@Test
-//	public void testDeletions() throws IOException, InterruptedException {
-//
-//		System.out.println("  Testing 'deletions'...");
-//
-//		CountDownLatch latch = new CountDownLatch(4);
-//		TreeDirectoryModel<TreeDirectoryModelTest, String> model = new TreeDirectoryModel<>(
-//			this,
-//			s -> Paths.get(s),
-//			p -> p != null ? p.toString() : null
-//		);
-//
-//		model.deletions().subscribe(u -> latch.countDown());
-//		model.addTopLevelDirectory(root, false);
-//		model.sync(tree(root));
-//
-//		Files.walkFileTree(dir_a, new DeleteFileVisitor());
-//
-//		model.sync(tree(root));
-//
-//		if ( !latch.await(1, TimeUnit.MINUTES) ) {
-//			fail("Directory model synchronization not completed in 1 minute.");
-//		}
-//
-//	}
+	@Test
+	public void testDeletions() throws IOException, InterruptedException {
+
+		System.out.println("  Testing 'deletions'...");
+
+		CountDownLatch latch = new CountDownLatch(4);
+		TreeDirectoryModel<TreeDirectoryModelTest, String> model = new TreeDirectoryModel<>(
+			this,
+			s -> Paths.get(s),
+			p -> p != null ? p.toString() : null
+		);
+
+		model.deletions().subscribe(u -> latch.countDown());
+		model.addTopLevelDirectory(root);
+		model.sync(root);
+
+		TreeItems.expandAll(model.getRoot(), true);
+		printTree(model, "After adding top directory, sync and tree expansion:");
+
+		Files.walkFileTree(dir_a, new DeleteFileVisitor());
+
+		model.sync(root);
+		printTree(model, "After directory removal and sync:");
+
+		if ( !latch.await(1, TimeUnit.MINUTES) ) {
+			fail("Directory model synchronization not completed in 1 minute.");
+		}
+
+	}
 
 	/**
 	 * Test of errors method, of class TreeDirectoryModel.
@@ -424,67 +444,88 @@ public class TreeDirectoryModelTest {
 	 * @throws java.io.IOException
 	 * @throws java.lang.InterruptedException
 	 */
-//	@Test
-//	public void testErrors() throws IOException, InterruptedException {
-//
-//		System.out.println("  Testing 'errors'...");
-//
-//		CountDownLatch latch = new CountDownLatch(2);
-//		TreeDirectoryModel<TreeDirectoryModelTest, String> model = new TreeDirectoryModel<>(
-//			this,
-//			s -> Paths.get(s),
-//			p -> p != null ? p.toString() : null
-//		);
-//
-//		model.errors().subscribe(u -> latch.countDown());
-//		model.addTopLevelDirectory(root, false);
-//		model.sync(tree(dir_a_c));
-//
-//		model = new TreeDirectoryModel<>(
-//			this,
-//			s -> Paths.get(s),
-//			p -> p != null ? p.toString() : null
-//		);
-//
-//		model.errors().subscribe(u -> latch.countDown());
-//		model.addTopLevelDirectory(file_a, false);
-//		model.sync(tree(file_a));
-//
-//		if ( !latch.await(1, TimeUnit.MINUTES) ) {
-//			fail("Directory model synchronization not completed in 1 minute.");
-//		}
-//
-//	}
+	@Test
+	public void testErrors() throws IOException, InterruptedException {
+
+		System.out.println("  Testing 'errors'...");
+
+		CountDownLatch latch = new CountDownLatch(2);
+		TreeDirectoryModel<TreeDirectoryModelTest, String> model = new TreeDirectoryModel<>(
+			this,
+			s -> Paths.get(s),
+			p -> p != null ? p.toString() : null
+		);
+
+		model.errors().subscribe(t -> {
+			latch.countDown();
+			if ( VERBOSE ) {
+				System.out.println(MessageFormat.format(
+					"    ERROR: {0} [{1}].",
+					t.getMessage(),
+					t.getClass().getName()
+				));
+			}
+		});
+		model.addTopLevelDirectory(root);
+		model.sync(dir_a_c);
+		printTree(model, "After adding top directory and sync:");
+
+		model = new TreeDirectoryModel<>(
+			this,
+			s -> Paths.get(s),
+			p -> p != null ? p.toString() : null
+		);
+
+		model.errors().subscribe(t -> {
+			latch.countDown();
+			if ( VERBOSE ) {
+				System.out.println(MessageFormat.format(
+					"    ERROR: {0} [{1}].",
+					t.getMessage(),
+					t.getClass().getName()
+				));
+			}
+		});
+		model.addTopLevelDirectory(file_a);
+		model.sync(file_a);
+		printTree(model, "After adding top directory and sync:");
+
+		if ( !latch.await(1, TimeUnit.MINUTES) ) {
+			fail("Directory model synchronization not completed in 1 minute.");
+		}
+
+	}
 
 	/**
 	 * Test of getRoot method, of class TreeDirectoryModel.
 	 */
-//	@Test
-//	public void testGetRoot() {
-//
-//		System.out.println("  Testing 'getRoot'...");
-//
-//		TreeDirectoryModel<TreeDirectoryModelTest, String> model = new TreeDirectoryModel<>(
-//			this,
-//			s -> Paths.get(s),
-//			p -> p != null ? p.toString() : null
-//		);
-//
-//		model.addTopLevelDirectory(dir_a, false);
-//		model.addTopLevelDirectory(dir_b, false);
-//
-//		TreeItem<String> modelRoot = model.getRoot();
-//
-//		assertThat(modelRoot).isNotNull();
-//		assertThat(modelRoot.getChildren()).size().isEqualTo(2);
-//		assertThat(modelRoot.getChildren()).element(0)
-//			.isInstanceOf(TreeDirectoryItems.TopLevelDirectoryItem.class)
-//			.extracting("path").element(0).isEqualTo(dir_a);
-//		assertThat(modelRoot.getChildren()).element(1)
-//			.isInstanceOf(TreeDirectoryItems.TopLevelDirectoryItem.class)
-//			.extracting("path").element(0).isEqualTo(dir_b);
-//
-//	}
+	@Test
+	public void testGetRoot() {
+
+		System.out.println("  Testing 'getRoot'...");
+
+		TreeDirectoryModel<TreeDirectoryModelTest, String> model = new TreeDirectoryModel<>(
+			this,
+			s -> Paths.get(s),
+			p -> p != null ? p.toString() : null
+		);
+
+		model.addTopLevelDirectory(dir_a);
+		model.addTopLevelDirectory(dir_b);
+		printTree(model, "After adding top directories:");
+
+		TreeItem<String> modelRoot = model.getRoot();
+
+		assertThat(modelRoot).isNotNull();
+		assertThat(modelRoot.getChildren()).size().isEqualTo(2);
+		assertThat(modelRoot.getChildren()).element(0)
+			.isInstanceOf(TreeDirectoryItems.TopLevelDirectoryItem.class)
+			.extracting("path").element(0).isEqualTo(dir_a);
+		assertThat(modelRoot.getChildren()).element(1)
+			.isInstanceOf(TreeDirectoryItems.TopLevelDirectoryItem.class)
+			.extracting("path").element(0).isEqualTo(dir_b);
+
+	}
 
 	/**
 	 * Test of modifications method, of class TreeDirectoryModel.
@@ -492,149 +533,196 @@ public class TreeDirectoryModelTest {
 	 * @throws java.io.IOException
 	 * @throws java.lang.InterruptedException
 	 */
-//	@Test
-//	public void testModifications() throws IOException, InterruptedException {
-//
-//		System.out.println("  Testing 'modifications'...");
-//
-//		CountDownLatch latch = new CountDownLatch(1);
-//		TreeDirectoryModel<TreeDirectoryModelTest, String> model = new TreeDirectoryModel<>(
-//			this,
-//			s -> Paths.get(s),
-//			p -> p != null ? p.toString() : null
-//		);
-//
-//		model.modifications().subscribe(u -> latch.countDown());
-//		model.addTopLevelDirectory(root, false);
-//		model.sync(tree(root));
-//
-//		//	Give some time before the actual modification.
-//		Thread.sleep(2222L);
-//
-//		Files.write(file_b1, "Some text to be written.\n".getBytes());
-//
-//		model.sync(tree(root));
-//
-//		if ( !latch.await(1, TimeUnit.MINUTES) ) {
-//			fail("Directory model synchronization not completed in 1 minute.");
-//		}
-//
-//	}
+	@Test
+	public void testModifications() throws IOException, InterruptedException {
+
+		System.out.println("  Testing 'modifications'...");
+
+		CountDownLatch latch = new CountDownLatch(1);
+		TreeDirectoryModel<TreeDirectoryModelTest, String> model = new TreeDirectoryModel<>(
+			this,
+			s -> Paths.get(s),
+			p -> p != null ? p.toString() : null
+		);
+
+		model.modifications().subscribe(u -> latch.countDown());
+		model.addTopLevelDirectory(root);
+		model.sync(root);
+
+		TreeItems.expandAll(model.getRoot(), true);
+		printTree(model, "After adding top directory, sync and tree expansion:");
+
+		//	Give some time before the actual modification.
+		Thread.sleep(2222L);
+
+		FileTime timeBeforeWrite = Files.getLastModifiedTime(file_b1);
+		TreeDirectoryItems.PathItem<String> fileItem = (TreeDirectoryItems.PathItem<String>) TreeItemWalker
+			.build(model.getRoot())
+			.stream()
+			.filter(ti -> {
+				if ( ti instanceof TreeDirectoryItems.PathItem ) {
+					return ((TreeDirectoryItems.PathItem<String>) ti).getPath().equals(file_b1);
+				} else {
+					return false;
+				}
+			})
+			.findFirst().get();
+
+		assertThat(timeBeforeWrite).isEqualTo(fileItem.asFileItem().getLastModified());
+
+		Files.write(file_b1, "Some text to be written.\n".getBytes());
+
+		FileTime timeAfterWrite = Files.getLastModifiedTime(file_b1);
+
+		assertThat(timeAfterWrite).isNotEqualTo(timeBeforeWrite);
+		assertThat(timeAfterWrite).isNotEqualTo(fileItem.asFileItem().getLastModified());
+
+		model.sync(root);
+
+		assertThat(timeAfterWrite).isEqualTo(fileItem.asFileItem().getLastModified());
+
+		if ( !latch.await(1, TimeUnit.MINUTES) ) {
+			fail("Directory model synchronization not completed in 1 minute.");
+		}
+
+	}
 
 	/**
 	 * Test of sync method, of class TreeDirectoryModel.
 	 * 
 	 * @throws java.io.IOException
 	 */
-//	@Test
-//	public void testSync() throws IOException {
-//
-//		System.out.println("  Testing 'sync'...");
-//
-//		TreeDirectoryModel<TreeDirectoryModelTest, String> model = new TreeDirectoryModel<>(
-//			this,
-//			s -> Paths.get(s),
-//			p -> p != null ? p.toString() : null
-//		);
-//
-//		assertThat(model.contains(dir_a)).isFalse();
-//		assertThat(model.contains(dir_a_c)).isFalse();
-//		assertThat(model.contains(file_a_c)).isFalse();
-//
-//		model.addTopLevelDirectory(dir_a, false);
-//		model.sync(tree(dir_a));
-//
-//		assertThat(model.contains(dir_a)).isTrue();
-//		assertThat(model.contains(dir_a_c)).isTrue();
-//		assertThat(model.contains(file_a_c)).isTrue();
-//
-//		model.delete(file_a_c);
-//
-//		assertThat(model.contains(dir_a)).isTrue();
-//		assertThat(model.contains(dir_a_c)).isTrue();
-//		assertThat(model.contains(file_a_c)).isFalse();
-//
-//		model.sync(tree(dir_a));
-//
-//		assertThat(model.contains(dir_a)).isTrue();
-//		assertThat(model.contains(dir_a_c)).isTrue();
-//		assertThat(model.contains(file_a_c)).isTrue();
-//
-//		model.delete(file_a_c);
-//
-//		assertThat(model.contains(dir_a)).isTrue();
-//		assertThat(model.contains(dir_a_c)).isTrue();
-//		assertThat(model.contains(file_a_c)).isFalse();
-//
-//		model.sync(tree(dir_a));
-//
-//		assertThat(model.contains(dir_a)).isTrue();
-//		assertThat(model.contains(dir_a_c)).isTrue();
-//		assertThat(model.contains(file_a_c)).isTrue();
-//
-//		//	Something outside the current roots.
-//		model.sync(tree(dir_b));
-//
-//		assertThat(model.contains(dir_b)).isFalse();
-//		assertThat(model.contains(file_b1)).isFalse();
-//		assertThat(model.contains(file_b2)).isFalse();
-//
-//	}
+	@Test
+	public void testSync() throws IOException {
+
+		System.out.println("  Testing 'sync'...");
+
+		TreeDirectoryModel<TreeDirectoryModelTest, String> model = new TreeDirectoryModel<>(
+			this,
+			s -> Paths.get(s),
+			p -> p != null ? p.toString() : null
+		);
+
+		assertThat(model.contains(dir_a)).isFalse();
+		assertThat(model.contains(dir_a_c)).isFalse();
+		assertThat(model.contains(file_a_c)).isFalse();
+
+		model.addTopLevelDirectory(dir_a);
+		model.sync(dir_a);
+
+		TreeItems.expandAll(model.getRoot(), true);
+		printTree(model, "After adding top directory, sync and tree expansion:");
+
+		assertThat(model.contains(dir_a)).isTrue();
+		assertThat(model.contains(dir_a_c)).isTrue();
+		assertThat(model.contains(file_a_c)).isTrue();
+		assertThat(model.contains(file_a)).isTrue();
+
+		model.delete(file_a_c);
+		printTree(model, "After file removal from model:");
+
+		assertThat(model.contains(dir_a)).isTrue();
+		assertThat(model.contains(dir_a_c)).isTrue();
+		assertThat(model.contains(file_a_c)).isFalse();
+		assertThat(model.contains(file_a)).isTrue();
+
+		model.sync(dir_a);
+		printTree(model, "After sync:");
+
+		assertThat(model.contains(dir_a)).isTrue();
+		assertThat(model.contains(dir_a_c)).isTrue();
+		assertThat(model.contains(file_a_c)).isTrue();
+		assertThat(model.contains(file_a)).isTrue();
+
+		model.delete(dir_a_c);
+		printTree(model, "After directory removal from model:");
+
+		assertThat(model.contains(dir_a)).isTrue();
+		assertThat(model.contains(dir_a_c)).isFalse();
+		assertThat(model.contains(file_a_c)).isFalse();
+		assertThat(model.contains(file_a)).isTrue();
+
+		model.sync(dir_a);
+		printTree(model, "After sync:");
+
+		assertThat(model.contains(dir_a)).isTrue();
+		assertThat(model.contains(dir_a_c)).isTrue();
+		assertThat(model.contains(file_a_c)).isFalse();
+		assertThat(model.contains(file_a)).isTrue();
+
+		TreeItems.expandAll(model.getRoot(), true);
+		printTree(model, "After tree expansion:");
+
+		assertThat(model.contains(dir_a)).isTrue();
+		assertThat(model.contains(dir_a_c)).isTrue();
+		assertThat(model.contains(file_a_c)).isTrue();
+		assertThat(model.contains(file_a)).isTrue();
+
+		//	Something outside the current roots.
+		model.sync(dir_b);
+		printTree(model, "After sync:");
+
+		assertThat(model.contains(dir_b)).isFalse();
+		assertThat(model.contains(file_b1)).isFalse();
+		assertThat(model.contains(file_b2)).isFalse();
+
+	}
 
 	/**
 	 * Test of updateModificationTime method, of class TreeDirectoryModel.
 	 *
 	 * @throws java.io.IOException
 	 */
-//	@Test
-//	public void testUpdateModificationTime() throws IOException {
-//
-//		System.out.println("  Testing 'updateModificationTime'...");
-//
-//		TreeDirectoryModel<TreeDirectoryModelTest, String> model = new TreeDirectoryModel<>(
-//			this,
-//			s -> Paths.get(s),
-//			p -> p != null ? p.toString() : null
-//		);
-//
-//		assertThat(model.contains(dir_a)).isFalse();
-//		assertThat(model.contains(dir_a_c)).isFalse();
-//		assertThat(model.contains(file_a_c)).isFalse();
-//
-//		model.addTopLevelDirectory(root, false);
-//		model.addDirectory(dir_a);
-//		model.addDirectory(dir_a_c);
-//
-//		FileTime lastModifiedTime1 = Files.getLastModifiedTime(file_a_c);
-//
-//		model.addFile(file_a_c, lastModifiedTime1);
-//
-//		assertThat(model.contains(dir_a)).isTrue();
-//		assertThat(model.contains(dir_a_c)).isTrue();
-//		assertThat(model.contains(file_a_c)).isTrue();
-//
-//		TreeItem<String> item = model
-//			.getRoot()				//	The hidden root.
-//			.getChildren().get(0)	//	top directory: root
-//			.getChildren().get(0)	//	    directory: dir_a
-//			.getChildren().get(0)	//	    directory: dir_a_c
-//			.getChildren().get(0);	//	         file: file_a_c
-//
-//		assertThat(item)
-//			.isInstanceOf(TreeDirectoryItems.FileItem.class)
-//			.extracting("lastModified").element(0).isEqualTo(lastModifiedTime1);
-//
-//		FileTime lastModifiedTime2 = from(lastModifiedTime1.toInstant().plusSeconds(123L));
-//
-//		assertThat(lastModifiedTime2).isNotEqualTo(lastModifiedTime1);
-//
-//		model.updateModificationTime(file_a_c, lastModifiedTime2);
-//
-//		assertThat(item)
-//			.isInstanceOf(TreeDirectoryItems.FileItem.class)
-//			.extracting("lastModified").element(0).isEqualTo(lastModifiedTime2);
-//
-//	}
+	@Test
+	public void testUpdateModificationTime() throws IOException {
+
+		System.out.println("  Testing 'updateModificationTime'...");
+
+		TreeDirectoryModel<TreeDirectoryModelTest, String> model = new TreeDirectoryModel<>(
+			this,
+			s -> Paths.get(s),
+			p -> p != null ? p.toString() : null
+		);
+
+		assertThat(model.contains(dir_a)).isFalse();
+		assertThat(model.contains(dir_a_c)).isFalse();
+		assertThat(model.contains(file_a_c)).isFalse();
+
+		model.addTopLevelDirectory(root);
+		model.addDirectory(dir_a);
+		model.addDirectory(dir_a_c);
+
+		FileTime lastModifiedTime1 = Files.getLastModifiedTime(file_a_c);
+
+		model.addFile(file_a_c, lastModifiedTime1);
+		printTree(model, "After adding directories and file:");
+
+		assertThat(model.contains(dir_a)).isTrue();
+		assertThat(model.contains(dir_a_c)).isTrue();
+		assertThat(model.contains(file_a_c)).isTrue();
+
+		TreeItem<String> item = model
+			.getRoot()				//	The hidden root.
+			.getChildren().get(0)	//	top directory: root
+			.getChildren().get(0)	//	    directory: dir_a
+			.getChildren().get(0)	//	    directory: dir_a_c
+			.getChildren().get(0);	//	         file: file_a_c
+
+		assertThat(item)
+			.isInstanceOf(TreeDirectoryItems.FileItem.class)
+			.extracting("lastModified").element(0).isEqualTo(lastModifiedTime1);
+
+		FileTime lastModifiedTime2 = from(lastModifiedTime1.toInstant().plusSeconds(123L));
+
+		assertThat(lastModifiedTime2).isNotEqualTo(lastModifiedTime1);
+
+		model.updateModificationTime(file_a_c, lastModifiedTime2);
+
+		assertThat(item)
+			.isInstanceOf(TreeDirectoryItems.FileItem.class)
+			.extracting("lastModified").element(0).isEqualTo(lastModifiedTime2);
+
+	}
 
 	private void printTree( TreeDirectoryModel<TreeDirectoryModelTest, String> model ) {
 		printTree(model, null);
@@ -642,7 +730,7 @@ public class TreeDirectoryModelTest {
 
 	private void printTree( TreeDirectoryModel<TreeDirectoryModelTest, String> model, String comment ) {
 
-		if ( !PRINT_TREE_ENABLED ) {
+		if ( !VERBOSE ) {
 			return;
 		}
 
@@ -654,7 +742,7 @@ public class TreeDirectoryModelTest {
 
 		TreeItemWalker.visitValue(model.getRoot(), ( v, d ) -> {
 
-			StringBuilder builder = new StringBuilder(noComment ? "    " : "      ");
+			StringBuilder builder = new StringBuilder(noComment ? "  " : "    ");
 
 			for ( int i = 0; i < d; i++ ) {
 				builder.append("  ");

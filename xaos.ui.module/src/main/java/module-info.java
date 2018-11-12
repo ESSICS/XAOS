@@ -33,6 +33,8 @@ module xaos.ui {
 	requires org.kordamp.ikonli.javafx;
 	requires transitive xaos.core;
 	requires xaos.tools;
+	//	TODO:CR To be removed after getting rid of reactfx.
+	requires reactfx;
 
 	uses se.europeanspallationsource.xaos.ui.spi.ClassIconProvider;
 	uses se.europeanspallationsource.xaos.ui.spi.FileExtensionIconProvider;
