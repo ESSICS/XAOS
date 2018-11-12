@@ -21,6 +21,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Objects;
 import java.util.Spliterator;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -42,6 +43,13 @@ import javafx.util.Pair;
  * will be walked only if they are part of the sub-tree not yet visited.
  * Generally speaking no changes should be done to the tree structure during a
  * walk.</p>
+ * <p>
+ * <b>Important Note #3:</b> This implementation is not synchronized. Calling
+ * {@link #getDepth()}, {@link #hasNext()}, {@link #next()} and/or
+ * {@link #stream()}'s methods from different threads concurrently can produce
+ * odd results. Call {@code buildSynchronized) to get a synchronized version of
+ * the walker.
+ * </p>
  *
  * @author claudio.rosati@esss.se
  * @param <T> The type of the {@link TreeItem}s.
@@ -49,6 +57,95 @@ import javafx.util.Pair;
  */
 @SuppressWarnings( "ClassWithoutLogger" )
 public class TreeItemWalker<T> {
+
+	/**
+	 * Returns a walker initialized with the given {@code root} item.
+	 *
+	 * @param <T>  The type of the {@link TreeItem}s.
+	 * @param root The {@link TreeItem} being the root to be walked depth-first.
+	 *             Can be {@code null}, in which case an empty walker will be
+	 *             created.
+	 * @return A new instance of {@link TreeItemWalker} initialized with the
+	 *         given {@code root} parameter.
+	 */
+	public static <T> TreeItemWalker<T> build( TreeItem<T> root ) {
+		return new TreeItemWalker<>(root);
+	}
+
+	/**
+	 * Returns a walker initialized with the {@link TreeView#getRoot()} from the
+	 * given {@code view}.
+	 *
+	 * @param <T>  The type of the {@link TreeItem}s.
+	 * @param view The {@link TreeView} whose root element has to be walked
+	 *             depth-first. Can be {@code null}, or having a {@code null}
+	 *             root element, in which case an empty walker will be created.
+	 * @return A new instance of {@link TreeItemWalker} initialized with the
+	 *         given {@code view} parameter.
+	 */
+	public static <T> TreeItemWalker<T> build( TreeView<T> view ) {
+		return new TreeItemWalker<>(view);
+	}
+
+	/**
+	 * Returns a walker initialized with the {@link TreeTableView#getRoot()}
+	 * from the given {@code view}.
+	 *
+	 * @param <T>  The type of the {@link TreeItem}s.
+	 * @param view The {@link TreeTableView} whose root element has to be walked
+	 *             depth-first. Can be {@code null}, or having a {@code null}
+	 *             root element, in which case an empty walker will be created.
+	 * @return A new instance of {@link TreeItemWalker} initialized with the
+	 *         given {@code view} parameter.
+	 */
+	public static <T> TreeItemWalker<T> build( TreeTableView<T> view ) {
+		return new TreeItemWalker<>(view);
+	}
+
+	/**
+	 * Returns a synchronized walker initialized with the given {@code root}
+	 * item.
+	 *
+	 * @param <T>  The type of the {@link TreeItem}s.
+	 * @param root The {@link TreeItem} being the root to be walked depth-first.
+	 *             Can be {@code null}, in which case an empty walker will be
+	 *             created.
+	 * @return A new instance of {@link TreeItemWalker} initialized with the
+	 *         given {@code root} parameter.
+	 */
+	public static <T> TreeItemWalker<T> buildSynchronized( TreeItem<T> root ) {
+		return new SynchronizedWalker<>(root);
+	}
+
+	/**
+	 * Returns a synchronized walker initialized with the
+	 * {@link TreeView#getRoot()} from the given {@code view}.
+	 *
+	 * @param <T>  The type of the {@link TreeItem}s.
+	 * @param view The {@link TreeView} whose root element has to be walked
+	 *             depth-first. Can be {@code null}, or having a {@code null}
+	 *             root element, in which case an empty walker will be created.
+	 * @return A new instance of {@link TreeItemWalker} initialized with the
+	 *         given {@code view} parameter.
+	 */
+	public static <T> TreeItemWalker<T> buildSynchronized( TreeView<T> view ) {
+		return new SynchronizedWalker<>(view);
+	}
+
+	/**
+	 * Returns a synchronized walker initialized with the
+	 * {@link TreeTableView#getRoot()} from the given {@code view}.
+	 *
+	 * @param <T>  The type of the {@link TreeItem}s.
+	 * @param view The {@link TreeTableView} whose root element has to be walked
+	 *             depth-first. Can be {@code null}, or having a {@code null}
+	 *             root element, in which case an empty walker will be created.
+	 * @return A new instance of {@link TreeItemWalker} initialized with the
+	 *         given {@code view} parameter.
+	 */
+	public static <T> TreeItemWalker<T> buildSynchronized( TreeTableView<T> view ) {
+		return new SynchronizedWalker<>(view);
+	}
 
 	/**
 	 * Walks over the given tree {@code root} and calls the consumer for each
@@ -61,10 +158,29 @@ public class TreeItemWalker<T> {
 	 */
 	public static <T> void visit( TreeItem<T> root, Consumer<TreeItem<T>> visitor ) {
 
-		TreeItemWalker<T> walker = new TreeItemWalker<>(root);
+		TreeItemWalker<T> walker = build(root);
 
 		while ( walker.hasNext() ) {
 			visitor.accept(walker.next());
+		}
+
+	}
+
+	/**
+	 * Walks over the given tree {@code root} and calls the consumer for each
+	 * tree item.
+	 *
+	 * @param <T>     The type of the {@link TreeItem}s.
+	 * @param root    The root {@link TreeItem} to visit.
+	 * @param visitor The visitor receiving the visited {@link TreeItem} and the
+	 *                current walking depth during the tree walk.
+	 */
+	public static <T> void visit( TreeItem<T> root, BiConsumer<TreeItem<T>, Integer> visitor ) {
+
+		TreeItemWalker<T> walker = build(root);
+
+		while ( walker.hasNext() ) {
+			visitor.accept(walker.next(), walker.getDepth());
 		}
 
 	}
@@ -80,10 +196,29 @@ public class TreeItemWalker<T> {
 	 */
 	public static <T> void visit( TreeView<T> tree, Consumer<TreeItem<T>> visitor ) {
 
-		TreeItemWalker<T> walker = new TreeItemWalker<>(tree);
+		TreeItemWalker<T> walker = build(tree);
 
 		while ( walker.hasNext() ) {
 			visitor.accept(walker.next());
+		}
+
+	}
+
+	/**
+	 * Walks over the given root of the given {@code tree} and calls the consumer
+	 * for each tree item.
+	 *
+	 * @param <T>     The type of the {@link TreeItem}s.
+	 * @param tree    The {@link TreeView) whose root has to be visited.
+	 * @param visitor The visitor receiving the visited {@link TreeItem} and the
+	 *                current walking depth during the tree walk.
+	 */
+	public static <T> void visit( TreeView<T> tree, BiConsumer<TreeItem<T>, Integer> visitor ) {
+
+		TreeItemWalker<T> walker = build(tree);
+
+		while ( walker.hasNext() ) {
+			visitor.accept(walker.next(), walker.getDepth());
 		}
 
 	}
@@ -99,10 +234,29 @@ public class TreeItemWalker<T> {
 	 */
 	public static <T> void visit( TreeTableView<T> tree, Consumer<TreeItem<T>> visitor ) {
 
-		TreeItemWalker<T> walker = new TreeItemWalker<>(tree);
+		TreeItemWalker<T> walker = build(tree);
 
 		while ( walker.hasNext() ) {
 			visitor.accept(walker.next());
+		}
+
+	}
+
+	/**
+	 * Walks over the given root of the given {@code tree} and calls the consumer
+	 * for each tree item.
+	 *
+	 * @param <T>     The type of the {@link TreeItem}s.
+	 * @param tree    The {@link TreeTableView) whose root has to be visited.
+	 * @param visitor The visitor receiving the visited {@link TreeItem} and the
+	 *                current walking depth during the tree walk.
+	 */
+	public static <T> void visit( TreeTableView<T> tree, BiConsumer<TreeItem<T>, Integer> visitor ) {
+
+		TreeItemWalker<T> walker = build(tree);
+
+		while ( walker.hasNext() ) {
+			visitor.accept(walker.next(), walker.getDepth());
 		}
 
 	}
@@ -113,12 +267,50 @@ public class TreeItemWalker<T> {
 	 *
 	 * @param <T>     The type of the {@link TreeItem}s.
 	 * @param root    The root {@link TreeItem} to visit.
-	 * @param visitor The visitor receiving the visited {@link TreeItem}'svalue
+	 * @param visitor The visitor receiving the visited {@link TreeItem}'s value
 	 *                during the tree walk.
 	 */
 	public static <T> void visitValue( TreeItem<T> root, Consumer<T> visitor ) {
 
-		TreeItemWalker<T> walker = new TreeItemWalker<>(root);
+		TreeItemWalker<T> walker = build(root);
+
+		while ( walker.hasNext() ) {
+			visitor.accept(walker.next().getValue());
+		}
+
+	}
+
+	/**
+	 * Walks over the given tree {@code root} and calls the consumer for each
+	 * tree item's value.
+	 *
+	 * @param <T>     The type of the {@link TreeItem}s.
+	 * @param root    The root {@link TreeItem} to visit.
+	 * @param visitor The visitor receiving the visited {@link TreeItem}'s value
+	 *                and the current walking depth during the tree walk.
+	 */
+	public static <T> void visitValue( TreeItem<T> root, BiConsumer<T, Integer> visitor ) {
+
+		TreeItemWalker<T> walker = build(root);
+
+		while ( walker.hasNext() ) {
+			visitor.accept(walker.next().getValue(), walker.getDepth());
+		}
+
+	}
+
+	/**
+	 * Walks over the given root of the given {@code tree} and calls the consumer
+	 * for each tree item's value.
+	 *
+	 * @param <T>     The type of the {@link TreeItem}s.
+	 * @param tree    The {@link TreeView) whose root has to be visited.
+	 * @param visitor The visitor receiving the visited {@link TreeItem}'s value
+	 *                during the tree walk.
+	 */
+	public static <T> void visitValue( TreeView<T> tree, Consumer<T> visitor ) {
+
+		TreeItemWalker<T> walker = build(tree);
 
 		while ( walker.hasNext() ) {
 			visitor.accept(walker.next().getValue());
@@ -132,12 +324,31 @@ public class TreeItemWalker<T> {
 	 *
 	 * @param <T>     The type of the {@link TreeItem}s.
 	 * @param tree    The {@link TreeView) whose root has to be visited.
-	 * @param visitor The visitor receiving the visited {@link TreeItem}'svalue
+	 * @param visitor The visitor receiving the visited {@link TreeItem}'s value
+	 *                and the current walking depth during the tree walk.
+	 */
+	public static <T> void visitValue( TreeView<T> tree, BiConsumer<T, Integer> visitor ) {
+
+		TreeItemWalker<T> walker = build(tree);
+
+		while ( walker.hasNext() ) {
+			visitor.accept(walker.next().getValue(), walker.getDepth());
+		}
+
+	}
+
+	/**
+	 * Walks over the given root of the given {@code tree} and calls the consumer
+	 * for each tree item's value.
+	 *
+	 * @param <T>     The type of the {@link TreeItem}s.
+	 * @param tree    The {@link TreeTableView) whose root has to be visited.
+	 * @param visitor The visitor receiving the visited {@link TreeItem}'s value
 	 *                during the tree walk.
 	 */
-	public static <T> void visitValue( TreeView<T> tree, Consumer<T> visitor ) {
+	public static <T> void visitValue( TreeTableView<T> tree, Consumer<T> visitor ) {
 
-		TreeItemWalker<T> walker = new TreeItemWalker<>(tree);
+		TreeItemWalker<T> walker = build(tree);
 
 		while ( walker.hasNext() ) {
 			visitor.accept(walker.next().getValue());
@@ -151,15 +362,15 @@ public class TreeItemWalker<T> {
 	 *
 	 * @param <T>     The type of the {@link TreeItem}s.
 	 * @param tree    The {@link TreeTableView) whose root has to be visited.
-	 * @param visitor The visitor receiving the visited {@link TreeItem}'svalue
-	 *                during the tree walk.
+	 * @param visitor The visitor receiving the visited {@link TreeItem}'s value
+	 *                and the current walking depth during the tree walk.
 	 */
-	public static <T> void visitValue( TreeTableView<T> tree, Consumer<T> visitor ) {
+	public static <T> void visitValue( TreeTableView<T> tree, BiConsumer<T, Integer> visitor ) {
 
-		TreeItemWalker<T> walker = new TreeItemWalker<>(tree);
+		TreeItemWalker<T> walker = build(tree);
 
 		while ( walker.hasNext() ) {
-			visitor.accept(walker.next().getValue());
+			visitor.accept(walker.next().getValue(), walker.getDepth());
 		}
 
 	}
@@ -181,38 +392,48 @@ public class TreeItemWalker<T> {
 
 
 	/**
-	 * Initialize the walker with the given root item.
+	 * Initialize the walker with the given {@code root} item.
 	 *
 	 * @param root The {@link TreeItem} being the root to be walked depth-first.
 	 *             Can be {@code null}, in which case an empty walker will be
 	 *             created.
 	 */
-	public TreeItemWalker( TreeItem<T> root ) {
+	protected TreeItemWalker( TreeItem<T> root ) {
 		if ( root != null ) {
 			stack.push(new Pair<>(root, -1));
 		}
 	}
 
 	/**
-	 * Initialize the walker with the given root item.
+	 * Initialize the walker with the {@link TreeView#getRoot()} from the given
+	 * {@code view}.
 	 *
 	 * @param view The {@link TreeView} whose root element has to be walked
 	 *             depth-first. Can be {@code null}, or having a {@code null}
 	 *             root element, in which case an empty walker will be created.
 	 */
-	public TreeItemWalker( TreeView<T> view ) {
+	protected TreeItemWalker( TreeView<T> view ) {
 		this(view != null ? view.getRoot() : null);
 	}
 
 	/**
-	 * Initialize the walker with the given root item.
+	 * Initialize the walker with the {@link TreeTableView#getRoot()} from the
+	 * given {@code view}.
 	 *
 	 * @param view The {@link TreeTableView} whose root element has to be walked
 	 *             depth-first. Can be {@code null}, or having a {@code null}
 	 *             root element, in which case an empty walker will be created.
 	 */
-	public TreeItemWalker( TreeTableView<T> view ) {
+	protected TreeItemWalker( TreeTableView<T> view ) {
 		this(view != null ? view.getRoot() : null);
+	}
+
+	/**
+	 * @return The current depth level. {@code 0} means "root item" (the one
+	 * used to build this walker). {@code 1} means "root's child" and so on.
+	 */
+	public int getDepth() {
+		return depth;
 	}
 
 	/**
@@ -255,12 +476,22 @@ public class TreeItemWalker<T> {
 
 		depth += offset;
 
-		if ( Objects.equals(next, stack.peek().getKey().getParent()) ) {
-			offset = 1;
-		} else if ( Objects.equals(next.getParent(), stack.peek().getKey().getParent()) ) {
-			offset = 0;
-		} else {
-			offset = -1;
+		Pair<TreeItem<T>, Integer> lookAhead = stack.peek();
+
+		if ( lookAhead != null ) {
+
+			TreeItem<T> lookAheadKey = lookAhead.getKey();
+
+			if ( lookAheadKey != null ) {
+				if ( Objects.equals(next, lookAheadKey.getParent()) ) {
+					offset = 1;
+				} else if ( Objects.equals(next.getParent(), lookAheadKey.getParent()) ) {
+					offset = 0;
+				} else {
+					offset = -1;
+				}
+			}
+
 		}
 
 		return next;
@@ -279,6 +510,11 @@ public class TreeItemWalker<T> {
 			throw new IllegalStateException("Walking stack is empty.");
 		}
 
+		return createStream();
+
+	}
+
+	protected Stream<TreeItem<T>> createStream() {
 		return StreamSupport.stream(new Spliterator<TreeItem<T>>() {
 
 			@Override
@@ -309,7 +545,6 @@ public class TreeItemWalker<T> {
 			}
 
 		}, false);
-
 	}
 
 	/**
@@ -333,6 +568,84 @@ public class TreeItemWalker<T> {
 			// updated to "index".
 			stack.push(new Pair<>(treeItem, index));
 			stack.push(new Pair<>(children.get(index), -1));
+		}
+
+	}
+
+	private static class SynchronizedWalker<T> extends TreeItemWalker<T> {
+
+		SynchronizedWalker( TreeItem<T> root ) {
+			super(root);
+		}
+
+		SynchronizedWalker( TreeView<T> view ) {
+			super(view);
+		}
+
+		SynchronizedWalker( TreeTableView<T> view ) {
+			super(view);
+		}
+
+		@Override
+		public synchronized int getDepth() {
+			return super.getDepth();
+		}
+
+		@Override
+		public synchronized boolean hasNext() {
+			return super.hasNext();
+		}
+
+		@Override
+		public synchronized TreeItem<T> next() {
+			return super.next();
+		}
+
+		@Override
+		protected Stream<TreeItem<T>> createStream() {
+			return StreamSupport.stream(new Spliterator<TreeItem<T>>() {
+
+				@Override
+				public int characteristics() {
+					return 0;
+				}
+
+				@Override
+				public long estimateSize() {
+					return Long.MAX_VALUE;
+				}
+
+				@Override
+				public boolean tryAdvance( Consumer<? super TreeItem<T>> action ) {
+
+					boolean hn;
+					TreeItem<T> n = null;
+
+					synchronized ( SynchronizedWalker.this ) {
+
+						hn = hasNext();
+
+						if ( hn  ) {
+							n = next();
+						}
+
+					}
+
+					if ( hn ) {
+						action.accept(n);
+						return true;
+					}
+
+					return false;
+
+				}
+
+				@Override
+				public Spliterator<TreeItem<T>> trySplit() {
+					return null;
+				}
+
+			}, false);
 		}
 
 	}
