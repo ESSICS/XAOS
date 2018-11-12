@@ -228,10 +228,10 @@ watcher.watch(root);
 
 ```maven
 <dependency>
-	<groupId>se.europeanspallationsource</groupId>
-	<artifactId>xaos</artifactId>
-	<version>0.3.0-SNAPSHOT</version>
-	<scope>compile</scope>
+  <groupId>se.europeanspallationsource</groupId>
+  <artifactId>xaos</artifactId>
+  <version>0.3.0-SNAPSHOT</version>
+  <scope>compile</scope>
 </dependency>
 ```
 

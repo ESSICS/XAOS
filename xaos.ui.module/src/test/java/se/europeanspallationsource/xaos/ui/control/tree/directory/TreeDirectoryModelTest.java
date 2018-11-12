@@ -16,6 +16,7 @@
 package se.europeanspallationsource.xaos.ui.control.tree.directory;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -23,6 +24,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -40,6 +42,12 @@ import static org.junit.Assert.fail;
  */
 @SuppressWarnings( { "ClassWithoutLogger", "UseOfSystemOutOrSystemErr" } )
 public class TreeDirectoryModelTest {
+
+	/**
+	 * Enable/disable the {@link #printTree(TreeDirectoryModel, String)}. For
+	 * more verbose output set it to {@code true}.
+	 */
+	private static final boolean PRINT_TREE_ENABLED = Boolean.getBoolean("xaos.extended.test.printout");
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -92,6 +100,7 @@ public class TreeDirectoryModelTest {
 		model.addTopLevelDirectory(root);
 		model.addDirectory(dir_a);
 		model.addDirectory(dir_a_c);
+		printTree(model, "After adding directories:");
 
 		assertThat(model.contains(dir_a)).isTrue();
 		assertThat(model.contains(dir_a_c)).isTrue();
@@ -122,6 +131,7 @@ public class TreeDirectoryModelTest {
 		model.addDirectory(dir_a);
 		model.addDirectory(dir_a_c);
 		model.addFile(file_a_c, Files.getLastModifiedTime(file_a_c));
+		printTree(model, "After adding directories and file:");
 
 		assertThat(model.contains(dir_a)).isTrue();
 		assertThat(model.contains(dir_a_c)).isTrue();
@@ -146,6 +156,7 @@ public class TreeDirectoryModelTest {
 		assertThat(model.contains(root)).isFalse();
 
 		model.addTopLevelDirectory(root);
+		printTree(model, "After adding top directory:");
 
 		assertThat(model.contains(root)).isTrue();
 
@@ -176,11 +187,21 @@ public class TreeDirectoryModelTest {
 			di -> collapsedLatch.countDown(),
 			di -> expandedLatch.countDown()
 		);
-		model.sync(root, this);
+		printTree(model, "After adding top directory:");
 
 		assertThat(model.contains(root)).isTrue();
 
 		TreeItems.expandAll(model.getRoot(), true);
+		printTree(model, "After tree expansion:");
+
+		assertThat(model.contains(dir_a)).isFalse();
+		assertThat(model.contains(dir_b)).isFalse();
+
+		model.sync(root, this);
+		printTree(model, "After synch:");
+
+		TreeItems.expandAll(model.getRoot(), true);
+		printTree(model, "After tree expansion:");
 
 		if ( !expandedLatch.await(15, TimeUnit.SECONDS) ) {
 			fail("Directory expansion not completed in 15 seconds.");
@@ -215,24 +236,28 @@ public class TreeDirectoryModelTest {
 		assertThat(model.contains(file_a_c)).isFalse();
 
 		model.addTopLevelDirectory(root);
+		printTree(model, "After adding top directory:");
 
 		//	Roots not yet synchronized.
 		assertThat(model.contains(file_a_c)).isFalse();
 		assertThat(model.contains(file_b1)).isFalse();
 
 		model.sync(dir_a_c);
+		printTree(model, "After sync on a wrong directory:");
 
 		//	Roots not yet synchronized, so dir_a_c does not exist in the model.
 		assertThat(model.contains(dir_a_c)).isFalse();
 		assertThat(model.contains(file_a_c)).isFalse();
 
 		model.sync(root);
+		printTree(model, "After sync on root directory:");
 
 		//	Roots synchronized, but not yet expanded.
 		assertThat(model.contains(dir_a_c)).isFalse();
 		assertThat(model.contains(file_a_c)).isFalse();
 
 		TreeItems.expandAll(model.getRoot(), true);
+		printTree(model, "After tree expansion:");
 
 		//	Roots synchronized and expanded.
 		//	Now both dir_a_c and file_a_c are in the model.
@@ -262,8 +287,7 @@ public class TreeDirectoryModelTest {
 
 		model.addTopLevelDirectory(root);
 		model.sync(root);
-
-		TreeItemWalker.visit(model.getRoot(), new);
+		printTree(model, "After adding top directory and sync:");
 
 		//	Roots synchronized, now both dir_a_c and file_a_c are in the model.
 		assertThat(model.containsPrefixOf(dir_a_c)).isTrue();
@@ -611,5 +635,38 @@ public class TreeDirectoryModelTest {
 //			.extracting("lastModified").element(0).isEqualTo(lastModifiedTime2);
 //
 //	}
+
+	private void printTree( TreeDirectoryModel<TreeDirectoryModelTest, String> model ) {
+		printTree(model, null);
+	}
+
+	private void printTree( TreeDirectoryModel<TreeDirectoryModelTest, String> model, String comment ) {
+
+		if ( !PRINT_TREE_ENABLED ) {
+			return;
+		}
+
+		final boolean noComment = StringUtils.isBlank(comment);
+
+		if ( !noComment ) {
+			System.out.println("    " + comment);
+		}
+
+		TreeItemWalker.visitValue(model.getRoot(), ( v, d ) -> {
+
+			StringBuilder builder = new StringBuilder(noComment ? "    " : "      ");
+
+			for ( int i = 0; i < d; i++ ) {
+				builder.append("  ");
+			}
+
+			String item = "<root>";
+
+			if ( v != null ) {
+				System.out.println(builder.append(v.substring(1 + v.lastIndexOf(File.separatorChar))).toString());
+			}
+
+		});
+	}
 
 }

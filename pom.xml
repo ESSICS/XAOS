@@ -221,6 +221,9 @@
 					<argLine>
 						--illegal-access=permit
 					</argLine>
+					<systemPropertyVariables>
+						<xaos.extended.test.printout>true</xaos.extended.test.printout>
+					</systemPropertyVariables>
 				</configuration>
 				<dependencies>
 					<dependency>
