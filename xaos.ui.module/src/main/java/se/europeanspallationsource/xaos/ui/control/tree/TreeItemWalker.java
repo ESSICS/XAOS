@@ -19,6 +19,7 @@ package se.europeanspallationsource.xaos.ui.control.tree;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.Spliterator;
 import java.util.function.BiConsumer;
@@ -56,7 +57,7 @@ import javafx.util.Pair;
  * @see <a href="https://stackoverflow.com/questions/28342309/iterate-treeview-nodes">Iterate TreeView nodes</a>
  */
 @SuppressWarnings( "ClassWithoutLogger" )
-public class TreeItemWalker<T> {
+public class TreeItemWalker<T> implements Iterator<TreeItem<T>>, Iterable<TreeItem<T>> {
 
 	/**
 	 * Returns a walker initialized with the given {@code root} item.
@@ -439,14 +440,21 @@ public class TreeItemWalker<T> {
 	/**
 	 * @return {@code true} if the walker still has unserved items.
 	 */
+	@Override
 	public boolean hasNext() {
 		return !stack.isEmpty();
+	}
+
+	@Override
+	public Iterator<TreeItem<T>> iterator() {
+		return this;
 	}
 
 	/**
 	 * @return The next tree item in depth-first walk order: the parent is
 	 *         returned before any of its children.
 	 */
+	@Override
 	public TreeItem<T> next() {
 
 		if ( !hasNext() ) {
@@ -496,6 +504,11 @@ public class TreeItemWalker<T> {
 
 		return next;
 
+	}
+
+	@Override
+	public Spliterator<TreeItem<T>> spliterator() {
+		return stream().spliterator();
 	}
 
 	/**
