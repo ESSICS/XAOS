@@ -18,6 +18,7 @@ package se.europeanspallationsource.xaos.ui.control.tree.directory;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NotDirectoryException;
 import java.nio.file.Path;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchEvent.Kind;
@@ -27,6 +28,7 @@ import java.text.MessageFormat;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executor;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import javafx.application.Platform;
 import javafx.scene.control.TreeItem;
@@ -223,12 +225,27 @@ public class TreeDirectoryMonitor<I, T> {
 	 * Adds a directory to watch. The directory will be added to the directory
 	 * model and watched for changes.
 	 *
-	 * @param dir           The directory to be watched and viewed.
-	 * @param synchOnExpand If (@code true}, then folder synchronization is
-	 *                      performed only when the tree item is expanded.
+	 * @param dir The directory to be watched and viewed.
 	 */
-	public void addTopLevelDirectory( Path dir, boolean synchOnExpand ) {
-//	TODO:CR Add an overloaded "addTopLevelDirectory" with 2 new parameters: onCollapse and onExpand.
+	public void addTopLevelDirectory( Path dir) {
+		addTopLevelDirectory(dir, null, null);
+	}
+
+	/**
+	 * Adds a directory to watch. The directory will be added to the directory
+	 * model and watched for changes.
+	 *
+	 * @param dir        The directory to be watched and viewed.
+	 * @param onCollapse A {@link Consumer} to be invoked when this item is
+	 *                   collapsed. Can be {@code null}.
+	 * @param onExpand   A {@link Consumer} to be invoked when this item is
+	 *                   expanded. Can be {@code null}.
+	 */
+	public void addTopLevelDirectory(
+		Path dir,
+		final Consumer<? super TreeDirectoryItems.DirectoryItem<T>> onCollapse,
+		final Consumer<? super TreeDirectoryItems.DirectoryItem<T>> onExpand
+	) {
 
 		if ( !dir.isAbsolute() ) {
 			throw new IllegalArgumentException(MessageFormat.format(
@@ -246,7 +263,23 @@ public class TreeDirectoryMonitor<I, T> {
 //			}
 
 //	TODO:CR Add code to synch the directory watcher.
-			model.addTopLevelDirectory(dir, synchOnExpand);
+			model.addTopLevelDirectory(
+				dir,
+				onCollapse,
+				dirItem -> {
+
+					watchDirectory(dirItem.getPath());
+
+					if ( onExpand != null ) {
+						onExpand.accept(dirItem);
+					}
+
+				}
+			);
+
+			model.sync(dir);
+
+
 //			refresh(dir);
 			
 //		} catch ( IOException e ) {
@@ -301,6 +334,7 @@ public class TreeDirectoryMonitor<I, T> {
 	 * @return A {@link CompletionStage} completed exceptionally if an I/o
 	 *         error occurred.
 	 */
+//	TODO:CR to be removed?
 //	public CompletionStage<Void> refresh( Path path ) {
 //		return wrap(directoryWatcher.tree(path), clientThreadExecutor)
 //			.thenAcceptAsync(
@@ -322,7 +356,9 @@ public class TreeDirectoryMonitor<I, T> {
 			List<WatchEvent<?>> events = event.getEvents();
         
 			if ( events.stream().anyMatch(evt -> evt.kind() == OVERFLOW) ) {
-				refreshOrStreamError(dir);
+				model.sync(dir);
+//	TODO:CR to be removed?
+//				refreshOrStreamError(dir);
 			} else {
 				events.forEach(evt -> processEvent(dir, (WatchEvent<Path>) evt));
 			}
@@ -356,10 +392,13 @@ public class TreeDirectoryMonitor<I, T> {
 
 				if ( model.containsPrefixOf(child) ) {
 					model.addDirectory(child, externalInitiator);
-					directoryWatcher.watchOrStreamError(child);
+					model.sync(child);
+//	TODO:CR to be removed?
+//					directoryWatcher.watchOrStreamError(child);
 				}
 
-				refreshOrStreamError(child);
+//	TODO:CR to be removed?
+//				refreshOrStreamError(child);
 
 			} else {
 				try {
@@ -380,28 +419,23 @@ public class TreeDirectoryMonitor<I, T> {
 
 	}
 
-	private void refreshOrStreamError( Path path ) {
+//	TODO:CR to be removed?
+//	private void refreshOrStreamError( Path path ) {
 //		refresh(path).whenComplete(( nothing, ex ) -> {
 //			if ( ex != null ) {
 //				localErrors.push(ex);
 //			}
 //		});
-	}
-
-//	private void watchDirectory( PathElement tree ) {
-//
-//		if ( tree.isDirectory() ) {
-//
-//			Path path = tree.getPath();
-//
-//			if ( !directoryWatcher.isWatched(path) ) {
-//				directoryWatcher.watchOrStreamError(path);
-//			}
-//
-//			tree.getChildren().forEach(child -> watchDirectory(child));
-//
-//		}
-//
 //	}
+
+	private void watchDirectory( Path path ) {
+		if ( Files.isDirectory(path) ) {
+			if ( !directoryWatcher.isWatched(path) ) {
+				directoryWatcher.watchOrStreamError(path);
+			}
+		} else {
+			localErrors.push(new NotDirectoryException(path.toString()));
+		}
+	}
 
 }

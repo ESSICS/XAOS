@@ -74,7 +74,6 @@ public class DirectoryWatcherTest {
 
 	@Before
 	public void setUp() throws IOException {
-
 		executor = Executors.newSingleThreadExecutor();
 		root = Files.createTempDirectory("DW_");
 			dir_a = Files.createTempDirectory(root, "DW_a_");
@@ -84,29 +83,6 @@ public class DirectoryWatcherTest {
 			dir_b = Files.createTempDirectory(root, "DW_b_");
 				file_b1 = Files.createTempFile(dir_b, "DW_b1_", ".test");
 				file_b2 = Files.createTempFile(dir_b, "DW_b2_", ".test");
-
-//		System.out.println(MessageFormat.format(
-//			"  Testing 'DirectoryWatcher'\n"
-//			+ "    created directories:\n"
-//			+ "      {0}\n"
-//			+ "      {1}\n"
-//			+ "      {2}\n"
-//			+ "      {3}\n"
-//			+ "    created files:\n"
-//			+ "      {4}\n"
-//			+ "      {5}\n"
-//			+ "      {6}\n"
-//			+ "      {7}",
-//			root,
-//			dir_a,
-//			dir_a_c,
-//			dir_b,
-//			file_a,
-//			file_a_c,
-//			file_b1,
-//			file_b2
-//		));
-//
 	}
 
 	@After
@@ -830,101 +806,6 @@ public class DirectoryWatcherTest {
 		);
 
 	}
-
-//	TODO:CR to be removed
-//	/**
-//	 * Test of tree method, of class DirectoryWatcher.
-//	 *
-//	 * @throws java.io.IOException
-//	 */
-//	@Test
-//	public void testTree() throws IOException {
-//
-//		System.out.println(MessageFormat.format("  Testing ''tree'' [on {0}]...", root));
-//
-//		DirectoryWatcher watcher = build(executor);
-//		CompletableFuture<PathElement> future = watcher.tree(root);
-//
-//		assertNotNull(future);
-//
-//		PathElement rootElement = null;
-//
-//		try {
-//			rootElement = future.get(1, TimeUnit.MINUTES);
-//		} catch ( InterruptedException | ExecutionException | TimeoutException ex ) {
-//			fail(MessageFormat.format("Unable to get tree: {0} [{1}].", ex.getClass().getName(), ex.getMessage()));
-//		}
-//
-//		assertNotNull(rootElement);
-//
-//		assertEquals(root, rootElement.getPath());
-//		assertTrue(rootElement.isDirectory());
-//
-//		List<PathElement> rootChildren = rootElement.getChildren();
-//
-//		assertNotNull(rootChildren);
-//		assertEquals(2, rootChildren.size());
-//
-//			PathElement dirAElement = rootChildren.get(0);
-//
-//			assertNotNull(dirAElement);
-//			assertEquals(dir_a, dirAElement.getPath());
-//			assertTrue(dirAElement.isDirectory());
-//
-//			List<PathElement> dirAChildren = dirAElement.getChildren();
-//
-//			assertNotNull(dirAChildren);
-//			assertEquals(2, dirAChildren.size());
-//
-//				PathElement dirACElement = dirAChildren.get(0);
-//
-//				assertNotNull(dirACElement);
-//				assertEquals(dir_a_c, dirACElement.getPath());
-//				assertTrue(dirACElement.isDirectory());
-//
-//					List<PathElement> dirACChildren = dirACElement.getChildren();
-//
-//					assertNotNull(dirACChildren);
-//					assertEquals(1, dirACChildren.size());
-//
-//					PathElement fileACElement = dirACChildren.get(0);
-//
-//					assertNotNull(fileACElement);
-//					assertEquals(file_a_c, fileACElement.getPath());
-//					assertFalse(fileACElement.isDirectory());
-//
-//				PathElement fileAElement = dirAChildren.get(1);
-//
-//				assertNotNull(fileAElement);
-//				assertEquals(file_a, fileAElement.getPath());
-//				assertFalse(fileAElement.isDirectory());
-//
-//			PathElement dirBElement = rootChildren.get(1);
-//
-//			assertNotNull(dirBElement);
-//			assertEquals(dir_b, dirBElement.getPath());
-//			assertTrue(dirBElement.isDirectory());
-//
-//			List<PathElement> dirBChildren = dirBElement.getChildren();
-//
-//			assertNotNull(dirBChildren);
-//			assertEquals(2, dirBChildren.size());
-//
-//				PathElement fileB1Element = dirBChildren.get(0);
-//
-//				assertNotNull(fileB1Element);
-//				assertEquals(file_b1, fileB1Element.getPath());
-//				assertFalse(fileB1Element.isDirectory());
-//
-//				PathElement fileB2Element = dirBChildren.get(1);
-//
-//				assertNotNull(fileB2Element);
-//				assertEquals(file_b2, fileB2Element.getPath());
-//				assertFalse(fileB2Element.isDirectory());
-//
-//		watcher.shutdown();
-//
-//	}
 
 	/**
 	 * Test of unwatch method, of class DirectoryWatcher.
