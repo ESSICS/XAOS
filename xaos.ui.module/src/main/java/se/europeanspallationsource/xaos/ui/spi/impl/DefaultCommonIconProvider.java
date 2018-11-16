@@ -16,6 +16,7 @@
 package se.europeanspallationsource.xaos.ui.spi.impl;
 
 
+import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,9 +35,9 @@ import se.europeanspallationsource.xaos.ui.spi.IconProvider;
  *
  * @author claudio.rosati@esss.se
  */
-@SuppressWarnings( "ClassWithoutLogger" )
+@SuppressWarnings( { "ClassWithoutLogger", "UseOfSystemOutOrSystemErr" } )
 @ServiceProvider( service = IconProvider.class )
-public class DefaultCommonIconProvider implements IconProvider {
+public class DefaultCommonIconProvider extends BaseProvider implements IconProvider {
 
 	private static final Map<CommonIcons, Ikon> ICONS_MAP;
 
@@ -58,6 +59,15 @@ public class DefaultCommonIconProvider implements IconProvider {
 		map.put(CommonIcons.SQUARE_LEFT, FontAwesome.CARET_SQUARE_O_LEFT);
 		map.put(CommonIcons.SQUARE_RIGHT, FontAwesome.CARET_SQUARE_O_RIGHT);
 		map.put(CommonIcons.SQUARE_UP, FontAwesome.CARET_SQUARE_O_UP);
+
+		//	Print map if xaos.test.verbose is set to true.
+		verbosePrintout(
+			map,
+			MessageFormat.format(
+				"Common icons loaded [{0}]",
+				DefaultCommonIconProvider.class.getSimpleName()
+			)
+		);
 
 		ICONS_MAP = Collections.unmodifiableMap(map);
 

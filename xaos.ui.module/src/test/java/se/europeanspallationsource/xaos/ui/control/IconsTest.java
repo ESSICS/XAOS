@@ -18,11 +18,13 @@ package se.europeanspallationsource.xaos.ui.control;
 
 import io.github.classgraph.ClassGraph;
 import java.io.File;
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.TimeoutException;
 import javafx.embed.swing.SwingNode;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
@@ -30,6 +32,7 @@ import javafx.scene.Node;
 import javafx.scene.ParallelCamera;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.PointLight;
+import javafx.scene.Scene;
 import javafx.scene.SubScene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.chart.AreaChart;
@@ -128,10 +131,14 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.scene.web.HTMLEditor;
 import javafx.scene.web.WebView;
+import javafx.stage.Stage;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.kordamp.ikonli.fontawesome.FontAwesome;
+import org.testfx.api.FxToolkit;
+import org.testfx.framework.junit.ApplicationTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNull;
@@ -152,11 +159,24 @@ import static se.europeanspallationsource.xaos.ui.control.Icons.DEFAULT_SIZE;
  * @author claudio.rosati@esss.se
  */
 @SuppressWarnings( { "UseOfSystemOutOrSystemErr", "ClassWithoutLogger" } )
-public class IconsTest {
+public class IconsTest extends ApplicationTest {
 
 	@BeforeClass
 	public static void setUpClass() {
 		System.out.println("---- IconsTest -------------------------------------------------");
+	}
+
+	@Override
+	public void start( Stage stage ) throws IOException {
+
+		stage.setScene(new Scene(new AnchorPane(), 800, 500));
+		stage.show();
+
+	}
+
+	@After
+	public void tearDown() throws TimeoutException {
+		FxToolkit.cleanupStages();
 	}
 
 	/**
@@ -302,7 +322,10 @@ public class IconsTest {
 		classNames.forEach(className -> {
 			if ( supportedClasses.contains(className) ) {
 				supportedClasses.remove(className);
-				assertThat(Icons.iconForClass(className, DEFAULT_SIZE)).isNotNull().isInstanceOf(ImageView.class);
+				assertThat(Icons.iconForClass(className, DEFAULT_SIZE))
+					.overridingErrorMessage("Expecting actual icon not to be null for %1$s", className)
+					.isNotNull()
+					.isInstanceOf(ImageView.class);
 			} else {
 				assertNull("Icon for " + className, Icons.iconForClass(className, DEFAULT_SIZE));
 			}
@@ -941,7 +964,7 @@ public class IconsTest {
 		assertThat(Icons.iconForMIMEType("audio/vnd.nuera.ecelp9600")).isNotNull().isInstanceOf(Text.class);
 		assertThat(Icons.iconForMIMEType("audio/vnd.octel.sbc")).isNotNull().isInstanceOf(Text.class);
 		assertThat(Icons.iconForMIMEType("audio/vnd.presonus.multitrack")).isNotNull().isInstanceOf(Text.class);
-		assertThat(Icons.iconForMIMEType("audio/vnd.qcelp - DEPRECATED in favor of audio/qcelp")).isNotNull().isInstanceOf(Text.class);
+		assertThat(Icons.iconForMIMEType("audio/vnd.qcelp")).isNotNull().isInstanceOf(Text.class);
 		assertThat(Icons.iconForMIMEType("audio/vnd.rhetorex.32kadpcm")).isNotNull().isInstanceOf(Text.class);
 		assertThat(Icons.iconForMIMEType("audio/vnd.rip")).isNotNull().isInstanceOf(Text.class);
 		assertThat(Icons.iconForMIMEType("audio/vnd.sealedmedia.softseal.mpeg")).isNotNull().isInstanceOf(Text.class);
@@ -1291,7 +1314,10 @@ public class IconsTest {
 		new HashSet<>(supportedClasses).forEach(type -> {
 			if ( supportedClasses.contains(type) ) {
 				supportedClasses.remove(type);
-				assertThat(Icons.iconFor(type, DEFAULT_SIZE)).isNotNull().isInstanceOf(ImageView.class);
+				assertThat(Icons.iconFor(type, DEFAULT_SIZE))
+					.overridingErrorMessage("Expecting actual icon not to be null for %1$s", type.getName())
+					.isNotNull()
+					.isInstanceOf(ImageView.class);
 			} else {
 				assertThat(Icons.iconFor(type, DEFAULT_SIZE)).isNull();
 			}

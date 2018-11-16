@@ -25,14 +25,16 @@ module xaos.ui {
 	requires javafx.base;
 	requires javafx.controls;
 	requires javafx.graphics;
+	requires javafx.media;
 	requires javafx.swing;
 	requires javafx.web;
 	requires org.apache.commons.lang3;
+	requires org.apache.commons.text;
 	requires org.kordamp.iconli.core;
 	requires org.kordamp.ikonli.fontawesome;
 	requires org.kordamp.ikonli.javafx;
 	requires transitive xaos.core;
-	requires xaos.tools;
+	requires transitive xaos.tools;
 	//	TODO:CR To be removed after getting rid of reactfx.
 	requires reactfx;
 

@@ -16,6 +16,7 @@
 package se.europeanspallationsource.xaos.ui.spi.impl;
 
 
+import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,9 +33,9 @@ import se.europeanspallationsource.xaos.ui.spi.MIMETypeIconProvider;
  *
  * @author claudio.rosati@esss.se
  */
-@SuppressWarnings( "ClassWithoutLogger" )
+@SuppressWarnings( { "ClassWithoutLogger", "UseOfSystemOutOrSystemErr" } )
 @ServiceProvider( service = MIMETypeIconProvider.class )
-public class DefaultMIMETypeIconProvider implements MIMETypeIconProvider {
+public class DefaultMIMETypeIconProvider extends BaseProvider implements MIMETypeIconProvider {
 
 	private static final Map<String, Node> ICONS_MAP;
 
@@ -199,7 +200,7 @@ public class DefaultMIMETypeIconProvider implements MIMETypeIconProvider {
 		map.put("audio/vnd.nuera.ecelp9600", icon);
 		map.put("audio/vnd.octel.sbc", icon);
 		map.put("audio/vnd.presonus.multitrack", icon);
-		map.put("audio/vnd.qcelp - DEPRECATED in favor of audio/qcelp", icon);
+		map.put("audio/vnd.qcelp", icon);
 		map.put("audio/vnd.rhetorex.32kadpcm", icon);
 		map.put("audio/vnd.rip", icon);
 		map.put("audio/vnd.sealedmedia.softseal.mpeg", icon);
@@ -417,6 +418,15 @@ public class DefaultMIMETypeIconProvider implements MIMETypeIconProvider {
 		icon = FontIcon.of(FontAwesome.FILE_WORD_O);
 
 		map.put("application/msword", icon);
+
+		//	Print map if xaos.test.verbose is set to true.
+		verbosePrintout(
+			map,
+			MessageFormat.format(
+				"MIMEs loaded [{0}]",
+				DefaultMIMETypeIconProvider.class.getSimpleName()
+			)
+		);
 
 		ICONS_MAP = Collections.unmodifiableMap(map);
 

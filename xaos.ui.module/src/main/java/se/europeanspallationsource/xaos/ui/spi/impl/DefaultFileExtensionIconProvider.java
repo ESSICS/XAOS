@@ -16,6 +16,7 @@
 package se.europeanspallationsource.xaos.ui.spi.impl;
 
 
+import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,9 +34,9 @@ import se.europeanspallationsource.xaos.ui.spi.FileExtensionIconProvider;
  *
  * @author claudio.rosati@esss.se
  */
-@SuppressWarnings( "ClassWithoutLogger" )
+@SuppressWarnings( { "ClassWithoutLogger", "UseOfSystemOutOrSystemErr" } )
 @ServiceProvider( service = FileExtensionIconProvider.class )
-public class DefaultFileExtensionIconProvider implements FileExtensionIconProvider {
+public class DefaultFileExtensionIconProvider extends BaseProvider implements FileExtensionIconProvider {
 
 	private static final Map<String, Ikon> ICONS_MAP;
 
@@ -490,6 +491,15 @@ public class DefaultFileExtensionIconProvider implements FileExtensionIconProvid
 		map.put("wpd", icon);
 		map.put("wri", icon);
 		map.put("xlr", icon);
+
+		//	Print map if xaos.test.verbose is set to true.
+		verbosePrintout(
+			map,
+			MessageFormat.format(
+				"File extensions loaded [{0}]",
+				DefaultFileExtensionIconProvider.class.getSimpleName()
+			)
+		);
 
 		ICONS_MAP = Collections.unmodifiableMap(map);
 

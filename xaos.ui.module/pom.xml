@@ -18,6 +18,24 @@
 	</description>
 	<url>https://github.com/ESSICS/XAOS</url>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.1</version>
+				<configuration>
+					<argLine>
+						--add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
+					</argLine>
+					<argLine>
+						--add-opens javafx.controls/javafx.scene.control=xaos.tools
+					</argLine>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 	<dependencies>
 
         <!-- JavaFX - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -41,6 +59,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-media</artifactId>
+			<version>11.0.1</version>
+            <scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-swing</artifactId>
 			<version>11.0.1</version>
             <scope>compile</scope>
@@ -57,6 +81,12 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.8</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-text</artifactId>
+			<version>1.6</version>
 			<scope>compile</scope>
 		</dependency>
 
