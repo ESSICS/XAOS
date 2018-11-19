@@ -18,10 +18,14 @@ package se.europeanspallationsource.xaos.ui.control.tree.directory;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.MessageFormat;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -41,8 +45,12 @@ import org.testfx.framework.junit.ApplicationTest;
 import se.europeanspallationsource.xaos.core.util.io.DeleteFileVisitor;
 import se.europeanspallationsource.xaos.ui.control.tree.TreeItems;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryMonitorTest.ChangeSource.EXTERNAL;
+import static se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryMonitorTest.ChangeSource.INTERNAL;
 
 
 /**
@@ -115,14 +123,12 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 	 * @throws java.lang.InterruptedException
 	 */
 	@Test
-//@Ignore
 	public void testAddTopLevelDirectory() throws InterruptedException {
 
 		System.out.println(MessageFormat.format("  Testing ''addTopLevelDirectory'' [on {0}]...", root));
 
 		CountDownLatch latch = new CountDownLatch(1);
 		EventHandler<TreeItem.TreeModificationEvent<Path>> eventHandler = event -> {
-			Platform.runLater(() -> TreeItems.expandAll(rootItem, true));
 			latch.countDown();
 		};
 
@@ -135,516 +141,506 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 
 	}
 
-//	/**
-//	 * Test of creating directories.
-//	 *
-//	 * @throws java.lang.InterruptedException
-//	 * @throws java.io.IOException
-//	 */
-//	@Test
-//@Ignore
-//	public void testCreateDirectories() throws InterruptedException, IOException {
-//
-//		System.out.println(MessageFormat.format("  Testing directories creation [on {0}]...", root));
-//
-//		Queue<ChangeSource> sources = new ConcurrentLinkedDeque<>();
-//		Path toBeInternallyCreated1 = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_y");
-//		Path toBeInternallyCreated2 = FileSystems.getDefault().getPath(toBeInternallyCreated1.toString(), "dir_a_z");
-//		CountDownLatch latchInternal = new CountDownLatch(2);
-//		Path toBeExternallyCreated1 = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_w");
-//		Path toBeExternallyCreated2 = FileSystems.getDefault().getPath(toBeExternallyCreated1.toString(), "dir_a_x");
-//		CountDownLatch latchExternal = new CountDownLatch(2);
-//		EventHandler<TreeItem.TreeModificationEvent<Path>> eventHandler = event -> {
-//			Platform.runLater(() -> {
-//
-//				TreeItems.expandAll(rootItem, true);
-//
-//				if ( event.wasAdded() ) {
-//
-//					if ( toBeInternallyCreated1.equals(event.getAddedChildren().get(0).getValue())
-//					  || toBeInternallyCreated2.equals(event.getAddedChildren().get(0).getValue()) ) {
-//						latchInternal.countDown();
-//					}
-//
-//					if ( toBeExternallyCreated1.equals(event.getAddedChildren().get(0).getValue())
-//					  || toBeExternallyCreated2.equals(event.getAddedChildren().get(0).getValue()) ) {
-//						latchExternal.countDown();
-//					}
-//
-//				}
-//
-//			});
-//		};
-//
-//		rootItem.addEventHandler(TreeItem.childrenModificationEvent(), eventHandler);
-//		monitor.addTopLevelDirectory(root, false);
-//		monitor.model().creations().subscribe(u -> {
-//			if ( toBeInternallyCreated1.equals(u.getPath())
-//			  || toBeInternallyCreated2.equals(u.getPath())
-//			  || toBeExternallyCreated1.equals(u.getPath())
-//			  || toBeExternallyCreated2.equals(u.getPath()) ) {
-//				sources.offer(u.getInitiator());
-//			}
-//		});
-//
-//		//	INTERNAL creation.
-//		executor.execute(() -> {
-//			try {
-//				monitor.io().createDirectories(toBeInternallyCreated2, INTERNAL).toCompletableFuture().get();
-//			} catch ( InterruptedException | ExecutionException ex ) {
-//				fail(ex.getMessage());
-//			}
-//		});
-//
-//		if ( !latchInternal.await(1, TimeUnit.MINUTES) ) {
-//			fail("Directory creation not completed in 1 minute.");
-//		}
-//
-//		assertTrue(monitor.model().contains(toBeInternallyCreated1));
-//		assertTrue(monitor.model().contains(toBeInternallyCreated2));
-//		assertThat(view.getTreeItem(2).getValue()).isEqualTo(toBeInternallyCreated1);
-//		assertThat(view.getTreeItem(3).getValue()).isEqualTo(toBeInternallyCreated2);
-//		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(2);
-//		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(0);
-//
-//		//	EXTERNAL creation.
-//		sources.clear();
-//		Files.createDirectories(toBeExternallyCreated2);
-//
-//		if ( !latchExternal.await(1, TimeUnit.MINUTES) ) {
-//			fail("Directory creation not completed in 1 minute.");
-//		}
-//
-//		assertTrue(monitor.model().contains(toBeExternallyCreated1));
-//		assertTrue(monitor.model().contains(toBeExternallyCreated2));
-//		assertThat(view.getTreeItem(2).getValue()).isEqualTo(toBeExternallyCreated1);
-//		assertThat(view.getTreeItem(3).getValue()).isEqualTo(toBeExternallyCreated2);
-//		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(0);
-//		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(2);
-//
-//	}
-//
-//	/**
-//	 * Test of creating a directory.
-//	 *
-//	 * @throws java.lang.InterruptedException
-//	 * @throws java.io.IOException
-//	 */
-//	@Test
-//@Ignore
-//	public void testCreateDirectory() throws InterruptedException, IOException {
-//
-//		System.out.println(MessageFormat.format("  Testing directory creation [on {0}]...", root));
-//
-//		Queue<ChangeSource> sources = new ConcurrentLinkedDeque<>();
-//		Path toBeInternallyCreated = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_z");
-//		CountDownLatch latchInternal = new CountDownLatch(1);
-//		Path toBeExternallyCreated = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_y");
-//		CountDownLatch latchExternal = new CountDownLatch(1);
-//		EventHandler<TreeItem.TreeModificationEvent<Path>> eventHandler = event -> {
-//			Platform.runLater(() -> {
-//
-//				TreeItems.expandAll(rootItem, true);
-//
-//				if ( event.wasAdded() ) {
-//
-//					if ( toBeInternallyCreated.equals(event.getAddedChildren().get(0).getValue()) ) {
-//						latchInternal.countDown();
-//					}
-//
-//					if ( toBeExternallyCreated.equals(event.getAddedChildren().get(0).getValue()) ) {
-//						latchExternal.countDown();
-//					}
-//
-//				}
-//
-//			});
-//		};
-//
-//		rootItem.addEventHandler(TreeItem.childrenModificationEvent(), eventHandler);
-//		monitor.addTopLevelDirectory(root, false);
-//		monitor.model().creations().subscribe(u -> {
-//			if ( toBeInternallyCreated.equals(u.getPath())
-//			  || toBeExternallyCreated.equals(u.getPath()) ) {
-//				sources.offer(u.getInitiator());
-//			}
-//		});
-//
-//		//	INTERNAL creation.
-//		executor.execute(() -> {
-//			try {
-//				monitor.io().createDirectory(toBeInternallyCreated, INTERNAL).toCompletableFuture().get();
-//			} catch ( InterruptedException | ExecutionException ex ) {
-//				fail(ex.getMessage());
-//			}
-//		});
-//
-//		if ( !latchInternal.await(1, TimeUnit.MINUTES) ) {
-//			fail("Directory creation not completed in 1 minute.");
-//		}
-//
-//		assertTrue(monitor.model().contains(toBeInternallyCreated));
-//		assertThat(view.getTreeItem(2).getValue()).isEqualTo(toBeInternallyCreated);
-//		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(1);
-//		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(0);
-//
-//		//	EXTERNAL creation.
-//		sources.clear();
-//		Files.createDirectory(toBeExternallyCreated);
-//
-//		if ( !latchExternal.await(1, TimeUnit.MINUTES) ) {
-//			fail("Directory creation not completed in 1 minute.");
-//		}
-//
-//		assertTrue(monitor.model().contains(toBeExternallyCreated));
-//		assertThat(view.getTreeItem(2).getValue()).isEqualTo(toBeExternallyCreated);
-//		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(0);
-//		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(1);
-//
-//	}
-//
-//	/**
-//	 * Test of creating a file.
-//	 *
-//	 * @throws java.lang.InterruptedException
-//	 * @throws java.io.IOException
-//	 */
-//	@Test
-//@Ignore
-//	public void testCreateFile() throws InterruptedException, IOException {
-//
-//		System.out.println(MessageFormat.format("  Testing file creation [on {0}]...", root));
-//
-//		Queue<ChangeSource> sources = new ConcurrentLinkedDeque<>();
-//		Path toBeInternallyCreated = FileSystems.getDefault().getPath(dir_a.toString(), "created_file_internal.txt");
-//		CountDownLatch latchInternal = new CountDownLatch(1);
-//		Path toBeExternallyCreated = FileSystems.getDefault().getPath(dir_a.toString(), "created_file_external.txt");
-//		CountDownLatch latchExternal = new CountDownLatch(1);
-//		EventHandler<TreeItem.TreeModificationEvent<Path>> eventHandler = event -> {
-//			Platform.runLater(() -> {
-//
-//				TreeItems.expandAll(rootItem, true);
-//
-//				if ( event.wasAdded() ) {
-//
-//					if ( toBeInternallyCreated.equals(event.getAddedChildren().get(0).getValue()) ) {
-//						latchInternal.countDown();
-//					}
-//
-//					if ( toBeExternallyCreated.equals(event.getAddedChildren().get(0).getValue()) ) {
-//						latchExternal.countDown();
-//					}
-//
-//				}
-//
-//			});
-//		};
-//
-//		rootItem.addEventHandler(TreeItem.childrenModificationEvent(), eventHandler);
-//		monitor.addTopLevelDirectory(root, false);
-//		monitor.model().creations().subscribe(u -> {
-//			if ( toBeInternallyCreated.equals(u.getPath())
-//			  || toBeExternallyCreated.equals(u.getPath()) ) {
-//				sources.offer(u.getInitiator());
-//			}
-//		});
-//
-//		//	INTERNAL creation.
-//		executor.execute(() -> {
-//			try {
-//				monitor.io().createFile(toBeInternallyCreated, INTERNAL).toCompletableFuture().get();
-//			} catch ( InterruptedException | ExecutionException ex ) {
-//				fail(ex.getMessage());
-//			}
-//		});
-//
-//		if ( !latchInternal.await(1, TimeUnit.MINUTES) ) {
-//			fail("File creation not completed in 1 minute.");
-//		}
-//
-//		assertTrue(monitor.model().contains(toBeInternallyCreated));
-//		assertThat(view.getTreeItem(4).getValue()).isEqualTo(toBeInternallyCreated);
-//		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(1);
-//		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(0);
-//
-//		//	EXTERNAL creation.
-//		sources.clear();
-//		Files.createFile(toBeExternallyCreated);
-//
-//		if ( !latchExternal.await(1, TimeUnit.MINUTES) ) {
-//			fail("File creation not completed in 1 minute.");
-//		}
-//
-//		assertTrue(monitor.model().contains(toBeExternallyCreated));
-//		assertThat(view.getTreeItem(4).getValue()).isEqualTo(toBeExternallyCreated);
-//		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(0);
-//		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(1);
-//
-//	}
-//
-//	/**
-//	 * Test of deleting a file and a directory.
-//	 *
-//	 * @throws java.lang.InterruptedException
-//	 * @throws java.io.IOException
-//	 */
-//	@Test
-//@Ignore
-//	@SuppressWarnings( "CallToThreadYield" )
-//	public void testDelete() throws InterruptedException, IOException {
-//
-//		System.out.println(MessageFormat.format("  Testing file and directory deletion [on {0}]...", root));
-//
-//		Queue<ChangeSource> sources = new ConcurrentLinkedDeque<>();
-//		CountDownLatch latchInternal = new CountDownLatch(2);
-//		CountDownLatch latchExternal = new CountDownLatch(2);
-//		EventHandler<TreeItem.TreeModificationEvent<Path>> eventHandler = event -> {
-//			Platform.runLater(() -> {
-//
-//				TreeItems.expandAll(rootItem, true);
-//
-//				if ( event.wasRemoved() ) {
-//
-//					if ( dir_a_c.equals(event.getRemovedChildren().get(0).getValue())
-//					  || file_a_c.equals(event.getRemovedChildren().get(0).getValue()) ) {
-//						latchInternal.countDown();
-//					}
-//
-//					if ( dir_a.equals(event.getRemovedChildren().get(0).getValue())
-//					  || file_a.equals(event.getRemovedChildren().get(0).getValue()) ) {
-//						latchExternal.countDown();
-//					}
-//
-//				}
-//
-//			});
-//		};
-//
-//		rootItem.addEventHandler(TreeItem.childrenModificationEvent(), eventHandler);
-//		monitor.addTopLevelDirectory(root, false);
-//		monitor.model().deletions().subscribe(u -> {
-//			if ( dir_a_c.equals(u.getPath())
-//			  || file_a_c.equals(u.getPath())
-//			  || dir_a.equals(u.getPath())
-//			  || file_a.equals(u.getPath()) ) {
-//				sources.offer(u.getInitiator());
-//			}
-//		});
-//
-//		//	INTERNAL deletion.
-//		executor.execute(() -> {
-//			try {
-//				monitor.io().delete(file_a_c, INTERNAL).toCompletableFuture().get();
-//				monitor.io().delete(dir_a_c, INTERNAL).toCompletableFuture().get();
-//			} catch ( InterruptedException | ExecutionException ex ) {
-//				fail(ex.getMessage());
-//			}
-//		});
-//
-//		if ( !latchInternal.await(1, TimeUnit.MINUTES) ) {
-//			fail("Directory and file deletion not completed in 1 minute.");
-//		}
-//
-//		assertFalse(monitor.model().contains(file_a_c));
-//		assertFalse(monitor.model().contains(dir_a_c));
-//		assertThat(view.getTreeItem(3).getValue()).isEqualTo(dir_b);
-//		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(2);
-//		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(0);
-//
-//		//	EXTERNAL deletion.
-//		sources.clear();
-//		Files.delete(file_a);
-//
-//		while ( latchExternal.getCount() > 1 ) {
-//			Thread.yield();
-//		}
-//
-//		Files.delete(dir_a);
-//
-//		if ( !latchExternal.await(1, TimeUnit.MINUTES) ) {
-//			fail("Directory and file deletion not completed in 1 minute.");
-//		}
-//
-//		assertFalse(monitor.model().contains(file_a));
-//		assertFalse(monitor.model().contains(dir_a));
-//		assertThat(view.getTreeItem(1).getValue()).isEqualTo(dir_b);
-//		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(0);
-//		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(2);
-//
-//	}
-//
-//	/**
-//	 * Test of deleting a tree.
-//	 *
-//	 * @throws java.lang.InterruptedException
-//	 * @throws java.io.IOException
-//	 */
-//	@Test
-//@Ignore
-//	public void testDeleteTree() throws InterruptedException, IOException {
-//
-//		System.out.println(MessageFormat.format("  Testing tree deletion [on {0}]...", root));
-//
-//		Queue<ChangeSource> sources = new ConcurrentLinkedDeque<>();
-//		CountDownLatch latchInternal = new CountDownLatch(1);
-//		CountDownLatch latchExternal = new CountDownLatch(4);
-//		EventHandler<TreeItem.TreeModificationEvent<Path>> eventHandler = event -> {
-//			Platform.runLater(() -> {
-//
-//				TreeItems.expandAll(rootItem, true);
-//
-//				if ( event.wasRemoved() ) {
-//
-//					if ( dir_b.equals(event.getRemovedChildren().get(0).getValue()) ) {
-//						latchInternal.countDown();
-//					}
-//
-//					if ( dir_a.equals(event.getRemovedChildren().get(0).getValue())
-//					  || file_a.equals(event.getRemovedChildren().get(0).getValue())
-//					  || dir_a_c.equals(event.getRemovedChildren().get(0).getValue())
-//					  || file_a_c.equals(event.getRemovedChildren().get(0).getValue()) ) {
-//						latchExternal.countDown();
-//					}
-//
-//				}
-//
-//			});
-//		};
-//
-//		rootItem.addEventHandler(TreeItem.childrenModificationEvent(), eventHandler);
-//		monitor.addTopLevelDirectory(root, false);
-//		monitor.model().deletions().subscribe(u -> {
-//			if ( dir_b.equals(u.getPath())
-//			  || dir_a.equals(u.getPath())
-//			  || file_a.equals(u.getPath())
-//			  || dir_a_c.equals(u.getPath())
-//			  || file_a_c.equals(u.getPath()) ) {
-//				sources.offer(u.getInitiator());
-//			}
-//		});
-//
-//		//	INTERNAL deletion.
-//		executor.execute(() -> {
-//			try {
-//				monitor.io().deleteTree(dir_b, INTERNAL).toCompletableFuture().get();
-//			} catch ( InterruptedException | ExecutionException ex ) {
-//				fail(ex.getMessage());
-//			}
-//		});
-//
-//		if ( !latchInternal.await(1, TimeUnit.MINUTES) ) {
-//			fail("Tree deletion not completed in 1 minute.");
-//		}
-//
-//		assertFalse(monitor.model().contains(dir_b));
-//		assertFalse(monitor.model().contains(file_b1));
-//		assertFalse(monitor.model().contains(file_b2));
-//		assertThat(view.getExpandedItemCount()).isEqualTo(5);
-//		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(1);
-//		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(0);
-//
-//		//	EXTERNAL deletion.
-//		sources.clear();
-//		deleteRecursively(dir_a, latchExternal);
-//
-//		if ( !latchExternal.await(3, TimeUnit.MINUTES) ) {
-//			fail("Tree deletion not completed in 3 minutes.");
-//		}
-//
-//		assertFalse(monitor.model().contains(dir_a));
-//		assertFalse(monitor.model().contains(file_a));
-//		assertFalse(monitor.model().contains(dir_a_c));
-//		assertFalse(monitor.model().contains(file_a_c));
-//		assertThat(view.getExpandedItemCount()).isEqualTo(1);
-//		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(0);
-//		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(4);
-//
-//	}
-//
-//	/**
-//	 * Test of navigation capabilities.
-//	 *
-//	 * @throws java.lang.InterruptedException
-//	 */
-//	@Test
-//@Ignore
-//	public void testNavigationSOE() throws InterruptedException {
-//
-//		System.out.println("  Testing browser navigation (synchOnExpand: true)...");
-//
-//		monitor.addTopLevelDirectory(root, true);
-//
-//		assertThat(rootItem.getChildren().size()).isEqualTo(1);
-//
-//		//	---- root ----------------------------------------------------------
-//		TreeItem<Path> rItem = rootItem.getChildren().get(0);
-//
-//		assertThat(rItem).hasFieldOrPropertyWithValue("value", root);
-//		assertThat(rItem.getChildren().size()).isEqualTo(0);
-//
-//		executor.execute(() -> rItem.setExpanded(true));
-//
-//		Thread.sleep(3000L);
-//
-//		assertThat(rItem.getChildren().size()).isEqualTo(2);
-//
-//		//	---- dir_a ---------------------------------------------------------
-//		TreeItem<Path> aItem = rItem.getChildren().get(0);
-//
-//		assertThat(aItem).hasFieldOrPropertyWithValue("value", dir_a);
-//		assertThat(aItem.getChildren().size()).isEqualTo(0);
-//
-//		executor.execute(() -> aItem.setExpanded(true));
-//
-//		Thread.sleep(3000L);
-//
-//		assertThat(aItem.getChildren().size()).isEqualTo(2);
-//
-//		//	---- dir_a_c ---------------------------------------------------------
-//		TreeItem<Path> acItem = aItem.getChildren().get(0);
-//
-//		assertThat(acItem).hasFieldOrPropertyWithValue("value", dir_a_c);
-//		assertThat(acItem.getChildren().size()).isEqualTo(0);
-//
-//		executor.execute(() -> acItem.setExpanded(true));
-//
-//		Thread.sleep(3000L);
-//
-//		assertThat(acItem.getChildren().size()).isEqualTo(1);
-//
-//		//	---- file_a_c --------------------------------------------------------
-//		TreeItem<Path> acfItem = acItem.getChildren().get(0);
-//
-//		assertThat(acfItem).hasFieldOrPropertyWithValue("value", file_a_c);
-//
-//		//	---- file_a --------------------------------------------------------
-//		TreeItem<Path> afItem = aItem.getChildren().get(1);
-//
-//		assertThat(afItem).hasFieldOrPropertyWithValue("value", file_a);
-//
-//		//	---- dir_b ---------------------------------------------------------
-//		TreeItem<Path> bItem = rItem.getChildren().get(1);
-//
-//		assertThat(bItem).hasFieldOrPropertyWithValue("value", dir_b);
-//		assertThat(bItem.getChildren().size()).isEqualTo(0);
-//
-//		executor.execute(() -> bItem.setExpanded(true));
-//
-//		Thread.sleep(3000L);
-//
-//		assertThat(bItem.getChildren().size()).isEqualTo(2);
-//
-//		//	---- file_b1 -------------------------------------------------------
-//		TreeItem<Path> b1Item = bItem.getChildren().get(0);
-//
-//		assertThat(b1Item).hasFieldOrPropertyWithValue("value", file_b1);
-//
-//		//	---- file_b2 -------------------------------------------------------
-//		TreeItem<Path> b2Item = bItem.getChildren().get(1);
-//
-//		assertThat(b2Item).hasFieldOrPropertyWithValue("value", file_b2);
-//
-//	}
+	/**
+	 * Test of creating directories.
+	 *
+	 * @throws java.lang.InterruptedException
+	 * @throws java.io.IOException
+	 */
+	@Test
+	public void testCreateDirectories() throws InterruptedException, IOException {
+
+		System.out.println(MessageFormat.format("  Testing directories creation [on {0}]...", root));
+
+		Queue<ChangeSource> sources = new ConcurrentLinkedDeque<>();
+		Path toBeInternallyCreated1 = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_y");
+		Path toBeInternallyCreated2 = FileSystems.getDefault().getPath(toBeInternallyCreated1.toString(), "dir_a_z");
+		CountDownLatch latchInternal = new CountDownLatch(2);
+		Path toBeExternallyCreated1 = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_w");
+		Path toBeExternallyCreated2 = FileSystems.getDefault().getPath(toBeExternallyCreated1.toString(), "dir_a_x");
+		CountDownLatch latchExternal = new CountDownLatch(2);
+		EventHandler<TreeItem.TreeModificationEvent<Path>> eventHandler = event -> {
+			Platform.runLater(() -> {
+				if ( event.wasAdded() ) {
+
+					if ( toBeInternallyCreated1.equals(event.getAddedChildren().get(0).getValue())
+					  || toBeInternallyCreated2.equals(event.getAddedChildren().get(0).getValue()) ) {
+						latchInternal.countDown();
+					}
+
+					if ( toBeExternallyCreated1.equals(event.getAddedChildren().get(0).getValue())
+					  || toBeExternallyCreated2.equals(event.getAddedChildren().get(0).getValue()) ) {
+						latchExternal.countDown();
+					}
+
+					event.getAddedChildren().forEach(i -> i.setExpanded(true));
+
+				}
+			});
+		};
+
+		rootItem.addEventHandler(TreeItem.childrenModificationEvent(), eventHandler);
+		monitor.addTopLevelDirectory(root);
+		monitor.model().creations().subscribe(u -> {
+			if ( toBeInternallyCreated1.equals(u.getPath())
+			  || toBeInternallyCreated2.equals(u.getPath())
+			  || toBeExternallyCreated1.equals(u.getPath())
+			  || toBeExternallyCreated2.equals(u.getPath()) ) {
+				sources.offer(u.getInitiator());
+			}
+		});
+
+		expandTreeAndWait(monitor.model().getRoot());
+
+		//	INTERNAL creation.
+		executor.execute(() -> {
+			try {
+				monitor.io().createDirectories(toBeInternallyCreated2, INTERNAL).toCompletableFuture().get();
+			} catch ( InterruptedException | ExecutionException ex ) {
+				fail(ex.getMessage());
+			}
+		});
+
+		if ( !latchInternal.await(1, TimeUnit.MINUTES) ) {
+			fail("Directory creation not completed in 1 minute.");
+		}
+
+		assertTrue(monitor.model().contains(toBeInternallyCreated1));
+		assertTrue(monitor.model().contains(toBeInternallyCreated2));
+		assertThat(view.getTreeItem(2).getValue()).isEqualTo(toBeInternallyCreated1);
+		assertThat(view.getTreeItem(3).getValue()).isEqualTo(toBeInternallyCreated2);
+		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(2);
+		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(0);
+
+		//	EXTERNAL creation.
+		sources.clear();
+		Files.createDirectories(toBeExternallyCreated2);
+
+		if ( !latchExternal.await(1, TimeUnit.MINUTES) ) {
+			fail("Directory creation not completed in 1 minute.");
+		}
+
+		assertTrue(monitor.model().contains(toBeExternallyCreated1));
+		assertTrue(monitor.model().contains(toBeExternallyCreated2));
+		assertThat(view.getTreeItem(2).getValue()).isEqualTo(toBeExternallyCreated1);
+		assertThat(view.getTreeItem(3).getValue()).isEqualTo(toBeExternallyCreated2);
+		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(0);
+		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(2);
+
+	}
+
+	/**
+	 * Test of creating a directory.
+	 *
+	 * @throws java.lang.InterruptedException
+	 * @throws java.io.IOException
+	 */
+	@Test
+	public void testCreateDirectory() throws InterruptedException, IOException {
+
+		System.out.println(MessageFormat.format("  Testing directory creation [on {0}]...", root));
+
+		Queue<ChangeSource> sources = new ConcurrentLinkedDeque<>();
+		Path toBeInternallyCreated = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_z");
+		CountDownLatch latchInternal = new CountDownLatch(1);
+		Path toBeExternallyCreated = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_y");
+		CountDownLatch latchExternal = new CountDownLatch(1);
+		EventHandler<TreeItem.TreeModificationEvent<Path>> eventHandler = event -> {
+			Platform.runLater(() -> {
+				if ( event.wasAdded() ) {
+
+					if ( toBeInternallyCreated.equals(event.getAddedChildren().get(0).getValue()) ) {
+						latchInternal.countDown();
+					}
+
+					if ( toBeExternallyCreated.equals(event.getAddedChildren().get(0).getValue()) ) {
+						latchExternal.countDown();
+					}
+
+					event.getAddedChildren().forEach(i -> i.setExpanded(true));
+
+				}
+			});
+		};
+
+		rootItem.addEventHandler(TreeItem.childrenModificationEvent(), eventHandler);
+		monitor.addTopLevelDirectory(root);
+		monitor.model().creations().subscribe(u -> {
+			if ( toBeInternallyCreated.equals(u.getPath())
+			  || toBeExternallyCreated.equals(u.getPath()) ) {
+				sources.offer(u.getInitiator());
+			}
+		});
+
+		expandTreeAndWait(monitor.model().getRoot());
+
+		//	INTERNAL creation.
+		executor.execute(() -> {
+			try {
+				monitor.io().createDirectory(toBeInternallyCreated, INTERNAL).toCompletableFuture().get();
+			} catch ( InterruptedException | ExecutionException ex ) {
+				fail(ex.getMessage());
+			}
+		});
+
+		if ( !latchInternal.await(1, TimeUnit.MINUTES) ) {
+			fail("Directory creation not completed in 1 minute.");
+		}
+
+		assertTrue(monitor.model().contains(toBeInternallyCreated));
+		assertThat(view.getTreeItem(2).getValue()).isEqualTo(toBeInternallyCreated);
+		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(1);
+		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(0);
+
+		//	EXTERNAL creation.
+		sources.clear();
+		Files.createDirectory(toBeExternallyCreated);
+
+		if ( !latchExternal.await(1, TimeUnit.MINUTES) ) {
+			fail("Directory creation not completed in 1 minute.");
+		}
+
+		assertTrue(monitor.model().contains(toBeExternallyCreated));
+		assertThat(view.getTreeItem(2).getValue()).isEqualTo(toBeExternallyCreated);
+		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(0);
+		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(1);
+
+	}
+
+	/**
+	 * Test of creating a file.
+	 *
+	 * @throws java.lang.InterruptedException
+	 * @throws java.io.IOException
+	 */
+	@Test
+	public void testCreateFile() throws InterruptedException, IOException {
+
+		System.out.println(MessageFormat.format("  Testing file creation [on {0}]...", root));
+
+		Queue<ChangeSource> sources = new ConcurrentLinkedDeque<>();
+		Path toBeInternallyCreated = FileSystems.getDefault().getPath(dir_a.toString(), "created_file_internal.txt");
+		CountDownLatch latchInternal = new CountDownLatch(1);
+		Path toBeExternallyCreated = FileSystems.getDefault().getPath(dir_a.toString(), "created_file_external.txt");
+		CountDownLatch latchExternal = new CountDownLatch(1);
+		EventHandler<TreeItem.TreeModificationEvent<Path>> eventHandler = event -> {
+			Platform.runLater(() -> {
+				if ( event.wasAdded() ) {
+
+					if ( toBeInternallyCreated.equals(event.getAddedChildren().get(0).getValue()) ) {
+						latchInternal.countDown();
+					}
+
+					if ( toBeExternallyCreated.equals(event.getAddedChildren().get(0).getValue()) ) {
+						latchExternal.countDown();
+					}
+
+					event.getAddedChildren().forEach(i -> i.setExpanded(true));
+
+				}
+			});
+		};
+
+		rootItem.addEventHandler(TreeItem.childrenModificationEvent(), eventHandler);
+		monitor.addTopLevelDirectory(root);
+		monitor.model().creations().subscribe(u -> {
+			if ( toBeInternallyCreated.equals(u.getPath())
+			  || toBeExternallyCreated.equals(u.getPath()) ) {
+				sources.offer(u.getInitiator());
+			}
+		});
+
+		expandTreeAndWait(monitor.model().getRoot());
+
+		//	INTERNAL creation.
+		executor.execute(() -> {
+			try {
+				monitor.io().createFile(toBeInternallyCreated, INTERNAL).toCompletableFuture().get();
+			} catch ( InterruptedException | ExecutionException ex ) {
+				fail(ex.getMessage());
+			}
+		});
+
+		if ( !latchInternal.await(1, TimeUnit.MINUTES) ) {
+			fail("File creation not completed in 1 minute.");
+		}
+
+		assertTrue(monitor.model().contains(toBeInternallyCreated));
+		assertThat(view.getTreeItem(4).getValue()).isEqualTo(toBeInternallyCreated);
+		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(1);
+		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(0);
+
+		//	EXTERNAL creation.
+		sources.clear();
+		Files.createFile(toBeExternallyCreated);
+
+		if ( !latchExternal.await(1, TimeUnit.MINUTES) ) {
+			fail("File creation not completed in 1 minute.");
+		}
+
+		assertTrue(monitor.model().contains(toBeExternallyCreated));
+		assertThat(view.getTreeItem(4).getValue()).isEqualTo(toBeExternallyCreated);
+		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(0);
+		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(1);
+
+	}
+
+	/**
+	 * Test of deleting a file and a directory.
+	 *
+	 * @throws java.lang.InterruptedException
+	 * @throws java.io.IOException
+	 */
+	@Test
+	@SuppressWarnings( "CallToThreadYield" )
+	public void testDelete() throws InterruptedException, IOException {
+
+		System.out.println(MessageFormat.format("  Testing file and directory deletion [on {0}]...", root));
+
+		Queue<ChangeSource> sources = new ConcurrentLinkedDeque<>();
+		CountDownLatch latchInternal = new CountDownLatch(2);
+		CountDownLatch latchExternal = new CountDownLatch(2);
+		EventHandler<TreeItem.TreeModificationEvent<Path>> eventHandler = event -> {
+			Platform.runLater(() -> {
+				if ( event.wasRemoved() ) {
+
+					if ( dir_a_c.equals(event.getRemovedChildren().get(0).getValue())
+					  || file_a_c.equals(event.getRemovedChildren().get(0).getValue()) ) {
+						latchInternal.countDown();
+					}
+
+					if ( dir_a.equals(event.getRemovedChildren().get(0).getValue())
+					  || file_a.equals(event.getRemovedChildren().get(0).getValue()) ) {
+						latchExternal.countDown();
+					}
+
+				}
+			});
+		};
+
+		rootItem.addEventHandler(TreeItem.childrenModificationEvent(), eventHandler);
+		monitor.addTopLevelDirectory(root);
+		monitor.model().deletions().subscribe(u -> {
+			if ( dir_a_c.equals(u.getPath())
+			  || file_a_c.equals(u.getPath())
+			  || dir_a.equals(u.getPath())
+			  || file_a.equals(u.getPath()) ) {
+				sources.offer(u.getInitiator());
+			}
+		});
+
+		expandTreeAndWait(monitor.model().getRoot());
+
+		//	INTERNAL deletion.
+		executor.execute(() -> {
+			try {
+				monitor.io().delete(file_a_c, INTERNAL).toCompletableFuture().get();
+				monitor.io().delete(dir_a_c, INTERNAL).toCompletableFuture().get();
+			} catch ( InterruptedException | ExecutionException ex ) {
+				fail(ex.getMessage());
+			}
+		});
+
+		if ( !latchInternal.await(1, TimeUnit.MINUTES) ) {
+			fail("Directory and file deletion not completed in 1 minute.");
+		}
+
+		assertFalse(monitor.model().contains(file_a_c));
+		assertFalse(monitor.model().contains(dir_a_c));
+		assertThat(view.getTreeItem(3).getValue()).isEqualTo(dir_b);
+		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(2);
+		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(0);
+
+		//	EXTERNAL deletion.
+		sources.clear();
+		Files.delete(file_a);
+
+		while ( latchExternal.getCount() > 1 ) {
+			Thread.yield();
+		}
+
+		Files.delete(dir_a);
+
+		if ( !latchExternal.await(1, TimeUnit.MINUTES) ) {
+			fail("Directory and file deletion not completed in 1 minute.");
+		}
+
+		assertFalse(monitor.model().contains(file_a));
+		assertFalse(monitor.model().contains(dir_a));
+		assertThat(view.getTreeItem(1).getValue()).isEqualTo(dir_b);
+		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(0);
+		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(2);
+
+	}
+
+	/**
+	 * Test of deleting a tree.
+	 *
+	 * @throws java.lang.InterruptedException
+	 * @throws java.io.IOException
+	 */
+	@Test
+	public void testDeleteTree() throws InterruptedException, IOException {
+
+		System.out.println(MessageFormat.format("  Testing tree deletion [on {0}]...", root));
+
+		Queue<ChangeSource> sources = new ConcurrentLinkedDeque<>();
+		CountDownLatch latchInternal = new CountDownLatch(1);
+		CountDownLatch latchExternal = new CountDownLatch(4);
+		EventHandler<TreeItem.TreeModificationEvent<Path>> eventHandler = event -> {
+			Platform.runLater(() -> {
+				if ( event.wasRemoved() ) {
+
+					if ( dir_b.equals(event.getRemovedChildren().get(0).getValue()) ) {
+						latchInternal.countDown();
+					}
+
+					if ( dir_a.equals(event.getRemovedChildren().get(0).getValue())
+					  || file_a.equals(event.getRemovedChildren().get(0).getValue())
+					  || dir_a_c.equals(event.getRemovedChildren().get(0).getValue())
+					  || file_a_c.equals(event.getRemovedChildren().get(0).getValue()) ) {
+						latchExternal.countDown();
+					}
+
+				}
+			});
+		};
+
+		rootItem.addEventHandler(TreeItem.childrenModificationEvent(), eventHandler);
+		monitor.addTopLevelDirectory(root);
+		monitor.model().deletions().subscribe(u -> {
+			if ( dir_b.equals(u.getPath())
+			  || dir_a.equals(u.getPath())
+			  || file_a.equals(u.getPath())
+			  || dir_a_c.equals(u.getPath())
+			  || file_a_c.equals(u.getPath()) ) {
+				sources.offer(u.getInitiator());
+			}
+		});
+
+		expandTreeAndWait(monitor.model().getRoot());
+
+		//	INTERNAL deletion.
+		executor.execute(() -> {
+			try {
+				monitor.io().deleteTree(dir_b, INTERNAL).toCompletableFuture().get();
+			} catch ( InterruptedException | ExecutionException ex ) {
+				fail(ex.getMessage());
+			}
+		});
+
+		if ( !latchInternal.await(1, TimeUnit.MINUTES) ) {
+			fail("Tree deletion not completed in 1 minute.");
+		}
+
+		assertFalse(monitor.model().contains(dir_b));
+		assertFalse(monitor.model().contains(file_b1));
+		assertFalse(monitor.model().contains(file_b2));
+		assertThat(view.getExpandedItemCount()).isEqualTo(5);
+		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(1);
+		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(0);
+
+		//	EXTERNAL deletion.
+		sources.clear();
+		deleteRecursively(dir_a, latchExternal);
+
+		if ( !latchExternal.await(3, TimeUnit.MINUTES) ) {
+			fail("Tree deletion not completed in 3 minutes.");
+		}
+
+		assertFalse(monitor.model().contains(dir_a));
+		assertFalse(monitor.model().contains(file_a));
+		assertFalse(monitor.model().contains(dir_a_c));
+		assertFalse(monitor.model().contains(file_a_c));
+		assertThat(view.getExpandedItemCount()).isEqualTo(1);
+		assertThat(sources.stream().filter(cs -> INTERNAL.equals(cs)).count()).isEqualTo(0);
+		assertThat(sources.stream().filter(cs -> EXTERNAL.equals(cs)).count()).isEqualTo(4);
+
+	}
+
+	/**
+	 * Test of navigation capabilities.
+	 *
+	 * @throws java.lang.InterruptedException
+	 */
+	@Test
+	public void testNavigation() throws InterruptedException {
+
+		System.out.println("  Testing browser navigation...");
+
+		monitor.addTopLevelDirectory(root);
+
+		assertThat(rootItem.getChildren().size()).isEqualTo(1);
+
+		//	---- root ----------------------------------------------------------
+		TreeItem<Path> rItem = rootItem.getChildren().get(0);
+
+		assertThat(rItem).hasFieldOrPropertyWithValue("value", root);
+		assertThat(rItem.getChildren().size()).isEqualTo(0);
+
+		executor.execute(() -> rItem.setExpanded(true));
+
+		Thread.sleep(3000L);
+
+		assertThat(rItem.getChildren().size()).isEqualTo(2);
+
+		//	---- dir_a ---------------------------------------------------------
+		TreeItem<Path> aItem = rItem.getChildren().get(0);
+
+		assertThat(aItem).hasFieldOrPropertyWithValue("value", dir_a);
+		assertThat(aItem.getChildren().size()).isEqualTo(0);
+
+		executor.execute(() -> aItem.setExpanded(true));
+
+		Thread.sleep(3000L);
+
+		assertThat(aItem.getChildren().size()).isEqualTo(2);
+
+		//	---- dir_a_c ---------------------------------------------------------
+		TreeItem<Path> acItem = aItem.getChildren().get(0);
+
+		assertThat(acItem).hasFieldOrPropertyWithValue("value", dir_a_c);
+		assertThat(acItem.getChildren().size()).isEqualTo(0);
+
+		executor.execute(() -> acItem.setExpanded(true));
+
+		Thread.sleep(3000L);
+
+		assertThat(acItem.getChildren().size()).isEqualTo(1);
+
+		//	---- file_a_c --------------------------------------------------------
+		TreeItem<Path> acfItem = acItem.getChildren().get(0);
+
+		assertThat(acfItem).hasFieldOrPropertyWithValue("value", file_a_c);
+
+		//	---- file_a --------------------------------------------------------
+		TreeItem<Path> afItem = aItem.getChildren().get(1);
+
+		assertThat(afItem).hasFieldOrPropertyWithValue("value", file_a);
+
+		//	---- dir_b ---------------------------------------------------------
+		TreeItem<Path> bItem = rItem.getChildren().get(1);
+
+		assertThat(bItem).hasFieldOrPropertyWithValue("value", dir_b);
+		assertThat(bItem.getChildren().size()).isEqualTo(0);
+
+		executor.execute(() -> bItem.setExpanded(true));
+
+		Thread.sleep(3000L);
+
+		assertThat(bItem.getChildren().size()).isEqualTo(2);
+
+		//	---- file_b1 -------------------------------------------------------
+		TreeItem<Path> b1Item = bItem.getChildren().get(0);
+
+		assertThat(b1Item).hasFieldOrPropertyWithValue("value", file_b1);
+
+		//	---- file_b2 -------------------------------------------------------
+		TreeItem<Path> b2Item = bItem.getChildren().get(1);
+
+		assertThat(b2Item).hasFieldOrPropertyWithValue("value", file_b2);
+
+	}
 
 	@SuppressWarnings( "CallToThreadYield" )
 	private void deleteRecursively( Path root, CountDownLatch latch ) throws IOException {
@@ -667,6 +663,25 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 				Thread.yield();
 			}
 
+		}
+
+	}
+
+	private <T> void expandTreeAndWait( TreeItem<T> item ) {
+
+		CountDownLatch done = new CountDownLatch(1);
+
+		Platform.runLater(() -> {
+			TreeItems.expandAll(item, true);
+			done.countDown();
+		});
+
+		try {
+			if ( !done.await(1, TimeUnit.MINUTES) ) {
+				fail("Tree not expanded in 1 minute.");
+			}
+		} catch ( InterruptedException ex ) {
+				fail("Tree not expanded in 1 minute.");
 		}
 
 	}

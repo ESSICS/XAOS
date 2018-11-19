@@ -393,34 +393,6 @@ public class DirectoryWatcher {
 
 	}
 
-//	TODO:CR to be removed
-//	/**
-//	 * Returns a {@link CompletionStage} containing the tree structure of
-//	 * {@link PathElement} instances representing the content of the given
-//	 * {@code root} directory. The returned stage is completed exceptionally in
-//	 * case an error occurs.
-//	 *
-//	 * @param root The pathname of the tree's root directory.
-//	 * @return A {@link CompletionStage} containing the tree structure of
-//	 *         {@link PathElement} instances rooted at the given {@link Path},
-//	 *         or completed exceptionally if an I/o error occurred.
-//	 */
-//	public CompletableFuture<PathElement> tree( Path root ) {
-//
-//		CompletableFuture<PathElement> future = new CompletableFuture<>();
-//
-//		executeOnIOThread(() -> {
-//			try {
-//				future.complete(PathElement.tree(root));
-//			} catch ( Exception e ) {
-//				future.completeExceptionally(e);
-//			}
-//		});
-//
-//		return future;
-//
-//	}
-
 	/**
 	 * Unwatch the given directory {@link Path}.
 	 *

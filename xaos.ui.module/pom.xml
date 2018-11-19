@@ -26,8 +26,7 @@
 				<version>2.22.1</version>
 				<configuration>
 					<argLine>
-						--add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
-						--add-opens javafx.controls/javafx.scene.control=xaos.tools
+						--add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED --add-opens javafx.controls/javafx.scene.control=xaos.tools
 					</argLine>
 				</configuration>
 			</plugin>

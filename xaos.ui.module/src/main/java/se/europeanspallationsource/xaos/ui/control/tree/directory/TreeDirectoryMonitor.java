@@ -22,11 +22,9 @@ import java.nio.file.NotDirectoryException;
 import java.nio.file.Path;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchEvent.Kind;
-import java.nio.file.WatchService;
 import java.nio.file.attribute.FileTime;
 import java.text.MessageFormat;
 import java.util.List;
-import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -255,14 +253,6 @@ public class TreeDirectoryMonitor<I, T> {
 		}
 
 		try {
-
-//	TODO:CR Remove commented lines?
-//	Not needed: already in refresh(dir).
-//			if ( !directoryWatcher.isWatched(dir) ) {
-//				directoryWatcher.watch(dir);
-//			}
-
-//	TODO:CR Add code to synch the directory watcher.
 			model.addTopLevelDirectory(
 				dir,
 				onCollapse,
@@ -276,13 +266,7 @@ public class TreeDirectoryMonitor<I, T> {
 
 				}
 			);
-
 			model.sync(dir);
-
-
-//			refresh(dir);
-			
-//		} catch ( IOException e ) {
 		} catch ( Exception e ) {
 			localErrors.push(e);
 		}
@@ -321,31 +305,6 @@ public class TreeDirectoryMonitor<I, T> {
 		return model;
 	}
 
-	/**
-	 * Used to manually refresh the given subtree of the directory model.
-	 * <p>
-	 * Guarantees given by {@link WatchService} are weak and the behavior
-	 * may vary on different operating systems. It is possible that the
-	 * automatic synchronization is not 100% reliable. This method provides a
-	 * way to request synchronization in case any inconsistencies are
-	 * observed.</p>
-	 *
-	 * @param path The {@link Path} to be refreshed.
-	 * @return A {@link CompletionStage} completed exceptionally if an I/o
-	 *         error occurred.
-	 */
-//	TODO:CR to be removed?
-//	public CompletionStage<Void> refresh( Path path ) {
-//		return wrap(directoryWatcher.tree(path), clientThreadExecutor)
-//			.thenAcceptAsync(
-//				tree -> {
-//					model.sync(tree);
-//					watchDirectory(tree);
-//				},
-//				clientThreadExecutor
-//			);
-//	}
-
 	@SuppressWarnings( "unchecked" )
     private void processDirectoryEvent ( DirectoryWatcher.DirectoryEvent event ) {
 
@@ -357,8 +316,6 @@ public class TreeDirectoryMonitor<I, T> {
         
 			if ( events.stream().anyMatch(evt -> evt.kind() == OVERFLOW) ) {
 				model.sync(dir);
-//	TODO:CR to be removed?
-//				refreshOrStreamError(dir);
 			} else {
 				events.forEach(evt -> processEvent(dir, (WatchEvent<Path>) evt));
 			}
@@ -389,17 +346,10 @@ public class TreeDirectoryMonitor<I, T> {
 			}
 		} else if ( kind == ENTRY_CREATE ) {
 			if ( Files.isDirectory(child) ) {
-
 				if ( model.containsPrefixOf(child) ) {
 					model.addDirectory(child, externalInitiator);
 					model.sync(child);
-//	TODO:CR to be removed?
-//					directoryWatcher.watchOrStreamError(child);
 				}
-
-//	TODO:CR to be removed?
-//				refreshOrStreamError(child);
-
 			} else {
 				try {
 
@@ -418,15 +368,6 @@ public class TreeDirectoryMonitor<I, T> {
 		}
 
 	}
-
-//	TODO:CR to be removed?
-//	private void refreshOrStreamError( Path path ) {
-//		refresh(path).whenComplete(( nothing, ex ) -> {
-//			if ( ex != null ) {
-//				localErrors.push(ex);
-//			}
-//		});
-//	}
 
 	private void watchDirectory( Path path ) {
 		if ( Files.isDirectory(path) ) {
