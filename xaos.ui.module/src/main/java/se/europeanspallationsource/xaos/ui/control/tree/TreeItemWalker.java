@@ -48,7 +48,7 @@ import javafx.util.Pair;
  * <b>Important Note #3:</b> This implementation is not synchronized. Calling
  * {@link #getDepth()}, {@link #hasNext()}, {@link #next()} and/or
  * {@link #stream()}'s methods from different threads concurrently can produce
- * odd results. Call {@code buildSynchronized) to get a synchronized version of
+ * odd results. Call {@code buildSynchronized} to get a synchronized version of
  * the walker.
  * </p>
  *
@@ -191,7 +191,7 @@ public class TreeItemWalker<T> implements Iterator<TreeItem<T>>, Iterable<TreeIt
 	 * for each tree item.
 	 *
 	 * @param <T>     The type of the {@link TreeItem}s.
-	 * @param tree    The {@link TreeView) whose root has to be visited.
+	 * @param tree    The {@link TreeView} whose root has to be visited.
 	 * @param visitor The visitor receiving the visited {@link TreeItem} during
 	 *                the tree walk.
 	 */
@@ -210,7 +210,7 @@ public class TreeItemWalker<T> implements Iterator<TreeItem<T>>, Iterable<TreeIt
 	 * for each tree item.
 	 *
 	 * @param <T>     The type of the {@link TreeItem}s.
-	 * @param tree    The {@link TreeView) whose root has to be visited.
+	 * @param tree    The {@link TreeView} whose root has to be visited.
 	 * @param visitor The visitor receiving the visited {@link TreeItem} and the
 	 *                current walking depth during the tree walk.
 	 */
@@ -229,7 +229,7 @@ public class TreeItemWalker<T> implements Iterator<TreeItem<T>>, Iterable<TreeIt
 	 * for each tree item.
 	 *
 	 * @param <T>     The type of the {@link TreeItem}s.
-	 * @param tree    The {@link TreeTableView) whose root has to be visited.
+	 * @param tree    The {@link TreeTableView} whose root has to be visited.
 	 * @param visitor The visitor receiving the visited {@link TreeItem} during
 	 *                the tree walk.
 	 */
@@ -248,7 +248,7 @@ public class TreeItemWalker<T> implements Iterator<TreeItem<T>>, Iterable<TreeIt
 	 * for each tree item.
 	 *
 	 * @param <T>     The type of the {@link TreeItem}s.
-	 * @param tree    The {@link TreeTableView) whose root has to be visited.
+	 * @param tree    The {@link TreeTableView} whose root has to be visited.
 	 * @param visitor The visitor receiving the visited {@link TreeItem} and the
 	 *                current walking depth during the tree walk.
 	 */
@@ -305,7 +305,7 @@ public class TreeItemWalker<T> implements Iterator<TreeItem<T>>, Iterable<TreeIt
 	 * for each tree item's value.
 	 *
 	 * @param <T>     The type of the {@link TreeItem}s.
-	 * @param tree    The {@link TreeView) whose root has to be visited.
+	 * @param tree    The {@link TreeView} whose root has to be visited.
 	 * @param visitor The visitor receiving the visited {@link TreeItem}'s value
 	 *                during the tree walk.
 	 */
@@ -324,7 +324,7 @@ public class TreeItemWalker<T> implements Iterator<TreeItem<T>>, Iterable<TreeIt
 	 * for each tree item's value.
 	 *
 	 * @param <T>     The type of the {@link TreeItem}s.
-	 * @param tree    The {@link TreeView) whose root has to be visited.
+	 * @param tree    The {@link TreeView} whose root has to be visited.
 	 * @param visitor The visitor receiving the visited {@link TreeItem}'s value
 	 *                and the current walking depth during the tree walk.
 	 */
@@ -343,7 +343,7 @@ public class TreeItemWalker<T> implements Iterator<TreeItem<T>>, Iterable<TreeIt
 	 * for each tree item's value.
 	 *
 	 * @param <T>     The type of the {@link TreeItem}s.
-	 * @param tree    The {@link TreeTableView) whose root has to be visited.
+	 * @param tree    The {@link TreeTableView} whose root has to be visited.
 	 * @param visitor The visitor receiving the visited {@link TreeItem}'s value
 	 *                during the tree walk.
 	 */
@@ -362,7 +362,7 @@ public class TreeItemWalker<T> implements Iterator<TreeItem<T>>, Iterable<TreeIt
 	 * for each tree item's value.
 	 *
 	 * @param <T>     The type of the {@link TreeItem}s.
-	 * @param tree    The {@link TreeTableView) whose root has to be visited.
+	 * @param tree    The {@link TreeTableView} whose root has to be visited.
 	 * @param visitor The visitor receiving the visited {@link TreeItem}'s value
 	 *                and the current walking depth during the tree walk.
 	 */

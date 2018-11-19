@@ -27,8 +27,6 @@
 				<configuration>
 					<argLine>
 						--add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
-					</argLine>
-					<argLine>
 						--add-opens javafx.controls/javafx.scene.control=xaos.tools
 					</argLine>
 				</configuration>

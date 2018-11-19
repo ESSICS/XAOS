@@ -224,7 +224,7 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	 * <p>
 	 * <b>Note:</b> {@link #addDirectory(Path)} and {@link #addDirectory(Path, Object)}
 	 * methods will pass the given {@code onCollapse} and {@code onExpand} parameters
-	 * to the newly created {@link DirectoryItem}.</p>
+	 * to the newly created {@link TreeDirectoryItems.DirectoryItem}.</p>
 	 *
 	 * @param directory  The {@link Path} to be added as a top-level directory.
 	 * @param onCollapse A {@link Consumer} to be invoked when this item is

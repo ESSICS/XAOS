@@ -35,8 +35,10 @@ class BaseProvider {
 	 * Print on {@link System#out} the keys of the given {@code map} with a
 	 * preceding {@code message}.
 	 *
+	 * @param <K>     The type of the keys in the given {@code map}.
+	 * @param <V>     The type of the values in the given {@code map}.
 	 * @param map     The {@link Map} whose keys must be printed.
-	 * @param message The hreader message.
+	 * @param message The header message.
 	 */
 	@SuppressWarnings( "UseOfSystemOutOrSystemErr" )
 	protected static <K, V> void verbosePrintout( Map<K, V> map, String message ) {

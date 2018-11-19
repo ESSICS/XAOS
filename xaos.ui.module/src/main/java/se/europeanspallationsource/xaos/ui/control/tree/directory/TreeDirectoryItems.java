@@ -55,14 +55,14 @@ public class TreeDirectoryItems {
 	/**
 	 * The default {@link Function} converting a {@link Path} into the object
 	 * used as value in the corresponding {@link TreeItem} when the
-	 * {@link TreeIten} generic type is just {@link Path}.
+	 * {@link TreeItem} generic type is just {@link Path}.
 	 */
 	public static final Function<Path, Path> DEFAULT_INJECTOR = p -> p;
 
 	/**
 	 * The default {@link Function} converting the object returned by
 	 * {@link TreeItem#getValue()} into the corresponding {@link Path} when
-	 * the {@link TreeIten} generic type is just {@link Path}.
+	 * the {@link TreeItem} generic type is just {@link Path}.
 	 */
 	public static final Function<Path, Path> DEFAULT_PROJECTOR = v -> v;
 
