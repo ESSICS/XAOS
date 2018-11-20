@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <actions>
 	<action>
-		<actionName>CUSTOM-Resolve Dependencies</actionName>
-		<displayName>Resolve Dependencies</displayName>
+		<actionName>CUSTOM-Resolve Module Dependencies</actionName>
+		<displayName>Resolve Module Dependencies</displayName>
 		<goals>
 			<goal>dependency:resolve</goal>
+		</goals>
+	</action>
+	<action>
+		<actionName>CUSTOM-Resolve PON and Plugin Dependencies</actionName>
+		<displayName>Resolve POM and Plugin Dependencies</displayName>
+		<goals>
+			<goal>versions:display-dependency-updates</goal>
 		</goals>
 	</action>
 	<action>

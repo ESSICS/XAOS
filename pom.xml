@@ -215,7 +215,6 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.22.1</version>
 				<configuration>
-					<!--<forkCount>0</forkCount>-->
 					<includes>
 						<include>**/*Suite.java</include>
 					</includes>
