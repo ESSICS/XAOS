@@ -24,6 +24,32 @@ one plus the `.module` suffix.
 
 bla bla bla
 
+### [xaos.core](https://github.com/ESSICS/XAOS/tree/feature/XAOS-11/xaos.core.module)
+<!-- ### [xaos.core](https://github.com/ESSICS/XAOS/tree/master/xaos.core.module) -->
+
+bla bla bla
+
+### [xaos.tools](https://github.com/ESSICS/XAOS/tree/feature/XAOS-11/xaos.tools.module)
+<!-- ### [xaos.tools](https://github.com/ESSICS/XAOS/tree/master/xaos.tools.module) -->
+
+bla bla bla
+
+### [xaos.ui](https://github.com/ESSICS/XAOS/tree/feature/XAOS-11/xaos.ui.module)
+<!-- ### [xaos.ui](https://github.com/ESSICS/XAOS/tree/master/xaos.ui.module) -->
+
+bla bla bla
+
+### Test Modules
+
+From the introduction of JPMS in Java 9, some tests cannot anymore performed from
+inside the module to be tested. for this reasons there are some specific
+JPMS/Maven modules built to test others:
+
+* [xaos.tools.tests](https://github.com/ESSICS/XAOS/tree/feature/XAOS-11/xaos.tools.tests.module)
+<!-- * [xaos.tools.tests](https://github.com/ESSICS/XAOS/tree/master/xaos.tools.tests.module) -->
+
+bla bla bla
+
 ## Application Layout
 
 The framework will allow applications having a generic layout with the following components:
