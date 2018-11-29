@@ -56,7 +56,7 @@ JPMS/Maven modules built to test others:
 Each XAOS module needed to build your application require a dependency in the
 application's `pom.xml` file like the following one:
 
-```maven
+```xml
 <dependency>
   <groupId>se.europeanspallationsource</groupId>
   <artifactId>xaos.module</artifactId>
@@ -65,12 +65,35 @@ application's `pom.xml` file like the following one:
 </dependency>
 ```
 
-where _module_ is the name of the module needed.
+where _module_ is the name of the XAOS module needed. Look at the `README.md`
+file of the module you need for more examples and information.
+
+
+### Java `module-info`
+
+Inside your application's `module-info.java` file the following dependency must
+be added:
+
+```java
+module your.application {
+
+	...
+
+	requires xaos.module;
+
+	...
+
+}
+```
+
+where _module_ is the name of the XAOS module needed. Look at the `README.md`
+file of the module you need for more examples and information.
 
 
 ### System Properties
 
-XAOS defines the following system properties:
+XAOS defines the following system properties that can be set before launching
+an application build on XAOS (using `java -D<name>=<value> ...):
 
 Property | Type | Default | Description
 -------- | ---- | ------- | -----------
