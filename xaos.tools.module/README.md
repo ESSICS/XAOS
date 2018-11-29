@@ -31,13 +31,21 @@ public class MyService implements SomeService {
 Moreover, the _ServiceLoaderUtilities_ class will complement the
 `java.util.ServiceLoader` one with few more methods.
 
+**Note:** when using _ServiceProvider_ or _ServiceProviders_ `service` class
+must be listed in the _module-info_ class inside a `uses` statement. Moreover a
+`provides … with` statement must also be added to declare the annotated class as
+provider for the parameter class.
+
+**Note:** when using _ServiceLoaderUtilities_ the service provider interface
+type must be listed in the _module-info_ class inside a `uses` statement.
+
 
 ## Java Language Tools
 
 The _Reflections_ class provides few methods to handling fields and method
 access using the Java Reflection API.
 
-**Note:** When using the _Reflections_ class it is necessary to open the
+**Note:** when using the _Reflections_ class it is necessary to open the
 _module/package_ being reflected to `xaos.tools`. This can be achieved with the
 following flag being added to the command line launching the application:
 
