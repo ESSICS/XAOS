@@ -53,14 +53,19 @@ JPMS/Maven modules built to test others:
 
 ### Maven
 
+Each XAOS module needed to build your application require a dependency in the
+application's `pom.xml` file like the following one:
+
 ```xml
 <dependency>
   <groupId>se.europeanspallationsource</groupId>
-  <artifactId>xaos</artifactId>
+  <artifactId>xaos.module</artifactId>
   <version>0.3.0-SNAPSHOT</version>
   <scope>compile</scope>
 </dependency>
 ```
+
+where _module_ is the name of the module needed.
 
 
 ### System Properties
