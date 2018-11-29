@@ -32,7 +32,9 @@ bla bla bla
 ### [xaos.tools](https://github.com/ESSICS/XAOS/tree/feature/XAOS-11/xaos.tools.module)
 <!-- ### [xaos.tools](https://github.com/ESSICS/XAOS/tree/master/xaos.tools.module) -->
 
-bla bla bla
+The _XAOS Tools_ module (xaos.tool) provides tools and utilities used by the
+other XAOS modules (e.g. annotation processors) to simplify some programming
+tasks.
 
 ### [xaos.ui](https://github.com/ESSICS/XAOS/tree/feature/XAOS-11/xaos.ui.module)
 <!-- ### [xaos.ui](https://github.com/ESSICS/XAOS/tree/master/xaos.ui.module) -->
