@@ -12,18 +12,6 @@ source development environment used for creating accelerator physics
 applications, scripts and services.
 
 
-## Modules
-
-XAOS is written using the Java Platform Module System (JPMS) available since
-Java 9. The Maven project is also organized in modules maintaining a 1-to-1
-mapping with the JPMS ones. A Maven module's name is made up by the JPMS module
-one plus the `.module` suffix.
-
-### [xaos.app](https://github.com/ESSICS/XAOS/tree/feature/XAOS-11/xaos.app.module)
-<!-- ### [xaos.app](https://github.com/ESSICS/XAOS/tree/master/xaos.app.module) -->
-
-bla bla bla
-
 ## Application Layout
 
 The framework will allow applications having a generic layout with the following components:
