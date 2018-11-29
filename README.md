@@ -53,7 +53,7 @@ JPMS/Maven modules built to test others:
 
 ### Maven
 
-```Maven POM
+```xml
 <dependency>
   <groupId>se.europeanspallationsource</groupId>
   <artifactId>xaos</artifactId>
