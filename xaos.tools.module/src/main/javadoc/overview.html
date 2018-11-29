@@ -77,6 +77,16 @@ limitations under the License.
 			class provides few methods to handling fields and method access using
 			the Java Reflection API.
 		</p>
+		<p>
+			<b>Note:</b> When using {@link se.europeanspallationsource.xaos.tools.lang.Reflections}
+			it is necessary to open the module/package being reflected to
+			<code>xaos.tools</code>. This can be achieved with the following flag
+			being added to the command line launching the application:
+		</p>
+		
+<pre>
+  --add-opens module/package=xaos.tools
+</pre>
 
     </body>
 

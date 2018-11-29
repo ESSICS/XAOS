@@ -1,8 +1,8 @@
 # ![logo](https://github.com/ESSICS/XAOS/blob/feature/XAOS-11/doc/logo-small.png) XAOS (ΧΑΟΣ – the primordial state of existence)
 <!-- # ![logo](https://github.com/ESSICS/XAOS/blob/master/doc/logo-small.png) XAOS (ΧΑΟΣ – the primordial state of existence) -->
 
-<!--[![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/se.europeanspallationsource/xaos.svg)](https://oss.sonatype.org/content/repositories/snapshots/se/europeanspallationsource/xaos/)-->
-[![Maven Central](https://img.shields.io/maven-central/v/se.europeanspallationsource/xaos.svg)](https://repo1.maven.org/maven2/se/europeanspallationsource/xaos)
+[![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/se.europeanspallationsource/xaos.svg)](https://oss.sonatype.org/content/repositories/snapshots/se/europeanspallationsource/xaos/)
+<!--[![Maven Central](https://img.shields.io/maven-central/v/se.europeanspallationsource/xaos.svg)](https://repo1.maven.org/maven2/se/europeanspallationsource/xaos)-->
 [![javadoc](https://www.javadoc.io/badge/se.europeanspallationsource/xaos.svg)](https://www.javadoc.io/doc/se.europeanspallationsource/xaos)
 [![Apache License](https://img.shields.io/badge/license-Apache%20License%202.0-yellow.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
@@ -76,13 +76,9 @@ be added:
 
 ```java
 module your.application {
-
-	...
-
-	requires xaos.module;
-
-	...
-
+  ...
+  requires xaos.module;
+  ...
 }
 ```
 
@@ -93,7 +89,7 @@ file of the module you need for more examples and information.
 ### System Properties
 
 XAOS defines the following system properties that can be set before launching
-an application build on XAOS (using `java -D<name>=<value> ...):
+an application build on XAOS (using `java -D<name>=<value> ...` ):
 
 Property | Type | Default | Description
 -------- | ---- | ------- | -----------
@@ -111,10 +107,3 @@ here summarized:
 
 Who wants to contribute this projects must adopt the Gitflow model and
 [tools](https://github.com/nvie/gitflow).
-
-
-### Headless JavaFX Tests
-
-XAOS uses [OpenJFX Monocle](https://github.com/TestFX/Monocle) to perform headless
-test when the Java property `xaos.headless` is set to true. This is the standard
-mechanism used to perform daily builds with Jenkins.
