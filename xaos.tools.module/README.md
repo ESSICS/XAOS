@@ -6,7 +6,7 @@
 [![javadoc](https://www.javadoc.io/badge/se.europeanspallationsource/xaos.tools.svg)](https://www.javadoc.io/doc/se.europeanspallationsource/xaos.tools)
 [![Apache License](https://img.shields.io/badge/license-Apache%20License%202.0-yellow.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
-The _XAOS Tools_ module (xaos.tool) provides tools and utilities used by the
+The _XAOS Tools_ module (`xaos.tools`) provides tools and utilities used by the
 other XAOS modules (e.g. annotation processors) to simplify some programming
 tasks.
 
