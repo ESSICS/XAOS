@@ -59,7 +59,7 @@ following flag being added to the command line launching the application:
 
 ### Maven
 
-```maven
+```xml
 <dependency>
   <groupId>se.europeanspallationsource</groupId>
   <artifactId>xaos.tools</artifactId>
