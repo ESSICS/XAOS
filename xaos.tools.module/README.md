@@ -62,8 +62,8 @@ following flag being added to the command line launching the application:
 
 Here the Maven dependencies of `xaos.tools` module:
 
-![xaos.tools Maven dependencis](https://github.com/ESSICS/XAOS/blob/feature/XAOS-11/doc/maven-dependencies.png)
-<!--![xaos.tools dependencis](https://github.com/ESSICS/XAOS/blob/master/doc/maven-dependencies.png)-->
+![xaos.tools Maven dependencis](https://github.com/ESSICS/XAOS/blob/feature/XAOS-11/xaos.tools.module/doc/maven-dependencies.png)
+<!--![xaos.tools dependencis](https://github.com/ESSICS/XAOS/blob/master/xaos.tools.module/doc/maven-dependencies.png)-->
 
 
 ### Java `module-info`
@@ -81,6 +81,6 @@ module your.application {
 
 Here the Java dependencies of `xaos.tools` module:
 
-![xaos.tools Java dependencis](https://github.com/ESSICS/XAOS/blob/feature/XAOS-11/doc/java-dependencies.png)
-<!--![xaos.tools dependencis](https://github.com/ESSICS/XAOS/blob/master/doc/java-dependencies.png)-->
+![xaos.tools Java dependencis](https://github.com/ESSICS/XAOS/blob/feature/XAOS-11/xaos.tools.module/doc/java-dependencies.png)
+<!--![xaos.tools dependencis](https://github.com/ESSICS/XAOS/blob/master/xaos.tools.module/doc/java-dependencies.png)-->
 
