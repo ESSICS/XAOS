@@ -43,8 +43,8 @@ bla bla bla
 
 ### Test Modules
 
-From the introduction of JPMS in Java 9, some tests cannot anymore performed from
-inside the module to be tested. for this reasons there are some specific
+From the introduction of JPMS in Java 9, some tests cannot anymore performed
+from inside the module to be tested. for this reasons there are some specific
 JPMS/Maven modules built to test others:
 
 * [xaos.tools.tests](https://github.com/ESSICS/XAOS/tree/feature/XAOS-11/xaos.tools.tests.module).

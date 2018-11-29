@@ -7,3 +7,18 @@ The _XAOS Tools Tests_ module (`xaos.tools.tests`) provides some tests for the
 `xaos.tools` module that cannot be part of that project because of the JPMS
 introduced in Java 9.
 
+
+## Dependencies
+
+
+### Maven
+
+![xaos.tools.tests Maven dependencis](https://github.com/ESSICS/XAOS/blob/feature/XAOS-11/xaos.tools.tests.module/doc/maven-dependencies.png)
+<!--![xaos.tools.tests dependencis](https://github.com/ESSICS/XAOS/blob/master/xaos.tools.tests.module/doc/maven-dependencies.png)-->
+
+
+### Java `module-info`
+
+![xaos.tools.tests Java dependencis](https://github.com/ESSICS/XAOS/blob/feature/XAOS-11/xaos.tools.tests.module/doc/java-dependencies.png)
+<!--![xaos.tools.tests dependencis](https://github.com/ESSICS/XAOS/blob/master/xaos.tools.tests.module/doc/java-dependencies.png)-->
+
