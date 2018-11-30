@@ -40,7 +40,8 @@ tasks.
 ### [xaos.ui](https://github.com/ESSICS/XAOS/tree/feature/XAOS-11/xaos.ui.module)
 <!-- ### [xaos.ui](https://github.com/ESSICS/XAOS/tree/master/xaos.ui.module) -->
 
-bla bla bla
+The _XAOS UI_ module (`xaos.ui`) provides JavaFX-based controls and tools
+suitable for other projects too.
 
 ### Test Modules
 
