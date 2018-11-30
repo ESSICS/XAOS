@@ -71,6 +71,11 @@ application's `pom.xml` file like the following one:
 where _module_ is the name of the XAOS module needed. Look at the `README.md`
 file of the module you need for more examples and information.
 
+Here the Maven dependencies of `xaos` project:
+
+![xaos Maven dependencis](https://github.com/ESSICS/XAOS/blob/feature/XAOS-11/doc/maven-dependencies.png)
+<!--![xaos dependencis](https://github.com/ESSICS/XAOS/blob/master/doc/maven-dependencies.png)-->
+
 
 ### Java `module-info`
 
