@@ -48,11 +48,11 @@
 	<modules>
 		<module>xaos.tools.module</module>
 		<!--
-			THE FOLLOWING MODULE IS NOT DEPLOYED AND MUST NOT BE THE LAS ONE
-		    OTHERWISE ALL MODULES WILL NOT BE DEPLOYED (see nexus-staging-maven-plugin
+			THE FOLLOWING MODULE IS NOT DEPLOYED AND MUST NOT BE THE LAST ONE
+			OTHERWISE ALL MODULES WILL NOT BE DEPLOYED (see nexus-staging-maven-plugin
 			and how skipNexusStagingDeployMojo works).
 		-->
-		<module>xaos.tools.tests.module</module>
+		<module>xaos.tests.tools.module</module>
 		<module>xaos.core.module</module>
 		<module>xaos.ui.module</module>
 		<module>xaos.app.module</module>
@@ -67,6 +67,7 @@
 				<version>3.2.2</version>
 				<configuration>
 					<createImage>true</createImage>
+					<customStyleConfiguration>${project.basedir}/doc/maven-dependencies.json</customStyleConfiguration>
 					<dotExecutable>/usr/local/bin/dot</dotExecutable>
 					<graphFormat>dot</graphFormat>
 					<imageFormat>png</imageFormat>

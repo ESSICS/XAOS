@@ -9,7 +9,7 @@
         <version>0.3.0-SNAPSHOT</version>
     </parent>
 
-	<artifactId>xaos.tools.tests</artifactId>
+	<artifactId>xaos.tests.tools</artifactId>
     <packaging>jar</packaging>
     <name>XAOS - Tools Tests</name>
 	<description>
@@ -19,6 +19,24 @@
 
 	<build>
 		<plugins>
+			<!-- ALPHABETICALLY SORTED BY groupId:artifactId -->
+			<plugin>
+				<groupId>com.github.ferstl</groupId>
+				<artifactId>depgraph-maven-plugin</artifactId>
+				<version>3.2.2</version>
+				<configuration>
+					<customStyleConfiguration>${project.basedir}/../doc/maven-dependencies.json</customStyleConfiguration>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>test</phase>
+						<id>maven-dependency-graph</id>
+						<goals>
+							<goal>graph</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.sonatype.plugins</groupId>
 				<artifactId>nexus-staging-maven-plugin</artifactId>
