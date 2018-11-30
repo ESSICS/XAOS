@@ -133,7 +133,7 @@
 				<version>3.1.1</version>
 				<executions>
 					<execution>
-						<id>compile</id>
+						<id>dependency-check</id>
 						<goals>
 							<goal>resolve</goal>
 						</goals>
@@ -275,6 +275,15 @@
 				<configuration>
 					<generateBackupPoms>false</generateBackupPoms>
 				</configuration>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<id>maven-plugins-version-check</id>
+						<goals>
+							<goal>display-dependency-updates</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.sonatype.plugins</groupId>
