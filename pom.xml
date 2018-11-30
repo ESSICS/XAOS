@@ -62,6 +62,35 @@
 		<plugins>
 			<!-- ALPHABETICALLY SORTED BY groupId:artifactId -->
 			<plugin>
+				<groupId>com.github.ferstl</groupId>
+				<artifactId>depgraph-maven-plugin</artifactId>
+				<version>3.2.2</version>
+				<configuration>
+					<createImage>true</createImage>
+					<dotExecutable>/usr/local/bin/dot</dotExecutable>
+					<graphFormat>dot</graphFormat>
+					<imageFormat>png</imageFormat>
+					<outputDirectory>${project.basedir}/doc</outputDirectory>
+					<outputFileName>maven-dependencies</outputFileName>
+					<showClassifiers>true</showClassifiers>
+					<showConflicts>true</showConflicts>
+					<showDuplicates>true</showDuplicates>
+					<showGroupIds>true</showGroupIds>
+					<showOptional>true</showOptional>
+					<showTypes>true</showTypes>
+					<showVersions>true</showVersions>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>test</phase>
+						<id>maven-dependency-graph</id>
+						<goals>
+							<goal>aggregate</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-clean-plugin</artifactId>
 				<version>3.1.0</version>

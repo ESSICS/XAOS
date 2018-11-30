@@ -1,0 +1,17 @@
+digraph "xaos.tools" {
+  node [shape="box",style="rounded",fontname="Helvetica",fontsize="14"]
+  edge [fontsize="10",fontname="Helvetica"]
+
+  // Node Definitions:
+  "se.europeanspallationsource:xaos.tools:jar:compile"[label=<<font point-size="10">se.europeanspallationsource</font><br/>xaos.tools<font point-size="10"><br/>0.3.0-SNAPSHOT</font>>]
+  "org.apache.commons:commons-collections4:jar:compile"[label=<<font point-size="10">org.apache.commons</font><br/>commons-collections4<font point-size="10"><br/>4.2</font>>]
+  "org.assertj:assertj-core:jar:test"[label=<<font point-size="10">org.assertj</font><br/>assertj-core<font point-size="10"><br/>3.11.1</font><font point-size="10"><br/>(test)</font>>]
+  "junit:junit:jar:test"[label=<<font point-size="10">junit</font><br/>junit<font point-size="10"><br/>4.12</font><font point-size="10"><br/>(test)</font>>]
+  "org.hamcrest:hamcrest-core:jar:test"[label=<<font point-size="10">org.hamcrest</font><br/>hamcrest-core<font point-size="10"><br/>1.3</font><font point-size="10"><br/>(test)</font>>]
+
+  // Edge Definitions:
+  "se.europeanspallationsource:xaos.tools:jar:compile" -> "org.apache.commons:commons-collections4:jar:compile"
+  "se.europeanspallationsource:xaos.tools:jar:compile" -> "org.assertj:assertj-core:jar:test"
+  "junit:junit:jar:test" -> "org.hamcrest:hamcrest-core:jar:test"
+  "se.europeanspallationsource:xaos.tools:jar:compile" -> "junit:junit:jar:test"
+}
