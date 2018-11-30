@@ -20,6 +20,24 @@
 
 	<build>
 		<plugins>
+			<!-- ALPHABETICALLY SORTED BY groupId:artifactId -->
+			<plugin>
+				<groupId>com.github.ferstl</groupId>
+				<artifactId>depgraph-maven-plugin</artifactId>
+				<version>3.2.2</version>
+				<configuration>
+					<customStyleConfiguration>${project.basedir}/../doc/maven-dependencies.json</customStyleConfiguration>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>test</phase>
+						<id>maven-dependency-graph</id>
+						<goals>
+							<goal>graph</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>

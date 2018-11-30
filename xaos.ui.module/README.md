@@ -1,101 +1,16 @@
-# ![logo](https://github.com/ESSICS/XAOS/blob/feature/XAOS-11/doc/logo-small.png) XAOS (ΧΑΟΣ – the primordial state of existence)
-<!-- # ![logo](https://github.com/ESSICS/XAOS/blob/master/doc/logo-small.png) XAOS (ΧΑΟΣ – the primordial state of existence) -->
+# ![logo](https://github.com/ESSICS/XAOS/blob/feature/XAOS-11/doc/logo-small.png) XAOS – UI
+<!-- # ![logo](https://github.com/ESSICS/XAOS/blob/master/doc/logo-small.png) XAOS – UI -->
 
-<!--[![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/se.europeanspallationsource/xaos.svg)](https://oss.sonatype.org/content/repositories/snapshots/se/europeanspallationsource/xaos/)-->
-[![Maven Central](https://img.shields.io/maven-central/v/se.europeanspallationsource/xaos.svg)](https://repo1.maven.org/maven2/se/europeanspallationsource/xaos)
-[![javadoc](https://www.javadoc.io/badge/se.europeanspallationsource/xaos.svg)](https://www.javadoc.io/doc/se.europeanspallationsource/xaos)
+<!--[![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/se.europeanspallationsource/xaos.ui.svg)](https://oss.sonatype.org/content/repositories/snapshots/se/europeanspallationsource/xaos.ui/)-->
+[![Maven Central](https://img.shields.io/maven-central/v/se.europeanspallationsource/xaos.ui.svg)](https://repo1.maven.org/maven2/se/europeanspallationsource/xaos.ui)
+[![javadoc](https://www.javadoc.io/badge/se.europeanspallationsource/xaos.ui.svg)](https://www.javadoc.io/doc/se.europeanspallationsource/xaos.ui)
 [![Apache License](https://img.shields.io/badge/license-Apache%20License%202.0-yellow.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
-A JavaFX application framework made initially to create accelerator physics
-applications based on [Open XAL](https://github.com/openxal/openxal), an open
-source development environment used for creating accelerator physics
-applications, scripts and services.
+The _XAOS UI_ module (`xaos.ui`) provides JavaFX-based controls and tools
+suitable for other projects too.
 
 
-## Application Layout
-
-The framework will allow applications having a generic layout with the following components:
-
-- A toolbar in the top area, with 3 groups of buttons:
-
-  - On the left, the buttons controlling the display of the left and bottom views;
-  - On the right, the button controlling the display of the right view;
-  - On the center, application specific buttons.
-
-  If the application will not use outer views, the corresponding buttons will not be displayed.
-  Moreover, if no application specific buttons are added, the whole toolbar will not be displayed.
-
-- A status bar in the bottom area, where status message and other informations are displayed.
-  The status bar can be omitted it the application doesn't need it.
-
-- Peripheral views (`browser`, `navigator/overview`, `console/messages`, `palette`, and `inspector/properties`),
-  where the application can register content to be displayed. If some of the views are not used then
-  will not be displayed. When displayed, the splitters will allow to resize them.
-
-- The `main` view area used by the application to display its main content.
-
-![layout-01](https://github.com/ESSICS/XAOS/blob/master/doc/layout-01.png)
-
-
-### Outer View Areas
-
-The complete application is made of 6 view areas, where the `main` one is always visible.
-
-A view areas is visible only if at least one view is registered. The only exception is
-the `main` area, where views can be added dynamically, and no initial view is required.
-
-
-#### Browser View Area
-
-The `browser` view should be used to navigate high-level structures in order to
-find elements to be opened in dedicated views inside the `main` area.
-
-#### Navigator/Overview View Area
-
-This view area should be used to navigate the content of _selected_
-entities, or display an overview of a more detailed zone displayed in
-the currently visible `main` view.
-
-
-#### Console/Messages View Area
-
-The `console` view should be used to display messages from the application to the users,
-mirroring, for example, the standard System.out and System.err streams.
-
-
-#### Palette View Area
-
-The `palette` view area is where to display a set of (draggable or selectable)
-elements frequently used by the user.
-
-
-#### Inspector/Properties View Area
-
-This area should be used to display details of the element selected in the
-currently visible `main` view. Usually a table of name/value pairs is used to
-list the properties of the selected element, but other visualizations are
-possible too.
-
-
-### Main View Area
-
-The `main` view area will contains one or more views (not necessarily "document-based") 
-showing the data the use will act upon. The views in the `main` area can be opened 
-from user's interaction in the `browser` and/or the `navigation` area, or 
-programmatically.
-
-
-### How View Are Displayed
-
-Inside the `main` and `console` view areas, views are displayed in a tab container.
-In the remaining view areas, the alternative between tab container or accordion can
-be chosen.
-
-
-## Components
-
-
-### SVG Support
+## SVG Support
 
 XAOS supports SVG natively converting them in a JavaFX components graph, thus
 providing true vectorial rendering.
@@ -148,9 +63,12 @@ public class SVGFromURLTest extends ApplicationTest {
 ```
 
 
+## Tree Controls and Utilities
+
+
 ### Tree Directory Monitor
 
-TreeDirectoryMonitor combines a DirectoryWatcher, a TreeDirectoryModel, and a
+_TreeDirectoryMonitor_ combines a DirectoryWatcher, a TreeDirectoryModel, and a
 TreeDirectoryAsynchronousIO. The added value of this combination is that the
 tree model is updated automatically to reflect the current state of the
 file-system, and the application can distinguish file-system changes made via
@@ -159,71 +77,24 @@ the I/O facility (TreeDirectoryAsynchronousIO) from external ones.
 The directory model can be used directly as a model for TreeViews.
 
 
+### Filterable Tree Items
 
-## Tools and Utilities
-
-
-### Service Providers
-
-The _ServiceProvider_ annotation will simplify providing service implementations,
-taking care of publishing them in the proper file inside the `META-INF/service`
-folder.
-
-```java
-package my.module;
-import my.module.spi.SomeService;
-import se.europeanspallationsource.xaos.annotation.ServiceProvider;
-
-@ServiceProvider(service=SomeService.class)
-public class MyService implements SomeService {
-  ...
-}
-```
-
-Moreover, the _ServiceLoaderUtilities_ class will complement the
-`java.util.ServiceLoader` one with few more methods.
+_FilterableTreeItem_ is an extension of TreeItem with the possibility to filter
+its children.
 
 
-### IO Utilities
+### Tree Item Walker
+
+_TreeItemWalker_ walks a TreeItems tree depth-first. It supports streaming,
+visitor pattern and iterator pattern.
 
 
-#### Delete File Visitor
+### Tree Item Utilities
 
-It allows to delete recursively a folder.
-
-```java
-Files.walkFileTree(rootDirectory, new DeleteFileVisitor());
-```
+_TreeItems_ provides methods to manipulate trees made of TreeItems.
 
 
-#### Directory Watcher
-
-Watches for changes in files and directories, and allows for standard operations
-on both files and directories.
-
-```java
-ExecutorService executor = Executors.newSingleThreadExecutor();
-DirectoryWatcher watcher = build(executor);
-
-watcher.events().subscribe(event -> {
-  event.getEvents().stream().forEach(e -> {
-	if ( StandardWatchEventKinds.ENTRY_CREATE.equals(e.kind()) ) {
-	  ...
-	} else if ( StandardWatchEventKinds.ENTRY_DELETE.equals(e.kind()) ) {
-	  ...
-	} else if ( StandardWatchEventKinds.ENTRY_MODIFY.equals(e.kind()) ) {
-	  ...
-	}
-  });
-});
-
-Path root = ...
-
-watcher.watch(root);
-```
-
-
-## Using XAOS
+## Using XAOS UI
 
 
 ### Maven
@@ -231,37 +102,32 @@ watcher.watch(root);
 ```maven
 <dependency>
   <groupId>se.europeanspallationsource</groupId>
-  <artifactId>xaos</artifactId>
+  <artifactId>xaos.ui</artifactId>
   <version>0.3.0-SNAPSHOT</version>
   <scope>compile</scope>
 </dependency>
 ```
 
+Here the Maven dependencies of `xaos.ui` module:
 
-### System Properties
-
-XAOS defines the following system properties:
-
-Property | Type | Default | Description
--------- | ---- | ------- | -----------
-xaos.test.verbose | boolean | `false` | Some tests will be more verbose if set to `true`.
+![xaos.ui Maven dependencis](https://github.com/ESSICS/XAOS/blob/feature/XAOS-11/xaos.ui.module/doc/maven-dependencies.png)
+<!--![xaos.ui dependencis](https://github.com/ESSICS/XAOS/blob/master/xaos.ui.module/doc/maven-dependencies.png)-->
 
 
-## Contributing XAOS
+### Java `module-info`
 
+Inside your application's `module-info.java` file the following dependency must
+be added:
 
-The XAOS project on GitHub is using [Gitflow](https://blog.axosoft.com/gitflow/),
-development model introduced by [Vincent Driessen](http://nvie.com/posts/a-successful-git-branching-model/),
-here summarized:
+```java
+module your.application {
+  ...
+  requires xaos.ui;
+  ...
+}
+```
 
-![Gitflow](http://nvie.com/img/git-model@2x.png)
+Here the Java dependencies of `xaos.ui` module:
 
-Who wants to contribute this projects must adopt the Gitflow model and
-[tools](https://github.com/nvie/gitflow).
-
-
-### Headless JavaFX Tests
-
-XAOS uses [OpenJFX Monocle](https://github.com/TestFX/Monocle) to perform headless
-test when the Java property `xaos.headless` is set to true. This is the standard
-mechanism used to perform daily builds with Jenkins.
+![xaos.ui Java dependencis](https://github.com/ESSICS/XAOS/blob/feature/XAOS-11/xaos.ui.module/doc/java-dependencies.png)
+<!--![xaos.ui dependencis](https://github.com/ESSICS/XAOS/blob/master/xaos.ui.module/doc/java-dependencies.png)-->

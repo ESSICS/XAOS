@@ -34,7 +34,7 @@ import javafx.util.Pair;
 
 
 /**
- * Walks a {@link TreeItem}s tree depth-first.It supports streaming, visitor
+ * Walks a {@link TreeItem}s tree depth-first. It supports streaming, visitor
  * pattern and iterator pattern.
  * <p>
  * <b>Important Note #1:</b> Once used, a {@link TreeItemWalker} cannot be reused.

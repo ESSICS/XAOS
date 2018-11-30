@@ -61,8 +61,8 @@ public class FilterableTreeItem<T> extends CheckBoxTreeItem<T> {
 
 	/**
 	 * Creates a new {@link FilterableTreeItem} with filtered children. To enable
-	 * filtering sorting it is necessary to set the {@link TreeItemPredicate}. If no
-	 * predicate is set, then the tree item will attempt so bind itself to the
+	 * filtering sorting it is necessary to set the {@link TreeItemPredicate}. If
+	 * no predicate is set, then the tree item will attempt so bind itself to the
 	 * predicate of its parent.
 	 */
 	public FilterableTreeItem() {
@@ -71,8 +71,8 @@ public class FilterableTreeItem<T> extends CheckBoxTreeItem<T> {
 
 	/**
 	 * Creates a new {@link FilterableTreeItem} with filtered children. To enable
-	 * filtering sorting it is necessary to set the {@link TreeItemPredicate}. If no
-	 * predicate is set, then the tree item will attempt so bind itself to the
+	 * filtering sorting it is necessary to set the {@link TreeItemPredicate}. If 
+	 * no predicate is set, then the tree item will attempt so bind itself to the
 	 * predicate of its parent.
 	 *
 	 * @param value The value of the tree item.
@@ -83,8 +83,8 @@ public class FilterableTreeItem<T> extends CheckBoxTreeItem<T> {
 
 	/**
 	 * Creates a new {@link FilterableTreeItem} with filtered children.To enable
-	 * filtering sorting it is necessary to set the {@link TreeItemPredicate}.If no
-	 * predicate is set, then the tree item will attempt so bind itself to the
+	 * filtering sorting it is necessary to set the {@link TreeItemPredicate}.If 
+	 * no predicate is set, then the tree item will attempt so bind itself to the
 	 * predicate of its parent.
 	 *
 	 * @param value   The value of the tree item.
@@ -97,8 +97,8 @@ public class FilterableTreeItem<T> extends CheckBoxTreeItem<T> {
 
 	/**
 	 * Creates a new {@link FilterableTreeItem} with filtered children.To enable
-	 * filtering sorting it is necessary to set the {@link TreeItemPredicate}.If no
-	 * predicate is set, then the tree item will attempt so bind itself to the
+	 * filtering sorting it is necessary to set the {@link TreeItemPredicate}.If 
+	 * no predicate is set, then the tree item will attempt so bind itself to the
 	 * predicate of its parent.
 	 *
 	 * @param value    The value of the tree item.
@@ -112,13 +112,13 @@ public class FilterableTreeItem<T> extends CheckBoxTreeItem<T> {
 
 	/**
 	 * Creates a new {@link FilterableTreeItem} with filtered children.To enable
-	 * filtering sorting it is necessary to set the {@link TreeItemPredicate}.If no
-	 * predicate is set, then the tree item will attempt so bind itself to the
+	 * filtering sorting it is necessary to set the {@link TreeItemPredicate}.If 
+	 * no predicate is set, then the tree item will attempt so bind itself to the
 	 * predicate of its parent.
 	 *
 	 * @param value       The value of the tree item.
-	 * @param graphic     The {@link Node} to show in the {@link TreeView} next to
-	 *                    this tree item.
+	 * @param graphic     The {@link Node} to show in the {@link TreeView} next 
+	 *                    to this tree item.
 	 * @param selected    The initial value of the {@link #selectedProperty()}.
 	 * @param independent The initial value of the {@link #independentProperty()}.
 	 */
