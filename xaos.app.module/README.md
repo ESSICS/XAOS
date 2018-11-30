@@ -1,15 +1,13 @@
-# ![logo](https://github.com/ESSICS/XAOS/blob/feature/XAOS-11/doc/logo-small.png) XAOS (ΧΑΟΣ – the primordial state of existence)
-<!-- # ![logo](https://github.com/ESSICS/XAOS/blob/master/doc/logo-small.png) XAOS (ΧΑΟΣ – the primordial state of existence) -->
+# ![logo](https://github.com/ESSICS/XAOS/blob/feature/XAOS-11/doc/logo-small.png) XAOS – App
+<!-- # ![logo](https://github.com/ESSICS/XAOS/blob/master/doc/logo-small.png) XAOS –App -->
 
-<!--[![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/se.europeanspallationsource/xaos.svg)](https://oss.sonatype.org/content/repositories/snapshots/se/europeanspallationsource/xaos/)-->
-[![Maven Central](https://img.shields.io/maven-central/v/se.europeanspallationsource/xaos.svg)](https://repo1.maven.org/maven2/se/europeanspallationsource/xaos)
-[![javadoc](https://www.javadoc.io/badge/se.europeanspallationsource/xaos.svg)](https://www.javadoc.io/doc/se.europeanspallationsource/xaos)
+<!--[![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/se.europeanspallationsource/xaos.app.svg)](https://oss.sonatype.org/content/repositories/snapshots/se/europeanspallationsource/xaos.app/)-->
+[![Maven Central](https://img.shields.io/maven-central/v/se.europeanspallationsource/xaos.app.svg)](https://repo1.maven.org/maven2/se/europeanspallationsource/xaos.app)
+[![javadoc](https://www.javadoc.io/badge/se.europeanspallationsource/xaos.app.svg)](https://www.javadoc.io/doc/se.europeanspallationsource/xaos.app)
 [![Apache License](https://img.shields.io/badge/license-Apache%20License%202.0-yellow.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
-A JavaFX application framework made initially to create accelerator physics
-applications based on [Open XAL](https://github.com/openxal/openxal), an open
-source development environment used for creating accelerator physics
-applications, scripts and services.
+The _XAOS App_ module (`xaos.tools`) provides a JavaFX-based application
+framework for building UI-based applications with menus, toolbars, etc.
 
 
 ## Application Layout

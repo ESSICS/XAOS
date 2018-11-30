@@ -214,8 +214,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<docfilessubdirs/>
-					<!--<failOnError>false</failOnError>-->
+					<docfilessubdirs>true</docfilessubdirs>
 				</configuration>
 				<dependencies>
 					<dependency>

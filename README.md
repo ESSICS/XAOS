@@ -22,7 +22,8 @@ one plus the `.module` suffix.
 ### [xaos.app](https://github.com/ESSICS/XAOS/tree/feature/XAOS-11/xaos.app.module)
 <!-- ### [xaos.app](https://github.com/ESSICS/XAOS/tree/master/xaos.app.module) -->
 
-bla bla bla
+The _XAOS App_ module (`xaos.tools`) provides a JavaFX-based application
+framework for building UI-based applications with menus, toolbars, etc.
 
 ### [xaos.core](https://github.com/ESSICS/XAOS/tree/feature/XAOS-11/xaos.core.module)
 <!-- ### [xaos.core](https://github.com/ESSICS/XAOS/tree/master/xaos.core.module) -->
