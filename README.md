@@ -27,7 +27,8 @@ bla bla bla
 ### [xaos.core](https://github.com/ESSICS/XAOS/tree/feature/XAOS-11/xaos.core.module)
 <!-- ### [xaos.core](https://github.com/ESSICS/XAOS/tree/master/xaos.core.module) -->
 
-bla bla bla
+The _XAOS Core_ module (`xaos.core`) provides provides the non-UI classes part
+of the framework. Any non-graphical application can use this module.
 
 ### [xaos.tools](https://github.com/ESSICS/XAOS/tree/feature/XAOS-11/xaos.tools.module)
 <!-- ### [xaos.tools](https://github.com/ESSICS/XAOS/tree/master/xaos.tools.module) -->

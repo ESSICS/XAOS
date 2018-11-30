@@ -71,8 +71,11 @@
 					<dotExecutable>/usr/local/bin/dot</dotExecutable>
 					<graphFormat>dot</graphFormat>
 					<imageFormat>png</imageFormat>
+					<includeParentProjects>true</includeParentProjects>
 					<outputDirectory>${project.basedir}/doc</outputDirectory>
 					<outputFileName>maven-dependencies</outputFileName>
+					<reduceEdges>true</reduceEdges>
+					<repeatTransitiveDependenciesInTextGraph>true</repeatTransitiveDependenciesInTextGraph>
 					<showClassifiers>true</showClassifiers>
 					<showConflicts>true</showConflicts>
 					<showDuplicates>true</showDuplicates>
