@@ -205,6 +205,19 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>3.0.1</version>
+				<configuration>
+					<additionalOptions>--javafx</additionalOptions>
+					<detectJavaApiLink>true</detectJavaApiLink>
+					<detectLinks>true</detectLinks>
+					<detectOfflineLinks>true</detectOfflineLinks>
+					<docfilessubdirs>true</docfilessubdirs>
+					<isOffline>false</isOffline>
+					<links>
+						<link>https://docs.oracle.com/en/java/javase/${java.release}/docs/api</link>
+						<link>https://openjfx.io/javadoc/${java.release}</link>
+					</links>
+					<source>${java.release}</source>
+				</configuration>
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>
@@ -213,9 +226,6 @@
 						</goals>
 					</execution>
 				</executions>
-				<configuration>
-					<docfilessubdirs>true</docfilessubdirs>
-				</configuration>
 				<dependencies>
 					<dependency>
 						<groupId>org.ow2.asm</groupId>
