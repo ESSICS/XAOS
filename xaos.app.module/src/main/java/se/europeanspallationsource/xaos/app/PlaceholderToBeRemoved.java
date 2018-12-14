@@ -20,6 +20,6 @@ package se.europeanspallationsource.xaos.app;
  *
  * @author claudiorosati
  */
-public class NewClass {
+public class PlaceholderToBeRemoved {
 
 }

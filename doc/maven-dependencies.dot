@@ -31,14 +31,9 @@ digraph "xaos" {
   "org.kordamp.ikonli:ikonli-core:jar:compile"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.kordamp.ikonli<br/>ikonli-core<br/>11.0.2>]
   "org.kordamp.ikonli:ikonli-javafx:jar:compile"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.kordamp.ikonli<br/>ikonli-javafx<br/>11.0.2>]
   "org.kordamp.ikonli:ikonli-fontawesome-pack:jar:compile"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.kordamp.ikonli<br/>ikonli-fontawesome-pack<br/>11.0.2>]
-  "org.testfx:testfx-core:jar:test"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">org.testfx</font><br/>testfx-core<font color="grey55" point-size="10"><br/>4.0.13-alpha</font><font color="grey55" point-size="10"><br/>(test)</font>>]
-  "org.testfx:testfx-junit:jar:test"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">org.testfx</font><br/>testfx-junit<font color="grey55" point-size="10"><br/>4.0.13-alpha</font><font color="grey55" point-size="10"><br/>(test)</font>>]
+  "org.testfx:testfx-core:jar:test"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">org.testfx</font><br/>testfx-core<font color="grey55" point-size="10"><br/>4.0.15-alpha</font><font color="grey55" point-size="10"><br/>(test)</font>>]
+  "org.testfx:testfx-junit:jar:test"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">org.testfx</font><br/>testfx-junit<font color="grey55" point-size="10"><br/>4.0.15-alpha</font><font color="grey55" point-size="10"><br/>(test)</font>>]
   "io.github.classgraph:classgraph:jar:test"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">io.github.classgraph</font><br/>classgraph<font color="grey55" point-size="10"><br/>4.4.12</font><font color="grey55" point-size="10"><br/>(test)</font>>]
-  "org.jacpfx:jacpfx.API:jar:compile"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.jacpfx<br/>jacpfx.API<br/>3.0-SNAPSHOT>]
-  "org.jacpfx:jacpfx.JavaFX:jar:compile"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.jacpfx<br/>jacpfx.JavaFX<br/>3.0-SNAPSHOT>]
-  "org.jacpfx:JacpFXConcurrencyTools:jar:compile"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.jacpfx<br/>JacpFXConcurrencyTools<br/>3.0-SNAPSHOT>]
-  "org.jacpfx:jacpfx.JavaFXControls:jar:compile"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.jacpfx<br/>jacpfx.JavaFXControls<br/>3.0-SNAPSHOT>]
-  "org.jacpfx:jacpfx.JavaFXLauncher:jar:compile"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.jacpfx<br/>jacpfx.JavaFXLauncher<br/>3.0-SNAPSHOT>]
 
   // Edge Definitions:
   "se.europeanspallationsource:xaos:pom:compile" -> "se.europeanspallationsource:xaos.tools:jar:compile"[style="dashed"]
@@ -84,13 +79,6 @@ digraph "xaos" {
   "se.europeanspallationsource:xaos.ui:jar:compile" -> "org.assertj:assertj-core:jar:test"
   "se.europeanspallationsource:xaos.ui:jar:compile" -> "junit:junit:jar:test"
   "se.europeanspallationsource:xaos.app:jar:compile" -> "se.europeanspallationsource:xaos.ui:jar:compile"
-  "se.europeanspallationsource:xaos.app:jar:compile" -> "org.jacpfx:jacpfx.API:jar:compile"
-  "org.jacpfx:jacpfx.JavaFX:jar:compile" -> "org.jacpfx:JacpFXConcurrencyTools:jar:compile"
-  "se.europeanspallationsource:xaos.app:jar:compile" -> "org.jacpfx:jacpfx.JavaFX:jar:compile"
-  "se.europeanspallationsource:xaos.app:jar:compile" -> "org.jacpfx:jacpfx.JavaFXControls:jar:compile"
-  "se.europeanspallationsource:xaos.app:jar:compile" -> "org.jacpfx:jacpfx.JavaFXLauncher:jar:compile"
-  "se.europeanspallationsource:xaos.app:jar:compile" -> "org.testfx:testfx-core:jar:test"
-  "se.europeanspallationsource:xaos.app:jar:compile" -> "org.testfx:testfx-junit:jar:test"
   "se.europeanspallationsource:xaos.app:jar:compile" -> "org.assertj:assertj-core:jar:test"
   "se.europeanspallationsource:xaos.app:jar:compile" -> "junit:junit:jar:test"
 }

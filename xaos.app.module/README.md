@@ -6,15 +6,15 @@
 [![javadoc](https://www.javadoc.io/badge/se.europeanspallationsource/xaos.app.svg)](https://www.javadoc.io/doc/se.europeanspallationsource/xaos.app)
 [![Apache License](https://img.shields.io/badge/license-Apache%20License%202.0-yellow.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
-The _XAOS App_ module (`xaos.tools`) provides a JavaFX-based application
+The _XAOS App_ module (`xaos.app`) provides a JavaFX-based application
 framework for building UI-based applications with menus, toolbars, etc.
 
 
 ## Application Layout
 
-The framework will allow applications having a generic layout with the following components:
+The framework allows applications having a generic layout with the following components:
 
-- A toolbar in the top area, with 3 groups of buttons:
+- An optional toolbar in the top area, with 3 groups of buttons:
 
   - On the left, the buttons controlling the display of the left and bottom views;
   - On the right, the button controlling the display of the right view;
@@ -23,11 +23,11 @@ The framework will allow applications having a generic layout with the following
   If the application will not use outer views, the corresponding buttons will not be displayed.
   Moreover, if no application specific buttons are added, the whole toolbar will not be displayed.
 
-- A status bar in the bottom area, where status message and other informations are displayed.
-  The status bar can be omitted it the application doesn't need it.
+- A status bar in the bottom area, where status messages and other information are displayed.
+  The status bar will be omitted it the application doesn't need it.
 
 - Peripheral views (`browser`, `navigator/overview`, `console/messages`, `palette`, and `inspector/properties`),
-  where the application can register content to be displayed. If some of the views are not used then
+  where the application can register content to be displayed. If some of the views are not used they
   will not be displayed. When displayed, the splitters will allow to resize them.
 
 - The `main` view area used by the application to display its main content.
@@ -39,14 +39,18 @@ The framework will allow applications having a generic layout with the following
 
 The complete application is made of 6 view areas, where the `main` one is always visible.
 
-A view areas is visible only if at least one view is registered. The only exception is
+A view area is visible only if at least one view is registered. The only exception is
 the `main` area, where views can be added dynamically, and no initial view is required.
+
+Outer view areas' content can be static (i.e. always visible), or depending on what is the
+active view inside the `main` area.
 
 
 #### Browser View Area
 
 The `browser` view should be used to navigate high-level structures in order to
 find elements to be opened in dedicated views inside the `main` area.
+
 
 #### Navigator/Overview View Area
 
@@ -77,7 +81,7 @@ possible too.
 
 ### Main View Area
 
-The `main` view area will contains one or more views (not necessarily "document-based") 
+The `main` view area contains one or more views (not necessarily "document-based") 
 showing the data the use will act upon. The views in the `main` area can be opened 
 from user's interaction in the `browser` and/or the `navigation` area, or 
 programmatically.
@@ -90,138 +94,7 @@ In the remaining view areas, the alternative between tab container or accordion 
 be chosen.
 
 
-## Components
-
-
-### SVG Support
-
-XAOS supports SVG natively converting them in a JavaFX components graph, thus
-providing true vectorial rendering.
-
-The following simple test explains how to display SVGs with XAOS:
-
-```java
-package se.europeanspallationsource.xaos.ui.components;
-
-
-import java.io.IOException;
-import java.util.concurrent.TimeoutException;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import javax.xml.stream.XMLStreamException;
-import org.junit.After;
-import org.junit.Test;
-import org.testfx.api.FxToolkit;
-import org.testfx.framework.junit.ApplicationTest;
-
-import static org.testfx.assertions.api.Assertions.assertThat;
-
-public class SVGFromURLTest extends ApplicationTest {
-
-  private SVG svg;
-
-  @Override
-  public void start( Stage stage ) throws IOException, XMLStreamException {
-
-    svg = SVG.load(SVGFromURLTest.class.getResource("/svg/duke.svg"));
-
-    svg.setId("Loaded SVG Image");
-
-    stage.setScene(new Scene(svg));
-    stage.show();
-
-  }
-
-  @After
-  public void tearDown() throws TimeoutException {
-    FxToolkit.cleanupStages();
-  }
-
-  @Test
-  public void testLoadDuke() {
-    assertThat(svgContent).hasAnyChild();
-  }
-
-}
-```
-
-
-### Tree Directory Monitor
-
-TreeDirectoryMonitor combines a DirectoryWatcher, a TreeDirectoryModel, and a
-TreeDirectoryAsynchronousIO. The added value of this combination is that the
-tree model is updated automatically to reflect the current state of the
-file-system, and the application can distinguish file-system changes made via
-the I/O facility (TreeDirectoryAsynchronousIO) from external ones.
-
-The directory model can be used directly as a model for TreeViews.
-
-
-
-## Tools and Utilities
-
-
-### Service Providers
-
-The _ServiceProvider_ annotation will simplify providing service implementations,
-taking care of publishing them in the proper file inside the `META-INF/service`
-folder.
-
-```java
-package my.module;
-import my.module.spi.SomeService;
-import se.europeanspallationsource.xaos.annotation.ServiceProvider;
-
-@ServiceProvider(service=SomeService.class)
-public class MyService implements SomeService {
-  ...
-}
-```
-
-Moreover, the _ServiceLoaderUtilities_ class will complement the
-`java.util.ServiceLoader` one with few more methods.
-
-
-### IO Utilities
-
-
-#### Delete File Visitor
-
-It allows to delete recursively a folder.
-
-```java
-Files.walkFileTree(rootDirectory, new DeleteFileVisitor());
-```
-
-
-#### Directory Watcher
-
-Watches for changes in files and directories, and allows for standard operations
-on both files and directories.
-
-```java
-ExecutorService executor = Executors.newSingleThreadExecutor();
-DirectoryWatcher watcher = build(executor);
-
-watcher.events().subscribe(event -> {
-  event.getEvents().stream().forEach(e -> {
-	if ( StandardWatchEventKinds.ENTRY_CREATE.equals(e.kind()) ) {
-	  ...
-	} else if ( StandardWatchEventKinds.ENTRY_DELETE.equals(e.kind()) ) {
-	  ...
-	} else if ( StandardWatchEventKinds.ENTRY_MODIFY.equals(e.kind()) ) {
-	  ...
-	}
-  });
-});
-
-Path root = ...
-
-watcher.watch(root);
-```
-
-
-## Using XAOS
+## Using XAOS App
 
 
 ### Maven
@@ -229,37 +102,33 @@ watcher.watch(root);
 ```maven
 <dependency>
   <groupId>se.europeanspallationsource</groupId>
-  <artifactId>xaos</artifactId>
+  <artifactId>xaos.app</artifactId>
   <version>0.3.0-SNAPSHOT</version>
   <scope>compile</scope>
 </dependency>
 ```
 
+Here the Maven dependencies of `xaos.app` module:
 
-### System Properties
-
-XAOS defines the following system properties:
-
-Property | Type | Default | Description
--------- | ---- | ------- | -----------
-xaos.test.verbose | boolean | `false` | Some tests will be more verbose if set to `true`.
+![xaos.app Maven dependencis](https://github.com/ESSICS/XAOS/blob/feature/XAOS-11/xaos.app.module/doc/maven-dependencies.png)
+<!--![xaos.app dependencis](https://github.com/ESSICS/XAOS/blob/master/xaos.app.module/doc/maven-dependencies.png)-->
 
 
-## Contributing XAOS
+### Java `module-info`
 
+Inside your application's `module-info.java` file the following dependency must
+be added:
 
-The XAOS project on GitHub is using [Gitflow](https://blog.axosoft.com/gitflow/),
-development model introduced by [Vincent Driessen](http://nvie.com/posts/a-successful-git-branching-model/),
-here summarized:
+```java
+module your.application {
+  ...
+  requires xaos.app;
+  ...
+}
+```
 
-![Gitflow](http://nvie.com/img/git-model@2x.png)
+Here the Java dependencies of `xaos.app` module:
 
-Who wants to contribute this projects must adopt the Gitflow model and
-[tools](https://github.com/nvie/gitflow).
+![xaos.app Java dependencis](https://github.com/ESSICS/XAOS/blob/feature/XAOS-11/xaos.app.module/doc/java-dependencies.png)
+<!--![xaos.app dependencis](https://github.com/ESSICS/XAOS/blob/master/xaos.app.module/doc/java-dependencies.png)-->
 
-
-### Headless JavaFX Tests
-
-XAOS uses [OpenJFX Monocle](https://github.com/TestFX/Monocle) to perform headless
-test when the Java property `xaos.headless` is set to true. This is the standard
-mechanism used to perform daily builds with Jenkins.

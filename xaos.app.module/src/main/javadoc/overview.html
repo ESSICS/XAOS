@@ -41,12 +41,12 @@ limitations under the License.
         <h2>Application Layout</h2>
 
         <p>
-            The framework will allow applications having a generic layout with
-            the following components:
+            The framework allows applications having a generic layout with the
+            following components:
         </p>
         <ul>
             <li>
-                A toolbar in the top area, with 3 groups of buttons:
+                An optional toolbar in the top area, with 3 groups of buttons:
                 <ul style="list-style-type:square">
                     <li>On the left, the buttons controlling the display of the left and bottom views;</li>
                     <li>On the right, the button controlling the display of the right view;</li>
@@ -58,15 +58,15 @@ limitations under the License.
                 displayed.
             </li>
             <li>
-                A status bar in the bottom area, where status message and other
-                informations are displayed. The status bar can be omitted it the
-                application doesn't need it.
+                An optional status bar in the bottom area, where status messages
+				and other information are displayed. The status bar will be
+				omitted it the application doesn't need it.
             </li>
             <li>
                 Peripheral views (<i>browser</i>, <i>navigator/overview</i>,
                 <i>console/messages</i>, <i>palette</i>, and <i>inspector/properties</i>),
                 where the application can register content to be displayed. If
-                some of the views are not used then will not be displayed. When
+                some of the views are not used they will not be displayed. When
                 displayed, the splitters will allow to resize them.
             </li>
             <li>
@@ -92,6 +92,11 @@ limitations under the License.
             exception is the <i>main</i> area, where views can be added dynamically,
             and no initial view is required.
         </p>
+
+		<p>
+			Outer view areas' content can be static (i.e. always visible), or
+			depending on what is the active view inside the <i>main</i> area.
+		</p>
 
         <h4>Browser View Area</h4>
 
@@ -136,11 +141,10 @@ limitations under the License.
 		<h3>Main View Area</h3>
 
 		<p>
-			The <i>main</i> view area will contains one or more views (not
-			necessarily "document-based") showing the data the use will act upon.
-			The views in the <i>main</i> area can be opened from user's interaction
-			in the <i>browser</i> and/or the <i>navigation</i> area, or
-			programmatically.
+			The <i>main</i> view area contains one or more views (not necessarily
+			"document-based") showing the data the use will act upon. The views
+			in the <i>main</i> area can be opened from user's interaction in the
+			<i>browser</i> and/or the <i>navigation</i> area, or programmatically.
 		</p>
 
 		<h3>How View Are Displayed</h3>
