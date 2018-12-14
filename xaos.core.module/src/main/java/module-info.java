@@ -21,13 +21,7 @@
 module xaos.core {
 
 	requires java.logging;
-
-	//	TODO:CR To be removed after getting rid of reactfx.
-	//	        The following javafx modules are required by the reactfx one.
-	requires javafx.base;
-	requires javafx.controls;
-	requires javafx.graphics;
-	requires reactfx;
+	requires io.reactivex.rxjava2;
 
 	exports se.europeanspallationsource.xaos.core.util;
 	exports se.europeanspallationsource.xaos.core.util.io;

@@ -42,34 +42,12 @@
 
     <dependencies>
 
-        <!-- JavaFX - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-		<!-- The following javafx modules are required by the reactfx one. -->
+		<!-- RxJava Dependencies - - - - - - - - - - - - - - - - - - - - - -  -->
 		<dependency>
-			<groupId>org.openjfx</groupId>
-			<artifactId>javafx-base</artifactId>
-			<version>11.0.1</version>
-            <scope>compile</scope>
+			<groupId>io.reactivex.rxjava2</groupId>
+			<artifactId>rxjava</artifactId>
+			<version>2.2.4</version>
 		</dependency>
-		<dependency>
-			<groupId>org.openjfx</groupId>
-			<artifactId>javafx-controls</artifactId>
-			<version>11.0.1</version>
-            <scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openjfx</groupId>
-			<artifactId>javafx-graphics</artifactId>
-			<version>11.0.1</version>
-            <scope>compile</scope>
-		</dependency>
-
-		<!-- Other Dependencies  - - - - - - - - - - - - - - - - - - - - - -  -->
-        <dependency>
-            <groupId>org.reactfx</groupId>
-            <artifactId>reactfx</artifactId>
-            <version>2.0-M5</version>
-            <scope>compile</scope>
-        </dependency>
 
     </dependencies>
 

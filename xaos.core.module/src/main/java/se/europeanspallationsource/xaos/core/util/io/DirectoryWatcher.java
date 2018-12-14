@@ -16,6 +16,8 @@
 package se.europeanspallationsource.xaos.core.util.io;
 
 
+import io.reactivex.subjects.PublishSubject;
+import io.reactivex.subjects.Subject;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.nio.ByteBuffer;
@@ -45,8 +47,6 @@ import java.util.concurrent.RejectedExecutionException;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import org.reactfx.EventSource;
-import org.reactfx.EventStream;
 
 import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
@@ -84,7 +84,7 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
  * @author claudio.rosati@esss.se
  * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.DirWatcher</a>
  */
-public class DirectoryWatcher {
+public class DirectoryWatcher implements AutoCloseable {
 
 	private static final Logger LOGGER = Logger.getLogger(DirectoryWatcher.class.getName());
 
@@ -99,14 +99,14 @@ public class DirectoryWatcher {
 		return new DirectoryWatcher(eventThreadExecutor);
 	}
 
-	private final EventSource<Throwable> errors = new EventSource<>();
+	private volatile boolean closed = false;
+	private final Subject<Throwable> errors;
 	private final Executor eventThreadExecutor;
-	private final EventSource<DirectoryEvent> events = new EventSource<>();
+	private final Subject<DirectoryEvent> events;
 	private final LinkedBlockingQueue<Runnable> executorQueue = new LinkedBlockingQueue<>();
 	private boolean interrupted = false;
 	private final Thread ioThread;
 	private boolean mayInterrupt = false;
-	private volatile boolean shutdown = false;
 	private final WatchService watcher;
 	private final Map<WatchKey, WeakReference<Path>> watcherKeys = Collections.synchronizedMap(new WeakHashMap<>());
 
@@ -116,7 +116,32 @@ public class DirectoryWatcher {
 		this.ioThread = new Thread(this::ioLoop, "DirectoryWatcherIO");
 		this.eventThreadExecutor = eventThreadExecutor;
 
+		Subject<Throwable> errorsSubject = PublishSubject.create();
+		Subject<DirectoryEvent> eventsSubject = PublishSubject.create();
+
+		this.errors = errorsSubject.toSerialized();
+		this.events = eventsSubject.toSerialized();
+
 		startIOThread();
+
+	}
+
+	/**
+	 * Shutdown this watcher.
+	 * <p>
+	 * <b>Note:</b> this method will not shutdown the event thread {@link Executor}
+	 * used to create this watcher.
+	 * </p>
+	 */
+	@Override
+	public void close() {
+
+		closed = true;
+
+		interrupt();
+
+		errors.onComplete();
+		events.onComplete();
 
 	}
 
@@ -262,25 +287,15 @@ public class DirectoryWatcher {
 	/**
 	 * @return The {@link EventStream} of thrown errors.
 	 */
-	public EventStream<Throwable> errors() {
+	public Subject<Throwable> errors() {
 		return errors;
 	}
 
 	/**
 	 * @return The {@link EventStream} of signalled {@link DirectoryEvent}s.
 	 */
-	public EventStream<DirectoryEvent> events() {
+	public Subject<DirectoryEvent> events() {
 		return events;
-	}
-
-	/**
-	 * Returns {@code true} if this watcher was shutdown, meaning that no elements
-	 * will be posted to the errors and events streams.
-	 *
-	 * @return {@code true} if this watcher was shutdown.
-	 */
-	public final boolean isShutdown() {
-		return shutdown;
 	}
 
 	/**
@@ -289,8 +304,18 @@ public class DirectoryWatcher {
 	 *
 	 * @return {@code true} if this watcher's shutdown completed.
 	 */
-	public final boolean isShutdownComplete() {
+	public final boolean isCloseComplete() {
 		return !ioThread.isAlive();
+	}
+
+	/**
+	 * Returns {@code true} if this watcher was shutdown, meaning that no elements
+	 * will be posted to the errors and events streams.
+	 *
+	 * @return {@code true} if this watcher was shutdown.
+	 */
+	public final boolean isClosed() {
+		return closed;
 	}
 
 	/**
@@ -376,21 +401,6 @@ public class DirectoryWatcher {
 			onSuccess,
 			onError
 		);
-	}
-
-	/**
-	 * Shutdown this watcher.
-	 * <p>
-	 * <b>Note:</b> this method will not shutdown the event thread {@link Executor}
-	 * used to create this watcher.
-	 * </p>
-	 */
-	public final void shutdown() {
-
-		shutdown = true;
-
-		interrupt();
-
 	}
 
 	/**
@@ -664,11 +674,11 @@ public class DirectoryWatcher {
 	}
 
 	private void emitError( Throwable e ) {
-		executeOnEventThread(() -> errors.push(e));
+		executeOnEventThread(() -> errors.onNext(e));
 	}
 
 	private void emitEvent( DirectoryEvent event ) {
-		executeOnEventThread(() -> events.push(event));
+		executeOnEventThread(() -> events.onNext(event));
 	}
 
 	@SuppressWarnings( { "UseSpecificCatch", "BroadCatchBlock", "TooBroadCatch" } )
@@ -697,7 +707,7 @@ public class DirectoryWatcher {
 	}
 
 	private void executeOnIOThread( Runnable action ) throws RejectedExecutionException {
-		if ( !isShutdown() ) {
+		if ( !isClosed() ) {
 			executorQueue.add(action);
 			interrupt();
 		} else {
@@ -739,7 +749,7 @@ public class DirectoryWatcher {
 
 				emitEvent(event);
 
-			} else if ( isShutdown() ) {
+			} else if ( isClosed() ) {
 				try {
 					watcher.close();
 					break;
@@ -765,7 +775,7 @@ public class DirectoryWatcher {
 			try {
 				operation.run();
 			} catch ( Throwable t ) {
-				errors.push(t);
+				errors.onNext(t);
 			}
 		}
 
