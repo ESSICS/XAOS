@@ -285,14 +285,14 @@ public class DirectoryWatcher implements AutoCloseable {
 	}
 
 	/**
-	 * @return The {@link EventStream} of thrown errors.
+	 * @return The {@link Subject} of thrown errors.
 	 */
 	public Subject<Throwable> errors() {
 		return errors;
 	}
 
 	/**
-	 * @return The {@link EventStream} of signalled {@link DirectoryEvent}s.
+	 * @return The {@link Subject} of signalled {@link DirectoryEvent}s.
 	 */
 	public Subject<DirectoryEvent> events() {
 		return events;
