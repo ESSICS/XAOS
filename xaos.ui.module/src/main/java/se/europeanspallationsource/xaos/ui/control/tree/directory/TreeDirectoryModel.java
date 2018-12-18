@@ -16,6 +16,9 @@
 package se.europeanspallationsource.xaos.ui.control.tree.directory;
 
 
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
+import io.reactivex.subjects.Subject;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,8 +35,6 @@ import java.util.stream.Stream;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import org.reactfx.EventSource;
-import org.reactfx.EventStream;
 import se.europeanspallationsource.xaos.core.util.TriFunction;
 import se.europeanspallationsource.xaos.ui.control.Icons;
 import se.europeanspallationsource.xaos.ui.control.tree.DirectoryModel;
@@ -73,13 +74,13 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	 */
 	public static final GraphicFactory NO_GRAPHIC_FACTORY = ( p, d, e ) -> null;
 
-	private final EventSource<Update<I>> creations = new EventSource<>();
+	private final Subject<Update<I>> creations;
 	private final I defaultInitiator;
-	private final EventSource<Update<I>> deletions = new EventSource<>();
-	private final EventSource<Throwable> errors = new EventSource<>();
+	private final Subject<Update<I>> deletions;
+	private final Subject<Throwable> errors;
 	private GraphicFactory graphicFactory = DEFAULT_GRAPHIC_FACTORY;
 	private final Function<Path, T> injector;
-	private final EventSource<Update<I>> modifications = new EventSource<>();
+	private final Subject<Update<I>> modifications;
 	private final Function<T, Path> projector;
 	private final Reporter<I> reporter;
 	private final TreeItem<T> root = new TreeItem<>();
@@ -97,29 +98,41 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	 *                         {@link TreeItem}.
 	 */
 	public TreeDirectoryModel( I defaultInitiator, Function<T, Path> projector, Function<Path, T> injector ) {
+
 		this.defaultInitiator = defaultInitiator;
 		this.injector = injector;
 		this.projector = projector;
+
+		Subject<Update<I>> creationsSubject = PublishSubject.create();
+		Subject<Update<I>> deletionsSubject = PublishSubject.create();
+		Subject<Throwable> errorsSubject = PublishSubject.create();
+		Subject<Update<I>> modificationsSubject = PublishSubject.create();
+
+		this.creations = creationsSubject.toSerialized();
+		this.deletions = deletionsSubject.toSerialized();
+		this.errors = errorsSubject.toSerialized();
+		this.modifications = modificationsSubject.toSerialized();
+
 		this.reporter = new Reporter<I>() {
 
 			@Override
 			public void reportCreation( Path baseDir, Path relativePath, I initiator ) {
-				creations.push(Update.creation(baseDir, relativePath, initiator));
+				creations.onNext(Update.creation(baseDir, relativePath, initiator));
 			}
 
 			@Override
 			public void reportDeletion( Path baseDir, Path relativePath, I initiator ) {
-				deletions.push(Update.deletion(baseDir, relativePath, initiator));
+				deletions.onNext(Update.deletion(baseDir, relativePath, initiator));
 			}
 
 			@Override
 			public void reportError( Throwable error ) {
-				errors.push(error);
+				errors.onNext(error);
 			}
 
 			@Override
 			public void reportModification( Path baseDir, Path relativePath, I initiator ) {
-				modifications.push(Update.modification(baseDir, relativePath, initiator));
+				modifications.onNext(Update.modification(baseDir, relativePath, initiator));
 			}
 
 		};
@@ -270,7 +283,7 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	}
 
 	@Override
-	public EventStream<Update<I>> creations() {
+	public Observable<Update<I>> creations() {
 		return creations;
 	}
 
@@ -300,12 +313,20 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	}
 
 	@Override
-	public EventStream<Update<I>> deletions() {
+	public Observable<Update<I>> deletions() {
 		return deletions;
 	}
 
 	@Override
-	public EventStream<Throwable> errors() {
+	public void dispoase() {
+		creations.onComplete();
+		deletions.onComplete();
+		errors.onComplete();
+		modifications.onComplete();
+	}
+
+	@Override
+	public Observable<Throwable> errors() {
 		return errors;
 	}
 
@@ -315,7 +336,7 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	}
 
 	@Override
-	public EventStream<Update<I>> modifications() {
+	public Observable<Update<I>> modifications() {
 		return modifications;
 	}
 

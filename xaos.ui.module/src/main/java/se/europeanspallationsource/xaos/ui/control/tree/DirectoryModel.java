@@ -16,10 +16,10 @@
 package se.europeanspallationsource.xaos.ui.control.tree;
 
 
+import io.reactivex.Observable;
 import java.nio.file.Path;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import org.reactfx.EventStream;
 
 
 /**
@@ -43,17 +43,22 @@ public interface DirectoryModel<I, T> {
 	/**
 	 * @return An observable stream of additions to the model.
 	 */
-	EventStream<Update<I>> creations();
+	Observable<Update<I>> creations();
 
 	/**
 	 * @return An observable stream of removals from the model.
 	 */
-	EventStream<Update<I>> deletions();
+	Observable<Update<I>> deletions();
+
+	/**
+	 * Release the resources of this directory model.
+	 */
+	void dispoase();
 
 	/**
 	 * @return An observable stream of errors.
 	 */
-	EventStream<Throwable> errors();
+	Observable<Throwable> errors();
 
 	/**
 	 * Returns a tree item that can be used as a root of a {@link TreeView}.
@@ -73,7 +78,7 @@ public interface DirectoryModel<I, T> {
 	/**
 	 * @return An observable stream of file modifications in the model.
 	 */
-	EventStream<Update<I>> modifications();
+	Observable<Update<I>> modifications();
 
 	/**
 	 * API defining few reporting methods.

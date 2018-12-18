@@ -16,6 +16,7 @@
 package se.europeanspallationsource.xaos.core.util.io;
 
 
+import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 import java.io.IOException;
@@ -287,14 +288,14 @@ public class DirectoryWatcher implements AutoCloseable {
 	/**
 	 * @return The {@link Subject} of thrown errors.
 	 */
-	public Subject<Throwable> errors() {
+	public Observable<Throwable> errors() {
 		return errors;
 	}
 
 	/**
 	 * @return The {@link Subject} of signalled {@link DirectoryEvent}s.
 	 */
-	public Subject<DirectoryEvent> events() {
+	public Observable<DirectoryEvent> events() {
 		return events;
 	}
 

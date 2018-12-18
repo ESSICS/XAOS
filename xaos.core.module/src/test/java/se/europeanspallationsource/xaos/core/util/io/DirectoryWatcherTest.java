@@ -16,8 +16,8 @@
 package se.europeanspallationsource.xaos.core.util.io;
 
 
+import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.subjects.Subject;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.FileAlreadyExistsException;
@@ -468,7 +468,7 @@ public class DirectoryWatcherTest {
 
 		try ( DirectoryWatcher watcher = build(executor) ) {
 
-			Subject<Throwable> errorsStream = watcher.errors();
+			Observable<Throwable> errorsStream = watcher.errors();
 
 			assertNotNull(errorsStream);
 
@@ -488,7 +488,7 @@ public class DirectoryWatcherTest {
 
 		try ( DirectoryWatcher watcher = build(executor) ) {
 
-			Subject<DirectoryWatcher.DirectoryEvent> event = watcher.events();
+			Observable<DirectoryWatcher.DirectoryEvent> event = watcher.events();
 
 			assertNotNull(event);
 
