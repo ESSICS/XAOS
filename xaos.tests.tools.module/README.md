@@ -17,7 +17,3 @@ introduced in Java 9.
 <!--![xaos.tests.tools dependencis](https://github.com/ESSICS/XAOS/blob/master/xaos.tests.tools.module/doc/maven-dependencies.png)-->
 
 
-### Java `module-info`
-
-![xaos.tests.tools Java dependencis](https://github.com/ESSICS/XAOS/blob/feature/XAOS-11/xaos.tests.tools.module/doc/java-dependencies.png)
-<!--![xaos.tests.tools dependencis](https://github.com/ESSICS/XAOS/blob/master/xaos.tests.tools.module/doc/java-dependencies.png)-->
