@@ -52,8 +52,12 @@ import static se.europeanspallationsource.xaos.ui.control.Icons.DEFAULT_SIZE;
  * A {@link DirectoryModel} that can be used in a {@link TreeView}.
  * <p>
  * This model uses the {@link #DEFAULT_GRAPHIC_FACTORY} to provide graphics
- * to the tree nodes. That can be changed invoking {@link #setGraphicFactory(TreeDirectoryModel.GraphicFactory)}
- * after this model is built.</p>
+ * to the tree nodes. That can be changed invoking 
+ * {@link #setGraphicFactory(TreeDirectoryModel.GraphicFactory)} after this
+ * model is built.</p>
+ * <p>
+ * <b>NoteL</b> {@link #dispoase()} should be called when the model is no more
+ * used (typically when the viewer using it is disposed).</p>
  *
  * @param <I> Type of the initiator of changes to the model.
  * @param <T> Type of the object returned by {@link TreeItem#getValue()}.
