@@ -16,6 +16,7 @@
 package se.europeanspallationsource.xaos.ui.control.tree.directory;
 
 
+import io.reactivex.disposables.Disposable;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -109,6 +110,10 @@ public class TreeDirectoryModelTest {
 		assertThat(model.contains(dir_a)).isTrue();
 		assertThat(model.contains(dir_a_c)).isTrue();
 
+		model.dispose();
+
+		assertThat(model).hasFieldOrPropertyWithValue("disposed", true);
+
 	}
 
 	/**
@@ -141,6 +146,10 @@ public class TreeDirectoryModelTest {
 		assertThat(model.contains(dir_a_c)).isTrue();
 		assertThat(model.contains(file_a_c)).isTrue();
 
+		model.dispose();
+
+		assertThat(model).hasFieldOrPropertyWithValue("disposed", true);
+
 	}
 
 	/**
@@ -163,6 +172,10 @@ public class TreeDirectoryModelTest {
 		printTree(model, "After adding top directory:");
 
 		assertThat(model.contains(root)).isTrue();
+
+		model.dispose();
+
+		assertThat(model).hasFieldOrPropertyWithValue("disposed", true);
 
 	}
 
@@ -217,6 +230,10 @@ public class TreeDirectoryModelTest {
 			fail("Directory collapse not completed in 15 seconds.");
 		}
 
+		model.dispose();
+
+		assertThat(model).hasFieldOrPropertyWithValue("disposed", true);
+
 	}
 
 	/**
@@ -268,6 +285,10 @@ public class TreeDirectoryModelTest {
 		assertThat(model.contains(dir_a_c)).isTrue();
 		assertThat(model.contains(file_a_c)).isTrue();
 
+		model.dispose();
+
+		assertThat(model).hasFieldOrPropertyWithValue("disposed", true);
+
 	}
 
 	/**
@@ -298,6 +319,10 @@ public class TreeDirectoryModelTest {
 		assertThat(model.containsPrefixOf(file_a_c)).isTrue();
 		assertThat(model.containsPrefixOf(FileSystems.getDefault().getPath(System.getProperty("user.dir")))).isFalse();
 
+		model.dispose();
+
+		assertThat(model).hasFieldOrPropertyWithValue("disposed", true);
+
 	}
 
 	/**
@@ -318,7 +343,8 @@ public class TreeDirectoryModelTest {
 			p -> p != null ? p.toString() : null
 		);
 
-		model.creations().subscribe(u -> latch.countDown());
+		Disposable subscription = model.creations().subscribe(u -> latch.countDown());
+
 		model.addTopLevelDirectory(root);
 		model.sync(root);
 		
@@ -328,6 +354,12 @@ public class TreeDirectoryModelTest {
 		if ( !latch.await(1, TimeUnit.MINUTES) ) {
 			fail("Directory model synchronization not completed in 1 minute.");
 		}
+
+		subscription.dispose();
+		model.dispose();
+
+		assertThat(subscription).hasFieldOrPropertyWithValue("disposed", true);
+		assertThat(model).hasFieldOrPropertyWithValue("disposed", true);
 
 	}
 
@@ -400,6 +432,10 @@ public class TreeDirectoryModelTest {
 		assertThat(model.contains(dir_a_c)).isFalse();
 		assertThat(model.contains(file_a_c)).isFalse();
 
+		model.dispose();
+
+		assertThat(model).hasFieldOrPropertyWithValue("disposed", true);
+
 	}
 
 	/**
@@ -420,7 +456,8 @@ public class TreeDirectoryModelTest {
 			p -> p != null ? p.toString() : null
 		);
 
-		model.deletions().subscribe(u -> latch.countDown());
+		Disposable subscription = model.deletions().subscribe(u -> latch.countDown());
+
 		model.addTopLevelDirectory(root);
 		model.sync(root);
 
@@ -435,6 +472,10 @@ public class TreeDirectoryModelTest {
 		if ( !latch.await(1, TimeUnit.MINUTES) ) {
 			fail("Directory model synchronization not completed in 1 minute.");
 		}
+
+		model.dispose();
+
+		assertThat(model).hasFieldOrPropertyWithValue("disposed", true);
 
 	}
 
@@ -456,7 +497,7 @@ public class TreeDirectoryModelTest {
 			p -> p != null ? p.toString() : null
 		);
 
-		model.errors().subscribe(t -> {
+		Disposable errorsSubscription = model.errors().subscribe(t -> {
 			latch.countDown();
 			if ( VERBOSE ) {
 				System.out.println(MessageFormat.format(
@@ -470,13 +511,19 @@ public class TreeDirectoryModelTest {
 		model.sync(dir_a_c);
 		printTree(model, "After adding top directory and sync:");
 
+		errorsSubscription.dispose();
+		model.dispose();
+
+		assertThat(errorsSubscription).hasFieldOrPropertyWithValue("disposed", true);
+		assertThat(model).hasFieldOrPropertyWithValue("disposed", true);
+
 		model = new TreeDirectoryModel<>(
 			this,
 			s -> Paths.get(s),
 			p -> p != null ? p.toString() : null
 		);
 
-		model.errors().subscribe(t -> {
+		errorsSubscription = model.errors().subscribe(t -> {
 			latch.countDown();
 			if ( VERBOSE ) {
 				System.out.println(MessageFormat.format(
@@ -493,6 +540,12 @@ public class TreeDirectoryModelTest {
 		if ( !latch.await(1, TimeUnit.MINUTES) ) {
 			fail("Directory model synchronization not completed in 1 minute.");
 		}
+
+		errorsSubscription.dispose();
+		model.dispose();
+
+		assertThat(errorsSubscription).hasFieldOrPropertyWithValue("disposed", true);
+		assertThat(model).hasFieldOrPropertyWithValue("disposed", true);
 
 	}
 
@@ -525,6 +578,10 @@ public class TreeDirectoryModelTest {
 			.isInstanceOf(TreeDirectoryItems.TopLevelDirectoryItem.class)
 			.extracting("path").element(0).isEqualTo(dir_b);
 
+		model.dispose();
+
+		assertThat(model).hasFieldOrPropertyWithValue("disposed", true);
+
 	}
 
 	/**
@@ -545,7 +602,8 @@ public class TreeDirectoryModelTest {
 			p -> p != null ? p.toString() : null
 		);
 
-		model.modifications().subscribe(u -> latch.countDown());
+		Disposable modificationsSubscription = model.modifications().subscribe(u -> latch.countDown());
+
 		model.addTopLevelDirectory(root);
 		model.sync(root);
 
@@ -584,6 +642,12 @@ public class TreeDirectoryModelTest {
 		if ( !latch.await(1, TimeUnit.MINUTES) ) {
 			fail("Directory model synchronization not completed in 1 minute.");
 		}
+
+		modificationsSubscription.dispose();
+		model.dispose();
+
+		assertThat(modificationsSubscription).hasFieldOrPropertyWithValue("disposed", true);
+		assertThat(model).hasFieldOrPropertyWithValue("disposed", true);
 
 	}
 
@@ -666,6 +730,10 @@ public class TreeDirectoryModelTest {
 		assertThat(model.contains(file_b1)).isFalse();
 		assertThat(model.contains(file_b2)).isFalse();
 
+		model.dispose();
+
+		assertThat(model).hasFieldOrPropertyWithValue("disposed", true);
+
 	}
 
 	/**
@@ -721,6 +789,10 @@ public class TreeDirectoryModelTest {
 		assertThat(item)
 			.isInstanceOf(TreeDirectoryItems.FileItem.class)
 			.extracting("lastModified").element(0).isEqualTo(lastModifiedTime2);
+
+		model.dispose();
+
+		assertThat(model).hasFieldOrPropertyWithValue("disposed", true);
 
 	}
 

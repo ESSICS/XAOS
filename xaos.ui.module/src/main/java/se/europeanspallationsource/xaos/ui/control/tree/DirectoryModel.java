@@ -17,6 +17,7 @@ package se.europeanspallationsource.xaos.ui.control.tree;
 
 
 import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 import java.nio.file.Path;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -30,7 +31,7 @@ import javafx.scene.control.TreeView;
  * @author claudio.rosati@esss.se
  * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.DirectoryModel</a>
  */
-public interface DirectoryModel<I, T> {
+public interface DirectoryModel<I, T> extends Disposable {
 
 	/**
 	 * Indicates whether this directory model contains the given {@code path}.
@@ -49,11 +50,6 @@ public interface DirectoryModel<I, T> {
 	 * @return An observable stream of removals from the model.
 	 */
 	Observable<Update<I>> deletions();
-
-	/**
-	 * Release the resources of this directory model.
-	 */
-	void dispoase();
 
 	/**
 	 * @return An observable stream of errors.

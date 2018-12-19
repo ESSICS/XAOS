@@ -96,13 +96,18 @@ public class DirectoryWatcherTest {
 	 * Test of close method, of class DirectoryWatcher.
 	 *
 	 * @throws java.io.IOException
+	 * @throws java.lang.InterruptedException
 	 */
 	@Test( expected = RejectedExecutionException.class )
-	public void testClose() throws IOException, RejectedExecutionException {
+	public void testClose() throws IOException, RejectedExecutionException, InterruptedException {
 
 		System.out.println("  Testing 'close'...");
 
+		CountDownLatch latchErrors = new CountDownLatch(1);
+		CountDownLatch latchEvents = new CountDownLatch(1);
 		DirectoryWatcher watcher = build(executor);
+		Disposable errrorsSubscription = watcher.errors().subscribe(t -> {}, t -> {}, latchErrors::countDown);
+		Disposable eventsSubscription = watcher.events().subscribe(t -> {}, t -> {}, latchEvents::countDown);
 
 		assertFalse(watcher.isClosed());
 
@@ -120,6 +125,13 @@ public class DirectoryWatcherTest {
 
 		assertTrue(watcher.isClosed());
 
+		if ( !latchErrors.await(15, TimeUnit.SECONDS) ) {
+			fail("Missing 'onComplete' for errors stream in 15 seconds.");
+		}
+		if ( !latchEvents.await(15, TimeUnit.SECONDS) ) {
+			fail("Missing 'onComplete' for events stream in 15 seconds.");
+		}
+
 		watcher.delete(
 			file_b1,
 			t -> {
@@ -129,6 +141,9 @@ public class DirectoryWatcherTest {
 				fail("Operation has not been rejected.");
 			}
 		);
+
+		errrorsSubscription.dispose();
+		eventsSubscription.dispose();
 
 	}
 

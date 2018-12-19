@@ -81,6 +81,7 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	private final Subject<Update<I>> creations;
 	private final I defaultInitiator;
 	private final Subject<Update<I>> deletions;
+	private boolean disposed = false;
 	private final Subject<Throwable> errors;
 	private GraphicFactory graphicFactory = DEFAULT_GRAPHIC_FACTORY;
 	private final Function<Path, T> injector;
@@ -140,6 +141,7 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 			}
 
 		};
+		
 	}
 
 	/**
@@ -322,11 +324,15 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	}
 
 	@Override
-	public void dispoase() {
+	public void dispose() {
+
 		creations.onComplete();
 		deletions.onComplete();
 		errors.onComplete();
 		modifications.onComplete();
+
+		disposed = true;
+
 	}
 
 	@Override
@@ -337,6 +343,11 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	@Override
 	public TreeItem<T> getRoot() {
 		return root;
+	}
+
+	@Override
+	public boolean isDisposed() {
+		return disposed;
 	}
 
 	@Override
