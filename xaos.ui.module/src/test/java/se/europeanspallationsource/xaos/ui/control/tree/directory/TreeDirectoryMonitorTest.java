@@ -148,6 +148,7 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 	 * @throws java.io.IOException
 	 */
 	@Test
+	@SuppressWarnings( "ResultOfMethodCallIgnored" )
 	public void testCreateDirectories() throws InterruptedException, IOException {
 
 		System.out.println(MessageFormat.format("  Testing directories creation [on {0}]...", root));
@@ -236,6 +237,7 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 	 * @throws java.io.IOException
 	 */
 	@Test
+	@SuppressWarnings( "ResultOfMethodCallIgnored" )
 	public void testCreateDirectory() throws InterruptedException, IOException {
 
 		System.out.println(MessageFormat.format("  Testing directory creation [on {0}]...", root));
@@ -314,6 +316,7 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 	 * @throws java.io.IOException
 	 */
 	@Test
+	@SuppressWarnings( "ResultOfMethodCallIgnored" )
 	public void testCreateFile() throws InterruptedException, IOException {
 
 		System.out.println(MessageFormat.format("  Testing file creation [on {0}]...", root));
@@ -392,7 +395,7 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 	 * @throws java.io.IOException
 	 */
 	@Test
-	@SuppressWarnings( "CallToThreadYield" )
+	@SuppressWarnings( { "CallToThreadYield", "ResultOfMethodCallIgnored" } )
 	public void testDelete() throws InterruptedException, IOException {
 
 		System.out.println(MessageFormat.format("  Testing file and directory deletion [on {0}]...", root));
@@ -480,6 +483,7 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 	 * @throws java.io.IOException
 	 */
 	@Test
+	@SuppressWarnings( "ResultOfMethodCallIgnored" )
 	public void testDeleteTree() throws InterruptedException, IOException {
 
 		System.out.println(MessageFormat.format("  Testing tree deletion [on {0}]...", root));

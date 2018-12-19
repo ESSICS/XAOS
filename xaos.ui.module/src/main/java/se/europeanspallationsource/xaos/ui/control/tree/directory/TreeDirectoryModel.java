@@ -56,7 +56,7 @@ import static se.europeanspallationsource.xaos.ui.control.Icons.DEFAULT_SIZE;
  * {@link #setGraphicFactory(TreeDirectoryModel.GraphicFactory)} after this
  * model is built.</p>
  * <p>
- * <b>NoteL</b> {@link #dispoase()} should be called when the model is no more
+ * <b>Note:</b> {@link #dispose()} should be called when the model is no more
  * used (typically when the viewer using it is disposed).</p>
  *
  * @param <I> Type of the initiator of changes to the model.

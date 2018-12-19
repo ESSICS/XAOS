@@ -27,15 +27,6 @@
 				<configuration>
 					<customStyleConfiguration>${project.basedir}/../doc/maven-dependencies.json</customStyleConfiguration>
 				</configuration>
-				<executions>
-					<execution>
-						<phase>test</phase>
-						<id>maven-dependency-graph</id>
-						<goals>
-							<goal>graph</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
         </plugins>
     </build>

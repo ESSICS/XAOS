@@ -311,7 +311,7 @@ public class IconsTest extends ApplicationTest {
 				System.out.println(MessageFormat.format("    Collecting classes from package {0}...", packageName));
 				classNames.addAll(
 					new ClassGraph()
-						.enableSystemPackages()
+						.enableSystemJarsAndModules()
 						.whitelistPackages(packageName)
 						.scan()
 						.getAllClasses()

@@ -102,42 +102,43 @@ public class TreeDirectoryAsynchronousIOTest {
 
 		System.out.println(MessageFormat.format("  Testing ''createDirectories'' [on {0}]...", root));
 
-		DirectoryWatcher watcher = build(executor);
-		TreeDirectoryModel<TreeDirectoryAsynchronousIOTest, String> model = new TreeDirectoryModel<>(
-			this,
-			s -> Paths.get(s),
-			p -> p != null ? p.toString() : null
-		);
-		TreeDirectoryAsynchronousIO<TreeDirectoryAsynchronousIOTest, String> treeDAIO = new TreeDirectoryAsynchronousIO<>(
-			watcher,
-			model,
-			executor
-		);
+		try ( DirectoryWatcher watcher = build(executor) ) {
 
-		model.addTopLevelDirectory(dir_a);
+			TreeDirectoryModel<TreeDirectoryAsynchronousIOTest, String> model = new TreeDirectoryModel<>(
+				this,
+				s -> Paths.get(s),
+				p -> p != null ? p.toString() : null
+			);
+			TreeDirectoryAsynchronousIO<TreeDirectoryAsynchronousIOTest, String> treeDAIO = new TreeDirectoryAsynchronousIO<>(
+				watcher,
+				model,
+				executor
+			);
 
-		Path toBeCreated = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_x", "dir_a_y", "dir_a_z");
-		CompletionStage<Void> stage = treeDAIO.createDirectories(toBeCreated, this);
+			model.addTopLevelDirectory(dir_a);
 
-		stage.toCompletableFuture().get();
+			Path toBeCreated = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_x", "dir_a_y", "dir_a_z");
+			CompletionStage<Void> stage = treeDAIO.createDirectories(toBeCreated, this);
 
-		assertTrue(stage.toCompletableFuture().isDone());
-		assertTrue(Files.exists(toBeCreated));
-		assertTrue(Files.isDirectory(toBeCreated));
-		assertTrue(model.contains(toBeCreated));
-
-		Path toFail = file_a;
-
-		stage = treeDAIO.createDirectory(toFail, this);
-
-		try {
 			stage.toCompletableFuture().get();
-		} catch ( Exception ex ) {
-			assertTrue(ex.getCause() instanceof FileAlreadyExistsException);
-		}
-		assertTrue(stage.toCompletableFuture().isCompletedExceptionally());
 
-		watcher.shutdown();
+			assertTrue(stage.toCompletableFuture().isDone());
+			assertTrue(Files.exists(toBeCreated));
+			assertTrue(Files.isDirectory(toBeCreated));
+			assertTrue(model.contains(toBeCreated));
+
+			Path toFail = file_a;
+
+			stage = treeDAIO.createDirectory(toFail, this);
+
+			try {
+				stage.toCompletableFuture().get();
+			} catch ( Exception ex ) {
+				assertTrue(ex.getCause() instanceof FileAlreadyExistsException);
+			}
+			assertTrue(stage.toCompletableFuture().isCompletedExceptionally());
+
+		}
 
 	}
 
@@ -154,53 +155,54 @@ public class TreeDirectoryAsynchronousIOTest {
 
 		System.out.println(MessageFormat.format("  Testing ''createDirectory'' [on {0}]...", root));
 
-		DirectoryWatcher watcher = build(executor);
-		TreeDirectoryModel<TreeDirectoryAsynchronousIOTest, String> model = new TreeDirectoryModel<>(
-			this,
-			s -> Paths.get(s),
-			p -> p != null ? p.toString() : null
-		);
-		TreeDirectoryAsynchronousIO<TreeDirectoryAsynchronousIOTest, String> treeDAIO = new TreeDirectoryAsynchronousIO<>(
-			watcher,
-			model,
-			executor
-		);
+		try ( DirectoryWatcher watcher = build(executor) ) {
 
-		model.addTopLevelDirectory(dir_a);
+			TreeDirectoryModel<TreeDirectoryAsynchronousIOTest, String> model = new TreeDirectoryModel<>(
+				this,
+				s -> Paths.get(s),
+				p -> p != null ? p.toString() : null
+			);
+			TreeDirectoryAsynchronousIO<TreeDirectoryAsynchronousIOTest, String> treeDAIO = new TreeDirectoryAsynchronousIO<>(
+				watcher,
+				model,
+				executor
+			);
 
-		Path toBeCreated = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_z");
-		CompletionStage<Void> stage = treeDAIO.createDirectory(toBeCreated, this);
+			model.addTopLevelDirectory(dir_a);
 
-		stage.toCompletableFuture().get();
+			Path toBeCreated = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_z");
+			CompletionStage<Void> stage = treeDAIO.createDirectory(toBeCreated, this);
 
-		assertTrue(stage.toCompletableFuture().isDone());
-		assertTrue(Files.exists(toBeCreated));
-		assertTrue(Files.isDirectory(toBeCreated));
-		assertTrue(model.contains(toBeCreated));
-
-		Path toFail1 = dir_a_c;
-
-		stage = treeDAIO.createDirectory(toFail1, this);
-
-		try {
 			stage.toCompletableFuture().get();
-		} catch ( Exception ex ) {
-			assertTrue(ex.getCause() instanceof FileAlreadyExistsException);
+
+			assertTrue(stage.toCompletableFuture().isDone());
+			assertTrue(Files.exists(toBeCreated));
+			assertTrue(Files.isDirectory(toBeCreated));
+			assertTrue(model.contains(toBeCreated));
+
+			Path toFail1 = dir_a_c;
+
+			stage = treeDAIO.createDirectory(toFail1, this);
+
+			try {
+				stage.toCompletableFuture().get();
+			} catch ( Exception ex ) {
+				assertTrue(ex.getCause() instanceof FileAlreadyExistsException);
+			}
+			assertTrue(stage.toCompletableFuture().isCompletedExceptionally());
+
+			Path toFail2 = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_x", "dir_a_y", "dir_a_z");
+
+			stage = treeDAIO.createDirectory(toFail2, this);
+
+			try {
+				stage.toCompletableFuture().get();
+			} catch ( Exception ex ) {
+				assertTrue(ex.getCause() instanceof NoSuchFileException);
+			}
+			assertTrue(stage.toCompletableFuture().isCompletedExceptionally());
+
 		}
-		assertTrue(stage.toCompletableFuture().isCompletedExceptionally());
-
-		Path toFail2 = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_x", "dir_a_y", "dir_a_z");
-
-		stage = treeDAIO.createDirectory(toFail2, this);
-
-		try {
-			stage.toCompletableFuture().get();
-		} catch ( Exception ex ) {
-			assertTrue(ex.getCause() instanceof NoSuchFileException);
-		}
-		assertTrue(stage.toCompletableFuture().isCompletedExceptionally());
-
-		watcher.shutdown();
 
 	}
 
@@ -217,43 +219,44 @@ public class TreeDirectoryAsynchronousIOTest {
 
 		System.out.println(MessageFormat.format("  Testing ''createFile'' [on {0}]...", root));
 
-		DirectoryWatcher watcher = build(executor);
-		TreeDirectoryModel<TreeDirectoryAsynchronousIOTest, String> model = new TreeDirectoryModel<>(
-			this,
-			s -> Paths.get(s),
-			p -> p != null ? p.toString() : null
-		);
-		TreeDirectoryAsynchronousIO<TreeDirectoryAsynchronousIOTest, String> treeDAIO = new TreeDirectoryAsynchronousIO<>(
-			watcher,
-			model,
-			executor
-		);
+		try ( DirectoryWatcher watcher = build(executor) ) {
 
-		model.addTopLevelDirectory(dir_a);
+			TreeDirectoryModel<TreeDirectoryAsynchronousIOTest, String> model = new TreeDirectoryModel<>(
+				this,
+				s -> Paths.get(s),
+				p -> p != null ? p.toString() : null
+			);
+			TreeDirectoryAsynchronousIO<TreeDirectoryAsynchronousIOTest, String> treeDAIO = new TreeDirectoryAsynchronousIO<>(
+				watcher,
+				model,
+				executor
+			);
 
-		Path toBeCreated = FileSystems.getDefault().getPath(dir_a.toString(), "created_file.txt");
-		CompletionStage<Void> stage = treeDAIO.createFile(toBeCreated, this);
+			model.addTopLevelDirectory(dir_a);
 
-		stage.toCompletableFuture().get();
+			Path toBeCreated = FileSystems.getDefault().getPath(dir_a.toString(), "created_file.txt");
+			CompletionStage<Void> stage = treeDAIO.createFile(toBeCreated, this);
 
-		assertTrue(stage.toCompletableFuture().isDone());
-		assertTrue(Files.exists(toBeCreated));
-		assertFalse(Files.isDirectory(toBeCreated));
-		assertTrue(Files.isRegularFile(toBeCreated));
-		assertTrue(model.contains(toBeCreated));
-
-		Path toFail = FileSystems.getDefault().getPath(dir_a.toString(), "non-exitent", "created_file.txt");
-
-		stage = treeDAIO.createFile(toFail, this);
-
-		try {
 			stage.toCompletableFuture().get();
-		} catch ( Exception ex ) {
-			assertTrue(ex.getCause() instanceof NoSuchFileException);
-		}
-		assertTrue(stage.toCompletableFuture().isCompletedExceptionally());
 
-		watcher.shutdown();
+			assertTrue(stage.toCompletableFuture().isDone());
+			assertTrue(Files.exists(toBeCreated));
+			assertFalse(Files.isDirectory(toBeCreated));
+			assertTrue(Files.isRegularFile(toBeCreated));
+			assertTrue(model.contains(toBeCreated));
+
+			Path toFail = FileSystems.getDefault().getPath(dir_a.toString(), "non-exitent", "created_file.txt");
+
+			stage = treeDAIO.createFile(toFail, this);
+
+			try {
+				stage.toCompletableFuture().get();
+			} catch ( Exception ex ) {
+				assertTrue(ex.getCause() instanceof NoSuchFileException);
+			}
+			assertTrue(stage.toCompletableFuture().isCompletedExceptionally());
+
+		}
 
 	}
 
@@ -270,53 +273,54 @@ public class TreeDirectoryAsynchronousIOTest {
 
 		System.out.println(MessageFormat.format("  Testing ''delete'' [on {0}]...", root));
 
-		DirectoryWatcher watcher = build(executor);
-		TreeDirectoryModel<TreeDirectoryAsynchronousIOTest, String> model = new TreeDirectoryModel<>(
-			this,
-			s -> Paths.get(s),
-			p -> p != null ? p.toString() : null
-		);
-		TreeDirectoryAsynchronousIO<TreeDirectoryAsynchronousIOTest, String> treeDAIO = new TreeDirectoryAsynchronousIO<>(
-			watcher,
-			model,
-			executor
-		);
+		try ( DirectoryWatcher watcher = build(executor) ) {
 
-		model.addTopLevelDirectory(root);
-		model.sync(root);
-		TreeItems.expandAll(model.getRoot(), true);
+			TreeDirectoryModel<TreeDirectoryAsynchronousIOTest, String> model = new TreeDirectoryModel<>(
+				this,
+				s -> Paths.get(s),
+				p -> p != null ? p.toString() : null
+			);
+			TreeDirectoryAsynchronousIO<TreeDirectoryAsynchronousIOTest, String> treeDAIO = new TreeDirectoryAsynchronousIO<>(
+				watcher,
+				model,
+				executor
+			);
 
-		assertTrue(model.contains(dir_a));
-		assertTrue(model.contains(file_a));
-		assertTrue(model.contains(dir_a_c));
-		assertTrue(model.contains(file_a_c));
+			model.addTopLevelDirectory(root);
+			model.sync(root);
+			TreeItems.expandAll(model.getRoot(), true);
 
-		CompletionStage<Void> stage = treeDAIO.delete(file_a_c, this);
+			assertTrue(model.contains(dir_a));
+			assertTrue(model.contains(file_a));
+			assertTrue(model.contains(dir_a_c));
+			assertTrue(model.contains(file_a_c));
 
-		stage.toCompletableFuture().get();
+			CompletionStage<Void> stage = treeDAIO.delete(file_a_c, this);
 
-		assertTrue(stage.toCompletableFuture().isDone());
-		assertFalse(Files.exists(file_a_c));
-
-		stage = treeDAIO.delete(dir_a_c, this);
-
-		stage.toCompletableFuture().get();
-
-		assertTrue(stage.toCompletableFuture().isDone());
-		assertFalse(Files.exists(dir_a_c));
-
-		stage = treeDAIO.delete(dir_a, this);
-
-		try {
 			stage.toCompletableFuture().get();
-		} catch ( Exception ex ) {
-			assertTrue(ex.getCause() instanceof DirectoryNotEmptyException);
-		}
-		assertTrue(stage.toCompletableFuture().isCompletedExceptionally());
-		assertTrue(model.contains(dir_a));
-		assertTrue(model.contains(file_a));
 
-		watcher.shutdown();
+			assertTrue(stage.toCompletableFuture().isDone());
+			assertFalse(Files.exists(file_a_c));
+
+			stage = treeDAIO.delete(dir_a_c, this);
+
+			stage.toCompletableFuture().get();
+
+			assertTrue(stage.toCompletableFuture().isDone());
+			assertFalse(Files.exists(dir_a_c));
+
+			stage = treeDAIO.delete(dir_a, this);
+
+			try {
+				stage.toCompletableFuture().get();
+			} catch ( Exception ex ) {
+				assertTrue(ex.getCause() instanceof DirectoryNotEmptyException);
+			}
+			assertTrue(stage.toCompletableFuture().isCompletedExceptionally());
+			assertTrue(model.contains(dir_a));
+			assertTrue(model.contains(file_a));
+
+		}
 
 	}
 
@@ -333,38 +337,39 @@ public class TreeDirectoryAsynchronousIOTest {
 
 		System.out.println(MessageFormat.format("  Testing ''deleteTree'' [on {0}]...", root));
 
-		DirectoryWatcher watcher = build(executor);
-		TreeDirectoryModel<TreeDirectoryAsynchronousIOTest, String> model = new TreeDirectoryModel<>(
-			this,
-			s -> Paths.get(s),
-			p -> p != null ? p.toString() : null
-		);
-		TreeDirectoryAsynchronousIO<TreeDirectoryAsynchronousIOTest, String> treeDAIO = new TreeDirectoryAsynchronousIO<>(
-			watcher,
-			model,
-			executor
-		);
+		try ( DirectoryWatcher watcher = build(executor) ) {
 
-		model.addTopLevelDirectory(root);
-		model.sync(root);
-		TreeItems.expandAll(model.getRoot(), true);
+			TreeDirectoryModel<TreeDirectoryAsynchronousIOTest, String> model = new TreeDirectoryModel<>(
+				this,
+				s -> Paths.get(s),
+				p -> p != null ? p.toString() : null
+			);
+			TreeDirectoryAsynchronousIO<TreeDirectoryAsynchronousIOTest, String> treeDAIO = new TreeDirectoryAsynchronousIO<>(
+				watcher,
+				model,
+				executor
+			);
 
-		assertTrue(model.contains(dir_a));
-		assertTrue(model.contains(file_a));
-		assertTrue(model.contains(dir_a_c));
-		assertTrue(model.contains(file_a_c));
+			model.addTopLevelDirectory(root);
+			model.sync(root);
+			TreeItems.expandAll(model.getRoot(), true);
 
-		CompletionStage<Void> stage = treeDAIO.deleteTree(dir_a, this);
+			assertTrue(model.contains(dir_a));
+			assertTrue(model.contains(file_a));
+			assertTrue(model.contains(dir_a_c));
+			assertTrue(model.contains(file_a_c));
 
-		stage.toCompletableFuture().get();
+			CompletionStage<Void> stage = treeDAIO.deleteTree(dir_a, this);
 
-		assertTrue(stage.toCompletableFuture().isDone());
-		assertFalse(model.contains(dir_a));
-		assertFalse(model.contains(file_a));
-		assertFalse(model.contains(dir_a_c));
-		assertFalse(model.contains(file_a_c));
+			stage.toCompletableFuture().get();
 
-		watcher.shutdown();
+			assertTrue(stage.toCompletableFuture().isDone());
+			assertFalse(model.contains(dir_a));
+			assertFalse(model.contains(file_a));
+			assertFalse(model.contains(dir_a_c));
+			assertFalse(model.contains(file_a_c));
+
+		}
 
 	}
 
@@ -381,45 +386,46 @@ public class TreeDirectoryAsynchronousIOTest {
 
 		System.out.println(MessageFormat.format("  Testing ''readBinaryFile'' [on {0}]...", root));
 
-		DirectoryWatcher watcher = build(executor);
-		TreeDirectoryModel<TreeDirectoryAsynchronousIOTest, String> model = new TreeDirectoryModel<>(
-			this,
-			s -> Paths.get(s),
-			p -> p != null ? p.toString() : null
-		);
-		TreeDirectoryAsynchronousIO<TreeDirectoryAsynchronousIOTest, String> treeDAIO = new TreeDirectoryAsynchronousIO<>(
-			watcher,
-			model,
-			executor
-		);
+		try ( DirectoryWatcher watcher = build(executor) ) {
 
-		model.addTopLevelDirectory(root);
-		model.sync(root);
-		TreeItems.expandAll(model.getRoot(), true);
+			TreeDirectoryModel<TreeDirectoryAsynchronousIOTest, String> model = new TreeDirectoryModel<>(
+				this,
+				s -> Paths.get(s),
+				p -> p != null ? p.toString() : null
+			);
+			TreeDirectoryAsynchronousIO<TreeDirectoryAsynchronousIOTest, String> treeDAIO = new TreeDirectoryAsynchronousIO<>(
+				watcher,
+				model,
+				executor
+			);
 
-		byte[] content = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x03, 0x02, 0x01, 0x00 };
+			model.addTopLevelDirectory(root);
+			model.sync(root);
+			TreeItems.expandAll(model.getRoot(), true);
 
-		Files.write(file_b1, content);
+			byte[] content = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x03, 0x02, 0x01, 0x00 };
 
-		CompletionStage<byte[]> stage = treeDAIO.readBinaryFile(file_b1, this);
+			Files.write(file_b1, content);
 
-		byte[] read = stage.toCompletableFuture().get();
+			CompletionStage<byte[]> stage = treeDAIO.readBinaryFile(file_b1, this);
 
-		assertTrue(stage.toCompletableFuture().isDone());
-		assertArrayEquals(content, read);
+			byte[] read = stage.toCompletableFuture().get();
 
-		Path toFail = FileSystems.getDefault().getPath(dir_a.toString(), "non-exitent", "created_file.txt");
+			assertTrue(stage.toCompletableFuture().isDone());
+			assertArrayEquals(content, read);
 
-		stage = treeDAIO.readBinaryFile(toFail, this);
+			Path toFail = FileSystems.getDefault().getPath(dir_a.toString(), "non-exitent", "created_file.txt");
 
-		try {
-			stage.toCompletableFuture().get();
-		} catch ( Exception ex ) {
-			assertTrue(ex.getCause() instanceof NoSuchFileException);
+			stage = treeDAIO.readBinaryFile(toFail, this);
+
+			try {
+				stage.toCompletableFuture().get();
+			} catch ( Exception ex ) {
+				assertTrue(ex.getCause() instanceof NoSuchFileException);
+			}
+			assertTrue(stage.toCompletableFuture().isCompletedExceptionally());
+
 		}
-		assertTrue(stage.toCompletableFuture().isCompletedExceptionally());
-
-		watcher.shutdown();
 
 	}
 
@@ -436,46 +442,47 @@ public class TreeDirectoryAsynchronousIOTest {
 
 		System.out.println(MessageFormat.format("  Testing ''readTextFile'' [on {0}]...", root));
 
-		DirectoryWatcher watcher = build(executor);
-		TreeDirectoryModel<TreeDirectoryAsynchronousIOTest, String> model = new TreeDirectoryModel<>(
-			this,
-			s -> Paths.get(s),
-			p -> p != null ? p.toString() : null
-		);
-		TreeDirectoryAsynchronousIO<TreeDirectoryAsynchronousIOTest, String> treeDAIO = new TreeDirectoryAsynchronousIO<>(
-			watcher,
-			model,
-			executor
-		);
+		try ( DirectoryWatcher watcher = build(executor) ) {
 
-		model.addTopLevelDirectory(root);
-		model.sync(root);
-		TreeItems.expandAll(model.getRoot(), true);
+			TreeDirectoryModel<TreeDirectoryAsynchronousIOTest, String> model = new TreeDirectoryModel<>(
+				this,
+				s -> Paths.get(s),
+				p -> p != null ? p.toString() : null
+			);
+			TreeDirectoryAsynchronousIO<TreeDirectoryAsynchronousIOTest, String> treeDAIO = new TreeDirectoryAsynchronousIO<>(
+				watcher,
+				model,
+				executor
+			);
 
-		String content = "First line of text.\nSecond line of text.";
-		Charset charset = defaultCharset();
+			model.addTopLevelDirectory(root);
+			model.sync(root);
+			TreeItems.expandAll(model.getRoot(), true);
 
-		Files.write(file_b1, content.getBytes(charset), CREATE, WRITE, TRUNCATE_EXISTING);
+			String content = "First line of text.\nSecond line of text.";
+			Charset charset = defaultCharset();
 
-		CompletionStage<String> stage = treeDAIO.readTextFile(file_b1, charset, this);
+			Files.write(file_b1, content.getBytes(charset), CREATE, WRITE, TRUNCATE_EXISTING);
 
-		String read = stage.toCompletableFuture().get();
+			CompletionStage<String> stage = treeDAIO.readTextFile(file_b1, charset, this);
 
-		assertTrue(stage.toCompletableFuture().isDone());
-		assertEquals(content, read);
+			String read = stage.toCompletableFuture().get();
 
-		Path toFail = FileSystems.getDefault().getPath(dir_a.toString(), "non-exitent", "created_file.txt");
+			assertTrue(stage.toCompletableFuture().isDone());
+			assertEquals(content, read);
 
-		stage = treeDAIO.readTextFile(toFail, charset, this);
+			Path toFail = FileSystems.getDefault().getPath(dir_a.toString(), "non-exitent", "created_file.txt");
 
-		try {
-			stage.toCompletableFuture().get();
-		} catch ( Exception ex ) {
-			assertTrue(ex.getCause() instanceof NoSuchFileException);
+			stage = treeDAIO.readTextFile(toFail, charset, this);
+
+			try {
+				stage.toCompletableFuture().get();
+			} catch ( Exception ex ) {
+				assertTrue(ex.getCause() instanceof NoSuchFileException);
+			}
+			assertTrue(stage.toCompletableFuture().isCompletedExceptionally());
+
 		}
-		assertTrue(stage.toCompletableFuture().isCompletedExceptionally());
-
-		watcher.shutdown();
 
 	}
 
@@ -491,33 +498,34 @@ public class TreeDirectoryAsynchronousIOTest {
 
 		System.out.println(MessageFormat.format("  Testing ''writeBinaryFile'' [on {0}]...", root));
 
-		DirectoryWatcher watcher = build(executor);
-		TreeDirectoryModel<TreeDirectoryAsynchronousIOTest, String> model = new TreeDirectoryModel<>(
-			this,
-			s -> Paths.get(s),
-			p -> p != null ? p.toString() : null
-		);
-		TreeDirectoryAsynchronousIO<TreeDirectoryAsynchronousIOTest, String> treeDAIO = new TreeDirectoryAsynchronousIO<>(
-			watcher,
-			model,
-			executor
-		);
+		try ( DirectoryWatcher watcher = build(executor) ) {
 
-		model.addTopLevelDirectory(root);
-		model.sync(root);
-		TreeItems.expandAll(model.getRoot(), true);
+			TreeDirectoryModel<TreeDirectoryAsynchronousIOTest, String> model = new TreeDirectoryModel<>(
+				this,
+				s -> Paths.get(s),
+				p -> p != null ? p.toString() : null
+			);
+			TreeDirectoryAsynchronousIO<TreeDirectoryAsynchronousIOTest, String> treeDAIO = new TreeDirectoryAsynchronousIO<>(
+				watcher,
+				model,
+				executor
+			);
 
-		byte[] content = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x03, 0x02, 0x01, 0x00 };
-		CompletionStage<Void> stage = treeDAIO.writeBinaryFile(file_b1, content, this);
+			model.addTopLevelDirectory(root);
+			model.sync(root);
+			TreeItems.expandAll(model.getRoot(), true);
 
-		stage.toCompletableFuture().get();
-		assertTrue(stage.toCompletableFuture().isDone());
+			byte[] content = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x03, 0x02, 0x01, 0x00 };
+			CompletionStage<Void> stage = treeDAIO.writeBinaryFile(file_b1, content, this);
 
-		byte[] read = Files.readAllBytes(file_b1);
+			stage.toCompletableFuture().get();
+			assertTrue(stage.toCompletableFuture().isDone());
 
-		assertArrayEquals(content, read);
+			byte[] read = Files.readAllBytes(file_b1);
 
-		watcher.shutdown();
+			assertArrayEquals(content, read);
+
+		}
 
 	}
 
@@ -533,34 +541,35 @@ public class TreeDirectoryAsynchronousIOTest {
 
 		System.out.println(MessageFormat.format("  Testing ''writeBinaryFile'' [on {0}]...", root));
 
-		DirectoryWatcher watcher = build(executor);
-		TreeDirectoryModel<TreeDirectoryAsynchronousIOTest, String> model = new TreeDirectoryModel<>(
-			this,
-			s -> Paths.get(s),
-			p -> p != null ? p.toString() : null
-		);
-		TreeDirectoryAsynchronousIO<TreeDirectoryAsynchronousIOTest, String> treeDAIO = new TreeDirectoryAsynchronousIO<>(
-			watcher,
-			model,
-			executor
-		);
+		try ( DirectoryWatcher watcher = build(executor) ) {
 
-		model.addTopLevelDirectory(root);
-		model.sync(root);
-		TreeItems.expandAll(model.getRoot(), true);
+			TreeDirectoryModel<TreeDirectoryAsynchronousIOTest, String> model = new TreeDirectoryModel<>(
+				this,
+				s -> Paths.get(s),
+				p -> p != null ? p.toString() : null
+			);
+			TreeDirectoryAsynchronousIO<TreeDirectoryAsynchronousIOTest, String> treeDAIO = new TreeDirectoryAsynchronousIO<>(
+				watcher,
+				model,
+				executor
+			);
 
-		String content = "First line of text.\nSecond line of text.";
-		Charset charset = defaultCharset();
-		CompletionStage<Void> stage = treeDAIO.writeTextFile(file_b1, content, charset, this);
+			model.addTopLevelDirectory(root);
+			model.sync(root);
+			TreeItems.expandAll(model.getRoot(), true);
 
-		stage.toCompletableFuture().get();
-		assertTrue(stage.toCompletableFuture().isDone());
+			String content = "First line of text.\nSecond line of text.";
+			Charset charset = defaultCharset();
+			CompletionStage<Void> stage = treeDAIO.writeTextFile(file_b1, content, charset, this);
 
-		byte[] read = Files.readAllBytes(file_b1);
+			stage.toCompletableFuture().get();
+			assertTrue(stage.toCompletableFuture().isDone());
 
-		assertEquals(content, new String(read, charset));
+			byte[] read = Files.readAllBytes(file_b1);
 
-		watcher.shutdown();
+			assertEquals(content, new String(read, charset));
+
+		}
 
 	}
 

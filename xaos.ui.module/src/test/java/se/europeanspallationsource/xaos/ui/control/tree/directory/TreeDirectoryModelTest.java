@@ -39,6 +39,8 @@ import se.europeanspallationsource.xaos.ui.control.tree.TreeItems;
 
 import static java.nio.file.attribute.FileTime.from;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 
@@ -476,6 +478,62 @@ public class TreeDirectoryModelTest {
 		model.dispose();
 
 		assertThat(model).hasFieldOrPropertyWithValue("disposed", true);
+
+	}
+
+	/**
+	 * Test of dispose and isDisposed methods, of class TreeDirectoryModel.
+	 *
+	 * @throws java.lang.InterruptedException
+	 */
+	@Test
+	public void testDispose() throws InterruptedException {
+
+		System.out.println("  Testing 'dispose' and 'isDisposed'...");
+
+		CountDownLatch latchCreations = new CountDownLatch(1);
+		CountDownLatch latchDeletions = new CountDownLatch(1);
+		CountDownLatch latchErrors = new CountDownLatch(1);
+		CountDownLatch latchModifications = new CountDownLatch(1);
+		TreeDirectoryModel<TreeDirectoryModelTest, String> model = new TreeDirectoryModel<>(
+			this,
+			s -> Paths.get(s),
+			p -> p != null ? p.toString() : null
+		);
+
+		assertFalse(model.isDisposed());
+
+		Disposable creationsSubscription = model.creations().subscribe(t -> {}, t -> {}, latchCreations::countDown);
+		Disposable deletionsSubscription = model.creations().subscribe(t -> {}, t -> {}, latchDeletions::countDown);
+		Disposable errorsSubscription = model.creations().subscribe(t -> {}, t -> {}, latchErrors::countDown);
+		Disposable modificationsSubscription = model.creations().subscribe(t -> {}, t -> {}, latchModifications::countDown);
+
+		assertFalse(creationsSubscription.isDisposed());
+		assertFalse(deletionsSubscription.isDisposed());
+		assertFalse(errorsSubscription.isDisposed());
+		assertFalse(modificationsSubscription.isDisposed());
+
+		model.dispose();
+
+		assertTrue(model.isDisposed());
+
+		if ( !latchCreations.await(15, TimeUnit.SECONDS) ) {
+			fail("'creationsSubscription' not automatically disposed in 15 seconds.");
+		}
+		if ( !latchDeletions.await(15, TimeUnit.SECONDS) ) {
+			fail("'deletionsSubscription' not automatically disposed in 15 seconds.");
+		}
+		if ( !latchErrors.await(15, TimeUnit.SECONDS) ) {
+			fail("'errorsSubscription' not automatically disposed in 15 seconds.");
+		}
+		if ( !latchModifications.await(15, TimeUnit.SECONDS) ) {
+			fail("'modificationsSubscription' not automatically disposed in 15 seconds.");
+		}
+
+		assertTrue(creationsSubscription.isDisposed());
+		assertTrue(deletionsSubscription.isDisposed());
+		assertTrue(errorsSubscription.isDisposed());
+		assertTrue(modificationsSubscription.isDisposed());
 
 	}
 

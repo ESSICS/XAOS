@@ -16,6 +16,10 @@
 package se.europeanspallationsource.xaos.ui.control.tree.directory;
 
 
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.subjects.PublishSubject;
+import io.reactivex.subjects.Subject;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.NotDirectoryException;
@@ -31,9 +35,6 @@ import java.util.function.Function;
 import javafx.application.Platform;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import org.reactfx.EventSource;
-import org.reactfx.EventStream;
-import org.reactfx.EventStreams;
 import se.europeanspallationsource.xaos.core.util.io.DirectoryWatcher;
 
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
@@ -92,6 +93,7 @@ import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
  *         e.printStackTrace();
  *       }
  *
+ *       primaryStage.setOnCloseRequest(event -&gt; dirmon.dispose());
  *       primaryStage.setScene(new Scene(view, 500, 500));
  *       primaryStage.show();
  *
@@ -99,6 +101,9 @@ import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
  *
  *   }
  * </pre>
+ * <p>
+ * <b>Note:</b> {@link #dispose()} should be called when the model is no more
+ * used (typically when the viewer using it is disposed).</p>
  *
  * @param <I> Type of the <i>external initiator</i> of the I/O operation.
  * @param <T> Type of the object returned by {@link TreeItem#getValue()}.
@@ -106,7 +111,7 @@ import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
  * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.LiveDirsIO</a>
  */
 @SuppressWarnings( "ClassWithoutLogger" )
-public class TreeDirectoryMonitor<I, T> {
+public class TreeDirectoryMonitor<I, T> implements Disposable {
 
     /**
      * Creates a {@link TreeDirectoryMonitor} instance to be used from the
@@ -178,12 +183,13 @@ public class TreeDirectoryMonitor<I, T> {
 		);
     }
 
-    private final Executor clientThreadExecutor;
     private final DirectoryWatcher directoryWatcher;
-	private final EventStream<Throwable> errors;
+	private final Disposable directoryWatcherEventsSubscription;
+	private boolean disposed = false;
+	private final Observable<Throwable> errors;
 	private final I externalInitiator;
     private final TreeDirectoryAsynchronousIO<I, T> io;
-	private final EventSource<Throwable> localErrors = new EventSource<>();
+	private final Subject<Throwable> localErrors;
 	private final TreeDirectoryModel<I, T> model;
 
 	/**
@@ -210,12 +216,14 @@ public class TreeDirectoryMonitor<I, T> {
 
 		this.externalInitiator = externalInitiator;
 		this.model = new TreeDirectoryModel<>(externalInitiator, projector, injector);
-		this.clientThreadExecutor = clientThreadExecutor;
 		this.directoryWatcher = DirectoryWatcher.build(clientThreadExecutor);
 		this.io = new TreeDirectoryAsynchronousIO<>(directoryWatcher, model, clientThreadExecutor);
 
-		this.directoryWatcher.events().subscribe(this::processDirectoryEvent);
-		this.errors = EventStreams.merge(directoryWatcher.errors(), model.errors(), localErrors);
+		Subject<Throwable> localErrorsSubject = PublishSubject.create();
+
+		this.localErrors = localErrorsSubject.toSerialized();
+		this.errors = Observable.merge(directoryWatcher.errors(), model.errors(), localErrors);
+		this.directoryWatcherEventsSubscription = this.directoryWatcher.events().subscribe(this::processDirectoryEvent);
 
     }
 
@@ -268,7 +276,7 @@ public class TreeDirectoryMonitor<I, T> {
 			);
 			model.sync(dir);
 		} catch ( Exception e ) {
-			localErrors.push(e);
+			localErrors.onNext(e);
 		}
 		
 	}
@@ -278,14 +286,18 @@ public class TreeDirectoryMonitor<I, T> {
 	 * In particular, stops the I/O thread (used for I/O operations as well as
 	 * directory watching).
 	 */
+	@Override
+	@SuppressWarnings( "ConvertToTryWithResources" )
 	public void dispose() {
-		directoryWatcher.shutdown();
+		directoryWatcherEventsSubscription.dispose();
+		localErrors.onComplete();
+		directoryWatcher.close();
 	}
 
 	/**
-	 * @return The {@link EventStream} of asynchronously thrown errors.
+	 * @return The {@link Observable} of asynchronously thrown errors.
 	 */
-	public EventStream<Throwable> errors() {
+	public Observable<Throwable> errors() {
 		return errors;
 	}
 
@@ -296,6 +308,11 @@ public class TreeDirectoryMonitor<I, T> {
 	 */
 	public TreeDirectoryAsynchronousIO<I, T> io() {
 		return io;
+	}
+
+	@Override
+	public boolean isDisposed() {
+		return disposed;
 	}
 
     /**
@@ -342,7 +359,7 @@ public class TreeDirectoryMonitor<I, T> {
 				model.updateModificationTime(child, timestamp, externalInitiator);
 
 			} catch ( IOException ex ) {
-				localErrors.push(ex);
+				localErrors.onNext(ex);
 			}
 		} else if ( kind == ENTRY_CREATE ) {
 			if ( Files.isDirectory(child) ) {
@@ -358,7 +375,7 @@ public class TreeDirectoryMonitor<I, T> {
 					model.addFile(child, timestamp, externalInitiator);
 
 				} catch ( IOException e ) {
-					localErrors.push(e);
+					localErrors.onNext(e);
 				}
 			}
 		} else if ( kind == ENTRY_DELETE ) {
@@ -375,7 +392,7 @@ public class TreeDirectoryMonitor<I, T> {
 				directoryWatcher.watchOrStreamError(path);
 			}
 		} else {
-			localErrors.push(new NotDirectoryException(path.toString()));
+			localErrors.onNext(new NotDirectoryException(path.toString()));
 		}
 	}
 

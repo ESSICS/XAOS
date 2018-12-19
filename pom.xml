@@ -89,7 +89,7 @@
 						<phase>test</phase>
 						<id>maven-dependency-graph</id>
 						<goals>
-							<goal>aggregate</goal>
+							<goal>graph</goal>
 						</goals>
 					</execution>
 				</executions>
