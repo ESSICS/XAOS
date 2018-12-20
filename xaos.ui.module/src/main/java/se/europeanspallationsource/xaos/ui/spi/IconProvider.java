@@ -20,18 +20,21 @@ import javafx.scene.Node;
 
 
 /**
- * Provides icons (i.e. {@link Node}s) for a given key object.
+ * Provides icons (i.e. square {@link Node}s) for a given key object.
  *
  * @author claudio.rosati@esss.se
  */
 public interface IconProvider {
 
 	/**
-	 * Return an icon (i.e. a {@link Node} for the given {@code key} object.
+	 * Return an icon (i.e. a square {@link Node} for the given {@code key} object.
 	 *
-	 * @param key The object for which a graphical representation is needed.
-	 * @return An icon as a {@link Node} instance, or {@code null}.
+	 * @param key  The object for which a graphical representation is needed.
+	 * @param size The size of the square {@code Node} to be returned.
+	 * @return An icon as a {@link Node} instance, or {@code null} if {@code key}
+	 *         is {@code null}, {@code size <= 0}, or no suitable representation can
+	 *         be found.
 	 */
-	public Node iconFor( Object key );
+	public Node iconFor( Object key, int size );
 
 }

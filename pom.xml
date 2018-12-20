@@ -4,62 +4,111 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>se.europeanspallationsource</groupId>
-    <artifactId>xaos</artifactId>
-    <version>0.3.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
-    <name>XAOS</name>
-    <description>
-        A JavaFX application framework made initially to create accelerator
+	<artifactId>xaos</artifactId>
+	<version>0.3.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>XAOS</name>
+	<description>
+		A JavaFX application framework made initially to create accelerator
 		physics applications based on Open XAL, an open source development
 		environment  used for creating accelerator physics applications, scripts
 		and services.
-    </description>
-    <url>https://github.com/ESSICS/XAOS</url>
+	</description>
+	<url>https://github.com/ESSICS/XAOS</url>
 
-    <licenses>
-        <license>
-            <name>The Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        </license>
-    </licenses>
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
 
-    <developers>
-        <developer>
-            <name>Claudio Rosati</name>
-            <email>claudio.rosati@esss.se</email>
-            <organization>European Spallation Source ERIC</organization>
-            <organizationUrl>https://europeanspallationsource.se/</organizationUrl>
-        </developer>
-    </developers>
+	<developers>
+		<developer>
+			<name>Claudio Rosati</name>
+			<email>claudio.rosati@esss.se</email>
+			<organization>European Spallation Source ERIC</organization>
+			<organizationUrl>https://europeanspallationsource.se/</organizationUrl>
+		</developer>
+	</developers>
 
-    <scm>
-        <connection>scm:git:git://github.com/ESSICS/XAOS.git</connection>
-        <developerConnection>scm:git:ssh://github.com/ESSICS/XAOS.git</developerConnection>
-        <url>https://github.com/ESSICS/XAOS/tree/master</url>
-    </scm>
+	<scm>
+		<connection>scm:git:git://github.com/ESSICS/XAOS.git</connection>
+		<developerConnection>scm:git:ssh://github.com/ESSICS/XAOS.git</developerConnection>
+		<url>https://github.com/ESSICS/XAOS/tree/master</url>
+	</scm>
 
-    <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+	<properties>
+		<java.release>11</java.release>
+		<maven.compiler.source>${java.release}</maven.compiler.source>
+		<maven.compiler.target>${java.release}</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 
-    <modules>
-        <module>xaos.tools.module</module>
-        <module>xaos.core.module</module>
-        <module>xaos.ui.module</module>
-        <module>xaos.app.module</module>
-    </modules>
+	<modules>
+		<module>xaos.tools.module</module>
+		<!--
+			THE FOLLOWING MODULE IS NOT DEPLOYED AND MUST NOT BE THE LAST ONE
+			OTHERWISE ALL MODULES WILL NOT BE DEPLOYED (see nexus-staging-maven-plugin
+			and how skipNexusStagingDeployMojo works).
+		-->
+		<module>xaos.tests.tools.module</module>
+		<module>xaos.core.module</module>
+		<module>xaos.ui.module</module>
+		<module>xaos.ui.gauge.module</module>
+		<module>xaos.ui.plot.module</module>
+		<module>xaos.app.module</module>
+	</modules>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
-                <configuration>
-                    <showDeprecation>true</showDeprecation>
-                </configuration>
+	<build>
+		<plugins>
+			<!-- ALPHABETICALLY SORTED BY groupId:artifactId -->
+			<plugin>
+				<groupId>com.github.ferstl</groupId>
+				<artifactId>depgraph-maven-plugin</artifactId>
+				<version>3.2.2</version>
+				<configuration>
+					<createImage>true</createImage>
+					<customStyleConfiguration>${project.basedir}/doc/maven-dependencies.json</customStyleConfiguration>
+					<dotExecutable>/usr/local/bin/dot</dotExecutable>
+					<graphFormat>dot</graphFormat>
+					<imageFormat>png</imageFormat>
+					<includeParentProjects>true</includeParentProjects>
+					<outputDirectory>${project.basedir}/doc</outputDirectory>
+					<outputFileName>maven-dependencies</outputFileName>
+					<reduceEdges>true</reduceEdges>
+					<repeatTransitiveDependenciesInTextGraph>true</repeatTransitiveDependenciesInTextGraph>
+					<showClassifiers>true</showClassifiers>
+					<showConflicts>true</showConflicts>
+					<showDuplicates>true</showDuplicates>
+					<showGroupIds>true</showGroupIds>
+					<showOptional>true</showOptional>
+					<showTypes>true</showTypes>
+					<showVersions>true</showVersions>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>test</phase>
+						<id>maven-dependency-graph</id>
+						<goals>
+							<goal>graph</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>3.1.0</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.0</version>
+				<configuration>
+					<release>${java.release}</release>
+					<showDeprecation>true</showDeprecation>
+				</configuration>
 				<executions>
 					<execution>
 						<id>default-compile</id>
@@ -72,131 +121,261 @@
 						</configuration>
 					</execution>
 				</executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.0.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+				<dependencies>
+					<dependency>
+						<groupId>org.ow2.asm</groupId>
+						<artifactId>asm</artifactId>
+						<version>7.0</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>3.1.1</version>
+				<executions>
+					<execution>
+						<id>dependency-check</id>
+						<goals>
+							<goal>resolve</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>3.0.0-M1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>3.0.0-M2</version>
+				<executions>
+					<execution>
+						<id>enforce-maven</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireMavenVersion>
+									<version>3.5.4</version>
+								</requireMavenVersion>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.22.1</version>
+				<configuration>
+					<argLine>
+						--illegal-access=permit
+					</argLine>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.6</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+						<configuration>
+							<!-- This is necessary for gpg to not try to use the pinentry programs -->
+							<gpgArguments>
+								<arg>--pinentry-mode</arg>
+								<arg>loopback</arg>
+							</gpgArguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-install-plugin</artifactId>
+				<version>3.0.0-M1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.0.1</version>
+				<configuration>
+					<additionalOptions>--javafx</additionalOptions>
+					<detectJavaApiLink>true</detectJavaApiLink>
+					<detectLinks>true</detectLinks>
+					<detectOfflineLinks>true</detectOfflineLinks>
+					<docfilessubdirs>true</docfilessubdirs>
+					<isOffline>false</isOffline>
+					<links>
+						<link>https://docs.oracle.com/en/java/javase/${java.release}/docs/api</link>
+						<link>https://openjfx.io/javadoc/${java.release}</link>
+					</links>
+					<source>${java.release}</source>
+				</configuration>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.ow2.asm</groupId>
+						<artifactId>asm</artifactId>
+						<version>7.0</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.7.1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.0.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.21.0</version>
+				<version>2.22.1</version>
 				<configuration>
 					<includes>
 						<include>**/*Suite.java</include>
 					</includes>
+					<argLine>
+						--illegal-access=permit
+					</argLine>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.ow2.asm</groupId>
+						<artifactId>asm</artifactId>
+						<version>7.0</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.6.0</version>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+					<generateBackupPoms>false</generateBackupPoms>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<id>maven-plugins-version-check</id>
+						<goals>
+							<goal>display-dependency-updates</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.8</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
 				</configuration>
 			</plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.0.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <docfilessubdirs/>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.8.2</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.6</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.8</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+		</plugins>
+	</build>
 
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
+	<profiles>
+		<profile>
+			<id>verbose.tests</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>2.22.1</version>
+						<configuration>
+							<systemPropertyVariables>
+								<xaos.test.verbose>true</xaos.test.verbose>
+							</systemPropertyVariables>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
-    <repositories>
-        <repository>
-            <id>central</id>
-            <url>https://repo1.maven.org/maven2</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>snapshots-repo</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 
-    <dependencies>
+	<repositories>
+		<repository>
+			<id>central</id>
+			<url>https://repo1.maven.org/maven2</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>snapshots-repo</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 
-        <!-- Unit Test  - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+	<dependencies>
+
+		<!-- Unit Test  - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
-			<version>3.11.0</version>
+			<version>3.11.1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-core</artifactId>
-            <version>1.3</version>
-            <scope>test</scope>
-        </dependency>
-		
-    </dependencies>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
 
 </project>

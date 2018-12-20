@@ -20,10 +20,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.Node;
@@ -39,11 +39,10 @@ import se.europeanspallationsource.xaos.ui.spi.ClassIconProvider;
  *
  * @author claudio.rosati@esss.se
  */
-@SuppressWarnings( { "ClassWithoutLogger", "NestedAssignment" } )
+@SuppressWarnings( { "ClassWithoutLogger", "NestedAssignment", "UseOfSystemOutOrSystemErr" } )
 @ServiceProvider( service = ClassIconProvider.class )
-public class DefaultJavaFXClassIconProvider implements ClassIconProvider {
+public class DefaultJavaFXClassIconProvider extends BaseProvider implements ClassIconProvider {
 
-	private static final Map<String, Node> ICONS_MAP = new ConcurrentHashMap<>(120);
 	private static final Map<String, String> RESOURCES_MAP;
 
 	/**
@@ -54,14 +53,14 @@ public class DefaultJavaFXClassIconProvider implements ClassIconProvider {
 		Map<String, String> map = new HashMap<>(120);
 
 		try (
-			InputStream in = getResourceAsStream("icons/fxcomponents");
+			InputStream in = getResourceAsStream("icons/fxcomponents/icons-list.txt");
 			BufferedReader br = new BufferedReader(new InputStreamReader(in))
 		) {
 
 			String resource;
 
 			while ( ( resource = br.readLine() ) != null ) {
-				if ( !resource.contains("@") ) {
+				if ( !resource.trim().startsWith("#") ) {
 					map.put(
 						resource.substring(0, resource.lastIndexOf('.')),
 						"icons/fxcomponents/" + resource
@@ -72,6 +71,15 @@ public class DefaultJavaFXClassIconProvider implements ClassIconProvider {
 		} catch ( IOException ex ) {
 			Logger.getLogger(DefaultJavaFXClassIconProvider.class.getName()).log(Level.SEVERE, null, ex);
 		}
+
+		//	Print map if xaos.test.verbose is set to true.
+		verbosePrintout(
+			map,
+			MessageFormat.format(
+				"Resource names found [{0}]",
+				DefaultJavaFXClassIconProvider.class.getSimpleName()
+			)
+		);
 
 		RESOURCES_MAP = Collections.unmodifiableMap(map);
 
@@ -88,17 +96,15 @@ public class DefaultJavaFXClassIconProvider implements ClassIconProvider {
 	}
 
 	@Override
-	public Node iconFor( String clazz ) {
+	public Node iconFor( String clazz, int size ) {
 
-		if ( StringUtils.isBlank(clazz) ) {
+		if ( StringUtils.isBlank(clazz) || size <= 0 ) {
 			return null;
 		}
 		
-		Node node = null;
+		ImageView node = null;
 
-		if ( ICONS_MAP.containsKey(clazz) ) {
-			node = ICONS_MAP.get(clazz);
-		} else if ( clazz.startsWith("javafx.") ) {
+		if ( clazz.startsWith("javafx.") ) {
 
 			String simpleName = clazz.substring(1 + clazz.lastIndexOf('.'));
 
@@ -108,9 +114,20 @@ public class DefaultJavaFXClassIconProvider implements ClassIconProvider {
 
 				if ( resource != null ) {
 
-					node = new ImageView(new Image(getResourceAsStream(resource)));
+					node = new ImageView(new Image(
+						DefaultJavaFXClassIconProvider.class.getResource(resource).toString(),
+						true
+					));
 
-					ICONS_MAP.put(clazz, node);
+					node.setPreserveRatio(true);
+
+					Image image = node.getImage();
+
+					if ( image.getWidth() > image.getHeight() ) {
+						node.setFitWidth(size);
+					} else {
+						node.setFitHeight(size);
+					}
 
 				}
 

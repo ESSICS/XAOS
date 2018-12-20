@@ -79,7 +79,6 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 
 	@Before
 	public void setUp() throws IOException {
-
 		executor = Executors.newSingleThreadExecutor();
 		root = Files.createTempDirectory("TDM_");
 			dir_a = Files.createTempDirectory(root, "TDM_a_");
@@ -89,29 +88,6 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 			dir_b = Files.createTempDirectory(root, "TDM_b_");
 				file_b1 = Files.createTempFile(dir_b, "TDM_b1_", ".test");
 				file_b2 = Files.createTempFile(dir_b, "TDM_b2_", ".test");
-
-//		System.out.println(MessageFormat.format(
-//			"  Testing 'DirectoryWatcher'\n"
-//			+ "    created directories:\n"
-//			+ "      {0}\n"
-//			+ "      {1}\n"
-//			+ "      {2}\n"
-//			+ "      {3}\n"
-//			+ "    created files:\n"
-//			+ "      {4}\n"
-//			+ "      {5}\n"
-//			+ "      {6}\n"
-//			+ "      {7}",
-//			root,
-//			dir_a,
-//			dir_a_c,
-//			dir_b,
-//			file_a,
-//			file_a_c,
-//			file_b1,
-//			file_b2
-//		));
-//
 	}
 
 	@Override
@@ -153,7 +129,6 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 
 		CountDownLatch latch = new CountDownLatch(1);
 		EventHandler<TreeItem.TreeModificationEvent<Path>> eventHandler = event -> {
-			Platform.runLater(() -> TreeItems.expandAll(rootItem, true));
 			latch.countDown();
 		};
 
@@ -168,11 +143,12 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 
 	/**
 	 * Test of creating directories.
-	 * 
+	 *
 	 * @throws java.lang.InterruptedException
 	 * @throws java.io.IOException
 	 */
 	@Test
+	@SuppressWarnings( "ResultOfMethodCallIgnored" )
 	public void testCreateDirectories() throws InterruptedException, IOException {
 
 		System.out.println(MessageFormat.format("  Testing directories creation [on {0}]...", root));
@@ -185,10 +161,7 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 		Path toBeExternallyCreated2 = FileSystems.getDefault().getPath(toBeExternallyCreated1.toString(), "dir_a_x");
 		CountDownLatch latchExternal = new CountDownLatch(2);
 		EventHandler<TreeItem.TreeModificationEvent<Path>> eventHandler = event -> {
-			Platform.runLater(() -> { 
-				
-				TreeItems.expandAll(rootItem, true);
-
+			Platform.runLater(() -> {
 				if ( event.wasAdded() ) {
 
 					if ( toBeInternallyCreated1.equals(event.getAddedChildren().get(0).getValue())
@@ -201,8 +174,9 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 						latchExternal.countDown();
 					}
 
-				}
+					event.getAddedChildren().forEach(i -> i.setExpanded(true));
 
+				}
 			});
 		};
 
@@ -216,6 +190,8 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 				sources.offer(u.getInitiator());
 			}
 		});
+
+		expandTreeAndWait(monitor.model().getRoot());
 
 		//	INTERNAL creation.
 		executor.execute(() -> {
@@ -261,6 +237,7 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 	 * @throws java.io.IOException
 	 */
 	@Test
+	@SuppressWarnings( "ResultOfMethodCallIgnored" )
 	public void testCreateDirectory() throws InterruptedException, IOException {
 
 		System.out.println(MessageFormat.format("  Testing directory creation [on {0}]...", root));
@@ -271,10 +248,7 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 		Path toBeExternallyCreated = FileSystems.getDefault().getPath(dir_a.toString(), "dir_a_y");
 		CountDownLatch latchExternal = new CountDownLatch(1);
 		EventHandler<TreeItem.TreeModificationEvent<Path>> eventHandler = event -> {
-			Platform.runLater(() -> { 
-
-				TreeItems.expandAll(rootItem, true);
-
+			Platform.runLater(() -> {
 				if ( event.wasAdded() ) {
 
 					if ( toBeInternallyCreated.equals(event.getAddedChildren().get(0).getValue()) ) {
@@ -285,8 +259,9 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 						latchExternal.countDown();
 					}
 
-				}
+					event.getAddedChildren().forEach(i -> i.setExpanded(true));
 
+				}
 			});
 		};
 
@@ -298,6 +273,8 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 				sources.offer(u.getInitiator());
 			}
 		});
+
+		expandTreeAndWait(monitor.model().getRoot());
 
 		//	INTERNAL creation.
 		executor.execute(() -> {
@@ -339,6 +316,7 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 	 * @throws java.io.IOException
 	 */
 	@Test
+	@SuppressWarnings( "ResultOfMethodCallIgnored" )
 	public void testCreateFile() throws InterruptedException, IOException {
 
 		System.out.println(MessageFormat.format("  Testing file creation [on {0}]...", root));
@@ -350,9 +328,6 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 		CountDownLatch latchExternal = new CountDownLatch(1);
 		EventHandler<TreeItem.TreeModificationEvent<Path>> eventHandler = event -> {
 			Platform.runLater(() -> {
-
-				TreeItems.expandAll(rootItem, true);
-
 				if ( event.wasAdded() ) {
 
 					if ( toBeInternallyCreated.equals(event.getAddedChildren().get(0).getValue()) ) {
@@ -363,8 +338,9 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 						latchExternal.countDown();
 					}
 
-				}
+					event.getAddedChildren().forEach(i -> i.setExpanded(true));
 
+				}
 			});
 		};
 
@@ -376,6 +352,8 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 				sources.offer(u.getInitiator());
 			}
 		});
+
+		expandTreeAndWait(monitor.model().getRoot());
 
 		//	INTERNAL creation.
 		executor.execute(() -> {
@@ -417,7 +395,7 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 	 * @throws java.io.IOException
 	 */
 	@Test
-	@SuppressWarnings( "CallToThreadYield" )
+	@SuppressWarnings( { "CallToThreadYield", "ResultOfMethodCallIgnored" } )
 	public void testDelete() throws InterruptedException, IOException {
 
 		System.out.println(MessageFormat.format("  Testing file and directory deletion [on {0}]...", root));
@@ -427,9 +405,6 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 		CountDownLatch latchExternal = new CountDownLatch(2);
 		EventHandler<TreeItem.TreeModificationEvent<Path>> eventHandler = event -> {
 			Platform.runLater(() -> {
-
-				TreeItems.expandAll(rootItem, true);
-
 				if ( event.wasRemoved() ) {
 
 					if ( dir_a_c.equals(event.getRemovedChildren().get(0).getValue())
@@ -443,7 +418,6 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 					}
 
 				}
-
 			});
 		};
 
@@ -457,6 +431,8 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 				sources.offer(u.getInitiator());
 			}
 		});
+
+		expandTreeAndWait(monitor.model().getRoot());
 
 		//	INTERNAL deletion.
 		executor.execute(() -> {
@@ -507,6 +483,7 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 	 * @throws java.io.IOException
 	 */
 	@Test
+	@SuppressWarnings( "ResultOfMethodCallIgnored" )
 	public void testDeleteTree() throws InterruptedException, IOException {
 
 		System.out.println(MessageFormat.format("  Testing tree deletion [on {0}]...", root));
@@ -516,9 +493,6 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 		CountDownLatch latchExternal = new CountDownLatch(4);
 		EventHandler<TreeItem.TreeModificationEvent<Path>> eventHandler = event -> {
 			Platform.runLater(() -> {
-
-				TreeItems.expandAll(rootItem, true);
-
 				if ( event.wasRemoved() ) {
 
 					if ( dir_b.equals(event.getRemovedChildren().get(0).getValue()) ) {
@@ -533,7 +507,6 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 					}
 
 				}
-
 			});
 		};
 
@@ -548,6 +521,8 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 				sources.offer(u.getInitiator());
 			}
 		});
+
+		expandTreeAndWait(monitor.model().getRoot());
 
 		//	INTERNAL deletion.
 		executor.execute(() -> {
@@ -587,6 +562,90 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 
 	}
 
+	/**
+	 * Test of navigation capabilities.
+	 *
+	 * @throws java.lang.InterruptedException
+	 */
+	@Test
+	public void testNavigation() throws InterruptedException {
+
+		System.out.println("  Testing browser navigation...");
+
+		monitor.addTopLevelDirectory(root);
+
+		assertThat(rootItem.getChildren().size()).isEqualTo(1);
+
+		//	---- root ----------------------------------------------------------
+		TreeItem<Path> rItem = rootItem.getChildren().get(0);
+
+		assertThat(rItem).hasFieldOrPropertyWithValue("value", root);
+		assertThat(rItem.getChildren().size()).isEqualTo(0);
+
+		executor.execute(() -> rItem.setExpanded(true));
+
+		Thread.sleep(3000L);
+
+		assertThat(rItem.getChildren().size()).isEqualTo(2);
+
+		//	---- dir_a ---------------------------------------------------------
+		TreeItem<Path> aItem = rItem.getChildren().get(0);
+
+		assertThat(aItem).hasFieldOrPropertyWithValue("value", dir_a);
+		assertThat(aItem.getChildren().size()).isEqualTo(0);
+
+		executor.execute(() -> aItem.setExpanded(true));
+
+		Thread.sleep(3000L);
+
+		assertThat(aItem.getChildren().size()).isEqualTo(2);
+
+		//	---- dir_a_c ---------------------------------------------------------
+		TreeItem<Path> acItem = aItem.getChildren().get(0);
+
+		assertThat(acItem).hasFieldOrPropertyWithValue("value", dir_a_c);
+		assertThat(acItem.getChildren().size()).isEqualTo(0);
+
+		executor.execute(() -> acItem.setExpanded(true));
+
+		Thread.sleep(3000L);
+
+		assertThat(acItem.getChildren().size()).isEqualTo(1);
+
+		//	---- file_a_c --------------------------------------------------------
+		TreeItem<Path> acfItem = acItem.getChildren().get(0);
+
+		assertThat(acfItem).hasFieldOrPropertyWithValue("value", file_a_c);
+
+		//	---- file_a --------------------------------------------------------
+		TreeItem<Path> afItem = aItem.getChildren().get(1);
+
+		assertThat(afItem).hasFieldOrPropertyWithValue("value", file_a);
+
+		//	---- dir_b ---------------------------------------------------------
+		TreeItem<Path> bItem = rItem.getChildren().get(1);
+
+		assertThat(bItem).hasFieldOrPropertyWithValue("value", dir_b);
+		assertThat(bItem.getChildren().size()).isEqualTo(0);
+
+		executor.execute(() -> bItem.setExpanded(true));
+
+		Thread.sleep(3000L);
+
+		assertThat(bItem.getChildren().size()).isEqualTo(2);
+
+		//	---- file_b1 -------------------------------------------------------
+		TreeItem<Path> b1Item = bItem.getChildren().get(0);
+
+		assertThat(b1Item).hasFieldOrPropertyWithValue("value", file_b1);
+
+		//	---- file_b2 -------------------------------------------------------
+		TreeItem<Path> b2Item = bItem.getChildren().get(1);
+
+		assertThat(b2Item).hasFieldOrPropertyWithValue("value", file_b2);
+
+	}
+
 	@SuppressWarnings( "CallToThreadYield" )
 	private void deleteRecursively( Path root, CountDownLatch latch ) throws IOException {
 
@@ -608,6 +667,25 @@ public class TreeDirectoryMonitorTest extends ApplicationTest {
 				Thread.yield();
 			}
 
+		}
+
+	}
+
+	private <T> void expandTreeAndWait( TreeItem<T> item ) {
+
+		CountDownLatch done = new CountDownLatch(1);
+
+		Platform.runLater(() -> {
+			TreeItems.expandAll(item, true);
+			done.countDown();
+		});
+
+		try {
+			if ( !done.await(1, TimeUnit.MINUTES) ) {
+				fail("Tree not expanded in 1 minute.");
+			}
+		} catch ( InterruptedException ex ) {
+				fail("Tree not expanded in 1 minute.");
 		}
 
 	}

@@ -38,17 +38,23 @@ import se.europeanspallationsource.xaos.ui.spi.MIMETypeIconProvider;
 public class Icons {
 
 	/**
-	 * Calls {@link #iconForClass(String)} for the provided {@link Class}.
+	 * The default icon size to used in menus and toolbars
+	 */
+	public static final int DEFAULT_SIZE = 17;
+
+	/**
+	 * Calls {@link #iconForClass(String, int)} for the provided {@link Class}.
 	 *
 	 * @param clazz The {@link Class} for which a graphical representation is
 	 *              needed.
+	 * @param size  The size of the square {@code Node} to be returned.
 	 * @return An iconic {@link Node} representing the given {@link Class} object,
 	 *         or {@code null}.
 	 */
-	public static Node iconFor( Class<?> clazz ) {
+	public static Node iconFor( Class<?> clazz, int size ) {
 
 		if ( clazz != null ) {
-			return iconForClass(clazz.getName());
+			return iconForClass(clazz.getName(), size);
 		}
 
 		return null;
@@ -56,20 +62,21 @@ public class Icons {
 	}
 
 	/**
-	 * Calls {@link #iconForClass(String, Node)} for the provided {@link Class}
+	 * Calls {@link #iconForClass(String, int, Node)} for the provided {@link Class}
 	 * and default {@link Node}..
 	 *
 	 * @param clazz       The {@link Class} for which a graphical representation
 	 *                    is needed.
+	 * @param size        The size of the square {@code Node} to be returned.
 	 * @param defaultIcon The value to be returned if no provider was able to
 	 *                    return a valid alternative.
 	 * @return An iconic {@link Node} representing the given {@link Class} object,
 	 *         or {@code null}.
 	 */
-	public static Node iconFor( Class<?> clazz, Node defaultIcon ) {
+	public static Node iconFor( Class<?> clazz, int size, Node defaultIcon ) {
 
 		if ( clazz != null ) {
-			return iconForClass(clazz.getName(), defaultIcon);
+			return iconForClass(clazz.getName(), size, defaultIcon);
 		}
 
 		return null;
@@ -77,17 +84,19 @@ public class Icons {
 	}
 
 	/**
-	 * Calls {@link #iconForFileExtension(String)} for the provided {@link Path}.
+	 * Calls {@link #iconForFileExtension(String, int)} for the provided {@link Path}.
 	 *
-	 * @param path The {@link Path} for which a graphical representation is
+	 * @param file The {@link File} for which a graphical representation is
 	 *             needed.
+	 * @param size The size of the square {@code Node} to be returned.
 	 * @return An iconic {@link Node} representing the given {@link Path} object,
-	 *         or {@code null}.
+	 *         or {@code null}. {@code null} is also returned if {@code file} is
+	 *         {@code null}, or {@code size <= 0}.
 	 */
-	public static Node iconFor( File path ) {
+	public static Node iconFor( File file, int size ) {
 
-		if ( path != null ) {
-			return iconForFileExtension(FileExtensionIconProvider.extensionFor(path));
+		if ( file != null ) {
+			return iconForFileExtension(FileExtensionIconProvider.extensionFor(file), size);
 		}
 
 		return null;
@@ -95,20 +104,21 @@ public class Icons {
 	}
 
 	/**
-	 * Calls {@link #iconForFileExtension(String, Node)} for the provided
+	 * Calls {@link #iconForFileExtension(String, int, Node)} for the provided
 	 * {@link File} and default {@link Node}..
 	 *
 	 * @param file        The {@link File} for which a graphical representation
 	 *                    is needed.
+	 * @param size        The size of the square {@code Node} to be returned.
 	 * @param defaultIcon The value to be returned if no provider was able to
 	 *                    return a valid alternative.
 	 * @return An iconic {@link Node} representing the given {@link Path} object,
 	 *         or {@code null}.
 	 */
-	public static Node iconFor( File file, Node defaultIcon ) {
+	public static Node iconFor( File file, int size, Node defaultIcon ) {
 
 		if ( file != null ) {
-			return iconForFileExtension(FileExtensionIconProvider.extensionFor(file), defaultIcon);
+			return iconForFileExtension(FileExtensionIconProvider.extensionFor(file), size, defaultIcon);
 		}
 
 		return null;
@@ -117,18 +127,21 @@ public class Icons {
 
 	/**
 	 * @param object The object for which a graphical representation is needed.
-	 * @return An iconic {@link Node} representing given object, or {@code null}.
+	 * @param size   The size of the square {@code Node} to be returned.
+	 * @return An iconic {@link Node} representing the given {@code object} at the
+	 *         given {@code size}, or {@code null}. {@code null} is also returned
+	 *         if {@code object} is {@code null}, or {@code size <= 0}.
 	 */
-	public static Node iconFor( Object object ) {
+	public static Node iconFor( Object object, int size ) {
 
-		if ( Objects.nonNull(object) ) {
+		if ( Objects.nonNull(object) && size > 0 ) {
 
 			Iterator<IconProvider> iterator = ServiceLoader.load(IconProvider.class).iterator();
 
 			while ( iterator.hasNext() ) {
 
 				IconProvider provider = iterator.next();
-				Node icon = provider.iconFor(object);
+				Node icon = provider.iconFor(object, size);
 
 				if ( icon != null ) {
 					return icon;
@@ -144,30 +157,34 @@ public class Icons {
 
 	/**
 	 * @param object      The object for which a graphical representation is needed.
+	 * @param size        The size of the square {@code Node} to be returned.
 	 * @param defaultIcon The value to be returned if no provider was able to
 	 *                    return a valid alternative.
-	 * @return An iconic {@link Node} representing given object, or {@code null}.
+	 * @return An iconic {@link Node} representing the given {@code object} at the
+	 *         given {@code size}.
 	 */
-	public static Node iconFor( Object object, Node defaultIcon ) {
+	public static Node iconFor( Object object, int size, Node defaultIcon ) {
 
-		Node icon = iconFor(object);
+		Node icon = iconFor(object, size);
 
 		return ( icon != null ) ? icon : defaultIcon;
 
 	}
 
 	/**
-	 * Calls {@link #iconForFileExtension(String)} for the provided {@link Path}.
+	 * Calls {@link #iconForFileExtension(String, int)} for the provided {@link Path}.
 	 *
 	 * @param path The {@link Path} for which a graphical representation is
 	 *             needed.
+	 * @param size The size of the square {@code Node} to be returned.
 	 * @return An iconic {@link Node} representing the given {@link Path} object,
-	 *         or {@code null}.
+	 *         or {@code null}. {@code null} is also returned if {@code path} is
+	 *         {@code null}, or {@code size <= 0}.
 	 */
-	public static Node iconFor( Path path ) {
+	public static Node iconFor( Path path, int size ) {
 
 		if ( path != null ) {
-			return iconForFileExtension(FileExtensionIconProvider.extensionFor(path));
+			return iconForFileExtension(FileExtensionIconProvider.extensionFor(path), size);
 		}
 
 		return null;
@@ -175,20 +192,21 @@ public class Icons {
 	}
 
 	/**
-	 * Calls {@link #iconForFileExtension(String, Node)} for the provided
+	 * Calls {@link #iconForFileExtension(String, int, Node)} for the provided
 	 * {@link Path} and default {@link Node}..
 	 *
 	 * @param path        The {@link Path} for which a graphical representation
 	 *                    is needed.
+	 * @param size        The size of the square {@code Node} to be returned.
 	 * @param defaultIcon The value to be returned if no provider was able to
 	 *                    return a valid alternative.
 	 * @return An iconic {@link Node} representing the given {@link Path} object,
 	 *         or {@code null}.
 	 */
-	public static Node iconFor( Path path, Node defaultIcon ) {
+	public static Node iconFor( Path path, int size, Node defaultIcon ) {
 
 		if ( path != null ) {
-			return iconForFileExtension(FileExtensionIconProvider.extensionFor(path), defaultIcon);
+			return iconForFileExtension(FileExtensionIconProvider.extensionFor(path), size, defaultIcon);
 		}
 
 		return null;
@@ -198,19 +216,21 @@ public class Icons {
 	/**
 	 * @param clazz The full class name (the one returned by {@link Class#getName()})
 	 *              for which a graphical representation is needed.
+	 * @param size  The size of the square {@code Node} to be returned.
 	 * @return An iconic {@link Node} representing {@link Class} with the given
-	 *         {@code name}, or {@code null}.
+	 *         {@code name}, or {@code null}. {@code null} is also returned if
+	 *         {@code clazz} is {@code null}, or {@code size <= 0}.
 	 */
-	public static Node iconForClass( String clazz ) {
+	public static Node iconForClass( String clazz, int size ) {
 
-		if ( StringUtils.isNotBlank(clazz) ) {
+		if ( StringUtils.isNotBlank(clazz) && size > 0 ) {
 
 			Iterator<ClassIconProvider> iterator = ServiceLoader.load(ClassIconProvider.class).iterator();
 
 			while ( iterator.hasNext() ) {
 
 				ClassIconProvider provider = iterator.next();
-				Node icon = provider.iconFor(clazz);
+				Node icon = provider.iconFor(clazz, size);
 
 				if ( icon != null ) {
 					return icon;
@@ -227,14 +247,15 @@ public class Icons {
 	/**
 	 * @param clazz       The full class name (the one returned by {@link Class#getName()})
 	 *                    for which a graphical representation is needed.
+	 * @param size        The size of the square {@code Node} to be returned.
 	 * @param defaultIcon The value to be returned if no provider was able to
 	 *                    return a valid alternative.
 	 * @return An iconic {@link Node} representing {@link Class} with the given
 	 *         {@code name}, or {@code null}.
 	 */
-	public static Node iconForClass( String clazz, Node defaultIcon ) {
+	public static Node iconForClass( String clazz, int size, Node defaultIcon ) {
 
-		Node icon = iconForClass(clazz);
+		Node icon = iconForClass(clazz, size);
 
 		return ( icon != null ) ? icon : defaultIcon;
 
@@ -242,19 +263,22 @@ public class Icons {
 
 	/**
 	 * @param extension The file extension (without the preceding '.').
+	 * @param size      The size of the square {@code Node} to be returned.
 	 * @return An iconic {@link Node} representing a file with the given
-	 *         {@code extension}, or {@code null}.
+	 *         {@code extension} at the given {@code size}, or {@code null}.
+	 *         {@code null} is also returned if {@code extension} is {@code null}
+	 *         or empty, or {@code size <= 0}.
 	 */
-	public static Node iconForFileExtension( String extension ) {
+	public static Node iconForFileExtension( String extension, int size ) {
 
-		if ( StringUtils.isNotBlank(extension) ) {
+		if ( StringUtils.isNotBlank(extension) && size > 0 ) {
 
 			Iterator<FileExtensionIconProvider> iterator = ServiceLoader.load(FileExtensionIconProvider.class).iterator();
 
 			while ( iterator.hasNext() ) {
 
 				FileExtensionIconProvider provider = iterator.next();
-				Node icon = provider.iconFor(extension);
+				Node icon = provider.iconFor(extension, size);
 
 				if ( icon != null ) {
 					return icon;
@@ -270,14 +294,15 @@ public class Icons {
 
 	/**
 	 * @param extension   The file extension (without the preceding '.').
+	 * @param size        The size of the square {@code Node} to be returned.
 	 * @param defaultIcon The value to be returned if no provider was able to
 	 *                    return a valid alternative.
 	 * @return An iconic {@link Node} representing a file with the given
 	 *         {@code extension}, or {@code null}.
 	 */
-	public static Node iconForFileExtension( String extension, Node defaultIcon ) {
+	public static Node iconForFileExtension( String extension, int size, Node defaultIcon ) {
 
-		Node icon = iconForFileExtension(extension);
+		Node icon = iconForFileExtension(extension, size);
 
 		return ( icon != null ) ? icon : defaultIcon;
 

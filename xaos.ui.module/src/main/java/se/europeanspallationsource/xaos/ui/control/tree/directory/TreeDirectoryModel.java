@@ -16,6 +16,9 @@
 package se.europeanspallationsource.xaos.ui.control.tree.directory;
 
 
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
+import io.reactivex.subjects.Subject;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,6 +26,7 @@ import java.nio.file.Paths;
 import java.nio.file.attribute.FileTime;
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,12 +35,9 @@ import java.util.stream.Stream;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import org.reactfx.EventSource;
-import org.reactfx.EventStream;
 import se.europeanspallationsource.xaos.core.util.TriFunction;
-import se.europeanspallationsource.xaos.core.util.io.DirectoryModel;
-import se.europeanspallationsource.xaos.core.util.io.PathElement;
 import se.europeanspallationsource.xaos.ui.control.Icons;
+import se.europeanspallationsource.xaos.ui.control.tree.DirectoryModel;
 
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FILE;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FILE_EXECUTABLE;
@@ -44,10 +45,19 @@ import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FILE_HIDDE
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FILE_LINK;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FOLDER_COLLAPSED;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FOLDER_EXPANDED;
+import static se.europeanspallationsource.xaos.ui.control.Icons.DEFAULT_SIZE;
 
 
 /**
  * A {@link DirectoryModel} that can be used in a {@link TreeView}.
+ * <p>
+ * This model uses the {@link #DEFAULT_GRAPHIC_FACTORY} to provide graphics
+ * to the tree nodes. That can be changed invoking 
+ * {@link #setGraphicFactory(TreeDirectoryModel.GraphicFactory)} after this
+ * model is built.</p>
+ * <p>
+ * <b>Note:</b> {@link #dispose()} should be called when the model is no more
+ * used (typically when the viewer using it is disposed).</p>
  *
  * @param <I> Type of the initiator of changes to the model.
  * @param <T> Type of the object returned by {@link TreeItem#getValue()}.
@@ -68,13 +78,14 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	 */
 	public static final GraphicFactory NO_GRAPHIC_FACTORY = ( p, d, e ) -> null;
 
-	private final EventSource<Update<I>> creations = new EventSource<>();
+	private final Subject<Update<I>> creations;
 	private final I defaultInitiator;
-	private final EventSource<Update<I>> deletions = new EventSource<>();
-	private final EventSource<Throwable> errors = new EventSource<>();
+	private final Subject<Update<I>> deletions;
+	private boolean disposed = false;
+	private final Subject<Throwable> errors;
 	private GraphicFactory graphicFactory = DEFAULT_GRAPHIC_FACTORY;
 	private final Function<Path, T> injector;
-	private final EventSource<Update<I>> modifications = new EventSource<>();
+	private final Subject<Update<I>> modifications;
 	private final Function<T, Path> projector;
 	private final Reporter<I> reporter;
 	private final TreeItem<T> root = new TreeItem<>();
@@ -92,32 +103,45 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	 *                         {@link TreeItem}.
 	 */
 	public TreeDirectoryModel( I defaultInitiator, Function<T, Path> projector, Function<Path, T> injector ) {
+
 		this.defaultInitiator = defaultInitiator;
 		this.injector = injector;
 		this.projector = projector;
+
+		Subject<Update<I>> creationsSubject = PublishSubject.create();
+		Subject<Update<I>> deletionsSubject = PublishSubject.create();
+		Subject<Throwable> errorsSubject = PublishSubject.create();
+		Subject<Update<I>> modificationsSubject = PublishSubject.create();
+
+		this.creations = creationsSubject.toSerialized();
+		this.deletions = deletionsSubject.toSerialized();
+		this.errors = errorsSubject.toSerialized();
+		this.modifications = modificationsSubject.toSerialized();
+
 		this.reporter = new Reporter<I>() {
 
 			@Override
 			public void reportCreation( Path baseDir, Path relativePath, I initiator ) {
-				creations.push(Update.creation(baseDir, relativePath, initiator));
+				creations.onNext(Update.creation(baseDir, relativePath, initiator));
 			}
 
 			@Override
 			public void reportDeletion( Path baseDir, Path relativePath, I initiator ) {
-				deletions.push(Update.deletion(baseDir, relativePath, initiator));
+				deletions.onNext(Update.deletion(baseDir, relativePath, initiator));
 			}
 
 			@Override
 			public void reportError( Throwable error ) {
-				errors.push(error);
+				errors.onNext(error);
 			}
 
 			@Override
 			public void reportModification( Path baseDir, Path relativePath, I initiator ) {
-				modifications.push(Update.modification(baseDir, relativePath, initiator));
+				modifications.onNext(Update.modification(baseDir, relativePath, initiator));
 			}
 
 		};
+		
 	}
 
 	/**
@@ -192,14 +216,55 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	 * <p>
 	 * <b>Note:</b> The model is not synchronized automatically with the
 	 * given {@code directory}. An explicit call to
-	 * {@link #sync(se.europeanspallationsource.xaos.core.util.io.PathElement)},
-	 * or {@link #sync(se.europeanspallationsource.xaos.core.util.io.PathElement, java.lang.Object)}
+	 * {@link #sync(Path)}, or {@link #sync(Path, java.lang.Object)}
 	 * has to be performed if synchronization is required.</p>
 	 *
 	 * @param directory The {@link Path} to be added as a top-level directory.
 	 */
 	public void addTopLevelDirectory( Path directory ) {
-		root.getChildren().add(new TreeDirectoryItems.TopLevelDirectoryItem<>(injector.apply(directory), graphicFactory, projector, injector, reporter));
+		root.getChildren().add(TreeDirectoryItems.createTopLevelDirectoryItem(
+			injector.apply(directory),
+			graphicFactory,
+			projector,
+			injector,
+			reporter,
+			null,
+			null
+		));
+	}
+
+	/**
+	 * Add a top-lever directory to the model.
+	 * <p>
+	 * <b>Note:</b> The model is not synchronized automatically with the
+	 * given {@code directory}. An explicit call to
+	 * {@link #sync(Path)}, or {@link #sync(Path, java.lang.Object)}
+	 * has to be performed if synchronization is required.
+	 * <p>
+	 * <b>Note:</b> {@link #addDirectory(Path)} and {@link #addDirectory(Path, Object)}
+	 * methods will pass the given {@code onCollapse} and {@code onExpand} parameters
+	 * to the newly created {@link TreeDirectoryItems.DirectoryItem}.</p>
+	 *
+	 * @param directory  The {@link Path} to be added as a top-level directory.
+	 * @param onCollapse A {@link Consumer} to be invoked when this item is
+	 *                   collapsed. Can be {@code null}.
+	 * @param onExpand   A {@link Consumer} to be invoked when this item is
+	 *                   expanded. Can be {@code null}.
+	 */
+	public void addTopLevelDirectory(
+		Path directory,
+		Consumer<? super TreeDirectoryItems.DirectoryItem<T>> onCollapse,
+		Consumer<? super TreeDirectoryItems.DirectoryItem<T>> onExpand
+	) {
+		root.getChildren().add(TreeDirectoryItems.createTopLevelDirectoryItem(
+			injector.apply(directory),
+			graphicFactory,
+			projector,
+			injector,
+			reporter,
+			onCollapse,
+			onExpand
+		));
 	}
 
 	@Override
@@ -224,7 +289,7 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	}
 
 	@Override
-	public EventStream<Update<I>> creations() {
+	public Observable<Update<I>> creations() {
 		return creations;
 	}
 
@@ -254,12 +319,24 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	}
 
 	@Override
-	public EventStream<Update<I>> deletions() {
+	public Observable<Update<I>> deletions() {
 		return deletions;
 	}
 
 	@Override
-	public EventStream<Throwable> errors() {
+	public void dispose() {
+
+		creations.onComplete();
+		deletions.onComplete();
+		errors.onComplete();
+		modifications.onComplete();
+
+		disposed = true;
+
+	}
+
+	@Override
+	public Observable<Throwable> errors() {
 		return errors;
 	}
 
@@ -269,7 +346,12 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	}
 
 	@Override
-	public EventStream<Update<I>> modifications() {
+	public boolean isDisposed() {
+		return disposed;
+	}
+
+	@Override
+	public Observable<Update<I>> modifications() {
 		return modifications;
 	}
 
@@ -293,28 +375,55 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	}
 
 	/**
-	 * Synchronize the model with the given {@code tree} element. Missing items
-	 * will be added to the model. Items will be removed from the model if no
-	 * more existing. Files timestamps will be updated too.
+	 * Synchronize the model with the given {@code directory} element. Missing 
+	 * items will be added to the model for the expanded tree items, and a
+	 * callback is registered to update the collapsed tree items when will 
+	 * expand. Items will be removed from the model if no more existing. Files
+	 * timestamps will be updated too.
 	 *
-	 * @param tree The {@link PathElement} used to synchronize the model.
+	 * @param directory The {@link Path} used to synchronize the model.
 	 */
-	public void sync( PathElement tree ) {
-		sync(tree, defaultInitiator);
+	public void sync( Path directory ) {
+		sync(directory, defaultInitiator);
 	}
 
-	public void sync( PathElement tree, I initiator ) {
+	/**
+	 * Synchronize the model with the given {@code directory} element. Missing
+	 * items will be added to the model for the expanded tree items, and a
+	 * callback is registered to update the collapsed tree items when will
+	 * expand. Items will be removed from the model if no more existing. Files
+	 * timestamps will be updated too.
+	 *
+	 * @param directory The {@link Path} used to synchronize the model.
+	 * @param initiator The initiator of changes to the model.
+	 */
+	public void sync( Path directory, I initiator ) {
 
-		Path path = tree.getPath();
+		Path path = directory;
 
-		topLevelAncestorStream(path).forEach(ancestor -> ancestor.sync(tree, initiator));
+		topLevelAncestorStream(path).forEach(ancestor -> ancestor.sync(directory, initiator));
 
 	}
 
+	/**
+	 * Updates the modification time for the item associated to the given
+	 * {@link Path}.
+	 *
+	 * @param path         The path whose associated item must be updated.
+	 * @param lastModified The new modification time.
+	 */
 	public void updateModificationTime( Path path, FileTime lastModified ) {
 		updateModificationTime(path, lastModified, defaultInitiator);
 	}
 
+	/**
+	 * Updates the modification time for the item associated to the given
+	 * {@link Path}.
+	 *
+	 * @param path         The path whose associated item must be updated.
+	 * @param lastModified The new modification time.
+	 * @param initiator    The initiator of changes to the model.
+	 */
 	public void updateModificationTime( Path path, FileTime lastModified, I initiator ) {
 		getTopLevelAncestors(path, true).forEach(ancestor -> {
 
@@ -356,11 +465,11 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 		@Override
 		public Node createGraphic( Path path, boolean isDirectory, boolean isExpanded ) {
 			if ( isDirectory ) {
-				return isExpanded ? FOLDER_EXPANDED.getIcon() : FOLDER_COLLAPSED.getIcon();
+				return isExpanded ? Icons.iconFor(FOLDER_EXPANDED, DEFAULT_SIZE) : Icons.iconFor(FOLDER_COLLAPSED, DEFAULT_SIZE);
 			} else if ( Files.isSymbolicLink(path) ) {
-				return FILE_LINK.getIcon();
+				return Icons.iconFor(FILE_LINK, DEFAULT_SIZE);
 			} else if ( Files.isExecutable(path) ) {
-				return FILE_EXECUTABLE.getIcon();
+				return Icons.iconFor(FILE_EXECUTABLE, DEFAULT_SIZE);
 			} else {
 				
 				boolean hidden = false;
@@ -376,8 +485,8 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 				}
 				
 				return hidden
-					   ? FILE_HIDDEN.getIcon()
-					   : Icons.iconFor(path, FILE.getIcon());
+					   ?	 Icons.iconFor(FILE_HIDDEN, DEFAULT_SIZE)
+					   : Icons.iconFor(path, DEFAULT_SIZE, Icons.iconFor(FILE, DEFAULT_SIZE));
 				
 			}
 		}

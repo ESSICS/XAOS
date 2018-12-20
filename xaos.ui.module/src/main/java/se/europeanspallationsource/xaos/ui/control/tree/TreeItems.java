@@ -17,9 +17,14 @@ package se.europeanspallationsource.xaos.ui.control.tree;
 
 
 import java.nio.file.Path;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableView;
 import javafx.scene.control.TreeView;
 import javafx.util.Callback;
 
@@ -83,10 +88,10 @@ public class TreeItems {
 	 * application thread.</p>
 	 *
 	 * @param <T>    The type of the value returned by {@link TreeItem#getValue()}.
-	 * @param node   The node to be expanded or collapsed.
+	 * @param node   The {@link TreeItem} to be expanded or collapsed.
 	 * @param expand If {@code true} the node and its children will be expanded,
 	 *               if {@code false} they will be collapsed.
-	 * @return The passed node.
+	 * @return The passed {@link TreeItem} node.
 	 */
 	public static <T> TreeItem<T> expandAll( final TreeItem<T> node, final boolean expand ) {
 
@@ -95,7 +100,268 @@ public class TreeItems {
 			node.getChildren().forEach(n -> expandAll(n, expand));
 		}
 
+//	----------------------------------------------------------------------------
+//	The following implementation is not working because "setExpanded" is called
+//	after the stack update, so if expanding/collapsing changes the number of
+//	children, that is lost. In the current implementation, "getChildren" is
+//	called after "setExpanded", so any changes are kept in account.
+//	----------------------------------------------------------------------------
+//		TreeItemWalker.visit(node, n -> n.setExpanded(expand));
+//	----------------------------------------------------------------------------
+
 		return node;
+
+	}
+
+	/**
+	 * Expands/collapses the {@link TreeView} root node and all its non-leaf
+	 * children recursively.
+	 * <p>
+	 * This method is not thread safe, and should be called from the JavaFX
+	 * application thread.</p>
+	 *
+	 * @param <T>    The type of the value returned by {@link TreeItem#getValue()}.
+	 * @param tree   The {@link TreeView} whose root node has to be expanded or
+	 *               collapsed.
+	 * @param expand If {@code true} the node and its children will be expanded,
+	 *               if {@code false} they will be collapsed.
+	 * @return The passed {@link TreeView}.
+	 */
+	public static <T> TreeView<T> expandAll( final TreeView<T> tree, final boolean expand ) {
+
+		expandAll(tree.getRoot(), expand);
+
+		return tree;
+
+	}
+
+	/**
+	 * Expands/collapses the {@link TreeTableView} root node and all its non-leaf
+	 * children recursively.
+	 * <p>
+	 * This method is not thread safe, and should be called from the JavaFX
+	 * application thread.</p>
+	 *
+	 * @param <T>       The type of the value returned by {@link TreeItem#getValue()}.
+	 * @param treeTable The {@link TreeTableView} whose root node has to be
+	 *                  expanded or collapsed.
+	 * @param expand    If {@code true} the node and its children will be expanded,
+	 *                  if {@code false} they will be collapsed.
+	 * @return The passed {@link TreeTableView}.
+	 */
+	public static <T> TreeTableView<T> expandAll( final TreeTableView<T> treeTable, final boolean expand ) {
+
+		expandAll(treeTable.getRoot(), expand);
+
+		return treeTable;
+
+	}
+
+	/**
+	 * Return an {@link Optional} object possibly containing the first tree
+	 * item from the tree rooted at the given root node, matching the given
+	 * {@link Predicate}.
+	 *
+	 * @param <T>       The type of the value returned by {@link TreeItem#getValue()}.
+	 * @param root      The root {@link TreeItem} where the search is performed.
+	 * @param predicate The predicate used to select the visited tree item.
+	 * @return The {@link Optional} object possibly containing the found tree items.
+	 */
+	public static <T> Optional<TreeItem<T>> find ( final TreeItem<T> root, final Predicate<? super TreeItem<T>> predicate ) {
+
+		TreeItemWalker<T> walker = new TreeItemWalker<>(root);
+
+		return walker.stream().filter(predicate).findFirst();
+
+	}
+
+	/**
+	 * Return an {@link Optional} object possibly containing the first tree 
+	 * item from the given {@code tree}, matching the given {@link Predicate}.
+	 *
+	 * @param <T>       The type of the value returned by {@link TreeItem#getValue()}.
+	 * @param tree      The {@link TreeView} where the search is performed.
+	 * @param predicate The predicate used to select the visited tree item.
+	 * @return The {@link Optional} object possibly containing the found tree items.
+	 */
+	public static <T> Optional<TreeItem<T>> find ( final TreeView<T> tree, final Predicate<? super TreeItem<T>> predicate ) {
+
+		TreeItemWalker<T> walker = new TreeItemWalker<>(tree);
+
+		return walker.stream().filter(predicate).findFirst();
+
+	}
+
+	/**
+	 * Return an {@link Optional} object possibly containing the first tree
+	 * item from the given {@code tree} table, matching the given {@link Predicate}.
+	 *
+	 * @param <T>       The type of the value returned by {@link TreeItem#getValue()}.
+	 * @param tree      The {@link TreeTableView} where the search is performed.
+	 * @param predicate The predicate used to select the visited tree item.
+	 * @return The {@link Optional} object possibly containing the found tree items.
+	 */
+	public static <T> Optional<TreeItem<T>> find ( final TreeTableView<T> tree, final Predicate<? super TreeItem<T>> predicate ) {
+
+		TreeItemWalker<T> walker = new TreeItemWalker<>(tree);
+
+		return walker.stream().filter(predicate).findFirst();
+
+	}
+
+	/**
+	 * Return an {@link Optional} object possibly containing the first tree
+	 * item from the tree rooted at the given root node, whose value is matching
+	 * the given {@link Predicate}.
+	 *
+	 * @param <T>       The type of the value returned by {@link TreeItem#getValue()}.
+	 * @param root      The root {@link TreeItem} where the search is performed.
+	 * @param predicate The predicate used to select the visited tree item.
+	 * @return The {@link Optional} object possibly containing the found tree items.
+	 */
+	public static <T> Optional<TreeItem<T>> findValue ( final TreeItem<T> root, final Predicate<? super T> predicate ) {
+
+		TreeItemWalker<T> walker = new TreeItemWalker<>(root);
+
+		return walker.stream().filter(ti -> predicate.test(ti.getValue())).findFirst();
+
+	}
+
+	/**
+	 * Return an {@link Optional} object possibly containing the first tree
+	 * item from the given {@code tree}, whose value is matching the given
+	 * {@link Predicate}.
+	 *
+	 * @param <T>       The type of the value returned by {@link TreeItem#getValue()}.
+	 * @param tree      The {@link TreeView} where the search is performed.
+	 * @param predicate The predicate used to select the visited tree item.
+	 * @return The {@link Optional} object possibly containing the found tree items.
+	 */
+	public static <T> Optional<TreeItem<T>> findValue ( final TreeView<T> tree, final Predicate<? super T> predicate ) {
+
+		TreeItemWalker<T> walker = new TreeItemWalker<>(tree);
+
+		return walker.stream().filter(ti -> predicate.test(ti.getValue())).findFirst();
+
+	}
+
+	/**
+	 * Return an {@link Optional} object possibly containing the first tree
+	 * item from the given {@code tree} table, whose value is matching the given
+	 * {@link Predicate}.
+	 *
+	 * @param <T>       The type of the value returned by {@link TreeItem#getValue()}.
+	 * @param tree      The {@link TreeTableView} where the search is performed.
+	 * @param predicate The predicate used to select the visited tree item.
+	 * @return The {@link Optional} object possibly containing the found tree items.
+	 */
+	public static <T> Optional<TreeItem<T>> findValue ( final TreeTableView<T> tree, final Predicate<? super T> predicate ) {
+
+		TreeItemWalker<T> walker = new TreeItemWalker<>(tree);
+
+		return walker.stream().filter(ti -> predicate.test(ti.getValue())).findFirst();
+
+	}
+
+	/**
+	 * Return a {@link List} of the tree items from the tree rooted at the given
+	 * root node, matching the given {@link Predicate}.
+	 *
+	 * @param <T>       The type of the value returned by {@link TreeItem#getValue()}.
+	 * @param root      The root {@link TreeItem} where the search is performed.
+	 * @param predicate The predicate used to select the visited tree item.
+	 * @return The {@link List} of the found tree items.
+	 */
+	public static <T> List<TreeItem<T>> search ( final TreeItem<T> root, final Predicate<? super TreeItem<T>> predicate ) {
+
+		TreeItemWalker<T> walker = new TreeItemWalker<>(root);
+
+		return walker.stream().filter(predicate).collect(Collectors.toList());
+
+	}
+
+	/**
+	 * Return a {@link List} of the tree items from the given {@code tree},
+	 * matching the given {@link Predicate}.
+	 *
+	 * @param <T>       The type of the value returned by {@link TreeItem#getValue()}.
+	 * @param tree      The {@link TreeView} where the search is performed.
+	 * @param predicate The predicate used to select the visited tree item.
+	 * @return The {@link List} of the found tree items.
+	 */
+	public static <T> List<TreeItem<T>> search ( final TreeView<T> tree, final Predicate<? super TreeItem<T>> predicate ) {
+
+		TreeItemWalker<T> walker = new TreeItemWalker<>(tree);
+
+		return walker.stream().filter(predicate).collect(Collectors.toList());
+
+	}
+
+	/**
+	 * Return a {@link List} of the tree items from the given {@code tree} table,
+	 * matching the given {@link Predicate}.
+	 *
+	 * @param <T>       The type of the value returned by {@link TreeItem#getValue()}.
+	 * @param tree      The {@link TreeTableView} where the search is performed.
+	 * @param predicate The predicate used to select the visited tree item.
+	 * @return The {@link List} of the found tree items.
+	 */
+	public static <T> List<TreeItem<T>> search ( final TreeTableView<T> tree, final Predicate<? super TreeItem<T>> predicate ) {
+
+		TreeItemWalker<T> walker = new TreeItemWalker<>(tree);
+
+		return walker.stream().filter(predicate).collect(Collectors.toList());
+
+	}
+
+	/**
+	 * Return a {@link List} of the tree items from the tree rooted at the given
+	 * root node, whose value is matching the given {@link Predicate}.
+	 *
+	 * @param <T>       The type of the value returned by {@link TreeItem#getValue()}.
+	 * @param root      The root {@link TreeItem} where the search is performed.
+	 * @param predicate The predicate used to select the visited tree item.
+	 * @return The {@link List} of the found tree items.
+	 */
+	public static <T> List<TreeItem<T>> searchValue ( final TreeItem<T> root, final Predicate<? super T> predicate ) {
+
+		TreeItemWalker<T> walker = new TreeItemWalker<>(root);
+
+		return walker.stream().filter(ti -> predicate.test(ti.getValue())).collect(Collectors.toList());
+
+	}
+
+	/**
+	 * Return a {@link List} of the tree items from the given {@code tree},
+	 * whose value is matching the given {@link Predicate}.
+	 *
+	 * @param <T>       The type of the value returned by {@link TreeItem#getValue()}.
+	 * @param tree      The {@link TreeView} where the search is performed.
+	 * @param predicate The predicate used to select the visited tree item.
+	 * @return The {@link List} of the found tree items.
+	 */
+	public static <T> List<TreeItem<T>> searchValue ( final TreeView<T> tree, final Predicate<? super T> predicate ) {
+
+		TreeItemWalker<T> walker = new TreeItemWalker<>(tree);
+
+		return walker.stream().filter(ti -> predicate.test(ti.getValue())).collect(Collectors.toList());
+
+	}
+
+	/**
+	 * Return a {@link List} of the tree items from the given {@code tree} table,
+	 * whose value is matching the given {@link Predicate}.
+	 *
+	 * @param <T>       The type of the value returned by {@link TreeItem#getValue()}.
+	 * @param tree      The {@link TreeTableView} where the search is performed.
+	 * @param predicate The predicate used to select the visited tree item.
+	 * @return The {@link List} of the found tree items.
+	 */
+	public static <T> List<TreeItem<T>> searchValue ( final TreeTableView<T> tree, final Predicate<? super T> predicate ) {
+
+		TreeItemWalker<T> walker = new TreeItemWalker<>(tree);
+
+		return walker.stream().filter(ti -> predicate.test(ti.getValue())).collect(Collectors.toList());
 
 	}
 

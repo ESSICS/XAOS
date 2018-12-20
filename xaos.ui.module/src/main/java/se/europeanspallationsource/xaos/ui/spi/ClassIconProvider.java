@@ -27,12 +27,15 @@ import javafx.scene.Node;
 public interface ClassIconProvider {
 
 	/**
-	 * Return an icon (i.e. a {@link Node} for the given {@link Class} name.
+	 * Return an icon (i.e. a square {@link Node} for the given {@link Class} name.
 	 *
 	 * @param clazz The full class name (the one returned by {@link Class#getName()})
 	 *              for which a graphical representation is needed.
-	 * @return An icon as a {@link Node} instance, or {@code null}.
+	 * @param size  The size of the square {@code Node} to be returned.
+	 * @return An icon as a {@link Node} instance, or {@code null} if {@code clazz}
+	 *         is {@code null} or empty, {@code size <= 0}, or no suitable
+	 *         representation can be found.
 	 */
-	public Node iconFor( String clazz );
+	public Node iconFor( String clazz, int size );
 
 }

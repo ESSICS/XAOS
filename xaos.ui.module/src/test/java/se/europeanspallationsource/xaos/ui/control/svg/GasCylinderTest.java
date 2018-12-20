@@ -32,6 +32,7 @@ import org.junit.Test;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.testfx.assertions.api.Assertions.assertThat;
 
 
@@ -68,7 +69,7 @@ public class GasCylinderTest extends ApplicationTest {
 	@Test
 	public void testLoadSVG() {
 
-		System.out.println("  Testing ''load''...");
+		System.out.println("  Testing 'load'...");
 
 		assertThat(svg).isExactlyInstanceOf(SVG.class);
 		assertThat(svg).hasExactlyNumChildren(1);

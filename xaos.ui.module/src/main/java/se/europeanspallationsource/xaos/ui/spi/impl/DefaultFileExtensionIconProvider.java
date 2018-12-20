@@ -16,11 +16,13 @@
 package se.europeanspallationsource.xaos.ui.spi.impl;
 
 
+import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.Node;
 import org.apache.commons.lang3.StringUtils;
+import org.kordamp.ikonli.Ikon;
 import org.kordamp.ikonli.fontawesome.FontAwesome;
 import org.kordamp.ikonli.javafx.FontIcon;
 import se.europeanspallationsource.xaos.tools.annotation.ServiceProvider;
@@ -32,23 +34,22 @@ import se.europeanspallationsource.xaos.ui.spi.FileExtensionIconProvider;
  *
  * @author claudio.rosati@esss.se
  */
-@SuppressWarnings( "ClassWithoutLogger" )
+@SuppressWarnings( { "ClassWithoutLogger", "UseOfSystemOutOrSystemErr" } )
 @ServiceProvider( service = FileExtensionIconProvider.class )
-public class DefaultFileExtensionIconProvider implements FileExtensionIconProvider {
+public class DefaultFileExtensionIconProvider extends BaseProvider implements FileExtensionIconProvider {
 
-	private static final Map<String, Node> ICONS_MAP;
-	private static final int ICON_SIZE = 20;
+	private static final Map<String, Ikon> ICONS_MAP;
 
 	/**
 	 * static initializer.
 	 */
 	static {
 
-		Node icon;
-		Map<String, Node> map = new HashMap<>(100);
+		Ikon icon;
+		Map<String, Ikon> map = new HashMap<>(100);
 
 		//	Archive files...
-		icon = FontIcon.of(FontAwesome.FILE_ARCHIVE_O, ICON_SIZE);
+		icon = FontAwesome.FILE_ARCHIVE_O;
 
 		map.put("7x", icon);
 		map.put("a##", icon);
@@ -101,7 +102,7 @@ public class DefaultFileExtensionIconProvider implements FileExtensionIconProvid
 		map.put("zip", icon);
 
 		//	Audio/Music files...
-		icon = FontIcon.of(FontAwesome.FILE_AUDIO_O, ICON_SIZE);
+		icon = FontAwesome.FILE_AUDIO_O;
 
 		map.put("4md", icon);
 		map.put("668", icon);
@@ -148,7 +149,7 @@ public class DefaultFileExtensionIconProvider implements FileExtensionIconProvid
 		map.put("xa", icon);
 
 		//	Code files...
-		icon = FontIcon.of(FontAwesome.FILE_CODE_O, ICON_SIZE);
+		icon = FontAwesome.FILE_CODE_O;
 
 		map.put("4th", icon);
 		map.put("8", icon);
@@ -222,7 +223,7 @@ public class DefaultFileExtensionIconProvider implements FileExtensionIconProvid
 		map.put("xml", icon);
 
 		//	Database files...
-		icon = FontIcon.of(FontAwesome.DATABASE, ICON_SIZE);
+		icon = FontAwesome.DATABASE;
 
 		map.put("3dt", icon);
 		map.put("4db", icon);
@@ -266,7 +267,7 @@ public class DefaultFileExtensionIconProvider implements FileExtensionIconProvid
 		map.put("tdb", icon);
 
 		//	Image/Picture files...
-		icon = FontIcon.of(FontAwesome.FILE_IMAGE_O, ICON_SIZE);
+		icon = FontAwesome.FILE_IMAGE_O;
 
 		map.put("555", icon);
 		map.put("75", icon);
@@ -354,7 +355,7 @@ public class DefaultFileExtensionIconProvider implements FileExtensionIconProvid
 		map.put("xwd", icon);
 
 		//	Movie/Video files...
-		icon = FontIcon.of(FontAwesome.FILE_MOVIE_O, ICON_SIZE);
+		icon = FontAwesome.FILE_MOVIE_O;
 
 		map.put("byu", icon);
 		map.put("f4a", icon);
@@ -384,12 +385,12 @@ public class DefaultFileExtensionIconProvider implements FileExtensionIconProvid
 		map.put("xmv", icon);
 
 		//	PDF files...
-		icon = FontIcon.of(FontAwesome.FILE_PDF_O, ICON_SIZE);
+		icon = FontAwesome.FILE_PDF_O;
 
 		map.put("pdf", icon);
 
 		//	Presentation/Powerpoint files...
-		icon = FontIcon.of(FontAwesome.FILE_POWERPOINT_O, ICON_SIZE);
+		icon = FontAwesome.FILE_POWERPOINT_O;
 
 		map.put("ch4", icon);
 		map.put("key", icon);
@@ -405,7 +406,7 @@ public class DefaultFileExtensionIconProvider implements FileExtensionIconProvid
 		map.put("uop", icon);
 
 		//	Spreadsheet files...
-		icon = FontIcon.of(FontAwesome.FILE_EXCEL_O, ICON_SIZE);
+		icon = FontAwesome.FILE_EXCEL_O;
 
 		map.put("123", icon);
 		map.put("bwb", icon);
@@ -448,7 +449,7 @@ public class DefaultFileExtensionIconProvider implements FileExtensionIconProvid
 		map.put("xlw", icon);
 
 		//	Text files...
-		icon = FontIcon.of(FontAwesome.FILE_TEXT_O, ICON_SIZE);
+		icon = FontAwesome.FILE_TEXT_O;
 
 		map.put("1st", icon);
 		map.put("602", icon);
@@ -463,7 +464,7 @@ public class DefaultFileExtensionIconProvider implements FileExtensionIconProvid
 		map.put("txt", icon);
 
 		//	Word Processor files...
-		icon = FontIcon.of(FontAwesome.FILE_WORD_O, ICON_SIZE);
+		icon = FontAwesome.FILE_WORD_O;
 
 		map.put("chi", icon);
 		map.put("doc", icon);
@@ -491,18 +492,33 @@ public class DefaultFileExtensionIconProvider implements FileExtensionIconProvid
 		map.put("wri", icon);
 		map.put("xlr", icon);
 
+		//	Print map if xaos.test.verbose is set to true.
+		verbosePrintout(
+			map,
+			MessageFormat.format(
+				"File extensions loaded [{0}]",
+				DefaultFileExtensionIconProvider.class.getSimpleName()
+			)
+		);
+
 		ICONS_MAP = Collections.unmodifiableMap(map);
 
 	}
 
 	@Override
-	public Node iconFor( String extension ) {
+	public Node iconFor( String extension, int size ) {
 
-		if ( StringUtils.isBlank(extension) ) {
-			return null;
+		if ( StringUtils.isNotBlank(extension) && size > 0 ) {
+
+			Ikon icon = ICONS_MAP.get(extension.toLowerCase());
+
+			if ( icon != null ) {
+				return FontIcon.of(icon, size);
+			}
+
 		}
 
-		return ICONS_MAP.get(extension.toLowerCase());
+		return null;
 
 	}
 

@@ -16,7 +16,10 @@
 package se.europeanspallationsource.xaos.ui.control.tree;
 
 
+import java.io.IOException;
+import java.util.Optional;
 import javafx.scene.control.TreeItem;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -34,18 +37,14 @@ public class TreeItemsTest {
 		System.out.println("---- TreeItemsTest ---------------------------------------------");
 	}
 
-	/**
-	 * Test of expandAll method, of class TreeItems.
-	 */
-	@Test
+	private TreeItem<String> root;
+
+	@Before
 	@SuppressWarnings( "unchecked" )
-	public void testExpandAll() {
+	public void setUp() throws IOException {
 
-		System.out.println("  Testing ''expandAll''...");
+		root = new TreeItem<>("root");
 
-		TreeItem<String> root = new TreeItem<>("root");
-
-		root.setExpanded(true);
 		root.getChildren().addAll(
 			new TreeItem<>("node A"),
 			new TreeItem<>("node B"),
@@ -67,6 +66,19 @@ public class TreeItemsTest {
 					new TreeItem<>("node CBC"),
 					new TreeItem<>("node CBD")
 				);
+
+	}
+
+	/**
+	 * Test of expandAll method, of class TreeItems.
+	 */
+	@Test
+	@SuppressWarnings( "unchecked" )
+	public void testExpandAll() {
+
+		System.out.println("  Testing 'expandAll'...");
+
+		root.setExpanded(true);
 
 		root.getChildren().get(0).setExpanded(true);
 		root.getChildren().get(1).setExpanded(false);
@@ -113,6 +125,126 @@ public class TreeItemsTest {
 		assertThat(root.getChildren().get(0)).hasFieldOrPropertyWithValue("expanded", true);
 		assertThat(root.getChildren().get(2)).hasFieldOrPropertyWithValue("expanded", false);
 		assertThat(root.getChildren().get(2).getChildren().get(1)).hasFieldOrPropertyWithValue("expanded", false);
+
+	}
+
+	/**
+	 * Test of find method, of class TreeItems.
+	 */
+	@Test
+	public void testFind() {
+
+		System.out.println("  Testing 'find'...");
+
+		Optional<TreeItem<String>> found;
+
+		found = TreeItems.find(root, ti -> ti.getValue().contains("A"));
+
+		assertThat(found.isPresent()).isTrue();
+		assertThat(found.get()).isNotNull();
+		assertThat(found.get().getValue()).isEqualTo("node A");
+
+		found = TreeItems.find(root, ti -> ti.getValue().contains("CB"));
+
+		assertThat(found.isPresent()).isTrue();
+		assertThat(found.get()).isNotNull();
+		assertThat(found.get().getValue()).isEqualTo("node CB");
+
+		found = TreeItems.find(root, ti -> ti.getValue().contains("CBA"));
+
+		assertThat(found.isPresent()).isTrue();
+		assertThat(found.get()).isNotNull();
+		assertThat(found.get().getValue()).isEqualTo("node CBA");
+
+		found = TreeItems.find(root, ti -> ti.getValue().contains("ZZZ"));
+
+		assertThat(found.isPresent()).isFalse();
+
+	}
+
+	/**
+	 * Test of findValue method, of class TreeItems.
+	 */
+	@Test
+	public void testFindValue() {
+
+		System.out.println("  Testing 'findValue'...");
+
+		Optional<TreeItem<String>> found;
+
+		found = TreeItems.findValue(root, v -> v.contains("A"));
+
+		assertThat(found.isPresent()).isTrue();
+		assertThat(found.get()).isNotNull();
+		assertThat(found.get().getValue()).isEqualTo("node A");
+
+		found = TreeItems.findValue(root, v -> v.contains("CB"));
+
+		assertThat(found.isPresent()).isTrue();
+		assertThat(found.get()).isNotNull();
+		assertThat(found.get().getValue()).isEqualTo("node CB");
+
+		found = TreeItems.findValue(root, v -> v.contains("CBA"));
+
+		assertThat(found.isPresent()).isTrue();
+		assertThat(found.get()).isNotNull();
+		assertThat(found.get().getValue()).isEqualTo("node CBA");
+
+		found = TreeItems.findValue(root, v -> v.contains("ZZZ"));
+
+		assertThat(found.isPresent()).isFalse();
+
+	}
+
+	/**
+	 * Test of search method, of class TreeItems.
+	 */
+	@Test
+	public void testSearch() {
+
+		System.out.println("  Testing 'search'...");
+
+		assertThat(TreeItems.search(root, ti -> ti.getValue().contains("A")))
+			.isNotNull()
+			.isNotEmpty()
+			.hasSize(7);
+		assertThat(TreeItems.search(root, ti -> ti.getValue().contains("CB")))
+			.isNotNull()
+			.isNotEmpty()
+			.hasSize(5);
+		assertThat(TreeItems.search(root, ti -> ti.getValue().contains("CBA")))
+			.isNotNull()
+			.isNotEmpty()
+			.hasSize(1);
+		assertThat(TreeItems.search(root, ti -> ti.getValue().contains("ZZZ")))
+			.isNotNull()
+			.isEmpty();
+
+	}
+
+	/**
+	 * Test of searchValue method, of class TreeItems.
+	 */
+	@Test
+	public void testSearchValue() {
+
+		System.out.println("  Testing 'searchValue'...");
+
+		assertThat(TreeItems.searchValue(root, v -> v.contains("A")))
+			.isNotNull()
+			.isNotEmpty()
+			.hasSize(7);
+		assertThat(TreeItems.searchValue(root, v -> v.contains("CB")))
+			.isNotNull()
+			.isNotEmpty()
+			.hasSize(5);
+		assertThat(TreeItems.searchValue(root, v -> v.contains("CBA")))
+			.isNotNull()
+			.isNotEmpty()
+			.hasSize(1);
+		assertThat(TreeItems.searchValue(root, v -> v.contains("ZZZ")))
+			.isNotNull()
+			.isEmpty();
 
 	}
 

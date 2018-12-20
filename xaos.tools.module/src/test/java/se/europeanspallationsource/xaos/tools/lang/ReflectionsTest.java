@@ -55,7 +55,7 @@ public class ReflectionsTest {
 	@SuppressWarnings( { "UnusedAssignment", "BroadCatchBlock", "TooBroadCatch" } )
 	public void testGetField() throws NoSuchFieldException {
 
-		System.out.println("  Testing ''getField''...");
+		System.out.println("  Testing 'getField'...");
 
 		assertThat(getField(PublicInnerClass.class, "publicField")).isNotNull().hasFieldOrPropertyWithValue("name", "publicField");
 		assertThat(getField(PublicInnerClass.class, "packageField")).isNotNull().hasFieldOrPropertyWithValue("name", "packageField");
@@ -216,7 +216,7 @@ public class ReflectionsTest {
 	@SuppressWarnings( { "BroadCatchBlock", "TooBroadCatch" } )
 	public void testGetFieldValue() {
 
-		System.out.println("  Testing ''getFieldValue''...");
+		System.out.println("  Testing 'getFieldValue'...");
 
 		assertThat(getFieldValue(new PublicInnerClass(), "publicField")).isEqualTo(1);
 		assertThat(getFieldValue(new PublicInnerClass(), "packageField")).isEqualTo(2);
@@ -380,7 +380,7 @@ public class ReflectionsTest {
 	@SuppressWarnings( { "BroadCatchBlock", "TooBroadCatch", "UnusedAssignment" } )
 	public void testGetMethod() throws Exception {
 
-		System.out.println("  Testing ''getMethod''...");
+		System.out.println("  Testing 'getMethod'...");
 
 		assertThat(getMethod(PublicInnerClass.class, "setPublicField", int.class)).isNotNull().hasFieldOrPropertyWithValue("name", "setPublicField");
 		assertThat(getMethod(PublicInnerClass.class, "setPackageField", int.class)).isNotNull().hasFieldOrPropertyWithValue("name", "setPackageField");
@@ -543,7 +543,7 @@ public class ReflectionsTest {
 	@SuppressWarnings( { "BroadCatchBlock", "TooBroadCatch" } )
 	public void testInvokeMethod() throws NoSuchMethodException {
 
-		System.out.println("  Testing ''invokeMethod''...");
+		System.out.println("  Testing 'invokeMethod'...");
 
 		assertThat(invokeMethod(new PublicInnerClass(), "getPublicField")).isEqualTo(1);
 		assertThat(invokeMethod(new PublicInnerClass(), "getPackageField")).isEqualTo(2);
@@ -704,7 +704,7 @@ public class ReflectionsTest {
 	@Test
 	public void testSetFieldValue() {
 
-		System.out.println("  Testing ''setFieldValue''...");
+		System.out.println("  Testing 'setFieldValue'...");
 
 		assertThat(setAndReadBack(new PublicInnerClass(), "publicField", 12345)).isEqualTo(12345);
 		assertThat(setAndReadBack(new PublicInnerClass(), "packageField", 12345)).isEqualTo(12345);

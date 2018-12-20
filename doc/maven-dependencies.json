@@ -1,0 +1,129 @@
+{
+  "default-node": {
+    "type": "box",
+    "style": "rounded",
+    "default-font": {
+      "size": 14,
+      "name": "Helvetica"
+    },
+    "optional-font": {
+      "size": 10
+    },
+    "group-id-font": {
+      "size": 10
+    },
+    "version-font": {
+      "size": 10
+    },
+    "scope-font": {
+      "size": 10
+    },
+    "type-font": {
+      "size": 10
+    },
+    "classifier-font": {
+      "size": 10
+    }
+  },
+  "node-styles": {
+    "se.europeanspallationsource,xaos.tests*": {
+      "type": "box",
+      "style": "rounded",
+      "color": "#0094CA",
+      "default-font": {
+        "color": "#0094CA",
+        "size": 14,
+        "name": "Helvetica"
+      },
+      "optional-font": {
+        "color": "#0094CA",
+        "size": 10
+      },
+      "group-id-font": {
+        "color": "#0094CA",
+        "size": 10
+      },
+      "version-font": {
+        "color": "#0094CA",
+        "size": 10
+      },
+      "scope-font": {
+        "color": "#0094CA",
+        "size": 10
+      },
+      "type-font": {
+        "color": "#0094CA",
+        "size": 10
+      },
+      "classifier-font": {
+        "color": "#0094CA",
+        "size": 10
+      }
+    },
+    "se.europeanspallationsource,xaos*": {
+      "type": "box",
+      "style": "rounded, filled",
+      "fill-color": "#7DE1FF"
+    },
+    ",,test": {
+      "type": "box",
+      "style": "rounded",
+      "color": "grey55",
+      "default-font": {
+        "color": "grey55",
+        "size": 14,
+        "name": "Helvetica"
+      },
+      "optional-font": {
+        "color": "grey55",
+        "size": 10
+      },
+      "group-id-font": {
+        "color": "grey55",
+        "size": 10
+      },
+      "version-font": {
+        "color": "grey55",
+        "size": 10
+      },
+      "scope-font": {
+        "color": "grey55",
+        "size": 10
+      },
+      "type-font": {
+        "color": "grey55",
+        "size": 10
+      },
+      "classifier-font": {
+        "color": "grey55",
+        "size": 10
+      }
+    },
+    ",,": {
+      "type": "box",
+      "style": "rounded, filled",
+      "fill-color": "khaki"
+    }
+  },
+  "default-edge": {
+    "font": {
+      "size": 10,
+      "name": "Helvetica"
+    }
+  },
+  "edge-resolution-styles": {
+    "omitted-for-duplicate": {
+      "style": "dotted"
+    },
+    "parent": {
+      "style": "dashed"
+    },
+    "omitted-for-conflict": {
+      "style": "dashed",
+      "color": "red",
+      "font": {
+        "color": "red"
+      }
+    }
+  }
+}

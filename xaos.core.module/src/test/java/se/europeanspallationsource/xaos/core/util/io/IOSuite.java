@@ -26,8 +26,7 @@ import org.junit.runners.Suite;
 @RunWith( Suite.class )
 @Suite.SuiteClasses( {
 	DeleteFileVisitorTest.class,
-	DirectoryWatcherTest.class,
-	PathElementTest.class
+	DirectoryWatcherTest.class
 } )
 @SuppressWarnings( { "ClassMayBeInterface", "ClassWithoutLogger" } )
 public class IOSuite {

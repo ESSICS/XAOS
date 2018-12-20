@@ -17,7 +17,7 @@ limitations under the License.
 <html>
 
     <head>
-        <title>XAOS Tools API Specification</title>
+        <title>XAOS UI API Specification</title>
     </head>
     
     <body>
@@ -98,7 +98,9 @@ limitations under the License.
   }
 </pre>
 
-		<h3>Tree Directory Monitor</h3>
+		<h3>Tree Controls and Utilities</h3>
+
+		<h4>Tree Directory Monitor</h4>
 
 		<p>
 			{@link se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryMonitor}
@@ -111,8 +113,31 @@ limitations under the License.
 			facility from external ones.
 		</p>
 		<p>
-			The directory model can be used directly as a model for
+			The directory model can then be used directly as a model for
 			{@link javafx.scene.control.TreeView}s.
+		</p>
+
+		<h4>Filterable Tree Items</h4>
+
+		<p>
+			{@link se.europeanspallationsource.xaos.ui.control.tree.FilterableTreeItem}
+			is an extension of {@link javafx.scene.control.TreeItem} with the
+			possibility to filter its children.
+		</p>
+
+		<h4>Tree Item Walker</h4>
+
+		<p>
+			{@link se.europeanspallationsource.xaos.ui.control.tree.TreeItemWalker}
+			walks a {@link javafx.scene.control.TreeItem}s tree depth-first. It
+			supports streaming, visitor pattern and iterator pattern.
+		</p>
+
+		<h4>Tree Item Utilities</h4>
+
+		<p>
+			{@link se.europeanspallationsource.xaos.ui.control.tree.TreeItems}
+			provides methods to manipulate trees made of {@link javafx.scene.control.TreeItem}s.
 		</p>
 
     </body>

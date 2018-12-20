@@ -23,22 +23,25 @@ import javafx.scene.Node;
 
 
 /**
- * Provides icons (i.e. {@link Node}s) for a given file extension.
+ * Provides icons (i.e. square {@link Node}s) for a given file extension.
  *
  * @author claudio.rosati@esss.se
  */
 public interface FileExtensionIconProvider {
 
 	/**
-	 * Return an icon (i.e. a {@link Node} for the given file extension. A file
-	 * extension is string following the last '.' in the file's pathname.
+	 * Return an icon (i.e. a square {@link Node} for the given file extension.
+	 * A file extension is string following the last '.' in the file's pathname.
 	 *
 	 * @param extension File extension for which a graphical representation is
 	 *                  needed. Implementation should discard the first character
 	 *                  if equal to '.'. Can be {@code null}.
-	 * @return An icon as a {@link Node} instance, or {@code null}.
+	 * @param size      The size of the square {@code Node} to be returned.
+	 * @return An icon as a {@link Node} instance, or {@code null} if
+	 *         {@code extension} is {@code null} or empty, {@code size <= 0}, or no
+	 *         suitable representation can be found.
 	 */
-	public Node iconFor( String extension );
+	public Node iconFor( String extension, int size );
 
 	/**
 	 * @param path The {@link Path} for which the extension must be returned.

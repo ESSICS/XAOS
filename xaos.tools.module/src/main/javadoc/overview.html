@@ -69,6 +69,19 @@ limitations under the License.
 			class will complement the {@link java.util.ServiceLoader} one with
 			few more methods.
 		</p>
+		<p>
+			<b>Note:</b> when using {@link se.europeanspallationsource.xaos.tools.annotation.ServiceProvider}
+			or {@link se.europeanspallationsource.xaos.tools.annotation.ServiceProviders}
+			the {@code service} class must be listed in the {@code module-info}
+			class inside a <b>uses</b> statement. Moreover a <b>provides … with</b>
+			statement must also be added to declare the annotated class as
+			provider for the parameter class.
+		</p>
+		<p>
+			<b>Note:</b> when using {@link se.europeanspallationsource.xaos.tools.annotation.ServiceLoaderUtilities}
+			the service provider interface type must be listed in the
+			{@code module-info} class inside a <b>uses</b> statement.
+		</p>
 
 		<h3>Java Language Tools</h3>
 
@@ -77,6 +90,16 @@ limitations under the License.
 			class provides few methods to handling fields and method access using
 			the Java Reflection API.
 		</p>
+		<p>
+			<b>Note:</b> when using {@link se.europeanspallationsource.xaos.tools.lang.Reflections}
+			it is necessary to open the module/package being reflected to
+			<code>xaos.tools</code>. This can be achieved with the following flag
+			being added to the command line launching the application:
+		</p>
+		
+<pre>
+  --add-opens module/package=xaos.tools
+</pre>
 
     </body>
 

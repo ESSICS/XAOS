@@ -11,35 +11,34 @@
 
 	<artifactId>xaos.core</artifactId>
     <packaging>jar</packaging>
-    <name>XAOS Core</name>
+    <name>XAOS - Core</name>
 	<description>
 		Non graphical portion of the XAOS framework.
 	</description>
     <url>https://github.com/ESSICS/XAOS</url>
 
+    <build>
+        <plugins>
+			<!-- ALPHABETICALLY SORTED BY groupId:artifactId -->
+			<plugin>
+				<groupId>com.github.ferstl</groupId>
+				<artifactId>depgraph-maven-plugin</artifactId>
+				<version>3.2.2</version>
+				<configuration>
+					<customStyleConfiguration>${project.basedir}/../doc/maven-dependencies.json</customStyleConfiguration>
+				</configuration>
+			</plugin>
+        </plugins>
+    </build>
+
     <dependencies>
 
-        <!-- Apache - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<!--        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-collections4</artifactId>
-            <version>4.2</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.8</version>
-            <scope>compile</scope>
-        </dependency>-->
-
-		<!-- Other Dependencies  - - - - - - - - - - - - - - - - - - - - - -  -->
-        <dependency>
-            <groupId>org.reactfx</groupId>
-            <artifactId>reactfx</artifactId>
-            <version>2.0-M5</version>
-            <scope>compile</scope>
-        </dependency>
+		<!-- RxJava Dependencies - - - - - - - - - - - - - - - - - - - - - -  -->
+		<dependency>
+			<groupId>io.reactivex.rxjava2</groupId>
+			<artifactId>rxjava</artifactId>
+			<version>2.2.4</version>
+		</dependency>
 
     </dependencies>
 

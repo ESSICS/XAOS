@@ -16,32 +16,31 @@
 package se.europeanspallationsource.xaos.ui.control.tree.directory;
 
 
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.subjects.PublishSubject;
+import io.reactivex.subjects.Subject;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NotDirectoryException;
 import java.nio.file.Path;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchEvent.Kind;
-import java.nio.file.WatchService;
 import java.nio.file.attribute.FileTime;
 import java.text.MessageFormat;
 import java.util.List;
-import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executor;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import javafx.application.Platform;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import org.reactfx.EventSource;
-import org.reactfx.EventStream;
-import org.reactfx.EventStreams;
 import se.europeanspallationsource.xaos.core.util.io.DirectoryWatcher;
-import se.europeanspallationsource.xaos.core.util.io.PathElement;
 
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
-import static se.europeanspallationsource.xaos.core.util.DefaultExecutorCompletionStage.wrap;
 
 
 /**
@@ -84,13 +83,17 @@ import static se.europeanspallationsource.xaos.core.util.DefaultExecutorCompleti
  *         // Set directory to watch.
  *         dirmon.addTopLevelDirectory(Paths.get(System.getProperty("user.home"), "Documents").toAbsolutePath());
  *         view.setRoot(dirmon.model().getRoot());
+ *         view.setShowRoot(false);
+ *         view.setCellFactory(TreeItems.defaultTreePathCellFactory());
  * 
  *         // Stop DirectoryWatcher's thread.
  *         primaryStage.setOnCloseRequest(val -&gt; dirmon.dispose());
+ *
  *       } catch (IOException e) {
  *         e.printStackTrace();
  *       }
  *
+ *       primaryStage.setOnCloseRequest(event -&gt; dirmon.dispose());
  *       primaryStage.setScene(new Scene(view, 500, 500));
  *       primaryStage.show();
  *
@@ -98,6 +101,9 @@ import static se.europeanspallationsource.xaos.core.util.DefaultExecutorCompleti
  *
  *   }
  * </pre>
+ * <p>
+ * <b>Note:</b> {@link #dispose()} should be called when the model is no more
+ * used (typically when the viewer using it is disposed).</p>
  *
  * @param <I> Type of the <i>external initiator</i> of the I/O operation.
  * @param <T> Type of the object returned by {@link TreeItem#getValue()}.
@@ -105,7 +111,7 @@ import static se.europeanspallationsource.xaos.core.util.DefaultExecutorCompleti
  * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.LiveDirsIO</a>
  */
 @SuppressWarnings( "ClassWithoutLogger" )
-public class TreeDirectoryMonitor<I, T> {
+public class TreeDirectoryMonitor<I, T> implements Disposable {
 
     /**
      * Creates a {@link TreeDirectoryMonitor} instance to be used from the
@@ -169,7 +175,7 @@ public class TreeDirectoryMonitor<I, T> {
 		Function<Path, T> injector,
 		Executor clientThreadExecutor
 	) throws IOException {
-        return new TreeDirectoryMonitor<I, T>(
+        return new TreeDirectoryMonitor<>(
 			externalInitiator,
 			projector,
 			injector,
@@ -177,12 +183,13 @@ public class TreeDirectoryMonitor<I, T> {
 		);
     }
 
-    private final Executor clientThreadExecutor;
     private final DirectoryWatcher directoryWatcher;
-	private final EventStream<Throwable> errors;
+	private final Disposable directoryWatcherEventsSubscription;
+	private boolean disposed = false;
+	private final Observable<Throwable> errors;
 	private final I externalInitiator;
     private final TreeDirectoryAsynchronousIO<I, T> io;
-	private final EventSource<Throwable> localErrors = new EventSource<>();
+	private final Subject<Throwable> localErrors;
 	private final TreeDirectoryModel<I, T> model;
 
 	/**
@@ -208,13 +215,15 @@ public class TreeDirectoryMonitor<I, T> {
 	) throws IOException {
 
 		this.externalInitiator = externalInitiator;
-        this.model = new TreeDirectoryModel<>(externalInitiator, projector, injector);
-        this.clientThreadExecutor = clientThreadExecutor;
-        this.directoryWatcher = DirectoryWatcher.build(clientThreadExecutor);
-        this.io = new TreeDirectoryAsynchronousIO<>(directoryWatcher, model, clientThreadExecutor);
+		this.model = new TreeDirectoryModel<>(externalInitiator, projector, injector);
+		this.directoryWatcher = DirectoryWatcher.build(clientThreadExecutor);
+		this.io = new TreeDirectoryAsynchronousIO<>(directoryWatcher, model, clientThreadExecutor);
 
-        this.directoryWatcher.events().subscribe(this::processDirectoryEvent);
-        this.errors = EventStreams.merge(directoryWatcher.errors(), model.errors(), localErrors);
+		Subject<Throwable> localErrorsSubject = PublishSubject.create();
+
+		this.localErrors = localErrorsSubject.toSerialized();
+		this.errors = Observable.merge(directoryWatcher.errors(), model.errors(), localErrors);
+		this.directoryWatcherEventsSubscription = this.directoryWatcher.events().subscribe(this::processDirectoryEvent);
 
     }
 
@@ -224,7 +233,25 @@ public class TreeDirectoryMonitor<I, T> {
 	 *
 	 * @param dir The directory to be watched and viewed.
 	 */
-	public void addTopLevelDirectory( Path dir ) {
+	public void addTopLevelDirectory( Path dir) {
+		addTopLevelDirectory(dir, null, null);
+	}
+
+	/**
+	 * Adds a directory to watch. The directory will be added to the directory
+	 * model and watched for changes.
+	 *
+	 * @param dir        The directory to be watched and viewed.
+	 * @param onCollapse A {@link Consumer} to be invoked when this item is
+	 *                   collapsed. Can be {@code null}.
+	 * @param onExpand   A {@link Consumer} to be invoked when this item is
+	 *                   expanded. Can be {@code null}.
+	 */
+	public void addTopLevelDirectory(
+		Path dir,
+		final Consumer<? super TreeDirectoryItems.DirectoryItem<T>> onCollapse,
+		final Consumer<? super TreeDirectoryItems.DirectoryItem<T>> onExpand
+	) {
 
 		if ( !dir.isAbsolute() ) {
 			throw new IllegalArgumentException(MessageFormat.format(
@@ -234,18 +261,22 @@ public class TreeDirectoryMonitor<I, T> {
 		}
 
 		try {
+			model.addTopLevelDirectory(
+				dir,
+				onCollapse,
+				dirItem -> {
 
-//	Not needed: already in refresh(dir).
-//			if ( !directoryWatcher.isWatched(dir) ) {
-//				directoryWatcher.watch(dir);
-//			}
+					watchDirectory(dirItem.getPath());
 
-			model.addTopLevelDirectory(dir);
-			refresh(dir);
-			
-//		} catch ( IOException e ) {
+					if ( onExpand != null ) {
+						onExpand.accept(dirItem);
+					}
+
+				}
+			);
+			model.sync(dir);
 		} catch ( Exception e ) {
-			localErrors.push(e);
+			localErrors.onNext(e);
 		}
 		
 	}
@@ -255,14 +286,18 @@ public class TreeDirectoryMonitor<I, T> {
 	 * In particular, stops the I/O thread (used for I/O operations as well as
 	 * directory watching).
 	 */
+	@Override
+	@SuppressWarnings( "ConvertToTryWithResources" )
 	public void dispose() {
-		directoryWatcher.shutdown();
+		directoryWatcherEventsSubscription.dispose();
+		localErrors.onComplete();
+		directoryWatcher.close();
 	}
 
 	/**
-	 * @return The {@link EventStream} of asynchronously thrown errors.
+	 * @return The {@link Observable} of asynchronously thrown errors.
 	 */
-	public EventStream<Throwable> errors() {
+	public Observable<Throwable> errors() {
 		return errors;
 	}
 
@@ -275,35 +310,16 @@ public class TreeDirectoryMonitor<I, T> {
 		return io;
 	}
 
+	@Override
+	public boolean isDisposed() {
+		return disposed;
+	}
+
     /**
      * @return The observable tree directory model.
      */
 	public TreeDirectoryModel<I, T> model() {
 		return model;
-	}
-
-	/**
-	 * Used to manually refresh the given subtree of the directory model.
-	 * <p>
-	 * Guarantees given by {@link WatchService} are weak and the behavior
-	 * may vary on different operating systems. It is possible that the
-	 * automatic synchronization is not 100% reliable. This method provides a
-	 * way to request synchronization in case any inconsistencies are
-	 * observed.</p>
-	 *
-	 * @param path The {@link Path} to be refreshed.
-	 * @return A {@link CompletionStage} completed exceptionally if an I/o
-	 *         error occurred.
-	 */
-	public CompletionStage<Void> refresh( Path path ) {
-		return wrap(directoryWatcher.tree(path), clientThreadExecutor)
-			.thenAcceptAsync(
-				tree -> {
-					model.sync(tree);
-					watchDirectory(tree);
-				},
-				clientThreadExecutor
-			);
 	}
 
 	@SuppressWarnings( "unchecked" )
@@ -316,7 +332,7 @@ public class TreeDirectoryMonitor<I, T> {
 			List<WatchEvent<?>> events = event.getEvents();
         
 			if ( events.stream().anyMatch(evt -> evt.kind() == OVERFLOW) ) {
-				refreshOrStreamError(dir);
+				model.sync(dir);
 			} else {
 				events.forEach(evt -> processEvent(dir, (WatchEvent<Path>) evt));
 			}
@@ -343,18 +359,14 @@ public class TreeDirectoryMonitor<I, T> {
 				model.updateModificationTime(child, timestamp, externalInitiator);
 
 			} catch ( IOException ex ) {
-				localErrors.push(ex);
+				localErrors.onNext(ex);
 			}
 		} else if ( kind == ENTRY_CREATE ) {
 			if ( Files.isDirectory(child) ) {
-
 				if ( model.containsPrefixOf(child) ) {
 					model.addDirectory(child, externalInitiator);
-					directoryWatcher.watchOrStreamError(child);
+					model.sync(child);
 				}
-
-				refreshOrStreamError(child);
-
 			} else {
 				try {
 
@@ -363,7 +375,7 @@ public class TreeDirectoryMonitor<I, T> {
 					model.addFile(child, timestamp, externalInitiator);
 
 				} catch ( IOException e ) {
-					localErrors.push(e);
+					localErrors.onNext(e);
 				}
 			}
 		} else if ( kind == ENTRY_DELETE ) {
@@ -374,28 +386,14 @@ public class TreeDirectoryMonitor<I, T> {
 
 	}
 
-	private void refreshOrStreamError( Path path ) {
-		refresh(path).whenComplete(( nothing, ex ) -> {
-			if ( ex != null ) {
-				localErrors.push(ex);
-			}
-		});
-	}
-
-	private void watchDirectory( PathElement tree ) {
-
-		if ( tree.isDirectory() ) {
-
-			Path path = tree.getPath();
-			
+	private void watchDirectory( Path path ) {
+		if ( Files.isDirectory(path) ) {
 			if ( !directoryWatcher.isWatched(path) ) {
 				directoryWatcher.watchOrStreamError(path);
 			}
-
-			tree.getChildren().forEach(child -> watchDirectory(child));
-
+		} else {
+			localErrors.onNext(new NotDirectoryException(path.toString()));
 		}
-
 	}
 
 }

@@ -50,6 +50,12 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
  * Would result in a resource file {@code META-INF/services/my.module.spi.SomeService}
  * containing the single line of text: {@code my.module.MyService}.
  * </p>
+ * <p>
+ * <b>Note:</b> when using {@link ServiceProvider} the {@link #service()} class
+ * must be listed in the {@code module-info} class inside a <b>uses</b> statement.
+ * Moreover a <b>provides … with</b> statement must also be added to declare the
+ * annotated class as provider for the parameter class.
+ * </p>
  *
  * @author claudio.rosati@esss.se
  * @see <a href="http://bits.netbeans.org/8.1/javadoc/org-openide-util-lookup/overview-summary.html">NetBeans Lookup API</a>

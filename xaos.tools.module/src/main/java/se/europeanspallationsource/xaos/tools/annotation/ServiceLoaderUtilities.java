@@ -25,6 +25,11 @@ import org.apache.commons.collections4.IteratorUtils;
 
 /**
  * Provides few more methods to {@link ServiceLoader}.
+ * <p>
+ * <b>Note:</b> when using {@link ServiceLoaderUtilities} the service provider
+ * interface type must be listed in the {@code module-info} class inside a
+ * <b>uses</b> statement.
+ * </p>
  *
  * @author claudio.rosati@esss.se
  */
