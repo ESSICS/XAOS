@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+	<action>
+		<actionName>CUSTOM-Resolve Module Dependencies</actionName>
+		<displayName>Resolve Module Dependencies</displayName>
+		<goals>
+			<goal>dependency:resolve</goal>
+		</goals>
+	</action>
+	<action>
+		<actionName>CUSTOM-Resolve POM and Plugin Dependencies</actionName>
+		<displayName>Resolve POM and Plugin Dependencies</displayName>
+		<goals>
+			<goal>versions:display-dependency-updates</goal>
+		</goals>
+	</action>
+	<action>
+		<actionName>CUSTOM-Skip Tests</actionName>
+		<displayName>Skip Tests</displayName>
+		<goals>
+			<goal>clean</goal>
+			<goal>verify</goal>
+		</goals>
+		<properties>
+			<skipTests>true</skipTests>
+		</properties>
+	</action>
+	<action>
+		<actionName>test</actionName>
+		<packagings>
+			<packaging>*</packaging>
+		</packagings>
+		<goals>
+			<goal>test</goal>
+		</goals>
+		<activatedProfiles>
+			<activatedProfile>verbose.tests</activatedProfile>
+		</activatedProfiles>
+	</action>
+	<action>
+		<actionName>test.single</actionName>
+		<packagings>
+			<packaging>*</packaging>
+		</packagings>
+		<goals>
+			<goal>test-compile</goal>
+			<goal>surefire:test</goal>
+		</goals>
+		<properties>
+			<test>${packageClassName}</test>
+		</properties>
+		<activatedProfiles>
+			<activatedProfile>verbose.tests</activatedProfile>
+		</activatedProfiles>
+	</action>
+	<action>
+		<actionName>debug.test.single</actionName>
+		<packagings>
+			<packaging>*</packaging>
+		</packagings>
+		<goals>
+			<goal>test-compile</goal>
+			<goal>surefire:test</goal>
+		</goals>
+		<properties>
+			<test>${packageClassName}</test>
+			<forkMode>once</forkMode>
+			<maven.surefire.debug>-agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address}</maven.surefire.debug>
+			<jpda.listen>true</jpda.listen>
+		</properties>
+		<activatedProfiles>
+			<activatedProfile>verbose.tests</activatedProfile>
+		</activatedProfiles>
+	</action>
+</actions>

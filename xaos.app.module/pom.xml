@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+        <groupId>se.europeanspallationsource</groupId>
+        <artifactId>xaos</artifactId>
+        <version>0.3.0-SNAPSHOT</version>
+    </parent>
+
+	<artifactId>xaos.app</artifactId>
+    <packaging>jar</packaging>
+    <name>XAOS - App</name>
+	<description>
+		JavaFX-based portion of the XAOS framework, containing the JavaFX-based
+		application framework.
+	</description>
+    <url>https://github.com/ESSICS/XAOS</url>
+
+	<build>
+		<plugins>
+			<!-- ALPHABETICALLY SORTED BY groupId:artifactId -->
+			<plugin>
+				<groupId>com.github.ferstl</groupId>
+				<artifactId>depgraph-maven-plugin</artifactId>
+				<version>3.2.2</version>
+				<configuration>
+					<customStyleConfiguration>${project.basedir}/../doc/maven-dependencies.json</customStyleConfiguration>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+    <dependencies>
+
+        <!-- XAOS - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>xaos.tools</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>xaos.core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>xaos.ui</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+	</dependencies>
+
+</project>

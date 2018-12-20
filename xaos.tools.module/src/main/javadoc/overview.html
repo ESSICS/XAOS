@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<!--
+Copyright 2018 European Spallation Source ERIC.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html>
+
+    <head>
+        <title>XAOS Tools API Specification</title>
+    </head>
+    
+    <body>
+
+        <p>
+            XAOS (ΧΑΟΣ – the primordial state of existence) is a JavaFX 
+			application framework.
+        </p>
+        <p>
+            The framework was initially conceived to create accelerator physics
+            applications based on <a href="https://github.com/openxal/openxal" target="_blank"><em>Open XAL</em></a>,
+            an open source development environment used for creating accelerator
+            physics applications, scripts and services.
+        </p>
+		<p>
+			The framework is compose by a series of modules: the <i>XAOS Tools</i>
+			module provides tools used by the other modules (e.g. annotation
+			processors).
+		</p>
+        <p>
+            The project is hosted in the <a href="https://github.com/ESSICS/XAOS" target="_blank"><em>XAOS</em></a>
+            GitHub repository.
+        </p>
+
+		<h2>Tools and Utilities</h2>
+
+		<h3>Service Providers</h3>
+
+		<p>
+			The {@link se.europeanspallationsource.xaos.tools.annotation.ServiceProvider}
+			annotation will simplify providing service implementations, taking care of
+			publishing them in the proper file inside the <code>META-INF/service</code>
+			folder.
+		</p>
+
+<pre>
+  package my.module;
+  import my.module.spi.SomeService;
+  import se.europeanspallationsource.xaos.tools.annotation.ServiceProvider;
+
+  &#64;ServiceProvider(service=SomeService.class)
+  public class MyService implements SomeService {
+    ...
+  }
+</pre>
+
+		<p>
+			Moreover, the {@link se.europeanspallationsource.xaos.tools.annotation.ServiceLoaderUtilities}
+			class will complement the {@link java.util.ServiceLoader} one with
+			few more methods.
+		</p>
+		<p>
+			<b>Note:</b> when using {@link se.europeanspallationsource.xaos.tools.annotation.ServiceProvider}
+			or {@link se.europeanspallationsource.xaos.tools.annotation.ServiceProviders}
+			the {@code service} class must be listed in the {@code module-info}
+			class inside a <b>uses</b> statement. Moreover a <b>provides … with</b>
+			statement must also be added to declare the annotated class as
+			provider for the parameter class.
+		</p>
+		<p>
+			<b>Note:</b> when using {@link se.europeanspallationsource.xaos.tools.annotation.ServiceLoaderUtilities}
+			the service provider interface type must be listed in the
+			{@code module-info} class inside a <b>uses</b> statement.
+		</p>
+
+		<h3>Java Language Tools</h3>
+
+		<p>
+			The {@link se.europeanspallationsource.xaos.tools.lang.Reflections}
+			class provides few methods to handling fields and method access using
+			the Java Reflection API.
+		</p>
+		<p>
+			<b>Note:</b> when using {@link se.europeanspallationsource.xaos.tools.lang.Reflections}
+			it is necessary to open the module/package being reflected to
+			<code>xaos.tools</code>. This can be achieved with the following flag
+			being added to the command line launching the application:
+		</p>
+		
+<pre>
+  --add-opens module/package=xaos.tools
+</pre>
+
+    </body>
+
+</html>
