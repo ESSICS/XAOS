@@ -1,7 +1,6 @@
-# ![logo](https://github.com/ESSICS/XAOS/blob/feature/XAOS-11/doc/logo-small.png) XAOS – App
-<!-- # ![logo](https://github.com/ESSICS/XAOS/blob/master/doc/logo-small.png) XAOS –App -->
+# ![logo](https://github.com/ESSICS/XAOS/blob/master/doc/logo-small.png) XAOS –App
 
-<!--[![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/se.europeanspallationsource/xaos.app.svg)](https://oss.sonatype.org/content/repositories/snapshots/se/europeanspallationsource/xaos.app/)-->
+<!-- [![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/se.europeanspallationsource/xaos.app.svg)](https://oss.sonatype.org/content/repositories/snapshots/se/europeanspallationsource/xaos.app/) -->
 [![Maven Central](https://img.shields.io/maven-central/v/se.europeanspallationsource/xaos.app.svg)](https://repo1.maven.org/maven2/se/europeanspallationsource/xaos.app)
 [![javadoc](https://www.javadoc.io/badge/se.europeanspallationsource/xaos.app.svg)](https://www.javadoc.io/doc/se.europeanspallationsource/xaos.app)
 [![Apache License](https://img.shields.io/badge/license-Apache%20License%202.0-yellow.svg)](http://www.apache.org/licenses/LICENSE-2.0)
@@ -110,8 +109,7 @@ be chosen.
 
 Here the Maven dependencies of `xaos.app` module:
 
-![xaos.app Maven dependencis](https://github.com/ESSICS/XAOS/blob/feature/XAOS-11/xaos.app.module/doc/maven-dependencies.png)
-<!--![xaos.app dependencis](https://github.com/ESSICS/XAOS/blob/master/xaos.app.module/doc/maven-dependencies.png)-->
+![xaos.app dependencis](https://github.com/ESSICS/XAOS/blob/master/xaos.app.module/doc/maven-dependencies.png)
 
 
 ### Java `module-info`

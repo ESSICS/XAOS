@@ -1,7 +1,6 @@
-# ![logo](https://github.com/ESSICS/XAOS/blob/feature/XAOS-11/doc/logo-small.png) XAOS – UI
-<!-- # ![logo](https://github.com/ESSICS/XAOS/blob/master/doc/logo-small.png) XAOS – UI -->
+# ![logo](https://github.com/ESSICS/XAOS/blob/master/doc/logo-small.png) XAOS – UI
 
-<!--[![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/se.europeanspallationsource/xaos.ui.svg)](https://oss.sonatype.org/content/repositories/snapshots/se/europeanspallationsource/xaos.ui/)-->
+<!-- [![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/se.europeanspallationsource/xaos.ui.svg)](https://oss.sonatype.org/content/repositories/snapshots/se/europeanspallationsource/xaos.ui/) -->
 [![Maven Central](https://img.shields.io/maven-central/v/se.europeanspallationsource/xaos.ui.svg)](https://repo1.maven.org/maven2/se/europeanspallationsource/xaos.ui)
 [![javadoc](https://www.javadoc.io/badge/se.europeanspallationsource/xaos.ui.svg)](https://www.javadoc.io/doc/se.europeanspallationsource/xaos.ui)
 [![Apache License](https://img.shields.io/badge/license-Apache%20License%202.0-yellow.svg)](http://www.apache.org/licenses/LICENSE-2.0)
@@ -110,8 +109,7 @@ _TreeItems_ provides methods to manipulate trees made of TreeItems.
 
 Here the Maven dependencies of `xaos.ui` module:
 
-![xaos.ui Maven dependencis](https://github.com/ESSICS/XAOS/blob/feature/XAOS-11/xaos.ui.module/doc/maven-dependencies.png)
-<!--![xaos.ui dependencis](https://github.com/ESSICS/XAOS/blob/master/xaos.ui.module/doc/maven-dependencies.png)-->
+![xaos.ui dependencis](https://github.com/ESSICS/XAOS/blob/master/xaos.ui.module/doc/maven-dependencies.png)
 
 
 ### Java `module-info`

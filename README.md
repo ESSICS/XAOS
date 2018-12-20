@@ -1,8 +1,7 @@
-# ![logo](https://github.com/ESSICS/XAOS/blob/feature/XAOS-11/doc/logo-small.png) XAOS (ΧΑΟΣ – the primordial state of existence)
-<!-- # ![logo](https://github.com/ESSICS/XAOS/blob/master/doc/logo-small.png) XAOS (ΧΑΟΣ – the primordial state of existence) -->
+# ![logo](https://github.com/ESSICS/XAOS/blob/master/doc/logo-small.png) XAOS (ΧΑΟΣ – the primordial state of existence)
 
-[![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/se.europeanspallationsource/xaos.svg)](https://oss.sonatype.org/content/repositories/snapshots/se/europeanspallationsource/xaos/)
-<!--[![Maven Central](https://img.shields.io/maven-central/v/se.europeanspallationsource/xaos.svg)](https://repo1.maven.org/maven2/se/europeanspallationsource/xaos)-->
+<!-- [![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/se.europeanspallationsource/xaos.svg)](https://oss.sonatype.org/content/repositories/snapshots/se/europeanspallationsource/xaos/) -->
+[![Maven Central](https://img.shields.io/maven-central/v/se.europeanspallationsource/xaos.svg)](https://repo1.maven.org/maven2/se/europeanspallationsource/xaos)
 [![javadoc](https://www.javadoc.io/badge/se.europeanspallationsource/xaos.svg)](https://www.javadoc.io/doc/se.europeanspallationsource/xaos)
 [![Apache License](https://img.shields.io/badge/license-Apache%20License%202.0-yellow.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
@@ -19,30 +18,36 @@ Java 9. The Maven project is also organized in modules maintaining a 1-to-1
 mapping with the JPMS ones. A Maven module's name is made up by the JPMS module
 one plus the `.module` suffix.
 
-### [xaos.app](https://github.com/ESSICS/XAOS/tree/feature/XAOS-11/xaos.app.module)
-<!-- ### [xaos.app](https://github.com/ESSICS/XAOS/tree/master/xaos.app.module) -->
+### [xaos.app](https://github.com/ESSICS/XAOS/tree/master/xaos.app.module)
 
 The _XAOS App_ module (`xaos.tools`) provides a JavaFX-based application
 framework for building UI-based applications with menus, toolbars, etc.
 
-### [xaos.core](https://github.com/ESSICS/XAOS/tree/feature/XAOS-11/xaos.core.module)
-<!-- ### [xaos.core](https://github.com/ESSICS/XAOS/tree/master/xaos.core.module) -->
+### [xaos.core](https://github.com/ESSICS/XAOS/tree/master/xaos.core.module)
 
-The _XAOS Core_ module (`xaos.core`) provides provides the non-UI classes part
-of the framework. Any non-graphical application can use this module.
+The _XAOS Core_ module (`xaos.core`) provides the non-UI classes part of the
+framework. Any non-graphical application can use this module.
 
-### [xaos.tools](https://github.com/ESSICS/XAOS/tree/feature/XAOS-11/xaos.tools.module)
-<!-- ### [xaos.tools](https://github.com/ESSICS/XAOS/tree/master/xaos.tools.module) -->
+### [xaos.tools](https://github.com/ESSICS/XAOS/tree/master/xaos.tools.module)
 
 The _XAOS Tools_ module (`xaos.tool`) provides tools and utilities used by the
 other XAOS modules (e.g. annotation processors) to simplify some programming
 tasks.
 
-### [xaos.ui](https://github.com/ESSICS/XAOS/tree/feature/XAOS-11/xaos.ui.module)
-<!-- ### [xaos.ui](https://github.com/ESSICS/XAOS/tree/master/xaos.ui.module) -->
+### [xaos.ui](https://github.com/ESSICS/XAOS/tree/master/xaos.ui.module)
 
 The _XAOS UI_ module (`xaos.ui`) provides JavaFX-based controls and tools
 suitable for other projects too.
+
+### [xaos.ui.gauge](https://github.com/ESSICS/XAOS/tree/master/xaos.ui.gauge.module)
+
+The _XAOS Gauge_ module (`xaos.ui.gauge`) provides the JavaFX-based kit of
+controls and tools for creating gauges.
+
+### [xaos.ui.plot](https://github.com/ESSICS/XAOS/tree/master/xaos.ui.plot.module)
+
+The _XAOS Plot_ module (`xaos.ui.plot`) provides the JavaFX-based controls and
+tools for plotting data into a graph.
 
 ### Test Modules
 
@@ -50,8 +55,7 @@ From the introduction of JPMS in Java 9, some tests cannot anymore performed
 from inside the module to be tested. for this reasons there are some specific
 JPMS/Maven modules built to test others:
 
-* [xaos.tests.tools](https://github.com/ESSICS/XAOS/tree/feature/XAOS-11/xaos.tests.tools.module).
-<!-- * [xaos.tests.tools](https://github.com/ESSICS/XAOS/tree/master/xaos.tests.tools.module). -->
+* [xaos.tests.tools](https://github.com/ESSICS/XAOS/tree/master/xaos.tests.tools.module).
 
 ## Using XAOS
 
@@ -75,8 +79,7 @@ file of the module you need for more examples and information.
 
 Here the Maven dependencies of `xaos` project:
 
-![xaos Maven dependencis](https://github.com/ESSICS/XAOS/blob/feature/XAOS-11/doc/maven-dependencies.png)
-<!--![xaos dependencis](https://github.com/ESSICS/XAOS/blob/master/doc/maven-dependencies.png)-->
+![xaos dependencis](https://github.com/ESSICS/XAOS/blob/master/doc/parent-maven-dependencies.png)
 
 
 ### Java `module-info`

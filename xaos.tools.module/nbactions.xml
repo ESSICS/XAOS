@@ -8,7 +8,7 @@
 		</goals>
 	</action>
 	<action>
-		<actionName>CUSTOM-Resolve PON and Plugin Dependencies</actionName>
+		<actionName>CUSTOM-Resolve POM and Plugin Dependencies</actionName>
 		<displayName>Resolve POM and Plugin Dependencies</displayName>
 		<goals>
 			<goal>versions:display-dependency-updates</goal>

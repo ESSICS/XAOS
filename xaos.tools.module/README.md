@@ -1,8 +1,7 @@
-# ![logo](https://github.com/ESSICS/XAOS/blob/feature/XAOS-11/doc/logo-small.png) XAOS – Tools
-<!-- # ![logo](https://github.com/ESSICS/XAOS/blob/master/doc/logo-small.png) XAOS – Tools -->
+# ![logo](https://github.com/ESSICS/XAOS/blob/master/doc/logo-small.png) XAOS – Tools
 
-[![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/se.europeanspallationsource/xaos.tools.svg)](https://oss.sonatype.org/content/repositories/snapshots/se/europeanspallationsource/xaos.tools/)
-<!--[![Maven Central](https://img.shields.io/maven-central/v/se.europeanspallationsource/xaos.tools.svg)](https://repo1.maven.org/maven2/se/europeanspallationsource/xaos.tools)-->
+<!-- [![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/se.europeanspallationsource/xaos.tools.svg)](https://oss.sonatype.org/content/repositories/snapshots/se/europeanspallationsource/xaos.tools/) -->
+[![Maven Central](https://img.shields.io/maven-central/v/se.europeanspallationsource/xaos.tools.svg)](https://repo1.maven.org/maven2/se/europeanspallationsource/xaos.tools)
 [![javadoc](https://www.javadoc.io/badge/se.europeanspallationsource/xaos.tools.svg)](https://www.javadoc.io/doc/se.europeanspallationsource/xaos.tools)
 [![Apache License](https://img.shields.io/badge/license-Apache%20License%202.0-yellow.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
@@ -70,8 +69,7 @@ following flag being added to the command line launching the application:
 
 Here the Maven dependencies of `xaos.tools` module:
 
-![xaos.tools Maven dependencis](https://github.com/ESSICS/XAOS/blob/feature/XAOS-11/xaos.tools.module/doc/maven-dependencies.png)
-<!--![xaos.tools dependencis](https://github.com/ESSICS/XAOS/blob/master/xaos.tools.module/doc/maven-dependencies.png)-->
+![xaos.tools dependencis](https://github.com/ESSICS/XAOS/blob/master/xaos.tools.module/doc/maven-dependencies.png)
 
 
 ### Java `module-info`

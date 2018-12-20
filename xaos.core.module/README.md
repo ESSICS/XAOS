@@ -1,13 +1,12 @@
-# ![logo](https://github.com/ESSICS/XAOS/blob/feature/XAOS-11/doc/logo-small.png) XAOS – Core
-<!-- # ![logo](https://github.com/ESSICS/XAOS/blob/master/doc/logo-small.png) XAOS – Core -->
+# ![logo](https://github.com/ESSICS/XAOS/blob/master/doc/logo-small.png) XAOS – Core
 
-<!--[![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/se.europeanspallationsource/xaos.core.svg)](https://oss.sonatype.org/content/repositories/snapshots/se/europeanspallationsource/xaos.core/)-->
+<!-- [![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/se.europeanspallationsource/xaos.core.svg)](https://oss.sonatype.org/content/repositories/snapshots/se/europeanspallationsource/xaos.core/) -->
 [![Maven Central](https://img.shields.io/maven-central/v/se.europeanspallationsource/xaos.core.svg)](https://repo1.maven.org/maven2/se/europeanspallationsource/xaos.core)
 [![javadoc](https://www.javadoc.io/badge/se.europeanspallationsource/xaos.core.svg)](https://www.javadoc.io/doc/se.europeanspallationsource/xaos.core)
 [![Apache License](https://img.shields.io/badge/license-Apache%20License%202.0-yellow.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
-The _XAOS Core_ module (`xaos.core`) provides provides the non-UI classes part
-of the framework. Any non-graphical application can use this module.
+The _XAOS Core_ module (`xaos.core`) provides the non-UI classes part of the
+framework. Any non-graphical application can use this module.
 
 
 ## IO Utilities
@@ -65,8 +64,7 @@ watcher.watch(root);
 
 Here the Maven dependencies of `xaos.core` module:
 
-![xaos.core Maven dependencis](https://github.com/ESSICS/XAOS/blob/feature/XAOS-11/xaos.core.module/doc/maven-dependencies.png)
-<!--![xaos.core dependencis](https://github.com/ESSICS/XAOS/blob/master/xaos.core.module/doc/maven-dependencies.png)-->
+![xaos.core dependencis](https://github.com/ESSICS/XAOS/blob/master/xaos.core.module/doc/maven-dependencies.png)
 
 
 ### Java `module-info`
