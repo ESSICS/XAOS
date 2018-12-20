@@ -13,7 +13,8 @@
     <packaging>jar</packaging>
     <name>XAOS - Gauge</name>
 	<description>
-		JavaFX-based kit of controls and tools for creating gauges.
+		JavaFX-based kit of controls and tools for building gauges, meters,
+		knobs, etc.
 	</description>
     <url>https://github.com/ESSICS/XAOS</url>
 

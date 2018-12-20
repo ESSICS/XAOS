@@ -6,7 +6,7 @@
 [![Apache License](https://img.shields.io/badge/license-Apache%20License%202.0-yellow.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
 The _XAOS Gauge_ module (`xaos.ui.gauge`) provides the JavaFX-based kit of
-controls and tools for creating gauges.
+controls and tools for building gauges, meters, knobs, etc.
 
 
 ## Using XAOS Gauge
