@@ -16,7 +16,13 @@
 package se.europeanspallationsource.xaos.tests.tools;
 
 
+import java.util.ServiceLoader;
+import java.util.ServiceLoader.Provider;
+import java.util.stream.Stream;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import se.europeanspallationsource.xaos.tools.annotation.ServiceLoaderUtilities;
+
 
 
 /**
@@ -29,23 +35,25 @@ public class ServiceProviderProcessorTest {
 	public void test() {
 	}
 
-//	@BeforeClass
-//	public static void setUpClass() {
-//		System.out.println("---- ServiceProviderProcessorTest ------------------------------");
-//	}
-//
-//	@Test
-//	public void testBasicUsage() {
-//
-//		System.out.println("  Basic Usage");
-//
+	@BeforeClass
+	public static void setUpClass() {
+		System.out.println("---- ServiceProviderProcessorTest ------------------------------");
+	}
+
+	@Test
+	public void testBasicUsage() {
+
+		System.out.println("  Basic Usage");
+
+		Stream<Provider<BasicUsageInterface>> stream = ServiceLoaderUtilities.stream(ServiceLoader.load(BasicUsageInterface.class));
+		
 //		assertEquals(
 //			Collections.singletonList(BasicUsageImplementation.class),
 //			ServiceLoaderUtilities.classesOf(BasicUsageInterface.class)
 //		);
-//
-//	}
-//
+
+	}
+
 //	@Test
 //    public void testMultipleRegistrations() throws Exception {
 //

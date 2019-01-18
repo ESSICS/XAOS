@@ -21,7 +21,6 @@
 module xaos.tools {
 
 	requires java.compiler;
-	requires org.apache.commons.collections4;
 
 	exports se.europeanspallationsource.xaos.tools.annotation;
 	exports se.europeanspallationsource.xaos.tools.lang;

@@ -19,7 +19,7 @@ package se.europeanspallationsource.xaos.tests.tools;
 /**
  * @author claudio.rosati@esss.se
  */
-@SuppressWarnings( "ClassMayBeInterface" )
+@SuppressWarnings( "MarkerInterface" )
 public interface OrderedInterface {
 
 }

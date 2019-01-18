@@ -58,12 +58,14 @@
     <dependencies>
 
 		<!-- Apache - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<!--
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
             <version>4.2</version>
             <scope>compile</scope>
         </dependency>
+-->
 
 	</dependencies>
 

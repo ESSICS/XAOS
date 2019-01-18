@@ -21,7 +21,6 @@
 module xaos.tests {
 
 	requires xaos.tools;
-	requires org.apache.commons.collections4;
 
 	uses se.europeanspallationsource.xaos.tests.tools.BasicUsageInterface;
 	uses se.europeanspallationsource.xaos.tests.tools.MultipleRegistrationsInterface1;
@@ -38,5 +37,7 @@ module xaos.tests {
 		with se.europeanspallationsource.xaos.tests.tools.OrderedImpl1,
 			 se.europeanspallationsource.xaos.tests.tools.OrderedImpl2,
 			 se.europeanspallationsource.xaos.tests.tools.OrderedImpl3;
+
+	opens se.europeanspallationsource.xaos.tests.tools to xaos.tools;
 
 }
