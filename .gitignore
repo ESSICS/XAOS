@@ -15,3 +15,5 @@
 /xaos.ui.gauge.module/target/
 /xaos.ui.plot.module/nbproject/
 /xaos.ui.plot.module/target/
+/xaos.ui.plot.module copy/target/
+/xaos.demos.module/target/

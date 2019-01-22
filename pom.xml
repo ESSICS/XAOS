@@ -58,6 +58,7 @@
 		<module>xaos.ui.gauge.module</module>
 		<module>xaos.ui.plot.module</module>
 		<module>xaos.app.module</module>
+		<module>xaos.demos.module</module>
 	</modules>
 
 	<build>
