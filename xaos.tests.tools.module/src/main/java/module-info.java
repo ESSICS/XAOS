@@ -36,7 +36,8 @@ module xaos.tests {
 	provides se.europeanspallationsource.xaos.tests.tools.OrderedInterface
 		with se.europeanspallationsource.xaos.tests.tools.OrderedImpl1,
 			 se.europeanspallationsource.xaos.tests.tools.OrderedImpl2,
-			 se.europeanspallationsource.xaos.tests.tools.OrderedImpl3;
+			 se.europeanspallationsource.xaos.tests.tools.OrderedImpl3,
+			 se.europeanspallationsource.xaos.tests.tools.OrderedImpl4;
 
 	opens se.europeanspallationsource.xaos.tests.tools to xaos.tools;
 

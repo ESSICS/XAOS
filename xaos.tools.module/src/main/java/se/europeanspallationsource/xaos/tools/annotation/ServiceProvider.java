@@ -69,11 +69,12 @@ public @interface ServiceProvider {
     /**
      * An optional number determining the load order of this service relative to
 	 * others. Lower-numbered services are returned in the lookup result first.
-     * Services with no specified position are returned last (ordered by name).
+     * Services with no specified position are returned last (ordered by name),
+	 * followed by services registered using the standard Java mechanism.
 	 *
 	 * @return The load order of this service relative to others.
      */
-    int order() default Integer.MAX_VALUE;
+    int order() default Integer.MAX_VALUE - 1;
 
 	/**
 	 * The interface (or abstract class) to register this implementation under.
