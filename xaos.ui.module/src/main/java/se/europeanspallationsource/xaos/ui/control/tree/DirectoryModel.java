@@ -29,7 +29,7 @@ import javafx.scene.control.TreeView;
  * @param <I> Type of the initiator of changes to the model.
  * @param <T> Type of the object returned by {@link TreeItem#getValue()}.
  * @author claudio.rosati@esss.se
- * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.DirectoryModel</a>
+ * @see <a href="https://github.com/TomasMikula/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.DirectoryModel</a>
  */
 public interface DirectoryModel<I, T> extends Disposable {
 

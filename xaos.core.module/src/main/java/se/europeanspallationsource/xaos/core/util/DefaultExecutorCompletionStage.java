@@ -47,7 +47,7 @@ import java.util.function.Function;
  * @author claudio.rosati@esss.se
  * @param <T> The type passed to the consumers of this {@link CompletionStage}
  *            methods.
- * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.CompletionStageWithDefaultExecutor</a>
+ * @see <a href="https://github.com/TomasMikula/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.CompletionStageWithDefaultExecutor</a>
  */
 @SuppressWarnings( "ClassWithoutLogger" )
 public class DefaultExecutorCompletionStage<T> implements CompletionStage<T> {

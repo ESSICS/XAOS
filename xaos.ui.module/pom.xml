@@ -18,6 +18,12 @@
 	</description>
 	<url>https://github.com/ESSICS/XAOS</url>
 
+	<properties>
+		<ikonli.version>11.1.0</ikonli.version>
+		<javafx.version>11.0.2</javafx.version>
+		<testfx.version>4.0.15-alpha</testfx.version>
+	</properties>
+
 	<build>
 		<plugins>
 			<!-- ALPHABETICALLY SORTED BY groupId:artifactId -->
@@ -27,6 +33,21 @@
 				<version>3.2.2</version>
 				<configuration>
 					<customStyleConfiguration>${project.basedir}/../doc/maven-dependencies.json</customStyleConfiguration>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.0</version>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>${project.groupId}</groupId>
+							<artifactId>xaos.tools</artifactId>
+							<version>${project.version}</version>
+						</path>
+						<!-- ... more ... -->
+					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -48,37 +69,37 @@
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-base</artifactId>
-			<version>11.0.1</version>
+			<version>${javafx.version}</version>
             <scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-controls</artifactId>
-			<version>11.0.1</version>
+			<version>${javafx.version}</version>
             <scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-graphics</artifactId>
-			<version>11.0.1</version>
+			<version>${javafx.version}</version>
             <scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-media</artifactId>
-			<version>11.0.1</version>
+			<version>${javafx.version}</version>
             <scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-swing</artifactId>
-			<version>11.0.1</version>
+			<version>${javafx.version}</version>
             <scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-web</artifactId>
-			<version>11.0.1</version>
+			<version>${javafx.version}</version>
             <scope>compile</scope>
 		</dependency>
 
@@ -100,19 +121,19 @@
 		<dependency>
 			<groupId>org.kordamp.ikonli</groupId>
 			<artifactId>ikonli-core</artifactId>
-			<version>11.0.2</version>
+			<version>${ikonli.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.kordamp.ikonli</groupId>
 			<artifactId>ikonli-javafx</artifactId>
-			<version>11.0.2</version>
+			<version>${ikonli.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.kordamp.ikonli</groupId>
 			<artifactId>ikonli-fontawesome-pack</artifactId>
-			<version>11.0.2</version>
+			<version>${ikonli.version}</version>
 			<scope>compile</scope>
 		</dependency>
 
@@ -132,19 +153,19 @@
 		<dependency>
 			<groupId>org.testfx</groupId>
 			<artifactId>testfx-core</artifactId>
-			<version>4.0.15-alpha</version>
+			<version>${testfx.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.testfx</groupId>
 			<artifactId>testfx-junit</artifactId>
-			<version>4.0.15-alpha</version>
+			<version>${testfx.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>io.github.classgraph</groupId>
 			<artifactId>classgraph</artifactId>
-			<version>4.6.10</version>
+			<version>4.6.18</version>
 			<scope>test</scope>
 		</dependency>
 

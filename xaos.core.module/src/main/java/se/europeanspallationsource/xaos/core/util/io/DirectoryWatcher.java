@@ -83,7 +83,7 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
  *   watcher.watch(root);</pre>
  *
  * @author claudio.rosati@esss.se
- * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.DirWatcher</a>
+ * @see <a href="https://github.com/TomasMikula/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.DirWatcher</a>
  */
 public class DirectoryWatcher implements AutoCloseable {
 
