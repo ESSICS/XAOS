@@ -40,8 +40,6 @@
 
 	<properties>
 		<java.release>11</java.release>
-		<java.version>11.0.2</java.version>
-		<javafx.version>11.0.2</javafx.version>
 		<maven.compiler.source>${java.release}</maven.compiler.source>
 		<maven.compiler.target>${java.release}</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -212,7 +210,7 @@
 				<configuration>
 					<additionalOptions>--javafx</additionalOptions>
 					<detectJavaApiLink>true</detectJavaApiLink>
-					<detectLinks>true</detectLinks>
+					<detectLinks>false</detectLinks>
 					<detectOfflineLinks>true</detectOfflineLinks>
 					<docfilessubdirs>true</docfilessubdirs>
 					<isOffline>false</isOffline>

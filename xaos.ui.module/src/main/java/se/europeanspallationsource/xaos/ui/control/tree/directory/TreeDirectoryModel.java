@@ -62,7 +62,7 @@ import static se.europeanspallationsource.xaos.ui.control.Icons.DEFAULT_SIZE;
  * @param <I> Type of the initiator of changes to the model.
  * @param <T> Type of the object returned by {@link TreeItem#getValue()}.
  * @author claudio.rosati@esss.se
- * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.LiveDirsModel</a>
+ * @see <a href="https://github.com/TomasMikula/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.LiveDirsModel</a>
  */
 @SuppressWarnings( "ClassWithoutLogger" )
 public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {

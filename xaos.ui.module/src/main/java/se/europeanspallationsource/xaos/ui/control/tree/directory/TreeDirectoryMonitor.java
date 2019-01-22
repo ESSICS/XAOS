@@ -108,7 +108,7 @@ import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
  * @param <I> Type of the <i>external initiator</i> of the I/O operation.
  * @param <T> Type of the object returned by {@link TreeItem#getValue()}.
  * @author claudio.rosati@esss.se
- * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.LiveDirsIO</a>
+ * @see <a href="https://github.com/TomasMikula/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.LiveDirsIO</a>
  */
 @SuppressWarnings( "ClassWithoutLogger" )
 public class TreeDirectoryMonitor<I, T> implements Disposable {
