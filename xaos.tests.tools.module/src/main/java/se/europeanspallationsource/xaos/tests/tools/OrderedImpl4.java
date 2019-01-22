@@ -16,10 +16,11 @@
  */
 package se.europeanspallationsource.xaos.tests.tools;
 
+
 /**
  * @author claudio.rosati@esss.se
  */
-@SuppressWarnings( "MarkerInterface" )
-public interface OrderedInterface {
+@SuppressWarnings( "ClassMayBeInterface" )
+public class OrderedImpl4 implements OrderedInterface {
 
 }

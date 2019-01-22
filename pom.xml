@@ -210,7 +210,7 @@
 				<configuration>
 					<additionalOptions>--javafx</additionalOptions>
 					<detectJavaApiLink>true</detectJavaApiLink>
-					<detectLinks>true</detectLinks>
+					<detectLinks>false</detectLinks>
 					<detectOfflineLinks>true</detectOfflineLinks>
 					<docfilessubdirs>true</docfilessubdirs>
 					<isOffline>false</isOffline>

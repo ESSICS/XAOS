@@ -47,7 +47,7 @@ import static java.nio.file.attribute.FileTime.from;
  * Containing the classes used by {@link TreeDirectoryModel}.
  *
  * @author claudio.rosati@esss.se
- * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.PathItem</a>
+ * @see <a href="https://github.com/TomasMikula/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.PathItem</a>
  */
 @SuppressWarnings( "ClassWithoutLogger" )
 public class TreeDirectoryItems {

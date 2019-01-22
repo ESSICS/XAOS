@@ -29,7 +29,7 @@ import java.util.concurrent.CompletionStage;
  *
  * @param <I> Type of the <i>initiator</i> of the I/O operation.
  * @author claudio.rosati@esss.se
- * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.InitiatorTrackingIOFacility</a>
+ * @see <a href="https://github.com/TomasMikula/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.InitiatorTrackingIOFacility</a>
  */
 public interface InitiatorAsynchronousIO<I> {
 

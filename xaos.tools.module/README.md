@@ -62,9 +62,30 @@ following flag being added to the command line launching the application:
 <dependency>
   <groupId>se.europeanspallationsource</groupId>
   <artifactId>xaos.tools</artifactId>
-  <version>0.3.0-SNAPSHOT</version>
+  <version>0.4.0-SNAPSHOT</version>
   <scope>compile</scope>
 </dependency>
+```
+
+To use the _ServiceProvider_ annotation the following must be added to the
+project's plugin list:
+
+```xml
+<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-compiler-plugin</artifactId>
+  <version>3.8.0</version>
+  <configuration>
+    <annotationProcessorPaths>
+      <path>
+        <groupId>se.europeanspallationsource</groupId>
+        <artifactId>xaos.tools</artifactId>
+        <version>0.4.0-SNAPSHOT</version>
+      </path>
+      <!-- ... more ... -->
+    </annotationProcessorPaths>
+  </configuration>
+</plugin>
 ```
 
 Here the Maven dependencies of `xaos.tools` module:
