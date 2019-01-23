@@ -32,7 +32,7 @@
     </build>
 
 	<modules>
-		
+		<module>xaos.demos.simple.application.module</module>
 	</modules>
 
 </project>
