@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javafx.beans.value.ChangeListener;
@@ -41,6 +40,7 @@ import javafx.scene.control.TreeItem;
 import se.europeanspallationsource.xaos.ui.control.tree.DirectoryModel;
 
 import static java.nio.file.attribute.FileTime.from;
+import static se.europeanspallationsource.xaos.ui.impl.Constants.LOGGER;
 
 
 /**
@@ -65,8 +65,6 @@ public class TreeDirectoryItems {
 	 * the {@link TreeItem} generic type is just {@link Path}.
 	 */
 	public static final Function<Path, Path> DEFAULT_PROJECTOR = v -> v;
-
-	private static final Logger LOGGER = Logger.getLogger(TreeDirectoryItems.class.getName());
 
 	/**
 	 * Creates a new instance of {@link DirectoryItem} for the given parameters.

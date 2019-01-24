@@ -22,9 +22,9 @@ module xaos.ui {
 
 	requires java.logging;
 	requires java.xml;
-	requires javafx.base;
-	requires javafx.controls;
-	requires javafx.graphics;
+	requires transitive javafx.base;
+	requires transitive javafx.controls;
+	requires transitive javafx.graphics;
 	requires javafx.media;
 	requires javafx.swing;
 	requires javafx.web;

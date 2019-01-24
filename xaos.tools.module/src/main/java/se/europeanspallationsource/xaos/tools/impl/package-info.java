@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
+
 /**
+ * This package will contain classes public to all other packages in this
+ * module, but not exported through the module-info.
+ *
  * @author claudio.rosati@esss.se
  */
-module xaos.ui.gauge {
-
-	requires java.logging;
-
-}
+package se.europeanspallationsource.xaos.tools.impl;

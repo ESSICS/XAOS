@@ -26,9 +26,10 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.logging.Logger;
 import javax.xml.stream.events.StartElement;
 import org.apache.commons.lang3.StringUtils;
+
+import static se.europeanspallationsource.xaos.ui.impl.Constants.LOGGER;
 
 
 /**
@@ -36,6 +37,7 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author claudio.rosati@esss.se
  */
+@SuppressWarnings( "ClassWithoutLogger" )
 class SVGAttributesStackFrame {
 
 	static final String ATTR_CLASS = "class";
@@ -50,7 +52,6 @@ class SVGAttributesStackFrame {
 	static final String ATTR_STYLE = "style";
 	static final String ATTR_TRANSFORM = "transform";
 
-	private static final Logger LOGGER = Logger.getLogger(SVGAttributesStackFrame.class.getName());
 	private static final Set<String> SUPPORTED_ATTRIBUTES = new TreeSet<>(Arrays.asList(
 		ATTR_FILL,
 		ATTR_OPACITY,

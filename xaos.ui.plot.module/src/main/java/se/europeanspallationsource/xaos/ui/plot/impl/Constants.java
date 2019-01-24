@@ -14,12 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package se.europeanspallationsource.xaos.ui.plot.impl;
+
+
+import java.util.logging.Logger;
+
 
 /**
- * @author claudio.rosati@esss.se
+ * Constants for all classes in this module.
+ *
+ * @author claudiorosati
  */
-module xaos.ui.gauge {
+public interface Constants {
 
-	requires java.logging;
+	/**
+	 * The {@link Logger} to be used by all classes in this module.
+	 */
+	Logger LOGGER = Logger.getLogger(Constants.class.getName());
 
 }

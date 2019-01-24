@@ -25,13 +25,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.apache.commons.lang3.StringUtils;
 import se.europeanspallationsource.xaos.tools.annotation.ServiceProvider;
 import se.europeanspallationsource.xaos.ui.spi.ClassIconProvider;
+
+import static se.europeanspallationsource.xaos.ui.impl.Constants.LOGGER;
 
 
 /**
@@ -69,7 +70,7 @@ public class DefaultJavaFXClassIconProvider extends BaseProvider implements Clas
 			}
 
 		} catch ( IOException ex ) {
-			Logger.getLogger(DefaultJavaFXClassIconProvider.class.getName()).log(Level.SEVERE, null, ex);
+			LOGGER.log(Level.SEVERE, null, ex);
 		}
 
 		//	Print map if xaos.test.verbose is set to true.

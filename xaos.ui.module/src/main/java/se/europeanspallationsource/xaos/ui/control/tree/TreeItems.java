@@ -20,7 +20,6 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
@@ -34,9 +33,8 @@ import javafx.util.Callback;
  *
  * @author claudio.rosati@esss.se
  */
+@SuppressWarnings( "ClassWithoutLogger" )
 public class TreeItems {
-
-	private static final Logger LOGGER = Logger.getLogger(TreeItems.class.getName());
 
 	/**
 	 * Returns a cell factory to be used in {@link TreeView}s whose type

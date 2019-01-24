@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javafx.scene.Node;
@@ -46,6 +45,7 @@ import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FILE_LINK;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FOLDER_COLLAPSED;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FOLDER_EXPANDED;
 import static se.europeanspallationsource.xaos.ui.control.Icons.DEFAULT_SIZE;
+import static se.europeanspallationsource.xaos.ui.impl.Constants.LOGGER;
 
 
 /**
@@ -459,8 +459,6 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	 */
 	@SuppressWarnings( "PublicInnerClass" )
 	public static class DefaultGraphicFactory implements GraphicFactory {
-
-		private static final Logger LOGGER = Logger.getLogger(DefaultGraphicFactory.class.getName());
 
 		@Override
 		public Node createGraphic( Path path, boolean isDirectory, boolean isExpanded ) {
