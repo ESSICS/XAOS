@@ -19,6 +19,7 @@ package se.europeanspallationsource.xaos.app;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.application.Preloader.ErrorNotification;
 import javafx.application.Preloader.StateChangeNotification;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -28,7 +29,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import se.europeanspallationsource.xaos.core.util.ThreadPools;
 
+import static java.util.logging.Level.SEVERE;
 import static javafx.application.Preloader.StateChangeNotification.Type.BEFORE_START;
+import static se.europeanspallationsource.xaos.app.impl.Constants.LOGGER;
 
 
 /**
@@ -81,8 +84,18 @@ public class XAOSApplication extends Application {
 
 		ThreadPools.workStealingThreadPool().execute(() -> {
 
-			//	Call the startApplication() method.
-			startApplication((BorderPane) scene.getRoot());
+			try {
+				//	Call the startApplication() method.
+				startApplication((BorderPane) scene.getRoot());
+			} catch ( Exception ex ) {
+				LOGGER.log(SEVERE, "Exception when starting the application.", ex);
+				notifyPreloader(new ErrorNotification(
+					"XAOSApplication#startApplication",
+					"Exception when starting the application.",
+					ex
+				));
+				return;
+			}
 
 			//	After init is ready, the app is ready to be shown.
 			//	Do this before hiding the preloader stage to prevent the
