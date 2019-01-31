@@ -17,7 +17,6 @@
 package se.europeanspallationsource.xaos.demos.simple.impl;
 
 
-import se.europeanspallationsource.xaos.app.impl.Constants;
 import java.util.logging.Logger;
 
 
