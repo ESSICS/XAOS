@@ -34,7 +34,7 @@ import static org.testfx.assertions.api.Assertions.assertThat;
  * @author claudio.rosati@esss.se
  */
 @SuppressWarnings( { "ClassWithoutLogger", "UseOfSystemOutOrSystemErr" } )
-public class SVGFromURLTest extends ApplicationTest {
+public class SVGFromURLUITest extends ApplicationTest {
 	
 	@BeforeClass
 	public static void setUpClass() {
@@ -46,7 +46,7 @@ public class SVGFromURLTest extends ApplicationTest {
 	@Override
 	public void start( Stage stage ) throws IOException, XMLStreamException {
 
-		svg = SVG.load(SVGFromURLTest.class.getResource("/svg/duke.svg"));
+		svg = SVG.load(SVGFromURLUITest.class.getResource("/svg/duke.svg"));
 
 		svg.setId("Loaded SVG Image");
 

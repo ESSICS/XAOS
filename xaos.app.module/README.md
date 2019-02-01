@@ -9,6 +9,14 @@ The _XAOS App_ module (`xaos.app`) provides a JavaFX-based application
 framework for building UI-based applications with menus, toolbars, etc.
 
 
+## Application Types
+
+
+TODO:CR
+**** EXPLAIN THE DIFFERENT TYPES OF APPLICATIONS ****
+
+
+
 ## Application Layout
 
 The framework allows applications having a generic layout with the following components:

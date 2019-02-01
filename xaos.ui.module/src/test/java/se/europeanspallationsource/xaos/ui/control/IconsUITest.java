@@ -159,7 +159,7 @@ import static se.europeanspallationsource.xaos.ui.control.Icons.DEFAULT_SIZE;
  * @author claudio.rosati@esss.se
  */
 @SuppressWarnings( { "UseOfSystemOutOrSystemErr", "ClassWithoutLogger" } )
-public class IconsTest extends ApplicationTest {
+public class IconsUITest extends ApplicationTest {
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -1159,12 +1159,12 @@ public class IconsTest extends ApplicationTest {
 		//	--------------------------------------------------------------------
 //		System.out.println("    Presentation/Powerpoint files...");
 //
-//		assertThat(Icons.iconForMIMEType("xxx/xxx")).isNotNull().isInstanceOf(Text.class);
+//		assertThat(Icons.iconForMIMEType("directory/file")).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 //		System.out.println("    Spreadsheet files...");
 //
-//		assertThat(Icons.iconForMIMEType("xxx/xxx")).isNotNull().isInstanceOf(Text.class);
+//		assertThat(Icons.iconForMIMEType("directory/file")).isNotNull().isInstanceOf(Text.class);
 
 		//	--------------------------------------------------------------------
 		System.out.println("    Text files...");

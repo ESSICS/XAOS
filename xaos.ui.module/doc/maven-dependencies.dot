@@ -30,7 +30,7 @@ digraph "xaos.ui" {
   "org.assertj:assertj-core:jar"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">org.assertj</font><br/>assertj-core<font color="grey55" point-size="10"><br/>3.11.1</font><font color="grey55" point-size="10"><br/>(test)</font>>]
   "org.testfx:testfx-junit:jar"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">org.testfx</font><br/>testfx-junit<font color="grey55" point-size="10"><br/>4.0.15-alpha</font><font color="grey55" point-size="10"><br/>(test)</font>>]
   "junit:junit:jar"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">junit</font><br/>junit<font color="grey55" point-size="10"><br/>4.12</font><font color="grey55" point-size="10"><br/>(test)</font>>]
-  "io.github.classgraph:classgraph:jar"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">io.github.classgraph</font><br/>classgraph<font color="grey55" point-size="10"><br/>4.6.18</font><font color="grey55" point-size="10"><br/>(test)</font>>]
+  "io.github.classgraph:classgraph:jar"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">io.github.classgraph</font><br/>classgraph<font color="grey55" point-size="10"><br/>4.6.29</font><font color="grey55" point-size="10"><br/>(test)</font>>]
 
   // Edge Definitions:
   "org.openjfx:javafx-base:jar" -> "org.openjfx:javafx-base:jar:mac"
