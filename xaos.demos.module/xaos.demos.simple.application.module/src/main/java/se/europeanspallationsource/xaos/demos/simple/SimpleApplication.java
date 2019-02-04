@@ -16,9 +16,9 @@
 package se.europeanspallationsource.xaos.demos.simple;
 
 
-import java.util.logging.Logger;
-import javafx.application.Application;
-import se.europeanspallationsource.xaos.app.ApplicationLauncher;
+import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import se.europeanspallationsource.xaos.app.XAOSApplication;
 
 
 /**
@@ -26,12 +26,16 @@ import se.europeanspallationsource.xaos.app.ApplicationLauncher;
  *
  * @author claudio.rosati@esss.se
  */
-public class SimpleApplicationDemo extends ApplicationLauncher {
-
-	private static final Logger LOGGER = Logger.getLogger(SimpleApplicationDemo.class.getName());
+@SuppressWarnings( "ClassWithoutLogger" )
+public class SimpleApplication extends XAOSApplication {
 
 	public static void main( String[] args ) {
-		Application.launch(args);
+		launch(args);
+	}
+
+	@Override
+	protected void startApplication( BorderPane sceneRoot ) throws Exception {
+		sceneRoot.setCenter(new Label("S I M P L E   A P P L I C A T I O N"));
 	}
 
 }

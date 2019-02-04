@@ -90,6 +90,8 @@ public class XAOSApplication extends Application {
 		this.scene = new Scene(new BorderPane(), 1024, 768);
 
 		stage.setScene(scene);
+		//	TODO:CR set the appropriate title.
+		stage.setTitle(getClass().getSimpleName());
 
 		ThreadPools.workStealingThreadPool().execute(() -> {
 
