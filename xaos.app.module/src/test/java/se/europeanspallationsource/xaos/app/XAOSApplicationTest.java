@@ -69,10 +69,10 @@ public class XAOSApplicationTest {
 		assertThat(application.getCurrentSubStep()).isEqualTo(-1);
 
 		application.stepsComplete();
-		assertThat(application.getSteps()).isEqualTo(Double.MIN_VALUE);
+		assertThat(application.getSteps()).isEqualTo(Double.MAX_VALUE);
 		assertThat(application.getCurrentStep()).isEqualTo(Integer.MAX_VALUE);
-		assertThat(application.getSubSteps()).isEqualTo(-1);
-		assertThat(application.getCurrentSubStep()).isEqualTo(-1);
+		assertThat(application.getSubSteps()).isEqualTo(Double.MAX_VALUE);
+		assertThat(application.getCurrentSubStep()).isEqualTo(Integer.MAX_VALUE);
 
 	}
 
@@ -115,6 +115,104 @@ public class XAOSApplicationTest {
 		application.step();
 
 		application.step();	//	Called too much.
+
+	}
+
+	/**
+	 * Test of step method with negative sub-steps, of class XAOSApplication.
+	 */
+	@Test( expected = IllegalArgumentException.class )
+	public void testStepWithNegativeSubSteps() throws IllegalArgumentException {
+
+		System.out.println("  Testing 'step' with negativew sub-steps...");
+
+		application.stepsBegin(3);
+		application.step(-1);
+
+	}
+
+	/**
+	 * Test of step method with sub-steps, of class XAOSApplication.
+	 */
+	@Test
+	public void testStepWithSubSteps() {
+
+		System.out.println("  Testing 'step'...");
+
+		application.stepsBegin(3);
+		assertThat(application.getSteps()).isEqualTo(3);
+		assertThat(application.getCurrentStep()).isEqualTo(-1);
+		assertThat(application.getSubSteps()).isEqualTo(-1);
+		assertThat(application.getCurrentSubStep()).isEqualTo(-1);
+
+		application.step(2);
+		assertThat(application.getSteps()).isEqualTo(3);
+		assertThat(application.getCurrentStep()).isEqualTo(0);
+		assertThat(application.getSubSteps()).isEqualTo(2);
+		assertThat(application.getCurrentSubStep()).isEqualTo(-1);
+
+		application.step(3);
+		assertThat(application.getSteps()).isEqualTo(3);
+		assertThat(application.getCurrentStep()).isEqualTo(1);
+		assertThat(application.getSubSteps()).isEqualTo(3);
+		assertThat(application.getCurrentSubStep()).isEqualTo(-1);
+
+		application.step(4);
+		assertThat(application.getSteps()).isEqualTo(3);
+		assertThat(application.getCurrentStep()).isEqualTo(2);
+		assertThat(application.getSubSteps()).isEqualTo(4);
+		assertThat(application.getCurrentSubStep()).isEqualTo(-1);
+
+		application.stepsComplete();
+		assertThat(application.getSteps()).isEqualTo(Double.MAX_VALUE);
+		assertThat(application.getCurrentStep()).isEqualTo(Integer.MAX_VALUE);
+		assertThat(application.getSubSteps()).isEqualTo(Double.MAX_VALUE);
+		assertThat(application.getCurrentSubStep()).isEqualTo(Integer.MAX_VALUE);
+
+	}
+
+	/**
+	 * Test of step method with sub-steps called after completion, of class
+	 * XAOSApplication.
+	 */
+	@Test( expected = IllegalStateException.class )
+	public void testStepWithSubStepsIllegalStateAfterCompletion() throws IllegalStateException {
+
+		System.out.println("  Testing 'step' with sub-steps called after completion...");
+
+		application.stepsComplete();
+		application.step(4);
+
+	}
+
+	/**
+	 * Test of step method with sub-steps called before begin, of class
+	 * XAOSApplication.
+	 */
+	@Test( expected = IllegalStateException.class )
+	public void testStepWithSubStepsIllegalStateBeforeBegin() throws IllegalStateException {
+
+		System.out.println("  Testing 'step' with sub-steps called before begin...");
+
+		application.step(4);
+
+	}
+
+	/**
+	 * Test of step method with sub-steps called too much, of class
+	 * XAOSApplication.
+	 */
+	@Test( expected = IllegalStateException.class )
+	public void testStepWithSubStepsIllegalStateCalledTooMuch() throws IllegalStateException {
+
+		System.out.println("  Testing 'step' with sub-steps called too much...");
+
+		application.stepsBegin(3);
+		application.step();
+		application.step();
+		application.step();
+
+		application.step(4);	//	Called too much.
 
 	}
 
@@ -168,10 +266,124 @@ public class XAOSApplicationTest {
 		System.out.println("  Testing 'stepsComplete'...");
 
 		application.stepsComplete();
-		assertThat(application.getSteps()).isEqualTo(Double.MIN_VALUE);
+		assertThat(application.getSteps()).isEqualTo(Double.MAX_VALUE);
 		assertThat(application.getCurrentStep()).isEqualTo(Integer.MAX_VALUE);
+		assertThat(application.getSubSteps()).isEqualTo(Double.MAX_VALUE);
+		assertThat(application.getCurrentSubStep()).isEqualTo(Integer.MAX_VALUE);
+
+	}
+
+	/**
+	 * Test of subStep method, of class XAOSApplication.
+	 */
+	@Test
+	public void testSubStepWithSubSteps() {
+
+		System.out.println("  Testing 'step'...");
+
+		application.stepsBegin(3);
+		assertThat(application.getSteps()).isEqualTo(3);
+		assertThat(application.getCurrentStep()).isEqualTo(-1);
 		assertThat(application.getSubSteps()).isEqualTo(-1);
 		assertThat(application.getCurrentSubStep()).isEqualTo(-1);
+
+		application.step(2);
+		assertThat(application.getSteps()).isEqualTo(3);
+		assertThat(application.getCurrentStep()).isEqualTo(0);
+		assertThat(application.getSubSteps()).isEqualTo(2);
+		assertThat(application.getCurrentSubStep()).isEqualTo(-1);
+
+			application.subStep();
+			assertThat(application.getSteps()).isEqualTo(3);
+			assertThat(application.getCurrentStep()).isEqualTo(0);
+			assertThat(application.getSubSteps()).isEqualTo(2);
+			assertThat(application.getCurrentSubStep()).isEqualTo(0);
+
+			application.subStep();
+			assertThat(application.getSteps()).isEqualTo(3);
+			assertThat(application.getCurrentStep()).isEqualTo(0);
+			assertThat(application.getSubSteps()).isEqualTo(2);
+			assertThat(application.getCurrentSubStep()).isEqualTo(1);
+
+		application.step(3);
+		assertThat(application.getSteps()).isEqualTo(3);
+		assertThat(application.getCurrentStep()).isEqualTo(1);
+		assertThat(application.getSubSteps()).isEqualTo(3);
+		assertThat(application.getCurrentSubStep()).isEqualTo(-1);
+
+			application.subStep();
+			assertThat(application.getSteps()).isEqualTo(3);
+			assertThat(application.getCurrentStep()).isEqualTo(1);
+			assertThat(application.getSubSteps()).isEqualTo(3);
+			assertThat(application.getCurrentSubStep()).isEqualTo(0);
+
+			application.subStep();
+			assertThat(application.getSteps()).isEqualTo(3);
+			assertThat(application.getCurrentStep()).isEqualTo(1);
+			assertThat(application.getSubSteps()).isEqualTo(3);
+			assertThat(application.getCurrentSubStep()).isEqualTo(1);
+
+			application.subStep();
+			assertThat(application.getSteps()).isEqualTo(3);
+			assertThat(application.getCurrentStep()).isEqualTo(1);
+			assertThat(application.getSubSteps()).isEqualTo(3);
+			assertThat(application.getCurrentSubStep()).isEqualTo(2);
+
+		application.step();
+		assertThat(application.getSteps()).isEqualTo(3);
+		assertThat(application.getCurrentStep()).isEqualTo(2);
+		assertThat(application.getSubSteps()).isEqualTo(-1);
+		assertThat(application.getCurrentSubStep()).isEqualTo(-1);
+
+		application.stepsComplete();
+		assertThat(application.getSteps()).isEqualTo(Double.MAX_VALUE);
+		assertThat(application.getCurrentStep()).isEqualTo(Integer.MAX_VALUE);
+		assertThat(application.getSubSteps()).isEqualTo(Double.MAX_VALUE);
+		assertThat(application.getCurrentSubStep()).isEqualTo(Integer.MAX_VALUE);
+
+	}
+
+	/**
+	 * Test of subStep method called after completion, of class XAOSApplication.
+	 */
+	@Test( expected = IllegalStateException.class )
+	public void testSubStepIllegalStateAfterCompletion() throws IllegalStateException {
+
+		System.out.println("  Testing 'subStep' called after completion...");
+
+		application.stepsComplete();
+		application.subStep();
+
+	}
+
+	/**
+	 * Test of subStep method called before begin, of class XAOSApplication.
+	 */
+	@Test( expected = IllegalStateException.class )
+	public void testSubStepIllegalStateBeforeBegin() throws IllegalStateException {
+
+		System.out.println("  Testing 'subStep' called before begin...");
+
+		application.subStep();
+
+	}
+
+	/**
+	 * Test of subStep method called too much, of class XAOSApplication.
+	 */
+	@Test( expected = IllegalStateException.class )
+	public void testSubStepIllegalStateCalledTooMuch() throws IllegalStateException {
+
+		System.out.println("  Testing 'subStep' called too much...");
+
+		application.stepsBegin(3);
+		application.step();
+		application.step();
+		application.step(2);
+		application.subStep();
+		application.subStep();
+
+		application.subStep();	//	Called too much.
 
 	}
 

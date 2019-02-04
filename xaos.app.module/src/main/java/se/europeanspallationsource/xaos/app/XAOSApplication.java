@@ -236,6 +236,7 @@ public class XAOSApplication extends Application {
 		}
 
 		subSteps = -1;
+		currentSubStep = -1;
 		currentStep++;
 
 		notifyPreloader(new ProgressNotification(currentStep / steps));
@@ -260,18 +261,18 @@ public class XAOSApplication extends Application {
 	 *   }
 	 *   stepsComplete();</pre>
 	 *
-	 * @param subSteps The number of sub-steps to be performed. Cannot be 0. If
-	 *                 no sub-steps must be performed then call {@link #step()}
-	 *                 instead.
-	 * @throws IllegalArgumentException If {@code subSteps} is not a positive
-	 *                                  number.
+	 * @param subSteps The number of sub-steps to be performed. It must be
+	 *                 greater than or equal to 2. If no sub-steps must be
+	 *                 performed then call {@link #step()} instead.
+	 * @throws IllegalArgumentException If {@code subSteps} is not greater than
+	 *                                  or equal to 2.
 	 * @throws IllegalStateException    If this method is called before the
 	 *                                  {@link #stepsBegin(int)} one, or after
 	 *                                  {@link #stepsComplete()).
 	 */
 	protected void step( int subSteps ) throws IllegalArgumentException, IllegalStateException {
 
-		if ( subSteps <= 0 ) {
+		if ( subSteps <= 1 ) {
 			throw new IllegalArgumentException(MessageFormat.format("Illegal ''subSteps'' value [{0}].", steps));
 		} else {
 
@@ -338,8 +339,10 @@ public class XAOSApplication extends Application {
 	 */
 	protected void stepsComplete() {
 
-		steps = Double.MIN_VALUE;
+		steps = Double.MAX_VALUE;
 		currentStep = Integer.MAX_VALUE;
+		subSteps = Double.MAX_VALUE;
+		currentSubStep = Integer.MAX_VALUE;
 
 		notifyPreloader(new ProgressNotification(1.0));
 
@@ -394,7 +397,7 @@ public class XAOSApplication extends Application {
 	/**
 	 * Tells the {@link Preloader} the application startup process is about to
 	 * start the next sub-step of progress. It must be call at the beginning of
-	 * the sub-step to beperformed.
+	 * the sub-step to be performed.
 	 * <p>
 	 * For example:</p>
 	 * <pre>
@@ -409,12 +412,18 @@ public class XAOSApplication extends Application {
 	 *   stepsComplete();</pre>
 	 *
 	 * @throws IllegalStateException If this method is called before the
-	 *                               {@link #step(int)} one.
+	 *                               {@link #step(int)} one, or after
+	 *                               {@link #stepsComplete()), or more than the
+	 *                               number of sub-steps stated in {@link #step(int)}.
 	 */
 	protected void subStep() throws IllegalStateException {
 
 		if ( this.subSteps <= 0 ) {
 			throw new IllegalStateException("Sub-steps progress not begun.");
+		} else if ( currentSubStep == Integer.MAX_VALUE ) {
+			throw new IllegalStateException("Sub-step called after completion.");
+		} else if ( currentSubStep >= subSteps - 1 ) {
+			throw new IllegalStateException("Sub-step called more then declared sub-steps.");
 		}
 
 		currentSubStep++;
