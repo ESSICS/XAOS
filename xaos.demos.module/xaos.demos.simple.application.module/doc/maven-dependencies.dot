@@ -7,6 +7,7 @@ digraph "xaos.demos.simple.application" {
   "org.openjfx:javafx-base:jar:mac"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-base<br/>11.0.2<br/>mac>]
   "se.europeanspallationsource:xaos.app:jar"[shape="box",style="rounded, filled",fillcolor="#7DE1FF",label=<se.europeanspallationsource<br/>xaos.app<br/>0.4.0-SNAPSHOT>]
   "org.openjfx:javafx-controls:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-controls<br/>11.0.2>]
+  "org.openjfx:javafx-controls:jar:mac"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-controls<br/>11.0.2<br/>mac>]
   "org.openjfx:javafx-graphics:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-graphics<br/>11.0.2>]
   "org.openjfx:javafx-graphics:jar:mac"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-graphics<br/>11.0.2<br/>mac>]
   "se.europeanspallationsource:xaos.tools:jar"[shape="box",style="rounded, filled",fillcolor="#7DE1FF",label=<se.europeanspallationsource<br/>xaos.tools<br/>0.4.0-SNAPSHOT>]
@@ -26,7 +27,6 @@ digraph "xaos.demos.simple.application" {
   "org.kordamp.ikonli:ikonli-javafx:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.kordamp.ikonli<br/>ikonli-javafx<br/>11.1.0>]
   "org.kordamp.ikonli:ikonli-fontawesome-pack:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.kordamp.ikonli<br/>ikonli-fontawesome-pack<br/>11.1.0>]
   "se.europeanspallationsource:xaos.demos.simple.application:jar"[shape="box",style="rounded, filled",fillcolor="#7DE1FF",label=<se.europeanspallationsource<br/>xaos.demos.simple.application<br/>0.4.0-SNAPSHOT>]
-  "org.openjfx:javafx-controls:jar:mac"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-controls<br/>11.0.2<br/>mac>]
   "org.assertj:assertj-core:jar"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">org.assertj</font><br/>assertj-core<font color="grey55" point-size="10"><br/>3.11.1</font><font color="grey55" point-size="10"><br/>(test)</font>>]
   "junit:junit:jar"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">junit</font><br/>junit<font color="grey55" point-size="10"><br/>4.12</font><font color="grey55" point-size="10"><br/>(test)</font>>]
   "org.hamcrest:hamcrest-core:jar"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">org.hamcrest</font><br/>hamcrest-core<font color="grey55" point-size="10"><br/>1.3</font><font color="grey55" point-size="10"><br/>(test)</font>>]
@@ -34,7 +34,9 @@ digraph "xaos.demos.simple.application" {
   // Edge Definitions:
   "org.openjfx:javafx-base:jar" -> "org.openjfx:javafx-base:jar:mac"
   "se.europeanspallationsource:xaos.app:jar" -> "org.openjfx:javafx-base:jar"
-  "se.europeanspallationsource:xaos.app:jar" -> "org.openjfx:javafx-controls:jar"[style="dotted"]
+  "org.openjfx:javafx-controls:jar" -> "org.openjfx:javafx-controls:jar:mac"
+  "org.openjfx:javafx-controls:jar" -> "org.openjfx:javafx-graphics:jar"[style="dotted"]
+  "se.europeanspallationsource:xaos.app:jar" -> "org.openjfx:javafx-controls:jar"
   "org.openjfx:javafx-graphics:jar" -> "org.openjfx:javafx-graphics:jar:mac"
   "se.europeanspallationsource:xaos.app:jar" -> "org.openjfx:javafx-graphics:jar"
   "se.europeanspallationsource:xaos.app:jar" -> "se.europeanspallationsource:xaos.tools:jar"
@@ -65,10 +67,6 @@ digraph "xaos.demos.simple.application" {
   "se.europeanspallationsource:xaos.ui:jar" -> "se.europeanspallationsource:xaos.core:jar"[style="dotted"]
   "se.europeanspallationsource:xaos.app:jar" -> "se.europeanspallationsource:xaos.ui:jar"
   "se.europeanspallationsource:xaos.demos.simple.application:jar" -> "se.europeanspallationsource:xaos.app:jar"
-  "org.openjfx:javafx-controls:jar:mac" -> "org.openjfx:javafx-graphics:jar"[style="dotted"]
-  "org.openjfx:javafx-controls:jar" -> "org.openjfx:javafx-controls:jar:mac"
-  "org.openjfx:javafx-controls:jar" -> "org.openjfx:javafx-graphics:jar"[style="dotted"]
-  "se.europeanspallationsource:xaos.demos.simple.application:jar" -> "org.openjfx:javafx-controls:jar"
   "se.europeanspallationsource:xaos.demos.simple.application:jar" -> "org.assertj:assertj-core:jar"
   "junit:junit:jar" -> "org.hamcrest:hamcrest-core:jar"
   "se.europeanspallationsource:xaos.demos.simple.application:jar" -> "junit:junit:jar"
