@@ -45,7 +45,7 @@
 							<goal>copy-dependencies</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.build.directory}/dependencies</outputDirectory>
+							<outputDirectory>${project.build.directory}/product/mods</outputDirectory>
 							<overWriteIfNewer>true</overWriteIfNewer>
 							<overWriteReleases>false</overWriteReleases>
 							<overWriteSnapshots>false</overWriteSnapshots>
@@ -67,6 +67,7 @@
 						<manifestEntries>
 							<JavaFX-Application-Class>se.europeanspallationsource.xaos.demos.simple.SimpleApplication</JavaFX-Application-Class>
 							<JavaFX-Version>${javafx.version}</JavaFX-Version>
+							<ModuleMainClass>se.europeanspallationsource.xaos.demos.simple.SimpleApplication</ModuleMainClass>
 						</manifestEntries>
 					</archive>
 				</configuration>

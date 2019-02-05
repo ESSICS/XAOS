@@ -1,0 +1,10 @@
+digraph "xaos.demos.simple.application" {
+    // Path: /Users/claudiorosati/Projects/GitHubX/XAOS/xaos.demos.module/xaos.demos.simple.application.module/target/./installer-input/xaos.demos.simple.application-0.4.0-SNAPSHOT.jar
+   "se.europeanspallationsource.xaos.demos.simple"    -> "java.lang (java.base)";
+   "se.europeanspallationsource.xaos.demos.simple"    -> "javafx.scene (javafx.graphics)";
+   "se.europeanspallationsource.xaos.demos.simple"    -> "javafx.scene.control (javafx.controls)";
+   "se.europeanspallationsource.xaos.demos.simple"    -> "javafx.scene.layout (javafx.graphics)";
+   "se.europeanspallationsource.xaos.demos.simple"    -> "se.europeanspallationsource.xaos.app (xaos.app)";
+   "se.europeanspallationsource.xaos.demos.simple.impl" -> "java.lang (java.base)";
+   "se.europeanspallationsource.xaos.demos.simple.impl" -> "java.util.logging (java.logging)";
+}
