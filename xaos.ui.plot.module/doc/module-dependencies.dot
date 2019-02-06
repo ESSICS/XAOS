@@ -1,0 +1,4 @@
+digraph "summary" {
+  "xaos.ui.plot"                                     -> "java.base (java.base)";
+  "xaos.ui.plot"                                     -> "java.logging (java.logging)";
+}

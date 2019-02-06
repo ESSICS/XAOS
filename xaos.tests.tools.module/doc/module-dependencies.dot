@@ -1,0 +1,5 @@
+digraph "summary" {
+  "xaos.tools"                                       -> "java.base (java.base)";
+  "xaos.tests"                                       -> "java.base (java.base)";
+  "xaos.tests"                                       -> "xaos.tools";
+}

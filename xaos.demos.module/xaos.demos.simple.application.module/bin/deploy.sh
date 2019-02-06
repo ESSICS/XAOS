@@ -1,6 +1,10 @@
 #!/bin/bash
 #
 
+#
+# TODO:CR not working yet
+#
+
 cd target
 
 JAVAFX_MODS_PATH=/Library/Java/JavaVirtualMachines/javafx-jmods-11.0.2

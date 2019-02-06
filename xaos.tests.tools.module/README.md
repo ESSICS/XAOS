@@ -12,6 +12,15 @@ introduced in Java 9.
 
 ### Maven
 
+Here the Maven dependencies of `xaos.tests.tools` module:
+
 ![xaos.tests.tools dependencis](https://github.com/ESSICS/XAOS/blob/master/xaos.tests.tools.module/doc/maven-dependencies.png)
+
+
+### Java
+
+Here the Java module dependencies of `xaos.tests.tools` module:
+
+![xaos.tests.tools java dependencis](https://github.com/ESSICS/XAOS/blob/master/xaos.tests.tools.module/doc/module-dependencies.png)
 
 

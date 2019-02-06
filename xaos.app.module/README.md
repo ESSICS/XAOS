@@ -133,3 +133,7 @@ module your.application {
 }
 ```
 
+Here the Java module dependencies of `xaos.app` module:
+
+![xaos.app java dependencis](https://github.com/ESSICS/XAOS/blob/master/xaos.app.module/doc/module-dependencies.png)
+

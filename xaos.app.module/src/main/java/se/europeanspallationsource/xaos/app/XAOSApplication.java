@@ -224,7 +224,7 @@ public class XAOSApplication extends Application {
 	 *
 	 * @throws IllegalStateException If this method is called before the
 	 *                               {@link #stepsBegin(int)} one, or after
-	 *                               {@link #stepsComplete()), or more than the
+	 *                               {@link #stepsComplete()}, or more than the
 	 *                               number of steps stated in {@link #stepsBegin(int)}.
 	 */
 	protected void step() throws IllegalStateException {
@@ -270,7 +270,7 @@ public class XAOSApplication extends Application {
 	 *                                  or equal to 2.
 	 * @throws IllegalStateException    If this method is called before the
 	 *                                  {@link #stepsBegin(int)} one, or after
-	 *                                  {@link #stepsComplete()).
+	 *                                  {@link #stepsComplete()}.
 	 */
 	protected void step( int subSteps ) throws IllegalArgumentException, IllegalStateException {
 
@@ -415,7 +415,7 @@ public class XAOSApplication extends Application {
 	 *
 	 * @throws IllegalStateException If this method is called before the
 	 *                               {@link #step(int)} one, or after
-	 *                               {@link #stepsComplete()), or more than the
+	 *                               {@link #stepsComplete()}, or more than the
 	 *                               number of sub-steps stated in {@link #step(int)}.
 	 */
 	protected void subStep() throws IllegalStateException {

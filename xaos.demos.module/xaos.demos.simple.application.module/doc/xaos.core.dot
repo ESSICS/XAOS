@@ -1,8 +1,0 @@
-digraph "xaos.core" {
-    // Path: /Users/claudiorosati/Projects/GitHubX/XAOS/xaos.demos.module/xaos.demos.simple.application.module/target/./installer-input/xaos.core-0.4.0-SNAPSHOT.jar
-   "se.europeanspallationsource.xaos.core.util"       -> "java.lang (java.base)";
-   "se.europeanspallationsource.xaos.core.util"       -> "java.lang.invoke (java.base)";
-   "se.europeanspallationsource.xaos.core.util"       -> "java.util.concurrent (java.base)";
-   "se.europeanspallationsource.xaos.core.util"       -> "java.util.concurrent.atomic (java.base)";
-   "se.europeanspallationsource.xaos.core.util"       -> "java.util.concurrent.locks (java.base)";
-}

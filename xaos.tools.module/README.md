@@ -106,3 +106,7 @@ module your.application {
 }
 ```
 
+Here the Java module dependencies of `xaos.tools` module:
+
+![xaos.tools java dependencis](https://github.com/ESSICS/XAOS/blob/master/xaos.tools.module/doc/module-dependencies.png)
+

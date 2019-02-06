@@ -5,11 +5,20 @@
 [![javadoc](https://www.javadoc.io/badge/se.europeanspallationsource/xaos.demos.svg)](https://www.javadoc.io/doc/se.europeanspallationsource/xaos.demos)
 [![Apache License](https://img.shields.io/badge/license-Apache%20License%202.0-yellow.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
-The _XAOS Plot_ module (`xaos.demos`) provides demos and usage examples for the
+The _XAOS Demos_ module (`xaos.demos`) provides demos and usage examples for the
 XAOS project.
 
 
-## Using XAOS Plot
+## Sub-Modules
+
+
+### [xaos.demos.simple.application](https://github.com/ESSICS/XAOS/tree/master/xaos.demos.simple.application.module)
+
+The _XAOS - Demos [Simple Application]_ module (`xaos.demos.simple.application`)
+provides the simplest JavaFX application build using the XAOS framework.
+
+
+## Using XAOS Demos
 
 
 ### Maven

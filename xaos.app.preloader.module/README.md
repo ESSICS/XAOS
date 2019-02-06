@@ -51,3 +51,7 @@ module your.application.preloader {
 }
 ```
 
+Here the Java module dependencies of `xaos.app.preloader` module:
+
+![xaos.app.preloader java dependencis](https://github.com/ESSICS/XAOS/blob/master/xaos.app.preloader.module/doc/module-dependencies.png)
+

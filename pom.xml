@@ -43,6 +43,8 @@
 		<maven.compiler.source>${java.release}</maven.compiler.source>
 		<maven.compiler.target>${java.release}</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- Auxiliary programs -->
+		<dot.executable>/usr/local/bin/dot</dot.executable>
 		<!-- Dependencies Versions -->
 		<assertj.version>3.11.1</assertj.version>
 		<junit.version>4.12</junit.version>
@@ -144,6 +146,19 @@
 						<goals>
 							<goal>resolve</goal>
 						</goals>
+					</execution>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/product/mods</outputDirectory>
+							<overWriteIfNewer>true</overWriteIfNewer>
+							<overWriteReleases>false</overWriteReleases>
+							<overWriteSnapshots>false</overWriteSnapshots>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
@@ -288,6 +303,20 @@
 						<goals>
 							<goal>java</goal>
 						</goals>
+					</execution>
+					<execution>
+						<id>fixup</id>
+						<phase>install</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>${basedir}/bin/fixup.sh</executable>
+							<arguments>
+								<argument>${project.artifactId}-${project.version}.jar</argument>
+								<argument>${dot.executable}</argument>
+							</arguments>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
