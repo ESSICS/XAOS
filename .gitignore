@@ -3,6 +3,8 @@
 /target/
 /xaos.app.module/nbproject/
 /xaos.app.module/target/
+/xaos.app.preloader.module/target/
+/xaos.app.preloader.module/target/
 /xaos.core.module/nbproject/
 /xaos.core.module/target/
 /xaos.tests.tools.module/nbproject/
@@ -15,3 +17,7 @@
 /xaos.ui.gauge.module/target/
 /xaos.ui.plot.module/nbproject/
 /xaos.ui.plot.module/target/
+/xaos.demos.module/nbproject/
+/xaos.demos.module/target/
+/xaos.demos.module/xaos.demos.simple.application.module/nbproject/
+/xaos.demos.module/xaos.demos.simple.application.module/target/

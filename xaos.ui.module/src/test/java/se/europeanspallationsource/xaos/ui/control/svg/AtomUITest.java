@@ -36,7 +36,6 @@ import org.junit.Test;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.testfx.assertions.api.Assertions.assertThat;
 
 
@@ -44,7 +43,7 @@ import static org.testfx.assertions.api.Assertions.assertThat;
  * @author claudio.rosati@esss.se
  */
 @SuppressWarnings( { "ClassWithoutLogger", "UseOfSystemOutOrSystemErr" } )
-public class AtomTest extends ApplicationTest {
+public class AtomUITest extends ApplicationTest {
 	
 	@BeforeClass
 	public static void setUpClass() {
@@ -56,7 +55,7 @@ public class AtomTest extends ApplicationTest {
 	@Override
 	public void start( Stage stage ) throws IOException, XMLStreamException {
 
-		svg = SVG.load(AtomTest.class.getResource("/svg/atom.svg"));
+		svg = SVG.load(AtomUITest.class.getResource("/svg/atom.svg"));
 
 		svg.setId("Loaded SVG Image");
 

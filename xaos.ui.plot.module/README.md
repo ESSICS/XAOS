@@ -41,3 +41,7 @@ module your.application {
 }
 ```
 
+Here the Java module dependencies of `xaos.ui.plot` module:
+
+![xaos.ui.plot java dependencis](https://github.com/ESSICS/XAOS/blob/master/xaos.ui.plot.module/doc/module-dependencies.png)
+

@@ -49,15 +49,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryMonitorTest.ChangeSource.EXTERNAL;
-import static se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryMonitorTest.ChangeSource.INTERNAL;
+import static se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryMonitorUITest.ChangeSource.EXTERNAL;
+import static se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryMonitorUITest.ChangeSource.INTERNAL;
 
 
 /**
  * @author claudio.rosati@esss.se
  */
 @SuppressWarnings( { "ClassWithoutLogger", "UseOfSystemOutOrSystemErr" } )
-public class TreeDirectoryMonitorTest extends ApplicationTest {
+public class TreeDirectoryMonitorUITest extends ApplicationTest {
 
 	@BeforeClass
 	public static void setUpClass() {

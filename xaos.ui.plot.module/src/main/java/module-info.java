@@ -20,4 +20,6 @@
  */
 module xaos.ui.plot {
 
+	requires java.logging;
+
 }

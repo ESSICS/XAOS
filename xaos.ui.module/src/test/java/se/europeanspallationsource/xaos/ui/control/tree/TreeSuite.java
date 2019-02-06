@@ -21,7 +21,7 @@ import org.junit.runners.Suite;
 import se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryAsynchronousIOTest;
 import se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryItemsTest;
 import se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryModelTest;
-import se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryMonitorTest;
+import se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryMonitorUITest;
 
 
 /**
@@ -37,7 +37,7 @@ import se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryM
 	TreeDirectoryAsynchronousIOTest.class,
 	TreeDirectoryItemsTest.class,
 	TreeDirectoryModelTest.class,
-	TreeDirectoryMonitorTest.class,
+	TreeDirectoryMonitorUITest.class,
 } )
 @SuppressWarnings( { "ClassMayBeInterface", "ClassWithoutLogger", "UtilityClassWithoutPrivateConstructor" } )
 public class TreeSuite {

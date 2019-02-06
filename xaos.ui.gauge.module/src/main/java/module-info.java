@@ -20,4 +20,6 @@
  */
 module xaos.ui.gauge {
 
+	requires java.logging;
+
 }

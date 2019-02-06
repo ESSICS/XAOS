@@ -14,12 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.app;
+package se.europeanspallationsource.xaos.app.preloader.impl;
+
+
+import java.util.logging.Logger;
+
 
 /**
+ * Constants for all classes in this module.
  *
  * @author claudiorosati
  */
-public class PlaceholderToBeRemoved {
+public interface Constants {
+
+	/**
+	 * The {@link Logger} to be used by all classes in this module.
+	 */
+	Logger LOGGER = Logger.getLogger(Constants.class.getName());
 
 }

@@ -32,7 +32,6 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
@@ -78,6 +77,7 @@ import static se.europeanspallationsource.xaos.ui.control.svg.SVGAttributesStack
 import static se.europeanspallationsource.xaos.ui.control.svg.SVGAttributesStackFrame.ATTR_STROKE_MITERLIMIT;
 import static se.europeanspallationsource.xaos.ui.control.svg.SVGAttributesStackFrame.ATTR_STROKE_WIDTH;
 import static se.europeanspallationsource.xaos.ui.control.svg.SVGAttributesStackFrame.ATTR_TRANSFORM;
+import static se.europeanspallationsource.xaos.ui.impl.Constants.LOGGER;
 
 
 /**
@@ -87,9 +87,9 @@ import static se.europeanspallationsource.xaos.ui.control.svg.SVGAttributesStack
  * @author claudio.rosati@esss.se
  * @see <a href="https://github.com/skrb/SVGLoader">SVGLoader</a>
  */
+@SuppressWarnings( "ClassWithoutLogger" )
 class SVGContentBuilder {
 
-	private static final Logger LOGGER = Logger.getLogger(SVGContentBuilder.class.getName());
 	private static final String TYPE_KEY = "type";
 
 	private final Deque<SVGAttributesStackFrame> attributesStack = new ArrayDeque<>(4);

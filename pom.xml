@@ -43,6 +43,11 @@
 		<maven.compiler.source>${java.release}</maven.compiler.source>
 		<maven.compiler.target>${java.release}</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- Auxiliary programs -->
+		<dot.executable>/usr/local/bin/dot</dot.executable>
+		<!-- Dependencies Versions -->
+		<assertj.version>3.11.1</assertj.version>
+		<junit.version>4.12</junit.version>
 	</properties>
 
 	<modules>
@@ -58,6 +63,8 @@
 		<module>xaos.ui.gauge.module</module>
 		<module>xaos.ui.plot.module</module>
 		<module>xaos.app.module</module>
+		<module>xaos.app.preloader.module</module>
+		<module>xaos.demos.module</module>
 	</modules>
 
 	<build>
@@ -139,6 +146,19 @@
 						<goals>
 							<goal>resolve</goal>
 						</goals>
+					</execution>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/product/mods</outputDirectory>
+							<overWriteIfNewer>true</overWriteIfNewer>
+							<overWriteReleases>false</overWriteReleases>
+							<overWriteSnapshots>false</overWriteSnapshots>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
@@ -278,6 +298,27 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>1.6.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>java</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>fixup</id>
+						<phase>install</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>${basedir}/bin/fixup.sh</executable>
+							<arguments>
+								<argument>${project.artifactId}-${project.version}.jar</argument>
+								<argument>${dot.executable}</argument>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -366,13 +407,13 @@
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
-			<version>3.11.1</version>
+			<version>${assertj.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.12</version>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 

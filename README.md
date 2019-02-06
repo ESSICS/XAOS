@@ -79,7 +79,7 @@ file of the module you need for more examples and information.
 
 Here the Maven dependencies of `xaos` project:
 
-![xaos dependencis](https://github.com/ESSICS/XAOS/blob/master/doc/parent-maven-dependencies.png)
+![xaos dependencis](https://github.com/ESSICS/XAOS/blob/master/doc/maven-dependencies.png)
 
 
 ### Java `module-info`

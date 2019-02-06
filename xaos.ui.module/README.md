@@ -125,3 +125,7 @@ module your.application {
 }
 ```
 
+Here the Java module dependencies of `xaos.ui` module:
+
+![xaos.ui java dependencis](https://github.com/ESSICS/XAOS/blob/master/xaos.ui.module/doc/module-dependencies.png)
+

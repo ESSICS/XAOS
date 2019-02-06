@@ -41,3 +41,7 @@ module your.application {
 }
 ```
 
+Here the Java module dependencies of `xaos.ui.gauge` module:
+
+![xaos.ui.gauge java dependencis](https://github.com/ESSICS/XAOS/blob/master/xaos.ui.gauge.module/doc/module-dependencies.png)
+

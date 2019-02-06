@@ -80,3 +80,7 @@ module your.application {
 }
 ```
 
+Here the Java module dependencies of `xaos.core` module:
+
+![xaos.core java dependencis](https://github.com/ESSICS/XAOS/blob/master/xaos.core.module/doc/module-dependencies.png)
+

@@ -24,7 +24,11 @@ module xaos.app {
 	requires transitive xaos.core;
 	requires transitive xaos.tools;
 	requires transitive xaos.ui;
+	requires transitive javafx.base;
+	requires transitive javafx.graphics;
+	requires transitive javafx.controls;
 
+	exports se.europeanspallationsource.xaos.app;
 	exports se.europeanspallationsource.xaos.app.util;
 
 }
