@@ -21,5 +21,11 @@
 module xaos.ui.plot {
 
 	requires java.logging;
+	requires java.sql;
+	requires transitive javafx.base;
+	requires transitive javafx.controls;
+	requires javafx.fxml;
+	requires transitive javafx.graphics;
+	requires javafx.swing;
 
 }

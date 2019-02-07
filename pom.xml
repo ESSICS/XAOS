@@ -377,11 +377,12 @@
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
-
+	
 	<repositories>
+<!--
 		<repository>
 			<id>central</id>
-			<url>https://repo1.maven.org/maven2</url>
+			<url>http://repo.maven.apache.org/maven2/</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
@@ -399,6 +400,17 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
+		<repository>
+			<id>apache-snapshots-repo</id>
+			<url>http://repository.apache.org/snapshots</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+-->
 	</repositories>
 
 	<dependencies>
