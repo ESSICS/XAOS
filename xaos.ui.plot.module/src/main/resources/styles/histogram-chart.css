@@ -1,0 +1,94 @@
+.chart-coordinates-label {
+    -fx-background-color: rgba(255, 255, 128, 0.5);
+    -fx-border-color: black;
+    -fx-border-radius: 3;
+    visibility: visible;
+}
+
+.chart-data-tooltip-label {
+    -fx-background-color: rgb(153, 204, 204);
+    -fx-border-color: black;
+    -fx-border-radius: 3;
+    -fx-font-size: 12;
+    -fx-font-weight: bold;
+    -fx-text-alignment: center;
+    visibility: visible;
+}
+
+.chart-fitting-label {
+    -fx-background-color: white;
+    -fx-border-radius: 3;
+    -fx-stroke-width: 4;
+    visibility: visible;
+}
+
+.chart-coordinates-line {
+	-fx-stroke: maroon;
+	-fx-stroke-dash-array: 5 5;
+	-fx-stroke-width: 1;
+        visibility: visible;
+}
+
+.chart-error-line {
+	-fx-stroke: black;
+	-fx-stroke-width: 1;
+        visibility: visible;
+}
+
+.chart-zoom-rect {
+	-fx-fill: dodgerblue;
+	-fx-stroke: #002966 ;
+	-fx-stroke-type: inside;
+	-fx-stroke-width: 2;
+	-fx-opacity: 0.3;
+	-fx-cursor:url('/plugins/zoomIn.gif'),auto;
+}
+
+.chart-series-line {    
+    -fx-stroke-width: 1px;
+    -fx-effect: null;}
+
+.chart-plot-background {
+    -fx-background-color: white;
+}
+.chart-vertical-grid-lines {
+    -fx-stroke: black;
+    visibility: visible;
+}
+.chart-horizontal-grid-lines {
+    -fx-stroke: black;
+    visibility: visible;
+}
+
+.chart{
+   -color0 : green;
+   -color1 : navy;
+   -color2 : firebrick;
+   -color3 : cyan;
+   -color4 : magenta;
+   -color5 : teal;   
+   -color6 : chocolate;
+   -color7 : purple;
+   -color8 : gold;
+   -color9 : gray;
+   
+   
+   -horizontal: #ff0000;
+   -vertical: #006ddb;
+   -longitudinal: #24ff24;
+}
+
+.default-color0.chart-line-symbol { -fx-background-color: -color0, -color0; -fx-border-radius: 0 0 0 0; -fx-background-radius: 0 0 0 0;}
+.default-color1.chart-line-symbol { -fx-background-color: -color1, -color1; -fx-border-radius: 0 0 0 0; -fx-background-radius: 0 0 0 0;}
+.default-color2.chart-line-symbol { -fx-background-color: -color2, -color2; -fx-border-radius: 0 0 0 0; -fx-background-radius: 0 0 0 0;}
+.default-color3.chart-line-symbol { -fx-background-color: -color3, -color3; -fx-border-radius: 0 0 0 0; -fx-background-radius: 0 0 0 0;}
+.default-color4.chart-line-symbol { -fx-background-color: -color4, -color4; -fx-border-radius: 0 0 0 0; -fx-background-radius: 0 0 0 0;}
+.default-color5.chart-line-symbol { -fx-background-color: -color5, -color5; -fx-border-radius: 0 0 0 0; -fx-background-radius: 0 0 0 0;}
+.default-color0.chart-legend-item-symbol { -fx-background-color: -color0, -color0; }
+.default-color1.chart-legend-item-symbol { -fx-background-color: -color1, -color1; }
+.default-color2.chart-legend-item-symbol { -fx-background-color: -color2, -color2; }
+.default-color3.chart-legend-item-symbol { -fx-background-color: -color3, -color3; }
+.default-color4.chart-legend-item-symbol { -fx-background-color: -color4, -color4; }
+.default-color5.chart-legend-item-symbol { -fx-background-color: -color5, -color5; }
+
+

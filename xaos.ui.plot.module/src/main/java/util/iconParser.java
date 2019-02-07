@@ -1,0 +1,135 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package util;
+import javafx.scene.image.*;
+import javafx.geometry.Point2D;
+import chart.XYChartPlugin;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.chart.Chart;
+
+
+/**
+ *
+ * @author reubenlindroos
+ */
+public class iconParser extends XYChartPlugin{
+    private static final double toolSize = 125.0;
+    private static ImageView cenCircle;
+    private static ImageView rectangle1;
+    private static ImageView rectangle2;
+    private static ImageView rectangle3;
+    private static ImageView rectangle4;
+    private static ImageView dirCircle1;
+    private static ImageView dirCircle2; 
+    private static ImageView dirCircle3; 
+    private static ImageView dirCircle4;
+    private static ImageView[] cursorTool;
+    
+    public iconParser(){
+        cenCircle =  uploadImages("/icon/neutral/1-1-neutral.png");
+        rectangle1   = uploadImages("/icon/neutral/Rounded-Rectangle-neutral-1.png");
+        rectangle2   = uploadImages("/icon/neutral/Rounded-Rectangle-neutral-2.png");
+        rectangle3   = uploadImages("/icon/neutral/Rounded-Rectangle-neutral-3.png");
+        rectangle4   = uploadImages("/icon/neutral/Rounded-Rectangle-neutral-4.png");
+        dirCircle1 = uploadImages("/icon/neutral/circle-direction-neutral-1.png");
+        dirCircle2 = uploadImages("/icon/neutral/circle-direction-neutral-2.png"); 
+        dirCircle3 = uploadImages("/icon/neutral/circle-direction-neutral-3.png"); 
+        dirCircle4 = uploadImages("/icon/neutral/circle-direction-neutral-4.png");
+        cursorTool= getImages();
+    }
+    public void setChartForIcon(Chart newChart) {
+        this.setChart(newChart);
+    }
+    public static ImageView uploadImages(String imageURL ) {
+        Image image = new Image(imageURL);
+        ImageView ivImage = new ImageView(image);
+        return ivImage;
+    }
+    
+    public static ImageView[] getImages() {     
+        ImageView[] imageCollection ={cenCircle,rectangle1, rectangle2, rectangle3, rectangle4, dirCircle1, dirCircle2, dirCircle3, dirCircle4}; 
+        
+        return imageCollection;
+    }
+    public ObservableList<ImageView> getImagesAsList() {
+        ObservableList<ImageView> list = FXCollections.observableArrayList();
+        list.addAll(getImages());
+        return list;
+        
+    }
+    
+    public static void setLocation(Point2D mousePosition) {
+        for (ImageView image: cursorTool) {
+            image.setX(mousePosition.getX()-toolSize/2);
+            image.setY(mousePosition.getY()-toolSize/2);
+        }
+    }
+    
+     public static void setLocation(Double xPos, Double yPos) {
+        for (ImageView image: cursorTool) {
+            image.setX(xPos-toolSize/2);
+            image.setY(yPos-toolSize/2);
+        }
+    }
+    public void updateIcon(Boolean inSmallCircle, Boolean inBigCircle, Boolean inOuterRec, Integer index, Double xPos, Double yPos) {
+        
+        if (inSmallCircle){
+            cenCircle = uploadImages("/icon/roll_over/1-1-roll-over.png");
+            cenCircle.setX(xPos-toolSize/2);
+            cenCircle.setY(yPos-toolSize/2);
+        }                
+        else if (inBigCircle) {
+            
+            if (index==1){ 
+                dirCircle1 = uploadImages("/icon/roll_over/circle-direction-roll-over-1.png");
+                dirCircle1.setX(xPos-toolSize/2);
+                dirCircle1.setY(yPos-toolSize/2);
+            }
+            if (index==2){ 
+                dirCircle2 = uploadImages("/icon/roll_over/circle-direction-roll-over-2.png");
+                dirCircle2.setX(xPos-toolSize/2);
+                dirCircle2.setY(yPos-toolSize/2);
+            }
+            if (index==3){ 
+                dirCircle3 = uploadImages("/icon/roll_over/circle-direction-roll-over-3.png");
+                dirCircle3.setX(xPos-toolSize/2);
+                dirCircle3.setY(yPos-toolSize/2);
+            }
+            if (index==4){ 
+                dirCircle4 = uploadImages("/icon/roll_over/circle-direction-roll-over-4.png");
+                dirCircle4.setX(xPos-toolSize/2);
+                dirCircle4.setY(yPos-toolSize/2);
+            }
+            
+        }                
+        else if (inOuterRec){
+            
+            if (index==1){
+                rectangle1 = uploadImages("/icon/roll_over/Rounded-Rectangle-roll-over-1.png");
+                rectangle1.setX(xPos-toolSize/2);
+                rectangle1.setY(yPos-toolSize/2);
+            }
+            if (index==2){
+                rectangle2 = uploadImages("/icon/roll_over/Rounded-Rectangle-roll-over-2.png");
+                rectangle2.setX(xPos-toolSize/2);
+                rectangle2.setY(yPos-toolSize/2);
+            }
+            if (index==3){
+                rectangle3 = uploadImages("/icon/roll_over/Rounded-Rectangle-roll-over-3.png");
+                rectangle3.setX(xPos-toolSize/2);
+                rectangle3.setY(yPos-toolSize/2);
+            }
+            if (index==4){
+                rectangle4 = uploadImages("/icon/roll_over/Rounded-Rectangle-roll-over-4.png");
+                rectangle4.setX(xPos-toolSize/2);
+                rectangle4.setY(yPos-toolSize/2);
+            }
+            
+        }                       
+    
+    }
+}

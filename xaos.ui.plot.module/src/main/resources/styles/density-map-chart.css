@@ -1,0 +1,55 @@
+.chart {
+	-fx-legend-side: right;
+}
+
+.chart-legend {
+   -fx-background-color: transparent;
+}
+
+.chart-coordinates-label {
+    -fx-background-color: rgba(255, 255, 128, 0.5);
+    -fx-border-color: black;
+    -fx-border-radius: 3;
+    visibility: visible;
+}
+
+.chart-data-tooltip-label {
+    -fx-background-color: rgb(153, 204, 204);
+    -fx-border-color: black;
+    -fx-border-radius: 3;
+    -fx-font-size: 12;
+    -fx-font-weight: bold;
+    -fx-text-alignment: center;
+    visibility: visible;
+}
+
+.chart-coordinates-line {
+	-fx-stroke: maroon;
+	-fx-stroke-dash-array: 5 5;
+	-fx-stroke-width: 1;
+        visibility: visible;
+}
+
+.chart-zoom-rect {
+	-fx-fill: dodgerblue;
+	-fx-stroke: #002966 ;
+	-fx-stroke-type: inside;
+	-fx-stroke-width: 2;
+	-fx-opacity: 0.3;
+	-fx-cursor:url('/plugins/zoomIn.gif'),auto;
+}
+
+.chart-vertical-grid-lines {
+    -fx-stroke: black;
+    visibility: visible;
+}
+
+.chart-horizontal-grid-lines {
+    -fx-stroke: black;
+    visibility: visible;
+}
+
+.chart-projection-lines {
+    -fx-stroke: white;
+    -fx-stroke-width: 2;
+}

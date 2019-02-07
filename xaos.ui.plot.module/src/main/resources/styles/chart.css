@@ -1,0 +1,175 @@
+.chart-coordinates-label {
+    -fx-background-color: rgba(255, 255, 128, 0.5);
+    -fx-border-color: black;
+    -fx-border-radius: 3;
+    visibility: visible;
+}
+
+.chart-fitting-label {
+    -fx-background-color: white;
+    -fx-border-radius: 3;
+    -fx-stroke-width: 4;
+    visibility: visible;
+}
+
+.chart-data-tooltip-label {
+    -fx-background-color: rgb(153, 204, 204);
+    -fx-border-color: black;
+    -fx-border-radius: 3;
+    -fx-font-size: 12;    
+    -fx-font-weight: bold;
+    -fx-text-alignment: center;
+    visibility: visible;
+}
+
+.chart-coordinates-line {
+    -fx-stroke: maroon;
+    -fx-stroke-dash-array: 5 5;
+    -fx-stroke-width: 1;
+    visibility: visible;
+}
+
+.chart-error-line {
+    -fx-stroke: black;
+    -fx-stroke-width: 1;
+    visibility: visible;
+}
+
+.chart-zoom-rect {
+    -fx-fill: dodgerblue;
+    -fx-stroke: #002966 ;
+    -fx-stroke-type: inside;
+    -fx-stroke-width: 2;
+    -fx-opacity: 0.3;
+    -fx-cursor:url('/plugins/zoomIn.gif'),auto;
+}
+
+.chart-series-line {    
+    -fx-stroke-width: 1px;
+    -fx-effect: null;}
+
+.chart-plot-background {
+    -fx-background-color: white;
+}
+.chart-vertical-grid-lines {
+    -fx-stroke: black;
+    visibility: visible;
+}
+.chart-horizontal-grid-lines {
+    -fx-stroke: black;
+    visibility: visible;
+}
+
+.chart{
+   -color0 : green;
+   -color1 : navy;
+   -color2 : firebrick;
+   -color3 : cyan;
+   -color4 : magenta;
+   -color5 : teal;   
+   -color6 : chocolate;
+   -color7 : purple;
+   -color8 : gold;
+   -color9 : gray;
+   
+   
+   -horizontal: #ff0000;
+   -vertical: #006ddb;
+   -longitudinal: #24ff24;
+}
+
+.default-color0.chart-series-line { -fx-stroke: -color0; }
+.default-color1.chart-series-line { -fx-stroke: -color1; }
+.default-color2.chart-series-line { -fx-stroke: -color2; }
+.default-color3.chart-series-line { -fx-stroke: -color3; }
+.default-color4.chart-series-line { -fx-stroke: -color4; }
+.default-color5.chart-series-line { -fx-stroke: -color5; }
+.default-color6.chart-series-line { -fx-stroke: -color6; }
+.default-color7.chart-series-line { -fx-stroke: -color7; }
+.default-color8.chart-series-line { -fx-stroke: -color8; }
+.default-color9.chart-series-line { -fx-stroke: -color9; }
+
+.default-color0.chart-line-symbol { -fx-background-color: -color0, white; }
+.default-color1.chart-line-symbol { -fx-background-color: -color1, white; }
+.default-color2.chart-line-symbol { -fx-background-color: -color2, white; }
+.default-color3.chart-line-symbol { -fx-background-color: -color3, white; }
+.default-color4.chart-line-symbol { -fx-background-color: -color4, white; }
+.default-color5.chart-line-symbol { -fx-background-color: -color5, white; }
+.default-color6.chart-line-symbol { -fx-background-color: -color6, white; }
+.default-color7.chart-line-symbol { -fx-background-color: -color7, white; }
+.default-color8.chart-line-symbol { -fx-background-color: -color8, white; }
+.default-color9.chart-line-symbol { -fx-background-color: -color9, white; }
+
+.default-color0.chart-legend-item-symbol { -fx-background-color: -color0, white; }
+.default-color1.chart-legend-item-symbol { -fx-background-color: -color1, white; }
+.default-color2.chart-legend-item-symbol { -fx-background-color: -color2, white; }
+.default-color3.chart-legend-item-symbol { -fx-background-color: -color3, white; }
+.default-color4.chart-legend-item-symbol { -fx-background-color: -color4, white; }
+.default-color5.chart-legend-item-symbol { -fx-background-color: -color5, white; }
+.default-color6.chart-legend-item-symbol { -fx-background-color: -color6, white; }
+.default-color7.chart-legend-item-symbol { -fx-background-color: -color7, white; }
+.default-color8.chart-legend-item-symbol { -fx-background-color: -color8, white; }
+.default-color9.chart-legend-item-symbol { -fx-background-color: -color9, white; }
+
+.default-color0.chart-symbol { -fx-background-color: -color0}
+.default-color1.chart-symbol { -fx-background-color: -color1}
+.default-color2.chart-symbol { -fx-background-color: -color2}
+.default-color3.chart-symbol { -fx-background-color: -color3}
+.default-color4.chart-symbol { -fx-background-color: -color4}
+.default-color5.chart-symbol { -fx-background-color: -color5}
+.default-color6.chart-symbol { -fx-background-color: -color6}
+.default-color7.chart-symbol { -fx-background-color: -color7}
+.default-color8.chart-symbol { -fx-background-color: -color8}
+.default-color9.chart-symbol { -fx-background-color: -color9}
+
+.default-color0.chart-area-symbol { -fx-background-color: -color0, white; }
+.default-color1.chart-area-symbol { -fx-background-color: -color1, white; }
+.default-color2.chart-area-symbol { -fx-background-color: -color2, white; }
+.default-color3.chart-area-symbol { -fx-background-color: -color3, white; }
+.default-color4.chart-area-symbol { -fx-background-color: -color4, white; }
+.default-color5.chart-area-symbol { -fx-background-color: -color5, white; }
+.default-color6.chart-area-symbol { -fx-background-color: -color6, white; }
+.default-color7.chart-area-symbol { -fx-background-color: -color7, white; }
+.default-color8.chart-area-symbol { -fx-background-color: -color8, white; }
+.default-color9.chart-area-symbol { -fx-background-color: -color9, white; }
+ 
+.default-color0.chart-series-area-line { -fx-stroke: -color0; }
+.default-color1.chart-series-area-line { -fx-stroke: -color1; }
+.default-color2.chart-series-area-line { -fx-stroke: -color2; }
+.default-color3.chart-series-area-line { -fx-stroke: -color3; }
+.default-color4.chart-series-area-line { -fx-stroke: -color4; }
+.default-color5.chart-series-area-line { -fx-stroke: -color5; } 
+.default-color6.chart-series-area-line { -fx-stroke: -color6; }
+.default-color7.chart-series-area-line { -fx-stroke: -color7; }
+.default-color8.chart-series-area-line { -fx-stroke: -color8; }
+.default-color9.chart-series-area-line { -fx-stroke: -color9; } 
+
+.default-color0.chart-series-area-fill { -fx-fill: -color0; -fx-opacity: 0.2; }
+.default-color1.chart-series-area-fill { -fx-fill: -color1; -fx-opacity: 0.2; }
+.default-color2.chart-series-area-fill { -fx-fill: -color2; -fx-opacity: 0.2; }
+.default-color3.chart-series-area-fill { -fx-fill: -color3; -fx-opacity: 0.2; }
+.default-color4.chart-series-area-fill { -fx-fill: -color4; -fx-opacity: 0.2; }
+.default-color5.chart-series-area-fill { -fx-fill: -color5; -fx-opacity: 0.2; }
+.default-color6.chart-series-area-fill { -fx-fill: -color6; -fx-opacity: 0.2; }
+.default-color7.chart-series-area-fill { -fx-fill: -color7; -fx-opacity: 0.2; }
+.default-color8.chart-series-area-fill { -fx-fill: -color8; -fx-opacity: 0.2; }
+.default-color9.chart-series-area-fill { -fx-fill: -color9; -fx-opacity: 0.2; }
+
+.default-color0.chart-bar { -fx-background-color: -color0; }
+.default-color1.chart-bar { -fx-background-color: -color1; }
+.default-color2.chart-bar { -fx-background-color: -color2; }
+.default-color3.chart-bar { -fx-background-color: -color3; }
+.default-color4.chart-bar { -fx-background-color: -color4; }
+.default-color5.chart-bar { -fx-background-color: -color5; }
+.default-color6.chart-bar { -fx-background-color: -color6; }
+.default-color7.chart-bar { -fx-background-color: -color7; }
+.default-color8.chart-bar { -fx-background-color: -color8; }
+.default-color9.chart-bar { -fx-background-color: -color9; }
+
+/*
+.chart-alternative-row-fill {
+    -fx-fill: #99bcfd;
+    -fx-stroke: transparent;
+    -fx-stroke-width: 0;
+}
+*/
