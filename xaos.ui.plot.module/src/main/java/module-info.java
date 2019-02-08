@@ -32,4 +32,7 @@ module xaos.ui.plot {
 	requires transitive javafx.graphics;
 	requires javafx.swing;
 
+	exports se.europeanspallationsource.xaos.ui.plot;
+	exports se.europeanspallationsource.xaos.ui.plot.util;
+
 }

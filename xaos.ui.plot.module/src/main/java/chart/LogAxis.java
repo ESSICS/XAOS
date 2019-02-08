@@ -1,8 +1,20 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ * Copyright (C) 2018-2019 by European Spallation Source ERIC.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package chart;
 
 /**
@@ -21,27 +33,9 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.binding.DoubleBinding;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.chart.ValueAxis;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 

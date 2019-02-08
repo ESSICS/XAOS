@@ -1,5 +1,18 @@
-/**
- * Copyright (c) 2016 European Organisation for Nuclear Research (CERN), All Rights Reserved.
+/*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ * Copyright (C) 2018-2019 by European Spallation Source ERIC.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package chart.data;
@@ -27,26 +40,10 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.chart.ValueAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.stage.Stage;
 import util.DataXComparator;
 import util.Utils;
 
