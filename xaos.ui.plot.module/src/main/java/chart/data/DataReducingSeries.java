@@ -44,8 +44,8 @@ import javafx.scene.chart.ValueAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
-import util.DataXComparator;
-import util.Utils;
+import se.europeanspallationsource.xaos.ui.plot.util.AbscissaDataComparator;
+import se.europeanspallationsource.xaos.ui.plot.util.Utils;
 
 /**
  * 
@@ -281,8 +281,8 @@ public final class DataReducingSeries<X extends Number, Y extends Number> {
         }
         ValueAxis<X> xAxis = getXAxis(getSeries().getChart());
 
-        DataXComparator comparator = new DataXComparator(xAxis);
-        int fromIndex = Collections.binarySearch(input, DataXComparator.key(lowerBound), comparator);
+        AbscissaDataComparator comparator = new AbscissaDataComparator(xAxis);
+        int fromIndex = Collections.binarySearch(input, AbscissaDataComparator.key(lowerBound), comparator);
         if (fromIndex < 0) {
             fromIndex = -fromIndex - 1;
             if (fromIndex > 0) {
@@ -290,7 +290,7 @@ public final class DataReducingSeries<X extends Number, Y extends Number> {
             }
         }
 
-        int toIndex = Collections.binarySearch(input, DataXComparator.key(upperBound), comparator);
+        int toIndex = Collections.binarySearch(input, AbscissaDataComparator.key(upperBound), comparator);
         if (toIndex < 0) {
             toIndex = -toIndex - 1;
         }

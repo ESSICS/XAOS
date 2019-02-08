@@ -21,8 +21,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import util.Assert;
-import util.DataXComparator;
+import se.europeanspallationsource.xaos.ui.plot.util.AbscissaDataComparator;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.DoublePropertyBase;
 import javafx.geometry.Insets;
@@ -56,7 +55,9 @@ public final class DataPointTooltip extends CoordinatesLabel {
      */
     private final DoubleProperty pickingDistance = new DoublePropertyBase(DEFAULT_PICKING_DISTANCE) {
         @Override protected void invalidated() {
-            Assert.assertTrue(get() > 0, "The picking distance must be a positive value");
+			if ( get() <= 0 ) {
+				throw new IllegalArgumentException("The picking distance must be a positive value.");
+			}
         }
 
         @Override public Object getBean() {
@@ -72,7 +73,7 @@ public final class DataPointTooltip extends CoordinatesLabel {
     public void setPickingDistance(double value) { pickingDistance.set(value); }
     public DoubleProperty pickingDistanceProperty() { return pickingDistance; }
 
-    private DataXComparator xValueComparator;
+    private AbscissaDataComparator xValueComparator;
 
     /**
      * Creates and initalizes a new instance of DataPointTooltip class with {{@link #pickingDistanceProperty() picking
@@ -97,7 +98,7 @@ public final class DataPointTooltip extends CoordinatesLabel {
     protected void chartConnected(Chart newChart) {        
         if(newChart instanceof XYChart<?, ?>){
             super.chartConnected(newChart);
-            xValueComparator = new DataXComparator(((XYChart<?, ?>)newChart).getXAxis());
+            xValueComparator = new AbscissaDataComparator(((XYChart<?, ?>)newChart).getXAxis());
         }       
     }
 
@@ -155,7 +156,7 @@ public final class DataPointTooltip extends CoordinatesLabel {
     private List<Data<?, ?>> findNeighborPointsWithBinarySearch(Object xValue) {
         List<Data<?, ?>> points = new LinkedList<>();
         for (Series<?, ?> series : ((XYChart<?, ?>)getChart()).getData()) {
-            int index = Collections.binarySearch(series.getData(), DataXComparator.key(xValue), xValueComparator);
+            int index = Collections.binarySearch(series.getData(), AbscissaDataComparator.key(xValue), xValueComparator);
             if (index >= 0) {
                 points.add(series.getData().get(index));
             } else {

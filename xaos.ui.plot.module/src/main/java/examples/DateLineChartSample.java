@@ -51,7 +51,7 @@ import java.util.concurrent.TimeUnit;
 import javafx.scene.chart.XYChart.Series;
 import plugins.AreaValueTooltip;
 import plugins.PropertyMenu;
-import util.ErrorSeries;
+import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries;
 
 public class DateLineChartSample extends Application {
     private static final Random RANDOM = new Random(System.currentTimeMillis());

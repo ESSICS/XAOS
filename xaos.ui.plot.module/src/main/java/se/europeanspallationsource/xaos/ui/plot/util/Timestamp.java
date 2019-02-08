@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package util;
+package se.europeanspallationsource.xaos.ui.plot.util;
 
 
 import java.math.BigDecimal;

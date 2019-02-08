@@ -12,7 +12,6 @@ MODS_PATH="${PRODUCT_PATH}/mods"
 LIBS_PATH="${PRODUCT_PATH}/libs"
 MAIN_JAR="${TARGET_PATH}/$1"
 DOC_PATH=./doc
-DOT_BIN=/usr/local/bin/dot
 
 
 # Remove all test dependencies...

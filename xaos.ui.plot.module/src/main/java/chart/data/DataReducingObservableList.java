@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import util.DataXComparator;
+import se.europeanspallationsource.xaos.ui.plot.util.AbscissaDataComparator;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -173,7 +173,7 @@ public final class DataReducingObservableList<X extends Number, Y extends Number
             return sourceData;
         }
         
-        DataXComparator comparator = new DataXComparator(xAxis);
+        AbscissaDataComparator comparator = new AbscissaDataComparator(xAxis);
         return sourceData.subList(findFromIndex(comparator), findToIndex(comparator));
     }
 
@@ -186,8 +186,8 @@ public final class DataReducingObservableList<X extends Number, Y extends Number
         return firstX >= xAxis.getLowerBound() && lastX <= xAxis.getUpperBound();
     }
 
-    private int findFromIndex(DataXComparator comparator) {
-        int fromIndex = Collections.binarySearch(sourceData, DataXComparator.key(xAxis.getLowerBound()), comparator);
+    private int findFromIndex(AbscissaDataComparator comparator) {
+        int fromIndex = Collections.binarySearch(sourceData, AbscissaDataComparator.key(xAxis.getLowerBound()), comparator);
         if (fromIndex < 0) {
             fromIndex = -fromIndex - 1;
             if (fromIndex > 0) {
@@ -198,8 +198,8 @@ public final class DataReducingObservableList<X extends Number, Y extends Number
         return fromIndex;
     }
 
-    private int findToIndex(DataXComparator comparator) {
-        int toIndex = Collections.binarySearch(sourceData, DataXComparator.key(xAxis.getUpperBound()), comparator);
+    private int findToIndex(AbscissaDataComparator comparator) {
+        int toIndex = Collections.binarySearch(sourceData, AbscissaDataComparator.key(xAxis.getUpperBound()), comparator);
         if (toIndex < 0) {
             toIndex = -toIndex - 1;
         }

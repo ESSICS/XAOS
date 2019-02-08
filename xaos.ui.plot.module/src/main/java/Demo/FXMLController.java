@@ -41,7 +41,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import plugins.PropertyMenu;
-import util.ErrorSeries;
+import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries;
 public class FXMLController implements Initializable {
     
     @FXML

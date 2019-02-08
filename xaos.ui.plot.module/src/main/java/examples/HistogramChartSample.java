@@ -38,7 +38,7 @@ import plugins.KeyPan;
 import plugins.Pan;
 import plugins.PropertyMenu;
 import plugins.Zoom;
-import util.ErrorSeries;
+import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries;
 
 public class HistogramChartSample extends Application{
     private static final Random RANDOM = new Random(System.currentTimeMillis());

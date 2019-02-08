@@ -47,7 +47,7 @@ import plugins.Zoom;
 import plugins.ErrorBars;
 import plugins.AreaValueTooltip;
 import plugins.PropertyMenu;
-import util.ErrorSeries;
+import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries;
 
 public class AreaChartSample extends Application {
     private static final Random RANDOM = new Random(System.currentTimeMillis());

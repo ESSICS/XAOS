@@ -31,6 +31,7 @@ module xaos.ui.plot {
 	requires javafx.fxml;
 	requires transitive javafx.graphics;
 	requires javafx.swing;
+	requires org.apache.commons.lang3;
 
 	exports se.europeanspallationsource.xaos.ui.plot;
 	exports se.europeanspallationsource.xaos.ui.plot.util;

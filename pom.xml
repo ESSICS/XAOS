@@ -77,7 +77,7 @@
 				<configuration>
 					<createImage>true</createImage>
 					<customStyleConfiguration>${project.basedir}/doc/maven-dependencies.json</customStyleConfiguration>
-					<dotExecutable>/usr/local/bin/dot</dotExecutable>
+					<dotExecutable>${dot.executable}</dotExecutable>
 					<graphFormat>dot</graphFormat>
 					<imageFormat>png</imageFormat>
 					<includeParentProjects>true</includeParentProjects>

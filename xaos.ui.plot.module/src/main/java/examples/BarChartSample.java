@@ -37,7 +37,7 @@ import plugins.KeyPan;
 import plugins.Pan;
 import plugins.PropertyMenu;
 import plugins.Zoom;
-import util.ErrorSeries;
+import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries;
 
 public class BarChartSample extends Application {
     final static String AUSTRIA = "Austria";

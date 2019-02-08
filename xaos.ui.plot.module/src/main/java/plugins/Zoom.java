@@ -45,7 +45,7 @@ import javafx.util.Duration;
 import chart.XYChartPlugin;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.Chart;
-import static util.Assert.assertValueAxis;
+import static se.europeanspallationsource.xaos.ui.plot.util.Assertions.assertValueAxis;
 
 /**
  * Zoom capabilities along X, Y or both axis. For very zoom-in operation the current X and Y range is remembered 

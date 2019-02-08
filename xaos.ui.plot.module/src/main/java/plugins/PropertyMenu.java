@@ -71,15 +71,18 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+
 import static javafx.scene.paint.Color.WHITE;
+
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
-import util.Utils;
-import static util.iconParser.uploadImages;
+import se.europeanspallationsource.xaos.ui.plot.util.Utils;
+
+import static se.europeanspallationsource.xaos.ui.plot.util.iconParser.uploadImages;
 
 /**
  *

@@ -20,6 +20,8 @@ digraph "summary" {
   "xaos.ui.plot"                                     -> "javafx.fxml";
   "xaos.ui.plot"                                     -> "javafx.graphics";
   "xaos.ui.plot"                                     -> "javafx.swing";
+  "xaos.ui.plot"                                     -> "org.apache.commons.lang3";
+  "org.apache.commons.lang3"                         -> "java.base (java.base)";
   "javafx.graphics"                                  -> "java.base (java.base)";
   "javafx.graphics"                                  -> "java.desktop (java.desktop)";
   "javafx.graphics"                                  -> "java.xml (java.xml)";

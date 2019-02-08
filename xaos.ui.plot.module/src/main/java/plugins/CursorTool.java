@@ -20,7 +20,7 @@ import chart.DensityChartFX;
 import chart.XYChartPlugin;
 import java.util.ArrayDeque;
 import java.util.Deque;
-import util.iconParser;
+import se.europeanspallationsource.xaos.ui.plot.util.iconParser;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;

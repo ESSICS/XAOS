@@ -19,6 +19,7 @@
 
 	<properties>
 		<!-- Dependencies Versions -->
+		<commons-lang3.version>3.8.1</commons-lang3.version>
 		<commons-math3.version>3.6.1</commons-math3.version>
 		<javafx.version>11.0.2</javafx.version>
 		<xaos.version>${project.version}</xaos.version>
@@ -91,6 +92,12 @@
 		</dependency>
 
 		<!-- Apache - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${commons-lang3.version}</version>
+			<scope>compile</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-math3</artifactId>

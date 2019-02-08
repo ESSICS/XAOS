@@ -44,11 +44,13 @@ import plugins.DataPointTooltip;
 import plugins.Pan;
 import plugins.Zoom;
 import plugins.ErrorBars;
+
 import static javafx.application.Application.launch;
+
 import plugins.CoordinatesLines;
 import plugins.PropertyMenu;
-import util.ErrorSeries;
-import util.ErrorSeries.ErrorData;
+import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries;
+import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries.ErrorData;
 
 public class ScatterChartSample extends Application {
     private static final Random RANDOM = new Random(System.currentTimeMillis());

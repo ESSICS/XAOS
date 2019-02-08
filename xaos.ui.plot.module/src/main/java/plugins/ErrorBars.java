@@ -33,8 +33,8 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.Chart;
 import javafx.scene.control.CheckBox;
 import javafx.scene.input.MouseEvent;
-import util.ErrorSeries;
-import util.ErrorSeries.ErrorData;
+import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries;
+import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries.ErrorData;
 
 
 /**

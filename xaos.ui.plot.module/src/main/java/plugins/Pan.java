@@ -18,10 +18,9 @@
 package plugins;
 
 import chart.DensityChartFX;
-import static util.Assert.assertArgNotNull;
-import static util.Assert.assertValueAxis;
-import static javafx.scene.input.MouseButton.PRIMARY;
 
+import static se.europeanspallationsource.xaos.ui.plot.util.Assertions.assertValueAxis;
+import static javafx.scene.input.MouseButton.PRIMARY;
 
 import java.util.function.Predicate;
 
@@ -35,6 +34,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.input.MouseEvent;
 import chart.XYChartPlugin;
+import java.util.Objects;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.Chart;
 
@@ -60,7 +60,7 @@ public final class Pan extends XYChartPlugin {
     /** Panning mode along X, Y or both axis */
     private final ObjectProperty<AxisMode> panMode = new ObjectPropertyBase<AxisMode>(AxisMode.XY) {
         @Override protected void invalidated() {
-            assertArgNotNull(get(), getName());
+            Objects.requireNonNull​(get(), getName());
         }
 
         @Override public Object getBean() {

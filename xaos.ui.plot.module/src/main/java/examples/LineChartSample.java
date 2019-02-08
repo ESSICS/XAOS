@@ -46,7 +46,7 @@ import plugins.Pan;
 import plugins.Zoom;
 import plugins.PropertyMenu;
 import plugins.AreaValueTooltip;
-import util.ErrorSeries;
+import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries;
 
 public class LineChartSample extends Application {
     private static Long currentTime = System.currentTimeMillis();
