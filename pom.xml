@@ -378,8 +378,8 @@
 		</snapshotRepository>
 	</distributionManagement>
 	
-	<repositories>
 <!--
+	<repositories>
 		<repository>
 			<id>central</id>
 			<url>http://repo.maven.apache.org/maven2/</url>
@@ -410,8 +410,8 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
--->
 	</repositories>
+-->
 
 	<dependencies>
 

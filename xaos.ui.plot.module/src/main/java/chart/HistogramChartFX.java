@@ -9,7 +9,6 @@ import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.chart.Axis;
@@ -18,7 +17,6 @@ import javafx.scene.chart.ValueAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.CheckBox;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
@@ -59,8 +57,8 @@ public class HistogramChartFX<X,Y> extends LineChart<X,Y>{
       
     /**
      * Construct a new HistogramChartFX with the given data. 
-     * @param xAxis 
-     * @param yAxis
+     * @param xAxis  The X axis.
+     * @param yAxis The Y axis.
      * @param data Data to included in the chart
      * @param nbins desired discretisation for bins. 
      */
@@ -95,8 +93,8 @@ public class HistogramChartFX<X,Y> extends LineChart<X,Y>{
     }
     /**
      * Construct a new HistogramChartFX with the given data. 
-     * @param xAxis 
-     * @param yAxis
+     * @param xAxis The X axis.
+     * @param yAxis The Y axis.
      * @param data Data to included in the chart 
      */
     public HistogramChartFX(Axis<X> xAxis, Axis<Y> yAxis, ObservableList<Series<X,Y>> data){

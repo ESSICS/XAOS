@@ -3,12 +3,37 @@ digraph "xaos.ui.plot" {
   edge [fontsize="10",fontname="Helvetica"]
 
   // Node Definitions:
+  "org.openjfx:javafx-base:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-base<br/>11.0.2>]
+  "org.openjfx:javafx-base:jar:mac"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-base<br/>11.0.2<br/>mac>]
   "se.europeanspallationsource:xaos.ui.plot:jar"[shape="box",style="rounded, filled",fillcolor="#7DE1FF",label=<se.europeanspallationsource<br/>xaos.ui.plot<br/>0.4.0-SNAPSHOT>]
+  "org.openjfx:javafx-controls:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-controls<br/>11.0.2>]
+  "org.openjfx:javafx-controls:jar:mac"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-controls<br/>11.0.2<br/>mac>]
+  "org.openjfx:javafx-graphics:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-graphics<br/>11.0.2>]
+  "org.openjfx:javafx-fxml:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-fxml<br/>11.0.2>]
+  "org.openjfx:javafx-fxml:jar:mac"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-fxml<br/>11.0.2<br/>mac>]
+  "org.openjfx:javafx-graphics:jar:mac"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-graphics<br/>11.0.2<br/>mac>]
+  "org.openjfx:javafx-swing:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-swing<br/>11.0.2>]
+  "org.openjfx:javafx-swing:jar:mac"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-swing<br/>11.0.2<br/>mac>]
+  "org.apache.commons:commons-math3:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.apache.commons<br/>commons-math3<br/>3.6.1>]
   "org.assertj:assertj-core:jar"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">org.assertj</font><br/>assertj-core<font color="grey55" point-size="10"><br/>3.11.1</font><font color="grey55" point-size="10"><br/>(test)</font>>]
   "junit:junit:jar"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">junit</font><br/>junit<font color="grey55" point-size="10"><br/>4.12</font><font color="grey55" point-size="10"><br/>(test)</font>>]
   "org.hamcrest:hamcrest-core:jar"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">org.hamcrest</font><br/>hamcrest-core<font color="grey55" point-size="10"><br/>1.3</font><font color="grey55" point-size="10"><br/>(test)</font>>]
 
   // Edge Definitions:
+  "org.openjfx:javafx-base:jar" -> "org.openjfx:javafx-base:jar:mac"
+  "se.europeanspallationsource:xaos.ui.plot:jar" -> "org.openjfx:javafx-base:jar"
+  "org.openjfx:javafx-controls:jar" -> "org.openjfx:javafx-controls:jar:mac"
+  "org.openjfx:javafx-controls:jar" -> "org.openjfx:javafx-graphics:jar"[style="dotted"]
+  "se.europeanspallationsource:xaos.ui.plot:jar" -> "org.openjfx:javafx-controls:jar"
+  "org.openjfx:javafx-fxml:jar" -> "org.openjfx:javafx-fxml:jar:mac"
+  "org.openjfx:javafx-fxml:jar" -> "org.openjfx:javafx-controls:jar"[style="dotted"]
+  "se.europeanspallationsource:xaos.ui.plot:jar" -> "org.openjfx:javafx-fxml:jar"
+  "org.openjfx:javafx-graphics:jar" -> "org.openjfx:javafx-graphics:jar:mac"
+  "se.europeanspallationsource:xaos.ui.plot:jar" -> "org.openjfx:javafx-graphics:jar"
+  "org.openjfx:javafx-swing:jar" -> "org.openjfx:javafx-swing:jar:mac"
+  "org.openjfx:javafx-swing:jar" -> "org.openjfx:javafx-graphics:jar"[style="dotted"]
+  "se.europeanspallationsource:xaos.ui.plot:jar" -> "org.openjfx:javafx-swing:jar"
+  "se.europeanspallationsource:xaos.ui.plot:jar" -> "org.apache.commons:commons-math3:jar"
   "se.europeanspallationsource:xaos.ui.plot:jar" -> "org.assertj:assertj-core:jar"
   "junit:junit:jar" -> "org.hamcrest:hamcrest-core:jar"
   "se.europeanspallationsource:xaos.ui.plot:jar" -> "junit:junit:jar"

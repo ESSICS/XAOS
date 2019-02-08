@@ -20,6 +20,10 @@
  */
 module xaos.ui.plot {
 
+	//	The following is an "automatic module", whose name is derived from the
+	//	JAR name.
+	requires commons.math3;
+	
 	requires java.logging;
 	requires java.sql;
 	requires transitive javafx.base;

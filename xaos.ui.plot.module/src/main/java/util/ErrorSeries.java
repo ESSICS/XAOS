@@ -143,7 +143,10 @@ public class ErrorSeries<X,Y>{
         public final ObservableList<ErrorData<X,Y>> getData() { return displayedErrorData; }
         public final void setData(ObservableList<ErrorData<X,Y>> value) { data.setValue(value); }
         public final ObjectProperty<ObservableList<ErrorData<X,Y>>> dataProperty() { return data; }*/
-        
+
+		/**
+		 * @return The displayed error data.
+		 */
         public final ObservableList<ErrorData<X,Y>> getData() { return displayedErrorData; }
         public final void setData(ObservableList<ErrorData<X,Y>> data) { displayedErrorData = data; }
 
