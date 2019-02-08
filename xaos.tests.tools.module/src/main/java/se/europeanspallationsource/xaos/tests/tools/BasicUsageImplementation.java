@@ -1,6 +1,6 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- * Copyright (C) 2018 by European Spallation Source ERIC.
+ * Copyright (C) 2018-2019 by European Spallation Source ERIC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
