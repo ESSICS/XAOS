@@ -1,0 +1,84 @@
+
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
+stages:
+  - compile
+  - test
+  - package
+  - analyse
+  - publish
+
+compile:
+  stage: compile
+  image: registry.esss.lu.se/ics-docker/maven:openjdk-11
+  tags:
+    - docker
+  script:
+    - mvn --batch-mode compile
+  artifacts:
+    paths:
+      - target/
+      - xaos.app.module/target/
+      - xaos.core.module/target
+      - xaos.tests.tools.module/target
+      - xaos.tools.module/target
+      - xaos.ui.gauge.module/target
+      - xaos.ui.module/target
+      - xaos.ui.plot.module/target
+    expire_in: 1 day
+  only:
+    - web
+    - schedules
+
+test:
+  stage: test
+  image: registry.esss.lu.se/ics-docker/maven:openjdk-11
+  tags:
+    - docker
+  script:
+    - /bin/sh -c "xvfb-run mvn --batch-mode test"
+  artifacts:
+    reports:
+      junit:
+      - xaos.core.module/target/surefire-reports/TEST-*.xml
+      - xaos.tools.module/target/surefire-reports/TEST-*.xml
+      - xaos.ui.module/target/surefire-reports/TEST-*.xml
+      - xaos.tests.tools.module/target/surefire-reports/TEST-*.xml
+  only:
+    - web
+    - schedules
+
+package:
+  stage: package
+  image: registry.esss.lu.se/ics-docker/maven:openjdk-11
+  tags:
+    - docker
+  script:
+    - echo "${GPG_PRIVATE_KEY}" | gpg --batch --import
+    - mvn --batch-mode -Dxaos.headless=true -Dgpg.passphrase=${GPG_PASSPHRASE} -Dmaven.test.skip clean install
+  only:
+    - web
+    - schedules
+
+sonar:
+  stage: analyse
+  image: registry.esss.lu.se/ics-docker/maven:openjdk-11
+  tags:
+    - docker
+  script:
+    - mvn --batch-mode sonar:sonar -Dsonar.login=$SONARQUBE_TOKEN -Dsonar.branch=$CI_COMMIT_REF_SLUG
+  only:
+    - web@ics-software/XAOS
+    - schedules@ics-software/XAOS
+
+publish:
+  stage: publish
+  image: registry.esss.lu.se/ics-docker/maven:openjdk-11
+  tags:
+    - docker
+  script:
+    - mvn --batch-mode -Dxaos.headless=true -Dserver.id=ossrh -Dserver.username=${USERNAME} -Dserver.password='${PASSWORD}' clean deploy
+  only:
+    - web@ics-software/XAOS
+    - schedules@ics-software/XAOS
