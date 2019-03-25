@@ -80,7 +80,6 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
-import se.europeanspallationsource.xaos.ui.plot.util.Utils;
 import se.europeanspallationsource.xaos.ui.util.ClipboardUtils;
 
 import static se.europeanspallationsource.xaos.ui.plot.util.iconParser.uploadImages;
@@ -183,7 +182,7 @@ public class PropertyMenu extends XYChartPlugin{
                 System.out.print(fitLabel.getBoundsInLocal());
                 System.out.print(mouseLocation);
                 if((event.getClickCount() == 2) && fitLabel.getBoundsInLocal().contains(mouseLocation)){
-                    Utils.copyToClipboardText(fitLabel.getText());
+					ClipboardUtils.copyToSystemClipboard(fitLabel.getText());
                 }
             }
         }

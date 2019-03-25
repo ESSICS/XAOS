@@ -35,17 +35,6 @@ import javafx.scene.input.ClipboardContent;
 
 public class Utils {
 
-	public static void copyToClipboardText( String s ) {
-
-		final Clipboard clipboard = Clipboard.getSystemClipboard();
-		final ClipboardContent content = new ClipboardContent();
-
-		content.putString(s);
-		clipboard.clear();
-		clipboard.setContent(content);
-
-	}
-
 	public static void copyToClipboardImage( Label lbl ) {
 
 		WritableImage snapshot = lbl.snapshot(new SnapshotParameters(), null);

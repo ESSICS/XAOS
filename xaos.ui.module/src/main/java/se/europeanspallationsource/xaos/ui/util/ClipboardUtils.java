@@ -18,6 +18,7 @@ package se.europeanspallationsource.xaos.ui.util;
 
 
 import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 
 
 /**
@@ -33,6 +34,21 @@ public class ClipboardUtils {
 	 */
 	public static void clearSystemClipboard() {
 		Clipboard.getSystemClipboard().clear();
+	}
+
+	/**
+	 * Copy the given string into the system clipboard. The clipboard is cleared
+	 * before adding the new content.
+	 *
+	 * @param text The string to be copied into the system clipboard.
+	 */
+	public static void copyToSystemClipboard( String text ) {
+
+		final ClipboardContent content = new ClipboardContent();
+
+		content.putString(text);
+		Clipboard.getSystemClipboard().setContent(content);
+
 	}
 
 	private ClipboardUtils() {
