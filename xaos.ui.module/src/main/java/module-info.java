@@ -55,5 +55,6 @@ module xaos.ui {
 	exports se.europeanspallationsource.xaos.ui.control.tree;
 	exports se.europeanspallationsource.xaos.ui.control.tree.directory;
 	exports se.europeanspallationsource.xaos.ui.spi;
+	exports se.europeanspallationsource.xaos.ui.util;
 
 }

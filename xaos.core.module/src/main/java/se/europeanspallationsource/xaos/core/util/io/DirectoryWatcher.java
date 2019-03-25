@@ -46,6 +46,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.function.Consumer;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static java.nio.file.StandardOpenOption.CREATE;
@@ -54,7 +55,6 @@ import static java.nio.file.StandardOpenOption.WRITE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
-import static se.europeanspallationsource.xaos.core.impl.Constants.LOGGER;
 
 
 /**
@@ -85,8 +85,9 @@ import static se.europeanspallationsource.xaos.core.impl.Constants.LOGGER;
  * @author claudio.rosati@esss.se
  * @see <a href="https://github.com/TomasMikula/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.DirWatcher</a>
  */
-@SuppressWarnings( "ClassWithoutLogger" )
 public class DirectoryWatcher implements AutoCloseable {
+
+	private static final Logger LOGGER = Logger.getLogger(DirectoryWatcher.class.getName());
 
 	/**
 	 * Creates a {@link DirectoryWatcher} instance.

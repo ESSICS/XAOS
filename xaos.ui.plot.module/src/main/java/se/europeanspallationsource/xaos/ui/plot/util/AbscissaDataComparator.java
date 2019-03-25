@@ -40,7 +40,7 @@ public class AbscissaDataComparator<X> implements Comparator<Data<X, ?>> {
 	 * when using methods like
 	 * {@link Collections#binarySearch(java.util.List, java.lang.Object, java.util.Comparator)}.
 	 *
-	 * @param <X> The type of the X part of the returned {@link Data}.
+	 * @param <X>    The type of the X part of the returned {@link Data}.
 	 * @param xValue X value of the returned {@link Data}.
 	 * @return Data containing the given X value.
 	 */
@@ -65,15 +65,14 @@ public class AbscissaDataComparator<X> implements Comparator<Data<X, ?>> {
 
 	}
 
-	@SuppressWarnings( "unchecked" )
 	@Override
 	public int compare( Data<X, ?> data1, Data<X, ?> data2 ) {
 
-		double x1Numeric = xAxis.toNumericValue(data1.getXValue());
-		double x2Numeric = xAxis.toNumericValue(data2.getXValue());
+		double x1 = xAxis.toNumericValue(data1.getXValue());
+		double x2 = xAxis.toNumericValue(data2.getXValue());
 
-		return (int) Math.signum(x1Numeric - x2Numeric);
-		
+		return (int) Math.signum(x1 - x2);
+
 	}
 
 }

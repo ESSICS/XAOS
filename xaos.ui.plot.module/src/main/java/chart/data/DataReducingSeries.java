@@ -44,8 +44,8 @@ import javafx.scene.chart.ValueAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
+import se.europeanspallationsource.xaos.core.util.ThreadUtils;
 import se.europeanspallationsource.xaos.ui.plot.util.AbscissaDataComparator;
-import se.europeanspallationsource.xaos.ui.plot.util.Utils;
 
 /**
  * 
@@ -227,8 +227,8 @@ public final class DataReducingSeries<X extends Number, Y extends Number> {
             dataReductionNeeded.set(true);
             executor.submit(new Runnable() {
                 @Override public void run() {
-                    // Temporary hack to avoid reducing data twice (lowerBound and upperBound update)
-                    Utils.sleep(5);
+                    // Temporary hack to avoid reducing data twice (lowerBound and upperBound update).
+					ThreadUtils.sleep(5);
                     if (dataReductionNeeded.compareAndSet(true, false)) {
                         Platform.runLater(new Runnable() {
                             @Override

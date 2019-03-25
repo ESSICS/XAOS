@@ -21,10 +21,10 @@
 module xaos.app.preloader {
 
 	requires java.logging;
-	requires transitive xaos.core;
 	requires transitive javafx.base;
 	requires transitive javafx.controls;
 	requires transitive javafx.graphics;
+	requires transitive xaos.core;
 
 	exports se.europeanspallationsource.xaos.app.preloader;
 

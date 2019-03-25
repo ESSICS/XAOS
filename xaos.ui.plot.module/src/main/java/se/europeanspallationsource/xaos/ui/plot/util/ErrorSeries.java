@@ -185,14 +185,25 @@ public class ErrorSeries<X, Y> {
 	@SuppressWarnings( "PublicInnerClass" )
 	public static final class ErrorData<X, Y> {
 
-		/** Data point connected to the error bar. */
+		/**
+		 * Data point connected to the error bar.
+		 */
 		private XYChart.Data<X, Y> errorData = new XYChart.Data<>();
-		/** The series this data belongs to. */
+
+		/**
+		 * The series this data belongs to.
+		 */
 		private ErrorSeries<X, Y> errorSeries;
-		/** X coordinates of the error start and end. */
+
+		/**
+		 * X coordinates of the error start and end.
+		 */
 		private List<X> xErrorBar = new ArrayList<>(2);
 		private final Line xErrorLine = new Line();
-		/** Y coordinates of the error start and end. */
+
+		/**
+		 * Y coordinates of the error start and end.
+		 */
 		private List<Y> yErrorBar = new ArrayList<>(2);
 		private final Line yErrorLine = new Line();
 
@@ -205,9 +216,11 @@ public class ErrorSeries<X, Y> {
 		}
 
 		public ErrorData( XYChart.Data<X, Y> data, double yError ) {
+
 			this(data);
-			List catList = new ArrayList<>();
-			List<Number> numberList = new ArrayList<>();
+
+			List<Object> catList = new ArrayList<>(4);
+			List<Number> numberList = new ArrayList<>(4);
 
 			if ( ( !( data.getXValue() instanceof Number ) || ( data.getXValue() instanceof BigDecimal ) || ( data.getXValue() instanceof Long ) ) && ( data.getYValue() instanceof Number ) ) {
 				numberList.add(0, Double.parseDouble(errorData.getYValue().toString()) * ( 1 - yError ));
@@ -223,41 +236,45 @@ public class ErrorSeries<X, Y> {
 				setErrors(numberList, catList);
 			} else {
 				throw new IllegalArgumentException("Axis type incorrect, at least one of the Axes should be a Number axis. If both are the error val should be specified for both x and y. ");
-			};
+			}
+
 		}
 
-		;
-
-
         public ErrorData( XYChart.Data<X, Y> data, double[] xError, double[] yError ) {
+
 			this(data);
-			List<Number> xErrorList = new ArrayList<>();
-			List<Number> yErrorList = new ArrayList<>();
+
+			List<Number> xErrorList = new ArrayList<>(4);
+			List<Number> yErrorList = new ArrayList<>(4);
+
 			xErrorList.add(0, Double.parseDouble(errorData.getXValue().toString()) + xError[0]);
 			xErrorList.add(1, Double.parseDouble(errorData.getXValue().toString()) - xError[1]);
 			yErrorList.add(0, Double.parseDouble(errorData.getYValue().toString()) + yError[0]);
 			yErrorList.add(1, Double.parseDouble(errorData.getYValue().toString()) - yError[1]);
 			setErrors(xErrorList, yErrorList);
+
 		}
 
 		public ErrorData( XYChart.Data<X, Y> data, double xError, double yError ) {
+
 			this(data);
-			List<Number> xErrorList = new ArrayList<>();
-			List<Number> yErrorList = new ArrayList<>();
+
+			List<Number> xErrorList = new ArrayList<>(4);
+			List<Number> yErrorList = new ArrayList<>(4);
+
 			xErrorList.add(0, Double.parseDouble(errorData.getXValue().toString()) * ( 1 - xError ));
 			xErrorList.add(1, Double.parseDouble(errorData.getXValue().toString()) * ( 1 + xError ));
 			yErrorList.add(0, Double.parseDouble(errorData.getYValue().toString()) * ( 1 - yError ));
 			yErrorList.add(1, Double.parseDouble(errorData.getYValue().toString()) * ( 1 + yError ));
 			setErrors(xErrorList, yErrorList);
-		}
 
+		}
 
 		public XYChart.Data<?, ?> getDataPoint() {
 			return errorData;
 		}
 
-
-		@SuppressWarnings( { "unchecked", "rawtypes" } )
+		@SuppressWarnings( "ReturnOfCollectionOrArrayField" )
 		public List<?> getXErrorBar() {
 			return xErrorBar;
 		}
@@ -266,7 +283,7 @@ public class ErrorSeries<X, Y> {
 			return xErrorLine;
 		}
 
-
+		@SuppressWarnings( "ReturnOfCollectionOrArrayField" )
 		public List<?> getYErrorBar() {
 			return yErrorBar;
 		}
@@ -275,13 +292,9 @@ public class ErrorSeries<X, Y> {
 			return yErrorLine;
 		}
 
-
 		public Boolean isData( XYChart.Data<?, ?> data ) {
-			if ( errorData.getXValue().equals(data.getXValue()) && errorData.getYValue().equals(data.getYValue()) ) {
-				return true;
-			} else {
-				return false;
-			}
+			return ( errorData.getXValue().equals(data.getXValue())
+				  && errorData.getYValue().equals(data.getYValue()) );
 		}
 
 		public void resetLine() {
@@ -295,24 +308,33 @@ public class ErrorSeries<X, Y> {
 			yErrorLine.setStartY(0);
 			yErrorLine.setEndY(0);
 		}
+
 		public void setDataPoint( XYChart.Data<X, Y> data ) {
 			this.errorData = data;
 		}
-		public void setErrors( List<?> xError, List<Number> yError ) {
+
+		@SuppressWarnings( "unchecked" )
+		public void setErrors( List<?> xError, List<?> yError ) {
 			xErrorBar.add(0, (X) xError.get(0));
 			xErrorBar.add(1, (X) xError.get(1));
 			yErrorBar.add(0, (Y) yError.get(0));
 			yErrorBar.add(1, (Y) yError.get(1));
 		}
+
+		@SuppressWarnings( "AssignmentToCollectionOrArrayFieldFromParameter" )
 		public void setXErrorBar( List<X> xErrorBar ) {
 			this.xErrorBar = xErrorBar;
 		}
+
+		@SuppressWarnings( "AssignmentToCollectionOrArrayFieldFromParameter" )
 		public void setYErrorBar( List<Y> yErrorBar ) {
 			this.yErrorBar = yErrorBar;
 		}
+
 		void setErrorSeries( ErrorSeries<X, Y> series ) {
 			this.errorSeries = series;
 		}
+
 	}
 
 }

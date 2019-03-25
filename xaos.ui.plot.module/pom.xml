@@ -105,6 +105,18 @@
 			<scope>compile</scope>
 		</dependency>
 
+        <!-- XAOS - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>xaos.core</artifactId>
+            <version>${xaos.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>xaos.ui</artifactId>
+            <version>${xaos.version}</version>
+        </dependency>
+
 	</dependencies>
 
 </project>

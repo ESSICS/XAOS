@@ -81,6 +81,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import se.europeanspallationsource.xaos.ui.plot.util.Utils;
+import se.europeanspallationsource.xaos.ui.util.ClipboardUtils;
 
 import static se.europeanspallationsource.xaos.ui.plot.util.iconParser.uploadImages;
 
@@ -451,8 +452,8 @@ public class PropertyMenu extends XYChartPlugin{
                interpolatedValsList.remove(interpolatedValsList.size()-1);               
                getPlotChildren().removeAll(fittingLabel); 
                fittingLabel.remove(fittingLabel.size()-1);
-               getPlotChildren().addAll(fittingLabel); 
-               Utils.clearClipboard();
+               getPlotChildren().addAll(fittingLabel);
+			   ClipboardUtils.clearSystemClipboard();
             }
         });
         
@@ -462,7 +463,7 @@ public class PropertyMenu extends XYChartPlugin{
                ((XYChart<Number, Number>)getChart()).getData().removeAll(interpolatedValsList);
                getPlotChildren().removeAll(fittingLabel); 
                fittingLabel.clear();
-               Utils.clearClipboard();
+			   ClipboardUtils.clearSystemClipboard();
             }
         });
                 

@@ -14,22 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.tools.impl;
+package se.europeanspallationsource.xaos.ui.util;
 
 
-import java.util.logging.Logger;
+import javafx.scene.input.Clipboard;
 
 
 /**
- * Constants for all classes in this module.
+ * Various utilities for clipboards.
  *
- * @author claudiorosati
+ * @author claudio.rosati@esss.se
  */
-public interface Constants {
+@SuppressWarnings( "ClassWithoutLogger" )
+public class ClipboardUtils {
 
 	/**
-	 * The {@link Logger} to be used by all classes in this module.
+	 * Clear the system clipboard.
 	 */
-	Logger LOGGER = Logger.getLogger(Constants.class.getName());
+	public static void clearSystemClipboard() {
+		Clipboard.getSystemClipboard().clear();
+	}
+
+	private ClipboardUtils() {
+		//	Nothing to do.
+	}
 
 }

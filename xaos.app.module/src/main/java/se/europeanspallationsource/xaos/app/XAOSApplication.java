@@ -18,6 +18,7 @@ package se.europeanspallationsource.xaos.app;
 
 
 import java.text.MessageFormat;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.application.Preloader;
@@ -36,7 +37,6 @@ import se.europeanspallationsource.xaos.core.util.ThreadPools;
 import static java.util.logging.Level.SEVERE;
 import static javafx.application.Preloader.StateChangeNotification.Type.BEFORE_START;
 import static javafx.scene.control.ProgressIndicator.INDETERMINATE_PROGRESS;
-import static se.europeanspallationsource.xaos.app.impl.Constants.LOGGER;
 
 
 /**
@@ -48,8 +48,9 @@ import static se.europeanspallationsource.xaos.app.impl.Constants.LOGGER;
  *
  * @author claudio.rosati@esss.se
  */
-@SuppressWarnings( { "ClassWithoutLogger" } )
 public class XAOSApplication extends Application {
+
+	private static final Logger LOGGER = Logger.getLogger(XAOSApplication.class.getName());
 
 	private volatile int currentStep = -1;
 	private volatile int currentSubStep = -1;

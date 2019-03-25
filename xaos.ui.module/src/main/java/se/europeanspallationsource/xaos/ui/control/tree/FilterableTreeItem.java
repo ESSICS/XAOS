@@ -18,6 +18,7 @@ package se.europeanspallationsource.xaos.ui.control.tree;
 
 
 import java.util.function.Predicate;
+import java.util.logging.Logger;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -31,8 +32,6 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.CheckBoxTreeCell;
 import se.europeanspallationsource.xaos.tools.lang.Reflections;
-
-import static se.europeanspallationsource.xaos.ui.impl.Constants.LOGGER;
 
 
 /**
@@ -53,8 +52,9 @@ import static se.europeanspallationsource.xaos.ui.impl.Constants.LOGGER;
  * @author claudio.rosati@esss.se
  * @see <a href="http://www.kware.net/?p=204">Filtering a JavaFX TreeView</a>
  */
-@SuppressWarnings( "ClassWithoutLogger" )
 public class FilterableTreeItem<T> extends CheckBoxTreeItem<T> {
+
+	private static final Logger LOGGER = Logger.getLogger(FilterableTreeItem.class.getName());
 
 	final private FilteredList<TreeItem<T>> filteredList;
 	final private ObservableList<TreeItem<T>> unfilteredList;

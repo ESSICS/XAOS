@@ -1,5 +1,4 @@
 digraph "summary" {
   "xaos.tools"                                       -> "java.base (java.base)";
   "xaos.tools"                                       -> "java.compiler (java.compiler)";
-  "xaos.tools"                                       -> "java.logging (java.logging)";
 }
