@@ -228,7 +228,7 @@ public class ErrorSeries<X, Y> {
 				catList.add(0, errorData.getXValue());
 				catList.add(1, errorData.getXValue());
 				setErrors(catList, numberList);
-			} else if ( ( !( data.getYValue() instanceof Number ) ) && ( data.getXValue() instanceof Number ) ) {
+			} else if ( !( data.getYValue() instanceof Number ) && ( data.getXValue() instanceof Number ) ) {
 				numberList.add(0, Double.parseDouble(errorData.getXValue().toString()) * ( 1 - yError ));
 				numberList.add(1, Double.parseDouble(errorData.getXValue().toString()) * ( 1 + yError ));
 				catList.add(0, errorData.getYValue());
@@ -298,6 +298,7 @@ public class ErrorSeries<X, Y> {
 		}
 
 		public void resetLine() {
+
 			xErrorLine.setStartX(0);
 			xErrorLine.setEndX(0);
 			xErrorLine.setStartY(0);
@@ -307,6 +308,7 @@ public class ErrorSeries<X, Y> {
 			yErrorLine.setEndX(0);
 			yErrorLine.setStartY(0);
 			yErrorLine.setEndY(0);
+
 		}
 
 		public void setDataPoint( XYChart.Data<X, Y> data ) {
@@ -331,6 +333,7 @@ public class ErrorSeries<X, Y> {
 			this.yErrorBar = yErrorBar;
 		}
 
+//	TODO:CR Ask Natalia the reason of this method, being that the setter doesn't exists and errorSeries is never used.
 		void setErrorSeries( ErrorSeries<X, Y> series ) {
 			this.errorSeries = series;
 		}

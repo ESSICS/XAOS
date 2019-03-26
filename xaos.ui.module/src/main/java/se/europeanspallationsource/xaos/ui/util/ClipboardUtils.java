@@ -17,6 +17,9 @@
 package se.europeanspallationsource.xaos.ui.util;
 
 
+import java.util.Objects;
+import javafx.scene.Node;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 
@@ -28,6 +31,33 @@ import javafx.scene.input.ClipboardContent;
  */
 @SuppressWarnings( "ClassWithoutLogger" )
 public class ClipboardUtils {
+
+	/**
+	 * Captures a snapshot image of the given {@link Node} and copies it into
+	 * the system clipboard.
+	 *
+	 * @param node The node whose snapshot image must be copied in the system
+	 *             clipboard.
+	 * @throws NullPointerException If {@code node} is {@code null}.
+	 */
+	public static void captureSnapshotAndCopyToSystemClipboard( Node node ) {
+
+		Objects.requireNonNull(node, "Null 'node' parameter.");
+
+		node.snapshot(p -> {
+
+				final ClipboardContent content = new ClipboardContent();
+
+				content.putImage(p.getImage());
+				Clipboard.getSystemClipboard().setContent(content);
+				return null;
+
+			},
+			new SnapshotParameters(),
+			null
+		);
+
+	}
 
 	/**
 	 * Clear the system clipboard.
