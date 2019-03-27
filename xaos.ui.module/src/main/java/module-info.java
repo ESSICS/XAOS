@@ -24,6 +24,7 @@ module xaos.ui {
 	requires java.xml;
 	requires transitive javafx.base;
 	requires transitive javafx.controls;
+	requires transitive javafx.fxml;
 	requires transitive javafx.graphics;
 	requires javafx.media;
 	requires javafx.swing;

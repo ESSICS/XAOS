@@ -81,8 +81,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import se.europeanspallationsource.xaos.ui.util.ClipboardUtils;
-
-import static se.europeanspallationsource.xaos.ui.plot.util.iconParser.uploadImages;
+import se.europeanspallationsource.xaos.ui.util.ResourceUtils;
 
 /**
  *
@@ -109,11 +108,11 @@ public class PropertyMenu extends XYChartPlugin{
         menuRectangle.setWidth(toolSize+insetSize); 
         menuRectangle.setOpacity(0.5);
         menuRectangle.setFill(WHITE);
-        menuPrint =  uploadImages("/icon/properties/picture.png");
-        menuSave =  uploadImages("/icon/properties/save.png");
-        menuAxis =  uploadImages("/icon/properties/ruler2.png");
-        menuFit =  uploadImages("/icon/properties/fit.png");
-        menuProp =  uploadImages("/icon/properties/properties.png");
+        menuPrint =  new ImageView(ResourceUtils.getImage("/icons/properties/picture.png"));
+        menuSave =  new ImageView(ResourceUtils.getImage("/icons/properties/save.png"));
+        menuAxis =  new ImageView(ResourceUtils.getImage("/icons/properties/ruler2.png"));
+        menuFit =  new ImageView(ResourceUtils.getImage("/icons/properties/fit.png"));
+        menuProp =  new ImageView(ResourceUtils.getImage("/icons/properties/properties.png"));
         propertiesTool = getImages();
     }        
     

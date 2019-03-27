@@ -38,4 +38,9 @@ module xaos.ui.plot {
 	exports se.europeanspallationsource.xaos.ui.plot;
 	exports se.europeanspallationsource.xaos.ui.plot.util;
 
+	opens icons.neutral to xaos.ui;
+	opens icons.properties to xaos.ui;
+	opens icons.push to xaos.ui;
+	opens icons.roll_over to xaos.ui;
+
 }

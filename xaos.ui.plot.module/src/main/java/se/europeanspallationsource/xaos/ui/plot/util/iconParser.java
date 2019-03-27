@@ -22,6 +22,7 @@ import chart.XYChartPlugin;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.Chart;
+import se.europeanspallationsource.xaos.ui.util.ResourceUtils;
 
 
 /**
@@ -42,24 +43,19 @@ public class iconParser extends XYChartPlugin{
     private static ImageView[] cursorTool;
     
     public iconParser(){
-        cenCircle =  uploadImages("/icon/neutral/1-1-neutral.png");
-        rectangle1   = uploadImages("/icon/neutral/Rounded-Rectangle-neutral-1.png");
-        rectangle2   = uploadImages("/icon/neutral/Rounded-Rectangle-neutral-2.png");
-        rectangle3   = uploadImages("/icon/neutral/Rounded-Rectangle-neutral-3.png");
-        rectangle4   = uploadImages("/icon/neutral/Rounded-Rectangle-neutral-4.png");
-        dirCircle1 = uploadImages("/icon/neutral/circle-direction-neutral-1.png");
-        dirCircle2 = uploadImages("/icon/neutral/circle-direction-neutral-2.png"); 
-        dirCircle3 = uploadImages("/icon/neutral/circle-direction-neutral-3.png"); 
-        dirCircle4 = uploadImages("/icon/neutral/circle-direction-neutral-4.png");
+        cenCircle =  new ImageView(ResourceUtils.getImage("/icons/neutral/1-1-neutral.png"));
+        rectangle1   = new ImageView(ResourceUtils.getImage("/icons/neutral/Rounded-Rectangle-neutral-1.png"));
+        rectangle2   = new ImageView(ResourceUtils.getImage("/icons/neutral/Rounded-Rectangle-neutral-2.png"));
+        rectangle3   = new ImageView(ResourceUtils.getImage("/icons/neutral/Rounded-Rectangle-neutral-3.png"));
+        rectangle4   = new ImageView(ResourceUtils.getImage("/icons/neutral/Rounded-Rectangle-neutral-4.png"));
+        dirCircle1 = new ImageView(ResourceUtils.getImage("/icons/neutral/circle-direction-neutral-1.png"));
+        dirCircle2 = new ImageView(ResourceUtils.getImage("/icons/neutral/circle-direction-neutral-2.png"));
+        dirCircle3 = new ImageView(ResourceUtils.getImage("/icons/neutral/circle-direction-neutral-3.png"));
+        dirCircle4 = new ImageView(ResourceUtils.getImage("/icons/neutral/circle-direction-neutral-4.png"));
         cursorTool= getImages();
     }
     public void setChartForIcon(Chart newChart) {
         this.setChart(newChart);
-    }
-    public static ImageView uploadImages(String imageURL ) {
-        Image image = new Image(imageURL);
-        ImageView ivImage = new ImageView(image);
-        return ivImage;
     }
     
     public static ImageView[] getImages() {     
@@ -90,29 +86,29 @@ public class iconParser extends XYChartPlugin{
     public void updateIcon(Boolean inSmallCircle, Boolean inBigCircle, Boolean inOuterRec, Integer index, Double xPos, Double yPos) {
         
         if (inSmallCircle){
-            cenCircle = uploadImages("/icon/roll_over/1-1-roll-over.png");
+            cenCircle = new ImageView(ResourceUtils.getImage("/icons/roll_over/1-1-roll-over.png"));
             cenCircle.setX(xPos-toolSize/2);
             cenCircle.setY(yPos-toolSize/2);
         }                
         else if (inBigCircle) {
             
             if (index==1){ 
-                dirCircle1 = uploadImages("/icon/roll_over/circle-direction-roll-over-1.png");
+                dirCircle1 = new ImageView(ResourceUtils.getImage("/icons/roll_over/circle-direction-roll-over-1.png"));
                 dirCircle1.setX(xPos-toolSize/2);
                 dirCircle1.setY(yPos-toolSize/2);
             }
             if (index==2){ 
-                dirCircle2 = uploadImages("/icon/roll_over/circle-direction-roll-over-2.png");
+                dirCircle2 = new ImageView(ResourceUtils.getImage("/icons/roll_over/circle-direction-roll-over-2.png"));
                 dirCircle2.setX(xPos-toolSize/2);
                 dirCircle2.setY(yPos-toolSize/2);
             }
             if (index==3){ 
-                dirCircle3 = uploadImages("/icon/roll_over/circle-direction-roll-over-3.png");
+                dirCircle3 = new ImageView(ResourceUtils.getImage("/icons/roll_over/circle-direction-roll-over-3.png"));
                 dirCircle3.setX(xPos-toolSize/2);
                 dirCircle3.setY(yPos-toolSize/2);
             }
             if (index==4){ 
-                dirCircle4 = uploadImages("/icon/roll_over/circle-direction-roll-over-4.png");
+                dirCircle4 = new ImageView(ResourceUtils.getImage("/icons/roll_over/circle-direction-roll-over-4.png"));
                 dirCircle4.setX(xPos-toolSize/2);
                 dirCircle4.setY(yPos-toolSize/2);
             }
@@ -121,22 +117,22 @@ public class iconParser extends XYChartPlugin{
         else if (inOuterRec){
             
             if (index==1){
-                rectangle1 = uploadImages("/icon/roll_over/Rounded-Rectangle-roll-over-1.png");
+                rectangle1 = new ImageView(ResourceUtils.getImage("/icons/roll_over/Rounded-Rectangle-roll-over-1.png"));
                 rectangle1.setX(xPos-toolSize/2);
                 rectangle1.setY(yPos-toolSize/2);
             }
             if (index==2){
-                rectangle2 = uploadImages("/icon/roll_over/Rounded-Rectangle-roll-over-2.png");
+                rectangle2 = new ImageView(ResourceUtils.getImage("/icons/roll_over/Rounded-Rectangle-roll-over-2.png"));
                 rectangle2.setX(xPos-toolSize/2);
                 rectangle2.setY(yPos-toolSize/2);
             }
             if (index==3){
-                rectangle3 = uploadImages("/icon/roll_over/Rounded-Rectangle-roll-over-3.png");
+                rectangle3 = new ImageView(ResourceUtils.getImage("/icons/roll_over/Rounded-Rectangle-roll-over-3.png"));
                 rectangle3.setX(xPos-toolSize/2);
                 rectangle3.setY(yPos-toolSize/2);
             }
             if (index==4){
-                rectangle4 = uploadImages("/icon/roll_over/Rounded-Rectangle-roll-over-4.png");
+                rectangle4 = new ImageView(ResourceUtils.getImage("/icons/roll_over/Rounded-Rectangle-roll-over-4.png"));
                 rectangle4.setX(xPos-toolSize/2);
                 rectangle4.setY(yPos-toolSize/2);
             }
