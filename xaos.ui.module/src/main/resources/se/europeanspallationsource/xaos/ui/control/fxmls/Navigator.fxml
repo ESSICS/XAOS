@@ -8,7 +8,7 @@
 <?import javafx.scene.shape.MoveTo?>
 <?import javafx.scene.shape.Path?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="100.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="100.0" type="AnchorPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Path fx:id="forward" fill="DODGERBLUE" opacity="0.5" stroke="BLACK" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeType="INSIDE" strokeWidth="0.7" style="-fx-fill: -fx-body-color; -fx-stroke: -fx-outer-border;">
           <elements>
@@ -100,4 +100,4 @@
       </Path>
       <Circle fx:id="zoomToOne" fill="DODGERBLUE" layoutX="50.0" layoutY="50.0" opacity="0.5" radius="20.0" stroke="BLACK" strokeType="INSIDE" style="-fx-fill: -fx-body-color; -fx-stroke: -fx-outer-border;" styleClass=".button" />
    </children>
-</AnchorPane>
+</fx:root>

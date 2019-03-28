@@ -19,7 +19,7 @@
 
 	<properties>
 		<!-- Dependencies Versions -->
-		<rxjava.version>2.2.6</rxjava.version>
+		<rxjava.version>2.2.8</rxjava.version>
 	</properties>
 
     <build>

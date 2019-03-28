@@ -9,6 +9,8 @@ digraph "xaos.ui" {
   "org.openjfx:javafx-controls:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-controls<br/>11.0.2>]
   "org.openjfx:javafx-controls:jar:mac"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-controls<br/>11.0.2<br/>mac>]
   "org.openjfx:javafx-graphics:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-graphics<br/>11.0.2>]
+  "org.openjfx:javafx-fxml:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-fxml<br/>11.0.2>]
+  "org.openjfx:javafx-fxml:jar:mac"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-fxml<br/>11.0.2<br/>mac>]
   "org.openjfx:javafx-graphics:jar:mac"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-graphics<br/>11.0.2<br/>mac>]
   "org.openjfx:javafx-media:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-media<br/>11.0.2>]
   "org.openjfx:javafx-media:jar:mac"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-media<br/>11.0.2<br/>mac>]
@@ -22,15 +24,15 @@ digraph "xaos.ui" {
   "org.kordamp.ikonli:ikonli-javafx:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.kordamp.ikonli<br/>ikonli-javafx<br/>11.1.0>]
   "org.kordamp.ikonli:ikonli-fontawesome-pack:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.kordamp.ikonli<br/>ikonli-fontawesome-pack<br/>11.1.0>]
   "se.europeanspallationsource:xaos.tools:jar"[shape="box",style="rounded, filled",fillcolor="#7DE1FF",label=<se.europeanspallationsource<br/>xaos.tools<br/>0.4.0-SNAPSHOT>]
-  "io.reactivex.rxjava2:rxjava:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<io.reactivex.rxjava2<br/>rxjava<br/>2.2.6>]
+  "io.reactivex.rxjava2:rxjava:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<io.reactivex.rxjava2<br/>rxjava<br/>2.2.8>]
   "org.reactivestreams:reactive-streams:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.reactivestreams<br/>reactive-streams<br/>1.0.2>]
   "se.europeanspallationsource:xaos.core:jar"[shape="box",style="rounded, filled",fillcolor="#7DE1FF",label=<se.europeanspallationsource<br/>xaos.core<br/>0.4.0-SNAPSHOT>]
   "org.testfx:testfx-core:jar"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">org.testfx</font><br/>testfx-core<font color="grey55" point-size="10"><br/>4.0.15-alpha</font><font color="grey55" point-size="10"><br/>(test)</font>>]
   "org.hamcrest:hamcrest-core:jar"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">org.hamcrest</font><br/>hamcrest-core<font color="grey55" point-size="10"><br/>1.3</font><font color="grey55" point-size="10"><br/>(test)</font>>]
-  "org.assertj:assertj-core:jar"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">org.assertj</font><br/>assertj-core<font color="grey55" point-size="10"><br/>3.11.1</font><font color="grey55" point-size="10"><br/>(test)</font>>]
+  "org.assertj:assertj-core:jar"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">org.assertj</font><br/>assertj-core<font color="grey55" point-size="10"><br/>3.12.2</font><font color="grey55" point-size="10"><br/>(test)</font>>]
   "org.testfx:testfx-junit:jar"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">org.testfx</font><br/>testfx-junit<font color="grey55" point-size="10"><br/>4.0.15-alpha</font><font color="grey55" point-size="10"><br/>(test)</font>>]
   "junit:junit:jar"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">junit</font><br/>junit<font color="grey55" point-size="10"><br/>4.12</font><font color="grey55" point-size="10"><br/>(test)</font>>]
-  "io.github.classgraph:classgraph:jar"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">io.github.classgraph</font><br/>classgraph<font color="grey55" point-size="10"><br/>4.6.29</font><font color="grey55" point-size="10"><br/>(test)</font>>]
+  "io.github.classgraph:classgraph:jar"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">io.github.classgraph</font><br/>classgraph<font color="grey55" point-size="10"><br/>4.8.22</font><font color="grey55" point-size="10"><br/>(test)</font>>]
 
   // Edge Definitions:
   "org.openjfx:javafx-base:jar" -> "org.openjfx:javafx-base:jar:mac"
@@ -38,6 +40,9 @@ digraph "xaos.ui" {
   "org.openjfx:javafx-controls:jar" -> "org.openjfx:javafx-controls:jar:mac"
   "org.openjfx:javafx-controls:jar" -> "org.openjfx:javafx-graphics:jar"[style="dotted"]
   "se.europeanspallationsource:xaos.ui:jar" -> "org.openjfx:javafx-controls:jar"
+  "org.openjfx:javafx-fxml:jar" -> "org.openjfx:javafx-fxml:jar:mac"
+  "org.openjfx:javafx-fxml:jar" -> "org.openjfx:javafx-controls:jar"[style="dotted"]
+  "se.europeanspallationsource:xaos.ui:jar" -> "org.openjfx:javafx-fxml:jar"
   "org.openjfx:javafx-graphics:jar" -> "org.openjfx:javafx-graphics:jar:mac"
   "se.europeanspallationsource:xaos.ui:jar" -> "org.openjfx:javafx-graphics:jar"
   "org.openjfx:javafx-media:jar" -> "org.openjfx:javafx-media:jar:mac"
@@ -63,7 +68,7 @@ digraph "xaos.ui" {
   "se.europeanspallationsource:xaos.core:jar" -> "io.reactivex.rxjava2:rxjava:jar"
   "se.europeanspallationsource:xaos.ui:jar" -> "se.europeanspallationsource:xaos.core:jar"
   "org.testfx:testfx-core:jar" -> "org.hamcrest:hamcrest-core:jar"
-  "org.testfx:testfx-core:jar" -> "org.assertj:assertj-core:jar"[style="dotted"]
+  "org.testfx:testfx-core:jar" -> "org.assertj:assertj-core:jar"[style="dashed",color="red",fontcolor="red",label="3.11.1"]
   "se.europeanspallationsource:xaos.ui:jar" -> "org.testfx:testfx-core:jar"
   "org.testfx:testfx-junit:jar" -> "org.testfx:testfx-core:jar"[style="dotted"]
   "org.testfx:testfx-junit:jar" -> "junit:junit:jar"[style="dotted"]

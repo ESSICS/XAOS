@@ -18,14 +18,13 @@ digraph "summary" {
   "org.kordamp.ikonli.fontawesome"                   -> "org.kordamp.iconli.core";
   "org.apache.commons.text"                          -> "java.base (java.base)";
   "org.kordamp.iconli.core"                          -> "java.base (java.base)";
-  "io.reactivex.rxjava2"                             -> "java.base (java.base)";
-  "io.reactivex.rxjava2"                             -> "org.reactivestreams";
   "xaos.ui"                                          -> "io.reactivex.rxjava2";
   "xaos.ui"                                          -> "java.base (java.base)";
   "xaos.ui"                                          -> "java.logging (java.logging)";
   "xaos.ui"                                          -> "java.xml (java.xml)";
   "xaos.ui"                                          -> "javafx.base";
   "xaos.ui"                                          -> "javafx.controls";
+  "xaos.ui"                                          -> "javafx.fxml";
   "xaos.ui"                                          -> "javafx.graphics";
   "xaos.ui"                                          -> "org.apache.commons.lang3";
   "xaos.ui"                                          -> "org.apache.commons.text";
@@ -34,8 +33,11 @@ digraph "summary" {
   "xaos.ui"                                          -> "org.kordamp.ikonli.javafx";
   "xaos.ui"                                          -> "xaos.core";
   "xaos.ui"                                          -> "xaos.tools";
+  "io.reactivex.rxjava2"                             -> "java.base (java.base)";
+  "io.reactivex.rxjava2"                             -> "org.reactivestreams";
   "org.kordamp.ikonli.javafx"                        -> "java.base (java.base)";
   "org.kordamp.ikonli.javafx"                        -> "javafx.base";
   "org.kordamp.ikonli.javafx"                        -> "javafx.graphics";
   "org.kordamp.ikonli.javafx"                        -> "org.kordamp.iconli.core";
+  "javafx.fxml"                                      -> "java.base (java.base)";
 }

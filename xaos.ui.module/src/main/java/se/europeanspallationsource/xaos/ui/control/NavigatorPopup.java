@@ -26,6 +26,14 @@ import javafx.scene.control.PopupControl;
  * <p>
  * The implementation of the actions associated with the popup is left to 
  * the client code, that must add the corresponding callbacks.</p>
+ * <p>Typical usage is the following:</P>
+ * <pre>
+ * NavigatorPopup popup = new NavigatorPopup();
+ *
+ * popup.setOn...
+ * ...
+ * popup.setOn...
+ * popup.show(ownerNode, cursorScreenX, cursorScreenY);</pre>
  *
  * @author claudiorosati
  */

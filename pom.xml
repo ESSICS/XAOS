@@ -45,8 +45,10 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- Auxiliary programs -->
 		<dot.executable>/usr/local/bin/dot</dot.executable>
+		<!-- Plugin Dependencies Versions -->
+		<asm.version>7.1</asm.version>
 		<!-- Dependencies Versions -->
-		<assertj.version>3.11.1</assertj.version>
+		<assertj.version>3.12.2</assertj.version>
 		<junit.version>4.12</junit.version>
 	</properties>
 
@@ -132,7 +134,7 @@
 					<dependency>
 						<groupId>org.ow2.asm</groupId>
 						<artifactId>asm</artifactId>
-						<version>7.0</version>
+						<version>${asm.version}</version>
 					</dependency>
 				</dependencies>
 			</plugin>
@@ -252,7 +254,7 @@
 					<dependency>
 						<groupId>org.ow2.asm</groupId>
 						<artifactId>asm</artifactId>
-						<version>7.0</version>
+						<version>${asm.version}</version>
 					</dependency>
 				</dependencies>
 			</plugin>
@@ -290,7 +292,7 @@
 					<dependency>
 						<groupId>org.ow2.asm</groupId>
 						<artifactId>asm</artifactId>
-						<version>7.0</version>
+						<version>${asm.version}</version>
 					</dependency>
 				</dependencies>
 			</plugin>
