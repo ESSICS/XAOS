@@ -8,6 +8,7 @@ digraph "summary" {
   "javafx.controls"                                  -> "javafx.base";
   "javafx.controls"                                  -> "javafx.graphics";
   "xaos.ui"                                          -> "java.base (java.base)";
+  "xaos.ui"                                          -> "java.logging (java.logging)";
   "xaos.ui"                                          -> "javafx.base";
   "xaos.ui"                                          -> "javafx.graphics";
   "javafx.fxml"                                      -> "java.base (java.base)";

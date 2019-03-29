@@ -22,13 +22,15 @@ import java.text.MessageFormat;
 import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Path;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 import static java.util.logging.Level.SEVERE;
-
-
 
 
 /**
@@ -43,26 +45,44 @@ public class NavigatorController extends AnchorPane {
 	@FXML
 	private Path backward;
 	@FXML
+	private FontIcon backwardIcon;
+	@FXML
 	private Path forward;
+	@FXML
+	private FontIcon forwardIcon;
 	@FXML
 	private Path panDown;
 	@FXML
+	private FontIcon panDownIcon;
+	@FXML
 	private Path panLeft;
+	@FXML
+	private FontIcon panLeftIcon;
 	@FXML
 	private Path panRight;
 	@FXML
+	private FontIcon panRightIcon;
+	@FXML
 	private Path panUp;
 	@FXML
+	private FontIcon panUpIcon;
+	@FXML
+	private FontIcon soomOutIcon;
+	@FXML
 	private Path zoomIn;
+	@FXML
+	private FontIcon zoomInIcon;
 	@FXML
 	private Path zoomOut;
 	@FXML
 	private Circle zoomToOne;
+	@FXML
+	private Label zoomToOneLabel;
 
 	public NavigatorController() {
 		try {
 
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("fxmls/Navigator.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml/navigator.fxml"));
 
 			loader.setController(this);
 			loader.setRoot(this);
@@ -78,6 +98,44 @@ public class NavigatorController extends AnchorPane {
 				ex
 			);
 		}
+	}
+
+	private String enteredStyle;
+
+	@FXML
+	private void mouseEntered( MouseEvent event ) {
+
+		enteredStyle = ((Node) event.getSource()).getStyle();
+
+		((Node) event.getSource()).setStyle("-fx-fill: -hover-color");
+
+	}
+
+	@FXML
+	void mouseExited( MouseEvent event ) {
+
+		((Node) event.getSource()).setStyle(enteredStyle);
+
+	}
+
+	@FXML
+	void mousePressed( MouseEvent event ) {
+
+		((Node) event.getSource()).setStyle("-fx-fill: -pressed-color");
+
+	}
+
+	@FXML
+	void mouseReleased( MouseEvent event ) {
+
+		Node source = (Node) event.getSource();
+
+		if ( source.contains(event.getX(), event.getY()) ) {
+			source.setStyle("-fx-fill: -hover-color");
+		} else {
+			source.setStyle(enteredStyle);
+		}
+
 	}
 
 }

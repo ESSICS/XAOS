@@ -1,0 +1,6 @@
+.xaos-navigator {
+	-normal-color: derive(-fx-color,-11%);
+	-normal-color-lighter: derive(-fx-color,-7%);
+	-hover-color: derive(-fx-color,-22%);
+	-pressed-color: derive(-fx-color,-44%);
+}

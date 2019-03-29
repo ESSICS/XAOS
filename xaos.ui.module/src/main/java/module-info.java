@@ -58,4 +58,6 @@ module xaos.ui {
 	exports se.europeanspallationsource.xaos.ui.spi;
 	exports se.europeanspallationsource.xaos.ui.util;
 
+	opens se.europeanspallationsource.xaos.ui.control to javafx.fxml;
+
 }

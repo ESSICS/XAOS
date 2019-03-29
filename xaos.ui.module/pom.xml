@@ -63,6 +63,17 @@
 					<argLine>
 						--add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED --add-opens javafx.controls/javafx.scene.control=xaos.tools
 					</argLine>
+
+					<!-- THE FOLLOWING "excludes" AND "includes" SHOULD BE   -->
+					<!-- TO ALLOW EXECUTION OF A SINGLE SPECIFIC TEST.       -->
+
+					<excludes>
+						<exclude>**/*Suite.java</exclude>
+					</excludes>
+					<includes>
+						<include>**/NavigatorControllerUITest.java</include>
+					</includes>
+
 				</configuration>
 			</plugin>
 		</plugins>
