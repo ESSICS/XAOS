@@ -170,6 +170,8 @@ public class FilterableTreeItem<T> extends CheckBoxTreeItem<T> {
 
 	}
 
+    /* **** START OF JAVAFX PROPERTIES  **************************************** */
+
 	/*
 	 * ---- predicate ----------------------------------------------------------
 	 */

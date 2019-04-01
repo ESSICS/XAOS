@@ -20,6 +20,12 @@ package se.europeanspallationsource.xaos.ui.control;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.logging.Logger;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ObjectPropertyBase;
+import javafx.css.Styleable;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -31,55 +37,440 @@ import javafx.scene.shape.Path;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import static java.util.logging.Level.SEVERE;
+import static javafx.scene.input.MouseButton.PRIMARY;
 
 
 /**
- * The JavaFX controller for the {@link NavigatorPopup}.
+ * A JavaFX controller with 9 buttons to navigate a graphical area. Zoom, Pan
+ * and backward/forward buttons are provided and can be bound to the application
+ * code through the provided {@link EventHandler} methods.
  *
  * @author claudio.rosati@esss.se
  */
 public class NavigatorController extends AnchorPane {
 
+	/**
+	 * Called when the navigator's {@code backward} button is pressed.
+	 */
+	public static final EventType<Event> ON_BACKWARD = new EventType<Event>(Event.ANY, "NAVIGATOR_ON_BACKWARD");
+
+	/**
+	 * Called when the navigator's {@code forward} button is pressed.
+	 */
+	public static final EventType<Event> ON_FORWARD = new EventType<Event>(Event.ANY, "NAVIGATOR_ON_FORWARD");
+
+	/**
+	 * Called when the navigator's {@code panDown} button is pressed.
+	 */
+	public static final EventType<Event> ON_PAN_DOWN = new EventType<Event>(Event.ANY, "NAVIGATOR_ON_PAN_DOWN");
+
+	/**
+	 * Called when the navigator's {@code panLeft} button is pressed.
+	 */
+	public static final EventType<Event> ON_PAN_LEFT = new EventType<Event>(Event.ANY, "NAVIGATOR_ON_PAN_LEFT");
+
+	/**
+	 * Called when the navigator's {@code panRight} button is pressed.
+	 */
+	public static final EventType<Event> ON_PAN_RIGHT = new EventType<Event>(Event.ANY, "NAVIGATOR_ON_PAN_RIGHT");
+
+	/**
+	 * Called when the navigator's {@code panUp} button is pressed.
+	 */
+	public static final EventType<Event> ON_PAN_UP = new EventType<Event>(Event.ANY, "NAVIGATOR_ON_PAN_UP");
+
+	/**
+	 * Called when the navigator's {@code zoomIn} button is pressed.
+	 */
+	public static final EventType<Event> ON_ZOOM_IN = new EventType<Event>(Event.ANY, "NAVIGATOR_ON_ZOOM_IN");
+
+	/**
+	 * Called when the navigator's {@code zoomOut} button is pressed.
+	 */
+	public static final EventType<Event> ON_ZOOM_OUT = new EventType<Event>(Event.ANY, "NAVIGATOR_ON_ZOOM_OUT");
+
+	/**
+	 * Called when the navigator's {@code zoomToOne} button is pressed.
+	 */
+	public static final EventType<Event> ON_ZOOM_TO_ONE = new EventType<Event>(Event.ANY, "NAVIGATOR_ON_ZOOM_TO_ONE");
+
 	private static final Logger LOGGER = Logger.getLogger(NavigatorController.class.getName());
 
-	@FXML
-	private Path backward;
-	@FXML
-	private FontIcon backwardIcon;
-	@FXML
-	private Path forward;
-	@FXML
-	private FontIcon forwardIcon;
-	@FXML
-	private Path panDown;
-	@FXML
-	private FontIcon panDownIcon;
-	@FXML
-	private Path panLeft;
-	@FXML
-	private FontIcon panLeftIcon;
-	@FXML
-	private Path panRight;
-	@FXML
-	private FontIcon panRightIcon;
-	@FXML
-	private Path panUp;
-	@FXML
-	private FontIcon panUpIcon;
-	@FXML
-	private FontIcon soomOutIcon;
-	@FXML
-	private Path zoomIn;
-	@FXML
-	private FontIcon zoomInIcon;
-	@FXML
-	private Path zoomOut;
-	@FXML
-	private Circle zoomToOne;
-	@FXML
-	private Label zoomToOneLabel;
+	@FXML private Path backward;
+	@FXML private FontIcon backwardIcon;
+	private String enteredStyle;
+	@FXML private Path forward;
+	@FXML private FontIcon forwardIcon;
+	@FXML private Path panDown;
+	@FXML private FontIcon panDownIcon;
+	@FXML private Path panLeft;
+	@FXML private FontIcon panLeftIcon;
+	@FXML private Path panRight;
+	@FXML private FontIcon panRightIcon;
+	@FXML private Path panUp;
+	@FXML private FontIcon panUpIcon;
+	@FXML private Path zoomIn;
+	@FXML private FontIcon zoomInIcon;
+	@FXML private Path zoomOut;
+	@FXML private FontIcon zoomOutIcon;
+	@FXML private Circle zoomToOne;
+	@FXML private Label zoomToOneLabel;
 
 	public NavigatorController() {
+		init();
+	}
+
+	/*
+	 * **** START OF JAVAFX PROPERTIES *****************************************
+	 */
+
+	/*
+	 * ---- onBackward ---------------------------------------------------------
+	 */
+	private ObjectProperty<EventHandler<Event>> onBackward = new ObjectPropertyBase<EventHandler<Event>>() {
+
+		@Override
+		public Object getBean() {
+			return NavigatorController.this;
+		}
+
+		@Override
+		public String getName() {
+			return "onBackward";
+		}
+
+		@Override protected void invalidated() {
+			setEventHandler(ON_BACKWARD, get());
+		}
+
+	};
+
+	/**
+	 * Called when the {@code backward} button is pressed.
+	 *
+	 * @return The "on backward" property.
+	 */
+	public final ObjectProperty<EventHandler<Event>> onBackwardProperty() {
+		return onBackward;
+	}
+
+	public final EventHandler<Event> getOnBackward() {
+		return onBackwardProperty().get();
+	}
+
+	public final void setOnBackward( EventHandler<Event> value ) {
+		onBackwardProperty().set(value);
+	}
+
+	/*
+	 * ---- onForward ----------------------------------------------------------
+	 */
+	private ObjectProperty<EventHandler<Event>> onForward = new ObjectPropertyBase<EventHandler<Event>>() {
+
+		@Override
+		public Object getBean() {
+			return NavigatorController.this;
+		}
+
+		@Override
+		public String getName() {
+			return "onForward";
+		}
+
+		@Override protected void invalidated() {
+			setEventHandler(ON_FORWARD, get());
+		}
+
+	};
+
+	/**
+	 * Called when the {@code forward} button is pressed.
+	 *
+	 * @return The "on forward" property.
+	 */
+	public final ObjectProperty<EventHandler<Event>> onForwardProperty() {
+		return onForward;
+	}
+
+	public final EventHandler<Event> getOnForward() {
+		return onForwardProperty().get();
+	}
+
+	public final void setOnForward( EventHandler<Event> value ) {
+		onForwardProperty().set(value);
+	}
+
+	/*
+	 * ---- onPanDown ----------------------------------------------------------
+	 */
+	private ObjectProperty<EventHandler<Event>> onPanDown = new ObjectPropertyBase<EventHandler<Event>>() {
+
+		@Override
+		public Object getBean() {
+			return NavigatorController.this;
+		}
+
+		@Override
+		public String getName() {
+			return "onPanDown";
+		}
+
+		@Override protected void invalidated() {
+			setEventHandler(ON_PAN_DOWN, get());
+		}
+
+	};
+
+	/**
+	 * Called when the {@code panDown} button is pressed.
+	 *
+	 * @return The "on pan down" property.
+	 */
+	public final ObjectProperty<EventHandler<Event>> onPanDownProperty() {
+		return onPanDown;
+	}
+
+	public final EventHandler<Event> getOnPanDown() {
+		return onPanDownProperty().get();
+	}
+
+	public final void setOnPanDown( EventHandler<Event> value ) {
+		onPanDownProperty().set(value);
+	}
+
+	/*
+	 * ---- onPanLeft ----------------------------------------------------------
+	 */
+	private ObjectProperty<EventHandler<Event>> onPanLeft = new ObjectPropertyBase<EventHandler<Event>>() {
+
+		@Override
+		public Object getBean() {
+			return NavigatorController.this;
+		}
+
+		@Override
+		public String getName() {
+			return "onPanLeft";
+		}
+
+		@Override protected void invalidated() {
+			setEventHandler(ON_PAN_LEFT, get());
+		}
+
+	};
+
+	/**
+	 * Called when the {@code panLeft} button is pressed.
+	 *
+	 * @return The "on pan left" property.
+	 */
+	public final ObjectProperty<EventHandler<Event>> onPanLeftProperty() {
+		return onPanLeft;
+	}
+
+	public final EventHandler<Event> getOnPanLeft() {
+		return onPanLeftProperty().get();
+	}
+
+	public final void setOnPanLeft( EventHandler<Event> value ) {
+		onPanLeftProperty().set(value);
+	}
+
+	/*
+	 * ---- onPanRight ---------------------------------------------------------
+	 */
+	private ObjectProperty<EventHandler<Event>> onPanRight = new ObjectPropertyBase<EventHandler<Event>>() {
+
+		@Override
+		public Object getBean() {
+			return NavigatorController.this;
+		}
+
+		@Override
+		public String getName() {
+			return "onPanRight";
+		}
+
+		@Override protected void invalidated() {
+			setEventHandler(ON_PAN_RIGHT, get());
+		}
+
+	};
+
+	/**
+	 * Called when the {@code panRight} button is pressed.
+	 *
+	 * @return The "on pan right" property.
+	 */
+	public final ObjectProperty<EventHandler<Event>> onPanRightProperty() {
+		return onPanRight;
+	}
+
+	public final EventHandler<Event> getOnPanRight() {
+		return onPanRightProperty().get();
+	}
+
+	public final void setOnPanRight( EventHandler<Event> value ) {
+		onPanRightProperty().set(value);
+	}
+
+	/*
+	 * ---- onPanUp ------------------------------------------------------------
+	 */
+	private ObjectProperty<EventHandler<Event>> onPanUp = new ObjectPropertyBase<EventHandler<Event>>() {
+
+		@Override
+		public Object getBean() {
+			return NavigatorController.this;
+		}
+
+		@Override
+		public String getName() {
+			return "onPanUp";
+		}
+
+		@Override protected void invalidated() {
+			setEventHandler(ON_PAN_UP, get());
+		}
+
+	};
+
+	/**
+	 * Called when the {@code panUp} button is pressed.
+	 *
+	 * @return The "on pan up" property.
+	 */
+	public final ObjectProperty<EventHandler<Event>> onPanUpProperty() {
+		return onPanUp;
+	}
+
+	public final EventHandler<Event> getOnPanUp() {
+		return onPanUpProperty().get();
+	}
+
+	public final void setOnPanUp( EventHandler<Event> value ) {
+		onPanUpProperty().set(value);
+	}
+
+	/*
+	 * ---- onZoomIn -----------------------------------------------------------
+	 */
+	private ObjectProperty<EventHandler<Event>> onZoomIn = new ObjectPropertyBase<EventHandler<Event>>() {
+
+		@Override
+		public Object getBean() {
+			return NavigatorController.this;
+		}
+
+		@Override
+		public String getName() {
+			return "onZoomIn";
+		}
+
+		@Override protected void invalidated() {
+			setEventHandler(ON_ZOOM_IN, get());
+		}
+
+	};
+
+	/**
+	 * Called when the {@code zoomIn} button is pressed.
+	 *
+	 * @return The "on zoom in" property.
+	 */
+	public final ObjectProperty<EventHandler<Event>> onZoomInProperty() {
+		return onZoomIn;
+	}
+
+	public final EventHandler<Event> getOnZoomIn() {
+		return onZoomInProperty().get();
+	}
+
+	public final void setOnZoomIn( EventHandler<Event> value ) {
+		onZoomInProperty().set(value);
+	}
+
+	/*
+	 * ---- onZoomOut ----------------------------------------------------------
+	 */
+	private ObjectProperty<EventHandler<Event>> onZoomOut = new ObjectPropertyBase<EventHandler<Event>>() {
+
+		@Override
+		public Object getBean() {
+			return NavigatorController.this;
+		}
+
+		@Override
+		public String getName() {
+			return "onZoomOut";
+		}
+
+		@Override protected void invalidated() {
+			setEventHandler(ON_ZOOM_OUT, get());
+		}
+
+	};
+
+	/**
+	 * Called when the {@code zoomOut} button is pressed.
+	 *
+	 * @return The "on zoom out" property.
+	 */
+	public final ObjectProperty<EventHandler<Event>> onZoomOutProperty() {
+		return onZoomOut;
+	}
+
+	public final EventHandler<Event> getOnZoomOut() {
+		return onZoomOutProperty().get();
+	}
+
+	public final void setOnZoomOut( EventHandler<Event> value ) {
+		onZoomOutProperty().set(value);
+	}
+
+	/*
+	 * ---- onZoomToOne --------------------------------------------------------
+	 */
+	private ObjectProperty<EventHandler<Event>> onZoomToOne = new ObjectPropertyBase<EventHandler<Event>>() {
+
+		@Override
+		public Object getBean() {
+			return NavigatorController.this;
+		}
+
+		@Override
+		public String getName() {
+			return "onZoomToOne";
+		}
+
+		@Override protected void invalidated() {
+			setEventHandler(ON_ZOOM_TO_ONE, get());
+		}
+
+	};
+
+	/**
+	 * Called when the {@code zoomToOne} button is pressed.
+	 *
+	 * @return The "on zoom to one" property.
+	 */
+	public final ObjectProperty<EventHandler<Event>> onZoomToOneProperty() {
+		return onZoomToOne;
+	}
+
+	public final EventHandler<Event> getOnZoomToOne() {
+		return onZoomToOneProperty().get();
+	}
+
+	public final void setOnZoomToOne( EventHandler<Event> value ) {
+		onZoomToOneProperty().set(value);
+	}
+
+	/*
+	 * **** END OF JAVAFX PROPERTIES *******************************************
+	 */
+
+	private void init() {
 		try {
 
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml/navigator.fxml"));
@@ -100,33 +491,63 @@ public class NavigatorController extends AnchorPane {
 		}
 	}
 
-	private String enteredStyle;
+	@FXML
+	@SuppressWarnings( "ConvertToStringSwitch" )
+	private void mouseClicked( MouseEvent event ) {
+
+		Node source = (Node) event.getSource();
+
+		if ( source != null && PRIMARY == event.getButton() ) {
+
+			String id = source.getId();
+
+			if ( "backward".equals(id) ) {
+				Event.fireEvent(source, new Event(this, source, ON_BACKWARD));
+			} else if ( "forward".equals(id) ) {
+				Event.fireEvent(source, new Event(this, source, ON_FORWARD));
+			} else if ( "panDown".equals(id) ) {
+				Event.fireEvent(source, new Event(this, source, ON_PAN_DOWN));
+			} else if ( "panLeft".equals(id) ) {
+				Event.fireEvent(source, new Event(this, source, ON_PAN_LEFT));
+			} else if ( "panRight".equals(id) ) {
+				Event.fireEvent(source, new Event(this, source, ON_PAN_RIGHT));
+			} else if ( "panUp".equals(id) ) {
+				Event.fireEvent(source, new Event(this, source, ON_PAN_UP));
+			} else if ( "zoomIn".equals(id) ) {
+				Event.fireEvent(source, new Event(this, source, ON_ZOOM_IN));
+			} else if ( "zoomOut".equals(id) ) {
+				Event.fireEvent(source, new Event(this, source, ON_ZOOM_OUT));
+			} else if ( "zoomToOne".equals(id) ) {
+				Event.fireEvent(source, new Event(this, source, ON_ZOOM_TO_ONE));
+			} else {
+				LOGGER.warning(MessageFormat.format("Unexpected identifier [{0}].", id));
+			}
+
+		}
+
+	}
 
 	@FXML
 	private void mouseEntered( MouseEvent event ) {
 
-		enteredStyle = ((Node) event.getSource()).getStyle();
+		enteredStyle = ( (Styleable) event.getSource() ).getStyle();
 
-		((Node) event.getSource()).setStyle("-fx-fill: -hover-color");
-
-	}
-
-	@FXML
-	void mouseExited( MouseEvent event ) {
-
-		((Node) event.getSource()).setStyle(enteredStyle);
+		( (Node) event.getSource() ).setStyle("-fx-fill: -hover-color");
 
 	}
 
 	@FXML
-	void mousePressed( MouseEvent event ) {
-
-		((Node) event.getSource()).setStyle("-fx-fill: -pressed-color");
-
+	private void mouseExited( MouseEvent event ) {
+		( (Node) event.getSource() ).setStyle(enteredStyle);
 	}
 
 	@FXML
-	void mouseReleased( MouseEvent event ) {
+	private void mousePressed( MouseEvent event ) {
+		( (Node) event.getSource() ).setStyle("-fx-fill: -pressed-color");
+	}
+
+	@FXML
+	private void mouseReleased( MouseEvent event ) {
 
 		Node source = (Node) event.getSource();
 

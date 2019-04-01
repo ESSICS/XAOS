@@ -19,7 +19,9 @@ package se.europeanspallationsource.xaos.ui.control;
 
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeoutException;
+import javafx.application.Platform;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -42,6 +44,7 @@ import static javafx.geometry.Pos.CENTER;
 import static javafx.geometry.Pos.TOP_LEFT;
 import static javafx.geometry.Pos.TOP_RIGHT;
 import static javafx.scene.input.MouseButton.PRIMARY;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.testfx.robot.Motion.DEFAULT;
 
@@ -49,6 +52,7 @@ import static org.testfx.robot.Motion.DEFAULT;
 /**
  * @author claudio.rosati@esss.se
  */
+@SuppressWarnings( { "UseOfSystemOutOrSystemErr", "ClassWithoutLogger" } )
 public class NavigatorControllerUITest extends ApplicationTest {
 
 	@BeforeClass
@@ -69,10 +73,20 @@ public class NavigatorControllerUITest extends ApplicationTest {
 
 		controller.setLayoutX(20);
 		controller.setLayoutY(20);
+		controller.setOnBackward(e -> label.setText(((Node) e.getTarget()).getId()));
+		controller.setOnForward(e -> label.setText(((Node) e.getTarget()).getId()));
+		controller.setOnPanDown(e -> label.setText(((Node) e.getTarget()).getId()));
+		controller.setOnPanLeft(e -> label.setText(((Node) e.getTarget()).getId()));
+		controller.setOnPanRight(e -> label.setText(((Node) e.getTarget()).getId()));
+		controller.setOnPanUp(e -> label.setText(((Node) e.getTarget()).getId()));
+		controller.setOnZoomIn(e -> label.setText(((Node) e.getTarget()).getId()));
+		controller.setOnZoomOut(e -> label.setText(((Node) e.getTarget()).getId()));
+		controller.setOnZoomToOne(e -> label.setText(((Node) e.getTarget()).getId()));
 
 		label.setLayoutX(20);
 		label.setLayoutY(140);
 		label.setPrefSize(100, 20);
+		label.setAlignment(CENTER);
 		label.setTextAlignment(TextAlignment.CENTER);
 
 		root.getChildren().addAll(controller, label);
@@ -81,7 +95,6 @@ public class NavigatorControllerUITest extends ApplicationTest {
 
 		scene.getStylesheets().add(getClass().getResource("css/modena.css").toExternalForm());
 		stage.setScene(scene);
-		stage.setOnShown(e -> System.out.println("*** Visible"));
 		stage.show();
 
 	}
@@ -92,12 +105,12 @@ public class NavigatorControllerUITest extends ApplicationTest {
 	}
 
 	@Test
-	public void test() {
+	public void test() throws InterruptedException {
 
 		System.out.println("  Testing ''NavigatorController''...");
 
 		//	Give the UI time to draw itself.
-		ThreadUtils.sleep(1000);
+		ThreadUtils.sleep(500);
 
 		FxRobot robot = new FxRobot();
 
@@ -113,7 +126,7 @@ public class NavigatorControllerUITest extends ApplicationTest {
 
 	}
 
-	private void testSingleButton( FxRobot robot, String cssID, Pos position, Point2D offset ) {
+	private void testSingleButton( FxRobot robot, String cssID, Pos position, Point2D offset ) throws InterruptedException {
 
 		System.out.println(MessageFormat.format("    - Testing ''{0}''...", cssID));
 
@@ -137,6 +150,33 @@ public class NavigatorControllerUITest extends ApplicationTest {
 		//	Move the mouse cursor outside the node and check its status.
 		robot.moveTo(node, position, new Point2D(100, 100), DEFAULT);
 		assertTrue(node.getStyle().contains("-normal-color") || node.getStyle().contains("-normal-color-lighter"));
+
+		//	Mode the cursor over the node, press and keep pressed the primary
+		//	mouse button, then move outside the button: it must be in it normal
+		//	status.
+		robot.moveTo(node, position, offset, DEFAULT);
+		assertTrue(node.getStyle().contains("-hover-color"));
+		robot.press(PRIMARY);
+		assertTrue(node.getStyle().contains("-pressed-color"));
+		robot.moveTo(node, position, new Point2D(100, 100), DEFAULT);
+		assertTrue(node.getStyle().contains("-normal-color") || node.getStyle().contains("-normal-color-lighter"));
+		robot.release(PRIMARY);
+		assertTrue(node.getStyle().contains("-normal-color") || node.getStyle().contains("-normal-color-lighter"));
+
+		//	Clear the label, click on the button and verify that the label's
+		//	text corresponds to the given cssID.
+		CountDownLatch latch = new CountDownLatch(1);
+
+		Platform.runLater(() -> {
+			label.setText("—");
+			latch.countDown();
+		});
+
+		latch.await();
+
+		robot.moveTo(node, position, offset, DEFAULT);
+		robot.clickOn(PRIMARY);
+		assertThat("#" + label.getText()).isEqualTo(cssID);
 
 	}
 

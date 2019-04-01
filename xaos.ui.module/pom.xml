@@ -65,13 +65,14 @@
 					</argLine>
 
 					<!-- THE FOLLOWING "excludes" AND "includes" SHOULD BE   -->
-					<!-- TO ALLOW EXECUTION OF A SINGLE SPECIFIC TEST.       -->
+					<!-- USED TO ALLOW EXECUTION OF A SINGLE SPECIFIC TEST.  -->
+					<!-- Otherwise they should be commented out.             -->
 
 					<excludes>
 						<exclude>**/*Suite.java</exclude>
 					</excludes>
 					<includes>
-						<include>**/NavigatorControllerUITest.java</include>
+						<include>**/NavigatorPopupUITest.java</include>
 					</includes>
 
 				</configuration>
