@@ -26,7 +26,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
@@ -41,6 +40,7 @@ import se.europeanspallationsource.xaos.core.util.ThreadUtils;
 import static javafx.geometry.Pos.CENTER;
 import static javafx.scene.input.MouseButton.PRIMARY;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.testfx.robot.Motion.DEFAULT;
 
@@ -56,11 +56,11 @@ public class NavigatorPopupUITest extends ApplicationTest {
 		System.out.println("---- NavigatorControllerUITest ---------------------------------");
 	}
 
-	private AnchorPane root;
-	private NavigatorPopup popup;
 	private Label label;
 	private double mouseScreenX = 0;
 	private double mouseScreenY = 0;
+	private NavigatorPopup popup;
+	private AnchorPane root;
 
 	@Override
 	public void start( Stage stage ) throws IOException {
@@ -69,15 +69,16 @@ public class NavigatorPopupUITest extends ApplicationTest {
 		popup = new NavigatorPopup();
 		label = new Label("—");
 
-		root.setStyle("-fx-background-color: yellow;");
-		root.setFocusTraversable(true);
-		root.setOnKeyPressed(e -> {
-			if ( e.isAltDown() ) {
-				if ( !popup.isShowing() ) {
-					popup.show(root, mouseScreenX, mouseScreenY);
-				}
-			}
-		});
+		//	Next statement is used to visally check the rounded border of the popup.
+		//root.setStyle("-fx-background-color: yellow;");
+//		root.setFocusTraversable(true);
+//		root.setOnKeyPressed(e -> {
+//			if ( e.isAltDown() ) {
+//				if ( !popup.isShowing() ) {
+//					popup.show(root, mouseScreenX, mouseScreenY);
+//				}
+//			}
+//		});
 		root.setOnMouseMoved(e -> {
 			mouseScreenX = e.getScreenX();
 			mouseScreenY = e.getScreenY();
@@ -97,6 +98,7 @@ public class NavigatorPopupUITest extends ApplicationTest {
 		popup.setOnZoomOut(e -> label.setText(((Node) e.getTarget()).getId()));
 		popup.setOnZoomToOne(e -> label.setText(((Node) e.getTarget()).getId()));
 
+		label.setFocusTraversable(true);
 		label.setLayoutX(20);
 		label.setLayoutY(20);
 		label.setPrefSize(260, 20);
@@ -129,30 +131,27 @@ public class NavigatorPopupUITest extends ApplicationTest {
 		FxRobot robot = new FxRobot();
 
 		//	Open the popup...
-		CountDownLatch latch = new CountDownLatch(1);
-
-		Platform.runLater(() -> {
-			root.requestFocus();
-			latch.countDown();
-		});
-
-		latch.await();
-
 		robot.moveTo(root, CENTER, new Point2D(0, 0), DEFAULT);
-		robot.press(KeyCode.ALT);
+		fxExecuteAndWait(() -> popup.show(root, mouseScreenX, mouseScreenY));
 		assertTrue(popup.isShowing());
 
-		//	Dismiss the popup clicking outside...
-//		robot.moveTo(root, CENTER, new Point2D(100, 0), DEFAULT);
-//		robot.clickOn(PRIMARY);
-//		assertFalse(popup.isShowing());
-
-		ThreadUtils.sleep(30000);
+		//	Dismiss the popup explicitly...
+		fxExecuteAndWait(() -> popup.hide());
+		assertFalse(popup.isShowing());
 
 		//	Open the popup again...
 		robot.moveTo(root, CENTER, new Point2D(0, 0), DEFAULT);
-		robot.press(KeyCode.ALT);
+		fxExecuteAndWait(() -> popup.show(root, mouseScreenX, mouseScreenY));
 		assertTrue(popup.isShowing());
+
+		//	Dismiss the popup by loosing focus...
+//		fxExecuteAndWait(() -> label.requestFocus());
+//		assertFalse(popup.isShowing());
+
+		//	Open the popup again...
+//		robot.moveTo(root, CENTER, new Point2D(0, 0), DEFAULT);
+//		fxExecuteAndWait(() -> popup.show(root, mouseScreenX, mouseScreenY));
+//		assertTrue(popup.isShowing());
 
 		// Test each popup button...
 		testSingleButton(robot, "forward",   new Point2D(-40, -40));
@@ -168,6 +167,19 @@ public class NavigatorPopupUITest extends ApplicationTest {
 		//	Dismiss the popup...
 //		robot.press(KeyCode.ESCAPE);
 //		assertFalse(popup.isShowing());
+
+	}
+
+	private void fxExecuteAndWait ( Runnable r ) throws InterruptedException {
+
+		CountDownLatch latch = new CountDownLatch(1);
+
+		Platform.runLater(() -> {
+			r.run();
+			latch.countDown();
+		});
+
+		latch.await();
 
 	}
 
