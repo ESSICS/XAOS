@@ -19,21 +19,27 @@ package se.europeanspallationsource.xaos.ui.control;
 
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ObjectPropertyBase;
-import javafx.css.Styleable;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.WeakChangeListener;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
+import javafx.event.WeakEventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Path;
+import javafx.scene.shape.Shape;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import static java.util.logging.Level.SEVERE;
@@ -94,6 +100,10 @@ public class NavigatorController extends AnchorPane {
 	 */
 	public static final EventType<Event> ON_ZOOM_TO_ONE = new EventType<Event>(Event.ANY, "NAVIGATOR_ON_ZOOM_TO_ONE");
 
+	private static final String FOCUS_CHANGE_LISTENER = "FOCUS_CHANGE_LISTENER";
+	private static final String KEY_PRESSED_HANDLER = "KEY_PRESSED_HANDLER";
+	private static final String KEY_RELEASED_HANDLER = "KEY_RELEASED_HANDLER";
+
 	private static final Logger LOGGER = Logger.getLogger(NavigatorController.class.getName());
 
 	@FXML private Path backward;
@@ -118,11 +128,12 @@ public class NavigatorController extends AnchorPane {
 
 	public NavigatorController() {
 		init();
+		initListeners();
 	}
 
-	/*
-	 * **** START OF JAVAFX PROPERTIES *****************************************
-	 */
+	/***************************************************************************
+	 * START OF JAVAFX PROPERTIES                                              *
+	 ***************************************************************************/
 
 	/*
 	 * ---- onBackward ---------------------------------------------------------
@@ -466,9 +477,37 @@ public class NavigatorController extends AnchorPane {
 		onZoomToOneProperty().set(value);
 	}
 
-	/*
-	 * **** END OF JAVAFX PROPERTIES *******************************************
-	 */
+	/***************************************************************************
+	 * END OF JAVAFX PROPERTIES                                                *
+	 ***************************************************************************/
+
+	private void fireNavigationEvent ( Node source ) {
+
+		String id = source.getId();
+
+		if ( "backward".equals(id) ) {
+			Event.fireEvent(source, new Event(this, source, ON_BACKWARD));
+		} else if ( "forward".equals(id) ) {
+			Event.fireEvent(source, new Event(this, source, ON_FORWARD));
+		} else if ( "panDown".equals(id) ) {
+			Event.fireEvent(source, new Event(this, source, ON_PAN_DOWN));
+		} else if ( "panLeft".equals(id) ) {
+			Event.fireEvent(source, new Event(this, source, ON_PAN_LEFT));
+		} else if ( "panRight".equals(id) ) {
+			Event.fireEvent(source, new Event(this, source, ON_PAN_RIGHT));
+		} else if ( "panUp".equals(id) ) {
+			Event.fireEvent(source, new Event(this, source, ON_PAN_UP));
+		} else if ( "zoomIn".equals(id) ) {
+			Event.fireEvent(source, new Event(this, source, ON_ZOOM_IN));
+		} else if ( "zoomOut".equals(id) ) {
+			Event.fireEvent(source, new Event(this, source, ON_ZOOM_OUT));
+		} else if ( "zoomToOne".equals(id) ) {
+			Event.fireEvent(source, new Event(this, source, ON_ZOOM_TO_ONE));
+		} else {
+			LOGGER.warning(MessageFormat.format("Unexpected identifier [{0}].", id));
+		}
+
+	}
 
 	private void init() {
 		try {
@@ -491,70 +530,155 @@ public class NavigatorController extends AnchorPane {
 		}
 	}
 
+	private void initListeners() {
+		initListeners(backward);
+		initListeners(forward);
+		initListeners(panDown);
+		initListeners(panLeft);
+		initListeners(panRight);
+		initListeners(panUp);
+		initListeners(zoomIn);
+		initListeners(zoomOut);
+		initListeners(zoomToOne);
+	}
+
+	private void initListeners( final Shape shape ) {
+
+		Map<String, Object> listenersMap = new HashMap<>(4);
+		EventHandler<KeyEvent> keyPressedHandler = new EventHandler<KeyEvent>() {
+			@Override
+			public void handle( KeyEvent event ) {
+				if ( shape.isFocused() ) {
+					switch ( event.getCode() ) {
+						case ENTER:
+						case SPACE:
+							updateStyle(shape, FillStyle.PRESSED, StrokeStyle.FOCUSED);
+							event.consume();
+							break;
+					}
+				}
+			}
+		};
+		EventHandler<KeyEvent> keyReleasedHandler = new EventHandler<KeyEvent>() {
+			@Override
+			public void handle( KeyEvent event ) {
+				if ( shape.isFocused() ) {
+					switch ( event.getCode() ) {
+						case ENTER:
+						case SPACE:
+							fireNavigationEvent(shape);
+							updateStyle(shape);
+							event.consume();
+							break;
+					}
+				}
+			}
+		};
+		ChangeListener<Boolean> focusChangeListener = ( observable, hadFocus, hasFocus ) -> {
+			updateStyle(shape);
+		};
+
+		listenersMap.put(FOCUS_CHANGE_LISTENER, focusChangeListener);
+		listenersMap.put(KEY_PRESSED_HANDLER, keyPressedHandler);
+		listenersMap.put(KEY_RELEASED_HANDLER, keyReleasedHandler);
+
+		shape.setUserData(listenersMap);
+		shape.focusedProperty().addListener(new WeakChangeListener<>(focusChangeListener));
+		shape.addEventHandler(KeyEvent.KEY_PRESSED, new WeakEventHandler<>(keyPressedHandler));
+		shape.addEventHandler(KeyEvent.KEY_RELEASED, new WeakEventHandler<>(keyReleasedHandler));
+
+	}
+
+	private boolean isPanButton( Node node ) {
+		return ( node == panDown || node == panLeft || node == panRight || node == panUp );
+	}
+
 	@FXML
 	@SuppressWarnings( "ConvertToStringSwitch" )
 	private void mouseClicked( MouseEvent event ) {
 
 		Node source = (Node) event.getSource();
 
+		source.requestFocus();
+
 		if ( source != null && PRIMARY == event.getButton() ) {
-
-			String id = source.getId();
-
-			if ( "backward".equals(id) ) {
-				Event.fireEvent(source, new Event(this, source, ON_BACKWARD));
-			} else if ( "forward".equals(id) ) {
-				Event.fireEvent(source, new Event(this, source, ON_FORWARD));
-			} else if ( "panDown".equals(id) ) {
-				Event.fireEvent(source, new Event(this, source, ON_PAN_DOWN));
-			} else if ( "panLeft".equals(id) ) {
-				Event.fireEvent(source, new Event(this, source, ON_PAN_LEFT));
-			} else if ( "panRight".equals(id) ) {
-				Event.fireEvent(source, new Event(this, source, ON_PAN_RIGHT));
-			} else if ( "panUp".equals(id) ) {
-				Event.fireEvent(source, new Event(this, source, ON_PAN_UP));
-			} else if ( "zoomIn".equals(id) ) {
-				Event.fireEvent(source, new Event(this, source, ON_ZOOM_IN));
-			} else if ( "zoomOut".equals(id) ) {
-				Event.fireEvent(source, new Event(this, source, ON_ZOOM_OUT));
-			} else if ( "zoomToOne".equals(id) ) {
-				Event.fireEvent(source, new Event(this, source, ON_ZOOM_TO_ONE));
-			} else {
-				LOGGER.warning(MessageFormat.format("Unexpected identifier [{0}].", id));
-			}
-
+			fireNavigationEvent(source);
 		}
+
+		event.consume();
 
 	}
 
 	@FXML
 	private void mouseEntered( MouseEvent event ) {
-
-		enteredStyle = ( (Styleable) event.getSource() ).getStyle();
-
-		( (Node) event.getSource() ).setStyle("-fx-fill: -hover-color");
-
+		updateStyle((Node) event.getSource());
+		event.consume();
 	}
 
 	@FXML
 	private void mouseExited( MouseEvent event ) {
-		( (Node) event.getSource() ).setStyle(enteredStyle);
+		updateStyle((Node) event.getSource());
+		event.consume();
 	}
 
 	@FXML
 	private void mousePressed( MouseEvent event ) {
-		( (Node) event.getSource() ).setStyle("-fx-fill: -pressed-color");
+		updateStyle((Node) event.getSource());
+		event.consume();
 	}
 
 	@FXML
 	private void mouseReleased( MouseEvent event ) {
+		updateStyle((Node) event.getSource());
+		event.consume();
+	}
 
-		Node source = (Node) event.getSource();
+	private void updateStyle( Node node ) {
+		updateStyle(
+			node,
+			node.isPressed() ? FillStyle.PRESSED : ( node.isHover() ? FillStyle.HOVER : ( isPanButton(node) ? FillStyle.LIGHTER : FillStyle.DEFAULT ) ),
+			node.isFocused() ? StrokeStyle.FOCUSED : StrokeStyle.DEFAULT
+		);
+	}
 
-		if ( source.contains(event.getX(), event.getY()) ) {
-			source.setStyle("-fx-fill: -hover-color");
-		} else {
-			source.setStyle(enteredStyle);
+	private void updateStyle( Node node, FillStyle fill, StrokeStyle stroke ) {
+		node.setStyle(MessageFormat.format("{0}; {1};", fill.getStyle(), stroke.getStyle()));
+	}
+
+	@SuppressWarnings( "PackageVisibleInnerClass" )
+	enum FillStyle {
+
+		DEFAULT("-fx-fill: -normal-color"),
+		LIGHTER("-fx-fill: -normal-color-lighter"),
+		HOVER("-fx-fill: -hover-color"),
+		PRESSED("-fx-fill: -pressed-color");
+
+		private final String style;
+
+		FillStyle( String style ) {
+			this.style = style;
+		}
+
+		String getStyle() {
+			return style;
+		}
+
+	}
+
+	@SuppressWarnings( "PackageVisibleInnerClass" )
+	enum StrokeStyle {
+
+		DEFAULT("-fx-stroke: -fx-outer-border"),
+		FOCUSED("-fx-stroke: -fx-focus-color");
+
+		private final String style;
+
+		StrokeStyle( String style ) {
+			this.style = style;
+		}
+
+		String getStyle() {
+			return style;
 		}
 
 	}

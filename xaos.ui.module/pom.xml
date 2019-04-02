@@ -72,7 +72,7 @@
 						<exclude>**/*Suite.java</exclude>
 					</excludes>
 					<includes>
-						<include>**/NavigatorPopupUITest.java</include>
+						<include>**/NavigatorControllerUITest.java</include>
 					</includes>
 
 				</configuration>

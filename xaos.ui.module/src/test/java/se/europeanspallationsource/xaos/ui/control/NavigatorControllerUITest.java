@@ -37,6 +37,8 @@ import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
 import se.europeanspallationsource.xaos.core.util.ThreadUtils;
+import se.europeanspallationsource.xaos.ui.control.NavigatorController.FillStyle;
+import se.europeanspallationsource.xaos.ui.control.NavigatorController.StrokeStyle;
 
 import static javafx.geometry.Pos.BOTTOM_LEFT;
 import static javafx.geometry.Pos.BOTTOM_RIGHT;
@@ -133,35 +135,35 @@ public class NavigatorControllerUITest extends ApplicationTest {
 		Node node = robot.lookup(cssID).query();
 
 		//	Check the button is in its normal status.
-		assertTrue(node.getStyle().contains("-normal-color") || node.getStyle().contains("-normal-color-lighter"));
+		assertTrue(node.getStyle().contains(FillStyle.DEFAULT.getStyle()) || node.getStyle().contains(FillStyle.LIGHTER.getStyle()));
 
 		//	Move the mouse cursor over the node and check its status.
 		robot.moveTo(node, position, offset, DEFAULT);
-		assertTrue(node.getStyle().contains("-hover-color"));
+		assertTrue(node.getStyle().contains(FillStyle.HOVER.getStyle()));
 
 		//	Press the primary mouse button and check the node status.
 		robot.press(PRIMARY);
-		assertTrue(node.getStyle().contains("-pressed-color"));
+		assertTrue(node.getStyle().contains(FillStyle.PRESSED.getStyle()));
 
 		//	Release the primary mouse button and check the node status.
 		robot.release(PRIMARY);
-		assertTrue(node.getStyle().contains("-hover-color"));
+		assertTrue(node.getStyle().contains(FillStyle.HOVER.getStyle()));
 
 		//	Move the mouse cursor outside the node and check its status.
 		robot.moveTo(node, position, new Point2D(100, 100), DEFAULT);
-		assertTrue(node.getStyle().contains("-normal-color") || node.getStyle().contains("-normal-color-lighter"));
+		assertTrue(node.getStyle().contains(FillStyle.DEFAULT.getStyle()) || node.getStyle().contains(FillStyle.LIGHTER.getStyle()));
 
 		//	Mode the cursor over the node, press and keep pressed the primary
 		//	mouse button, then move outside the button: it must be in it normal
 		//	status.
 		robot.moveTo(node, position, offset, DEFAULT);
-		assertTrue(node.getStyle().contains("-hover-color"));
+		assertTrue(node.getStyle().contains(FillStyle.HOVER.getStyle()));
 		robot.press(PRIMARY);
-		assertTrue(node.getStyle().contains("-pressed-color"));
+		assertTrue(node.getStyle().contains(FillStyle.PRESSED.getStyle()));
 		robot.moveTo(node, position, new Point2D(100, 100), DEFAULT);
-		assertTrue(node.getStyle().contains("-normal-color") || node.getStyle().contains("-normal-color-lighter"));
+		assertTrue(node.getStyle().contains(FillStyle.PRESSED.getStyle()));
 		robot.release(PRIMARY);
-		assertTrue(node.getStyle().contains("-normal-color") || node.getStyle().contains("-normal-color-lighter"));
+		assertTrue(node.getStyle().contains(FillStyle.DEFAULT.getStyle()) || node.getStyle().contains(FillStyle.LIGHTER.getStyle()));
 
 		//	Clear the label, click on the button and verify that the label's
 		//	text corresponds to the given cssID.
@@ -177,6 +179,9 @@ public class NavigatorControllerUITest extends ApplicationTest {
 		robot.moveTo(node, position, offset, DEFAULT);
 		robot.clickOn(PRIMARY);
 		assertThat("#" + label.getText()).isEqualTo(cssID);
+
+		//	After clicking the button it should have been focused.
+		assertTrue(node.getStyle().contains(StrokeStyle.FOCUSED.getStyle()));
 
 	}
 

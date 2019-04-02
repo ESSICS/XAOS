@@ -18,6 +18,9 @@ package se.europeanspallationsource.xaos.ui.util;
 
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 
 
@@ -28,24 +31,105 @@ import javafx.application.Platform;
  */
 public class FXUtils {
 
+	private static final Logger LOGGER = Logger.getLogger(FXUtils.class.getName());
+
 	/**
 	 * Execute the given {@code task} on the JavaFX event thread via
 	 * {@link Platform#runLater(Runnable)} and await for termination.
+	 * <p>
+	 * If an exception is thrown while the given {@code task} is executed,
+	 * an error is logged.</p>
 	 *
 	 * @param task The {@link Runnable} to be executed.
 	 * @throws InterruptedException If the current thread is interrupted while
 	 *                              waiting.
 	 */
-	private static void runOnFXThreadAndWait( Runnable task ) throws InterruptedException {
+	public static void runOnFXThreadAndWait( Runnable task ) throws InterruptedException {
 
 		CountDownLatch latch = new CountDownLatch(1);
 
 		Platform.runLater(() -> {
-			task.run();
-			latch.countDown();
+			try {
+				task.run();
+			} catch ( Exception ex ) {
+				LOGGER.log(Level.SEVERE, "Exception while running task in the JavaFX event thread.", ex);
+			} finally {
+				latch.countDown();
+			}
 		});
 
 		latch.await();
+
+	}
+
+	/**
+	 * Execute the given {@code task} on the JavaFX event thread via
+	 * {@link Platform#runLater(Runnable)} and await for termination.
+	 * <p>
+	 * If an exception is thrown while the given {@code task} is executed,
+	 * an error is logged.</p>
+	 *
+	 * @param task    The {@link Runnable} to be executed.
+	 * @param timeout The maximum time to wait.
+	 * @param unit    The time unit of the {@code timeout} argument.
+	 * @return {@code true} if the given {@code task} was executed, or
+	 *         {@code false} if the waiting time elapsed before the {@code task}
+	 *         is executed.
+	 * @throws InterruptedException If the current thread is interrupted while
+	 *                              waiting.
+	 */
+	public static boolean runOnFXThreadAndWait( Runnable task, long timeout, TimeUnit unit )
+		throws InterruptedException
+	{
+
+		CountDownLatch latch = new CountDownLatch(1);
+
+		Platform.runLater(() -> {
+			try {
+				task.run();
+			} catch ( Exception ex ) {
+				LOGGER.log(Level.SEVERE, "Exception while running task in the JavaFX event thread.", ex);
+			} finally {
+				latch.countDown();
+			}
+		});
+
+		return latch.await(timeout, unit);
+
+	}
+
+	/**
+	 * Execute the given {@code task} on the JavaFX event thread via
+	 * {@link Platform#runLater(Runnable)} and await for termination.
+	 * <p>
+	 * If an exception is thrown while the given {@code task} is executed,
+	 * an error is logged.</p>
+	 * <p>
+	 * If the current thread is interrupted no exception is thrown: an error
+	 * message is logged instead.
+	 * </p>
+	 *
+	 * @param task The {@link Runnable} to be executed.
+	 */
+	public static void runOnFXThreadAndWaitSilently( Runnable task ) {
+
+		CountDownLatch latch = new CountDownLatch(1);
+
+		Platform.runLater(() -> {
+			try {
+				task.run();
+			} catch ( Exception ex ) {
+				LOGGER.log(Level.SEVERE, "Exception while running task in the JavaFX event thread.", ex);
+			} finally {
+				latch.countDown();
+			}
+		});
+
+		try {
+			latch.await();
+		} catch ( InterruptedException ex ) {
+			LOGGER.log(Level.SEVERE, "Exception while waiting for task being executed in the JavaFX event thread.", ex);
+		}
 
 	}
 

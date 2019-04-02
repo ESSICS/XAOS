@@ -36,6 +36,7 @@ import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
 import se.europeanspallationsource.xaos.core.util.ThreadUtils;
+import se.europeanspallationsource.xaos.ui.util.FXUtils;
 
 import static javafx.geometry.Pos.CENTER;
 import static javafx.scene.input.MouseButton.PRIMARY;
@@ -132,16 +133,16 @@ public class NavigatorPopupUITest extends ApplicationTest {
 
 		//	Open the popup...
 		robot.moveTo(root, CENTER, new Point2D(0, 0), DEFAULT);
-		fxExecuteAndWait(() -> popup.show(root, mouseScreenX, mouseScreenY));
+		FXUtils.runOnFXThreadAndWait(() -> popup.show(root, mouseScreenX, mouseScreenY));
 		assertTrue(popup.isShowing());
 
 		//	Dismiss the popup explicitly...
-		fxExecuteAndWait(() -> popup.hide());
+		FXUtils.runOnFXThreadAndWait(() -> popup.hide());
 		assertFalse(popup.isShowing());
 
 		//	Open the popup again...
 		robot.moveTo(root, CENTER, new Point2D(0, 0), DEFAULT);
-		fxExecuteAndWait(() -> popup.show(root, mouseScreenX, mouseScreenY));
+		FXUtils.runOnFXThreadAndWait(() -> popup.show(root, mouseScreenX, mouseScreenY));
 		assertTrue(popup.isShowing());
 
 		//	Dismiss the popup by loosing focus...
@@ -167,19 +168,6 @@ public class NavigatorPopupUITest extends ApplicationTest {
 		//	Dismiss the popup...
 //		robot.press(KeyCode.ESCAPE);
 //		assertFalse(popup.isShowing());
-
-	}
-
-	private void fxExecuteAndWait ( Runnable r ) throws InterruptedException {
-
-		CountDownLatch latch = new CountDownLatch(1);
-
-		Platform.runLater(() -> {
-			r.run();
-			latch.countDown();
-		});
-
-		latch.await();
 
 	}
 
