@@ -19,14 +19,13 @@ package se.europeanspallationsource.xaos.ui.control;
 
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeoutException;
-import javafx.application.Platform;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
@@ -39,6 +38,7 @@ import org.testfx.framework.junit.ApplicationTest;
 import se.europeanspallationsource.xaos.core.util.ThreadUtils;
 import se.europeanspallationsource.xaos.ui.control.NavigatorController.FillStyle;
 import se.europeanspallationsource.xaos.ui.control.NavigatorController.StrokeStyle;
+import se.europeanspallationsource.xaos.ui.util.FXUtils;
 
 import static javafx.geometry.Pos.BOTTOM_LEFT;
 import static javafx.geometry.Pos.BOTTOM_RIGHT;
@@ -167,21 +167,23 @@ public class NavigatorControllerUITest extends ApplicationTest {
 
 		//	Clear the label, click on the button and verify that the label's
 		//	text corresponds to the given cssID.
-		CountDownLatch latch = new CountDownLatch(1);
-
-		Platform.runLater(() -> {
-			label.setText("—");
-			latch.countDown();
-		});
-
-		latch.await();
-
+		FXUtils.runOnFXThreadAndWait(() -> label.setText("—"));
 		robot.moveTo(node, position, offset, DEFAULT);
 		robot.clickOn(PRIMARY);
 		assertThat("#" + label.getText()).isEqualTo(cssID);
 
 		//	After clicking the button it should have been focused.
 		assertTrue(node.getStyle().contains(StrokeStyle.FOCUSED.getStyle()));
+
+		//	Press SPACE to press the button.
+		FXUtils.runOnFXThreadAndWait(() -> label.setText("—"));
+		robot.type(KeyCode.SPACE);
+		assertThat("#" + label.getText()).isEqualTo(cssID);
+
+		//	Press ENTER to press the button.
+		FXUtils.runOnFXThreadAndWait(() -> label.setText("—"));
+		robot.type(KeyCode.ENTER);
+		assertThat("#" + label.getText()).isEqualTo(cssID);
 
 	}
 
