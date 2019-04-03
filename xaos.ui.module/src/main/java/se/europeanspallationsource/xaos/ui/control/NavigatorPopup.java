@@ -17,6 +17,7 @@
 package se.europeanspallationsource.xaos.ui.control;
 
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -54,48 +55,9 @@ public class NavigatorPopup extends PopupControl {
 	private final double offsetX = navigator.getPrefWidth() / 2.0;
 	private final double offsetY = navigator.getPrefHeight() / 2.0;
 
-	/**
-	 * Create a new {@link NavigatorPopup} instance.
-	 */
-	public NavigatorPopup() {
-		getScene().setFill(Color.TRANSPARENT);
-		getScene().setRoot(navigator);
-		super.setAnchorLocation(AnchorLocation.CONTENT_TOP_LEFT);
-	}
-
-	/*
-	 * **** START OF JAVAFX PROPERTIES *****************************************
-	 */
-
-	/*
-	 * ---- onBackward ---------------------------------------------------------
-	 */
-	public final ObjectProperty<EventHandler<Event>> onBackwardProperty() {
-		return navigator.onBackwardProperty();
-	}
-
-	public final EventHandler<Event> getOnBackward() {
-		return navigator.getOnBackward();
-	}
-
-	public final void setOnBackward( EventHandler<Event> value ) {
-		navigator.setOnBackward(value);
-	}
-
-	/*
-	 * ---- onForward ----------------------------------------------------------
-	 */
-	public final ObjectProperty<EventHandler<Event>> onForwardProperty() {
-		return navigator.onForwardProperty();
-	}
-
-	public final EventHandler<Event> getOnForward() {
-		return navigator.getOnForward();
-	}
-
-	public final void setOnForward( EventHandler<Event> value ) {
-		navigator.setOnForward(value);
-	}
+	/* *********************************************************************** *
+	 * START OF JAVAFX PROPERTIES                                              *
+	 * *********************************************************************** */
 
 	/*
 	 * ---- onPanDown ----------------------------------------------------------
@@ -158,6 +120,36 @@ public class NavigatorPopup extends PopupControl {
 	}
 
 	/*
+	 * ---- onRedo -------------------------------------------------------------
+	 */
+	public final ObjectProperty<EventHandler<Event>> onRedoProperty() {
+		return navigator.onRedoProperty();
+	}
+
+	public final EventHandler<Event> getOnRedo() {
+		return navigator.getOnRedo();
+	}
+
+	public final void setOnRedo( EventHandler<Event> value ) {
+		navigator.setOnRedo(value);
+	}
+
+	/*
+	 * ---- onUndo -------------------------------------------------------------
+	 */
+	public final ObjectProperty<EventHandler<Event>> onUndoProperty() {
+		return navigator.onUndoProperty();
+	}
+
+	public final EventHandler<Event> getOnUndo() {
+		return navigator.getOnUndo();
+	}
+
+	public final void setOnUndo( EventHandler<Event> value ) {
+		navigator.setOnUndo(value);
+	}
+
+	/*
 	 * ---- onZoomIn -----------------------------------------------------------
 	 */
 	public final ObjectProperty<EventHandler<Event>> onZoomInProperty() {
@@ -203,8 +195,152 @@ public class NavigatorPopup extends PopupControl {
 	}
 
 	/*
-	 * **** END OF JAVAFX PROPERTIES *******************************************
+	 * ---- panDownDisabled ----------------------------------------------------
 	 */
+	public final BooleanProperty panDownDisabledProperty() {
+		return navigator.panDownDisabledProperty();
+	}
+
+	public final boolean isPanDownDisabled() {
+		return navigator.isPanDownDisabled();
+	}
+
+	public final void setPanDownDisabled( boolean disabled ) {
+		navigator.setPanDownDisabled(disabled);
+	}
+
+	/*
+	 * ---- panLeftDisabled ----------------------------------------------------
+	 */
+	public final BooleanProperty panLeftDisabledProperty() {
+		return navigator.panLeftDisabledProperty();
+	}
+
+	public final boolean isPanLeftDisabled() {
+		return navigator.isPanLeftDisabled();
+	}
+
+	public final void setPanLeftDisabled( boolean disabled ) {
+		navigator.setPanLeftDisabled(disabled);
+	}
+
+	/*
+	 * ---- panRightDisabled ---------------------------------------------------
+	 */
+	public final BooleanProperty panRightDisabledProperty() {
+		return navigator.panRightDisabledProperty();
+	}
+
+	public final boolean isPanRightDisabled() {
+		return navigator.isPanRightDisabled();
+	}
+
+	public final void setPanRightDisabled( boolean disabled ) {
+		navigator.setPanRightDisabled(disabled);
+	}
+
+	/*
+	 * ---- panUpDisabled ------------------------------------------------------
+	 */
+	public final BooleanProperty panUpDisabledProperty() {
+		return navigator.panUpDisabledProperty();
+	}
+
+	public final boolean isPanUpDisabled() {
+		return navigator.isPanUpDisabled();
+	}
+
+	public final void setPanUpDisabled( boolean disabled ) {
+		navigator.setPanUpDisabled(disabled);
+	}
+
+	/*
+	 * ---- redoDisabled -------------------------------------------------------
+	 */
+	public final BooleanProperty redoDisabledProperty() {
+		return navigator.redoDisabledProperty();
+	}
+
+	public final boolean isRedoDisabled() {
+		return navigator.isRedoDisabled();
+	}
+
+	public final void setRedoDisabled( boolean disabled ) {
+		navigator.setRedoDisabled(disabled);
+	}
+
+	/*
+	 * ---- undoDisabled -------------------------------------------------------
+	 */
+	public final BooleanProperty undoDisabledProperty() {
+		return navigator.undoDisabledProperty();
+	}
+
+	public final boolean isUndoDisabled() {
+		return navigator.isUndoDisabled();
+	}
+
+	public final void setUndoDisabled( boolean disabled ) {
+		navigator.setUndoDisabled(disabled);
+	}
+
+	/*
+	 * ---- zoomInDisabled -----------------------------------------------------
+	 */
+	public final BooleanProperty zoomInDisabledProperty() {
+		return navigator.zoomInDisabledProperty();
+	}
+
+	public final boolean isZoomInDisabled() {
+		return navigator.isZoomInDisabled();
+	}
+
+	public final void setZoomInDisabled( boolean disabled ) {
+		navigator.setZoomInDisabled(disabled);
+	}
+
+	/*
+	 * ---- zoomOutDisabled ----------------------------------------------------
+	 */
+	public final BooleanProperty zoomOutDisabledProperty() {
+		return navigator.zoomOutDisabledProperty();
+	}
+
+	public final boolean isZoomOutDisabled() {
+		return navigator.isZoomOutDisabled();
+	}
+
+	public final void setZoomOutDisabled( boolean disabled ) {
+		navigator.setZoomOutDisabled(disabled);
+	}
+
+	/*
+	 * ---- zoomToOneDisabled --------------------------------------------------
+	 */
+	public final BooleanProperty zoomToOneDisabledProperty() {
+		return navigator.zoomToOneDisabledProperty();
+	}
+
+	public final boolean isZoomToOneDisabled() {
+		return navigator.    isZoomToOneDisabled();
+	}
+
+	public final void setZoomToOneDisabled( boolean disabled ) {
+		navigator.setZoomToOneDisabled(disabled);
+	}
+
+	/* *********************************************************************** *
+	 * END OF JAVAFX PROPERTIES                                                *
+	 * *********************************************************************** */
+
+	/**
+	 * Create a new {@link NavigatorPopup} instance.
+	 */
+	public NavigatorPopup() {
+		getScene().setFill(Color.TRANSPARENT);
+		getScene().setRoot(navigator);
+		super.setAnchorLocation(AnchorLocation.CONTENT_TOP_LEFT);
+	}
 
 	@Override
 	public void show( Window ownerWindow, double anchorX, double anchorY ) {

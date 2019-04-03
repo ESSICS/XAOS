@@ -20,6 +20,7 @@ package se.europeanspallationsource.xaos.ui.control;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.concurrent.TimeoutException;
+import javafx.beans.property.BooleanProperty;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -35,7 +36,6 @@ import org.junit.Test;
 import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
-import se.europeanspallationsource.xaos.core.util.ThreadUtils;
 import se.europeanspallationsource.xaos.ui.control.NavigatorController.FillStyle;
 import se.europeanspallationsource.xaos.ui.control.NavigatorController.StrokeStyle;
 import se.europeanspallationsource.xaos.ui.util.FXUtils;
@@ -47,6 +47,7 @@ import static javafx.geometry.Pos.TOP_LEFT;
 import static javafx.geometry.Pos.TOP_RIGHT;
 import static javafx.scene.input.MouseButton.PRIMARY;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.testfx.robot.Motion.DEFAULT;
 
@@ -75,12 +76,12 @@ public class NavigatorControllerUITest extends ApplicationTest {
 
 		controller.setLayoutX(20);
 		controller.setLayoutY(20);
-		controller.setOnBackward(e -> label.setText(((Node) e.getTarget()).getId()));
-		controller.setOnForward(e -> label.setText(((Node) e.getTarget()).getId()));
 		controller.setOnPanDown(e -> label.setText(((Node) e.getTarget()).getId()));
 		controller.setOnPanLeft(e -> label.setText(((Node) e.getTarget()).getId()));
 		controller.setOnPanRight(e -> label.setText(((Node) e.getTarget()).getId()));
 		controller.setOnPanUp(e -> label.setText(((Node) e.getTarget()).getId()));
+		controller.setOnRedo(e -> label.setText(((Node) e.getTarget()).getId()));
+		controller.setOnUndo(e -> label.setText(((Node) e.getTarget()).getId()));
 		controller.setOnZoomIn(e -> label.setText(((Node) e.getTarget()).getId()));
 		controller.setOnZoomOut(e -> label.setText(((Node) e.getTarget()).getId()));
 		controller.setOnZoomToOne(e -> label.setText(((Node) e.getTarget()).getId()));
@@ -111,24 +112,21 @@ public class NavigatorControllerUITest extends ApplicationTest {
 
 		System.out.println("  Testing ''NavigatorController''...");
 
-		//	Give the UI time to draw itself.
-		ThreadUtils.sleep(500);
-
 		FxRobot robot = new FxRobot();
 
-		testSingleButton(robot, "#forward",   TOP_LEFT,     new Point2D( 10,  10));
-		testSingleButton(robot, "#backward",  BOTTOM_LEFT,  new Point2D( 10, -10));
-		testSingleButton(robot, "#zoomIn",    TOP_RIGHT,    new Point2D(-10,  10));
-		testSingleButton(robot, "#zoomOut",   BOTTOM_RIGHT, new Point2D(-10, -10));
-		testSingleButton(robot, "#panUp",     CENTER,       new Point2D(  0,   0));
-		testSingleButton(robot, "#panRight",  CENTER,       new Point2D(  0,   0));
-		testSingleButton(robot, "#panDown",   CENTER,       new Point2D(  0,   0));
-		testSingleButton(robot, "#panLeft",   CENTER,       new Point2D(  0,   0));
-		testSingleButton(robot, "#zoomToOne", CENTER,       new Point2D(  0,   0));
+		testSingleButton(robot, "#undo",      TOP_LEFT,     new Point2D( 10,  10), controller.undoDisabledProperty());
+		testSingleButton(robot, "#redo",      BOTTOM_LEFT,  new Point2D( 10, -10), controller.redoDisabledProperty());
+		testSingleButton(robot, "#zoomIn",    TOP_RIGHT,    new Point2D(-10,  10), controller.zoomInDisabledProperty());
+		testSingleButton(robot, "#zoomOut",   BOTTOM_RIGHT, new Point2D(-10, -10), controller.zoomOutDisabledProperty());
+		testSingleButton(robot, "#panUp",     CENTER,       new Point2D(  0,   0), controller.panUpDisabledProperty());
+		testSingleButton(robot, "#panRight",  CENTER,       new Point2D(  0,   0), controller.panRightDisabledProperty());
+		testSingleButton(robot, "#panDown",   CENTER,       new Point2D(  0,   0), controller.panDownDisabledProperty());
+		testSingleButton(robot, "#panLeft",   CENTER,       new Point2D(  0,   0), controller.panLeftDisabledProperty());
+		testSingleButton(robot, "#zoomToOne", CENTER,       new Point2D(  0,   0), controller.zoomToOneDisabledProperty());
 
 	}
 
-	private void testSingleButton( FxRobot robot, String cssID, Pos position, Point2D offset ) throws InterruptedException {
+	private void testSingleButton( FxRobot robot, String cssID, Pos position, Point2D offset, BooleanProperty disabledProperty ) throws InterruptedException {
 
 		System.out.println(MessageFormat.format("    - Testing ''{0}''...", cssID));
 
@@ -184,6 +182,25 @@ public class NavigatorControllerUITest extends ApplicationTest {
 		FXUtils.runOnFXThreadAndWait(() -> label.setText("—"));
 		robot.type(KeyCode.ENTER);
 		assertThat("#" + label.getText()).isEqualTo(cssID);
+
+		//	Disable the button and check its status.
+		FXUtils.runOnFXThreadAndWait(() -> disabledProperty.set(true));
+		assertTrue(node.isDisable());
+		assertTrue(node.isDisabled());
+		FXUtils.runOnFXThreadAndWait(() -> label.setText("—"));
+		robot.clickOn(PRIMARY);
+		assertThat(label.getText()).isEqualTo("—");
+
+		//	Enable the button and check its status.
+		FXUtils.runOnFXThreadAndWait(() -> disabledProperty.set(false));
+		assertFalse(node.isDisable());
+		assertFalse(node.isDisabled());
+		FXUtils.runOnFXThreadAndWait(() -> label.setText("—"));
+		robot.clickOn(PRIMARY);
+		assertThat("#" + label.getText()).isEqualTo(cssID);
+
+		//	Leave it disabled for visual feedback.
+		FXUtils.runOnFXThreadAndWait(() -> disabledProperty.set(true));
 
 	}
 

@@ -26,6 +26,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
@@ -35,7 +36,6 @@ import org.junit.Test;
 import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
-import se.europeanspallationsource.xaos.core.util.ThreadUtils;
 import se.europeanspallationsource.xaos.ui.util.FXUtils;
 
 import static javafx.geometry.Pos.CENTER;
@@ -72,14 +72,6 @@ public class NavigatorPopupUITest extends ApplicationTest {
 
 		//	Next statement is used to visally check the rounded border of the popup.
 		//root.setStyle("-fx-background-color: yellow;");
-//		root.setFocusTraversable(true);
-//		root.setOnKeyPressed(e -> {
-//			if ( e.isAltDown() ) {
-//				if ( !popup.isShowing() ) {
-//					popup.show(root, mouseScreenX, mouseScreenY);
-//				}
-//			}
-//		});
 		root.setOnMouseMoved(e -> {
 			mouseScreenX = e.getScreenX();
 			mouseScreenY = e.getScreenY();
@@ -89,12 +81,12 @@ public class NavigatorPopupUITest extends ApplicationTest {
 		popup.setAutoHide(true);
 		popup.setConsumeAutoHidingEvents(true);
 		popup.setHideOnEscape(true);
-		popup.setOnBackward(e -> label.setText(((Node) e.getTarget()).getId()));
-		popup.setOnForward(e -> label.setText(((Node) e.getTarget()).getId()));
 		popup.setOnPanDown(e -> label.setText(((Node) e.getTarget()).getId()));
 		popup.setOnPanLeft(e -> label.setText(((Node) e.getTarget()).getId()));
 		popup.setOnPanRight(e -> label.setText(((Node) e.getTarget()).getId()));
 		popup.setOnPanUp(e -> label.setText(((Node) e.getTarget()).getId()));
+		popup.setOnRedo(e -> label.setText(((Node) e.getTarget()).getId()));
+		popup.setOnUndo(e -> label.setText(((Node) e.getTarget()).getId()));
 		popup.setOnZoomIn(e -> label.setText(((Node) e.getTarget()).getId()));
 		popup.setOnZoomOut(e -> label.setText(((Node) e.getTarget()).getId()));
 		popup.setOnZoomToOne(e -> label.setText(((Node) e.getTarget()).getId()));
@@ -126,9 +118,6 @@ public class NavigatorPopupUITest extends ApplicationTest {
 
 		System.out.println("  Testing ''NavigatorController''...");
 
-		//	Give the UI time to draw itself.
-		ThreadUtils.sleep(500);
-
 		FxRobot robot = new FxRobot();
 
 		//	Open the popup...
@@ -145,18 +134,9 @@ public class NavigatorPopupUITest extends ApplicationTest {
 		FXUtils.runOnFXThreadAndWait(() -> popup.show(root, mouseScreenX, mouseScreenY));
 		assertTrue(popup.isShowing());
 
-		//	Dismiss the popup by loosing focus...
-//		fxExecuteAndWait(() -> label.requestFocus());
-//		assertFalse(popup.isShowing());
-
-		//	Open the popup again...
-//		robot.moveTo(root, CENTER, new Point2D(0, 0), DEFAULT);
-//		fxExecuteAndWait(() -> popup.show(root, mouseScreenX, mouseScreenY));
-//		assertTrue(popup.isShowing());
-
 		// Test each popup button...
-		testSingleButton(robot, "forward",   new Point2D(-40, -40));
-		testSingleButton(robot, "backward",  new Point2D(-40,  40));
+		testSingleButton(robot, "undo",      new Point2D(-40, -40));
+		testSingleButton(robot, "redo",      new Point2D(-40,  40));
 		testSingleButton(robot, "zoomIn",    new Point2D( 40, -40));
 		testSingleButton(robot, "zoomOut",   new Point2D( 40,  40));
 		testSingleButton(robot, "panUp",     new Point2D(  0, -25));
@@ -166,8 +146,8 @@ public class NavigatorPopupUITest extends ApplicationTest {
 		testSingleButton(robot, "zoomToOne", new Point2D(  0,   0));
 
 		//	Dismiss the popup...
-//		robot.press(KeyCode.ESCAPE);
-//		assertFalse(popup.isShowing());
+		robot.type(KeyCode.ESCAPE);
+		assertFalse(popup.isShowing());
 
 	}
 

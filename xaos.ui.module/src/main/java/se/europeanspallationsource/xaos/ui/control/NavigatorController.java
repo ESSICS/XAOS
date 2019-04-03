@@ -22,8 +22,10 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ObjectPropertyBase;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.WeakChangeListener;
 import javafx.event.Event;
@@ -47,23 +49,13 @@ import static javafx.scene.input.MouseButton.PRIMARY;
 
 
 /**
- * A JavaFX controller with 9 buttons to navigate a graphical area. Zoom, Pan
- * and backward/forward buttons are provided and can be bound to the application
+ * A JavaFX controller with 9 buttons to navigate a graphical area. Zoom, pan
+ * and undo/redo buttons are provided and can be bound to the application
  * code through the provided {@link EventHandler} methods.
  *
  * @author claudio.rosati@esss.se
  */
 public class NavigatorController extends AnchorPane {
-
-	/**
-	 * Called when the navigator's {@code backward} button is pressed.
-	 */
-	public static final EventType<Event> ON_BACKWARD = new EventType<Event>(Event.ANY, "NAVIGATOR_ON_BACKWARD");
-
-	/**
-	 * Called when the navigator's {@code forward} button is pressed.
-	 */
-	public static final EventType<Event> ON_FORWARD = new EventType<Event>(Event.ANY, "NAVIGATOR_ON_FORWARD");
 
 	/**
 	 * Called when the navigator's {@code panDown} button is pressed.
@@ -86,6 +78,16 @@ public class NavigatorController extends AnchorPane {
 	public static final EventType<Event> ON_PAN_UP = new EventType<Event>(Event.ANY, "NAVIGATOR_ON_PAN_UP");
 
 	/**
+	 * Called when the navigator's {@code redo} button is pressed.
+	 */
+	public static final EventType<Event> ON_REDO = new EventType<Event>(Event.ANY, "NAVIGATOR_ON_REDO");
+
+	/**
+	 * Called when the navigator's {@code undo} button is pressed.
+	 */
+	public static final EventType<Event> ON_UNDO = new EventType<Event>(Event.ANY, "NAVIGATOR_ON_UNDO");
+
+	/**
 	 * Called when the navigator's {@code zoomIn} button is pressed.
 	 */
 	public static final EventType<Event> ON_ZOOM_IN = new EventType<Event>(Event.ANY, "NAVIGATOR_ON_ZOOM_IN");
@@ -100,17 +102,14 @@ public class NavigatorController extends AnchorPane {
 	 */
 	public static final EventType<Event> ON_ZOOM_TO_ONE = new EventType<Event>(Event.ANY, "NAVIGATOR_ON_ZOOM_TO_ONE");
 
+	private static final String DISABLED_CHANGE_LISTENER = "DISABLED_CHANGE_LISTENER";
 	private static final String FOCUS_CHANGE_LISTENER = "FOCUS_CHANGE_LISTENER";
 	private static final String KEY_PRESSED_HANDLER = "KEY_PRESSED_HANDLER";
 	private static final String KEY_RELEASED_HANDLER = "KEY_RELEASED_HANDLER";
 
 	private static final Logger LOGGER = Logger.getLogger(NavigatorController.class.getName());
 
-	@FXML private Path backward;
-	@FXML private FontIcon backwardIcon;
 	private String enteredStyle;
-	@FXML private Path forward;
-	@FXML private FontIcon forwardIcon;
 	@FXML private Path panDown;
 	@FXML private FontIcon panDownIcon;
 	@FXML private Path panLeft;
@@ -119,6 +118,10 @@ public class NavigatorController extends AnchorPane {
 	@FXML private FontIcon panRightIcon;
 	@FXML private Path panUp;
 	@FXML private FontIcon panUpIcon;
+	@FXML private Path redo;
+	@FXML private FontIcon redoIcon;
+	@FXML private Path undo;
+	@FXML private FontIcon undoIcon;
 	@FXML private Path zoomIn;
 	@FXML private FontIcon zoomInIcon;
 	@FXML private Path zoomOut;
@@ -126,110 +129,17 @@ public class NavigatorController extends AnchorPane {
 	@FXML private Circle zoomToOne;
 	@FXML private Label zoomToOneLabel;
 
-	public NavigatorController() {
-		init();
-		initListeners();
-	}
-
-	/***************************************************************************
+	/* *********************************************************************** *
 	 * START OF JAVAFX PROPERTIES                                              *
-	 ***************************************************************************/
-
-	/*
-	 * ---- onBackward ---------------------------------------------------------
-	 */
-	private ObjectProperty<EventHandler<Event>> onBackward = new ObjectPropertyBase<EventHandler<Event>>() {
-
-		@Override
-		public Object getBean() {
-			return NavigatorController.this;
-		}
-
-		@Override
-		public String getName() {
-			return "onBackward";
-		}
-
-		@Override protected void invalidated() {
-			setEventHandler(ON_BACKWARD, get());
-		}
-
-	};
-
-	/**
-	 * Called when the {@code backward} button is pressed.
-	 *
-	 * @return The "on backward" property.
-	 */
-	public final ObjectProperty<EventHandler<Event>> onBackwardProperty() {
-		return onBackward;
-	}
-
-	public final EventHandler<Event> getOnBackward() {
-		return onBackwardProperty().get();
-	}
-
-	public final void setOnBackward( EventHandler<Event> value ) {
-		onBackwardProperty().set(value);
-	}
-
-	/*
-	 * ---- onForward ----------------------------------------------------------
-	 */
-	private ObjectProperty<EventHandler<Event>> onForward = new ObjectPropertyBase<EventHandler<Event>>() {
-
-		@Override
-		public Object getBean() {
-			return NavigatorController.this;
-		}
-
-		@Override
-		public String getName() {
-			return "onForward";
-		}
-
-		@Override protected void invalidated() {
-			setEventHandler(ON_FORWARD, get());
-		}
-
-	};
-
-	/**
-	 * Called when the {@code forward} button is pressed.
-	 *
-	 * @return The "on forward" property.
-	 */
-	public final ObjectProperty<EventHandler<Event>> onForwardProperty() {
-		return onForward;
-	}
-
-	public final EventHandler<Event> getOnForward() {
-		return onForwardProperty().get();
-	}
-
-	public final void setOnForward( EventHandler<Event> value ) {
-		onForwardProperty().set(value);
-	}
+	 * *********************************************************************** */
 
 	/*
 	 * ---- onPanDown ----------------------------------------------------------
 	 */
-	private ObjectProperty<EventHandler<Event>> onPanDown = new ObjectPropertyBase<EventHandler<Event>>() {
-
-		@Override
-		public Object getBean() {
-			return NavigatorController.this;
-		}
-
-		@Override
-		public String getName() {
-			return "onPanDown";
-		}
-
+	private ObjectProperty<EventHandler<Event>> onPanDown = new SimpleObjectProperty<>(NavigatorController.this, "onPanDown") {
 		@Override protected void invalidated() {
 			setEventHandler(ON_PAN_DOWN, get());
 		}
-
 	};
 
 	/**
@@ -252,22 +162,10 @@ public class NavigatorController extends AnchorPane {
 	/*
 	 * ---- onPanLeft ----------------------------------------------------------
 	 */
-	private ObjectProperty<EventHandler<Event>> onPanLeft = new ObjectPropertyBase<EventHandler<Event>>() {
-
-		@Override
-		public Object getBean() {
-			return NavigatorController.this;
-		}
-
-		@Override
-		public String getName() {
-			return "onPanLeft";
-		}
-
+	private ObjectProperty<EventHandler<Event>> onPanLeft = new SimpleObjectProperty<>(NavigatorController.this, "onPanLeft") {
 		@Override protected void invalidated() {
 			setEventHandler(ON_PAN_LEFT, get());
 		}
-
 	};
 
 	/**
@@ -290,22 +188,10 @@ public class NavigatorController extends AnchorPane {
 	/*
 	 * ---- onPanRight ---------------------------------------------------------
 	 */
-	private ObjectProperty<EventHandler<Event>> onPanRight = new ObjectPropertyBase<EventHandler<Event>>() {
-
-		@Override
-		public Object getBean() {
-			return NavigatorController.this;
-		}
-
-		@Override
-		public String getName() {
-			return "onPanRight";
-		}
-
+	private ObjectProperty<EventHandler<Event>> onPanRight = new SimpleObjectProperty<>(NavigatorController.this, "onPanRight") {
 		@Override protected void invalidated() {
 			setEventHandler(ON_PAN_RIGHT, get());
 		}
-
 	};
 
 	/**
@@ -328,22 +214,10 @@ public class NavigatorController extends AnchorPane {
 	/*
 	 * ---- onPanUp ------------------------------------------------------------
 	 */
-	private ObjectProperty<EventHandler<Event>> onPanUp = new ObjectPropertyBase<EventHandler<Event>>() {
-
-		@Override
-		public Object getBean() {
-			return NavigatorController.this;
-		}
-
-		@Override
-		public String getName() {
-			return "onPanUp";
-		}
-
+	private ObjectProperty<EventHandler<Event>> onPanUp = new SimpleObjectProperty<>(NavigatorController.this, "onPanUp") {
 		@Override protected void invalidated() {
 			setEventHandler(ON_PAN_UP, get());
 		}
-
 	};
 
 	/**
@@ -364,24 +238,64 @@ public class NavigatorController extends AnchorPane {
 	}
 
 	/*
+	 * ---- onRedo -------------------------------------------------------------
+	 */
+	private ObjectProperty<EventHandler<Event>> onRedo = new SimpleObjectProperty<>(NavigatorController.this, "onRedo") {
+		@Override protected void invalidated() {
+			setEventHandler(ON_REDO, get());
+		}
+	};
+
+	/**
+	 * Called when the {@code redo} button is pressed.
+	 *
+	 * @return The "on redo" property.
+	 */
+	public final ObjectProperty<EventHandler<Event>> onRedoProperty() {
+		return onRedo;
+	}
+
+	public final EventHandler<Event> getOnRedo() {
+		return onRedoProperty().get();
+	}
+
+	public final void setOnRedo( EventHandler<Event> value ) {
+		onRedoProperty().set(value);
+	}
+
+	/*
+	 * ---- onUndo -------------------------------------------------------------
+	 */
+	private ObjectProperty<EventHandler<Event>> onUndo = new SimpleObjectProperty<>(NavigatorController.this, "onUndo") {
+		@Override protected void invalidated() {
+			setEventHandler(ON_UNDO, get());
+		}
+	};
+
+	/**
+	 * Called when the {@code undo} button is pressed.
+	 *
+	 * @return The "on undo" property.
+	 */
+	public final ObjectProperty<EventHandler<Event>> onUndoProperty() {
+		return onUndo;
+	}
+
+	public final EventHandler<Event> getOnUndo() {
+		return onUndoProperty().get();
+	}
+
+	public final void setOnUndo( EventHandler<Event> value ) {
+		onUndoProperty().set(value);
+	}
+
+	/*
 	 * ---- onZoomIn -----------------------------------------------------------
 	 */
-	private ObjectProperty<EventHandler<Event>> onZoomIn = new ObjectPropertyBase<EventHandler<Event>>() {
-
-		@Override
-		public Object getBean() {
-			return NavigatorController.this;
-		}
-
-		@Override
-		public String getName() {
-			return "onZoomIn";
-		}
-
+	private ObjectProperty<EventHandler<Event>> onZoomIn = new SimpleObjectProperty<>(NavigatorController.this, "onZoomIn") {
 		@Override protected void invalidated() {
 			setEventHandler(ON_ZOOM_IN, get());
 		}
-
 	};
 
 	/**
@@ -404,22 +318,10 @@ public class NavigatorController extends AnchorPane {
 	/*
 	 * ---- onZoomOut ----------------------------------------------------------
 	 */
-	private ObjectProperty<EventHandler<Event>> onZoomOut = new ObjectPropertyBase<EventHandler<Event>>() {
-
-		@Override
-		public Object getBean() {
-			return NavigatorController.this;
-		}
-
-		@Override
-		public String getName() {
-			return "onZoomOut";
-		}
-
+	private ObjectProperty<EventHandler<Event>> onZoomOut = new SimpleObjectProperty<>(NavigatorController.this, "onZoomOut") {
 		@Override protected void invalidated() {
 			setEventHandler(ON_ZOOM_OUT, get());
 		}
-
 	};
 
 	/**
@@ -442,22 +344,10 @@ public class NavigatorController extends AnchorPane {
 	/*
 	 * ---- onZoomToOne --------------------------------------------------------
 	 */
-	private ObjectProperty<EventHandler<Event>> onZoomToOne = new ObjectPropertyBase<EventHandler<Event>>() {
-
-		@Override
-		public Object getBean() {
-			return NavigatorController.this;
-		}
-
-		@Override
-		public String getName() {
-			return "onZoomToOne";
-		}
-
+	private ObjectProperty<EventHandler<Event>> onZoomToOne = new SimpleObjectProperty<>(NavigatorController.this, "onZoomToOne") {
 		@Override protected void invalidated() {
 			setEventHandler(ON_ZOOM_TO_ONE, get());
 		}
-
 	};
 
 	/**
@@ -477,19 +367,218 @@ public class NavigatorController extends AnchorPane {
 		onZoomToOneProperty().set(value);
 	}
 
-	/***************************************************************************
+	/*
+	 * ---- panDownDisabled ----------------------------------------------------
+	 */
+	private BooleanProperty panDownDisabled = new SimpleBooleanProperty(NavigatorController.this, "panDownDisabled", false);
+
+	/**
+	 * Indicates whether or not the {@code panDown} button is disabled.
+	 *
+	 * @return Whether or not the "pan down" button is disabled.
+	 */
+	public final BooleanProperty panDownDisabledProperty() {
+		return panDownDisabled;
+	}
+
+	public final boolean isPanDownDisabled() {
+		return panDownDisabledProperty().get();
+	}
+
+	public final void setPanDownDisabled( boolean disabled ) {
+		panDownDisabledProperty().set(disabled);
+	}
+
+	/*
+	 * ---- panLeftDisabled ----------------------------------------------------
+	 */
+	private BooleanProperty panLeftDisabled = new SimpleBooleanProperty(NavigatorController.this, "panLeftDisabled", false);
+
+	/**
+	 * Indicates whether or not the {@code panLeft} button is disabled.
+	 *
+	 * @return Whether or not the "pan left" button is disabled.
+	 */
+	public final BooleanProperty panLeftDisabledProperty() {
+		return panLeftDisabled;
+	}
+
+	public final boolean isPanLeftDisabled() {
+		return panLeftDisabledProperty().get();
+	}
+
+	public final void setPanLeftDisabled( boolean disabled ) {
+		panLeftDisabledProperty().set(disabled);
+	}
+
+	/*
+	 * ---- panRightDisabled ---------------------------------------------------
+	 */
+	private BooleanProperty panRightDisabled = new SimpleBooleanProperty(NavigatorController.this, "panRightDisabled", false);
+
+	/**
+	 * Indicates whether or not the {@code panRight} button is disabled.
+	 *
+	 * @return Whether or not the "pan right" button is disabled.
+	 */
+	public final BooleanProperty panRightDisabledProperty() {
+		return panRightDisabled;
+	}
+
+	public final boolean isPanRightDisabled() {
+		return panRightDisabledProperty().get();
+	}
+
+	public final void setPanRightDisabled( boolean disabled ) {
+		panRightDisabledProperty().set(disabled);
+	}
+
+	/*
+	 * ---- panUpDisabled ------------------------------------------------------
+	 */
+	private BooleanProperty panUpDisabled = new SimpleBooleanProperty(NavigatorController.this, "panUpDisabled", false);
+
+	/**
+	 * Indicates whether or not the {@code panUp} button is disabled.
+	 *
+	 * @return Whether or not the "pan up" button is disabled.
+	 */
+	public final BooleanProperty panUpDisabledProperty() {
+		return panUpDisabled;
+	}
+
+	public final boolean isPanUpDisabled() {
+		return panUpDisabledProperty().get();
+	}
+
+	public final void setPanUpDisabled( boolean disabled ) {
+		panUpDisabledProperty().set(disabled);
+	}
+
+	/*
+	 * ---- redoDisabled -------------------------------------------------------
+	 */
+	private BooleanProperty redoDisabled = new SimpleBooleanProperty(NavigatorController.this, "redoDisabled", false);
+
+	/**
+	 * Indicates whether or not the {@code redo} button is disabled.
+	 *
+	 * @return Whether or not the "redo" button is disabled.
+	 */
+	public final BooleanProperty redoDisabledProperty() {
+		return redoDisabled;
+	}
+
+	public final boolean isRedoDisabled() {
+		return redoDisabledProperty().get();
+	}
+
+	public final void setRedoDisabled( boolean disabled ) {
+		redoDisabledProperty().set(disabled);
+	}
+
+	/*
+	 * ---- undoDisabled -------------------------------------------------------
+	 */
+	private BooleanProperty undoDisabled = new SimpleBooleanProperty(NavigatorController.this, "undoDisabled", false);
+
+	/**
+	 * Indicates whether or not the {@code undo} button is disabled.
+	 *
+	 * @return Whether or not the "undo" button is disabled.
+	 */
+	public final BooleanProperty undoDisabledProperty() {
+		return undoDisabled;
+	}
+
+	public final boolean isUndoDisabled() {
+		return undoDisabledProperty().get();
+	}
+
+	public final void setUndoDisabled( boolean disabled ) {
+		undoDisabledProperty().set(disabled);
+	}
+
+	/*
+	 * ---- zoomInDisabled -----------------------------------------------------
+	 */
+	private BooleanProperty zoomInDisabled = new SimpleBooleanProperty(NavigatorController.this, "zoomInDisabled", false);
+
+	/**
+	 * Indicates whether or not the {@code zoomIn} button is disabled.
+	 *
+	 * @return Whether or not the "zoom in" button is disabled.
+	 */
+	public final BooleanProperty zoomInDisabledProperty() {
+		return zoomInDisabled;
+	}
+
+	public final boolean isZoomInDisabled() {
+		return zoomInDisabledProperty().get();
+	}
+
+	public final void setZoomInDisabled( boolean disabled ) {
+		zoomInDisabledProperty().set(disabled);
+	}
+
+	/*
+	 * ---- zoomOutDisabled ----------------------------------------------------
+	 */
+	private BooleanProperty zoomOutDisabled = new SimpleBooleanProperty(NavigatorController.this, "zoomOutDisabled", false);
+
+	/**
+	 * Indicates whether or not the {@code zoomOut} button is disabled.
+	 *
+	 * @return Whether or not the "zoom out" button is disabled.
+	 */
+	public final BooleanProperty zoomOutDisabledProperty() {
+		return zoomOutDisabled;
+	}
+
+	public final boolean isZoomOutDisabled() {
+		return zoomOutDisabledProperty().get();
+	}
+
+	public final void setZoomOutDisabled( boolean disabled ) {
+		zoomOutDisabledProperty().set(disabled);
+	}
+
+	/*
+	 * ---- zoomToOneDisabled --------------------------------------------------
+	 */
+	private BooleanProperty zoomToOneDisabled = new SimpleBooleanProperty(NavigatorController.this, "zoomToOneDisabled", false);
+
+	/**
+	 * Indicates whether or not the {@code zoomToOne} button is disabled.
+	 *
+	 * @return Whether or not the "zoom to one" button is disabled.
+	 */
+	public final BooleanProperty zoomToOneDisabledProperty() {
+		return zoomToOneDisabled;
+	}
+
+	public final boolean isZoomToOneDisabled() {
+		return zoomToOneDisabledProperty().get();
+	}
+
+	public final void setZoomToOneDisabled( boolean disabled ) {
+		zoomToOneDisabledProperty().set(disabled);
+	}
+
+	/* *********************************************************************** *
 	 * END OF JAVAFX PROPERTIES                                                *
-	 ***************************************************************************/
+	 * *********************************************************************** */
+
+	public NavigatorController() {
+		init();
+		initListeners();
+	}
 
 	private void fireNavigationEvent ( Node source ) {
 
 		String id = source.getId();
 
-		if ( "backward".equals(id) ) {
-			Event.fireEvent(source, new Event(this, source, ON_BACKWARD));
-		} else if ( "forward".equals(id) ) {
-			Event.fireEvent(source, new Event(this, source, ON_FORWARD));
-		} else if ( "panDown".equals(id) ) {
+		if ( "panDown".equals(id) ) {
 			Event.fireEvent(source, new Event(this, source, ON_PAN_DOWN));
 		} else if ( "panLeft".equals(id) ) {
 			Event.fireEvent(source, new Event(this, source, ON_PAN_LEFT));
@@ -497,6 +586,10 @@ public class NavigatorController extends AnchorPane {
 			Event.fireEvent(source, new Event(this, source, ON_PAN_RIGHT));
 		} else if ( "panUp".equals(id) ) {
 			Event.fireEvent(source, new Event(this, source, ON_PAN_UP));
+		} else if ( "redo".equals(id) ) {
+			Event.fireEvent(source, new Event(this, source, ON_REDO));
+		} else if ( "undo".equals(id) ) {
+			Event.fireEvent(source, new Event(this, source, ON_UNDO));
 		} else if ( "zoomIn".equals(id) ) {
 			Event.fireEvent(source, new Event(this, source, ON_ZOOM_IN));
 		} else if ( "zoomOut".equals(id) ) {
@@ -531,30 +624,58 @@ public class NavigatorController extends AnchorPane {
 	}
 
 	private void initListeners() {
-		initListeners(backward);
-		initListeners(forward);
-		initListeners(panDown);
-		initListeners(panLeft);
-		initListeners(panRight);
-		initListeners(panUp);
-		initListeners(zoomIn);
-		initListeners(zoomOut);
-		initListeners(zoomToOne);
+
+		initListeners(panDown, panDownIcon);
+		panDown.disableProperty().bind(panDownDisabledProperty());
+		panDownIcon.disableProperty().bind(panDownDisabledProperty());
+
+		initListeners(panLeft, panLeftIcon);
+		panLeft.disableProperty().bind(panLeftDisabledProperty());
+		panLeftIcon.disableProperty().bind(panLeftDisabledProperty());
+
+		initListeners(panRight, panRightIcon);
+		panRight.disableProperty().bind(panRightDisabledProperty());
+		panRightIcon.disableProperty().bind(panRightDisabledProperty());
+
+		initListeners(panUp, panUpIcon);
+		panUp.disableProperty().bind(panUpDisabledProperty());
+		panUpIcon.disableProperty().bind(panUpDisabledProperty());
+
+		initListeners(redo, redoIcon);
+		redo.disableProperty().bind(redoDisabledProperty());
+		redoIcon.disableProperty().bind(redoDisabledProperty());
+
+		initListeners(undo, undoIcon);
+		undo.disableProperty().bind(undoDisabledProperty());
+		undoIcon.disableProperty().bind(undoDisabledProperty());
+
+		initListeners(zoomIn, zoomInIcon);
+		zoomIn.disableProperty().bind(zoomInDisabledProperty());
+		zoomInIcon.disableProperty().bind(zoomInDisabledProperty());
+
+		initListeners(zoomOut, zoomOutIcon);
+		zoomOut.disableProperty().bind(zoomOutDisabledProperty());
+		zoomOutIcon.disableProperty().bind(zoomOutDisabledProperty());
+
+		initListeners(zoomToOne, zoomToOneLabel);
+		zoomToOne.disableProperty().bind(zoomToOneDisabledProperty());
+		zoomToOneLabel.disableProperty().bind(zoomToOneDisabledProperty());
+
 	}
 
-	private void initListeners( final Shape shape ) {
+	private void initListeners( final Shape shape, final Node icon ) {
 
 		Map<String, Object> listenersMap = new HashMap<>(4);
 		EventHandler<KeyEvent> keyPressedHandler = new EventHandler<KeyEvent>() {
 			@Override
 			public void handle( KeyEvent event ) {
-				if ( shape.isFocused() ) {
+				if ( shape.isFocused() && !shape.isDisabled() ) {
 					switch ( event.getCode() ) {
 						case ENTER:
 						case SPACE:
 							updateStyle(shape, FillStyle.PRESSED, StrokeStyle.FOCUSED);
 							event.consume();
-							break;
+						break;
 					}
 				}
 			}
@@ -562,7 +683,7 @@ public class NavigatorController extends AnchorPane {
 		EventHandler<KeyEvent> keyReleasedHandler = new EventHandler<KeyEvent>() {
 			@Override
 			public void handle( KeyEvent event ) {
-				if ( shape.isFocused() ) {
+				if ( shape.isFocused() && !shape.isDisabled() ) {
 					switch ( event.getCode() ) {
 						case ENTER:
 						case SPACE:
@@ -577,12 +698,18 @@ public class NavigatorController extends AnchorPane {
 		ChangeListener<Boolean> focusChangeListener = ( observable, hadFocus, hasFocus ) -> {
 			updateStyle(shape);
 		};
+		ChangeListener<Boolean> disabledChangeListener = ( observable, wasDisabled, isDisabled ) -> {
+			updateStyle(shape);
+			icon.setOpacity(isDisabled ? 0.3 : 1.0);
+		};
 
+		listenersMap.put(DISABLED_CHANGE_LISTENER, disabledChangeListener);
 		listenersMap.put(FOCUS_CHANGE_LISTENER, focusChangeListener);
 		listenersMap.put(KEY_PRESSED_HANDLER, keyPressedHandler);
 		listenersMap.put(KEY_RELEASED_HANDLER, keyReleasedHandler);
 
 		shape.setUserData(listenersMap);
+		shape.disabledProperty().addListener(new WeakChangeListener<>(disabledChangeListener));
 		shape.focusedProperty().addListener(new WeakChangeListener<>(focusChangeListener));
 		shape.addEventHandler(KeyEvent.KEY_PRESSED, new WeakEventHandler<>(keyPressedHandler));
 		shape.addEventHandler(KeyEvent.KEY_RELEASED, new WeakEventHandler<>(keyReleasedHandler));
@@ -601,7 +728,7 @@ public class NavigatorController extends AnchorPane {
 
 		source.requestFocus();
 
-		if ( source != null && PRIMARY == event.getButton() ) {
+		if ( source != null && !source.isDisabled() && PRIMARY == event.getButton() ) {
 			fireNavigationEvent(source);
 		}
 
@@ -636,7 +763,15 @@ public class NavigatorController extends AnchorPane {
 	private void updateStyle( Node node ) {
 		updateStyle(
 			node,
-			node.isPressed() ? FillStyle.PRESSED : ( node.isHover() ? FillStyle.HOVER : ( isPanButton(node) ? FillStyle.LIGHTER : FillStyle.DEFAULT ) ),
+			node.isDisabled() 
+			? FillStyle.DISABLED
+			: ( node.isPressed()
+				? FillStyle.PRESSED
+				: ( node.isHover()
+					? FillStyle.HOVER
+					: ( isPanButton(node)
+						? FillStyle.LIGHTER
+						: FillStyle.DEFAULT ) ) ),
 			node.isFocused() ? StrokeStyle.FOCUSED : StrokeStyle.DEFAULT
 		);
 	}
@@ -651,7 +786,8 @@ public class NavigatorController extends AnchorPane {
 		DEFAULT("-fx-fill: -normal-color"),
 		LIGHTER("-fx-fill: -normal-color-lighter"),
 		HOVER("-fx-fill: -hover-color"),
-		PRESSED("-fx-fill: -pressed-color");
+		PRESSED("-fx-fill: -pressed-color"),
+		DISABLED("-fx-fill: -disabled-color");
 
 		private final String style;
 
