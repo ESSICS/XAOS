@@ -596,8 +596,8 @@ public class DensityChartFX<X,Y> extends Chart{
         double legendHeight = legend.getPrefHeight(width);
         double legendWidth = legend.getPrefWidth(height);
 
-        top = snapPosition(isLegendVisible() && getLegendSide() == TOP ? top + legendHeight : top);
-        left = snapPosition(isLegendVisible() && getLegendSide() == LEFT ? left + legendWidth : left);
+        top = snapPositionY(isLegendVisible() && getLegendSide() == TOP ? top + legendHeight : top);
+        left = snapPositionX(isLegendVisible() && getLegendSide() == LEFT ? left + legendWidth : left);
         width = isLegendVisible() && getLegendSide().isVertical() ? width - legendWidth : width;
         height = isLegendVisible() && getLegendSide().isHorizontal() ? height - legendHeight : height;
 
@@ -611,12 +611,12 @@ public class DensityChartFX<X,Y> extends Chart{
         // but it actually does!! so when calling prefWidth/prefHeight we must give at the end the correct length
         // otherwise the calculation of display positions will be wrong. Took this hack from XYChart.
         for (int count = 0; count < 5; count++) {
-            yAxisHeight = snapSize(height - xAxisHeight);
+            yAxisHeight = snapSizeY(height - xAxisHeight);
             if (yAxisHeight < 0) {
                 yAxisHeight = 0;
             }
             yAxisWidth = yAxis.prefWidth(yAxisHeight);
-            xAxisWidth = snapSize(width - yAxisWidth);
+            xAxisWidth = snapSizeX(width - yAxisWidth);
             if (xAxisWidth < 0) {
                 xAxisWidth = 0;
             }
@@ -1288,7 +1288,7 @@ public class DensityChartFX<X,Y> extends Chart{
 
         private void layoutLegendHorizontally() {
             double legendWidth = getWidth();
-            double zAxisHeight = snapSize(zAxis.prefHeight(legendWidth));
+            double zAxisHeight = snapSizeX(zAxis.prefHeight(legendWidth));
 
             gradientRect.setX(0);
             gradientRect.setWidth(legendWidth);
@@ -1308,7 +1308,7 @@ public class DensityChartFX<X,Y> extends Chart{
 
         private void layoutLegendVertically() {
             double legendHeight = getHeight();
-            double zAxisWidth = snapSize(zAxis.prefWidth(legendHeight));
+            double zAxisWidth = snapSizeY(zAxis.prefWidth(legendHeight));
 
             gradientRect.setY(0);
             gradientRect.setWidth(LEGEND_IMAGE_SIZE);

@@ -26,10 +26,7 @@ import java.util.Date;
 
 
 /**
- * Timestamp.
- *
- * TODO:CR Ask Natalia who is "tap"
- * @author tap
+ * A {@link Comparable} timestamp.
  */
 public class Timestamp implements Comparable<Timestamp> {
 

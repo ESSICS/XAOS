@@ -60,7 +60,6 @@ public class ErrorSeries<X, Y> {
 	 */
 	public ErrorSeries( ObservableList<ErrorData<X, Y>> data ) {
 		setData(data);
-		data.forEach(item -> item.setErrorSeries(this));
 	}
 
 	/**
@@ -189,11 +188,6 @@ public class ErrorSeries<X, Y> {
 		 * Data point connected to the error bar.
 		 */
 		private XYChart.Data<X, Y> errorData = new XYChart.Data<>();
-
-		/**
-		 * The series this data belongs to.
-		 */
-		private ErrorSeries<X, Y> errorSeries;
 
 		/**
 		 * X coordinates of the error start and end.
@@ -331,11 +325,6 @@ public class ErrorSeries<X, Y> {
 		@SuppressWarnings( "AssignmentToCollectionOrArrayFieldFromParameter" )
 		public void setYErrorBar( List<Y> yErrorBar ) {
 			this.yErrorBar = yErrorBar;
-		}
-
-//	TODO:CR Ask Natalia the reason of this method, being that the setter doesn't exists and errorSeries is never used.
-		void setErrorSeries( ErrorSeries<X, Y> series ) {
-			this.errorSeries = series;
 		}
 
 	}
