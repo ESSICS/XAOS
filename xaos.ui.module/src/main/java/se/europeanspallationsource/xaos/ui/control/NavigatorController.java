@@ -19,23 +19,21 @@ package se.europeanspallationsource.xaos.ui.control;
 
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.WeakChangeListener;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
-import javafx.event.WeakEventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -43,6 +41,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.Shape;
 import org.kordamp.ikonli.javafx.FontIcon;
+import se.europeanspallationsource.xaos.core.util.ThreadPools;
+import se.europeanspallationsource.xaos.core.util.ThreadUtils;
 
 import static java.util.logging.Level.SEVERE;
 import static javafx.scene.input.MouseButton.PRIMARY;
@@ -52,6 +52,20 @@ import static javafx.scene.input.MouseButton.PRIMARY;
  * A JavaFX controller with 9 buttons to navigate a graphical area. Zoom, pan
  * and undo/redo buttons are provided and can be bound to the application
  * code through the provided {@link EventHandler} methods.
+ * <p>
+ * The navigation buttons can be activated by means of keyboard accelerators:</p>
+ * <table>
+ *   <caption>Navigation accelerators.</caption>
+ *   <tr><td>Pan Down</td><td>Shortcut+DOWN</td></tr>
+ *   <tr><td>Pan Left</td><td>Shortcut+LEFT</td></tr>
+ *   <tr><td>Pan Right</td><td>Shortcut+RIGHT</td></tr>
+ *   <tr><td>Pan Up</td><td>Shortcut+UP</td></tr>
+ *   <tr><td>Redo</td><td>Shift+Shortcut+Z</td></tr>
+ *   <tr><td>Undo</td><td>Shortcut+Z</td></tr>
+ *   <tr><td>Zoom In</td><td>Shift+Shortcut+UP</td></tr>
+ *   <tr><td>Zoom Out</td><td>Shift+Shortcut+DOWN</td></tr>
+ *   <tr><td>Zoom To One</td><td>Shortcut+EQUALS</td></tr>
+ * </table>
  *
  * @author claudio.rosati@esss.se
  */
@@ -106,6 +120,7 @@ public class NavigatorController extends AnchorPane {
 	private static final String FOCUS_CHANGE_LISTENER = "FOCUS_CHANGE_LISTENER";
 	private static final String KEY_PRESSED_HANDLER = "KEY_PRESSED_HANDLER";
 	private static final String KEY_RELEASED_HANDLER = "KEY_RELEASED_HANDLER";
+	private static final String KEY_TYPED_HANDLER = "KEY_TYPED_HANDLER";
 
 	private static final Logger LOGGER = Logger.getLogger(NavigatorController.class.getName());
 
@@ -571,7 +586,7 @@ public class NavigatorController extends AnchorPane {
 
 	public NavigatorController() {
 		init();
-		initListeners();
+		initButtonListeners();
 	}
 
 	private void fireNavigationEvent ( Node source ) {
@@ -623,96 +638,113 @@ public class NavigatorController extends AnchorPane {
 		}
 	}
 
-	private void initListeners() {
+	private void initButtonListeners() {
 
-		initListeners(panDown, panDownIcon);
+		initButtonListeners(panDown, panDownIcon, KeyCombination.keyCombination("Shortcut+DOWN"));
 		panDown.disableProperty().bind(panDownDisabledProperty());
 		panDownIcon.disableProperty().bind(panDownDisabledProperty());
 
-		initListeners(panLeft, panLeftIcon);
+		initButtonListeners(panLeft, panLeftIcon, KeyCombination.keyCombination("Shortcut+LEFT"));
 		panLeft.disableProperty().bind(panLeftDisabledProperty());
 		panLeftIcon.disableProperty().bind(panLeftDisabledProperty());
 
-		initListeners(panRight, panRightIcon);
+		initButtonListeners(panRight, panRightIcon, KeyCombination.keyCombination("Shortcut+RIGHT"));
 		panRight.disableProperty().bind(panRightDisabledProperty());
 		panRightIcon.disableProperty().bind(panRightDisabledProperty());
 
-		initListeners(panUp, panUpIcon);
+		initButtonListeners(panUp, panUpIcon, KeyCombination.keyCombination("Shortcut+UP"));
 		panUp.disableProperty().bind(panUpDisabledProperty());
 		panUpIcon.disableProperty().bind(panUpDisabledProperty());
 
-		initListeners(redo, redoIcon);
+		initButtonListeners(redo, redoIcon, KeyCombination.keyCombination("Shift+Shortcut+Z"));
 		redo.disableProperty().bind(redoDisabledProperty());
 		redoIcon.disableProperty().bind(redoDisabledProperty());
 
-		initListeners(undo, undoIcon);
+		initButtonListeners(undo, undoIcon, KeyCombination.keyCombination("Shortcut+Z"));
 		undo.disableProperty().bind(undoDisabledProperty());
 		undoIcon.disableProperty().bind(undoDisabledProperty());
 
-		initListeners(zoomIn, zoomInIcon);
+		initButtonListeners(zoomIn, zoomInIcon, KeyCombination.keyCombination("Shift+Shortcut+UP"));
 		zoomIn.disableProperty().bind(zoomInDisabledProperty());
 		zoomInIcon.disableProperty().bind(zoomInDisabledProperty());
 
-		initListeners(zoomOut, zoomOutIcon);
+		initButtonListeners(zoomOut, zoomOutIcon, KeyCombination.keyCombination("Shift+Shortcut+DOWN"));
 		zoomOut.disableProperty().bind(zoomOutDisabledProperty());
 		zoomOutIcon.disableProperty().bind(zoomOutDisabledProperty());
 
-		initListeners(zoomToOne, zoomToOneLabel);
+		initButtonListeners(zoomToOne, zoomToOneLabel, KeyCombination.keyCombination("Shortcut+EQUALS"));
 		zoomToOne.disableProperty().bind(zoomToOneDisabledProperty());
 		zoomToOneLabel.disableProperty().bind(zoomToOneDisabledProperty());
 
 	}
 
-	private void initListeners( final Shape shape, final Node icon ) {
+	@SuppressWarnings( "CallToThreadYield" )
+	private void initButtonListeners( final Shape shape, final Node icon, KeyCombination accelerator ) {
 
-		Map<String, Object> listenersMap = new HashMap<>(4);
-		EventHandler<KeyEvent> keyPressedHandler = new EventHandler<KeyEvent>() {
-			@Override
-			public void handle( KeyEvent event ) {
+		shape.disabledProperty().addListener(( observable, wasDisabled, isDisabled ) -> {
+			updateStyle(shape);
+			icon.setOpacity(isDisabled ? 0.3 : 1.0);
+		});
+		shape.focusedProperty().addListener(( observable, hadFocus, hasFocus ) -> {
+			updateStyle(shape);
+		});
+		shape.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
 				if ( shape.isFocused() && !shape.isDisabled() ) {
 					switch ( event.getCode() ) {
 						case ENTER:
 						case SPACE:
 							updateStyle(shape, FillStyle.PRESSED, StrokeStyle.FOCUSED);
 							event.consume();
-						break;
-					}
-				}
-			}
-		};
-		EventHandler<KeyEvent> keyReleasedHandler = new EventHandler<KeyEvent>() {
-			@Override
-			public void handle( KeyEvent event ) {
-				if ( shape.isFocused() && !shape.isDisabled() ) {
-					switch ( event.getCode() ) {
-						case ENTER:
-						case SPACE:
-							fireNavigationEvent(shape);
-							updateStyle(shape);
-							event.consume();
 							break;
 					}
 				}
+		});
+		shape.addEventHandler(KeyEvent.KEY_RELEASED, event -> {
+			if ( shape.isFocused() && !shape.isDisabled() ) {
+				switch ( event.getCode() ) {
+					case ENTER:
+					case SPACE:
+						fireNavigationEvent(shape);
+						updateStyle(shape);
+						event.consume();
+						break;
+				}
 			}
-		};
-		ChangeListener<Boolean> focusChangeListener = ( observable, hadFocus, hasFocus ) -> {
-			updateStyle(shape);
-		};
-		ChangeListener<Boolean> disabledChangeListener = ( observable, wasDisabled, isDisabled ) -> {
-			updateStyle(shape);
-			icon.setOpacity(isDisabled ? 0.3 : 1.0);
-		};
+		});
 
-		listenersMap.put(DISABLED_CHANGE_LISTENER, disabledChangeListener);
-		listenersMap.put(FOCUS_CHANGE_LISTENER, focusChangeListener);
-		listenersMap.put(KEY_PRESSED_HANDLER, keyPressedHandler);
-		listenersMap.put(KEY_RELEASED_HANDLER, keyReleasedHandler);
-
-		shape.setUserData(listenersMap);
-		shape.disabledProperty().addListener(new WeakChangeListener<>(disabledChangeListener));
-		shape.focusedProperty().addListener(new WeakChangeListener<>(focusChangeListener));
-		shape.addEventHandler(KeyEvent.KEY_PRESSED, new WeakEventHandler<>(keyPressedHandler));
-		shape.addEventHandler(KeyEvent.KEY_RELEASED, new WeakEventHandler<>(keyReleasedHandler));
+		addEventHandler(KeyEvent.KEY_RELEASED, event -> {
+			if ( !shape.isDisabled() && accelerator.match(event) ) {
+				ThreadPools.fixedThreadPool().execute(() -> {
+					Platform.runLater(() -> {
+						shape.requestFocus();
+						shape.fireEvent(new KeyEvent(
+							KeyEvent.KEY_PRESSED,
+							KeyCode.SPACE.getChar(),
+							KeyCode.SPACE.getName(),
+							KeyCode.SPACE,
+							false,
+							false,
+							false,
+							false
+						));
+					});
+					ThreadUtils.sleep(100);
+					Platform.runLater(() -> {
+						shape.fireEvent(new KeyEvent(
+							KeyEvent.KEY_RELEASED,
+							KeyCode.SPACE.getChar(),
+							KeyCode.SPACE.getName(),
+							KeyCode.SPACE,
+							false,
+							false,
+							false,
+							false
+						));
+					});
+				});
+				event.consume();
+			}
+		});
 
 	}
 

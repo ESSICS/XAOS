@@ -77,10 +77,6 @@ public class NavigatorPopupUITest extends ApplicationTest {
 			mouseScreenY = e.getScreenY();
 		});
 
-		popup.setAutoFix(true);
-		popup.setAutoHide(true);
-		popup.setConsumeAutoHidingEvents(true);
-		popup.setHideOnEscape(true);
 		popup.setOnPanDown(e -> label.setText(((Node) e.getTarget()).getId()));
 		popup.setOnPanLeft(e -> label.setText(((Node) e.getTarget()).getId()));
 		popup.setOnPanRight(e -> label.setText(((Node) e.getTarget()).getId()));

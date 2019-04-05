@@ -46,19 +46,28 @@ public class FXUtils {
 	 */
 	public static void runOnFXThreadAndWait( Runnable task ) throws InterruptedException {
 
-		CountDownLatch latch = new CountDownLatch(1);
-
-		Platform.runLater(() -> {
+		if ( Platform.isFxApplicationThread() ) {
 			try {
 				task.run();
 			} catch ( Exception ex ) {
 				LOGGER.log(Level.SEVERE, "Exception while running task in the JavaFX event thread.", ex);
-			} finally {
-				latch.countDown();
 			}
-		});
+		} else {
 
-		latch.await();
+			CountDownLatch latch = new CountDownLatch(1);
+
+			Platform.runLater(() -> {
+				try {
+					task.run();
+				} catch ( Exception ex ) {
+					LOGGER.log(Level.SEVERE, "Exception while running task in the JavaFX event thread.", ex);
+				} finally {
+					latch.countDown();
+				}
+			});
+
+			latch.await();
+		}
 
 	}
 
@@ -82,19 +91,32 @@ public class FXUtils {
 		throws InterruptedException
 	{
 
-		CountDownLatch latch = new CountDownLatch(1);
+		if ( Platform.isFxApplicationThread() ) {
 
-		Platform.runLater(() -> {
 			try {
 				task.run();
 			} catch ( Exception ex ) {
 				LOGGER.log(Level.SEVERE, "Exception while running task in the JavaFX event thread.", ex);
-			} finally {
-				latch.countDown();
 			}
-		});
 
-		return latch.await(timeout, unit);
+			return true;
+
+		} else {
+
+			CountDownLatch latch = new CountDownLatch(1);
+
+			Platform.runLater(() -> {
+				try {
+					task.run();
+				} catch ( Exception ex ) {
+					LOGGER.log(Level.SEVERE, "Exception while running task in the JavaFX event thread.", ex);
+				} finally {
+					latch.countDown();
+				}
+			});
+
+			return latch.await(timeout, unit);
+		}
 
 	}
 
@@ -113,22 +135,32 @@ public class FXUtils {
 	 */
 	public static void runOnFXThreadAndWaitSilently( Runnable task ) {
 
-		CountDownLatch latch = new CountDownLatch(1);
-
-		Platform.runLater(() -> {
+		if ( Platform.isFxApplicationThread() ) {
 			try {
 				task.run();
 			} catch ( Exception ex ) {
 				LOGGER.log(Level.SEVERE, "Exception while running task in the JavaFX event thread.", ex);
-			} finally {
-				latch.countDown();
 			}
-		});
+		} else {
 
-		try {
-			latch.await();
-		} catch ( InterruptedException ex ) {
-			LOGGER.log(Level.SEVERE, "Exception while waiting for task being executed in the JavaFX event thread.", ex);
+			CountDownLatch latch = new CountDownLatch(1);
+
+			Platform.runLater(() -> {
+				try {
+					task.run();
+				} catch ( Exception ex ) {
+					LOGGER.log(Level.SEVERE, "Exception while running task in the JavaFX event thread.", ex);
+				} finally {
+					latch.countDown();
+				}
+			});
+
+			try {
+				latch.await();
+			} catch ( InterruptedException ex ) {
+				LOGGER.log(Level.SEVERE, "Exception while waiting for task being executed in the JavaFX event thread.", ex);
+			}
+
 		}
 
 	}

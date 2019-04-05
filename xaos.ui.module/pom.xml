@@ -73,7 +73,7 @@
 					</excludes>
 					<includes>
 						<include>**/NavigatorControllerUITest.java</include>
-						<include>**/NavigatorPopupUITestS.java</include>
+						<include>**/NavigatorPopupUITest.java</include>
 					</includes>
 -->
 				</configuration>

@@ -322,7 +322,7 @@ public class NavigatorPopup extends PopupControl {
 	}
 
 	public final boolean isZoomToOneDisabled() {
-		return navigator.    isZoomToOneDisabled();
+		return navigator.isZoomToOneDisabled();
 	}
 
 	public final void setZoomToOneDisabled( boolean disabled ) {
@@ -337,9 +337,16 @@ public class NavigatorPopup extends PopupControl {
 	 * Create a new {@link NavigatorPopup} instance.
 	 */
 	public NavigatorPopup() {
+
 		getScene().setFill(Color.TRANSPARENT);
 		getScene().setRoot(navigator);
-		super.setAnchorLocation(AnchorLocation.CONTENT_TOP_LEFT);
+
+		setAnchorLocation(AnchorLocation.CONTENT_TOP_LEFT);
+		setAutoFix(true);
+		setAutoHide(true);
+		setConsumeAutoHidingEvents(true);
+		setHideOnEscape(true);
+
 	}
 
 	@Override

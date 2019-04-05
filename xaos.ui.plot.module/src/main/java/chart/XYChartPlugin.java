@@ -54,11 +54,11 @@ public abstract class XYChartPlugin {
      * 
      * @return associated chart or {@code null}
      */
-    protected final Chart getChart() {
+    public final Chart getChart() {
         return chart;
     }
 
-    protected final ValueAxis<?> getXValueAxis() {
+    public final ValueAxis<?> getXValueAxis() {
         if(getChart() instanceof XYChart<?, ?>){
             if (((XYChart<?, ?>) getChart()).getXAxis() instanceof CategoryAxis) {
                 return new NumberAxis();
@@ -72,7 +72,7 @@ public abstract class XYChartPlugin {
     }
     
 
-    protected final ValueAxis<?> getYValueAxis() {
+    public final ValueAxis<?> getYValueAxis() {
         if(getChart() instanceof XYChart<?, ?>){
             if (((XYChart<?, ?>) getChart()).getYAxis() instanceof CategoryAxis) {
                 return new NumberAxis();}
