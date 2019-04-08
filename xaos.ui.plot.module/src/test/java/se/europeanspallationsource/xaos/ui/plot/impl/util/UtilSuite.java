@@ -14,30 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package se.europeanspallationsource.xaos.ui.plot.impl.util;
+
+
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+
 
 /**
  * @author claudio.rosati@esss.se
  */
-module xaos.ui.plot {
-
-	//	The following is an "automatic module", whose name is derived from the
-	//	JAR name.
-	requires commons.math3;
-	
-	requires java.logging;
-	requires java.sql;
-	requires transitive javafx.base;
-	requires transitive javafx.controls;
-	requires javafx.fxml;
-	requires transitive javafx.graphics;
-	requires javafx.swing;
-	requires org.apache.commons.lang3;
-	requires transitive xaos.core;
-	requires transitive xaos.ui;
-
-	exports se.europeanspallationsource.xaos.ui.plot;
-	exports se.europeanspallationsource.xaos.ui.plot.util;
-
-	opens icons.properties to xaos.ui;
+@RunWith( Suite.class )
+@Suite.SuiteClasses( {
+	ChartUndoManagerUITest.class
+} )
+@SuppressWarnings( { "ClassMayBeInterface", "ClassWithoutLogger", "UtilityClassWithoutPrivateConstructor" } )
+public class UtilSuite {
 
 }

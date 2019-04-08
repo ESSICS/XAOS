@@ -151,7 +151,7 @@ public class NavigatorController extends AnchorPane {
 	/*
 	 * ---- onPanDown ----------------------------------------------------------
 	 */
-	private ObjectProperty<EventHandler<Event>> onPanDown = new SimpleObjectProperty<>(NavigatorController.this, "onPanDown") {
+	private final ObjectProperty<EventHandler<Event>> onPanDown = new SimpleObjectProperty<>(NavigatorController.this, "onPanDown") {
 		@Override protected void invalidated() {
 			setEventHandler(ON_PAN_DOWN, get());
 		}
@@ -177,7 +177,7 @@ public class NavigatorController extends AnchorPane {
 	/*
 	 * ---- onPanLeft ----------------------------------------------------------
 	 */
-	private ObjectProperty<EventHandler<Event>> onPanLeft = new SimpleObjectProperty<>(NavigatorController.this, "onPanLeft") {
+	private final ObjectProperty<EventHandler<Event>> onPanLeft = new SimpleObjectProperty<>(NavigatorController.this, "onPanLeft") {
 		@Override protected void invalidated() {
 			setEventHandler(ON_PAN_LEFT, get());
 		}
@@ -203,7 +203,7 @@ public class NavigatorController extends AnchorPane {
 	/*
 	 * ---- onPanRight ---------------------------------------------------------
 	 */
-	private ObjectProperty<EventHandler<Event>> onPanRight = new SimpleObjectProperty<>(NavigatorController.this, "onPanRight") {
+	private final ObjectProperty<EventHandler<Event>> onPanRight = new SimpleObjectProperty<>(NavigatorController.this, "onPanRight") {
 		@Override protected void invalidated() {
 			setEventHandler(ON_PAN_RIGHT, get());
 		}
@@ -229,7 +229,7 @@ public class NavigatorController extends AnchorPane {
 	/*
 	 * ---- onPanUp ------------------------------------------------------------
 	 */
-	private ObjectProperty<EventHandler<Event>> onPanUp = new SimpleObjectProperty<>(NavigatorController.this, "onPanUp") {
+	private final ObjectProperty<EventHandler<Event>> onPanUp = new SimpleObjectProperty<>(NavigatorController.this, "onPanUp") {
 		@Override protected void invalidated() {
 			setEventHandler(ON_PAN_UP, get());
 		}
@@ -255,7 +255,7 @@ public class NavigatorController extends AnchorPane {
 	/*
 	 * ---- onRedo -------------------------------------------------------------
 	 */
-	private ObjectProperty<EventHandler<Event>> onRedo = new SimpleObjectProperty<>(NavigatorController.this, "onRedo") {
+	private final ObjectProperty<EventHandler<Event>> onRedo = new SimpleObjectProperty<>(NavigatorController.this, "onRedo") {
 		@Override protected void invalidated() {
 			setEventHandler(ON_REDO, get());
 		}
@@ -281,7 +281,7 @@ public class NavigatorController extends AnchorPane {
 	/*
 	 * ---- onUndo -------------------------------------------------------------
 	 */
-	private ObjectProperty<EventHandler<Event>> onUndo = new SimpleObjectProperty<>(NavigatorController.this, "onUndo") {
+	private final ObjectProperty<EventHandler<Event>> onUndo = new SimpleObjectProperty<>(NavigatorController.this, "onUndo") {
 		@Override protected void invalidated() {
 			setEventHandler(ON_UNDO, get());
 		}
@@ -307,7 +307,7 @@ public class NavigatorController extends AnchorPane {
 	/*
 	 * ---- onZoomIn -----------------------------------------------------------
 	 */
-	private ObjectProperty<EventHandler<Event>> onZoomIn = new SimpleObjectProperty<>(NavigatorController.this, "onZoomIn") {
+	private final ObjectProperty<EventHandler<Event>> onZoomIn = new SimpleObjectProperty<>(NavigatorController.this, "onZoomIn") {
 		@Override protected void invalidated() {
 			setEventHandler(ON_ZOOM_IN, get());
 		}
@@ -333,7 +333,7 @@ public class NavigatorController extends AnchorPane {
 	/*
 	 * ---- onZoomOut ----------------------------------------------------------
 	 */
-	private ObjectProperty<EventHandler<Event>> onZoomOut = new SimpleObjectProperty<>(NavigatorController.this, "onZoomOut") {
+	private final ObjectProperty<EventHandler<Event>> onZoomOut = new SimpleObjectProperty<>(NavigatorController.this, "onZoomOut") {
 		@Override protected void invalidated() {
 			setEventHandler(ON_ZOOM_OUT, get());
 		}
@@ -359,7 +359,7 @@ public class NavigatorController extends AnchorPane {
 	/*
 	 * ---- onZoomToOne --------------------------------------------------------
 	 */
-	private ObjectProperty<EventHandler<Event>> onZoomToOne = new SimpleObjectProperty<>(NavigatorController.this, "onZoomToOne") {
+	private final ObjectProperty<EventHandler<Event>> onZoomToOne = new SimpleObjectProperty<>(NavigatorController.this, "onZoomToOne") {
 		@Override protected void invalidated() {
 			setEventHandler(ON_ZOOM_TO_ONE, get());
 		}
@@ -385,7 +385,7 @@ public class NavigatorController extends AnchorPane {
 	/*
 	 * ---- panDownDisabled ----------------------------------------------------
 	 */
-	private BooleanProperty panDownDisabled = new SimpleBooleanProperty(NavigatorController.this, "panDownDisabled", false);
+	private final BooleanProperty panDownDisabled = new SimpleBooleanProperty(NavigatorController.this, "panDownDisabled", false);
 
 	/**
 	 * Indicates whether or not the {@code panDown} button is disabled.
@@ -407,7 +407,7 @@ public class NavigatorController extends AnchorPane {
 	/*
 	 * ---- panLeftDisabled ----------------------------------------------------
 	 */
-	private BooleanProperty panLeftDisabled = new SimpleBooleanProperty(NavigatorController.this, "panLeftDisabled", false);
+	private final BooleanProperty panLeftDisabled = new SimpleBooleanProperty(NavigatorController.this, "panLeftDisabled", false);
 
 	/**
 	 * Indicates whether or not the {@code panLeft} button is disabled.
@@ -429,7 +429,7 @@ public class NavigatorController extends AnchorPane {
 	/*
 	 * ---- panRightDisabled ---------------------------------------------------
 	 */
-	private BooleanProperty panRightDisabled = new SimpleBooleanProperty(NavigatorController.this, "panRightDisabled", false);
+	private final BooleanProperty panRightDisabled = new SimpleBooleanProperty(NavigatorController.this, "panRightDisabled", false);
 
 	/**
 	 * Indicates whether or not the {@code panRight} button is disabled.
@@ -451,7 +451,7 @@ public class NavigatorController extends AnchorPane {
 	/*
 	 * ---- panUpDisabled ------------------------------------------------------
 	 */
-	private BooleanProperty panUpDisabled = new SimpleBooleanProperty(NavigatorController.this, "panUpDisabled", false);
+	private final BooleanProperty panUpDisabled = new SimpleBooleanProperty(NavigatorController.this, "panUpDisabled", false);
 
 	/**
 	 * Indicates whether or not the {@code panUp} button is disabled.
@@ -473,7 +473,7 @@ public class NavigatorController extends AnchorPane {
 	/*
 	 * ---- redoDisabled -------------------------------------------------------
 	 */
-	private BooleanProperty redoDisabled = new SimpleBooleanProperty(NavigatorController.this, "redoDisabled", false);
+	private final BooleanProperty redoDisabled = new SimpleBooleanProperty(NavigatorController.this, "redoDisabled", false);
 
 	/**
 	 * Indicates whether or not the {@code redo} button is disabled.
@@ -495,7 +495,7 @@ public class NavigatorController extends AnchorPane {
 	/*
 	 * ---- undoDisabled -------------------------------------------------------
 	 */
-	private BooleanProperty undoDisabled = new SimpleBooleanProperty(NavigatorController.this, "undoDisabled", false);
+	private final BooleanProperty undoDisabled = new SimpleBooleanProperty(NavigatorController.this, "undoDisabled", false);
 
 	/**
 	 * Indicates whether or not the {@code undo} button is disabled.
@@ -517,7 +517,7 @@ public class NavigatorController extends AnchorPane {
 	/*
 	 * ---- zoomInDisabled -----------------------------------------------------
 	 */
-	private BooleanProperty zoomInDisabled = new SimpleBooleanProperty(NavigatorController.this, "zoomInDisabled", false);
+	private final BooleanProperty zoomInDisabled = new SimpleBooleanProperty(NavigatorController.this, "zoomInDisabled", false);
 
 	/**
 	 * Indicates whether or not the {@code zoomIn} button is disabled.
@@ -539,7 +539,7 @@ public class NavigatorController extends AnchorPane {
 	/*
 	 * ---- zoomOutDisabled ----------------------------------------------------
 	 */
-	private BooleanProperty zoomOutDisabled = new SimpleBooleanProperty(NavigatorController.this, "zoomOutDisabled", false);
+	private final BooleanProperty zoomOutDisabled = new SimpleBooleanProperty(NavigatorController.this, "zoomOutDisabled", false);
 
 	/**
 	 * Indicates whether or not the {@code zoomOut} button is disabled.
@@ -561,7 +561,7 @@ public class NavigatorController extends AnchorPane {
 	/*
 	 * ---- zoomToOneDisabled --------------------------------------------------
 	 */
-	private BooleanProperty zoomToOneDisabled = new SimpleBooleanProperty(NavigatorController.this, "zoomToOneDisabled", false);
+	private final BooleanProperty zoomToOneDisabled = new SimpleBooleanProperty(NavigatorController.this, "zoomToOneDisabled", false);
 
 	/**
 	 * Indicates whether or not the {@code zoomToOne} button is disabled.
@@ -589,6 +589,7 @@ public class NavigatorController extends AnchorPane {
 		initButtonListeners();
 	}
 
+	@SuppressWarnings( "ConvertToStringSwitch" )
 	private void fireNavigationEvent ( Node source ) {
 
 		String id = source.getId();
@@ -753,7 +754,7 @@ public class NavigatorController extends AnchorPane {
 	}
 
 	@FXML
-	@SuppressWarnings( "ConvertToStringSwitch" )
+	@SuppressWarnings( "null" )
 	private void mouseClicked( MouseEvent event ) {
 
 		Node source = (Node) event.getSource();

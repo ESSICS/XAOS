@@ -31,7 +31,7 @@ import javafx.stage.Stage;
 import plugins.AreaValueTooltip;
 import plugins.CoordinatesLabel;
 import plugins.CoordinatesLines;
-import plugins.CursorTool;
+import se.europeanspallationsource.xaos.ui.plot.plugins.CursorTool;
 import plugins.ErrorBars;
 import plugins.KeyPan;
 import plugins.Pan;

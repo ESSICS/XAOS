@@ -39,7 +39,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import chart.data.DataReducingSeries;
 import plugins.CoordinatesLabel;
-import plugins.CursorTool;
+import se.europeanspallationsource.xaos.ui.plot.plugins.CursorTool;
 import plugins.KeyPan;
 import plugins.DataPointTooltip;
 import plugins.Pan;

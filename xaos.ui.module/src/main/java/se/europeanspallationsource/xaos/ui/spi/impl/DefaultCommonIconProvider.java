@@ -49,16 +49,27 @@ public class DefaultCommonIconProvider extends BaseProvider implements IconProvi
 		Node icon;
 		Map<CommonIcons, Ikon> map = new HashMap<>(100);
 
+		map.put(CommonIcons.CHEVRON_DOWN, FontAwesome.CHEVRON_DOWN);
+		map.put(CommonIcons.CHEVRON_LEFT, FontAwesome.CHEVRON_LEFT);
+		map.put(CommonIcons.CHEVRON_RIGHT, FontAwesome.CHEVRON_RIGHT);
+		map.put(CommonIcons.CHEVRON_UP, FontAwesome.CHEVRON_UP);
 		map.put(CommonIcons.FILE, FontAwesome.FILE_O);
 		map.put(CommonIcons.FILE_EXECUTABLE, FontAwesome.PLAY_CIRCLE_O);
 		map.put(CommonIcons.FILE_HIDDEN, FontAwesome.FILE);
 		map.put(CommonIcons.FILE_LINK, FontAwesome.LINK);
 		map.put(CommonIcons.FOLDER_COLLAPSED, FontAwesome.FOLDER_O);
 		map.put(CommonIcons.FOLDER_EXPANDED, FontAwesome.FOLDER_OPEN_O);
+		map.put(CommonIcons.FORWARD, FontAwesome.FORWARD);
+		map.put(CommonIcons.REPLY, FontAwesome.REPLY);
+		map.put(CommonIcons.REPLY_ALL, FontAwesome.REPLY_ALL);
+		map.put(CommonIcons.SEARCH, FontAwesome.SEARCH);
+		map.put(CommonIcons.SHARE, FontAwesome.SHARE);
 		map.put(CommonIcons.SQUARE_DOWN, FontAwesome.CARET_SQUARE_O_DOWN);
 		map.put(CommonIcons.SQUARE_LEFT, FontAwesome.CARET_SQUARE_O_LEFT);
 		map.put(CommonIcons.SQUARE_RIGHT, FontAwesome.CARET_SQUARE_O_RIGHT);
 		map.put(CommonIcons.SQUARE_UP, FontAwesome.CARET_SQUARE_O_UP);
+		map.put(CommonIcons.ZOOM_IN, FontAwesome.SEARCH_PLUS);
+		map.put(CommonIcons.ZOOM_OUT, FontAwesome.SEARCH_MINUS);
 
 		//	Print map if xaos.test.verbose is set to true.
 		verbosePrintout(

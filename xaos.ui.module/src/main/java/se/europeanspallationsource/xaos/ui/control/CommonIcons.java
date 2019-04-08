@@ -24,16 +24,25 @@ package se.europeanspallationsource.xaos.ui.control;
  */
 @SuppressWarnings( "ClassWithoutLogger" )
 public enum CommonIcons {
-
+	CHEVRON_DOWN,
+	CHEVRON_LEFT,
+	CHEVRON_RIGHT,
+	CHEVRON_UP,
 	FILE,
 	FILE_EXECUTABLE,
 	FILE_HIDDEN,
 	FILE_LINK,
 	FOLDER_COLLAPSED,
 	FOLDER_EXPANDED,
+	FORWARD,
+	REPLY,
+	REPLY_ALL,
+	SEARCH,
+	SHARE,
 	SQUARE_DOWN,
 	SQUARE_LEFT,
 	SQUARE_RIGHT,
-	SQUARE_UP;
-
+	SQUARE_UP,
+	ZOOM_IN,
+	ZOOM_OUT
 }

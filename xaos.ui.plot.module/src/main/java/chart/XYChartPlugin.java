@@ -43,7 +43,7 @@ public abstract class XYChartPlugin {
     private final ObservableList<Node> plotChildren = FXCollections.observableArrayList();
 
     /**
-     * Returns boolean true if methods need to update their internal record of chart. 
+     * Returns boolean true if methods need to update their internal record of chart.
      * 
      * true if zoomInStarted(), zoomOut() or zoomOrigin()
      */

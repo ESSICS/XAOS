@@ -38,7 +38,7 @@ import plugins.CoordinatesLines;
 import plugins.Pan;
 import plugins.PropertyMenu;
 import plugins.Zoom;
-import plugins.CursorTool;
+import se.europeanspallationsource.xaos.ui.plot.plugins.CursorTool;
 import plugins.KeyPan;
 
 
