@@ -145,6 +145,7 @@ public final class CursorTool extends XYChartPlugin {
 
 		double plotHeight = getYValueAxis().getUpperBound() - getYValueAxis().getLowerBound();
 
+		getXValueAxis().setAutoRanging(false);
 		getYValueAxis().setAutoRanging(false);
 		getYValueAxis().setLowerBound(getYValueAxis().getLowerBound() - 0.1 * plotHeight);
 		getYValueAxis().setUpperBound(getYValueAxis().getUpperBound() - 0.1 * plotHeight);
@@ -158,8 +159,10 @@ public final class CursorTool extends XYChartPlugin {
 		double plotWidth = getXValueAxis().getUpperBound() - getXValueAxis().getLowerBound();
 
 		getXValueAxis().setAutoRanging(false);
+		getYValueAxis().setAutoRanging(false);
 		getXValueAxis().setLowerBound(getXValueAxis().getLowerBound() - 0.1 * plotWidth);
 		getXValueAxis().setUpperBound(getXValueAxis().getUpperBound() - 0.1 * plotWidth);
+
 	}
 
 	private void panRight() {
@@ -169,6 +172,7 @@ public final class CursorTool extends XYChartPlugin {
 		double plotWidth = getXValueAxis().getUpperBound() - getXValueAxis().getLowerBound();
 
 		getXValueAxis().setAutoRanging(false);
+		getYValueAxis().setAutoRanging(false);
 		getXValueAxis().setLowerBound(getXValueAxis().getLowerBound() + 0.1 * plotWidth);
 		getXValueAxis().setUpperBound(getXValueAxis().getUpperBound() + 0.1 * plotWidth);
 
@@ -180,6 +184,7 @@ public final class CursorTool extends XYChartPlugin {
 
 		double plotHeight = getYValueAxis().getUpperBound() - getYValueAxis().getLowerBound();
 
+		getXValueAxis().setAutoRanging(false);
 		getYValueAxis().setAutoRanging(false);
 		getYValueAxis().setLowerBound(getYValueAxis().getLowerBound() + 0.1 * plotHeight);
 		getYValueAxis().setUpperBound(getYValueAxis().getUpperBound() + 0.1 * plotHeight);

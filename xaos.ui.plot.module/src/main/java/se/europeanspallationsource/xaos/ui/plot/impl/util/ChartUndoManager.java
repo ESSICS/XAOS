@@ -138,6 +138,20 @@ public class ChartUndoManager {
 	}
 
 	/**
+	 * @return The number of available redoables.
+	 */
+	public int getAvailableRedoables() {
+		return redoList.size();
+	}
+
+	/**
+	 * @return The number of available undoables.
+	 */
+	public int getAvailableUndoables() {
+		return undoList.size();
+	}
+
+	/**
 	 * Set the given {@code plugin}'s {@link Chart} bounds to values previously
 	 * undone.
 	 *
@@ -197,28 +211,28 @@ public class ChartUndoManager {
 	private static class UndoableEntry {
 
 		private final boolean xAutoRange;
-		private final double xLowerBoud;
-		private final double xUpperBoud;
+		private final double xLowerBound;
+		private final double xUpperBound;
 		private final boolean yAutoRange;
-		private final double yLowerBoud;
-		private final double yUpperBoud;
+		private final double yLowerBound;
+		private final double yUpperBound;
 
 		UndoableEntry( XYChartPlugin plugin ) {
-			this.xAutoRange = plugin.getXValueAxis().isAutoRanging();
-			this.xLowerBoud = plugin.getXValueAxis().getLowerBound();
-			this.xUpperBoud = plugin.getXValueAxis().getUpperBound();
-			this.yAutoRange = plugin.getYValueAxis().isAutoRanging();
-			this.yLowerBoud = plugin.getYValueAxis().getLowerBound();
-			this.yUpperBoud = plugin.getYValueAxis().getUpperBound();
+			this.xAutoRange  = plugin.getXValueAxis().isAutoRanging();
+			this.xLowerBound = plugin.getXValueAxis().getLowerBound();
+			this.xUpperBound = plugin.getXValueAxis().getUpperBound();
+			this.yAutoRange  = plugin.getYValueAxis().isAutoRanging();
+			this.yLowerBound = plugin.getYValueAxis().getLowerBound();
+			this.yUpperBound = plugin.getYValueAxis().getUpperBound();
 		}
 
 		void restore( XYChartPlugin plugin ) {
 			plugin.getXValueAxis().setAutoRanging(xAutoRange);
-			plugin.getXValueAxis().setLowerBound(xLowerBoud);
-			plugin.getXValueAxis().setUpperBound(xUpperBoud);
 			plugin.getYValueAxis().setAutoRanging(yAutoRange);
-			plugin.getYValueAxis().setLowerBound(yLowerBoud);
-			plugin.getYValueAxis().setUpperBound(yUpperBoud);
+			plugin.getXValueAxis().setLowerBound(xLowerBound);
+			plugin.getXValueAxis().setUpperBound(xUpperBound);
+			plugin.getYValueAxis().setLowerBound(yLowerBound);
+			plugin.getYValueAxis().setUpperBound(yUpperBound);
 		}
 
 	}

@@ -26,6 +26,7 @@ import java.util.Random;
 import java.util.concurrent.TimeoutException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -39,6 +40,15 @@ import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
 import se.europeanspallationsource.xaos.ui.plot.plugins.CursorTool;
 
+import static javafx.geometry.Pos.CENTER;
+import static javafx.scene.input.KeyCode.ALT;
+import static javafx.scene.input.MouseButton.PRIMARY;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.testfx.robot.Motion.DEFAULT;
+
+
 
 
 /**
@@ -47,13 +57,29 @@ import se.europeanspallationsource.xaos.ui.plot.plugins.CursorTool;
 @SuppressWarnings( { "UseOfSystemOutOrSystemErr", "ClassWithoutLogger" } )
 public class ChartUndoManagerUITest extends ApplicationTest {
 
+	private static final Point2D PAN_DOWN_POINT = new Point2D(0, 25);
+	private static final Point2D PAN_LEFT_POINT = new Point2D(-25, 0);
+	private static final Point2D PAN_RIGHT_POINT = new Point2D(25, 0);
+	private static final Point2D PAN_UP_POINT = new Point2D(0, -25);
 	private static final int POINTS_COUNT = 20;
 	private static final Random RANDOM = new Random(System.currentTimeMillis());
+	private static final Point2D REDO_POINT = new Point2D(-40, 40);
+	private static final Point2D UNDO_POINT = new Point2D(-40, -40);
+	private static final Point2D ZOOM_IN_POINT = new Point2D(40, -40);
+	private static final Point2D ZOOM_OUT_POINT = new Point2D(40, 40);
+	private static final Point2D ZOOM_TO_ONE_POINT = new Point2D(0, 0);
 
 	@BeforeClass
 	public static void setUpClass() {
 		System.out.println("---- ChartUndoManagerUITest ------------------------------------");
 	}
+
+	private LineChartFX<Number, Number> chart;
+	private double chartXLowerBound;
+	private double chartXUpperBound;
+	private double chartYLowerBound;
+	private double chartYUpperBound;
+	private CursorTool cursorTool;
 
 	@Override
 	public void start( Stage stage ) throws IOException {
@@ -64,12 +90,12 @@ public class ChartUndoManagerUITest extends ApplicationTest {
 		xAxis.setAnimated(false);
 		yAxis.setAnimated(false);
 
-		final LineChartFX<Number, Number> chart = new LineChartFX<Number, Number>(xAxis, yAxis);
+		chart = new LineChartFX<>(xAxis, yAxis);
 
 		chart.setTitle("ChartUndoManagerUITest");
 		chart.setAnimated(false);
 		chart.getChartPlugins().addAll(
-			new CursorTool()
+			cursorTool = new CursorTool()
 //			new KeyPan(),
 //			new CoordinatesLines(),
 //			new Zoom(),
@@ -113,23 +139,290 @@ public class ChartUndoManagerUITest extends ApplicationTest {
 		FxToolkit.cleanupStages();
 	}
 
+	/**
+	 * Test UNDO and REDO on CursorTool.
+	 */
 	@Test
-	public void test() throws InterruptedException {
+	public void testCursorTool() {
 
 		System.out.println("  Testing ''ChartUndoManager''...");
 
 		FxRobot robot = new FxRobot();
+		ChartUndoManager undoManager = ChartUndoManager.get(cursorTool.getChart());
 
-		//	--------------------------------------------------------------------
-		//	Test UNDO and REDO on CursorTool...
-		//	--------------------------------------------------------------------
+		//	Get chart's reference bounds...
+		chartXLowerBound = cursorTool.getXValueAxis().getLowerBound();
+		chartXUpperBound = cursorTool.getXValueAxis().getUpperBound();
+		chartYLowerBound = cursorTool.getYValueAxis().getLowerBound();
+		chartYUpperBound = cursorTool.getYValueAxis().getUpperBound();
 
+		//	Activate the tool...
+		robot.moveTo(chart);
+		robot.type(ALT);
 
+		//	Assert initial conditions...
+		assertFalse(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
 
+		// Testing PAN DOWN...
+		System.out.println("    - Testing PAN DOWN...");
+		cursorToolResetChartMoveAndClick(robot, PAN_DOWN_POINT);
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(cursorTool.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(cursorTool.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		cursorToolResetChartMoveAndClick(robot, UNDO_POINT, false);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+		assertThat(cursorTool.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(cursorTool.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		cursorToolResetChartMoveAndClick(robot, REDO_POINT, false);
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(cursorTool.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(cursorTool.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		cursorToolResetChartMoveAndClick(robot, UNDO_POINT, false);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
 
+		// Testing PAN DOWN...
+		System.out.println("    - Testing PAN UP...");
+		cursorToolResetChartMoveAndClick(robot, PAN_UP_POINT);
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(cursorTool.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(cursorTool.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		cursorToolResetChartMoveAndClick(robot, UNDO_POINT, false);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+		assertThat(cursorTool.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(cursorTool.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		cursorToolResetChartMoveAndClick(robot, REDO_POINT, false);
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(cursorTool.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(cursorTool.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		cursorToolResetChartMoveAndClick(robot, UNDO_POINT, false);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
 
+		// Testing PAN LEFT...
+		System.out.println("    - Testing PAN LEFT...");
+		cursorToolResetChartMoveAndClick(robot, PAN_LEFT_POINT);
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(cursorTool.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		assertThat(cursorTool.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		cursorToolResetChartMoveAndClick(robot, UNDO_POINT, false);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+		assertThat(cursorTool.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(cursorTool.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		cursorToolResetChartMoveAndClick(robot, REDO_POINT, false);
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(cursorTool.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		assertThat(cursorTool.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		cursorToolResetChartMoveAndClick(robot, UNDO_POINT, false);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
 
+		// Testing PAN RIGHT...
+		System.out.println("    - Testing PAN RIGHT...");
+		cursorToolResetChartMoveAndClick(robot, PAN_RIGHT_POINT);
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(cursorTool.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		assertThat(cursorTool.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		cursorToolResetChartMoveAndClick(robot, UNDO_POINT, false);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+		assertThat(cursorTool.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(cursorTool.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		cursorToolResetChartMoveAndClick(robot, REDO_POINT, false);
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(cursorTool.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		assertThat(cursorTool.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		cursorToolResetChartMoveAndClick(robot, UNDO_POINT, false);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
 
+		// Testing ZOOM IN...
+		System.out.println("    - Testing ZOOM IN...");
+		cursorToolResetChartMoveAndClick(robot, ZOOM_IN_POINT);
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(cursorTool.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		assertThat(cursorTool.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		cursorToolResetChartMoveAndClick(robot, UNDO_POINT, false);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+		assertThat(cursorTool.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(cursorTool.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		cursorToolResetChartMoveAndClick(robot, REDO_POINT, false);
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(cursorTool.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		assertThat(cursorTool.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		cursorToolResetChartMoveAndClick(robot, UNDO_POINT, false);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+
+		// Testing ZOOM OUT...
+		System.out.println("    - Testing ZOOM OUT...");
+		cursorToolResetChartMoveAndClick(robot, ZOOM_OUT_POINT);
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(cursorTool.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		assertThat(cursorTool.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		cursorToolResetChartMoveAndClick(robot, UNDO_POINT, false);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+		assertThat(cursorTool.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(cursorTool.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		cursorToolResetChartMoveAndClick(robot, REDO_POINT, false);
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(cursorTool.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		assertThat(cursorTool.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		cursorToolResetChartMoveAndClick(robot, UNDO_POINT, false);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+
+		// Testing ZOOM TO ONE...
+		System.out.println("    - Testing ZOOM TO ONE...");
+		cursorToolResetChartMoveAndClick(robot, ZOOM_OUT_POINT);
+		cursorToolResetChartMoveAndClick(robot, ZOOM_TO_ONE_POINT, false);
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(cursorTool.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(cursorTool.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		cursorToolResetChartMoveAndClick(robot, UNDO_POINT, false);
+		assertTrue(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(cursorTool.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		assertThat(cursorTool.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		cursorToolResetChartMoveAndClick(robot, REDO_POINT, false);
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(cursorTool.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(cursorTool.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		cursorToolResetChartMoveAndClick(robot, UNDO_POINT, false);
+		assertTrue(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(cursorTool.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		assertThat(cursorTool.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		cursorToolResetChartMoveAndClick(robot, UNDO_POINT, false);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+		assertThat(cursorTool.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(cursorTool.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+
+		//	Testing multiple operations and undo/redo
+		System.out.println("    - Testing multiple operation and undo/redo...");
+		cursorToolResetChartMoveAndClick(robot, ZOOM_OUT_POINT);
+		assertThat(undoManager.getAvailableRedoables()).isEqualTo(0);
+		assertThat(undoManager.getAvailableUndoables()).isEqualTo(1);
+		cursorToolResetChartMoveAndClick(robot, PAN_DOWN_POINT, false);
+		assertThat(undoManager.getAvailableRedoables()).isEqualTo(0);
+		assertThat(undoManager.getAvailableUndoables()).isEqualTo(2);
+		cursorToolResetChartMoveAndClick(robot, PAN_DOWN_POINT, false);
+		assertThat(undoManager.getAvailableRedoables()).isEqualTo(0);
+		assertThat(undoManager.getAvailableUndoables()).isEqualTo(3);
+		cursorToolResetChartMoveAndClick(robot, PAN_LEFT_POINT, false);
+		assertThat(undoManager.getAvailableRedoables()).isEqualTo(0);
+		assertThat(undoManager.getAvailableUndoables()).isEqualTo(4);
+		cursorToolResetChartMoveAndClick(robot, ZOOM_OUT_POINT, false);
+		assertThat(undoManager.getAvailableRedoables()).isEqualTo(0);
+		assertThat(undoManager.getAvailableUndoables()).isEqualTo(5);
+		cursorToolResetChartMoveAndClick(robot, PAN_DOWN_POINT, false);
+		assertThat(undoManager.getAvailableRedoables()).isEqualTo(0);
+		assertThat(undoManager.getAvailableUndoables()).isEqualTo(6);
+		cursorToolResetChartMoveAndClick(robot, PAN_LEFT_POINT, false);
+		assertThat(undoManager.getAvailableRedoables()).isEqualTo(0);
+		assertThat(undoManager.getAvailableUndoables()).isEqualTo(7);
+		cursorToolResetChartMoveAndClick(robot, UNDO_POINT, false);
+		assertThat(undoManager.getAvailableRedoables()).isEqualTo(1);
+		assertThat(undoManager.getAvailableUndoables()).isEqualTo(6);
+		cursorToolResetChartMoveAndClick(robot, UNDO_POINT, false);
+		assertThat(undoManager.getAvailableRedoables()).isEqualTo(2);
+		assertThat(undoManager.getAvailableUndoables()).isEqualTo(5);
+		cursorToolResetChartMoveAndClick(robot, UNDO_POINT, false);
+		assertThat(undoManager.getAvailableRedoables()).isEqualTo(3);
+		assertThat(undoManager.getAvailableUndoables()).isEqualTo(4);
+		cursorToolResetChartMoveAndClick(robot, REDO_POINT, false);
+		assertThat(undoManager.getAvailableRedoables()).isEqualTo(2);
+		assertThat(undoManager.getAvailableUndoables()).isEqualTo(5);
+		cursorToolResetChartMoveAndClick(robot, PAN_DOWN_POINT, false);
+		assertThat(undoManager.getAvailableRedoables()).isEqualTo(0);
+		assertThat(undoManager.getAvailableUndoables()).isEqualTo(6);
+
+	}
+
+	private void cursorToolResetChartMoveAndClick ( FxRobot robot, Point2D offset ) {
+		cursorToolResetChartMoveAndClick(robot, offset, true);
+	}
+
+	private void cursorToolResetChartMoveAndClick ( FxRobot robot, Point2D offset, boolean reset ) {
+
+		if ( reset ) {
+			cursorTool.getXValueAxis().setLowerBound(chartXLowerBound);
+			cursorTool.getXValueAxis().setUpperBound(chartXUpperBound);
+			cursorTool.getYValueAxis().setLowerBound(chartYLowerBound);
+			cursorTool.getYValueAxis().setUpperBound(chartYUpperBound);
+		}
+
+		robot.moveTo(chart, CENTER, offset, DEFAULT);
+		robot.clickOn(PRIMARY);
 
 	}
 

@@ -52,6 +52,16 @@ import static org.testfx.robot.Motion.DEFAULT;
 @SuppressWarnings( { "UseOfSystemOutOrSystemErr", "ClassWithoutLogger" } )
 public class NavigatorPopupUITest extends ApplicationTest {
 
+	private static final Point2D PAN_DOWN_POINT = new Point2D(0, 25);
+	private static final Point2D PAN_LEFT_POINT = new Point2D(-25, 0);
+	private static final Point2D PAN_RIGHT_POINT = new Point2D(25, 0);
+	private static final Point2D PAN_UP_POINT = new Point2D(0, -25);
+	private static final Point2D REDO_POINT = new Point2D(-40, 40);
+	private static final Point2D UNDO_POINT = new Point2D(-40, -40);
+	private static final Point2D ZOOM_IN_POINT = new Point2D(40, -40);
+	private static final Point2D ZOOM_OUT_POINT = new Point2D(40, 40);
+	private static final Point2D ZOOM_TO_ONE_POINT = new Point2D(0, 0);
+
 	@BeforeClass
 	public static void setUpClass() {
 		System.out.println("---- NavigatorControllerUITest ---------------------------------");
@@ -131,15 +141,15 @@ public class NavigatorPopupUITest extends ApplicationTest {
 		assertTrue(popup.isShowing());
 
 		// Test each popup button...
-		testSingleButton(robot, "undo",      new Point2D(-40, -40));
-		testSingleButton(robot, "redo",      new Point2D(-40,  40));
-		testSingleButton(robot, "zoomIn",    new Point2D( 40, -40));
-		testSingleButton(robot, "zoomOut",   new Point2D( 40,  40));
-		testSingleButton(robot, "panUp",     new Point2D(  0, -25));
-		testSingleButton(robot, "panRight",  new Point2D( 25,   0));
-		testSingleButton(robot, "panDown",   new Point2D(  0,  25));
-		testSingleButton(robot, "panLeft",   new Point2D(-25,   0));
-		testSingleButton(robot, "zoomToOne", new Point2D(  0,   0));
+		testSingleButton(robot, "undo",      UNDO_POINT);
+		testSingleButton(robot, "redo",      REDO_POINT);
+		testSingleButton(robot, "zoomIn",    ZOOM_IN_POINT);
+		testSingleButton(robot, "zoomOut",   ZOOM_OUT_POINT);
+		testSingleButton(robot, "panUp",     PAN_UP_POINT);
+		testSingleButton(robot, "panRight",  PAN_RIGHT_POINT);
+		testSingleButton(robot, "panDown",   PAN_DOWN_POINT);
+		testSingleButton(robot, "panLeft",   PAN_LEFT_POINT);
+		testSingleButton(robot, "zoomToOne", ZOOM_TO_ONE_POINT);
 
 		//	Dismiss the popup...
 		robot.type(KeyCode.ESCAPE);

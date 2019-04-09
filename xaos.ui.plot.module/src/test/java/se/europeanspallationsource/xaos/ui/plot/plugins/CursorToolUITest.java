@@ -54,8 +54,17 @@ import static org.testfx.robot.Motion.DEFAULT;
 @SuppressWarnings( { "UseOfSystemOutOrSystemErr", "ClassWithoutLogger" } )
 public class CursorToolUITest extends ApplicationTest {
 
+	private static final Point2D PAN_DOWN_POINT = new Point2D(0, 25);
+	private static final Point2D PAN_LEFT_POINT = new Point2D(-25, 0);
+	private static final Point2D PAN_RIGHT_POINT = new Point2D(25, 0);
+	private static final Point2D PAN_UP_POINT = new Point2D(0, -25);
 	private static final int POINTS_COUNT = 20;
 	private static final Random RANDOM = new Random(System.currentTimeMillis());
+	private static final Point2D REDO_POINT = new Point2D(-40, 40);
+	private static final Point2D UNDO_POINT = new Point2D(-40, -40);
+	private static final Point2D ZOOM_IN_POINT = new Point2D(40, -40);
+	private static final Point2D ZOOM_OUT_POINT = new Point2D(40, 40);
+	private static final Point2D ZOOM_TO_ONE_POINT = new Point2D(0, 0);
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -63,15 +72,16 @@ public class CursorToolUITest extends ApplicationTest {
 	}
 
 	private LineChartFX<Number, Number> chart;
-	private double height;
-	private CursorTool tool;
-	private double width;
-	private double xLowerBound;
-	private double xUpperBound;
-	private double yLowerBound;
-	private double yUpperBound;
+	private double chartHeight;
+	private double chartWidth;
+	private double chartXLowerBound;
+	private double chartXUpperBound;
+	private double chartYLowerBound;
+	private double chartYUpperBound;
+	private CursorTool cursorTool;
 
 	@Override
+	@SuppressWarnings( "NestedAssignment" )
 	public void start( Stage stage ) throws IOException {
 
 		final NumberAxis xAxis = new NumberAxis();
@@ -80,12 +90,13 @@ public class CursorToolUITest extends ApplicationTest {
 		xAxis.setAnimated(false);
 		yAxis.setAnimated(false);
 
-		tool = new CursorTool();
-		chart = new LineChartFX<Number, Number>(xAxis, yAxis);
+		chart = new LineChartFX<>(xAxis, yAxis);
 
 		chart.setTitle("CursorToolUITest");
 		chart.setAnimated(false);
-		chart.getChartPlugins().addAll(tool);
+		chart.getChartPlugins().addAll(
+			cursorTool = new CursorTool()
+		);
 
 		DataReducingSeries<Number, Number> series0 = new DataReducingSeries<>();
 
@@ -121,19 +132,19 @@ public class CursorToolUITest extends ApplicationTest {
 	}
 
 	@Test
-	public void test() throws InterruptedException {
+	public void test() {
 
 		System.out.println("  Testing ''CursorTool''...");
 
 		FxRobot robot = new FxRobot();
 
 		//	Get chart's reference bounds...
-		xLowerBound = tool.getXValueAxis().getLowerBound();
-		xUpperBound = tool.getXValueAxis().getUpperBound();
-		yLowerBound = tool.getYValueAxis().getLowerBound();
-		yUpperBound = tool.getYValueAxis().getUpperBound();
-		width  = xUpperBound - xLowerBound;
-		height = yUpperBound - yLowerBound;
+		chartXLowerBound = cursorTool.getXValueAxis().getLowerBound();
+		chartXUpperBound = cursorTool.getXValueAxis().getUpperBound();
+		chartWidth       = chartXUpperBound - chartXLowerBound;
+		chartYLowerBound = cursorTool.getYValueAxis().getLowerBound();
+		chartYUpperBound = cursorTool.getYValueAxis().getUpperBound();
+		chartHeight      = chartYUpperBound - chartYLowerBound;
 
 		//	Activate the tool...
 		robot.moveTo(chart);
@@ -145,80 +156,98 @@ public class CursorToolUITest extends ApplicationTest {
 
 		// Testing PAN DOWN...
 		System.out.println("    - Testing PAN DOWN...");
-		resetChartMoveAndClick(robot, new Point2D(0, 25));
-		assertThat(tool.getYValueAxis().getLowerBound()).isLessThan(yLowerBound);
-		assertThat(tool.getYValueAxis().getUpperBound()).isLessThan(yUpperBound);
-		assertThat(tool.getYValueAxis().getUpperBound() - tool.getYValueAxis().getLowerBound()).isEqualTo(height, Offset.offset(0.01));
+		cursorToolResetChartMoveAndClick(robot, PAN_DOWN_POINT);
+		assertThat(cursorTool.getYValueAxis().getLowerBound()).isLessThan(chartYLowerBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound()).isLessThan(chartYUpperBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound() - cursorTool.getYValueAxis().getLowerBound()).isEqualTo(chartHeight, Offset.offset(0.01));
 
 		// Testing PAN UP...
 		System.out.println("    - Testing PAN UP...");
-		resetChartMoveAndClick(robot, new Point2D(0, -25));
-		assertThat(tool.getYValueAxis().getLowerBound()).isGreaterThan(yLowerBound);
-		assertThat(tool.getYValueAxis().getUpperBound()).isGreaterThan(yUpperBound);
-		assertThat(tool.getYValueAxis().getUpperBound() - tool.getYValueAxis().getLowerBound()).isEqualTo(height, Offset.offset(0.01));
+		cursorToolResetChartMoveAndClick(robot, PAN_UP_POINT);
+		assertThat(cursorTool.getYValueAxis().getLowerBound()).isGreaterThan(chartYLowerBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound()).isGreaterThan(chartYUpperBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound() - cursorTool.getYValueAxis().getLowerBound()).isEqualTo(chartHeight, Offset.offset(0.01));
 
 		// Testing PAN LEFT...
 		System.out.println("    - Testing PAN LEFT...");
-		resetChartMoveAndClick(robot, new Point2D(-25, 0));
-		assertThat(tool.getXValueAxis().getLowerBound()).isLessThan(xLowerBound);
-		assertThat(tool.getXValueAxis().getUpperBound()).isLessThan(xUpperBound);
-		assertThat(tool.getXValueAxis().getUpperBound() - tool.getXValueAxis().getLowerBound()).isEqualTo(width, Offset.offset(0.01));
+		cursorToolResetChartMoveAndClick(robot, PAN_LEFT_POINT);
+		assertThat(cursorTool.getXValueAxis().getLowerBound()).isLessThan(chartXLowerBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound()).isLessThan(chartXUpperBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound() - cursorTool.getXValueAxis().getLowerBound()).isEqualTo(chartWidth, Offset.offset(0.01));
 
 		// Testing PAN RIGHT...
 		System.out.println("    - Testing PAN RIGHT...");
-		resetChartMoveAndClick(robot, new Point2D(25, 0));
-		assertThat(tool.getXValueAxis().getLowerBound()).isGreaterThan(xLowerBound);
-		assertThat(tool.getXValueAxis().getUpperBound()).isGreaterThan(xUpperBound);
-		assertThat(tool.getXValueAxis().getUpperBound() - tool.getXValueAxis().getLowerBound()).isEqualTo(width, Offset.offset(0.01));
+		cursorToolResetChartMoveAndClick(robot, PAN_RIGHT_POINT);
+		assertThat(cursorTool.getXValueAxis().getLowerBound()).isGreaterThan(chartXLowerBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound()).isGreaterThan(chartXUpperBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound() - cursorTool.getXValueAxis().getLowerBound()).isEqualTo(chartWidth, Offset.offset(0.01));
 
 		// Testing ZOOM IN...
 		System.out.println("    - Testing ZOOM IN...");
-		resetChartMoveAndClick(robot, new Point2D(40, -40));
-		assertThat(tool.getXValueAxis().getLowerBound()).isGreaterThan(xLowerBound);
-		assertThat(tool.getXValueAxis().getUpperBound()).isLessThan(xUpperBound);
-		assertThat(tool.getXValueAxis().getUpperBound() - tool.getXValueAxis().getLowerBound()).isLessThan(width);
-		assertThat(tool.getYValueAxis().getLowerBound()).isGreaterThan(yLowerBound);
-		assertThat(tool.getYValueAxis().getUpperBound()).isLessThan(yUpperBound);
-		assertThat(tool.getYValueAxis().getUpperBound() - tool.getYValueAxis().getLowerBound()).isLessThan(height);
+		cursorToolResetChartMoveAndClick(robot, ZOOM_IN_POINT);
+		assertThat(cursorTool.getXValueAxis().getLowerBound()).isGreaterThan(chartXLowerBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound()).isLessThan(chartXUpperBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound() - cursorTool.getXValueAxis().getLowerBound()).isLessThan(chartWidth);
+		assertThat(cursorTool.getYValueAxis().getLowerBound()).isGreaterThan(chartYLowerBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound()).isLessThan(chartYUpperBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound() - cursorTool.getYValueAxis().getLowerBound()).isLessThan(chartHeight);
 
 		// Testing ZOOM OUT...
 		System.out.println("    - Testing ZOOM OUT...");
-		resetChartMoveAndClick(robot, new Point2D(40, 40));
-		assertThat(tool.getXValueAxis().getLowerBound()).isLessThan(xLowerBound);
-		assertThat(tool.getXValueAxis().getUpperBound()).isGreaterThan(xUpperBound);
-		assertThat(tool.getXValueAxis().getUpperBound() - tool.getXValueAxis().getLowerBound()).isGreaterThan(width);
-		assertThat(tool.getYValueAxis().getLowerBound()).isLessThan(yLowerBound);
-		assertThat(tool.getYValueAxis().getUpperBound()).isGreaterThan(yUpperBound);
-		assertThat(tool.getYValueAxis().getUpperBound() - tool.getYValueAxis().getLowerBound()).isGreaterThan(height);
+		cursorToolResetChartMoveAndClick(robot, ZOOM_OUT_POINT);
+		assertThat(cursorTool.getXValueAxis().getLowerBound()).isLessThan(chartXLowerBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound()).isGreaterThan(chartXUpperBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound() - cursorTool.getXValueAxis().getLowerBound()).isGreaterThan(chartWidth);
+		assertThat(cursorTool.getYValueAxis().getLowerBound()).isLessThan(chartYLowerBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound()).isGreaterThan(chartYUpperBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound() - cursorTool.getYValueAxis().getLowerBound()).isGreaterThan(chartHeight);
 
 		// Testing ZOOM TO ONE...
 		System.out.println("    - Testing ZOOM TO ONE...");
-		resetChartMoveAndClick(robot, new Point2D(40, -40));	//	Zoom In
-		resetChartMoveAndClick(robot, new Point2D(0, 0), false);
-		assertThat(tool.getXValueAxis().getLowerBound()).isEqualTo(xLowerBound, Offset.offset(0.01));
-		assertThat(tool.getXValueAxis().getUpperBound()).isEqualTo(xUpperBound, Offset.offset(0.01));
-		assertThat(tool.getYValueAxis().getLowerBound()).isEqualTo(yLowerBound, Offset.offset(0.01));
-		assertThat(tool.getYValueAxis().getUpperBound()).isEqualTo(yUpperBound, Offset.offset(0.01));
+		cursorToolResetChartMoveAndClick(robot, ZOOM_IN_POINT);
+		cursorToolResetChartMoveAndClick(robot, ZOOM_TO_ONE_POINT, false);
+		assertThat(cursorTool.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound, Offset.offset(0.01));
+		assertThat(cursorTool.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound, Offset.offset(0.01));
+		assertThat(cursorTool.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound, Offset.offset(0.01));
+		assertThat(cursorTool.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound, Offset.offset(0.01));
 
 		// Testing UNDO...
 		System.out.println("    - Testing UNDO...");
-		resetChartMoveAndClick(robot, new Point2D(40, -40));	//	Zoom In
-		resetChartMoveAndClick(robot, new Point2D(-40, -40), false);
-		assertThat(tool.getXValueAxis().getLowerBound()).isEqualTo(xLowerBound, Offset.offset(0.01));
-		assertThat(tool.getXValueAxis().getUpperBound()).isEqualTo(xUpperBound, Offset.offset(0.01));
-		assertThat(tool.getYValueAxis().getLowerBound()).isEqualTo(yLowerBound, Offset.offset(0.01));
-		assertThat(tool.getYValueAxis().getUpperBound()).isEqualTo(yUpperBound, Offset.offset(0.01));
+		cursorToolResetChartMoveAndClick(robot, ZOOM_IN_POINT);
+		cursorToolResetChartMoveAndClick(robot, UNDO_POINT, false);
+		assertThat(cursorTool.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound, Offset.offset(0.01));
+		assertThat(cursorTool.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound, Offset.offset(0.01));
+		assertThat(cursorTool.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound, Offset.offset(0.01));
+		assertThat(cursorTool.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound, Offset.offset(0.01));
 
 		// Testing REDO...
 		System.out.println("    - Testing REDO...");
-		resetChartMoveAndClick(robot, new Point2D(-40, 40), false);
+		cursorToolResetChartMoveAndClick(robot, REDO_POINT, false);
 		//	Now it should be after Zoom In done
-		assertThat(tool.getXValueAxis().getLowerBound()).isGreaterThan(xLowerBound);
-		assertThat(tool.getXValueAxis().getUpperBound()).isLessThan(xUpperBound);
-		assertThat(tool.getXValueAxis().getUpperBound() - tool.getXValueAxis().getLowerBound()).isLessThan(width);
-		assertThat(tool.getYValueAxis().getLowerBound()).isGreaterThan(yLowerBound);
-		assertThat(tool.getYValueAxis().getUpperBound()).isLessThan(yUpperBound);
-		assertThat(tool.getYValueAxis().getUpperBound() - tool.getYValueAxis().getLowerBound()).isLessThan(height);
+		assertThat(cursorTool.getXValueAxis().getLowerBound()).isGreaterThan(chartXLowerBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound()).isLessThan(chartXUpperBound);
+		assertThat(cursorTool.getXValueAxis().getUpperBound() - cursorTool.getXValueAxis().getLowerBound()).isLessThan(chartWidth);
+		assertThat(cursorTool.getYValueAxis().getLowerBound()).isGreaterThan(chartYLowerBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound()).isLessThan(chartYUpperBound);
+		assertThat(cursorTool.getYValueAxis().getUpperBound() - cursorTool.getYValueAxis().getLowerBound()).isLessThan(chartHeight);
+
+	}
+
+	private void cursorToolResetChartMoveAndClick ( FxRobot robot, Point2D offset ) {
+		cursorToolResetChartMoveAndClick(robot, offset, true);
+	}
+
+	private void cursorToolResetChartMoveAndClick ( FxRobot robot, Point2D offset, boolean reset ) {
+
+		if ( reset ) {
+			cursorTool.getXValueAxis().setLowerBound(chartXLowerBound);
+			cursorTool.getXValueAxis().setUpperBound(chartXUpperBound);
+			cursorTool.getYValueAxis().setLowerBound(chartYLowerBound);
+			cursorTool.getYValueAxis().setUpperBound(chartYUpperBound);
+		}
+
+		robot.moveTo(chart, CENTER, offset, DEFAULT);
+		robot.clickOn(PRIMARY);
 
 	}
 
@@ -250,24 +279,6 @@ public class CursorToolUITest extends ApplicationTest {
 		}
 
 		return data;
-
-	}
-
-	private void resetChartMoveAndClick ( FxRobot robot, Point2D offset ) {
-		resetChartMoveAndClick(robot, offset, true);
-	}
-
-	private void resetChartMoveAndClick ( FxRobot robot, Point2D offset, boolean reset ) {
-
-		if ( reset ) {
-			tool.getXValueAxis().setLowerBound(xLowerBound);
-			tool.getXValueAxis().setUpperBound(xUpperBound);
-			tool.getYValueAxis().setLowerBound(yLowerBound);
-			tool.getYValueAxis().setUpperBound(yUpperBound);
-		}
-
-		robot.moveTo(chart, CENTER, offset, DEFAULT);
-		robot.clickOn(PRIMARY);
 
 	}
 
