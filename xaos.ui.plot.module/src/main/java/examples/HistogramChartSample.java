@@ -31,7 +31,7 @@ import javafx.stage.Stage;
 import plugins.AreaValueTooltip;
 import plugins.CoordinatesLabel;
 import plugins.CoordinatesLines;
-import se.europeanspallationsource.xaos.ui.plot.plugins.CursorTool;
+import se.europeanspallationsource.xaos.ui.plot.plugins.Navigator;
 import plugins.DataPointTooltip;
 import plugins.ErrorBars;
 import plugins.KeyPan;
@@ -59,7 +59,7 @@ public class HistogramChartSample extends Application{
         
         ObservableList<XYChartPlugin> pluginList = FXCollections.observableArrayList();        
          
-        chart.getChartPlugins().addAll(new CursorTool(), new KeyPan(), new CoordinatesLines(), 
+        chart.getChartPlugins().addAll(new Navigator(), new KeyPan(), new CoordinatesLines(), 
             new Zoom(), new Pan(), new CoordinatesLabel(), new DataPointTooltip(), new AreaValueTooltip(), new PropertyMenu());
                                       
         chart.setBarGap(1);

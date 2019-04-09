@@ -37,7 +37,8 @@ import se.europeanspallationsource.xaos.ui.plot.impl.util.ChartUndoManager;
  * @author Reuben Lindroos
  * @author claudio.rosati@esss.se
  */
-public final class CursorTool extends XYChartPlugin {
+@SuppressWarnings( "ClassWithoutLogger" )
+public final class Navigator extends XYChartPlugin {
 
 	private double cursorScreenX;
 	private double cursorScreenY;
@@ -48,7 +49,7 @@ public final class CursorTool extends XYChartPlugin {
 	private final EventHandler<MouseEvent> mouseReleasedHandler = this::mouseReleased;
 	private final NavigatorPopup popup = new NavigatorPopup();
 
-	public CursorTool() {
+	public Navigator() {
 
 		popup.setOnPanDown(e -> panDown());
 		popup.setOnPanLeft(e -> panLeft());

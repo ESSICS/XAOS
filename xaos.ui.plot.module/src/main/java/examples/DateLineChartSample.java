@@ -39,7 +39,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import plugins.CoordinatesLabel;
-import se.europeanspallationsource.xaos.ui.plot.plugins.CursorTool;
+import se.europeanspallationsource.xaos.ui.plot.plugins.Navigator;
 import plugins.KeyPan;
 import plugins.DataPointTooltip;
 import plugins.Pan;
@@ -88,7 +88,7 @@ public class DateLineChartSample extends Application {
 
         ObservableList<XYChartPlugin> pluginList = FXCollections.observableArrayList();
          
-         pluginList.addAll(new CursorTool(), new KeyPan(), new CoordinatesLines(), 
+         pluginList.addAll(new Navigator(), new KeyPan(), new CoordinatesLines(), 
             new Zoom(), new Pan(), new CoordinatesLabel(), new DataPointTooltip(), new AreaValueTooltip(), new PropertyMenu());
          
          chart.addChartPlugins(pluginList);

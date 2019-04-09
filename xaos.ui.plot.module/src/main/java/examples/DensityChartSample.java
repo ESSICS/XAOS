@@ -38,7 +38,7 @@ import plugins.CoordinatesLines;
 import plugins.Pan;
 import plugins.PropertyMenu;
 import plugins.Zoom;
-import se.europeanspallationsource.xaos.ui.plot.plugins.CursorTool;
+import se.europeanspallationsource.xaos.ui.plot.plugins.Navigator;
 import plugins.KeyPan;
 
 
@@ -71,7 +71,7 @@ public class DensityChartSample extends Application {
         chart.setSmooth(true);
         chart.setProjectionLinesVisible(true);
         
-        chart.getChartPlugins().addAll(new PropertyMenu(), new Zoom(), new KeyPan(), new Pan(), new CursorTool(), new CoordinatesLines(), new CoordinatesLabel());
+        chart.getChartPlugins().addAll(new PropertyMenu(), new Zoom(), new KeyPan(), new Pan(), new Navigator(), new CoordinatesLines(), new CoordinatesLabel());
 
         
         // readImage() creates an instance of DensityChart.Data   

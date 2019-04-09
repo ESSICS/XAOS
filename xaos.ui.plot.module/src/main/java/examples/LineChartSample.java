@@ -39,7 +39,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import chart.data.DataReducingSeries;
 import plugins.CoordinatesLabel;
-import se.europeanspallationsource.xaos.ui.plot.plugins.CursorTool;
+import se.europeanspallationsource.xaos.ui.plot.plugins.Navigator;
 import plugins.KeyPan;
 import plugins.DataPointTooltip;
 import plugins.Pan;
@@ -89,7 +89,7 @@ public class LineChartSample extends Application {
         chart.setTitle("Test data");
         chart.setAnimated(false);
 
-        chart.getChartPlugins().addAll(new CursorTool(), new KeyPan(), new CoordinatesLines(), 
+        chart.getChartPlugins().addAll(new Navigator(), new KeyPan(), new CoordinatesLines(), 
                new Zoom(), new Pan(), new CoordinatesLabel(), new DataPointTooltip(), new AreaValueTooltip(), new PropertyMenu());
                
         series0 = new DataReducingSeries<>();
