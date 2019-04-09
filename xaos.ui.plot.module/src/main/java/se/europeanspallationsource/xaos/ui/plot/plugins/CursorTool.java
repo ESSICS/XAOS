@@ -59,6 +59,9 @@ public final class CursorTool extends XYChartPlugin {
 		popup.setOnZoomOut(e -> zoomOut());
 		popup.setOnZoomToOne(e -> autoScale());
 
+		popup.setOnRedo(e -> ChartUndoManager.get(getChart()).redo(this));
+		popup.setOnUndo(e -> ChartUndoManager.get(getChart()).undo(this));
+
 	}
 
 	@Override

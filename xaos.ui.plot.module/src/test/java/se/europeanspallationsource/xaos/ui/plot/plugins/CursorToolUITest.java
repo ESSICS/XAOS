@@ -127,10 +127,6 @@ public class CursorToolUITest extends ApplicationTest {
 
 		FxRobot robot = new FxRobot();
 
-		//	Activate the tool...
-		robot.moveTo(chart);
-		robot.type(ALT);
-
 		//	Get chart's reference bounds...
 		xLowerBound = tool.getXValueAxis().getLowerBound();
 		xUpperBound = tool.getXValueAxis().getUpperBound();
@@ -138,6 +134,10 @@ public class CursorToolUITest extends ApplicationTest {
 		yUpperBound = tool.getYValueAxis().getUpperBound();
 		width  = xUpperBound - xLowerBound;
 		height = yUpperBound - yLowerBound;
+
+		//	Activate the tool...
+		robot.moveTo(chart);
+		robot.type(ALT);
 
 		//	--------------------------------------------------------------------
 		//	Test each popup button...
@@ -193,23 +193,32 @@ public class CursorToolUITest extends ApplicationTest {
 
 		// Testing ZOOM TO ONE...
 		System.out.println("    - Testing ZOOM TO ONE...");
-		resetChartMoveAndClick(robot, new Point2D(40, -40));
+		resetChartMoveAndClick(robot, new Point2D(40, -40));	//	Zoom In
 		resetChartMoveAndClick(robot, new Point2D(0, 0), false);
 		assertThat(tool.getXValueAxis().getLowerBound()).isEqualTo(xLowerBound, Offset.offset(0.01));
 		assertThat(tool.getXValueAxis().getUpperBound()).isEqualTo(xUpperBound, Offset.offset(0.01));
 		assertThat(tool.getYValueAxis().getLowerBound()).isEqualTo(yLowerBound, Offset.offset(0.01));
 		assertThat(tool.getYValueAxis().getUpperBound()).isEqualTo(yUpperBound, Offset.offset(0.01));
 
+		// Testing UNDO...
+		System.out.println("    - Testing UNDO...");
+		resetChartMoveAndClick(robot, new Point2D(40, -40));	//	Zoom In
+		resetChartMoveAndClick(robot, new Point2D(-40, -40), false);
+		assertThat(tool.getXValueAxis().getLowerBound()).isEqualTo(xLowerBound, Offset.offset(0.01));
+		assertThat(tool.getXValueAxis().getUpperBound()).isEqualTo(xUpperBound, Offset.offset(0.01));
+		assertThat(tool.getYValueAxis().getLowerBound()).isEqualTo(yLowerBound, Offset.offset(0.01));
+		assertThat(tool.getYValueAxis().getUpperBound()).isEqualTo(yUpperBound, Offset.offset(0.01));
 
-
-
-
-//		testSingleButton(robot, chart, "undo",      new Point2D(-40, -40));
-//		testSingleButton(robot, chart, "redo",      new Point2D(-40,  40));
-
-
-
-
+		// Testing REDO...
+		System.out.println("    - Testing REDO...");
+		resetChartMoveAndClick(robot, new Point2D(-40, 40), false);
+		//	Now it should be after Zoom In done
+		assertThat(tool.getXValueAxis().getLowerBound()).isGreaterThan(xLowerBound);
+		assertThat(tool.getXValueAxis().getUpperBound()).isLessThan(xUpperBound);
+		assertThat(tool.getXValueAxis().getUpperBound() - tool.getXValueAxis().getLowerBound()).isLessThan(width);
+		assertThat(tool.getYValueAxis().getLowerBound()).isGreaterThan(yLowerBound);
+		assertThat(tool.getYValueAxis().getUpperBound()).isLessThan(yUpperBound);
+		assertThat(tool.getYValueAxis().getUpperBound() - tool.getYValueAxis().getLowerBound()).isLessThan(height);
 
 	}
 

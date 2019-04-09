@@ -80,8 +80,8 @@
 						<exclude>**/*Suite.java</exclude>
 					</excludes>
 					<includes>
-						<!--<include>**/ChartUndoManagerUITest.java</include>-->
-						<include>**/CursorToolUITest.java</include>
+						<include>**/ChartUndoManagerUITest.java</include>
+						<!--<include>**/CursorToolUITest.java</include>-->
 					</includes>
 
 				</configuration>

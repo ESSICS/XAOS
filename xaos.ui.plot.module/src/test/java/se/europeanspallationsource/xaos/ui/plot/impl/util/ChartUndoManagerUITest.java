@@ -39,7 +39,6 @@ import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
 import se.europeanspallationsource.xaos.ui.plot.plugins.CursorTool;
 
-import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -121,8 +120,16 @@ public class ChartUndoManagerUITest extends ApplicationTest {
 
 		FxRobot robot = new FxRobot();
 
-		//	...
-		assertTrue(true);
+		//	--------------------------------------------------------------------
+		//	Test UNDO and REDO on CursorTool...
+		//	--------------------------------------------------------------------
+
+
+
+
+
+
+
 
 	}
 
