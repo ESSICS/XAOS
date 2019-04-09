@@ -53,9 +53,10 @@ import static javafx.scene.input.MouseButton.PRIMARY;
  * and undo/redo buttons are provided and can be bound to the application
  * code through the provided {@link EventHandler} methods.
  * <p>
- * The navigation buttons can be activated by means of keyboard accelerators:</p>
+ * The navigation buttons can be activated by means of keyboard accelerators 
+ * (Shortcut stans for Ctrl on Windows or Linux, and Command on macOS):</p>
  * <table>
- *   <caption>Navigation accelerators.</caption>
+ *   <caption>&nbsp;</caption>
  *   <tr><td>Pan Down</td><td>Shortcut+DOWN</td></tr>
  *   <tr><td>Pan Left</td><td>Shortcut+LEFT</td></tr>
  *   <tr><td>Pan Right</td><td>Shortcut+RIGHT</td></tr>
@@ -116,11 +117,15 @@ public class NavigatorController extends AnchorPane {
 	 */
 	public static final EventType<Event> ON_ZOOM_TO_ONE = new EventType<Event>(Event.ANY, "NAVIGATOR_ON_ZOOM_TO_ONE");
 
-	private static final String DISABLED_CHANGE_LISTENER = "DISABLED_CHANGE_LISTENER";
-	private static final String FOCUS_CHANGE_LISTENER = "FOCUS_CHANGE_LISTENER";
-	private static final String KEY_PRESSED_HANDLER = "KEY_PRESSED_HANDLER";
-	private static final String KEY_RELEASED_HANDLER = "KEY_RELEASED_HANDLER";
-	private static final String KEY_TYPED_HANDLER = "KEY_TYPED_HANDLER";
+	public static final KeyCombination PAN_DOWN_ACCELERATOR    = KeyCombination.keyCombination("Shortcut+DOWN");
+	public static final KeyCombination PAN_LEFT_ACCELERATOR    = KeyCombination.keyCombination("Shortcut+LEFT");
+	public static final KeyCombination PAN_RIGHT_ACCELERATOR   = KeyCombination.keyCombination("Shortcut+RIGHT");
+	public static final KeyCombination PAN_UP_ACCELERATOR      = KeyCombination.keyCombination("Shortcut+UP");
+	public static final KeyCombination REDO_ACCELERATOR        = KeyCombination.keyCombination("Shift+Shortcut+Z");
+	public static final KeyCombination UNDO_ACCELERATOR        = KeyCombination.keyCombination("Shortcut+Z");
+	public static final KeyCombination ZOOM_IN_ACCELERATOR     = KeyCombination.keyCombination("Shift+Shortcut+UP");
+	public static final KeyCombination ZOOM_OUT_ACCELERATOR    = KeyCombination.keyCombination("Shift+Shortcut+DOWN");
+	public static final KeyCombination ZOOM_TO_ONE_ACCELERATOR = KeyCombination.keyCombination("Shortcut+EQUALS");
 
 	private static final Logger LOGGER = Logger.getLogger(NavigatorController.class.getName());
 
@@ -638,42 +643,42 @@ public class NavigatorController extends AnchorPane {
 			);
 		}
 	}
-
+	
 	private void initButtonListeners() {
 
-		initButtonListeners(panDown, panDownIcon, KeyCombination.keyCombination("Shortcut+DOWN"));
+		initButtonListeners(panDown, panDownIcon, PAN_DOWN_ACCELERATOR);
 		panDown.disableProperty().bind(panDownDisabledProperty());
 		panDownIcon.disableProperty().bind(panDownDisabledProperty());
 
-		initButtonListeners(panLeft, panLeftIcon, KeyCombination.keyCombination("Shortcut+LEFT"));
+		initButtonListeners(panLeft, panLeftIcon, PAN_LEFT_ACCELERATOR);
 		panLeft.disableProperty().bind(panLeftDisabledProperty());
 		panLeftIcon.disableProperty().bind(panLeftDisabledProperty());
 
-		initButtonListeners(panRight, panRightIcon, KeyCombination.keyCombination("Shortcut+RIGHT"));
+		initButtonListeners(panRight, panRightIcon, PAN_RIGHT_ACCELERATOR);
 		panRight.disableProperty().bind(panRightDisabledProperty());
 		panRightIcon.disableProperty().bind(panRightDisabledProperty());
 
-		initButtonListeners(panUp, panUpIcon, KeyCombination.keyCombination("Shortcut+UP"));
+		initButtonListeners(panUp, panUpIcon, PAN_UP_ACCELERATOR);
 		panUp.disableProperty().bind(panUpDisabledProperty());
 		panUpIcon.disableProperty().bind(panUpDisabledProperty());
 
-		initButtonListeners(redo, redoIcon, KeyCombination.keyCombination("Shift+Shortcut+Z"));
+		initButtonListeners(redo, redoIcon, REDO_ACCELERATOR);
 		redo.disableProperty().bind(redoDisabledProperty());
 		redoIcon.disableProperty().bind(redoDisabledProperty());
 
-		initButtonListeners(undo, undoIcon, KeyCombination.keyCombination("Shortcut+Z"));
+		initButtonListeners(undo, undoIcon, UNDO_ACCELERATOR);
 		undo.disableProperty().bind(undoDisabledProperty());
 		undoIcon.disableProperty().bind(undoDisabledProperty());
 
-		initButtonListeners(zoomIn, zoomInIcon, KeyCombination.keyCombination("Shift+Shortcut+UP"));
+		initButtonListeners(zoomIn, zoomInIcon, ZOOM_IN_ACCELERATOR);
 		zoomIn.disableProperty().bind(zoomInDisabledProperty());
 		zoomInIcon.disableProperty().bind(zoomInDisabledProperty());
 
-		initButtonListeners(zoomOut, zoomOutIcon, KeyCombination.keyCombination("Shift+Shortcut+DOWN"));
+		initButtonListeners(zoomOut, zoomOutIcon, ZOOM_OUT_ACCELERATOR);
 		zoomOut.disableProperty().bind(zoomOutDisabledProperty());
 		zoomOutIcon.disableProperty().bind(zoomOutDisabledProperty());
 
-		initButtonListeners(zoomToOne, zoomToOneLabel, KeyCombination.keyCombination("Shortcut+EQUALS"));
+		initButtonListeners(zoomToOne, zoomToOneLabel, ZOOM_TO_ONE_ACCELERATOR);
 		zoomToOne.disableProperty().bind(zoomToOneDisabledProperty());
 		zoomToOneLabel.disableProperty().bind(zoomToOneDisabledProperty());
 

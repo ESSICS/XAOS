@@ -36,7 +36,6 @@
 	-fx-stroke-type: inside;
 	-fx-stroke-width: 2;
 	-fx-opacity: 0.3;
-	-fx-cursor:url('/plugins/zoomIn.gif'),auto;
 }
 
 .chart-vertical-grid-lines {

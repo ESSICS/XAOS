@@ -25,6 +25,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import se.europeanspallationsource.xaos.ui.control.NavigatorPopup;
 import se.europeanspallationsource.xaos.ui.plot.impl.util.ChartUndoManager;
+import se.europeanspallationsource.xaos.ui.plot.plugins.impl.PanHelper;
+import se.europeanspallationsource.xaos.ui.plot.plugins.impl.ZoomHelper;
 
 
 /**
@@ -33,6 +35,23 @@ import se.europeanspallationsource.xaos.ui.plot.impl.util.ChartUndoManager;
  * is still opened, pressing ALT again will move it under the current mouse
  * cursor position. The popup can be closed pressing ESC or clicking outside
  * it.</p>
+ * <p>
+ * Once the popup is open, buttons can be navigated with TAB, and pressing
+ * SPACE/ENTER will press the button. Button can be activated pressing keyboard
+ * accelerators (Shortcut stans for Ctrl on Windows or Linux, and Command on
+ * macOS):</p>
+ * <table>
+ *   <caption>&nbsp;</caption>
+ *   <tr><td>Pan Down</td><td>Shortcut+DOWN</td></tr>
+ *   <tr><td>Pan Left</td><td>Shortcut+LEFT</td></tr>
+ *   <tr><td>Pan Right</td><td>Shortcut+RIGHT</td></tr>
+ *   <tr><td>Pan Up</td><td>Shortcut+UP</td></tr>
+ *   <tr><td>Redo</td><td>Shift+Shortcut+Z</td></tr>
+ *   <tr><td>Undo</td><td>Shortcut+Z</td></tr>
+ *   <tr><td>Zoom In</td><td>Shift+Shortcut+UP</td></tr>
+ *   <tr><td>Zoom Out</td><td>Shift+Shortcut+DOWN</td></tr>
+ *   <tr><td>Zoom To One</td><td>Shortcut+EQUALS</td></tr>
+ * </table>
  *
  * @author Reuben Lindroos
  * @author claudio.rosati@esss.se
@@ -42,23 +61,25 @@ public final class Navigator extends XYChartPlugin {
 
 	private double cursorScreenX;
 	private double cursorScreenY;
-	private final EventHandler<KeyEvent> keyPressedHandler = this::keyPressed;
-	private final EventHandler<MouseEvent> mouseEnteredHandler = this::mouseEntered;
-	private final EventHandler<MouseEvent> mouseExitedHandler = this::mouseExited;
-	private final EventHandler<MouseEvent> mouseMovedHandler = this::mouseMoved;
+	private final EventHandler<KeyEvent>   keyPressedHandler    = this::keyPressed;
+	private final EventHandler<MouseEvent> mouseEnteredHandler  = this::mouseEntered;
+	private final EventHandler<MouseEvent> mouseExitedHandler   = this::mouseExited;
+	private final EventHandler<MouseEvent> mouseMovedHandler    = this::mouseMoved;
 	private final EventHandler<MouseEvent> mouseReleasedHandler = this::mouseReleased;
+	private final PanHelper panHelper = new PanHelper(this);
 	private final NavigatorPopup popup = new NavigatorPopup();
+	private final ZoomHelper zoomHelper = new ZoomHelper(this);
 
 	public Navigator() {
 
-		popup.setOnPanDown(e -> panDown());
-		popup.setOnPanLeft(e -> panLeft());
-		popup.setOnPanRight(e -> panRight());
-		popup.setOnPanUp(e -> panUp());
+		popup.setOnPanDown(e -> panHelper.panDown());
+		popup.setOnPanLeft(e -> panHelper.panLeft());
+		popup.setOnPanRight(e -> panHelper.panRight());
+		popup.setOnPanUp(e -> panHelper.panUp());
 
-		popup.setOnZoomIn(e -> zoomIn());
-		popup.setOnZoomOut(e -> zoomOut());
-		popup.setOnZoomToOne(e -> autoScale());
+		popup.setOnZoomIn(e -> zoomHelper.zoomIn());
+		popup.setOnZoomOut(e -> zoomHelper.zoomOut());
+		popup.setOnZoomToOne(e -> zoomHelper.autoScale());
 
 		popup.setOnRedo(e -> ChartUndoManager.get(getChart()).redo(this));
 		popup.setOnUndo(e -> ChartUndoManager.get(getChart()).undo(this));
@@ -92,12 +113,6 @@ public final class Navigator extends XYChartPlugin {
 		oldChart.removeEventHandler(MouseEvent.MOUSE_ENTERED_TARGET, mouseEnteredHandler);
 		oldChart.addEventFilter(KeyEvent.KEY_PRESSED, keyPressedHandler);
 
-	}
-
-	private void autoScale() {
-		ChartUndoManager.get(getChart()).captureUndoable(this);
-		getXValueAxis().setAutoRanging(true);
-		getYValueAxis().setAutoRanging(true);
 	}
 
 	private void keyPressed ( KeyEvent event ) {
@@ -138,90 +153,6 @@ public final class Navigator extends XYChartPlugin {
 		if ( popup.isShowing() ) {
 			popup.hide();
 		}
-	}
-
-	private void panDown() {
-
-		ChartUndoManager.get(getChart()).captureUndoable(this);
-
-		double plotHeight = getYValueAxis().getUpperBound() - getYValueAxis().getLowerBound();
-
-		getXValueAxis().setAutoRanging(false);
-		getYValueAxis().setAutoRanging(false);
-		getYValueAxis().setLowerBound(getYValueAxis().getLowerBound() - 0.1 * plotHeight);
-		getYValueAxis().setUpperBound(getYValueAxis().getUpperBound() - 0.1 * plotHeight);
-
-	}
-
-	private void panLeft() {
-
-		ChartUndoManager.get(getChart()).captureUndoable(this);
-
-		double plotWidth = getXValueAxis().getUpperBound() - getXValueAxis().getLowerBound();
-
-		getXValueAxis().setAutoRanging(false);
-		getYValueAxis().setAutoRanging(false);
-		getXValueAxis().setLowerBound(getXValueAxis().getLowerBound() - 0.1 * plotWidth);
-		getXValueAxis().setUpperBound(getXValueAxis().getUpperBound() - 0.1 * plotWidth);
-
-	}
-
-	private void panRight() {
-
-		ChartUndoManager.get(getChart()).captureUndoable(this);
-
-		double plotWidth = getXValueAxis().getUpperBound() - getXValueAxis().getLowerBound();
-
-		getXValueAxis().setAutoRanging(false);
-		getYValueAxis().setAutoRanging(false);
-		getXValueAxis().setLowerBound(getXValueAxis().getLowerBound() + 0.1 * plotWidth);
-		getXValueAxis().setUpperBound(getXValueAxis().getUpperBound() + 0.1 * plotWidth);
-
-	}
-
-	private void panUp() {
-
-		ChartUndoManager.get(getChart()).captureUndoable(this);
-
-		double plotHeight = getYValueAxis().getUpperBound() - getYValueAxis().getLowerBound();
-
-		getXValueAxis().setAutoRanging(false);
-		getYValueAxis().setAutoRanging(false);
-		getYValueAxis().setLowerBound(getYValueAxis().getLowerBound() + 0.1 * plotHeight);
-		getYValueAxis().setUpperBound(getYValueAxis().getUpperBound() + 0.1 * plotHeight);
-
-	}
-
-	private void zoomIn() {
-
-		ChartUndoManager.get(getChart()).captureUndoable(this);
-
-		double plotHeight = getYValueAxis().getUpperBound() - getYValueAxis().getLowerBound();
-		double plotWidth  = getXValueAxis().getUpperBound() - getXValueAxis().getLowerBound();
-
-		getXValueAxis().setAutoRanging(false);
-		getYValueAxis().setAutoRanging(false);
-		getXValueAxis().setLowerBound(getXValueAxis().getLowerBound() + 0.1 * plotWidth);
-		getXValueAxis().setUpperBound(getXValueAxis().getUpperBound() - 0.1 * plotWidth);
-		getYValueAxis().setLowerBound(getYValueAxis().getLowerBound() + 0.1 * plotHeight);
-		getYValueAxis().setUpperBound(getYValueAxis().getUpperBound() - 0.1 * plotHeight);
-
-	}
-
-	private void zoomOut() {
-
-		ChartUndoManager.get(getChart()).captureUndoable(this);
-
-		double plotHeight = getYValueAxis().getUpperBound() - getYValueAxis().getLowerBound();
-		double plotWidth  = getXValueAxis().getUpperBound() - getXValueAxis().getLowerBound();
-
-		getXValueAxis().setAutoRanging(false);
-		getYValueAxis().setAutoRanging(false);
-		getXValueAxis().setLowerBound(getXValueAxis().getLowerBound() - 0.1 * plotWidth);
-		getXValueAxis().setUpperBound(getXValueAxis().getUpperBound() + 0.1 * plotWidth);
-		getYValueAxis().setLowerBound(getYValueAxis().getLowerBound() - 0.1 * plotHeight);
-		getYValueAxis().setUpperBound(getYValueAxis().getUpperBound() + 0.1 * plotHeight);
-
 	}
 
 }

@@ -38,6 +38,7 @@ import org.junit.Test;
 import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
+import se.europeanspallationsource.xaos.ui.plot.plugins.KeyboardAccelerators;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Navigator;
 
 import static javafx.geometry.Pos.CENTER;
@@ -79,9 +80,11 @@ public class ChartUndoManagerUITest extends ApplicationTest {
 	private double chartXUpperBound;
 	private double chartYLowerBound;
 	private double chartYUpperBound;
+	private KeyboardAccelerators keyboardAccelerators;
 	private Navigator navigator;
 
 	@Override
+	@SuppressWarnings( "NestedAssignment" )
 	public void start( Stage stage ) throws IOException {
 
 		final NumberAxis xAxis = new NumberAxis();
@@ -94,8 +97,9 @@ public class ChartUndoManagerUITest extends ApplicationTest {
 
 		chart.setTitle("ChartUndoManagerUITest");
 		chart.setAnimated(false);
-		chart.getChartPlugins().addAll(navigator = new Navigator()
-//			new KeyPan(),
+		chart.getChartPlugins().addAll(
+			navigator            = new Navigator(),
+			keyboardAccelerators = new KeyboardAccelerators()
 //			new CoordinatesLines(),
 //			new Zoom(),
 //			new Pan(),

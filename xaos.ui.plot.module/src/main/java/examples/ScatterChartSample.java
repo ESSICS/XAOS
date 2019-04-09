@@ -14,8 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package examples;
+
 
 import chart.ScatterChartFX;
 import chart.NumberAxis;
@@ -39,7 +39,7 @@ import javafx.stage.WindowEvent;
 import chart.data.DataReducingSeries;
 import plugins.CoordinatesLabel;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Navigator;
-import plugins.KeyPan;
+import se.europeanspallationsource.xaos.ui.plot.plugins.KeyboardAccelerators;
 import plugins.DataPointTooltip;
 import plugins.Pan;
 import plugins.Zoom;
@@ -52,93 +52,98 @@ import plugins.PropertyMenu;
 import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries;
 import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries.ErrorData;
 
+
 public class ScatterChartSample extends Application {
-    private static final Random RANDOM = new Random(System.currentTimeMillis());
 
-    private static final int NB_OF_POINTS = 10;
-    private static final int PERIOD_MS = 500;
+	private static final Random RANDOM = new Random(System.currentTimeMillis());
 
-    private ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-    private DataReducingSeries<Number, Number> series0;
-    private DataReducingSeries<Number, Number> series1;
-    private DataReducingSeries<Number, Number> series2;
+	private static final int NB_OF_POINTS = 10;
+	private static final int PERIOD_MS = 500;
 
-    @Override
-    public void start(Stage stage) {
-        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent event) {
-                Platform.exit();
-                System.exit(0);
-            }
-        });
+	private ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+	private DataReducingSeries<Number, Number> series0;
+	private DataReducingSeries<Number, Number> series1;
+	private DataReducingSeries<Number, Number> series2;
 
-        stage.setTitle("Scatter Chart Sample");
-        final NumberAxis xAxis = new NumberAxis();
-        xAxis.setAnimated(false);
-        final NumberAxis yAxis = new NumberAxis();
-        yAxis.setAnimated(false);
-        final ScatterChartFX<Number, Number> chart = new ScatterChartFX<Number, Number>(xAxis, yAxis);
-        chart.setTitle("Test data");
-        chart.setAnimated(false);
-        chart.getChartPlugins().addAll(new Navigator(), new KeyPan(), new CoordinatesLines(), 
-               new Zoom(), new Pan(), new CoordinatesLabel(), new DataPointTooltip() , new PropertyMenu());
-               
-        series0 = new DataReducingSeries<>();
-        series0.setName("Generated test data-horizontal1");
-        series0.setData(generateData(NB_OF_POINTS));
-        chart.getData().add(series0.getSeries());
-        
-        series1 = new DataReducingSeries<>();
-        series1.setName("Generated test data-horizontal2");
-        series1.setData(generateData(NB_OF_POINTS));
-        chart.getData().add(series1.getSeries());
-        
-        series2 = new DataReducingSeries<>();
-        series2.setName("Generated test data-vertical");
-        series2.setData(generateData(NB_OF_POINTS));
-        chart.getData().add(series2.getSeries());               
-        
-        ObservableList<ErrorData<Number,Number>> error0 = FXCollections.observableArrayList();
-        ObservableList<ErrorData<Number,Number>> error1 = FXCollections.observableArrayList();       
-        ObservableList<ErrorData<Number,Number>> error2 = FXCollections.observableArrayList();
-       
-      //DataReducingObservableList.Data<Number,Number> error0 = FXCollections.observableArrayList();
-       
-        for (int ind = 0; ind < NB_OF_POINTS; ind++) {
-            error0.add(new ErrorData<Number,Number>(series0.getData().get(ind),0.2,0.2));
-            error1.add(new ErrorData<Number, Number>(series1.getData().get(ind),0.15,0.0));
-            error2.add(new ErrorData<Number, Number>(series2.getData().get(ind),0.05,0.1));          
-        }        
+	@Override
+	public void start( Stage stage ) {
+		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			@Override
+			public void handle( WindowEvent event ) {
+				Platform.exit();
+				System.exit(0);
+			}
+		});
 
-        //Series 0
-        chart.setSeriesAsHorizontal(0);//red
-        chart.getChartPlugins().add(new ErrorBars(new ErrorSeries(error0),0));
+		stage.setTitle("Scatter Chart Sample");
+		final NumberAxis xAxis = new NumberAxis();
+		xAxis.setAnimated(false);
+		final NumberAxis yAxis = new NumberAxis();
+		yAxis.setAnimated(false);
+		final ScatterChartFX<Number, Number> chart = new ScatterChartFX<Number, Number>(xAxis, yAxis);
+		chart.setTitle("Test data");
+		chart.setAnimated(false);
+		chart.getChartPlugins().addAll(new Navigator(),
+			new KeyboardAccelerators(),
+			new CoordinatesLines(),
+			new Zoom(),
+			new Pan(),
+			new CoordinatesLabel(),
+			new DataPointTooltip(),
+			new PropertyMenu()
+		);
 
+		series0 = new DataReducingSeries<>();
+		series0.setName("Generated test data-horizontal1");
+		series0.setData(generateData(NB_OF_POINTS));
+		chart.getData().add(series0.getSeries());
 
-        //Series 1
-        chart.setSeriesAsVertical(1);//blue
-        chart.getChartPlugins().add(new ErrorBars(new ErrorSeries(error1),1));
+		series1 = new DataReducingSeries<>();
+		series1.setName("Generated test data-horizontal2");
+		series1.setData(generateData(NB_OF_POINTS));
+		chart.getData().add(series1.getSeries());
 
-        //Series 2
-        chart.setSeriesAsLongitudinal(2);//horrible green
-        chart.getChartPlugins().add(new ErrorBars(new ErrorSeries(error2),2));
+		series2 = new DataReducingSeries<>();
+		series2.setName("Generated test data-vertical");
+		series2.setData(generateData(NB_OF_POINTS));
+		chart.getData().add(series2.getSeries());
 
-        
-        Label infoLabel = new Label();
-        infoLabel.setText("Zoom-in: drag with left-mouse, Zoom-out: right-click, Zoom-origin: right-click + CTRL, Pan: drag with left-mouse + CTRL or keyboard arrows");
+		ObservableList<ErrorData<Number, Number>> error0 = FXCollections.observableArrayList();
+		ObservableList<ErrorData<Number, Number>> error1 = FXCollections.observableArrayList();
+		ObservableList<ErrorData<Number, Number>> error2 = FXCollections.observableArrayList();
 
-        BorderPane borderPane = new BorderPane(chart);                     
-        
-        chart.setFocusTraversable(true);
-        
-        
-        borderPane.setBottom(infoLabel);
-        Scene scene = new Scene(borderPane, 800, 600);
+		//DataReducingObservableList.Data<Number,Number> error0 = FXCollections.observableArrayList();
+		for ( int ind = 0; ind < NB_OF_POINTS; ind++ ) {
+			error0.add(new ErrorData<Number, Number>(series0.getData().get(ind), 0.2, 0.2));
+			error1.add(new ErrorData<Number, Number>(series1.getData().get(ind), 0.15, 0.0));
+			error2.add(new ErrorData<Number, Number>(series2.getData().get(ind), 0.05, 0.1));
+		}
 
-        stage.setScene(scene);
-        stage.show();
-    }
+		//Series 0
+		chart.setSeriesAsHorizontal(0);//red
+		chart.getChartPlugins().add(new ErrorBars(new ErrorSeries(error0), 0));
+
+		//Series 1
+		chart.setSeriesAsVertical(1);//blue
+		chart.getChartPlugins().add(new ErrorBars(new ErrorSeries(error1), 1));
+
+		//Series 2
+		chart.setSeriesAsLongitudinal(2);//horrible green
+		chart.getChartPlugins().add(new ErrorBars(new ErrorSeries(error2), 2));
+
+		Label infoLabel = new Label();
+		infoLabel.setText("Zoom-in: drag with left-mouse, Zoom-out: right-click, Zoom-origin: right-click + CTRL, Pan: drag with left-mouse + CTRL or keyboard arrows");
+
+		BorderPane borderPane = new BorderPane(chart);
+
+		chart.setFocusTraversable(true);
+
+		borderPane.setBottom(infoLabel);
+		Scene scene = new Scene(borderPane, 800, 600);
+
+		stage.setScene(scene);
+		stage.show();
+	}
 
 //    private static ObservableList<XYChart.Data<Number, Number>> generateData(int nbOfPoints) {
 //        List<XYChart.Data<Number, Number>> data = new ArrayList<>(nbOfPoints);
@@ -149,46 +154,47 @@ public class ScatterChartSample extends Application {
 //        data.add(new XYChart.Data<>(2,1.5));
 //        return FXCollections.observableArrayList(data);
 //    }
+	private static ObservableList<XYChart.Data<Number, Number>> generateData( int nbOfPoints ) {
+		int[] yValues = generateIntArray(0, 5, nbOfPoints);
+		List<XYChart.Data<Number, Number>> data = new ArrayList<>(nbOfPoints);
+		for ( int i = 0; i < yValues.length; i++ ) {
+			data.add(new XYChart.Data<Number, Number>(i, yValues[i]));
+		}
+		return FXCollections.observableArrayList(data);
+	}
 
-    private static ObservableList<XYChart.Data<Number, Number>> generateData(int nbOfPoints) {
-        int[] yValues = generateIntArray(0, 5, nbOfPoints);
-        List<XYChart.Data<Number, Number>> data = new ArrayList<>(nbOfPoints);
-        for (int i = 0; i < yValues.length; i++) {
-            data.add(new XYChart.Data<Number, Number>(i, yValues[i]));
-        }
-        return FXCollections.observableArrayList(data);
-    }
-    public static int[] generateIntArray(int firstValue, int variance, int size) {
-        int[] data = new int[size];
-        data[0] = firstValue;
-        for (int i = 1; i < data.length; i++) {
-            int sign = RANDOM.nextBoolean() ? 1 : -1;
-            data[i] = data[i - 1] + (int) (variance * RANDOM.nextDouble()) * sign;
-        }
-        return data;
-    }
+	public static int[] generateIntArray( int firstValue, int variance, int size ) {
+		int[] data = new int[size];
+		data[0] = firstValue;
+		for ( int i = 1; i < data.length; i++ ) {
+			int sign = RANDOM.nextBoolean() ? 1 : -1;
+			data[i] = data[i - 1] + (int) ( variance * RANDOM.nextDouble() ) * sign;
+		}
+		return data;
+	}
 
-    private class ChartUpdater implements Runnable {
-        @Override
-        public void run() {
-            try {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        long s1 = System.currentTimeMillis();
-                        series1.getData().setAll(generateData(NB_OF_POINTS));
-                        series2.getData().setAll(generateData(NB_OF_POINTS));
-                        long s2 = System.currentTimeMillis();
-                        System.out.println("SetData: " + (s2 - s1));
-                    }
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
+	private class ChartUpdater implements Runnable {
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+		@Override
+		public void run() {
+			try {
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						long s1 = System.currentTimeMillis();
+						series1.getData().setAll(generateData(NB_OF_POINTS));
+						series2.getData().setAll(generateData(NB_OF_POINTS));
+						long s2 = System.currentTimeMillis();
+						System.out.println("SetData: " + ( s2 - s1 ));
+					}
+				});
+			} catch ( Exception e ) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public static void main( String[] args ) {
+		launch(args);
+	}
 }

@@ -40,7 +40,7 @@ import javafx.stage.WindowEvent;
 import chart.data.DataReducingSeries;
 import plugins.CoordinatesLabel;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Navigator;
-import plugins.KeyPan;
+import se.europeanspallationsource.xaos.ui.plot.plugins.KeyboardAccelerators;
 import plugins.DataPointTooltip;
 import plugins.Pan;
 import plugins.Zoom;
@@ -80,8 +80,16 @@ public class AreaChartSample extends Application {
         chart.setAnimated(false);
 //        chart.setAxisSortingPolicy(SortingPolicy.NONE);
 //        chart.setCreateSymbols(false);
-        chart.getChartPlugins().addAll(new Navigator(), new KeyPan(), new CoordinatesLines(), 
-               new Zoom(), new Pan(), new CoordinatesLabel(), new DataPointTooltip(), new AreaValueTooltip(), new PropertyMenu());
+        chart.getChartPlugins().addAll(new Navigator(),
+			new KeyboardAccelerators(),
+			new CoordinatesLines(),
+            new Zoom(), 
+			new Pan(),
+			new CoordinatesLabel(),
+			new DataPointTooltip(),
+			new AreaValueTooltip(),
+			new PropertyMenu()
+		);
                
         series0 = new DataReducingSeries<>();
         series0.setName("Generated test data-horizontal");

@@ -30,7 +30,7 @@ import plugins.DataPointTooltip;
 import plugins.Pan;
 import plugins.Zoom;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Navigator;
-import plugins.KeyPan;
+import se.europeanspallationsource.xaos.ui.plot.plugins.KeyboardAccelerators;
 import java.util.Random;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -69,8 +69,14 @@ public class AreaChartGenerator {
         chart.setTitle("Test data");
         chart.setAnimated(false);
 
-        chart.getChartPlugins().addAll(new Navigator(), new KeyPan(), new CoordinatesLines(), 
-               new Zoom(), new Pan(), new CoordinatesLabel(), new DataPointTooltip() );
+        chart.getChartPlugins().addAll(new Navigator(),
+			new KeyboardAccelerators(),
+			new CoordinatesLines(),
+            new Zoom(), 
+			new Pan(),
+			new CoordinatesLabel(),
+			new DataPointTooltip()
+		);
         
         if (series0==null){
         series0 = new DataReducingSeries<>();

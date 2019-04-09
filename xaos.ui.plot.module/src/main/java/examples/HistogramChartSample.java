@@ -34,7 +34,7 @@ import plugins.CoordinatesLines;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Navigator;
 import plugins.DataPointTooltip;
 import plugins.ErrorBars;
-import plugins.KeyPan;
+import se.europeanspallationsource.xaos.ui.plot.plugins.KeyboardAccelerators;
 import plugins.Pan;
 import plugins.PropertyMenu;
 import plugins.Zoom;
@@ -59,8 +59,16 @@ public class HistogramChartSample extends Application{
         
         ObservableList<XYChartPlugin> pluginList = FXCollections.observableArrayList();        
          
-        chart.getChartPlugins().addAll(new Navigator(), new KeyPan(), new CoordinatesLines(), 
-            new Zoom(), new Pan(), new CoordinatesLabel(), new DataPointTooltip(), new AreaValueTooltip(), new PropertyMenu());
+        chart.getChartPlugins().addAll(new Navigator(),
+			new KeyboardAccelerators(),
+			new CoordinatesLines(),
+            new Zoom(), 
+			new Pan(),
+			new CoordinatesLabel(),
+			new DataPointTooltip(),
+			new AreaValueTooltip(),
+			new PropertyMenu()
+		);
                                       
         chart.setBarGap(1);
         chart.setLegendVisible(true);       
