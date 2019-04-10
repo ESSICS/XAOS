@@ -19,7 +19,6 @@
 
 	<properties>
 		<!-- Dependencies Versions -->
-		<controlsfx.version>11.0.0-RC2</controlsfx.version>
 		<javafx.version>11.0.2</javafx.version>
 		<xaos.version>${project.version}</xaos.version>
 	</properties>
@@ -59,13 +58,6 @@
 			<version>${javafx.version}</version>
             <scope>compile</scope>
 		</dependency>
-
-        <!-- ControlsFX - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-        <dependency>
-            <groupId>org.controlsfx</groupId>
-            <artifactId>controlsfx</artifactId>
-            <version>${controlsfx.version}</version>
-        </dependency>
 
         <!-- XAOS - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
         <dependency>

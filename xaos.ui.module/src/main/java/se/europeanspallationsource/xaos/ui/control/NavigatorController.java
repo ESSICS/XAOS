@@ -18,6 +18,7 @@ package se.europeanspallationsource.xaos.ui.control;
 
 
 import java.io.IOException;
+import java.net.URL;
 import java.text.MessageFormat;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -54,7 +55,7 @@ import static javafx.scene.input.MouseButton.PRIMARY;
  * code through the provided {@link EventHandler} methods.
  * <p>
  * The navigation buttons can be activated by means of keyboard accelerators 
- * (Shortcut stans for Ctrl on Windows or Linux, and Command on macOS):</p>
+ * (Shortcut stands for Ctrl on Windows or Linux, and Command on macOS):</p>
  * <table>
  *   <caption>&nbsp;</caption>
  *   <tr><td>Pan Down</td><td>Shortcut+DOWN</td></tr>
@@ -129,7 +130,6 @@ public class NavigatorController extends AnchorPane {
 
 	private static final Logger LOGGER = Logger.getLogger(NavigatorController.class.getName());
 
-	private String enteredStyle;
 	@FXML private Path panDown;
 	@FXML private FontIcon panDownIcon;
 	@FXML private Path panLeft;
@@ -624,9 +624,12 @@ public class NavigatorController extends AnchorPane {
 	}
 
 	private void init() {
+
+		URL resource = getClass().getResource("/se/europeanspallationsource/xaos/ui/impl/control/fxml/navigator.fxml");
+
 		try {
 
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml/navigator.fxml"));
+			FXMLLoader loader = new FXMLLoader(resource);
 
 			loader.setController(this);
 			loader.setRoot(this);
@@ -636,12 +639,13 @@ public class NavigatorController extends AnchorPane {
 			LOGGER.log(
 				SEVERE,
 				MessageFormat.format(
-					"Unable to load 'Navigator.xml' resource [{0}].",
-					getClass().getResource("Navigator.xml")
+					"Unable to load 'navigator.xml' resource [{0}].",
+					resource.toExternalForm()
 				),
 				ex
 			);
 		}
+
 	}
 	
 	private void initButtonListeners() {

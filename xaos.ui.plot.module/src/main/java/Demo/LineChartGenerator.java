@@ -28,13 +28,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.ValueAxis;
 import javafx.scene.chart.XYChart;
-import plugins.CoordinatesLabel;
-import plugins.CoordinatesLines;
-import plugins.DataPointTooltip;
-import plugins.Pan;
-import plugins.Zoom;
-import se.europeanspallationsource.xaos.ui.plot.plugins.Navigator;
-import se.europeanspallationsource.xaos.ui.plot.plugins.KeyboardAccelerators;
+import se.europeanspallationsource.xaos.ui.plot.Plugins;
 
 /**
  *
@@ -68,15 +62,7 @@ public class LineChartGenerator {
         chart = new LineChartFX<Number, Number>(xAxis, yAxis);
         chart.setTitle("Test data");
         chart.setAnimated(false);
-
-        chart.getChartPlugins().addAll(new Navigator(),
-			new KeyboardAccelerators(),
-			new CoordinatesLines(),
-            new Zoom(), 
-			new Pan(),
-			new CoordinatesLabel(),
-			new DataPointTooltip()
-		);
+        chart.getChartPlugins().addAll(Plugins.all());
         
         if (series0==null){
         series0 = new DataReducingSeries<>();

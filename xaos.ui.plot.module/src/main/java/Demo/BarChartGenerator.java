@@ -24,7 +24,7 @@ import java.util.Random;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.ValueAxis;
 import javafx.scene.chart.XYChart;
-import plugins.DataPointTooltip;
+import se.europeanspallationsource.xaos.ui.plot.Plugins;
 
 /**
  *
@@ -51,7 +51,7 @@ public class BarChartGenerator {
     public void generateChart() {
         chart = new BarChartFX<String,Number>(xAxis,yAxis);
         chart.setTitle("Employee quarterly Summary");
-        chart.getChartPlugins().addAll(new DataPointTooltip());
+        chart.getChartPlugins().addAll(Plugins.all());
         XYChart.Series series1 = new XYChart.Series();
         series1.setName("Natalia");       
         series1.getData().add(new XYChart.Data(usefulCode, 256.34));

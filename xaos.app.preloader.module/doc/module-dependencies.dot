@@ -9,7 +9,6 @@ digraph "summary" {
   "javafx.graphics"                                  -> "javafx.base";
   "javafx.graphics"                                  -> "jdk.unsupported (jdk.unsupported)";
   "xaos.app.preloader"                               -> "java.base (java.base)";
-  "xaos.app.preloader"                               -> "java.logging (java.logging)";
   "xaos.app.preloader"                               -> "javafx.base";
   "xaos.app.preloader"                               -> "javafx.controls";
   "xaos.app.preloader"                               -> "javafx.graphics";

@@ -14,21 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.ui.plot.plugins;
+package se.europeanspallationsource.xaos.ui.plot;
 
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import chart.XYChartPlugin;
+import javafx.collections.ObservableList;
 
 
 /**
+ * Defines the needed behavior for a plot chart to be plugged with
+ * {@link XYChartPlugin}s.
+ *
  * @author claudio.rosati@esss.se
  */
-@RunWith( Suite.class )
-@Suite.SuiteClasses( {
-	NavigatorUITest.class
-} )
-@SuppressWarnings( { "ClassMayBeInterface", "ClassWithoutLogger", "UtilityClassWithoutPrivateConstructor" } )
-public class PluginsSuite {
+public interface XYPluggable {
+
+	/**
+	 * Returns a list of plugins added to a plot chart.
+	 *
+	 * @return A non-{@code null} list of plugins added to the chart.
+	 */
+	ObservableList<XYChartPlugin> getChartPlugins();
 
 }

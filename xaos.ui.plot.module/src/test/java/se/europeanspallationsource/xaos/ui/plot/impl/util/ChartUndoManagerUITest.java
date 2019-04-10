@@ -18,6 +18,7 @@ package se.europeanspallationsource.xaos.ui.plot.impl.util;
 
 
 import chart.LineChartFX;
+import chart.XYChartPlugin;
 import chart.data.DataReducingSeries;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,8 +39,7 @@ import org.junit.Test;
 import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
-import se.europeanspallationsource.xaos.ui.plot.plugins.KeyboardAccelerators;
-import se.europeanspallationsource.xaos.ui.plot.plugins.Navigator;
+import se.europeanspallationsource.xaos.ui.plot.Plugins;
 
 import static javafx.geometry.Pos.CENTER;
 import static javafx.scene.input.KeyCode.ALT;
@@ -80,8 +80,8 @@ public class ChartUndoManagerUITest extends ApplicationTest {
 	private double chartXUpperBound;
 	private double chartYLowerBound;
 	private double chartYUpperBound;
-	private KeyboardAccelerators keyboardAccelerators;
-	private Navigator navigator;
+	private XYChartPlugin keyboardAccelerators;
+	private XYChartPlugin navigator;
 
 	@Override
 	@SuppressWarnings( "NestedAssignment" )
@@ -98,8 +98,8 @@ public class ChartUndoManagerUITest extends ApplicationTest {
 		chart.setTitle("ChartUndoManagerUITest");
 		chart.setAnimated(false);
 		chart.getChartPlugins().addAll(
-			navigator            = new Navigator(),
-			keyboardAccelerators = new KeyboardAccelerators()
+			navigator            = Plugins.navigator(),
+			keyboardAccelerators = Plugins.keyboardAccelerators()
 //			new CoordinatesLines(),
 //			new Zoom(),
 //			new Pan(),

@@ -25,7 +25,6 @@ import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-import plugins.CoordinatesLines;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -38,15 +37,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import chart.data.DataReducingSeries;
-import plugins.CoordinatesLabel;
-import se.europeanspallationsource.xaos.ui.plot.plugins.Navigator;
-import se.europeanspallationsource.xaos.ui.plot.plugins.KeyboardAccelerators;
-import plugins.DataPointTooltip;
-import plugins.Pan;
-import plugins.Zoom;
 import plugins.ErrorBars;
-import plugins.AreaValueTooltip;
-import plugins.PropertyMenu;
+import se.europeanspallationsource.xaos.ui.plot.Plugins;
 import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries;
 
 public class AreaChartSample extends Application {
@@ -80,16 +72,7 @@ public class AreaChartSample extends Application {
         chart.setAnimated(false);
 //        chart.setAxisSortingPolicy(SortingPolicy.NONE);
 //        chart.setCreateSymbols(false);
-        chart.getChartPlugins().addAll(new Navigator(),
-			new KeyboardAccelerators(),
-			new CoordinatesLines(),
-            new Zoom(), 
-			new Pan(),
-			new CoordinatesLabel(),
-			new DataPointTooltip(),
-			new AreaValueTooltip(),
-			new PropertyMenu()
-		);
+        chart.getChartPlugins().addAll(Plugins.all());
                
         series0 = new DataReducingSeries<>();
         series0.setName("Generated test data-horizontal");

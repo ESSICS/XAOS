@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.ui.spi.impl;
+package se.europeanspallationsource.xaos.ui.impl.spi;
 
 
 import java.util.Map;

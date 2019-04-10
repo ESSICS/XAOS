@@ -14,10 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.ui.plot.plugins;
+package se.europeanspallationsource.xaos.ui.plot.impl.plugins;
 
 
 import chart.LineChartFX;
+import chart.XYChartPlugin;
 import chart.data.DataReducingSeries;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ import org.junit.Test;
 import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
+import se.europeanspallationsource.xaos.ui.plot.Plugins;
 
 import static javafx.geometry.Pos.CENTER;
 import static javafx.scene.input.KeyCode.ALT;
@@ -78,7 +80,7 @@ public class NavigatorUITest extends ApplicationTest {
 	private double chartXUpperBound;
 	private double chartYLowerBound;
 	private double chartYUpperBound;
-	private Navigator navigatorTool;
+	private XYChartPlugin navigator;
 
 	@Override
 	@SuppressWarnings( "NestedAssignment" )
@@ -95,7 +97,7 @@ public class NavigatorUITest extends ApplicationTest {
 		chart.setTitle("NavigatorUITest");
 		chart.setAnimated(false);
 		chart.getChartPlugins().addAll(
-			navigatorTool = new Navigator()
+			navigator = Plugins.navigator()
 		);
 
 		DataReducingSeries<Number, Number> series0 = new DataReducingSeries<>();
@@ -139,11 +141,11 @@ public class NavigatorUITest extends ApplicationTest {
 		FxRobot robot = new FxRobot();
 
 		//	Get chart's reference bounds...
-		chartXLowerBound = navigatorTool.getXValueAxis().getLowerBound();
-		chartXUpperBound = navigatorTool.getXValueAxis().getUpperBound();
+		chartXLowerBound = navigator.getXValueAxis().getLowerBound();
+		chartXUpperBound = navigator.getXValueAxis().getUpperBound();
 		chartWidth       = chartXUpperBound - chartXLowerBound;
-		chartYLowerBound = navigatorTool.getYValueAxis().getLowerBound();
-		chartYUpperBound = navigatorTool.getYValueAxis().getUpperBound();
+		chartYLowerBound = navigator.getYValueAxis().getLowerBound();
+		chartYUpperBound = navigator.getYValueAxis().getUpperBound();
 		chartHeight      = chartYUpperBound - chartYLowerBound;
 
 		//	Activate the tool...
@@ -157,79 +159,79 @@ public class NavigatorUITest extends ApplicationTest {
 		// Testing PAN DOWN...
 		System.out.println("    - Testing PAN DOWN...");
 		navigatorResetChartMoveAndClick(robot, PAN_DOWN_POINT);
-		assertThat(navigatorTool.getYValueAxis().getLowerBound()).isLessThan(chartYLowerBound);
-		assertThat(navigatorTool.getYValueAxis().getUpperBound()).isLessThan(chartYUpperBound);
-		assertThat(navigatorTool.getYValueAxis().getUpperBound() - navigatorTool.getYValueAxis().getLowerBound()).isEqualTo(chartHeight, Offset.offset(0.01));
+		assertThat(navigator.getYValueAxis().getLowerBound()).isLessThan(chartYLowerBound);
+		assertThat(navigator.getYValueAxis().getUpperBound()).isLessThan(chartYUpperBound);
+		assertThat(navigator.getYValueAxis().getUpperBound() - navigator.getYValueAxis().getLowerBound()).isEqualTo(chartHeight, Offset.offset(0.01));
 
 		// Testing PAN UP...
 		System.out.println("    - Testing PAN UP...");
 		navigatorResetChartMoveAndClick(robot, PAN_UP_POINT);
-		assertThat(navigatorTool.getYValueAxis().getLowerBound()).isGreaterThan(chartYLowerBound);
-		assertThat(navigatorTool.getYValueAxis().getUpperBound()).isGreaterThan(chartYUpperBound);
-		assertThat(navigatorTool.getYValueAxis().getUpperBound() - navigatorTool.getYValueAxis().getLowerBound()).isEqualTo(chartHeight, Offset.offset(0.01));
+		assertThat(navigator.getYValueAxis().getLowerBound()).isGreaterThan(chartYLowerBound);
+		assertThat(navigator.getYValueAxis().getUpperBound()).isGreaterThan(chartYUpperBound);
+		assertThat(navigator.getYValueAxis().getUpperBound() - navigator.getYValueAxis().getLowerBound()).isEqualTo(chartHeight, Offset.offset(0.01));
 
 		// Testing PAN LEFT...
 		System.out.println("    - Testing PAN LEFT...");
 		navigatorResetChartMoveAndClick(robot, PAN_LEFT_POINT);
-		assertThat(navigatorTool.getXValueAxis().getLowerBound()).isLessThan(chartXLowerBound);
-		assertThat(navigatorTool.getXValueAxis().getUpperBound()).isLessThan(chartXUpperBound);
-		assertThat(navigatorTool.getXValueAxis().getUpperBound() - navigatorTool.getXValueAxis().getLowerBound()).isEqualTo(chartWidth, Offset.offset(0.01));
+		assertThat(navigator.getXValueAxis().getLowerBound()).isLessThan(chartXLowerBound);
+		assertThat(navigator.getXValueAxis().getUpperBound()).isLessThan(chartXUpperBound);
+		assertThat(navigator.getXValueAxis().getUpperBound() - navigator.getXValueAxis().getLowerBound()).isEqualTo(chartWidth, Offset.offset(0.01));
 
 		// Testing PAN RIGHT...
 		System.out.println("    - Testing PAN RIGHT...");
 		navigatorResetChartMoveAndClick(robot, PAN_RIGHT_POINT);
-		assertThat(navigatorTool.getXValueAxis().getLowerBound()).isGreaterThan(chartXLowerBound);
-		assertThat(navigatorTool.getXValueAxis().getUpperBound()).isGreaterThan(chartXUpperBound);
-		assertThat(navigatorTool.getXValueAxis().getUpperBound() - navigatorTool.getXValueAxis().getLowerBound()).isEqualTo(chartWidth, Offset.offset(0.01));
+		assertThat(navigator.getXValueAxis().getLowerBound()).isGreaterThan(chartXLowerBound);
+		assertThat(navigator.getXValueAxis().getUpperBound()).isGreaterThan(chartXUpperBound);
+		assertThat(navigator.getXValueAxis().getUpperBound() - navigator.getXValueAxis().getLowerBound()).isEqualTo(chartWidth, Offset.offset(0.01));
 
 		// Testing ZOOM IN...
 		System.out.println("    - Testing ZOOM IN...");
 		navigatorResetChartMoveAndClick(robot, ZOOM_IN_POINT);
-		assertThat(navigatorTool.getXValueAxis().getLowerBound()).isGreaterThan(chartXLowerBound);
-		assertThat(navigatorTool.getXValueAxis().getUpperBound()).isLessThan(chartXUpperBound);
-		assertThat(navigatorTool.getXValueAxis().getUpperBound() - navigatorTool.getXValueAxis().getLowerBound()).isLessThan(chartWidth);
-		assertThat(navigatorTool.getYValueAxis().getLowerBound()).isGreaterThan(chartYLowerBound);
-		assertThat(navigatorTool.getYValueAxis().getUpperBound()).isLessThan(chartYUpperBound);
-		assertThat(navigatorTool.getYValueAxis().getUpperBound() - navigatorTool.getYValueAxis().getLowerBound()).isLessThan(chartHeight);
+		assertThat(navigator.getXValueAxis().getLowerBound()).isGreaterThan(chartXLowerBound);
+		assertThat(navigator.getXValueAxis().getUpperBound()).isLessThan(chartXUpperBound);
+		assertThat(navigator.getXValueAxis().getUpperBound() - navigator.getXValueAxis().getLowerBound()).isLessThan(chartWidth);
+		assertThat(navigator.getYValueAxis().getLowerBound()).isGreaterThan(chartYLowerBound);
+		assertThat(navigator.getYValueAxis().getUpperBound()).isLessThan(chartYUpperBound);
+		assertThat(navigator.getYValueAxis().getUpperBound() - navigator.getYValueAxis().getLowerBound()).isLessThan(chartHeight);
 
 		// Testing ZOOM OUT...
 		System.out.println("    - Testing ZOOM OUT...");
 		navigatorResetChartMoveAndClick(robot, ZOOM_OUT_POINT);
-		assertThat(navigatorTool.getXValueAxis().getLowerBound()).isLessThan(chartXLowerBound);
-		assertThat(navigatorTool.getXValueAxis().getUpperBound()).isGreaterThan(chartXUpperBound);
-		assertThat(navigatorTool.getXValueAxis().getUpperBound() - navigatorTool.getXValueAxis().getLowerBound()).isGreaterThan(chartWidth);
-		assertThat(navigatorTool.getYValueAxis().getLowerBound()).isLessThan(chartYLowerBound);
-		assertThat(navigatorTool.getYValueAxis().getUpperBound()).isGreaterThan(chartYUpperBound);
-		assertThat(navigatorTool.getYValueAxis().getUpperBound() - navigatorTool.getYValueAxis().getLowerBound()).isGreaterThan(chartHeight);
+		assertThat(navigator.getXValueAxis().getLowerBound()).isLessThan(chartXLowerBound);
+		assertThat(navigator.getXValueAxis().getUpperBound()).isGreaterThan(chartXUpperBound);
+		assertThat(navigator.getXValueAxis().getUpperBound() - navigator.getXValueAxis().getLowerBound()).isGreaterThan(chartWidth);
+		assertThat(navigator.getYValueAxis().getLowerBound()).isLessThan(chartYLowerBound);
+		assertThat(navigator.getYValueAxis().getUpperBound()).isGreaterThan(chartYUpperBound);
+		assertThat(navigator.getYValueAxis().getUpperBound() - navigator.getYValueAxis().getLowerBound()).isGreaterThan(chartHeight);
 
 		// Testing ZOOM TO ONE...
 		System.out.println("    - Testing ZOOM TO ONE...");
 		navigatorResetChartMoveAndClick(robot, ZOOM_IN_POINT);
 		navigatorResetChartMoveAndClick(robot, ZOOM_TO_ONE_POINT, false);
-		assertThat(navigatorTool.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound, Offset.offset(0.01));
-		assertThat(navigatorTool.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound, Offset.offset(0.01));
-		assertThat(navigatorTool.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound, Offset.offset(0.01));
-		assertThat(navigatorTool.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound, Offset.offset(0.01));
+		assertThat(navigator.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound, Offset.offset(0.01));
+		assertThat(navigator.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound, Offset.offset(0.01));
+		assertThat(navigator.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound, Offset.offset(0.01));
+		assertThat(navigator.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound, Offset.offset(0.01));
 
 		// Testing UNDO...
 		System.out.println("    - Testing UNDO...");
 		navigatorResetChartMoveAndClick(robot, ZOOM_IN_POINT);
 		navigatorResetChartMoveAndClick(robot, UNDO_POINT, false);
-		assertThat(navigatorTool.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound, Offset.offset(0.01));
-		assertThat(navigatorTool.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound, Offset.offset(0.01));
-		assertThat(navigatorTool.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound, Offset.offset(0.01));
-		assertThat(navigatorTool.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound, Offset.offset(0.01));
+		assertThat(navigator.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound, Offset.offset(0.01));
+		assertThat(navigator.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound, Offset.offset(0.01));
+		assertThat(navigator.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound, Offset.offset(0.01));
+		assertThat(navigator.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound, Offset.offset(0.01));
 
 		// Testing REDO...
 		System.out.println("    - Testing REDO...");
 		navigatorResetChartMoveAndClick(robot, REDO_POINT, false);
 		//	Now it should be after Zoom In done
-		assertThat(navigatorTool.getXValueAxis().getLowerBound()).isGreaterThan(chartXLowerBound);
-		assertThat(navigatorTool.getXValueAxis().getUpperBound()).isLessThan(chartXUpperBound);
-		assertThat(navigatorTool.getXValueAxis().getUpperBound() - navigatorTool.getXValueAxis().getLowerBound()).isLessThan(chartWidth);
-		assertThat(navigatorTool.getYValueAxis().getLowerBound()).isGreaterThan(chartYLowerBound);
-		assertThat(navigatorTool.getYValueAxis().getUpperBound()).isLessThan(chartYUpperBound);
-		assertThat(navigatorTool.getYValueAxis().getUpperBound() - navigatorTool.getYValueAxis().getLowerBound()).isLessThan(chartHeight);
+		assertThat(navigator.getXValueAxis().getLowerBound()).isGreaterThan(chartXLowerBound);
+		assertThat(navigator.getXValueAxis().getUpperBound()).isLessThan(chartXUpperBound);
+		assertThat(navigator.getXValueAxis().getUpperBound() - navigator.getXValueAxis().getLowerBound()).isLessThan(chartWidth);
+		assertThat(navigator.getYValueAxis().getLowerBound()).isGreaterThan(chartYLowerBound);
+		assertThat(navigator.getYValueAxis().getUpperBound()).isLessThan(chartYUpperBound);
+		assertThat(navigator.getYValueAxis().getUpperBound() - navigator.getYValueAxis().getLowerBound()).isLessThan(chartHeight);
 
 	}
 
@@ -240,10 +242,10 @@ public class NavigatorUITest extends ApplicationTest {
 	private void navigatorResetChartMoveAndClick ( FxRobot robot, Point2D offset, boolean reset ) {
 
 		if ( reset ) {
-			navigatorTool.getXValueAxis().setLowerBound(chartXLowerBound);
-			navigatorTool.getXValueAxis().setUpperBound(chartXUpperBound);
-			navigatorTool.getYValueAxis().setLowerBound(chartYLowerBound);
-			navigatorTool.getYValueAxis().setUpperBound(chartYUpperBound);
+			navigator.getXValueAxis().setLowerBound(chartXLowerBound);
+			navigator.getXValueAxis().setUpperBound(chartXUpperBound);
+			navigator.getYValueAxis().setLowerBound(chartYLowerBound);
+			navigator.getYValueAxis().setUpperBound(chartYUpperBound);
 		}
 
 		robot.moveTo(chart, CENTER, offset, DEFAULT);

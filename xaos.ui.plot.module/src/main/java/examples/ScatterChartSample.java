@@ -37,18 +37,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import chart.data.DataReducingSeries;
-import plugins.CoordinatesLabel;
-import se.europeanspallationsource.xaos.ui.plot.plugins.Navigator;
-import se.europeanspallationsource.xaos.ui.plot.plugins.KeyboardAccelerators;
-import plugins.DataPointTooltip;
-import plugins.Pan;
-import plugins.Zoom;
 import plugins.ErrorBars;
 
 import static javafx.application.Application.launch;
 
-import plugins.CoordinatesLines;
-import plugins.PropertyMenu;
+import se.europeanspallationsource.xaos.ui.plot.Plugins;
 import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries;
 import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries.ErrorData;
 
@@ -83,15 +76,7 @@ public class ScatterChartSample extends Application {
 		final ScatterChartFX<Number, Number> chart = new ScatterChartFX<Number, Number>(xAxis, yAxis);
 		chart.setTitle("Test data");
 		chart.setAnimated(false);
-		chart.getChartPlugins().addAll(new Navigator(),
-			new KeyboardAccelerators(),
-			new CoordinatesLines(),
-			new Zoom(),
-			new Pan(),
-			new CoordinatesLabel(),
-			new DataPointTooltip(),
-			new PropertyMenu()
-		);
+        chart.getChartPlugins().addAll(Plugins.all());
 
 		series0 = new DataReducingSeries<>();
 		series0.setName("Generated test data-horizontal1");

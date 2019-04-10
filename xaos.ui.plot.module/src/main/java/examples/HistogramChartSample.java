@@ -19,7 +19,6 @@ package examples;
 
 import chart.HistogramChartFX;
 import chart.NumberAxis;
-import chart.XYChartPlugin;
 import java.util.Random;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -28,16 +27,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import plugins.AreaValueTooltip;
-import plugins.CoordinatesLabel;
-import plugins.CoordinatesLines;
-import se.europeanspallationsource.xaos.ui.plot.plugins.Navigator;
-import plugins.DataPointTooltip;
 import plugins.ErrorBars;
-import se.europeanspallationsource.xaos.ui.plot.plugins.KeyboardAccelerators;
-import plugins.Pan;
-import plugins.PropertyMenu;
-import plugins.Zoom;
+import se.europeanspallationsource.xaos.ui.plot.Plugins;
 import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries;
 
 public class HistogramChartSample extends Application{
@@ -56,19 +47,7 @@ public class HistogramChartSample extends Application{
         HistogramChartFX<Number,Number> chart = new HistogramChartFX<Number,Number>(xAxis,yAxis,dataForPlot, 20);
         
         chart.getData().get(0).setName("Gauss Histogram");
-        
-        ObservableList<XYChartPlugin> pluginList = FXCollections.observableArrayList();        
-         
-        chart.getChartPlugins().addAll(new Navigator(),
-			new KeyboardAccelerators(),
-			new CoordinatesLines(),
-            new Zoom(), 
-			new Pan(),
-			new CoordinatesLabel(),
-			new DataPointTooltip(),
-			new AreaValueTooltip(),
-			new PropertyMenu()
-		);
+        chart.getChartPlugins().addAll(Plugins.all());
                                       
         chart.setBarGap(1);
         chart.setLegendVisible(true);       

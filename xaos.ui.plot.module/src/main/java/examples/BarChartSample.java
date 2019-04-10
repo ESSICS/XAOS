@@ -20,7 +20,6 @@ package examples;
 import chart.BarChartFX;
 import chart.NumberAxis;
 import chart.XYChartPlugin;
-import plugins.DataPointTooltip;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,15 +27,8 @@ import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
-import plugins.AreaValueTooltip;
-import plugins.CoordinatesLabel;
-import plugins.CoordinatesLines;
-import se.europeanspallationsource.xaos.ui.plot.plugins.Navigator;
 import plugins.ErrorBars;
-import se.europeanspallationsource.xaos.ui.plot.plugins.KeyboardAccelerators;
-import plugins.Pan;
-import plugins.PropertyMenu;
-import plugins.Zoom;
+import se.europeanspallationsource.xaos.ui.plot.Plugins;
 import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries;
 
 
@@ -58,16 +50,7 @@ public class BarChartSample extends Application {
 
 		ObservableList<XYChartPlugin> pluginList = FXCollections.observableArrayList();
 
-		pluginList.addAll(new Navigator(),
-			new KeyboardAccelerators(),
-			new CoordinatesLines(),
-			new Zoom(),
-			new Pan(),
-			new CoordinatesLabel(),
-			new DataPointTooltip(),
-			new AreaValueTooltip(),
-			new PropertyMenu()
-		);
+		pluginList.addAll(Plugins.all());
 
 		bc.addChartPlugins(pluginList);
 		xAxis.setLabel("Country");

@@ -33,13 +33,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javax.swing.JOptionPane;
-import plugins.CoordinatesLabel;
-import plugins.CoordinatesLines;
-import plugins.Pan;
-import plugins.PropertyMenu;
-import plugins.Zoom;
-import se.europeanspallationsource.xaos.ui.plot.plugins.Navigator;
-import se.europeanspallationsource.xaos.ui.plot.plugins.KeyboardAccelerators;
+import se.europeanspallationsource.xaos.ui.plot.Plugins;
 
 
 public class DensityChartSample extends Application {
@@ -70,15 +64,7 @@ public class DensityChartSample extends Application {
         chart.setAnimated(false);
         chart.setSmooth(true);
         chart.setProjectionLinesVisible(true);
-        
-		chart.getChartPlugins().addAll(new PropertyMenu(),
-			new Zoom(),
-			new KeyboardAccelerators(),
-			new Pan(),
-			new Navigator(),
-			new CoordinatesLines(),
-			new CoordinatesLabel()
-		);
+        chart.getChartPlugins().addAll(Plugins.all());
 
         
         // readImage() creates an instance of DensityChart.Data   

@@ -14,12 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.ui.plot;
+package se.europeanspallationsource.xaos.ui.plot.impl.plugins;
+
+
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+
 
 /**
- *
- * @author claudiorosati
+ * @author claudio.rosati@esss.se
  */
-public class Placeholder {
+@RunWith( Suite.class )
+@Suite.SuiteClasses( {
+	KeyboardAcceleratorsUITest.class,
+	NavigatorUITest.class
+} )
+@SuppressWarnings( { "ClassMayBeInterface", "ClassWithoutLogger", "UtilityClassWithoutPrivateConstructor" } )
+public class PluginsSuite {
 
 }

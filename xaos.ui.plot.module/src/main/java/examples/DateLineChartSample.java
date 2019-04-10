@@ -25,7 +25,6 @@ import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-import plugins.CoordinatesLines;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -38,19 +37,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-import plugins.CoordinatesLabel;
-import se.europeanspallationsource.xaos.ui.plot.plugins.Navigator;
-import se.europeanspallationsource.xaos.ui.plot.plugins.KeyboardAccelerators;
-import plugins.DataPointTooltip;
-import plugins.Pan;
-import plugins.Zoom;
 import plugins.ErrorBars;
 import chart.TimeAxis;
 import chart.XYChartPlugin;
 import java.util.concurrent.TimeUnit;
 import javafx.scene.chart.XYChart.Series;
-import plugins.AreaValueTooltip;
-import plugins.PropertyMenu;
+import se.europeanspallationsource.xaos.ui.plot.Plugins;
 import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries;
 
 
@@ -89,16 +81,7 @@ public class DateLineChartSample extends Application {
 
 		ObservableList<XYChartPlugin> pluginList = FXCollections.observableArrayList();
 
-		pluginList.addAll(new Navigator(),
-			new KeyboardAccelerators(),
-			new CoordinatesLines(),
-			new Zoom(),
-			new Pan(),
-			new CoordinatesLabel(),
-			new DataPointTooltip(),
-			new AreaValueTooltip(),
-			new PropertyMenu()
-		);
+		pluginList.addAll(Plugins.all());
 
 		chart.addChartPlugins(pluginList);
 

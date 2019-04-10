@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.ui.plot.plugins.impl;
+package se.europeanspallationsource.xaos.ui.plot.impl.plugins;
 
 
 import chart.XYChartPlugin;
@@ -22,66 +22,52 @@ import se.europeanspallationsource.xaos.ui.plot.impl.util.ChartUndoManager;
 
 
 /**
- * Helper class supporting chart pan operations.
+ * Helper class supporting chart zoom operations.
  *
  * @author claudio.rosati@esss.se
  */
-public class PanHelper {
+public class ZoomHelper {
 
 	private final XYChartPlugin plugin;
 
-	public PanHelper( XYChartPlugin plugin ) {
+	public ZoomHelper( XYChartPlugin plugin ) {
 		this.plugin = plugin;
 	}
 
-	public void panDown() {
+	public void autoScale() {
+		ChartUndoManager.get(plugin.getChart()).captureUndoable(plugin);
+		plugin.getXValueAxis().setAutoRanging(true);
+		plugin.getYValueAxis().setAutoRanging(true);
+	}
+
+	public void zoomIn() {
 
 		ChartUndoManager.get(plugin.getChart()).captureUndoable(plugin);
 
 		double plotHeight = plugin.getYValueAxis().getUpperBound() - plugin.getYValueAxis().getLowerBound();
-
-		plugin.getXValueAxis().setAutoRanging(false);
-		plugin.getYValueAxis().setAutoRanging(false);
-		plugin.getYValueAxis().setLowerBound(plugin.getYValueAxis().getLowerBound() - 0.1 * plotHeight);
-		plugin.getYValueAxis().setUpperBound(plugin.getYValueAxis().getUpperBound() - 0.1 * plotHeight);
-
-	}
-
-	public void panLeft() {
-
-		ChartUndoManager.get(plugin.getChart()).captureUndoable(plugin);
-
-		double plotWidth = plugin.getXValueAxis().getUpperBound() - plugin.getXValueAxis().getLowerBound();
-
-		plugin.getXValueAxis().setAutoRanging(false);
-		plugin.getYValueAxis().setAutoRanging(false);
-		plugin.getXValueAxis().setLowerBound(plugin.getXValueAxis().getLowerBound() - 0.1 * plotWidth);
-		plugin.getXValueAxis().setUpperBound(plugin.getXValueAxis().getUpperBound() - 0.1 * plotWidth);
-
-	}
-
-	public void panRight() {
-
-		ChartUndoManager.get(plugin.getChart()).captureUndoable(plugin);
-
-		double plotWidth = plugin.getXValueAxis().getUpperBound() - plugin.getXValueAxis().getLowerBound();
+		double plotWidth  = plugin.getXValueAxis().getUpperBound() - plugin.getXValueAxis().getLowerBound();
 
 		plugin.getXValueAxis().setAutoRanging(false);
 		plugin.getYValueAxis().setAutoRanging(false);
 		plugin.getXValueAxis().setLowerBound(plugin.getXValueAxis().getLowerBound() + 0.1 * plotWidth);
-		plugin.getXValueAxis().setUpperBound(plugin.getXValueAxis().getUpperBound() + 0.1 * plotWidth);
+		plugin.getXValueAxis().setUpperBound(plugin.getXValueAxis().getUpperBound() - 0.1 * plotWidth);
+		plugin.getYValueAxis().setLowerBound(plugin.getYValueAxis().getLowerBound() + 0.1 * plotHeight);
+		plugin.getYValueAxis().setUpperBound(plugin.getYValueAxis().getUpperBound() - 0.1 * plotHeight);
 
 	}
 
-	public void panUp() {
+	public void zoomOut() {
 
 		ChartUndoManager.get(plugin.getChart()).captureUndoable(plugin);
 
 		double plotHeight = plugin.getYValueAxis().getUpperBound() - plugin.getYValueAxis().getLowerBound();
+		double plotWidth  = plugin.getXValueAxis().getUpperBound() - plugin.getXValueAxis().getLowerBound();
 
 		plugin.getXValueAxis().setAutoRanging(false);
 		plugin.getYValueAxis().setAutoRanging(false);
-		plugin.getYValueAxis().setLowerBound(plugin.getYValueAxis().getLowerBound() + 0.1 * plotHeight);
+		plugin.getXValueAxis().setLowerBound(plugin.getXValueAxis().getLowerBound() - 0.1 * plotWidth);
+		plugin.getXValueAxis().setUpperBound(plugin.getXValueAxis().getUpperBound() + 0.1 * plotWidth);
+		plugin.getYValueAxis().setLowerBound(plugin.getYValueAxis().getLowerBound() - 0.1 * plotHeight);
 		plugin.getYValueAxis().setUpperBound(plugin.getYValueAxis().getUpperBound() + 0.1 * plotHeight);
 
 	}

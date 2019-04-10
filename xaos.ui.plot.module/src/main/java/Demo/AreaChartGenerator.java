@@ -24,17 +24,11 @@ import chart.LogAxis;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.chart.ValueAxis;
-import plugins.CoordinatesLabel;
-import plugins.CoordinatesLines;
-import plugins.DataPointTooltip;
-import plugins.Pan;
-import plugins.Zoom;
-import se.europeanspallationsource.xaos.ui.plot.plugins.Navigator;
-import se.europeanspallationsource.xaos.ui.plot.plugins.KeyboardAccelerators;
 import java.util.Random;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
+import se.europeanspallationsource.xaos.ui.plot.Plugins;
 /**
  *
  * @author reubenlindroos
@@ -68,15 +62,7 @@ public class AreaChartGenerator {
         chart = new AreaChartFX<Number, Number>(xAxis, yAxis);
         chart.setTitle("Test data");
         chart.setAnimated(false);
-
-        chart.getChartPlugins().addAll(new Navigator(),
-			new KeyboardAccelerators(),
-			new CoordinatesLines(),
-            new Zoom(), 
-			new Pan(),
-			new CoordinatesLabel(),
-			new DataPointTooltip()
-		);
+        chart.getChartPlugins().addAll(Plugins.all());
         
         if (series0==null){
         series0 = new DataReducingSeries<>();

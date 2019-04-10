@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.ui.plot.plugins;
+package se.europeanspallationsource.xaos.ui.plot.impl.plugins;
 
 
 import chart.XYChartPlugin;
@@ -25,8 +25,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import se.europeanspallationsource.xaos.ui.control.NavigatorPopup;
 import se.europeanspallationsource.xaos.ui.plot.impl.util.ChartUndoManager;
-import se.europeanspallationsource.xaos.ui.plot.plugins.impl.PanHelper;
-import se.europeanspallationsource.xaos.ui.plot.plugins.impl.ZoomHelper;
 
 
 /**
@@ -38,7 +36,7 @@ import se.europeanspallationsource.xaos.ui.plot.plugins.impl.ZoomHelper;
  * <p>
  * Once the popup is open, buttons can be navigated with TAB, and pressing
  * SPACE/ENTER will press the button. Button can be activated pressing keyboard
- * accelerators (Shortcut stans for Ctrl on Windows or Linux, and Command on
+ * accelerators (Shortcut stands for Ctrl on Windows or Linux, and Command on
  * macOS):</p>
  * <table>
  *   <caption>&nbsp;</caption>
