@@ -19,7 +19,7 @@ package plugins;
 
 import java.text.DecimalFormat;
 
-import chart.XYChartPlugin;
+import chart.Plugin;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.EventHandler;
@@ -41,7 +41,7 @@ import javafx.scene.input.MouseEvent;
  * 
  * @author Grzegorz Kruk
  */
-public class CoordinatesLabel extends XYChartPlugin {
+public class CoordinatesLabel extends Plugin {
     private static final int DEFAULT_X_OFFSET = 15;
     private static final int DEFAULT_Y_OFFSET = 5;
 

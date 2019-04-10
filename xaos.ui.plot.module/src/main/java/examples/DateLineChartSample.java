@@ -39,7 +39,7 @@ import javafx.stage.WindowEvent;
 
 import plugins.ErrorBars;
 import chart.TimeAxis;
-import chart.XYChartPlugin;
+import chart.Plugin;
 import java.util.concurrent.TimeUnit;
 import javafx.scene.chart.XYChart.Series;
 import se.europeanspallationsource.xaos.ui.plot.Plugins;
@@ -79,7 +79,7 @@ public class DateLineChartSample extends Application {
 		chart.setTitle("Test data");
 		chart.setAnimated(false);
 
-		ObservableList<XYChartPlugin> pluginList = FXCollections.observableArrayList();
+		ObservableList<Plugin> pluginList = FXCollections.observableArrayList();
 
 		pluginList.addAll(Plugins.all());
 

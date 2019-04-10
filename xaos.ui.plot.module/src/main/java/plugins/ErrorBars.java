@@ -19,7 +19,7 @@ package plugins;
 
 import chart.BarChartFX;
 import chart.HistogramChartFX;
-import chart.XYChartPlugin;
+import chart.Plugin;
 import com.sun.javafx.charts.Legend.LegendItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -41,7 +41,7 @@ import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries.ErrorData;
  *
  * @author reubenlindroos
  */
-public class ErrorBars<X,Y> extends XYChartPlugin{
+public class ErrorBars<X,Y> extends Plugin{
      
     
     private ObservableList<ErrorSeries<X,Y>> xyError = FXCollections.observableArrayList();

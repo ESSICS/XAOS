@@ -23,7 +23,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Line;
-import chart.XYChartPlugin;
+import chart.Plugin;
 import javafx.scene.chart.Chart;
 
 /**
@@ -34,7 +34,7 @@ import javafx.scene.chart.Chart;
  * 
  * @author Grzegorz Kruk 
  */
-public final class CoordinatesLines extends XYChartPlugin {
+public final class CoordinatesLines extends Plugin {
 
     private final Line verticalLine = new Line();
     private final Line horizontalLine = new Line();

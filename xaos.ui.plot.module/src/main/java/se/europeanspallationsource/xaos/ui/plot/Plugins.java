@@ -17,7 +17,7 @@
 package se.europeanspallationsource.xaos.ui.plot;
 
 
-import chart.XYChartPlugin;
+import chart.Plugin;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.Chart;
 import se.europeanspallationsource.xaos.ui.control.NavigatorPopup;
@@ -35,16 +35,16 @@ import se.europeanspallationsource.xaos.ui.plot.impl.plugins.Navigator;
 public class Plugins {
 
 	/**
-	 * @return All available {@link XYChartPlugin}s, in the right order, to be
+	 * @return All available {@link Plugin}s, in the right order, to be
 	 *         used as parameter for the {@link ObservableList#addAll(java.lang.Object...)}
-	 *         method of the lister returned by {@link XYPluggable#getChartPlugins() }.
+	 *         method of the lister returned by {@link Pluggable#getPlugins()}.
 	 */
-	public static XYChartPlugin[] all() {
-		return new XYChartPlugin[] {
+	public static Plugin[] all() {
+		return new Plugin[] {
 			new Navigator(),
 			new KeyboardAccelerators()
-//			new Zoom(),
 //			new Pan(),
+//			new Zoom(),
 //			new CoordinatesLines(),
 //			new CoordinatesLabel(),
 //			new DataPointTooltip(),
@@ -72,7 +72,7 @@ public class Plugins {
 	 *
 	 * @return A navigator plugin.
 	 */
-	public static XYChartPlugin keyboardAccelerators() {
+	public static Plugin keyboardAccelerators() {
 		return new KeyboardAccelerators();
 	}
 
@@ -104,7 +104,7 @@ public class Plugins {
 	 *
 	 * @return A navigator plugin.
 	 */
-	public static XYChartPlugin navigator() {
+	public static Plugin navigator() {
 		return new Navigator();
 	}
 

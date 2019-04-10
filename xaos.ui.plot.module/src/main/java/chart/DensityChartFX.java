@@ -298,7 +298,7 @@ public class DensityChartFX<X,Y> extends Chart{
      * 
      * @return non-null list of plugins added to the chart
      */
-    public final ObservableList<XYChartPlugin> getChartPlugins() {
+    public final ObservableList<Plugin> getChartPlugins() {
         return pluginManager.getPlugins();
     }
     
@@ -310,7 +310,7 @@ public class DensityChartFX<X,Y> extends Chart{
      * 
      * 
      */
-    public void addChartPlugins(ObservableList<XYChartPlugin> plugins){
+    public void addChartPlugins(ObservableList<Plugin> plugins){
          plugins.forEach(item->{
          try{
             pluginManager.getPlugins().add(item);

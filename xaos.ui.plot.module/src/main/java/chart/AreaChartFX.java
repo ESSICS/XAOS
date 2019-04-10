@@ -30,7 +30,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.layout.StackPane;
 
 /**
- * A thin extension of the FX {@link AreaChart} supporting custom {@link XYChartPlugin} plugin implementations.
+ * A thin extension of the FX {@link AreaChart} supporting custom {@link Plugin} plugin implementations.
  * 
  * @author Grzegorz Kruk
  * @param <X> type of X values
@@ -79,7 +79,7 @@ public class AreaChartFX<X, Y> extends AreaChart<X, Y> {
      * 
      * @return non-null list of plugins added to the chart
      */
-    public final ObservableList<XYChartPlugin> getChartPlugins() {
+    public final ObservableList<Plugin> getChartPlugins() {
         return pluginManager.getPlugins();
     }
     
@@ -91,7 +91,7 @@ public class AreaChartFX<X, Y> extends AreaChart<X, Y> {
      * 
      * 
      */
-    public void addChartPlugins(ObservableList<XYChartPlugin> plugins){
+    public void addChartPlugins(ObservableList<Plugin> plugins){
          plugins.forEach(item->{
          try{
             pluginManager.getPlugins().add(item);

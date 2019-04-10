@@ -20,7 +20,7 @@ package examples;
 import chart.BarChartFX;
 
 import chart.NumberAxis;
-import chart.XYChartPlugin;
+import chart.Plugin;
 import plugins.ErrorBars;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -50,7 +50,7 @@ public class HorBarChartSample extends Application {
 		final BarChartFX<Number, String> bc = new BarChartFX<>(yAxis, xAxis);
 
 		bc.setTitle("Country Summary");
-		ObservableList<XYChartPlugin> pluginList = FXCollections.observableArrayList();
+		ObservableList<Plugin> pluginList = FXCollections.observableArrayList();
 
 		pluginList.addAll(Plugins.all());
 

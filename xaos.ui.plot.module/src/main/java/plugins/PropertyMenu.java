@@ -25,7 +25,7 @@ import chart.LineChartFX;
 import chart.LogAxis;
 import chart.NumberAxis;
 import chart.ScatterChartFX;
-import chart.XYChartPlugin;
+import chart.Plugin;
 import chart.data.ExpTrendLine;
 import chart.data.GaussianTrendLine;
 import chart.data.LogTrendLine;
@@ -87,7 +87,7 @@ import se.europeanspallationsource.xaos.ui.util.ResourceUtils;
  *
  * @author nataliamilas
  */
-public class PropertyMenu extends XYChartPlugin{
+public class PropertyMenu extends Plugin{
     private final double toolSize = 50.0;
     private final double insetSize = 10.0;
     private double scaleX = 1.0;

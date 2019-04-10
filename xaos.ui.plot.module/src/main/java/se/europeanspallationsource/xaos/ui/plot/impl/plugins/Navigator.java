@@ -17,7 +17,7 @@
 package se.europeanspallationsource.xaos.ui.plot.impl.plugins;
 
 
-import chart.XYChartPlugin;
+import chart.Plugin;
 import javafx.beans.binding.Bindings;
 import javafx.event.EventHandler;
 import javafx.scene.chart.Chart;
@@ -51,11 +51,10 @@ import se.europeanspallationsource.xaos.ui.plot.impl.util.ChartUndoManager;
  *   <tr><td>Zoom To One</td><td>Shortcut+EQUALS</td></tr>
  * </table>
  *
- * @author Reuben Lindroos
  * @author claudio.rosati@esss.se
  */
 @SuppressWarnings( "ClassWithoutLogger" )
-public final class Navigator extends XYChartPlugin {
+public final class Navigator extends Plugin {
 
 	private double cursorScreenX;
 	private double cursorScreenY;

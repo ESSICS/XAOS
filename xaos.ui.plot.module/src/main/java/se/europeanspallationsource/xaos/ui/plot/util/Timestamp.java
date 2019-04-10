@@ -27,6 +27,8 @@ import java.util.Date;
 
 /**
  * A {@link Comparable} timestamp.
+ *
+ * @author claudio.rosati@esss.se
  */
 public class Timestamp implements Comparable<Timestamp> {
 

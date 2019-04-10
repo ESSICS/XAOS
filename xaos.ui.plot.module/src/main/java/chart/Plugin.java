@@ -34,10 +34,10 @@ import javafx.scene.input.MouseEvent;
 
 /**
  * Base for {@link XYChart} plugins.
- * 
- * @author Grzegorz Kruk
+ *
+ * @author claudio.rosati@esss.se
  */
-public abstract class XYChartPlugin {
+public abstract class Plugin {
 
     private Chart chart;    
     private final ObservableList<Node> plotChildren = FXCollections.observableArrayList();

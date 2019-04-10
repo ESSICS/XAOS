@@ -17,7 +17,7 @@
 package se.europeanspallationsource.xaos.ui.plot.impl.plugins;
 
 
-import chart.XYChartPlugin;
+import chart.Plugin;
 import javafx.event.EventHandler;
 import javafx.scene.chart.Chart;
 import javafx.scene.input.KeyEvent;
@@ -50,10 +50,9 @@ import static se.europeanspallationsource.xaos.ui.control.NavigatorController.ZO
  * <tr><td>Zoom To One</td><td>Shortcut+EQUALS</td></tr>
  * </table>
  *
- * @author Reuben Lindroos
  * @author claudio.rosati@esss.se
  */
-public class KeyboardAccelerators extends XYChartPlugin {
+public class KeyboardAccelerators extends Plugin {
 
 	private final EventHandler<KeyEvent> keyPresseddHandler = this::keyPressed;
 	private final PanHelper panHelper = new PanHelper(this);

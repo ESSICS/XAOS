@@ -19,7 +19,7 @@ package examples;
 
 import chart.BarChartFX;
 import chart.NumberAxis;
-import chart.XYChartPlugin;
+import chart.Plugin;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -48,7 +48,7 @@ public class BarChartSample extends Application {
 			= new BarChartFX<>(xAxis, yAxis);
 		bc.setTitle("Country Summary");
 
-		ObservableList<XYChartPlugin> pluginList = FXCollections.observableArrayList();
+		ObservableList<Plugin> pluginList = FXCollections.observableArrayList();
 
 		pluginList.addAll(Plugins.all());
 

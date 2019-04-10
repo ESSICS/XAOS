@@ -17,7 +17,7 @@
 package se.europeanspallationsource.xaos.ui.plot.impl.plugins;
 
 
-import chart.XYChartPlugin;
+import chart.Plugin;
 import se.europeanspallationsource.xaos.ui.plot.impl.util.ChartUndoManager;
 
 
@@ -28,9 +28,9 @@ import se.europeanspallationsource.xaos.ui.plot.impl.util.ChartUndoManager;
  */
 public class ZoomHelper {
 
-	private final XYChartPlugin plugin;
+	private final Plugin plugin;
 
-	public ZoomHelper( XYChartPlugin plugin ) {
+	public ZoomHelper( Plugin plugin ) {
 		this.plugin = plugin;
 	}
 

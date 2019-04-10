@@ -33,7 +33,7 @@ import javafx.scene.chart.Chart;
  */
 class PluginManager {
 
-    private final ListChangeListener<XYChartPlugin> pluginsChanged = (change) -> {
+    private final ListChangeListener<Plugin> pluginsChanged = (change) -> {
         while (change.next()) {
             unbindPlugins(change.getRemoved());
             bindPlugins(change.getAddedSubList());
@@ -50,7 +50,7 @@ class PluginManager {
     
     private final Chart chart;
     private final Group pluginsNodes;
-    private final ObservableList<XYChartPlugin> plugins = FXCollections.observableArrayList();
+    private final ObservableList<Plugin> plugins = FXCollections.observableArrayList();
 
     PluginManager(Chart chart, Group pluginsNodesGroup) {    
         this.chart = chart;
@@ -61,28 +61,28 @@ class PluginManager {
         plugins.addListener(pluginsChanged);
     }
 
-    ObservableList<XYChartPlugin> getPlugins() {
+    ObservableList<Plugin> getPlugins() {
         
         return plugins; //NOSONAR
     }
 
-    private void bindPlugins(List<? extends XYChartPlugin> addedPlugins) {
-        for (XYChartPlugin plugin : addedPlugins) {
+    private void bindPlugins(List<? extends Plugin> addedPlugins) {
+        for (Plugin plugin : addedPlugins) {
             plugin.setChart(chart);
             plugin.getPlotChildren().addListener(pluginPlotChildrenChanged);
         }
-        for (XYChartPlugin plugin : addedPlugins) {
+        for (Plugin plugin : addedPlugins) {
             pluginsNodes.getChildren().addAll(plugin.getPlotChildren());
         }
         
     }
 
-    private void unbindPlugins(List<? extends XYChartPlugin> removedPlugins) {
-        for (XYChartPlugin plugin : removedPlugins) {
+    private void unbindPlugins(List<? extends Plugin> removedPlugins) {
+        for (Plugin plugin : removedPlugins) {
             plugin.setChart(null);
             plugin.getPlotChildren().removeListener(pluginPlotChildrenChanged);
         }
-        for (XYChartPlugin plugin : removedPlugins) {
+        for (Plugin plugin : removedPlugins) {
             pluginsNodes.getChildren().removeAll(plugin.getPlotChildren());
         }
     }

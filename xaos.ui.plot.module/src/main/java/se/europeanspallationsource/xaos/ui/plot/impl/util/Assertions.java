@@ -24,6 +24,8 @@ import org.apache.commons.lang3.Validate;
 
 /**
  * Set of assertion methods useful for checking method arguments.
+ *
+ * @author claudio.rosati@esss.se
  */
 @SuppressWarnings( "ClassWithoutLogger" )
 public class Assertions {

@@ -30,6 +30,7 @@ import javafx.scene.chart.XYChart.Series;
  * {@link Series}.The comparison is performed against the X value (abscissa).
  *
  * @param <X> The type of
+ * @author claudio.rosati@esss.se
  */
 @SuppressWarnings( "ClassWithoutLogger" )
 public class AbscissaDataComparator<X> implements Comparator<Data<X, ?>> {

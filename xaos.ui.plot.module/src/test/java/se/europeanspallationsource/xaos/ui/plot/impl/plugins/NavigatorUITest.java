@@ -18,7 +18,7 @@ package se.europeanspallationsource.xaos.ui.plot.impl.plugins;
 
 
 import chart.LineChartFX;
-import chart.XYChartPlugin;
+import chart.Plugin;
 import chart.data.DataReducingSeries;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -80,7 +80,7 @@ public class NavigatorUITest extends ApplicationTest {
 	private double chartXUpperBound;
 	private double chartYLowerBound;
 	private double chartYUpperBound;
-	private XYChartPlugin navigator;
+	private Plugin navigator;
 
 	@Override
 	@SuppressWarnings( "NestedAssignment" )

@@ -17,7 +17,9 @@
 
 package plugins;
 
+import se.europeanspallationsource.xaos.ui.plot.impl.plugins.AxisConstraints;
 import chart.DensityChartFX;
+
 import static javafx.scene.input.MouseButton.PRIMARY;
 import static javafx.scene.input.MouseButton.SECONDARY;
 
@@ -42,9 +44,10 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import chart.XYChartPlugin;
+import chart.Plugin;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.Chart;
+
 import static se.europeanspallationsource.xaos.ui.plot.util.Assertions.assertValueAxis;
 
 /**
@@ -63,7 +66,7 @@ import static se.europeanspallationsource.xaos.ui.plot.util.Assertions.assertVal
  * 
  * @author Grzegorz Kruk
  */
-public final class Zoom extends XYChartPlugin {
+public final class Zoom extends Plugin {
     private static final int ZOOM_RECT_MIN_SIZE = 5;
     private static final Duration DEFAULT_ZOOM_DURATION = Duration.millis(500);
 
@@ -104,11 +107,11 @@ public final class Zoom extends XYChartPlugin {
         return !event.isAltDown() && !event.isControlDown() && !event.isMetaDown() && !event.isShiftDown();
     }
 
-    /** Determines if zoom-in should be allowed along a single axis or on both. By default it's {@link AxisMode#XY}.*/
-    private final ObjectProperty<AxisMode> zoomMode = new SimpleObjectProperty<>(this, "zoomMode", AxisMode.XY);
-    public void setZoomMode(AxisMode value) { zoomMode.set(value); }
-    public AxisMode getZoomMode() { return zoomMode.get(); }
-    public ObjectProperty<AxisMode> zoomModeProperty() { return zoomMode; }
+    /** Determines if zoom-in should be allowed along a single axis or on both. By default it's {@link AxisConstraints#X_AND_Y}.*/
+    private final ObjectProperty<AxisConstraints> zoomMode = new SimpleObjectProperty<>(this, "zoomMode", AxisConstraints.X_AND_Y);
+    public void setZoomMode(AxisConstraints value) { zoomMode.set(value); }
+    public AxisConstraints getZoomMode() { return zoomMode.get(); }
+    public ObjectProperty<AxisConstraints> zoomModeProperty() { return zoomMode; }
 
     /** When {@code true} zooming will be animated. By default it's {@code false}. */
     private final BooleanProperty animated = new SimpleBooleanProperty(this, "animated", false);
@@ -140,10 +143,10 @@ public final class Zoom extends XYChartPlugin {
 
     /**
      * Creates and initializes a new instance of Zoom with animation disabled and with {@link #zoomModeProperty()
-     * zoomMode} initialized to {@link AxisMode#XY}.
+     * zoomMode} initialized to {@link AxisConstraints#X_AND_Y}.
      */
     public Zoom() {
-        this(AxisMode.XY);
+        this(AxisConstraints.X_AND_Y);
     }
 
     /**
@@ -151,7 +154,7 @@ public final class Zoom extends XYChartPlugin {
      * 
      * @param zoomMode initial value of {@link #zoomModeProperty() zoomMode} property
      */
-    public Zoom(AxisMode zoomMode) {
+    public Zoom(AxisConstraints zoomMode) {
         this(zoomMode, false);
     }
 
@@ -161,7 +164,7 @@ public final class Zoom extends XYChartPlugin {
      * @param zoomMode initial value of {@link #zoomModeProperty() zoomMode} property
      * @param animated initial value of {@link #animatedProperty() animated} property
      */
-    public Zoom(AxisMode zoomMode, boolean animated) {
+    public Zoom(AxisConstraints zoomMode, boolean animated) {
         setZoomMode(zoomMode);
         setAnimated(animated);
 
@@ -336,11 +339,11 @@ public final class Zoom extends XYChartPlugin {
         double zoomRectWidth = plotAreaBounds.getWidth();
         double zoomRectHeight = plotAreaBounds.getHeight();
 
-        if (getZoomMode() == AxisMode.X || getZoomMode() == AxisMode.XY) {
+        if (getZoomMode() == AxisConstraints.X_ONLY || getZoomMode() == AxisConstraints.X_AND_Y) {
             zoomRectX = Math.min(zoomStartPoint.getX(), zoomEndPoint.getX());
             zoomRectWidth = Math.abs(zoomEndPoint.getX() - zoomStartPoint.getX());
         }
-        if (getZoomMode() == AxisMode.Y || getZoomMode() == AxisMode.XY) {
+        if (getZoomMode() == AxisConstraints.Y_ONLY || getZoomMode() == AxisConstraints.X_AND_Y) {
             zoomRectY = Math.min(zoomStartPoint.getY(), zoomEndPoint.getY());
             zoomRectHeight = Math.abs(zoomEndPoint.getY() - zoomStartPoint.getY());
         }

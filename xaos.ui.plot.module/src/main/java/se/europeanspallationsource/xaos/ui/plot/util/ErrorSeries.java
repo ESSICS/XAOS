@@ -33,9 +33,9 @@ import javafx.scene.shape.Line;
 /**
  * Holds the values of the error bars.
  *
- * @author natalia.milas@esss.se
  * @param <X> The X type of the series.
  * @param <Y> The Y type of the series.
+ * @author natalia.milas@esss.se
  */
 @SuppressWarnings( "ClassWithoutLogger" )
 public class ErrorSeries<X, Y> {

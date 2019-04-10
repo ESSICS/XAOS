@@ -17,23 +17,23 @@
 package se.europeanspallationsource.xaos.ui.plot;
 
 
-import chart.XYChartPlugin;
+import chart.Plugin;
 import javafx.collections.ObservableList;
 
 
 /**
  * Defines the needed behavior for a plot chart to be plugged with
- * {@link XYChartPlugin}s.
+ * {@link Plugin}s.
  *
  * @author claudio.rosati@esss.se
  */
-public interface XYPluggable {
+public interface Pluggable {
 
 	/**
 	 * Returns a list of plugins added to a plot chart.
 	 *
 	 * @return A non-{@code null} list of plugins added to the chart.
 	 */
-	ObservableList<XYChartPlugin> getChartPlugins();
+	ObservableList<Plugin> getPlugins();
 
 }

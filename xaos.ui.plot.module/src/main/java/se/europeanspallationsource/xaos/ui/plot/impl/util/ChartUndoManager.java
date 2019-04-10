@@ -17,7 +17,7 @@
 package se.europeanspallationsource.xaos.ui.plot.impl.util;
 
 
-import chart.XYChartPlugin;
+import chart.Plugin;
 import java.util.Map;
 import java.util.WeakHashMap;
 import javafx.beans.binding.Bindings;
@@ -119,12 +119,12 @@ public class ChartUndoManager {
 	 * Capture the upper and lower X/Y bounds from the given {@code plugin}'s
 	 * {@link Chart} and push it in the undo stack.
 	 *
-	 * @param plugin The {@link XYChartPlugin} needing to save the current
+	 * @param plugin The {@link Plugin} needing to save the current
 	 *               {@link Chart}'s bounds into the undo stack.
 	 * @throws NullPointerException If {@code plugin} or {@code plugin.getChart()}
 	 *                              are {@code null}.
 	 */
-	public void captureUndoable( XYChartPlugin plugin ) {
+	public void captureUndoable( Plugin plugin ) {
 
 		Validate.notNull(plugin, "Null 'plugin'.");
 
@@ -155,12 +155,12 @@ public class ChartUndoManager {
 	 * Set the given {@code plugin}'s {@link Chart} bounds to values previously
 	 * undone.
 	 *
-	 * @param plugin The {@link XYChartPlugin} wishing to redo.
+	 * @param plugin The {@link Plugin} wishing to redo.
 	 * @throws NullPointerException  If {@code plugin} or {@code plugin.getChart()}
 	 *                               are {@code null}.
 	 * @throws IllegalStateException If redo cannot be performed.
 	 */
-	public void redo( XYChartPlugin plugin ) {
+	public void redo( Plugin plugin ) {
 
 		Validate.notNull(plugin, "Null 'plugin'.");
 
@@ -177,12 +177,12 @@ public class ChartUndoManager {
 	/**
 	 * Set the given {@code plugin}'s {@link Chart} bounds to values captured.
 	 *
-	 * @param plugin The {@link XYChartPlugin} wishing to redo.
+	 * @param plugin The {@link Plugin} wishing to redo.
 	 * @throws NullPointerException  If {@code plugin} or {@code plugin.getChart()}
 	 *                               are {@code null}.
 	 * @throws IllegalStateException If undo cannot be performed.
 	 */
-	public void undo( XYChartPlugin plugin ) {
+	public void undo( Plugin plugin ) {
 
 		Validate.notNull(plugin, "Null 'plugin'.");
 
@@ -217,7 +217,7 @@ public class ChartUndoManager {
 		private final double yLowerBound;
 		private final double yUpperBound;
 
-		UndoableEntry( XYChartPlugin plugin ) {
+		UndoableEntry( Plugin plugin ) {
 			this.xAutoRange  = plugin.getXValueAxis().isAutoRanging();
 			this.xLowerBound = plugin.getXValueAxis().getLowerBound();
 			this.xUpperBound = plugin.getXValueAxis().getUpperBound();
@@ -226,7 +226,7 @@ public class ChartUndoManager {
 			this.yUpperBound = plugin.getYValueAxis().getUpperBound();
 		}
 
-		void restore( XYChartPlugin plugin ) {
+		void restore( Plugin plugin ) {
 			plugin.getXValueAxis().setAutoRanging(xAutoRange);
 			plugin.getYValueAxis().setAutoRanging(yAutoRange);
 			plugin.getXValueAxis().setLowerBound(xLowerBound);

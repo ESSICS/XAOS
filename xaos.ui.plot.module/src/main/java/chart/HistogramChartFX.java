@@ -193,11 +193,11 @@ public class HistogramChartFX<X,Y> extends LineChart<X,Y>{
         this.getData().add(binnedDataSet);
     }
     
-    public final ObservableList<XYChartPlugin> getChartPlugins() {
+    public final ObservableList<Plugin> getChartPlugins() {
         return pluginManager.getPlugins();
     }
    
-    public void addChartPlugins(ObservableList<XYChartPlugin> plugins){
+    public void addChartPlugins(ObservableList<Plugin> plugins){
          plugins.forEach(item->{
          try{
             pluginManager.getPlugins().add(item);

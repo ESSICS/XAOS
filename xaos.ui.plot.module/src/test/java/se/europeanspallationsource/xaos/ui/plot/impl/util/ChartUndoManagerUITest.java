@@ -18,7 +18,7 @@ package se.europeanspallationsource.xaos.ui.plot.impl.util;
 
 
 import chart.LineChartFX;
-import chart.XYChartPlugin;
+import chart.Plugin;
 import chart.data.DataReducingSeries;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -90,8 +90,8 @@ public class ChartUndoManagerUITest extends ApplicationTest {
 	private double chartXUpperBound;
 	private double chartYLowerBound;
 	private double chartYUpperBound;
-	private XYChartPlugin keyboardAccelerators;
-	private XYChartPlugin navigator;
+	private Plugin keyboardAccelerators;
+	private Plugin navigator;
 
 	@Override
 	@SuppressWarnings( "NestedAssignment" )
@@ -110,9 +110,9 @@ public class ChartUndoManagerUITest extends ApplicationTest {
 		chart.getChartPlugins().addAll(
 			navigator            = Plugins.navigator(),
 			keyboardAccelerators = Plugins.keyboardAccelerators()
-//			new CoordinatesLines(),
-//			new Zoom(),
 //			new Pan(),
+//			new Zoom(),
+//			new CoordinatesLines(),
 //			new CoordinatesLabel(),
 //			new DataPointTooltip(),
 //			new AreaValueTooltip(),

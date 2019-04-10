@@ -17,7 +17,7 @@
 package se.europeanspallationsource.xaos.ui.plot.impl.plugins;
 
 
-import chart.XYChartPlugin;
+import chart.Plugin;
 import se.europeanspallationsource.xaos.ui.plot.impl.util.ChartUndoManager;
 
 
@@ -28,9 +28,9 @@ import se.europeanspallationsource.xaos.ui.plot.impl.util.ChartUndoManager;
  */
 public class PanHelper {
 
-	private final XYChartPlugin plugin;
+	private final Plugin plugin;
 
-	public PanHelper( XYChartPlugin plugin ) {
+	public PanHelper( Plugin plugin ) {
 		this.plugin = plugin;
 	}
 
