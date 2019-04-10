@@ -62,7 +62,7 @@ public class ScatterChartGenerator {
         chart = new ScatterChartFX<Number, Number>(xAxis, yAxis);
         chart.setTitle("Test data");
         chart.setAnimated(false);
-        chart.getChartPlugins().addAll(Plugins.all());
+        chart.getPlugins().addAll(Plugins.all());
         
         if (series0==null){
         series0 = new DataReducingSeries<>();

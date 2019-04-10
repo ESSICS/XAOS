@@ -80,26 +80,26 @@ public class FXMLController implements Initializable {
                 if ("LineChartFX".equals(t1)) {
                     lineChart = lineChartGen.getChart(NB_OF_POINTS);
                     borderpane.setCenter(lineChart);
-                    lineChart.getChartPlugins().add(new PropertyMenu());
+                    lineChart.getPlugins().add(new PropertyMenu());
                     
                 }
                 if ("ScatterChartFX".equals(t1)) {
                     scatterChart = scatterChartGen.getChart(NB_OF_POINTS);
                     borderpane.setCenter(scatterChart);
-                    scatterChart.getChartPlugins().add(new PropertyMenu());
+                    scatterChart.getPlugins().add(new PropertyMenu());
                     
                 }
                 
                 if ("AreaChartFX".equals(t1)) {
                     areaChart = areaChartGen.getChart(NB_OF_POINTS);
                     borderpane.setCenter(areaChart);
-                    areaChart.getChartPlugins().add(new PropertyMenu());
+                    areaChart.getPlugins().add(new PropertyMenu());
                     
                 }
                 if ("BarChartFX".equals(t1)) {
                     barChart = barChartGen.getChart();
                     borderpane.setCenter(barChart);
-                    barChart.getChartPlugins().add(new PropertyMenu());
+                    barChart.getPlugins().add(new PropertyMenu());
                     
                 }
             requestFocusOnClick();}  
@@ -113,42 +113,42 @@ public class FXMLController implements Initializable {
     private void handleErrorButton(ActionEvent event) {
       if ("LineChartFX".equals(chartchoice.getValue().toString())) {
        if (errorBarsToInclude.isEmpty()){errorGenerator(lineChart);}
-       if (!lineChart.getChartPlugins().containsAll( errorBarsToInclude)){
-          lineChart.getChartPlugins().addAll(errorBarsToInclude);}
+       if (!lineChart.getPlugins().containsAll( errorBarsToInclude)){
+          lineChart.getPlugins().addAll(errorBarsToInclude);}
           
        else {
-           lineChart.getChartPlugins().removeAll(errorBarsToInclude);
+           lineChart.getPlugins().removeAll(errorBarsToInclude);
            errorBarsToInclude.clear();
        }}
       
       
        if ("ScatterChartFX".equals(chartchoice.getValue().toString())) {
         if (errorBarsToInclude.isEmpty()){errorGenerator(scatterChart);}
-        if (!scatterChart.getChartPlugins().containsAll( errorBarsToInclude)){
-          scatterChart.getChartPlugins().addAll(errorBarsToInclude);}
+        if (!scatterChart.getPlugins().containsAll( errorBarsToInclude)){
+          scatterChart.getPlugins().addAll(errorBarsToInclude);}
           
         else {
-           scatterChart.getChartPlugins().removeAll(errorBarsToInclude);
+           scatterChart.getPlugins().removeAll(errorBarsToInclude);
            errorBarsToInclude.clear();
        }}
        
        if ("AreaChartFX".equals(chartchoice.getValue().toString())) {
         if (errorBarsToInclude.isEmpty()){errorGenerator(areaChart);}
-        if (!areaChart.getChartPlugins().containsAll( errorBarsToInclude)){
-          areaChart.getChartPlugins().addAll(errorBarsToInclude);}
+        if (!areaChart.getPlugins().containsAll( errorBarsToInclude)){
+          areaChart.getPlugins().addAll(errorBarsToInclude);}
           
         else {
-           areaChart.getChartPlugins().removeAll(errorBarsToInclude);
+           areaChart.getPlugins().removeAll(errorBarsToInclude);
            errorBarsToInclude.clear();
        }}
        
         if ("BarChartFX".equals(chartchoice.getValue().toString())) {
         if (errorBarsToInclude.isEmpty()){errorGenerator(barChart);}
-        if (!barChart.getChartPlugins().containsAll( errorBarsToInclude)){
-          barChart.getChartPlugins().addAll(errorBarsToInclude);}
+        if (!barChart.getPlugins().containsAll( errorBarsToInclude)){
+          barChart.getPlugins().addAll(errorBarsToInclude);}
           
         else {
-           barChart.getChartPlugins().removeAll(errorBarsToInclude);
+           barChart.getPlugins().removeAll(errorBarsToInclude);
            errorBarsToInclude.clear();
        }}
       

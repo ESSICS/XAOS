@@ -72,7 +72,7 @@ public class AreaChartSample extends Application {
         chart.setAnimated(false);
 //        chart.setAxisSortingPolicy(SortingPolicy.NONE);
 //        chart.setCreateSymbols(false);
-        chart.getChartPlugins().addAll(Plugins.all());
+        chart.getPlugins().addAll(Plugins.all());
                
         series0 = new DataReducingSeries<>();
         series0.setName("Generated test data-horizontal");
@@ -103,16 +103,16 @@ public class AreaChartSample extends Application {
 
         //Series 0
         chart.setSeriesAsHorizontal(0);//red
-        chart.getChartPlugins().add(new ErrorBars(new ErrorSeries(error0),0));
+        chart.getPlugins().add(new ErrorBars(new ErrorSeries(error0),0));
 
 
         //Series 1
         chart.setSeriesAsVertical(1);//blue
-        chart.getChartPlugins().add(new ErrorBars(new ErrorSeries(error1),1));
+        chart.getPlugins().add(new ErrorBars(new ErrorSeries(error1),1));
 
         //Series 2
         chart.setSeriesAsLongitudinal(2);//horrible green
-        chart.getChartPlugins().add(new ErrorBars(new ErrorSeries(error2),2));
+        chart.getPlugins().add(new ErrorBars(new ErrorSeries(error2),2));
        
         
         Label infoLabel = new Label();
@@ -120,7 +120,7 @@ public class AreaChartSample extends Application {
 
         BorderPane borderPane = new BorderPane(chart);
         
-        //chart.getChartPlugins().add(new ErrorBars(chart));
+        //chart.getPlugins().add(new ErrorBars(chart));
 
         //stage.widthProperty().addListener((obs, oldVal, newVal) -> {
         //   System.out.println(chart.getXAxis().getChildrenUnmodifiable());

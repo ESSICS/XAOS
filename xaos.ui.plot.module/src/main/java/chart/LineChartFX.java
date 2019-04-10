@@ -28,6 +28,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.layout.StackPane;
 import javafx.event.ActionEvent;
 import javafx.scene.control.CheckBox;
+import se.europeanspallationsource.xaos.ui.plot.Pluggable;
 
 
 /**
@@ -37,7 +38,7 @@ import javafx.scene.control.CheckBox;
  * @param <X> type of X values
  * @param <Y> type of Y values
  */
-public class LineChartFX<X, Y> extends LineChart<X, Y> {
+public class LineChartFX<X, Y> extends LineChart<X, Y> implements Pluggable {
     
     //Variables used to include plugIns in teh Chart
     private final Group pluginsNodesGroup = new Group();
@@ -86,12 +87,8 @@ public class LineChartFX<X, Y> extends LineChart<X, Y> {
         getStylesheets().add("/styles/chart.css");                         
     }
 
-    /**
-     * Returns a list of plugins added to the chart.
-     * 
-     * @return non-null list of plugins added to the chart
-     */
-    public final ObservableList<Plugin> getChartPlugins() {
+	@Override
+    public final ObservableList<Plugin> getPlugins() {
         return pluginManager.getPlugins();
     }
     public void addChartPlugins(ObservableList<Plugin> plugins){

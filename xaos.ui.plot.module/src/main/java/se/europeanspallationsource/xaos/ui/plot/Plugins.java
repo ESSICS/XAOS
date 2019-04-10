@@ -21,8 +21,10 @@ import chart.Plugin;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.Chart;
 import se.europeanspallationsource.xaos.ui.control.NavigatorPopup;
+import se.europeanspallationsource.xaos.ui.plot.AxisConstrained.AxisConstraints;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.KeyboardAccelerators;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.Navigator;
+import se.europeanspallationsource.xaos.ui.plot.impl.plugins.Pan;
 
 
 /**
@@ -41,9 +43,9 @@ public class Plugins {
 	 */
 	public static Plugin[] all() {
 		return new Plugin[] {
-			new Navigator(),
-			new KeyboardAccelerators()
-//			new Pan(),
+			navigator(),
+			keyboardAccelerators(),
+			pan()
 //			new Zoom(),
 //			new CoordinatesLines(),
 //			new CoordinatesLabel(),
@@ -106,6 +108,27 @@ public class Plugins {
 	 */
 	public static Plugin navigator() {
 		return new Navigator();
+	}
+
+	/**
+	 * Return a plugin that allows panning-by-dragging operation on both axis.
+	 *
+	 * @return A pan plugin.
+	 */
+	public static Plugin pan() {
+		return new Pan();
+	}
+
+	/**
+	 * Return a plugin that allows panning-by-dragging operation along the
+	 * specified axis.
+	 *
+	 * @param constraints Initial value for the pan plugin's
+	 *                    {@link Pan#constraintsProperty() constraints} property.
+	 * @return A pan plugin.
+	 */
+	public static Plugin pan( AxisConstraints constraints ) {
+		return new Pan();
 	}
 
 	private Plugins() {

@@ -64,7 +64,7 @@ public class DensityChartSample extends Application {
         chart.setAnimated(false);
         chart.setSmooth(true);
         chart.setProjectionLinesVisible(true);
-        chart.getChartPlugins().addAll(Plugins.all());
+        chart.getPlugins().addAll(Plugins.all());
 
         
         // readImage() creates an instance of DensityChart.Data   

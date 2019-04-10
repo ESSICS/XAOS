@@ -96,7 +96,7 @@ public class NavigatorUITest extends ApplicationTest {
 
 		chart.setTitle("NavigatorUITest");
 		chart.setAnimated(false);
-		chart.getChartPlugins().addAll(
+		chart.getPlugins().addAll(
 			navigator = Plugins.navigator()
 		);
 

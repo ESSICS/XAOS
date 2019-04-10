@@ -52,6 +52,7 @@ import static se.europeanspallationsource.xaos.ui.control.NavigatorController.ZO
  *
  * @author claudio.rosati@esss.se
  */
+@SuppressWarnings( "ClassWithoutLogger" )
 public class KeyboardAccelerators extends Plugin {
 
 	private final EventHandler<KeyEvent> keyPresseddHandler = this::keyPressed;
@@ -59,13 +60,13 @@ public class KeyboardAccelerators extends Plugin {
 	private final ZoomHelper zoomHelper = new ZoomHelper(this);
 
 	@Override
-	protected void chartConnected( Chart newChart ) {
-		newChart.addEventHandler(KeyEvent.KEY_PRESSED, keyPresseddHandler);
+	protected void chartConnected( Chart chart ) {
+		chart.addEventHandler(KeyEvent.KEY_PRESSED, keyPresseddHandler);
 	}
 
 	@Override
-	protected void chartDisconnected( Chart oldChart ) {
-		oldChart.removeEventHandler(KeyEvent.KEY_PRESSED, keyPresseddHandler);
+	protected void chartDisconnected( Chart chart ) {
+		chart.removeEventHandler(KeyEvent.KEY_PRESSED, keyPresseddHandler);
 	}
 
 	private void keyPressed ( KeyEvent event ) {

@@ -84,31 +84,31 @@ public final class Navigator extends Plugin {
 	}
 
 	@Override
-	protected void chartConnected( Chart newChart ) {
+	protected void chartConnected( Chart chart ) {
 
 		//	Using event filters instead of event handlers to capture the event
 		//	earlier and block other plugins using it.
-		newChart.addEventFilter(KeyEvent.KEY_PRESSED, keyPressedHandler);
-		newChart.addEventHandler(MouseEvent.MOUSE_ENTERED_TARGET, mouseEnteredHandler);
-		newChart.addEventHandler(MouseEvent.MOUSE_EXITED_TARGET, mouseExitedHandler);
-		newChart.addEventHandler(MouseEvent.MOUSE_RELEASED, mouseReleasedHandler);
+		chart.addEventFilter(KeyEvent.KEY_PRESSED, keyPressedHandler);
+		chart.addEventHandler(MouseEvent.MOUSE_ENTERED_TARGET, mouseEnteredHandler);
+		chart.addEventHandler(MouseEvent.MOUSE_EXITED_TARGET, mouseExitedHandler);
+		chart.addEventHandler(MouseEvent.MOUSE_RELEASED, mouseReleasedHandler);
 
-		popup.redoDisabledProperty().bind(Bindings.not(ChartUndoManager.get(newChart).redoableProperty()));
-		popup.undoDisabledProperty().bind(Bindings.not(ChartUndoManager.get(newChart).undoableProperty()));
+		popup.redoDisabledProperty().bind(Bindings.not(ChartUndoManager.get(chart).redoableProperty()));
+		popup.undoDisabledProperty().bind(Bindings.not(ChartUndoManager.get(chart).undoableProperty()));
 
 	}
 
 	@Override
-	protected void chartDisconnected( Chart oldChart ) {
+	protected void chartDisconnected( Chart chart ) {
 
 		popup.undoDisabledProperty().unbind();
 		popup.redoDisabledProperty().unbind();
 
-		oldChart.removeEventHandler(MouseEvent.MOUSE_RELEASED, mouseReleasedHandler);
-		oldChart.removeEventHandler(MouseEvent.MOUSE_MOVED, mouseMovedHandler);
-		oldChart.removeEventHandler(MouseEvent.MOUSE_EXITED_TARGET, mouseExitedHandler);
-		oldChart.removeEventHandler(MouseEvent.MOUSE_ENTERED_TARGET, mouseEnteredHandler);
-		oldChart.addEventFilter(KeyEvent.KEY_PRESSED, keyPressedHandler);
+		chart.removeEventHandler(MouseEvent.MOUSE_RELEASED, mouseReleasedHandler);
+		chart.removeEventHandler(MouseEvent.MOUSE_MOVED, mouseMovedHandler);
+		chart.removeEventHandler(MouseEvent.MOUSE_EXITED_TARGET, mouseExitedHandler);
+		chart.removeEventHandler(MouseEvent.MOUSE_ENTERED_TARGET, mouseEnteredHandler);
+		chart.addEventFilter(KeyEvent.KEY_PRESSED, keyPressedHandler);
 
 	}
 

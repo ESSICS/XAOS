@@ -61,9 +61,11 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+
 import static javafx.scene.paint.Color.CYAN;
 import static javafx.scene.paint.Color.DARKBLUE;
 import static javafx.scene.paint.Color.DARKRED;
+
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
@@ -71,6 +73,7 @@ import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
+import se.europeanspallationsource.xaos.ui.plot.Pluggable;
 
 /**
  * DensityChartFX is a specialized chart that uses colors to represent data values. 
@@ -84,7 +87,7 @@ import javafx.scene.shape.Rectangle;
  * @author Grzegorz Kruk
  */
 
-public class DensityChartFX<X,Y> extends Chart{
+public class DensityChartFX<X,Y> extends Chart implements Pluggable {
     
     //Variables used to include plugIns in teh Chart
     private final Group pluginsNodesGroup = new Group();
@@ -293,12 +296,8 @@ public class DensityChartFX<X,Y> extends Chart{
     }
     
     
-    /**
-     * Returns a list of plugins added to the chart.
-     * 
-     * @return non-null list of plugins added to the chart
-     */
-    public final ObservableList<Plugin> getChartPlugins() {
+	@Override
+    public final ObservableList<Plugin> getPlugins() {
         return pluginManager.getPlugins();
     }
     

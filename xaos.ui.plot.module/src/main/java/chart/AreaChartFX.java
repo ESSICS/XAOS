@@ -28,6 +28,7 @@ import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.Axis;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.StackPane;
+import se.europeanspallationsource.xaos.ui.plot.Pluggable;
 
 /**
  * A thin extension of the FX {@link AreaChart} supporting custom {@link Plugin} plugin implementations.
@@ -36,7 +37,7 @@ import javafx.scene.layout.StackPane;
  * @param <X> type of X values
  * @param <Y> type of Y values
  */
-public class AreaChartFX<X, Y> extends AreaChart<X, Y> {
+public class AreaChartFX<X, Y> extends AreaChart<X, Y> implements Pluggable {
 
     //Variables used to include plugIns in teh Chart
     private final Group pluginsNodesGroup = new Group();
@@ -74,12 +75,8 @@ public class AreaChartFX<X, Y> extends AreaChart<X, Y> {
         getPlotChildren().add(pluginsNodesGroup);
     }
 
-    /**
-     * Returns a list of plugins added to the chart.
-     * 
-     * @return non-null list of plugins added to the chart
-     */
-    public final ObservableList<Plugin> getChartPlugins() {
+	@Override
+    public final ObservableList<Plugin> getPlugins() {
         return pluginManager.getPlugins();
     }
     

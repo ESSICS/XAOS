@@ -76,7 +76,7 @@ public class ScatterChartSample extends Application {
 		final ScatterChartFX<Number, Number> chart = new ScatterChartFX<Number, Number>(xAxis, yAxis);
 		chart.setTitle("Test data");
 		chart.setAnimated(false);
-        chart.getChartPlugins().addAll(Plugins.all());
+        chart.getPlugins().addAll(Plugins.all());
 
 		series0 = new DataReducingSeries<>();
 		series0.setName("Generated test data-horizontal1");
@@ -106,15 +106,15 @@ public class ScatterChartSample extends Application {
 
 		//Series 0
 		chart.setSeriesAsHorizontal(0);//red
-		chart.getChartPlugins().add(new ErrorBars(new ErrorSeries(error0), 0));
+		chart.getPlugins().add(new ErrorBars(new ErrorSeries(error0), 0));
 
 		//Series 1
 		chart.setSeriesAsVertical(1);//blue
-		chart.getChartPlugins().add(new ErrorBars(new ErrorSeries(error1), 1));
+		chart.getPlugins().add(new ErrorBars(new ErrorSeries(error1), 1));
 
 		//Series 2
 		chart.setSeriesAsLongitudinal(2);//horrible green
-		chart.getChartPlugins().add(new ErrorBars(new ErrorSeries(error2), 2));
+		chart.getPlugins().add(new ErrorBars(new ErrorSeries(error2), 2));
 
 		Label infoLabel = new Label();
 		infoLabel.setText("Zoom-in: drag with left-mouse, Zoom-out: right-click, Zoom-origin: right-click + CTRL, Pan: drag with left-mouse + CTRL or keyboard arrows");

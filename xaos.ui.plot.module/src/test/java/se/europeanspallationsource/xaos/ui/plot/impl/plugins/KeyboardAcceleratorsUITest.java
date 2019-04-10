@@ -93,7 +93,7 @@ public class KeyboardAcceleratorsUITest extends ApplicationTest {
 
 		chart.setTitle("NavigatorUITest");
 		chart.setAnimated(false);
-		chart.getChartPlugins().addAll(
+		chart.getPlugins().addAll(
 			keyboardAccelerators = Plugins.keyboardAccelerators()
 		);
 

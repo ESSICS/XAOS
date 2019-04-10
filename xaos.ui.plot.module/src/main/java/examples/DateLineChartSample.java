@@ -113,13 +113,13 @@ public class DateLineChartSample extends Application {
 
 		//Series 0
 		chart.setSeriesAsHorizontal(0);//red
-		chart.getChartPlugins().add(new ErrorBars(error0, 0));
+		chart.getPlugins().add(new ErrorBars(error0, 0));
 		//Series 1
 		chart.setSeriesAsVertical(1);//blue
-		chart.getChartPlugins().add(new ErrorBars(error1, 1));
+		chart.getPlugins().add(new ErrorBars(error1, 1));
 		//Series 2
 		chart.setSeriesAsLongitudinal(2);//horrible green
-		chart.getChartPlugins().add(new ErrorBars(error2, 2));
+		chart.getPlugins().add(new ErrorBars(error2, 2));
 
 		Label infoLabel = new Label();
 		infoLabel.setText("Zoom-in: drag with left-mouse, Zoom-out: right-click, Zoom-origin: right-click + CTRL, Pan: drag with left-mouse + CTRL or keyboard arrows");

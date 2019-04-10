@@ -26,6 +26,7 @@ import se.europeanspallationsource.xaos.ui.plot.impl.util.ChartUndoManager;
  *
  * @author claudio.rosati@esss.se
  */
+@SuppressWarnings( "ClassWithoutLogger" )
 public class PanHelper {
 
 	private final Plugin plugin;

@@ -93,7 +93,7 @@ public class BarChartSample extends Application {
 			error2.add(new ErrorSeries.ErrorData<>(bc.getData().get(2).getData().get(ind), 0.05));
 		}
 
-		bc.getChartPlugins().addAll(new ErrorBars(new ErrorSeries<>(error0), 0), new ErrorBars(new ErrorSeries<>(error1), 1), new ErrorBars(new ErrorSeries<>(error2), 2));
+		bc.getPlugins().addAll(new ErrorBars(new ErrorSeries<>(error0), 0), new ErrorBars(new ErrorSeries<>(error1), 1), new ErrorBars(new ErrorSeries<>(error2), 2));
 
 		stage.setScene(scene);
 		stage.show();

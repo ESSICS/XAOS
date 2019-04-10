@@ -80,7 +80,7 @@ public class LineChartSample extends Application {
 		final LineChartFX<Number, Number> chart = new LineChartFX<Number, Number>(xAxis, yAxis);
 		chart.setTitle("Test data");
 		chart.setAnimated(false);
-        chart.getChartPlugins().addAll(Plugins.all());
+        chart.getPlugins().addAll(Plugins.all());
 
 		series0 = new DataReducingSeries<>();
 		series0.setName("Generated test1");
@@ -145,13 +145,13 @@ public class LineChartSample extends Application {
 
 		//Series 0
 		//chart.setSeriesAsHorizontal(3);//red
-		//chart.getChartPlugins().add(new ErrorBars(error0,0));
+		//chart.getPlugins().add(new ErrorBars(error0,0));
 		//Series 1
 		//chart.setSeriesAsVertical(4);//blue
-		//chart.getChartPlugins().add(new ErrorBars(error1,1));
+		//chart.getPlugins().add(new ErrorBars(error1,1));
 		//Series 2
 		//chart.setSeriesAsLongitudinal(5);//horrible green
-		//chart.getChartPlugins().add(new ErrorBars(error2,2));
+		//chart.getPlugins().add(new ErrorBars(error2,2));
 		Label infoLabel = new Label();
 		infoLabel.setText("Zoom-in: drag with left-mouse, Zoom-out: right-click, Zoom-origin: right-click + CTRL, Pan: drag with left-mouse + CTRL or keyboard arrows");
 

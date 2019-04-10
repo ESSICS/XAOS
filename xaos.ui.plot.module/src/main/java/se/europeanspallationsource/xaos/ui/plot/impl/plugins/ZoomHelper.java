@@ -26,6 +26,7 @@ import se.europeanspallationsource.xaos.ui.plot.impl.util.ChartUndoManager;
  *
  * @author claudio.rosati@esss.se
  */
+@SuppressWarnings( "ClassWithoutLogger" )
 public class ZoomHelper {
 
 	private final Plugin plugin;

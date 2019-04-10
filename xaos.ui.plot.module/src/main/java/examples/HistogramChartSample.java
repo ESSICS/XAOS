@@ -47,7 +47,7 @@ public class HistogramChartSample extends Application{
         HistogramChartFX<Number,Number> chart = new HistogramChartFX<Number,Number>(xAxis,yAxis,dataForPlot, 20);
         
         chart.getData().get(0).setName("Gauss Histogram");
-        chart.getChartPlugins().addAll(Plugins.all());
+        chart.getPlugins().addAll(Plugins.all());
                                       
         chart.setBarGap(1);
         chart.setLegendVisible(true);       
@@ -66,7 +66,7 @@ public class HistogramChartSample extends Application{
 
         //Series 0
         //chart.setSeriesAsVertical(0);//red
-        chart.getChartPlugins().add(new ErrorBars(new ErrorSeries(error0),0));      
+        chart.getPlugins().add(new ErrorBars(new ErrorSeries(error0),0));      
         
         
         Label infoLabel = new Label();

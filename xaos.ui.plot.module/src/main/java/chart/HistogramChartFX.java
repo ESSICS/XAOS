@@ -38,13 +38,14 @@ import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
+import se.europeanspallationsource.xaos.ui.plot.Pluggable;
 
 
 /**
  *
  * @author reubenlindroos
  */
-public class HistogramChartFX<X,Y> extends LineChart<X,Y>{
+public class HistogramChartFX<X,Y> extends LineChart<X,Y> implements Pluggable {
     //Variables used to include plugIns in teh Chart
     private final Group pluginsNodesGroup = new Group();
     private final PluginManager pluginManager = new PluginManager(this, pluginsNodesGroup);
@@ -193,7 +194,8 @@ public class HistogramChartFX<X,Y> extends LineChart<X,Y>{
         this.getData().add(binnedDataSet);
     }
     
-    public final ObservableList<Plugin> getChartPlugins() {
+	@Override
+    public final ObservableList<Plugin> getPlugins() {
         return pluginManager.getPlugins();
     }
    

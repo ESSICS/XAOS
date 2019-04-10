@@ -35,6 +35,7 @@ import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
+import se.europeanspallationsource.xaos.ui.plot.Pluggable;
 
 /**
  * A thin extension of the FX {@link ScatterChart} supporting custom {@link Plugin} plugin implementations.
@@ -43,7 +44,7 @@ import javafx.scene.shape.PathElement;
  * @param <X> type of X values
  * @param <Y> type of Y values
  */
-public class ScatterChartFX<X, Y> extends LineChart<X, Y> {
+public class ScatterChartFX<X, Y> extends LineChart<X, Y> implements Pluggable {
 
     //Variables used to include plugIns in teh Chart
     private final Group pluginsNodesGroup = new Group();
@@ -81,12 +82,8 @@ public class ScatterChartFX<X, Y> extends LineChart<X, Y> {
         getPlotChildren().add(pluginsNodesGroup);
     }
 
-    /**
-     * Returns a list of plugins added to the chart.
-     * 
-     * @return non-null list of plugins added to the chart
-     */
-    public final ObservableList<Plugin> getChartPlugins() {
+	@Override
+    public final ObservableList<Plugin> getPlugins() {
         return pluginManager.getPlugins();
     }
     

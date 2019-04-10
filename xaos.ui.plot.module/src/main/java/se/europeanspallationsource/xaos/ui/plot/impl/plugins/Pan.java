@@ -17,12 +17,12 @@
 package se.europeanspallationsource.xaos.ui.plot.impl.plugins;
 
 
+import se.europeanspallationsource.xaos.ui.plot.AxisConstrained;
 import chart.DensityChartFX;
 import chart.Plugin;
-import java.util.Objects;
+import java.text.MessageFormat;
 import java.util.function.Predicate;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ObjectPropertyBase;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
@@ -32,6 +32,7 @@ import javafx.scene.chart.Chart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.input.MouseEvent;
+import org.apache.commons.lang3.Validate;
 
 import static javafx.scene.input.MouseButton.PRIMARY;
 import static se.europeanspallationsource.xaos.ui.plot.util.Assertions.assertValueAxis;
@@ -43,8 +44,94 @@ import static se.europeanspallationsource.xaos.ui.plot.util.Assertions.assertVal
  *
  * @author claudio.rosati@esss.se
  */
-public final class Pan extends Plugin {
+@SuppressWarnings( "ClassWithoutLogger" )
+public final class Pan extends Plugin implements AxisConstrained {
 
+	private static final Cursor PAN_CURSOR = Cursor.OPEN_HAND;
+
+	/* *********************************************************************** *
+	 * START OF JAVAFX PROPERTIES                                              *
+	 * *********************************************************************** */
+
+	/*
+	 * ---- constraints --------------------------------------------------------
+	 */
+	private final ObjectProperty<AxisConstraints> constraints = new SimpleObjectProperty<AxisConstraints>( Pan.this, "constraints", AxisConstraints.X_AND_Y) {
+		@Override protected void invalidated() {
+			Validate.notNull(get(), "Null '%1$s' property.", getName());
+		}
+	};
+
+	@Override
+	public ObjectProperty<AxisConstraints> constraintsProperty() {
+		return constraints;
+	}
+
+	/* *********************************************************************** *
+	 * END OF JAVAFX PROPERTIES                                                *
+	 * *********************************************************************** */
+
+	/**
+	 * Creates a new instance of this plugin with
+	 * {@link AxisConstraints#X_AND_Y X_AND_Y} constraints.
+	 *
+	 * @see #constraintsProperty()
+	 */
+	public Pan() {
+		this(AxisConstraints.X_AND_Y);
+	}
+
+	/**
+	 * Creates a new instance of this plugin with the given {@code constraints}.
+	 *
+	 * @param constraints Initial value for the
+	 *                    {@link #constraintsProperty() constraints} property.
+	 */
+	public Pan( AxisConstraints constraints ) {
+		setConstraints(constraints);
+	}
+
+	@Override
+	@SuppressWarnings( "null" )
+	protected void chartConnected( Chart chart ) {
+
+		if ( chart instanceof BarChart ) {
+			throw new UnsupportedOperationException(MessageFormat.format(
+				"{0} non supported.",
+				chart.getClass().getSimpleName()
+			));
+		} else if ( chart instanceof XYChart<?, ?> ) {
+			assertValueAxis(( (XYChart<?, ?>) chart ).getXAxis(), "X");
+			assertValueAxis(( (XYChart<?, ?>) chart ).getYAxis(), "Y");
+		} else if ( chart instanceof DensityChartFX<?, ?> ) {
+			assertValueAxis(( (DensityChartFX<?, ?>) chart ).getXAxis(), "X");
+			assertValueAxis(( (DensityChartFX<?, ?>) chart ).getYAxis(), "Y");
+		}
+
+		chart.addEventHandler(MouseEvent.DRAG_DETECTED, panStartHandler);
+		chart.addEventHandler(MouseEvent.MOUSE_DRAGGED, panDragHandler);
+		chart.addEventHandler(MouseEvent.MOUSE_RELEASED, panEndHandler);
+
+	}
+
+	@Override
+	protected void chartDisconnected( Chart chart ) {
+		chart.removeEventHandler(MouseEvent.DRAG_DETECTED, panStartHandler);
+		chart.removeEventHandler(MouseEvent.MOUSE_DRAGGED, panDragHandler);
+		chart.removeEventHandler(MouseEvent.MOUSE_RELEASED, panEndHandler);
+	}
+
+
+
+
+
+
+
+
+
+
+
+	
 	/**
 	 * Default pan mouse filter passing on left mouse button with {@link MouseEvent#isControlDown() control key down}.
 	 */
@@ -54,52 +141,6 @@ public final class Pan extends Plugin {
 				&& event.isControlDown() && !event.isAltDown() && !event.isMetaDown() && !event.isShiftDown();
 		}
 	};
-
-	/**
-	 * Panning mode along X_ONLY, Y_ONLY or both axis
-	 */
-	private final ObjectProperty<AxisConstraints> panMode = new ObjectPropertyBase<AxisConstraints>(AxisConstraints.X_AND_Y) {
-		@Override protected void invalidated() {
-			Objects.requireNonNull​(get(), getName());
-		}
-
-		@Override public Object getBean() {
-			return Pan.this;
-		}
-
-		@Override public String getName() {
-			return "panMode";
-		}
-	};
-
-	public void setPanMode( AxisConstraints value ) {
-		panMode.set(value);
-	}
-
-	public AxisConstraints getPanMode() {
-		return panMode.get();
-	}
-
-	public ObjectProperty<AxisConstraints> panModeProperty() {
-		return panMode;
-	}
-
-	/**
-	 * Mouse cursor used during panning.
-	 */
-	private final ObjectProperty<Cursor> panCursor = new SimpleObjectProperty<Cursor>(this, "panCursor", Cursor.CLOSED_HAND);
-
-	public void setPanCursor( Cursor value ) {
-		panCursor.set(value);
-	}
-
-	public Cursor getPanCursor() {
-		return panCursor.get();
-	}
-
-	public ObjectProperty<Cursor> panCursorProperty() {
-		return panCursor;
-	}
 
 	private Predicate<MouseEvent> mouseFilter = DEFAULT_MOUSE_FILTER;
 	private Cursor sceneCursor;
@@ -132,56 +173,8 @@ public final class Pan extends Plugin {
 	private double plotWidth;
 	private double plotHeight;
 
-	/**
-	 * Creates a new instance of Pan class with {@link AxisConstraints#X_AND_Y X_AND_Y} {@link #panModeProperty() panMode}.
-	 */
-	public Pan() {
-		this(AxisConstraints.X_AND_Y);
-	}
-
-	/**
-	 * Creates a new instance of Pan class.
-	 *
-	 * @param panMode initial value for the {@link #panModeProperty() panMode} property
-	 */
-	public Pan( AxisConstraints panMode ) {
-		setPanMode(panMode);
-	}
-
-	@Override
-	protected void chartDisconnected( Chart oldChart ) {
-		unbindListeners(oldChart);
-	}
-
-	@Override
-	protected void chartConnected( Chart newChart ) {
-		if ( newChart instanceof BarChart ) {
-			super.chartDisconnected(newChart);
-		} else {
-			if ( newChart instanceof XYChart<?, ?> ) {
-				assertValueAxis(( (XYChart<?, ?>) newChart ).getXAxis(), "X");
-				assertValueAxis(( (XYChart<?, ?>) newChart ).getYAxis(), "Y");
-			} else if ( newChart instanceof DensityChartFX<?, ?> ) {
-				assertValueAxis(( (DensityChartFX<?, ?>) newChart ).getXAxis(), "X");
-				assertValueAxis(( (DensityChartFX<?, ?>) newChart ).getYAxis(), "Y");
-			}
-			bindListeners(newChart);
-		}
-	}
-
-	private void unbindListeners( Chart chart ) {
-		chart.removeEventHandler(MouseEvent.DRAG_DETECTED, panStartHandler);
-		chart.removeEventHandler(MouseEvent.MOUSE_DRAGGED, panDragHandler);
-		chart.removeEventHandler(MouseEvent.MOUSE_RELEASED, panEndHandler);
-	}
-
-	private void bindListeners( Chart chart ) {
-		chart.addEventHandler(MouseEvent.DRAG_DETECTED, panStartHandler);
-		chart.addEventHandler(MouseEvent.MOUSE_DRAGGED, panDragHandler);
-		chart.addEventHandler(MouseEvent.MOUSE_RELEASED, panEndHandler);
-	}
-
 	private final EventHandler<MouseEvent> panStartHandler = ( MouseEvent event ) -> {
+		System.out.println("DRAG detected.");
 		if ( mouseFilter == null || mouseFilter.test(event) ) {
 			panStarted(event);
 			event.consume();
@@ -218,9 +211,7 @@ public final class Pan extends Plugin {
 			viewReset = false;
 		}
 		sceneCursor = getChart().getScene().getCursor();
-		if ( getPanCursor() != null ) {
-			getChart().getScene().setCursor(getPanCursor());
-		}
+			getChart().getScene().setCursor(PAN_CURSOR);
 	}
 
 	private void panDragged( MouseEvent event ) {
@@ -231,11 +222,11 @@ public final class Pan extends Plugin {
 		double xOffset = prevDataPoint.getXValue().doubleValue() - dataX;
 		double yOffset = prevDataPoint.getYValue().doubleValue() - dataY;
 		//System.out.println("prevDataPoint " + prevDataPoint + " datax " + dataX + " xOffset " + xOffset);
-		if ( getPanMode() == AxisConstraints.X_ONLY || getPanMode() == AxisConstraints.X_AND_Y ) {
+		if ( getConstraints() == AxisConstraints.X_ONLY || getConstraints() == AxisConstraints.X_AND_Y ) {
 			getXValueAxis().setLowerBound(getXValueAxis().getLowerBound() + xOffset);
 			getXValueAxis().setUpperBound(getXValueAxis().getLowerBound() + plotWidth);
 		}
-		if ( getPanMode() == AxisConstraints.Y_ONLY || getPanMode() == AxisConstraints.X_AND_Y ) {
+		if ( getConstraints() == AxisConstraints.Y_ONLY || getConstraints() == AxisConstraints.X_AND_Y ) {
 			getYValueAxis().setLowerBound(getYValueAxis().getLowerBound() + yOffset);
 			getYValueAxis().setUpperBound(getYValueAxis().getLowerBound() + plotHeight);
 		}

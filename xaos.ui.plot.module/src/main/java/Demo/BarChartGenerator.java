@@ -51,7 +51,7 @@ public class BarChartGenerator {
     public void generateChart() {
         chart = new BarChartFX<String,Number>(xAxis,yAxis);
         chart.setTitle("Employee quarterly Summary");
-        chart.getChartPlugins().addAll(Plugins.all());
+        chart.getPlugins().addAll(Plugins.all());
         XYChart.Series series1 = new XYChart.Series();
         series1.setName("Natalia");       
         series1.getData().add(new XYChart.Data(usefulCode, 256.34));
