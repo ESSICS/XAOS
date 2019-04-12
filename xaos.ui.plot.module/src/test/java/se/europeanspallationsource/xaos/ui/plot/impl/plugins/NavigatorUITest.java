@@ -49,7 +49,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.testfx.robot.Motion.DEFAULT;
 
 
-
 /**
  * @author claudio.rosati@esss.se
  */
@@ -235,24 +234,6 @@ public class NavigatorUITest extends ApplicationTest {
 
 	}
 
-	private void navigatorResetChartMoveAndClick ( FxRobot robot, Point2D offset ) {
-		navigatorResetChartMoveAndClick(robot, offset, true);
-	}
-
-	private void navigatorResetChartMoveAndClick ( FxRobot robot, Point2D offset, boolean reset ) {
-
-		if ( reset ) {
-			navigator.getXValueAxis().setLowerBound(chartXLowerBound);
-			navigator.getXValueAxis().setUpperBound(chartXUpperBound);
-			navigator.getYValueAxis().setLowerBound(chartYLowerBound);
-			navigator.getYValueAxis().setUpperBound(chartYUpperBound);
-		}
-
-		robot.moveTo(chart, CENTER, offset, DEFAULT);
-		robot.clickOn(PRIMARY);
-
-	}
-
 	private ObservableList<XYChart.Data<Number, Number>> generateData( int pointsCount ) {
 
 		int[] yValues = generateIntArray(0, 5, pointsCount);
@@ -281,6 +262,24 @@ public class NavigatorUITest extends ApplicationTest {
 		}
 
 		return data;
+
+	}
+
+	private void navigatorResetChartMoveAndClick ( FxRobot robot, Point2D offset ) {
+		navigatorResetChartMoveAndClick(robot, offset, true);
+	}
+
+	private void navigatorResetChartMoveAndClick ( FxRobot robot, Point2D offset, boolean reset ) {
+
+		if ( reset ) {
+			navigator.getXValueAxis().setLowerBound(chartXLowerBound);
+			navigator.getXValueAxis().setUpperBound(chartXUpperBound);
+			navigator.getYValueAxis().setLowerBound(chartYLowerBound);
+			navigator.getYValueAxis().setUpperBound(chartYUpperBound);
+		}
+
+		robot.moveTo(chart, CENTER, offset, DEFAULT);
+		robot.clickOn(PRIMARY);
 
 	}
 

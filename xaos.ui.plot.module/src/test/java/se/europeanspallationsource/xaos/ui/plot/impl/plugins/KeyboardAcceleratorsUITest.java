@@ -55,7 +55,6 @@ import static se.europeanspallationsource.xaos.ui.control.NavigatorController.ZO
 import static se.europeanspallationsource.xaos.ui.control.NavigatorController.ZOOM_TO_ONE_ACCELERATOR;
 
 
-
 /**
  * @author claudio.rosati@esss.se
  */
@@ -91,7 +90,7 @@ public class KeyboardAcceleratorsUITest extends ApplicationTest {
 
 		chart = new LineChartFX<>(xAxis, yAxis);
 
-		chart.setTitle("NavigatorUITest");
+		chart.setTitle("KeyboardAcceleratorsUITest");
 		chart.setAnimated(false);
 		chart.getPlugins().addAll(
 			keyboardAccelerators = Plugins.keyboardAccelerators()

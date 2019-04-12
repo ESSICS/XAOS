@@ -27,7 +27,8 @@ import org.junit.runners.Suite;
 @RunWith( Suite.class )
 @Suite.SuiteClasses( {
 	KeyboardAcceleratorsUITest.class,
-	NavigatorUITest.class
+	NavigatorUITest.class,
+	PannerUITest.class
 } )
 @SuppressWarnings( { "ClassMayBeInterface", "ClassWithoutLogger", "UtilityClassWithoutPrivateConstructor" } )
 public class PluginsSuite {
