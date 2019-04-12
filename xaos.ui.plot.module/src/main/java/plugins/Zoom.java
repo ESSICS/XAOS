@@ -42,7 +42,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import org.apache.commons.lang3.Validate;
-import se.europeanspallationsource.xaos.ui.plot.AxisConstrained;
+import se.europeanspallationsource.xaos.ui.plot.plugins.AxisConstrained;
 
 import static javafx.scene.input.MouseButton.PRIMARY;
 import static javafx.scene.input.MouseButton.SECONDARY;

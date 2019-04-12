@@ -28,7 +28,7 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
 import plugins.ErrorBars;
-import se.europeanspallationsource.xaos.ui.plot.Plugins;
+import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
 import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries;
 
 

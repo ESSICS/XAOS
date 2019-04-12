@@ -206,6 +206,37 @@ public abstract class Plugin {
         return new Point2D(xInAxis, yInAxis);
     }
 
+	/**
+	 * Returns {@code true} if the mouse cursor is inside the plot area.
+	 *
+	 * @param event The {@link MouseEvent} containing the cursor position.
+	 * @return {@code true} if the mouse cursor is inside the plot area,
+	 *         {@code false} otherwise.
+     * @throws NullPointerException If the plugin hasn't been added to any chart.
+	 */
+	protected final boolean isInsidePlotArea( MouseEvent event ) {
+
+		double sceneX = event.getSceneX();
+		double sceneY = event.getSceneY();
+
+		if ( chart instanceof XYChart<?, ?> ) {
+
+			double axisX = ( (XYChart<?, ?>) chart ).getXAxis().sceneToLocal(sceneX, sceneY).getX();
+			double axisY = ( (XYChart<?, ?>) chart ).getYAxis().sceneToLocal(sceneX, sceneY).getY();
+
+			return ( (XYChart<?, ?>) chart ).getXAxis().isValueOnAxis(Double.valueOf(axisX))
+				&& ( (XYChart<?, ?>) chart ).getYAxis().isValueOnAxis((Double) axisY);
+
+		} else if ( getChart() instanceof DensityChartFX<?, ?> ) {
+			xInAxis = ( (DensityChartFX<?, ?>) getChart() ).getXAxis().sceneToLocal(mouseLocationInScene).getX();
+			yInAxis = ( (DensityChartFX<?, ?>) getChart() ).getYAxis().sceneToLocal(mouseLocationInScene).getY();
+		}
+
+
+
+
+	}
+
     /**
      * Converts given point in display coordinates into the corresponding point within the underlying data coordinates.
      * 

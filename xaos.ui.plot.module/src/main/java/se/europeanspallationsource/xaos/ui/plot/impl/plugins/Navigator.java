@@ -89,8 +89,8 @@ public final class Navigator extends Plugin {
 		//	Using event filters instead of event handlers to capture the event
 		//	earlier and block other plugins using it.
 		chart.addEventFilter(KeyEvent.KEY_PRESSED, keyPressedHandler);
-		chart.addEventHandler(MouseEvent.MOUSE_ENTERED_TARGET, mouseEnteredHandler);
-		chart.addEventHandler(MouseEvent.MOUSE_EXITED_TARGET, mouseExitedHandler);
+		chart.addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEnteredHandler);
+		chart.addEventHandler(MouseEvent.MOUSE_EXITED, mouseExitedHandler);
 		chart.addEventHandler(MouseEvent.MOUSE_RELEASED, mouseReleasedHandler);
 
 		popup.redoDisabledProperty().bind(Bindings.not(ChartUndoManager.get(chart).redoableProperty()));
@@ -106,8 +106,8 @@ public final class Navigator extends Plugin {
 
 		chart.removeEventHandler(MouseEvent.MOUSE_RELEASED, mouseReleasedHandler);
 		chart.removeEventHandler(MouseEvent.MOUSE_MOVED, mouseMovedHandler);
-		chart.removeEventHandler(MouseEvent.MOUSE_EXITED_TARGET, mouseExitedHandler);
-		chart.removeEventHandler(MouseEvent.MOUSE_ENTERED_TARGET, mouseEnteredHandler);
+		chart.removeEventHandler(MouseEvent.MOUSE_EXITED, mouseExitedHandler);
+		chart.removeEventHandler(MouseEvent.MOUSE_ENTERED, mouseEnteredHandler);
 		chart.addEventFilter(KeyEvent.KEY_PRESSED, keyPressedHandler);
 
 	}

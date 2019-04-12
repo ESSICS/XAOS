@@ -28,7 +28,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import plugins.ErrorBars;
-import se.europeanspallationsource.xaos.ui.plot.Plugins;
+import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
 import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries;
 
 public class HistogramChartSample extends Application{

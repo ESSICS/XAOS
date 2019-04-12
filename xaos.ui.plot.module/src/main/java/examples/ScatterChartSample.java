@@ -41,7 +41,7 @@ import plugins.ErrorBars;
 
 import static javafx.application.Application.launch;
 
-import se.europeanspallationsource.xaos.ui.plot.Plugins;
+import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
 import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries;
 import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries.ErrorData;
 

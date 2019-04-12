@@ -29,7 +29,7 @@ import javafx.scene.chart.Axis;
 import javafx.scene.chart.BarChart;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.StackPane;
-import se.europeanspallationsource.xaos.ui.plot.Pluggable;
+import se.europeanspallationsource.xaos.ui.plot.plugins.Pluggable;
 
 /**
  * A thin extension of the FX {@link AreaChart} supporting custom {@link Plugin} plugin implementations.

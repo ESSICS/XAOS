@@ -33,7 +33,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javax.swing.JOptionPane;
-import se.europeanspallationsource.xaos.ui.plot.Plugins;
+import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
 
 
 public class DensityChartSample extends Application {

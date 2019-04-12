@@ -35,7 +35,7 @@ import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
-import se.europeanspallationsource.xaos.ui.plot.Pluggable;
+import se.europeanspallationsource.xaos.ui.plot.plugins.Pluggable;
 
 /**
  * A thin extension of the FX {@link ScatterChart} supporting custom {@link Plugin} plugin implementations.

@@ -73,7 +73,7 @@ import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
-import se.europeanspallationsource.xaos.ui.plot.Pluggable;
+import se.europeanspallationsource.xaos.ui.plot.plugins.Pluggable;
 
 /**
  * DensityChartFX is a specialized chart that uses colors to represent data values. 

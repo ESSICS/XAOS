@@ -28,7 +28,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.layout.StackPane;
 import javafx.event.ActionEvent;
 import javafx.scene.control.CheckBox;
-import se.europeanspallationsource.xaos.ui.plot.Pluggable;
+import se.europeanspallationsource.xaos.ui.plot.plugins.Pluggable;
 
 
 /**

@@ -84,9 +84,13 @@ public class KeyboardAccelerators extends Plugin {
 			} else if ( PAN_UP_ACCELERATOR.match(event) ) {
 				panHelper.panUp();
 			} else if ( REDO_ACCELERATOR.match(event) ) {
-				ChartUndoManager.get(chart).redo(this);
+				if ( ChartUndoManager.get(chart).isRedoable() ) {
+					ChartUndoManager.get(chart).redo(this);
+				}
 			} else if ( UNDO_ACCELERATOR.match(event) ) {
-				ChartUndoManager.get(chart).undo(this);
+				if ( ChartUndoManager.get(chart).isUndoable() ) {
+					ChartUndoManager.get(chart).undo(this);
+				}
 			} else if ( ZOOM_IN_ACCELERATOR.match(event) ) {
 				zoomHelper.zoomIn();
 			} else if ( ZOOM_OUT_ACCELERATOR.match(event) ) {

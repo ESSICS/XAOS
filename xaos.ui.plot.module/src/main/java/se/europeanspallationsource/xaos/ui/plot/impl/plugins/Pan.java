@@ -17,11 +17,9 @@
 package se.europeanspallationsource.xaos.ui.plot.impl.plugins;
 
 
-import se.europeanspallationsource.xaos.ui.plot.AxisConstrained;
 import chart.DensityChartFX;
 import chart.Plugin;
 import java.text.MessageFormat;
-import java.util.function.Predicate;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.EventHandler;
@@ -33,8 +31,9 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.input.MouseEvent;
 import org.apache.commons.lang3.Validate;
+import se.europeanspallationsource.xaos.ui.plot.impl.util.ChartUndoManager;
+import se.europeanspallationsource.xaos.ui.plot.plugins.AxisConstrained;
 
-import static javafx.scene.input.MouseButton.PRIMARY;
 import static se.europeanspallationsource.xaos.ui.plot.util.Assertions.assertValueAxis;
 
 
@@ -48,6 +47,11 @@ import static se.europeanspallationsource.xaos.ui.plot.util.Assertions.assertVal
 public final class Pan extends Plugin implements AxisConstrained {
 
 	private static final Cursor PAN_CURSOR = Cursor.OPEN_HAND;
+	
+	private Cursor originalCursor = Cursor.DEFAULT;
+	private double plotHeight;
+	private double plotWidth;
+	private Data<Number, Number> startingDataPoint = null;
 
 	/* *********************************************************************** *
 	 * START OF JAVAFX PROPERTIES                                              *
@@ -91,6 +95,12 @@ public final class Pan extends Plugin implements AxisConstrained {
 		setConstraints(constraints);
 	}
 
+	private final EventHandler<MouseEvent> dragDetectedHandler = this::dragDetected;
+	private final EventHandler<MouseEvent> draggedHandler = this::dragged;
+	private final EventHandler<MouseEvent> mouseEnteredHandler  = this::mouseEntered;
+	private final EventHandler<MouseEvent> mouseExitedHandler   = this::mouseExited;
+	private final EventHandler<MouseEvent> mouseReleasedHandler = this::mouseReleased;
+
 	@Override
 	@SuppressWarnings( "null" )
 	protected void chartConnected( Chart chart ) {
@@ -108,139 +118,141 @@ public final class Pan extends Plugin implements AxisConstrained {
 			assertValueAxis(( (DensityChartFX<?, ?>) chart ).getYAxis(), "Y");
 		}
 
-		chart.addEventHandler(MouseEvent.DRAG_DETECTED, panStartHandler);
-		chart.addEventHandler(MouseEvent.MOUSE_DRAGGED, panDragHandler);
-		chart.addEventHandler(MouseEvent.MOUSE_RELEASED, panEndHandler);
+		chart.addEventHandler(MouseEvent.DRAG_DETECTED, dragDetectedHandler);
+		chart.addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEnteredHandler);
+		chart.addEventHandler(MouseEvent.MOUSE_EXITED, mouseExitedHandler);
+		chart.addEventHandler(MouseEvent.MOUSE_RELEASED, mouseReleasedHandler);
 
 	}
 
 	@Override
 	protected void chartDisconnected( Chart chart ) {
-		chart.removeEventHandler(MouseEvent.DRAG_DETECTED, panStartHandler);
-		chart.removeEventHandler(MouseEvent.MOUSE_DRAGGED, panDragHandler);
-		chart.removeEventHandler(MouseEvent.MOUSE_RELEASED, panEndHandler);
+		chart.removeEventHandler(MouseEvent.MOUSE_RELEASED, mouseReleasedHandler);
+		chart.removeEventHandler(MouseEvent.MOUSE_EXITED, mouseExitedHandler);
+		chart.removeEventHandler(MouseEvent.MOUSE_ENTERED, mouseEnteredHandler);
+		chart.removeEventHandler(MouseEvent.DRAG_DETECTED, dragDetectedHandler);
 	}
 
+	private void dragDetected( MouseEvent event ) {
 
+		if ( event.isPrimaryButtonDown()
+		  && !event.isAltDown()
+		  && !event.isControlDown()
+		  && !event.isMetaDown()
+		  && !event.isShiftDown() ) {
 
+			//	Capture undo status...
+			Chart chart = getChart();
 
+			ChartUndoManager.get(chart).captureUndoable(this);
 
+			//	Disable auto range...
+			getXValueAxis().setAutoRanging(false);
+			getYValueAxis().setAutoRanging(false);
 
+			//	Capture initial pan location.
+			Point2D mouseLocation = getLocationInPlotArea(event);
 
+			startingDataPoint = new Data<>(
+				getXValueForDisplayAsDouble(mouseLocation.getX()),
+				getYValueForDisplayAsDouble(mouseLocation.getY())
+			);
+			plotHeight = getYValueAxis().getUpperBound() - getYValueAxis().getLowerBound();
+			plotWidth = getXValueAxis().getUpperBound() - getXValueAxis().getLowerBound();
 
+			//	Set the PAN cursor...
+			originalCursor = chart.getScene().getCursor();
 
+			chart.getScene().setCursor(PAN_CURSOR);
 
+			//	Add drag listener...
+			chart.addEventHandler(MouseEvent.MOUSE_DRAGGED, draggedHandler);
 
-	
-	/**
-	 * Default pan mouse filter passing on left mouse button with {@link MouseEvent#isControlDown() control key down}.
-	 */
-	public static final Predicate<MouseEvent> DEFAULT_MOUSE_FILTER = new Predicate<MouseEvent>() {
-		@Override public boolean test( MouseEvent event ) {
-			return event.getButton() == PRIMARY && !event.isMiddleButtonDown() && !event.isSecondaryButtonDown()
-				&& event.isControlDown() && !event.isAltDown() && !event.isMetaDown() && !event.isShiftDown();
-		}
-	};
-
-	private Predicate<MouseEvent> mouseFilter = DEFAULT_MOUSE_FILTER;
-	private Cursor sceneCursor;
-
-	/**
-	 * Returns MouseEvent filter triggering pan operation.
-	 *
-	 * @return filter used to test whether given MouseEvent should start panning operation
-	 * @see #setMouseFilter(Predicate)
-	 */
-	public Predicate<MouseEvent> getMouseFilter() {
-		return mouseFilter;
-	}
-
-	/**
-	 * Sets the filter determining whether given MouseEvent triggered on {@link MouseEvent#DRAG_DETECTED event type}
-	 * should start panning operation.
-	 * <p>
-	 * By default it is initialized to {@link #DEFAULT_MOUSE_FILTER}.
-	 * </p>
-	 *
-	 * @param mouseFilter the mouse filter to be used. Can be set to {@code null} to start panning on any
-	 *                    {@link MouseEvent#DRAG_DETECTED DRAG_DETECTED} event.
-	 */
-	public void setMouseFilter( Predicate<MouseEvent> mouseFilter ) {
-		this.mouseFilter = mouseFilter;
-	}
-
-	private Data<Number, Number> prevDataPoint = null;
-	private double plotWidth;
-	private double plotHeight;
-
-	private final EventHandler<MouseEvent> panStartHandler = ( MouseEvent event ) -> {
-		System.out.println("DRAG detected.");
-		if ( mouseFilter == null || mouseFilter.test(event) ) {
-			panStarted(event);
+			//	Job done, consume the event...
 			event.consume();
-		}
-	};
 
-	private final EventHandler<MouseEvent> panDragHandler = ( MouseEvent event ) -> {
-		if ( panOngoing() ) {
-			panDragged(event);
+		}
+
+	}
+
+	private void dragged( MouseEvent event ) {
+
+		if ( isPanOngoing() ) {
+			//	Drag started...
+
+			Point2D mouseLocation = getLocationInPlotArea(event);
+			double xOffset = startingDataPoint.getXValue().doubleValue() - getXValueForDisplayAsDouble(mouseLocation.getX());
+			double yOffset = startingDataPoint.getYValue().doubleValue() - getYValueForDisplayAsDouble(mouseLocation.getY());
+
+			if ( getConstraints() == AxisConstraints.X_ONLY || getConstraints() == AxisConstraints.X_AND_Y ) {
+				getXValueAxis().setLowerBound(getXValueAxis().getLowerBound() + xOffset);
+				getXValueAxis().setUpperBound(getXValueAxis().getLowerBound() + plotWidth);
+			}
+
+			if ( getConstraints() == AxisConstraints.Y_ONLY || getConstraints() == AxisConstraints.X_AND_Y ) {
+				getYValueAxis().setLowerBound(getYValueAxis().getLowerBound() + yOffset);
+				getYValueAxis().setUpperBound(getYValueAxis().getLowerBound() + plotHeight);
+			}
+
+			//	Job done, consume the event...
 			event.consume();
+
 		}
+
+	}
+
+	private boolean isPanOngoing() {
+		return ( startingDataPoint != null );
+	}
+
+	private void mouseEntered( MouseEvent event ) {
+
+		if ( isPanOngoing() ) {
+
+			Chart chart = getChart();
+
+			//	Add drag listener...
+			chart.addEventHandler(MouseEvent.MOUSE_DRAGGED, draggedHandler);
+
+			//	Set the PAN cursor...
+			chart.getScene().setCursor(PAN_CURSOR);
+
+		}
+
+	}
+
+	private void mouseExited( MouseEvent event ) {
+
+		if ( isPanOngoing() ) {
+
+			Chart chart = getChart();
+
+			//	Remove drag listener...
+			chart.removeEventHandler(MouseEvent.MOUSE_DRAGGED, draggedHandler);
+
+			//	Restore original cursor...
+			chart.getScene().setCursor(originalCursor);
+
+		}
+
+	}
+
+	private void mouseReleased( MouseEvent event ) {
+
+		//	Clear starting point...
+		startingDataPoint = null;
+
+		//	Remove drag listener...
+		Chart chart = getChart();
+
+		chart.removeEventHandler(MouseEvent.MOUSE_DRAGGED, draggedHandler);
+
+		//	Restore original cursor...
+		chart.getScene().setCursor(originalCursor);
+
+		//	Job done, consume the event...
+		event.consume();
+
 	};
-
-	private final EventHandler<MouseEvent> panEndHandler = ( MouseEvent event ) -> {
-		if ( panOngoing() ) {
-			panEnded();
-			event.consume();
-		}
-	};
-
-	private boolean panOngoing() {
-		return prevDataPoint != null;
-	}
-
-	private void panStarted( MouseEvent event ) {
-		getXValueAxis().setAutoRanging(false);
-		getYValueAxis().setAutoRanging(false);
-		Point2D mouseLocation = getLocationInPlotArea(event);
-		double dataX = getXValueForDisplayAsDouble(mouseLocation.getX());
-		double dataY = getYValueForDisplayAsDouble(mouseLocation.getY());
-		prevDataPoint = new Data<>(dataX, dataY);
-		if ( viewReset ) {
-			resetPlotSize();
-			viewReset = false;
-		}
-		sceneCursor = getChart().getScene().getCursor();
-			getChart().getScene().setCursor(PAN_CURSOR);
-	}
-
-	private void panDragged( MouseEvent event ) {
-		Point2D mouseLocation = getLocationInPlotArea(event);
-		double dataX = getXValueForDisplayAsDouble(mouseLocation.getX());
-		double dataY = getYValueForDisplayAsDouble(mouseLocation.getY());
-
-		double xOffset = prevDataPoint.getXValue().doubleValue() - dataX;
-		double yOffset = prevDataPoint.getYValue().doubleValue() - dataY;
-		//System.out.println("prevDataPoint " + prevDataPoint + " datax " + dataX + " xOffset " + xOffset);
-		if ( getConstraints() == AxisConstraints.X_ONLY || getConstraints() == AxisConstraints.X_AND_Y ) {
-			getXValueAxis().setLowerBound(getXValueAxis().getLowerBound() + xOffset);
-			getXValueAxis().setUpperBound(getXValueAxis().getLowerBound() + plotWidth);
-		}
-		if ( getConstraints() == AxisConstraints.Y_ONLY || getConstraints() == AxisConstraints.X_AND_Y ) {
-			getYValueAxis().setLowerBound(getYValueAxis().getLowerBound() + yOffset);
-			getYValueAxis().setUpperBound(getYValueAxis().getLowerBound() + plotHeight);
-		}
-	}
-
-	private void panEnded() {
-		prevDataPoint = null;
-		viewReset = true;
-		getChart().getScene().setCursor(sceneCursor);
-	}
-
-	private void resetPlotSize() {
-		plotHeight = getYValueAxis().getUpperBound() - getYValueAxis().getLowerBound();
-		plotWidth = getXValueAxis().getUpperBound() - getXValueAxis().getLowerBound();
-	}
 
 }

@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.ui.plot;
+package se.europeanspallationsource.xaos.ui.plot.plugins;
 
 
 import chart.Plugin;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.Chart;
 import se.europeanspallationsource.xaos.ui.control.NavigatorPopup;
-import se.europeanspallationsource.xaos.ui.plot.AxisConstrained.AxisConstraints;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.KeyboardAccelerators;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.Navigator;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.Pan;
+import se.europeanspallationsource.xaos.ui.plot.plugins.AxisConstrained.AxisConstraints;
 
 
 /**

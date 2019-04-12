@@ -28,7 +28,7 @@ import java.util.Random;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
-import se.europeanspallationsource.xaos.ui.plot.Plugins;
+import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
 /**
  *
  * @author reubenlindroos

@@ -42,7 +42,7 @@ import chart.TimeAxis;
 import chart.Plugin;
 import java.util.concurrent.TimeUnit;
 import javafx.scene.chart.XYChart.Series;
-import se.europeanspallationsource.xaos.ui.plot.Plugins;
+import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
 import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries;
 
 
