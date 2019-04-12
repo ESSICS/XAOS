@@ -23,7 +23,7 @@ import javafx.scene.chart.Chart;
 import se.europeanspallationsource.xaos.ui.control.NavigatorPopup;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.KeyboardAccelerators;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.Navigator;
-import se.europeanspallationsource.xaos.ui.plot.impl.plugins.Pan;
+import se.europeanspallationsource.xaos.ui.plot.impl.plugins.Panner;
 import se.europeanspallationsource.xaos.ui.plot.plugins.AxisConstrained.AxisConstraints;
 
 
@@ -40,12 +40,15 @@ public class Plugins {
 	 * @return All available {@link Plugin}s, in the right order, to be
 	 *         used as parameter for the {@link ObservableList#addAll(java.lang.Object...)}
 	 *         method of the lister returned by {@link Pluggable#getPlugins()}.
+	 * @see #keyboardAccelerators
+	 * @see #navigator()
+	 * @see #panner() 
 	 */
 	public static Plugin[] all() {
 		return new Plugin[] {
 			navigator(),
 			keyboardAccelerators(),
-			pan()
+			panner()
 //			new Zoom(),
 //			new CoordinatesLines(),
 //			new CoordinatesLabel(),
@@ -56,20 +59,20 @@ public class Plugins {
 	}
 
 	/**
-	 * Returns a plugin that allow pan and zoom operations to be performed using
-	 * keyboards accelerators (Shortcut stands for Ctrl on Windows or Linux, and
-	 * Command on macOS):
+	 * Returns a plugin that allow panner and zoom operations to be performed 
+	 * using keyboards accelerators (Shortcut stands for Ctrl on Windows or
+	 * Linux, and Command on macOS):
 	 * <table>
-	 * <caption>&nbsp;</caption>
-	 * <tr><td>Pan Down</td><td>Shortcut+DOWN</td></tr>
-	 * <tr><td>Pan Left</td><td>Shortcut+LEFT</td></tr>
-	 * <tr><td>Pan Right</td><td>Shortcut+RIGHT</td></tr>
-	 * <tr><td>Pan Up</td><td>Shortcut+UP</td></tr>
-	 * <tr><td>Redo</td><td>Shift+Shortcut+Z</td></tr>
-	 * <tr><td>Undo</td><td>Shortcut+Z</td></tr>
-	 * <tr><td>Zoom In</td><td>Shift+Shortcut+UP</td></tr>
-	 * <tr><td>Zoom Out</td><td>Shift+Shortcut+DOWN</td></tr>
-	 * <tr><td>Zoom To One</td><td>Shortcut+EQUALS</td></tr>
+	 *   <caption>&nbsp;</caption>
+	 *   <tr><td>Panner Down</td><td>Shortcut+DOWN</td></tr>
+	 *   <tr><td>Panner Left</td><td>Shortcut+LEFT</td></tr>
+	 *   <tr><td>Panner Right</td><td>Shortcut+RIGHT</td></tr>
+	 *   <tr><td>Panner Up</td><td>Shortcut+UP</td></tr>
+	 *   <tr><td>Redo</td><td>Shift+Shortcut+Z</td></tr>
+	 *   <tr><td>Undo</td><td>Shortcut+Z</td></tr>
+	 *   <tr><td>Zoom In</td><td>Shift+Shortcut+UP</td></tr>
+	 *   <tr><td>Zoom Out</td><td>Shift+Shortcut+DOWN</td></tr>
+	 *   <tr><td>Zoom To One</td><td>Shortcut+EQUALS</td></tr>
 	 * </table>
 	 *
 	 * @return A navigator plugin.
@@ -93,10 +96,10 @@ public class Plugins {
 	 * macOS):</p>
 	 * <table>
 	 * <caption>&nbsp;</caption>
-	 * <tr><td>Pan Down</td><td>Shortcut+DOWN</td></tr>
-	 * <tr><td>Pan Left</td><td>Shortcut+LEFT</td></tr>
-	 * <tr><td>Pan Right</td><td>Shortcut+RIGHT</td></tr>
-	 * <tr><td>Pan Up</td><td>Shortcut+UP</td></tr>
+	 * <tr><td>Panner Down</td><td>Shortcut+DOWN</td></tr>
+	 * <tr><td>Panner Left</td><td>Shortcut+LEFT</td></tr>
+	 * <tr><td>Panner Right</td><td>Shortcut+RIGHT</td></tr>
+	 * <tr><td>Panner Up</td><td>Shortcut+UP</td></tr>
 	 * <tr><td>Redo</td><td>Shift+Shortcut+Z</td></tr>
 	 * <tr><td>Undo</td><td>Shortcut+Z</td></tr>
 	 * <tr><td>Zoom In</td><td>Shift+Shortcut+UP</td></tr>
@@ -112,23 +115,43 @@ public class Plugins {
 
 	/**
 	 * Return a plugin that allows panning-by-dragging operation on both axis.
+	 * <p>
+	 * Pressing SHIFT when panning will restrict the movements to
+	 * {@link AxisConstraints#X_ONLY X_ONLY} or {@link AxisConstraints#Y_ONLY Y_ONLY}
+	 * according to the direction of the initial movement of the gesture.</p>
+	 * <p>
+	 * Scroll can be performed with a track-pad or a mouse wheel. Shift will lock
+	 * the scroll on the prominent axis, while Shortcut (Command on macOS, Ctrl
+	 * on Windows and Linux) will swap the axis (so with a mouse wheel will be
+	 * possible to scroll on both axis).</p>
 	 *
-	 * @return A pan plugin.
+	 * @return A panner plugin.
 	 */
-	public static Plugin pan() {
-		return new Pan();
+	public static Plugin panner() {
+		return new Panner();
 	}
 
 	/**
 	 * Return a plugin that allows panning-by-dragging operation along the
 	 * specified axis.
+	 * <p>
+	 * If {@code constraints} parameter is set to
+	 * {@link AxisConstraints#X_AND_Y X_AND_Y}, then pressing SHIFT when 
+	 * panning will restrict the movement to {@link AxisConstraints#X_ONLY X_ONLY}
+	 * or {@link AxisConstraints#Y_ONLY Y_ONLY} according to the direction of the
+	 * initial movement of the gesture.</p>
+	 * <p>
+	 * Scroll can be performed with a track-pad or a mouse wheel. Shift will lock
+	 * the scroll on the prominent axis, while Shortcut (Command on macOS, Ctrl
+	 * on Windows and Linux) will swap the axis (so with a mouse wheel will be
+	 * possible to scroll on both axis).</p>
 	 *
-	 * @param constraints Initial value for the pan plugin's
-	 *                    {@link Pan#constraintsProperty() constraints} property.
-	 * @return A pan plugin.
+	 * @param constraints Initial value for the panner plugin's
+                    {@link Panner#constraintsProperty() constraints} property.
+	 * @return A panner plugin.
 	 */
-	public static Plugin pan( AxisConstraints constraints ) {
-		return new Pan();
+	public static Plugin panner( AxisConstraints constraints ) {
+		return new Panner(constraints);
 	}
 
 	private Plugins() {

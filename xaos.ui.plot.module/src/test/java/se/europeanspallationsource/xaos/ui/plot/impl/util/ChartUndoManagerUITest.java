@@ -90,7 +90,7 @@ public class ChartUndoManagerUITest extends ApplicationTest {
 	private double chartYUpperBound;
 	private Plugin keyboardAccelerators;
 	private Plugin navigator;
-	private Plugin pan;
+	private Plugin panner;
 
 	@Override
 	@SuppressWarnings( "NestedAssignment" )
@@ -109,7 +109,7 @@ public class ChartUndoManagerUITest extends ApplicationTest {
 		chart.getPlugins().addAll(
 			navigator            = Plugins.navigator(),
 			keyboardAccelerators = Plugins.keyboardAccelerators(),
-			pan                  = Plugins.pan()
+			panner               = Plugins.panner()
 //			new Zoom(),
 //			new CoordinatesLines(),
 //			new CoordinatesLabel(),

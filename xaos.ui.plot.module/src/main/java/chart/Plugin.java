@@ -216,24 +216,22 @@ public abstract class Plugin {
 	 */
 	protected final boolean isInsidePlotArea( MouseEvent event ) {
 
-		double sceneX = event.getSceneX();
-		double sceneY = event.getSceneY();
+		Point2D mouseLocation = getLocationInPlotArea(event);
+		double valueX = getXValueForDisplayAsDouble(mouseLocation.getX());
+		ValueAxis<?> xValueAxis = getXValueAxis();
 
-		if ( chart instanceof XYChart<?, ?> ) {
-
-			double axisX = ( (XYChart<?, ?>) chart ).getXAxis().sceneToLocal(sceneX, sceneY).getX();
-			double axisY = ( (XYChart<?, ?>) chart ).getYAxis().sceneToLocal(sceneX, sceneY).getY();
-
-			return ( (XYChart<?, ?>) chart ).getXAxis().isValueOnAxis(Double.valueOf(axisX))
-				&& ( (XYChart<?, ?>) chart ).getYAxis().isValueOnAxis((Double) axisY);
-
-		} else if ( getChart() instanceof DensityChartFX<?, ?> ) {
-			xInAxis = ( (DensityChartFX<?, ?>) getChart() ).getXAxis().sceneToLocal(mouseLocationInScene).getX();
-			yInAxis = ( (DensityChartFX<?, ?>) getChart() ).getYAxis().sceneToLocal(mouseLocationInScene).getY();
+		if ( valueX < xValueAxis.getLowerBound() || valueX > xValueAxis.getUpperBound() ) {
+			return false;
 		}
 
+		double valueY =	getYValueForDisplayAsDouble(mouseLocation.getY());
+		ValueAxis<?> yValueAxis = getYValueAxis();
 
+		if ( valueY < yValueAxis.getLowerBound() || valueY > yValueAxis.getUpperBound() ) {
+			return false;
+		}
 
+		return true;
 
 	}
 

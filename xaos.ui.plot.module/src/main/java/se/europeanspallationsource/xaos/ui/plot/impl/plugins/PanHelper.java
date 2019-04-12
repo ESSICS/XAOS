@@ -29,10 +29,27 @@ import se.europeanspallationsource.xaos.ui.plot.impl.util.ChartUndoManager;
 @SuppressWarnings( "ClassWithoutLogger" )
 public class PanHelper {
 
+	private static final double PAN_FACTOR = 0.1;
+	private static final double SCROLL_FACTOR = 0.005;
+
 	private final Plugin plugin;
 
 	public PanHelper( Plugin plugin ) {
 		this.plugin = plugin;
+	}
+
+	public void moveHorizontally ( double offset ) {
+		plugin.getXValueAxis().setAutoRanging(false);
+		plugin.getYValueAxis().setAutoRanging(false);
+		plugin.getXValueAxis().setLowerBound(plugin.getXValueAxis().getLowerBound() + offset);
+		plugin.getXValueAxis().setUpperBound(plugin.getXValueAxis().getUpperBound() + offset);
+	}
+
+	public void moveVertically ( double offset ) {
+		plugin.getXValueAxis().setAutoRanging(false);
+		plugin.getYValueAxis().setAutoRanging(false);
+		plugin.getYValueAxis().setLowerBound(plugin.getYValueAxis().getLowerBound() + offset);
+		plugin.getYValueAxis().setUpperBound(plugin.getYValueAxis().getUpperBound() + offset);
 	}
 
 	public void panDown() {
@@ -41,10 +58,7 @@ public class PanHelper {
 
 		double plotHeight = plugin.getYValueAxis().getUpperBound() - plugin.getYValueAxis().getLowerBound();
 
-		plugin.getXValueAxis().setAutoRanging(false);
-		plugin.getYValueAxis().setAutoRanging(false);
-		plugin.getYValueAxis().setLowerBound(plugin.getYValueAxis().getLowerBound() - 0.1 * plotHeight);
-		plugin.getYValueAxis().setUpperBound(plugin.getYValueAxis().getUpperBound() - 0.1 * plotHeight);
+		moveVertically(- PAN_FACTOR * plotHeight);
 
 	}
 
@@ -54,10 +68,7 @@ public class PanHelper {
 
 		double plotWidth = plugin.getXValueAxis().getUpperBound() - plugin.getXValueAxis().getLowerBound();
 
-		plugin.getXValueAxis().setAutoRanging(false);
-		plugin.getYValueAxis().setAutoRanging(false);
-		plugin.getXValueAxis().setLowerBound(plugin.getXValueAxis().getLowerBound() - 0.1 * plotWidth);
-		plugin.getXValueAxis().setUpperBound(plugin.getXValueAxis().getUpperBound() - 0.1 * plotWidth);
+		moveHorizontally(- PAN_FACTOR * plotWidth);
 
 	}
 
@@ -67,10 +78,7 @@ public class PanHelper {
 
 		double plotWidth = plugin.getXValueAxis().getUpperBound() - plugin.getXValueAxis().getLowerBound();
 
-		plugin.getXValueAxis().setAutoRanging(false);
-		plugin.getYValueAxis().setAutoRanging(false);
-		plugin.getXValueAxis().setLowerBound(plugin.getXValueAxis().getLowerBound() + 0.1 * plotWidth);
-		plugin.getXValueAxis().setUpperBound(plugin.getXValueAxis().getUpperBound() + 0.1 * plotWidth);
+		moveHorizontally(PAN_FACTOR * plotWidth);
 
 	}
 
@@ -80,10 +88,27 @@ public class PanHelper {
 
 		double plotHeight = plugin.getYValueAxis().getUpperBound() - plugin.getYValueAxis().getLowerBound();
 
-		plugin.getXValueAxis().setAutoRanging(false);
-		plugin.getYValueAxis().setAutoRanging(false);
-		plugin.getYValueAxis().setLowerBound(plugin.getYValueAxis().getLowerBound() + 0.1 * plotHeight);
-		plugin.getYValueAxis().setUpperBound(plugin.getYValueAxis().getUpperBound() + 0.1 * plotHeight);
+		moveVertically(PAN_FACTOR * plotHeight);
+
+	}
+
+	public void scrollHorizontally( double offset ) {
+
+		ChartUndoManager.get(plugin.getChart()).captureUndoable(plugin);
+
+		double plotHeight = plugin.getXValueAxis().getUpperBound() - plugin.getXValueAxis().getLowerBound();
+
+		moveHorizontally(offset * SCROLL_FACTOR * plotHeight);
+
+	}
+
+	public void scrollVertically( double offset ) {
+
+		ChartUndoManager.get(plugin.getChart()).captureUndoable(plugin);
+
+		double plotHeight = plugin.getYValueAxis().getUpperBound() - plugin.getYValueAxis().getLowerBound();
+
+		moveVertically(offset * SCROLL_FACTOR * plotHeight);
 
 	}
 
