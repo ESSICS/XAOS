@@ -44,9 +44,9 @@ import static se.europeanspallationsource.xaos.ui.plot.util.Assertions.assertVal
  * axis, changing the visible axis range.
  * <p>
  * If {@link #constraintsProperty() constraints} property is set to
- * {@link AxisConstraints#X_AND_Y X_AND_Y}, then pressing SHIFT when starting
- * panning will restrict the movement to {@link AxisConstraints#X_ONLY X_ONLY}
- * or {@link AxisConstraints#Y_ONLY Y_ONLY} according to the direction of the
+ * {@link AxisConstraints#X_AND_Y X_AND_Y}, then pressing SHIFT when panning
+ * will restrict the movement to {@link AxisConstraints#X_ONLY X_ONLY} or
+ * {@link AxisConstraints#Y_ONLY Y_ONLY} according to the direction of the
  * initial movement of the gesture.</p>
  * <p>
  * Scroll can be performed with a track-pad or a mouse wheel. Shift will lock
@@ -99,7 +99,7 @@ public final class Panner extends Plugin implements AxisConstrained {
 	 * Creates a new instance of this plugin with
 	 * {@link AxisConstraints#X_AND_Y X_AND_Y} constraints.
 	 * <p>
-	 * Pressing SHIFT when starting
+	 * Pressing SHIFT when panning will restrict the movements to
 	 * {@link AxisConstraints#X_ONLY X_ONLY} or {@link AxisConstraints#Y_ONLY Y_ONLY}
 	 * according to the direction of the initial movement of the gesture.</p>
 	 * <p>
@@ -118,7 +118,7 @@ public final class Panner extends Plugin implements AxisConstrained {
 	 * Creates a new instance of this plugin with the given {@code constraints}.
 	 * <p>
 	 * If {@link #constraintsProperty() constraints} property is set to
-	 * {@link AxisConstraints#X_AND_Y X_AND_Y}, then pressing SHIFT when starting
+	 * {@link AxisConstraints#X_AND_Y X_AND_Y}, then pressing SHIFT when 
 	 * panning will restrict the movement to {@link AxisConstraints#X_ONLY X_ONLY}
 	 * or {@link AxisConstraints#Y_ONLY Y_ONLY} according to the direction of the
 	 * initial movement of the gesture.</p>
