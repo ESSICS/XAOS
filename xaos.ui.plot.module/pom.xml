@@ -81,8 +81,8 @@
 					</excludes>
 					<includes>
 						<!--<include>**/KeyboardAcceleratorsUITest.java</include>-->
-						<!--<include>**/NavigatorUITest.java</include>-->
-						<include>**/PannerUITest.java</include>
+						<include>**/NavigatorUITest.java</include>
+						<!--<include>**/PannerUITest.java</include>-->
 						<!--<include>**/ChartUndoManagerUITest.java</include>-->
 					</includes>
 
