@@ -69,7 +69,7 @@ public class PannerUITest extends ApplicationTest {
 	private double chartXUpperBound;
 	private double chartYLowerBound;
 	private double chartYUpperBound;
-	private Plugin keyboardAccelerators;
+	private Plugin panner;
 
 	@Override
 	@SuppressWarnings( "NestedAssignment" )
@@ -86,7 +86,7 @@ public class PannerUITest extends ApplicationTest {
 		chart.setTitle("PannerUITest");
 		chart.setAnimated(false);
 		chart.getPlugins().addAll(
-			keyboardAccelerators = Plugins.keyboardAccelerators()
+			panner = Plugins.panner()
 		);
 
 		DataReducingSeries<Number, Number> series0 = new DataReducingSeries<>();
@@ -130,11 +130,11 @@ public class PannerUITest extends ApplicationTest {
 		FxRobot robot = new FxRobot();
 
 		//	Get chart's reference bounds...
-		chartXLowerBound = keyboardAccelerators.getXValueAxis().getLowerBound();
-		chartXUpperBound = keyboardAccelerators.getXValueAxis().getUpperBound();
+		chartXLowerBound = panner.getXValueAxis().getLowerBound();
+		chartXUpperBound = panner.getXValueAxis().getUpperBound();
 		chartWidth       = chartXUpperBound - chartXLowerBound;
-		chartYLowerBound = keyboardAccelerators.getYValueAxis().getLowerBound();
-		chartYUpperBound = keyboardAccelerators.getYValueAxis().getUpperBound();
+		chartYLowerBound = panner.getYValueAxis().getLowerBound();
+		chartYUpperBound = panner.getYValueAxis().getUpperBound();
 		chartHeight      = chartYUpperBound - chartYLowerBound;
 
 		//	Activate the tool...
@@ -148,9 +148,9 @@ public class PannerUITest extends ApplicationTest {
 		// Testing mouse PAN DOWN...
 		System.out.println("    - Testing mouse mouse PAN DOWN...");
 		mouseResetChartAndDrag(robot, new Point2D(0, 100), true);
-		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isLessThan(chartYLowerBound);
-		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isLessThan(chartYUpperBound);
-		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound() - keyboardAccelerators.getYValueAxis().getLowerBound()).isEqualTo(chartHeight, Offset.offset(0.01));
+		assertThat(panner.getYValueAxis().getLowerBound()).isLessThan(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isLessThan(chartYUpperBound);
+		assertThat(panner.getYValueAxis().getUpperBound() - panner.getYValueAxis().getLowerBound()).isEqualTo(chartHeight, Offset.offset(0.01));
 
 //		// Testing mouse PAN UP...
 //		System.out.println("    - Testing mouse PAN UP...");
@@ -262,15 +262,15 @@ public class PannerUITest extends ApplicationTest {
 	private void mouseResetChartAndDrag ( FxRobot robot, Point2D offset, boolean release, boolean reset ) {
 
 		if ( reset ) {
-			keyboardAccelerators.getXValueAxis().setLowerBound(chartXLowerBound);
-			keyboardAccelerators.getXValueAxis().setUpperBound(chartXUpperBound);
-			keyboardAccelerators.getYValueAxis().setLowerBound(chartYLowerBound);
-			keyboardAccelerators.getYValueAxis().setUpperBound(chartYUpperBound);
+			panner.getXValueAxis().setLowerBound(chartXLowerBound);
+			panner.getXValueAxis().setUpperBound(chartXUpperBound);
+			panner.getYValueAxis().setLowerBound(chartYLowerBound);
+			panner.getYValueAxis().setUpperBound(chartYUpperBound);
 		}
 
 		robot.moveTo(chart, CENTER, Point2D.ZERO, DEFAULT);
-//		robot.drag(PRIMARY);
-		robot.press(PRIMARY);
+		robot.drag(PRIMARY);
+//		robot.press(PRIMARY);
 		robot.moveBy(offset.getX(), offset.getY());
 
 		if ( release ) {

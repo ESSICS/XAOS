@@ -19,7 +19,7 @@
 
 	<properties>
 		<!-- Dependencies Versions -->
-		<commons-lang3.version>3.8.1</commons-lang3.version>
+		<commons-lang3.version>3.9</commons-lang3.version>
 		<commons-math3.version>3.6.1</commons-math3.version>
 		<javafx.version>11.0.2</javafx.version>
 		<testfx.version>4.0.15-alpha</testfx.version>
@@ -66,7 +66,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.1</version>
+				<version>3.0.0-M3</version>
 				<configuration>
 					<argLine>
 						--add-exports=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED --add-exports=javafx.controls/com.sun.javafx.charts=xaos.ui.plot

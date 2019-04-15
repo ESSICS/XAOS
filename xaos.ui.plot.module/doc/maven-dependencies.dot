@@ -14,7 +14,7 @@ digraph "xaos.ui.plot" {
   "org.openjfx:javafx-graphics:jar:mac"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-graphics<br/>11.0.2<br/>mac>]
   "org.openjfx:javafx-swing:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-swing<br/>11.0.2>]
   "org.openjfx:javafx-swing:jar:mac"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-swing<br/>11.0.2<br/>mac>]
-  "org.apache.commons:commons-lang3:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.apache.commons<br/>commons-lang3<br/>3.8.1>]
+  "org.apache.commons:commons-lang3:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.apache.commons<br/>commons-lang3<br/>3.9>]
   "org.apache.commons:commons-math3:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.apache.commons<br/>commons-math3<br/>3.6.1>]
   "io.reactivex.rxjava2:rxjava:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<io.reactivex.rxjava2<br/>rxjava<br/>2.2.8>]
   "org.reactivestreams:reactive-streams:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.reactivestreams<br/>reactive-streams<br/>1.0.2>]
@@ -66,7 +66,7 @@ digraph "xaos.ui.plot" {
   "org.openjfx:javafx-web:jar" -> "org.openjfx:javafx-media:jar"[style="dotted"]
   "se.europeanspallationsource:xaos.ui:jar" -> "org.openjfx:javafx-web:jar"
   "se.europeanspallationsource:xaos.ui:jar" -> "org.apache.commons:commons-lang3:jar"[style="dotted"]
-  "org.apache.commons:commons-text:jar" -> "org.apache.commons:commons-lang3:jar"[style="dotted"]
+  "org.apache.commons:commons-text:jar" -> "org.apache.commons:commons-lang3:jar"[style="dashed",color="red",fontcolor="red",label="3.8.1"]
   "se.europeanspallationsource:xaos.ui:jar" -> "org.apache.commons:commons-text:jar"
   "se.europeanspallationsource:xaos.ui:jar" -> "org.kordamp.ikonli:ikonli-core:jar"
   "org.kordamp.ikonli:ikonli-javafx:jar" -> "org.kordamp.ikonli:ikonli-core:jar"[style="dotted"]
