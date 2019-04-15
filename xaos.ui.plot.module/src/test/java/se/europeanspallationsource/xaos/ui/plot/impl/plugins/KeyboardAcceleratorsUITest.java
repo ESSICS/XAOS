@@ -72,8 +72,10 @@ public class KeyboardAcceleratorsUITest extends ApplicationTest {
 	private LineChartFX<Number, Number> chart;
 	private double chartHeight;
 	private double chartWidth;
+	private boolean chartXAutoRange;
 	private double chartXLowerBound;
 	private double chartXUpperBound;
+	private boolean chartYAutoRange;
 	private double chartYLowerBound;
 	private double chartYUpperBound;
 	private Plugin keyboardAccelerators;
@@ -137,9 +139,11 @@ public class KeyboardAcceleratorsUITest extends ApplicationTest {
 		FxRobot robot = new FxRobot();
 
 		//	Get chart's reference bounds...
+		chartXAutoRange  = keyboardAccelerators.getXValueAxis().isAutoRanging();
 		chartXLowerBound = keyboardAccelerators.getXValueAxis().getLowerBound();
 		chartXUpperBound = keyboardAccelerators.getXValueAxis().getUpperBound();
 		chartWidth       = chartXUpperBound - chartXLowerBound;
+		chartYAutoRange  = keyboardAccelerators.getYValueAxis().isAutoRanging();
 		chartYLowerBound = keyboardAccelerators.getYValueAxis().getLowerBound();
 		chartYUpperBound = keyboardAccelerators.getYValueAxis().getUpperBound();
 		chartHeight      = chartYUpperBound - chartYLowerBound;
@@ -155,8 +159,6 @@ public class KeyboardAcceleratorsUITest extends ApplicationTest {
 		// Testing PAN DOWN...
 		System.out.println("    - Testing PAN DOWN...");
 		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) PAN_DOWN_ACCELERATOR);
-		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound, Offset.offset(0.01));
-		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound, Offset.offset(0.01));
 		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isLessThan(chartYLowerBound);
 		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isLessThan(chartYUpperBound);
 		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound() - keyboardAccelerators.getYValueAxis().getLowerBound()).isEqualTo(chartHeight, Offset.offset(0.01));
@@ -164,8 +166,6 @@ public class KeyboardAcceleratorsUITest extends ApplicationTest {
 		// Testing PAN UP...
 		System.out.println("    - Testing PAN UP...");
 		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) PAN_UP_ACCELERATOR);
-		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound, Offset.offset(0.01));
-		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound, Offset.offset(0.01));
 		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isGreaterThan(chartYLowerBound);
 		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isGreaterThan(chartYUpperBound);
 		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound() - keyboardAccelerators.getYValueAxis().getLowerBound()).isEqualTo(chartHeight, Offset.offset(0.01));
@@ -176,8 +176,6 @@ public class KeyboardAcceleratorsUITest extends ApplicationTest {
 		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isLessThan(chartXLowerBound);
 		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isLessThan(chartXUpperBound);
 		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound() - keyboardAccelerators.getXValueAxis().getLowerBound()).isEqualTo(chartWidth, Offset.offset(0.01));
-		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound, Offset.offset(0.01));
-		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound, Offset.offset(0.01));
 
 		// Testing PAN RIGHT...
 		System.out.println("    - Testing PAN RIGHT...");
@@ -185,8 +183,6 @@ public class KeyboardAcceleratorsUITest extends ApplicationTest {
 		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isGreaterThan(chartXLowerBound);
 		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isGreaterThan(chartXUpperBound);
 		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound() - keyboardAccelerators.getXValueAxis().getLowerBound()).isEqualTo(chartWidth, Offset.offset(0.01));
-		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound, Offset.offset(0.01));
-		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound, Offset.offset(0.01));
 
 		// Testing ZOOM IN...
 		System.out.println("    - Testing ZOOM IN...");
@@ -246,6 +242,8 @@ public class KeyboardAcceleratorsUITest extends ApplicationTest {
 	private void acceleratorsResetChartAndPress ( FxRobot robot, KeyCodeCombination combination, boolean reset ) {
 
 		if ( reset ) {
+			keyboardAccelerators.getXValueAxis().setAutoRanging(chartXAutoRange);
+			keyboardAccelerators.getYValueAxis().setAutoRanging(chartYAutoRange);
 			keyboardAccelerators.getXValueAxis().setLowerBound(chartXLowerBound);
 			keyboardAccelerators.getXValueAxis().setUpperBound(chartXUpperBound);
 			keyboardAccelerators.getYValueAxis().setLowerBound(chartYLowerBound);

@@ -20,7 +20,7 @@
 
 	<properties>
 		<!-- Dependencies Versions -->
-		<javafx.version>11.0.2</javafx.version>
+		<javafx.version>12</javafx.version>
 		<xaos.version>${project.version}</xaos.version>
 	</properties>
 

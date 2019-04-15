@@ -21,7 +21,7 @@
 		<!-- Dependencies Versions -->
 		<commons-lang3.version>3.9</commons-lang3.version>
 		<commons-math3.version>3.6.1</commons-math3.version>
-		<javafx.version>11.0.2</javafx.version>
+		<javafx.version>12</javafx.version>
 		<testfx.version>4.0.15-alpha</testfx.version>
 		<xaos.version>${project.version}</xaos.version>
 	</properties>
@@ -81,8 +81,8 @@
 					</excludes>
 					<includes>
 						<!--<include>**/KeyboardAcceleratorsUITest.java</include>-->
-						<include>**/NavigatorUITest.java</include>
-						<!--<include>**/PannerUITest.java</include>-->
+						<!--<include>**/NavigatorUITest.java</include>-->
+						<include>**/PannerUITest.java</include>
 						<!--<include>**/ChartUndoManagerUITest.java</include>-->
 					</includes>
 

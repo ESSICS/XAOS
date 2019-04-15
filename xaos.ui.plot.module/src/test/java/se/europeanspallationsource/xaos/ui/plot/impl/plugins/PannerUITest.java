@@ -40,6 +40,7 @@ import org.junit.Test;
 import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
+import se.europeanspallationsource.xaos.core.util.ThreadUtils;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
 
 import static javafx.geometry.Pos.CENTER;
@@ -65,8 +66,10 @@ public class PannerUITest extends ApplicationTest {
 	private LineChartFX<Number, Number> chart;
 	private double chartHeight;
 	private double chartWidth;
+	private boolean chartXAutoRange;
 	private double chartXLowerBound;
 	private double chartXUpperBound;
+	private boolean chartYAutoRange;
 	private double chartYLowerBound;
 	private double chartYUpperBound;
 	private Plugin panner;
@@ -123,16 +126,18 @@ public class PannerUITest extends ApplicationTest {
 	}
 
 	@Test
-	public void test() {
+	public void testMouseDrag() {
 
 		System.out.println("  Testing ''Panner''...");
 
 		FxRobot robot = new FxRobot();
 
 		//	Get chart's reference bounds...
+		chartXAutoRange  = panner.getXValueAxis().isAutoRanging();
 		chartXLowerBound = panner.getXValueAxis().getLowerBound();
 		chartXUpperBound = panner.getXValueAxis().getUpperBound();
 		chartWidth       = chartXUpperBound - chartXLowerBound;
+		chartYAutoRange  = panner.getYValueAxis().isAutoRanging();
 		chartYLowerBound = panner.getYValueAxis().getLowerBound();
 		chartYUpperBound = panner.getYValueAxis().getUpperBound();
 		chartHeight      = chartYUpperBound - chartYLowerBound;
@@ -142,85 +147,171 @@ public class PannerUITest extends ApplicationTest {
 		robot.clickOn(PRIMARY);
 
 		//	--------------------------------------------------------------------
-		//	Test each mouse and scroll-wheel positions...
+		//	Test each mouse drag positions...
 		//	--------------------------------------------------------------------
 
-		// Testing mouse PAN DOWN...
-		System.out.println("    - Testing mouse mouse PAN DOWN...");
+		// Testing mouse DRAG DOWN...
+		System.out.println("    - Testing mouse mouse DRAG DOWN...");
 		mouseResetChartAndDrag(robot, new Point2D(0, 100), true);
+		assertThat(panner.getYValueAxis().getLowerBound()).isGreaterThan(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isGreaterThan(chartYUpperBound);
+		assertThat(panner.getYValueAxis().getUpperBound() - panner.getYValueAxis().getLowerBound()).isEqualTo(chartHeight, Offset.offset(0.01));
+
+		// Testing mouse DRAG UP...
+		System.out.println("    - Testing mouse DRAG UP...");
+		mouseResetChartAndDrag(robot, new Point2D(0, -100), true);
 		assertThat(panner.getYValueAxis().getLowerBound()).isLessThan(chartYLowerBound);
 		assertThat(panner.getYValueAxis().getUpperBound()).isLessThan(chartYUpperBound);
 		assertThat(panner.getYValueAxis().getUpperBound() - panner.getYValueAxis().getLowerBound()).isEqualTo(chartHeight, Offset.offset(0.01));
 
-//		// Testing mouse PAN UP...
-//		System.out.println("    - Testing mouse PAN UP...");
-//		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) PAN_UP_ACCELERATOR);
-//		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isGreaterThan(chartYLowerBound);
-//		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isGreaterThan(chartYUpperBound);
-//		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound() - keyboardAccelerators.getYValueAxis().getLowerBound()).isEqualTo(chartHeight, Offset.offset(0.01));
-//
-//		// Testing mouse PAN LEFT...
-//		System.out.println("    - Testing mouse PAN LEFT...");
-//		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) PAN_LEFT_ACCELERATOR);
-//		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isLessThan(chartXLowerBound);
-//		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isLessThan(chartXUpperBound);
-//		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound() - keyboardAccelerators.getXValueAxis().getLowerBound()).isEqualTo(chartWidth, Offset.offset(0.01));
-//
-//		// Testing mouse PAN RIGHT...
-//		System.out.println("    - Testing mouse PAN RIGHT...");
-//		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) PAN_RIGHT_ACCELERATOR);
-//		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isGreaterThan(chartXLowerBound);
-//		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isGreaterThan(chartXUpperBound);
-//		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound() - keyboardAccelerators.getXValueAxis().getLowerBound()).isEqualTo(chartWidth, Offset.offset(0.01));
-//
-//		// Testing mouse ZOOM IN...
-//		System.out.println("    - Testing mouse ZOOM IN...");
-//		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) ZOOM_IN_ACCELERATOR);
-//		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isGreaterThan(chartXLowerBound);
-//		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isLessThan(chartXUpperBound);
-//		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound() - keyboardAccelerators.getXValueAxis().getLowerBound()).isLessThan(chartWidth);
-//		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isGreaterThan(chartYLowerBound);
-//		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isLessThan(chartYUpperBound);
-//		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound() - keyboardAccelerators.getYValueAxis().getLowerBound()).isLessThan(chartHeight);
-//
-//		// Testing mouse ZOOM OUT...
-//		System.out.println("    - Testing mouse ZOOM OUT...");
-//		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) ZOOM_OUT_ACCELERATOR);
-//		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isLessThan(chartXLowerBound);
-//		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isGreaterThan(chartXUpperBound);
-//		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound() - keyboardAccelerators.getXValueAxis().getLowerBound()).isGreaterThan(chartWidth);
-//		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isLessThan(chartYLowerBound);
-//		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isGreaterThan(chartYUpperBound);
-//		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound() - keyboardAccelerators.getYValueAxis().getLowerBound()).isGreaterThan(chartHeight);
-//
-//		// Testing mouse ZOOM TO ONE...
-//		System.out.println("    - Testing mouse ZOOM TO ONE...");
-//		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) ZOOM_IN_ACCELERATOR);
-//		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) ZOOM_TO_ONE_ACCELERATOR, false);
-//		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound, Offset.offset(0.01));
-//		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound, Offset.offset(0.01));
-//		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound, Offset.offset(0.01));
-//		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound, Offset.offset(0.01));
-//
-//		// Testing mouse UNDO...
-//		System.out.println("    - Testing mouse UNDO...");
-//		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) ZOOM_IN_ACCELERATOR);
-//		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) UNDO_ACCELERATOR, false);
-//		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound, Offset.offset(0.01));
-//		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound, Offset.offset(0.01));
-//		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound, Offset.offset(0.01));
-//		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound, Offset.offset(0.01));
-//
-//		// Testing mouse REDO...
-//		System.out.println("    - Testing mouse REDO...");
-//		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) REDO_ACCELERATOR, false);
-//		//	Now it should be after Zoom In done
-//		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isGreaterThan(chartXLowerBound);
-//		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isLessThan(chartXUpperBound);
-//		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound() - keyboardAccelerators.getXValueAxis().getLowerBound()).isLessThan(chartWidth);
-//		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isGreaterThan(chartYLowerBound);
-//		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isLessThan(chartYUpperBound);
-//		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound() - keyboardAccelerators.getYValueAxis().getLowerBound()).isLessThan(chartHeight);
+		// Testing mouse DRAG LEFT...
+		System.out.println("    - Testing mouse DRAG LEFT...");
+		mouseResetChartAndDrag(robot, new Point2D(-100, 0), true);
+		assertThat(panner.getXValueAxis().getLowerBound()).isGreaterThan(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isGreaterThan(chartXUpperBound);
+		assertThat(panner.getXValueAxis().getUpperBound() - panner.getXValueAxis().getLowerBound()).isEqualTo(chartWidth, Offset.offset(0.01));
+
+		// Testing mouse DRAG RIGHT...
+		System.out.println("    - Testing mouse PAN RIGHT...");
+		mouseResetChartAndDrag(robot, new Point2D(100, 0), true);
+		assertThat(panner.getXValueAxis().getLowerBound()).isLessThan(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isLessThan(chartXUpperBound);
+		assertThat(panner.getXValueAxis().getUpperBound() - panner.getXValueAxis().getLowerBound()).isEqualTo(chartWidth, Offset.offset(0.01));
+
+		// Testing mouse DRAG DOWN-LEFT...
+		System.out.println("    - Testing mouse mouse DRAG DOWN-LEFT...");
+		mouseResetChartAndDrag(robot, new Point2D(-100, 100), true);
+		assertThat(panner.getXValueAxis().getLowerBound()).isGreaterThan(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isGreaterThan(chartXUpperBound);
+		assertThat(panner.getXValueAxis().getUpperBound() - panner.getXValueAxis().getLowerBound()).isEqualTo(chartWidth, Offset.offset(0.01));
+		assertThat(panner.getYValueAxis().getLowerBound()).isGreaterThan(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isGreaterThan(chartYUpperBound);
+		assertThat(panner.getYValueAxis().getUpperBound() - panner.getYValueAxis().getLowerBound()).isEqualTo(chartHeight, Offset.offset(0.01));
+
+		// Testing mouse DRAG DOWN-RIGHT...
+		System.out.println("    - Testing mouse mouse DRAG DOWN-RIGHT...");
+		mouseResetChartAndDrag(robot, new Point2D(100, 100), true);
+		assertThat(panner.getXValueAxis().getLowerBound()).isLessThan(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isLessThan(chartXUpperBound);
+		assertThat(panner.getXValueAxis().getUpperBound() - panner.getXValueAxis().getLowerBound()).isEqualTo(chartWidth, Offset.offset(0.01));
+		assertThat(panner.getYValueAxis().getLowerBound()).isGreaterThan(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isGreaterThan(chartYUpperBound);
+		assertThat(panner.getYValueAxis().getUpperBound() - panner.getYValueAxis().getLowerBound()).isEqualTo(chartHeight, Offset.offset(0.01));
+
+		// Testing mouse DRAG UP-LEFT...
+		System.out.println("    - Testing mouse DRAG UP-LEFT...");
+		mouseResetChartAndDrag(robot, new Point2D(-100, -100), true);
+		assertThat(panner.getXValueAxis().getLowerBound()).isGreaterThan(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isGreaterThan(chartXUpperBound);
+		assertThat(panner.getXValueAxis().getUpperBound() - panner.getXValueAxis().getLowerBound()).isEqualTo(chartWidth, Offset.offset(0.01));
+		assertThat(panner.getYValueAxis().getLowerBound()).isLessThan(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isLessThan(chartYUpperBound);
+		assertThat(panner.getYValueAxis().getUpperBound() - panner.getYValueAxis().getLowerBound()).isEqualTo(chartHeight, Offset.offset(0.01));
+
+		// Testing mouse DRAG UP-RIGHT...
+		System.out.println("    - Testing mouse DRAG UP-RIGHT...");
+		mouseResetChartAndDrag(robot, new Point2D(100, -100), true);
+		assertThat(panner.getXValueAxis().getLowerBound()).isLessThan(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isLessThan(chartXUpperBound);
+		assertThat(panner.getXValueAxis().getUpperBound() - panner.getXValueAxis().getLowerBound()).isEqualTo(chartWidth, Offset.offset(0.01));
+		assertThat(panner.getYValueAxis().getLowerBound()).isLessThan(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isLessThan(chartYUpperBound);
+		assertThat(panner.getYValueAxis().getUpperBound() - panner.getYValueAxis().getLowerBound()).isEqualTo(chartHeight, Offset.offset(0.01));
+
+	}
+
+	@Test
+	public void testMouseScroll() {
+
+		System.out.println("  Testing ''Panner''...");
+
+		FxRobot robot = new FxRobot();
+
+		//	Get chart's reference bounds...
+		chartXAutoRange  = panner.getXValueAxis().isAutoRanging();
+		chartXLowerBound = panner.getXValueAxis().getLowerBound();
+		chartXUpperBound = panner.getXValueAxis().getUpperBound();
+		chartWidth       = chartXUpperBound - chartXLowerBound;
+		chartYAutoRange  = panner.getYValueAxis().isAutoRanging();
+		chartYLowerBound = panner.getYValueAxis().getLowerBound();
+		chartYUpperBound = panner.getYValueAxis().getUpperBound();
+		chartHeight      = chartYUpperBound - chartYLowerBound;
+
+		//	Activate the tool...
+		robot.moveTo(chart);
+		robot.clickOn(PRIMARY);
+
+		//	--------------------------------------------------------------------
+		//	Test each mouse scroll-wheel positions...
+		//	--------------------------------------------------------------------
+
+		// Testing mouse DRAG DOWN...
+		System.out.println("    - Testing mouse mouse DRAG DOWN...");
+		mouseResetChartAndDrag(robot, new Point2D(0, 100), true);
+		assertThat(panner.getYValueAxis().getLowerBound()).isGreaterThan(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isGreaterThan(chartYUpperBound);
+		assertThat(panner.getYValueAxis().getUpperBound() - panner.getYValueAxis().getLowerBound()).isEqualTo(chartHeight, Offset.offset(0.01));
+
+		// Testing mouse DRAG UP...
+		System.out.println("    - Testing mouse DRAG UP...");
+		mouseResetChartAndDrag(robot, new Point2D(0, -100), true);
+		assertThat(panner.getYValueAxis().getLowerBound()).isLessThan(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isLessThan(chartYUpperBound);
+		assertThat(panner.getYValueAxis().getUpperBound() - panner.getYValueAxis().getLowerBound()).isEqualTo(chartHeight, Offset.offset(0.01));
+
+		// Testing mouse DRAG LEFT...
+		System.out.println("    - Testing mouse DRAG LEFT...");
+		mouseResetChartAndDrag(robot, new Point2D(-100, 0), true);
+		assertThat(panner.getXValueAxis().getLowerBound()).isGreaterThan(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isGreaterThan(chartXUpperBound);
+		assertThat(panner.getXValueAxis().getUpperBound() - panner.getXValueAxis().getLowerBound()).isEqualTo(chartWidth, Offset.offset(0.01));
+
+		// Testing mouse DRAG RIGHT...
+		System.out.println("    - Testing mouse PAN RIGHT...");
+		mouseResetChartAndDrag(robot, new Point2D(100, 0), true);
+		assertThat(panner.getXValueAxis().getLowerBound()).isLessThan(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isLessThan(chartXUpperBound);
+		assertThat(panner.getXValueAxis().getUpperBound() - panner.getXValueAxis().getLowerBound()).isEqualTo(chartWidth, Offset.offset(0.01));
+
+		// Testing mouse DRAG DOWN-LEFT...
+		System.out.println("    - Testing mouse mouse DRAG DOWN-LEFT...");
+		mouseResetChartAndDrag(robot, new Point2D(-100, 100), true);
+		assertThat(panner.getXValueAxis().getLowerBound()).isGreaterThan(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isGreaterThan(chartXUpperBound);
+		assertThat(panner.getXValueAxis().getUpperBound() - panner.getXValueAxis().getLowerBound()).isEqualTo(chartWidth, Offset.offset(0.01));
+		assertThat(panner.getYValueAxis().getLowerBound()).isGreaterThan(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isGreaterThan(chartYUpperBound);
+		assertThat(panner.getYValueAxis().getUpperBound() - panner.getYValueAxis().getLowerBound()).isEqualTo(chartHeight, Offset.offset(0.01));
+
+		// Testing mouse DRAG DOWN-RIGHT...
+		System.out.println("    - Testing mouse mouse DRAG DOWN-RIGHT...");
+		mouseResetChartAndDrag(robot, new Point2D(100, 100), true);
+		assertThat(panner.getXValueAxis().getLowerBound()).isLessThan(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isLessThan(chartXUpperBound);
+		assertThat(panner.getXValueAxis().getUpperBound() - panner.getXValueAxis().getLowerBound()).isEqualTo(chartWidth, Offset.offset(0.01));
+		assertThat(panner.getYValueAxis().getLowerBound()).isGreaterThan(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isGreaterThan(chartYUpperBound);
+		assertThat(panner.getYValueAxis().getUpperBound() - panner.getYValueAxis().getLowerBound()).isEqualTo(chartHeight, Offset.offset(0.01));
+
+		// Testing mouse DRAG UP-LEFT...
+		System.out.println("    - Testing mouse DRAG UP-LEFT...");
+		mouseResetChartAndDrag(robot, new Point2D(-100, -100), true);
+		assertThat(panner.getXValueAxis().getLowerBound()).isGreaterThan(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isGreaterThan(chartXUpperBound);
+		assertThat(panner.getXValueAxis().getUpperBound() - panner.getXValueAxis().getLowerBound()).isEqualTo(chartWidth, Offset.offset(0.01));
+		assertThat(panner.getYValueAxis().getLowerBound()).isLessThan(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isLessThan(chartYUpperBound);
+		assertThat(panner.getYValueAxis().getUpperBound() - panner.getYValueAxis().getLowerBound()).isEqualTo(chartHeight, Offset.offset(0.01));
+
+		// Testing mouse DRAG UP-RIGHT...
+		System.out.println("    - Testing mouse DRAG UP-RIGHT...");
+		mouseResetChartAndDrag(robot, new Point2D(100, -100), true);
+		assertThat(panner.getXValueAxis().getLowerBound()).isLessThan(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isLessThan(chartXUpperBound);
+		assertThat(panner.getXValueAxis().getUpperBound() - panner.getXValueAxis().getLowerBound()).isEqualTo(chartWidth, Offset.offset(0.01));
+		assertThat(panner.getYValueAxis().getLowerBound()).isLessThan(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isLessThan(chartYUpperBound);
+		assertThat(panner.getYValueAxis().getUpperBound() - panner.getYValueAxis().getLowerBound()).isEqualTo(chartHeight, Offset.offset(0.01));
 
 	}
 
@@ -262,6 +353,8 @@ public class PannerUITest extends ApplicationTest {
 	private void mouseResetChartAndDrag ( FxRobot robot, Point2D offset, boolean release, boolean reset ) {
 
 		if ( reset ) {
+			panner.getXValueAxis().setAutoRanging(chartXAutoRange);
+			panner.getYValueAxis().setAutoRanging(chartYAutoRange);
 			panner.getXValueAxis().setLowerBound(chartXLowerBound);
 			panner.getXValueAxis().setUpperBound(chartXUpperBound);
 			panner.getYValueAxis().setLowerBound(chartYLowerBound);
@@ -269,12 +362,14 @@ public class PannerUITest extends ApplicationTest {
 		}
 
 		robot.moveTo(chart, CENTER, Point2D.ZERO, DEFAULT);
-		robot.drag(PRIMARY);
-//		robot.press(PRIMARY);
-		robot.moveBy(offset.getX(), offset.getY());
+		robot.press(PRIMARY);
+		robot.moveTo(chart, CENTER, offset, DEFAULT);
+
+		//	Necessary to give the robot the time to perform the movement.
+		ThreadUtils.sleep(200);
 
 		if ( release ) {
-			robot.drop();
+			robot.release(PRIMARY);
 		}
 
 	}

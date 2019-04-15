@@ -1,14 +1,4 @@
 digraph "summary" {
-  "org.kordamp.ikonli.javafx"                        -> "java.base (java.base)";
-  "org.kordamp.ikonli.javafx"                        -> "javafx.base";
-  "org.kordamp.ikonli.javafx"                        -> "javafx.graphics";
-  "org.kordamp.ikonli.javafx"                        -> "org.kordamp.iconli.core";
-  "xaos.core"                                        -> "io.reactivex.rxjava2";
-  "xaos.core"                                        -> "java.base (java.base)";
-  "xaos.core"                                        -> "java.logging (java.logging)";
-  "org.reactivestreams"                              -> "java.base (java.base)";
-  "javafx.base"                                      -> "java.base (java.base)";
-  "xaos.tools"                                       -> "java.base (java.base)";
   "javafx.graphics"                                  -> "java.base (java.base)";
   "javafx.graphics"                                  -> "java.desktop (java.desktop)";
   "javafx.graphics"                                  -> "java.xml (java.xml)";
@@ -17,10 +7,26 @@ digraph "summary" {
   "javafx.controls"                                  -> "java.base (java.base)";
   "javafx.controls"                                  -> "javafx.base";
   "javafx.controls"                                  -> "javafx.graphics";
-  "org.apache.commons.lang3"                         -> "java.base (java.base)";
-  "org.apache.commons.text"                          -> "java.base (java.base)";
   "org.kordamp.ikonli.fontawesome"                   -> "java.base (java.base)";
   "org.kordamp.ikonli.fontawesome"                   -> "org.kordamp.iconli.core";
+  "javafx.base"                                      -> "java.base (java.base)";
+  "xaos.core"                                        -> "io.reactivex.rxjava2";
+  "xaos.core"                                        -> "java.base (java.base)";
+  "xaos.core"                                        -> "java.logging (java.logging)";
+  "org.reactivestreams"                              -> "java.base (java.base)";
+  "org.kordamp.ikonli.javafx"                        -> "java.base (java.base)";
+  "org.kordamp.ikonli.javafx"                        -> "javafx.base";
+  "org.kordamp.ikonli.javafx"                        -> "javafx.graphics";
+  "org.kordamp.ikonli.javafx"                        -> "org.kordamp.iconli.core";
+  "xaos.tools"                                       -> "java.base (java.base)";
+  "org.apache.commons.lang3"                         -> "java.base (java.base)";
+  "org.apache.commons.text"                          -> "java.base (java.base)";
+  "org.kordamp.iconli.core"                          -> "java.base (java.base)";
+  "javafx.fxml"                                      -> "java.base (java.base)";
+  "javafx.fxml"                                      -> "java.scripting (java.scripting)";
+  "javafx.fxml"                                      -> "java.xml (java.xml)";
+  "javafx.fxml"                                      -> "javafx.base";
+  "javafx.fxml"                                      -> "javafx.graphics";
   "xaos.ui"                                          -> "io.reactivex.rxjava2";
   "xaos.ui"                                          -> "java.base (java.base)";
   "xaos.ui"                                          -> "java.logging (java.logging)";
@@ -38,10 +44,4 @@ digraph "summary" {
   "xaos.ui"                                          -> "xaos.tools";
   "io.reactivex.rxjava2"                             -> "java.base (java.base)";
   "io.reactivex.rxjava2"                             -> "org.reactivestreams";
-  "javafx.fxml"                                      -> "java.base (java.base)";
-  "javafx.fxml"                                      -> "java.scripting (java.scripting)";
-  "javafx.fxml"                                      -> "java.xml (java.xml)";
-  "javafx.fxml"                                      -> "javafx.base";
-  "javafx.fxml"                                      -> "javafx.graphics";
-  "org.kordamp.iconli.core"                          -> "java.base (java.base)";
 }

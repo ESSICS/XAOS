@@ -75,8 +75,10 @@ public class NavigatorUITest extends ApplicationTest {
 	private LineChartFX<Number, Number> chart;
 	private double chartHeight;
 	private double chartWidth;
+	private boolean chartXAutoRange;
 	private double chartXLowerBound;
 	private double chartXUpperBound;
+	private boolean chartYAutoRange;
 	private double chartYLowerBound;
 	private double chartYUpperBound;
 	private Plugin navigator;
@@ -140,9 +142,11 @@ public class NavigatorUITest extends ApplicationTest {
 		FxRobot robot = new FxRobot();
 
 		//	Get chart's reference bounds...
+		chartXAutoRange  = navigator.getXValueAxis().isAutoRanging();
 		chartXLowerBound = navigator.getXValueAxis().getLowerBound();
 		chartXUpperBound = navigator.getXValueAxis().getUpperBound();
 		chartWidth       = chartXUpperBound - chartXLowerBound;
+		chartYAutoRange  = navigator.getYValueAxis().isAutoRanging();
 		chartYLowerBound = navigator.getYValueAxis().getLowerBound();
 		chartYUpperBound = navigator.getYValueAxis().getUpperBound();
 		chartHeight      = chartYUpperBound - chartYLowerBound;
@@ -158,8 +162,6 @@ public class NavigatorUITest extends ApplicationTest {
 		// Testing PAN DOWN...
 		System.out.println("    - Testing PAN DOWN...");
 		navigatorResetChartMoveAndClick(robot, PAN_DOWN_POINT);
-		assertThat(navigator.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound, Offset.offset(0.01));
-		assertThat(navigator.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound, Offset.offset(0.01));
 		assertThat(navigator.getYValueAxis().getLowerBound()).isLessThan(chartYLowerBound);
 		assertThat(navigator.getYValueAxis().getUpperBound()).isLessThan(chartYUpperBound);
 		assertThat(navigator.getYValueAxis().getUpperBound() - navigator.getYValueAxis().getLowerBound()).isEqualTo(chartHeight, Offset.offset(0.01));
@@ -167,8 +169,6 @@ public class NavigatorUITest extends ApplicationTest {
 		// Testing PAN UP...
 		System.out.println("    - Testing PAN UP...");
 		navigatorResetChartMoveAndClick(robot, PAN_UP_POINT);
-		assertThat(navigator.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound, Offset.offset(0.01));
-		assertThat(navigator.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound, Offset.offset(0.01));
 		assertThat(navigator.getYValueAxis().getLowerBound()).isGreaterThan(chartYLowerBound);
 		assertThat(navigator.getYValueAxis().getUpperBound()).isGreaterThan(chartYUpperBound);
 		assertThat(navigator.getYValueAxis().getUpperBound() - navigator.getYValueAxis().getLowerBound()).isEqualTo(chartHeight, Offset.offset(0.01));
@@ -179,8 +179,6 @@ public class NavigatorUITest extends ApplicationTest {
 		assertThat(navigator.getXValueAxis().getLowerBound()).isLessThan(chartXLowerBound);
 		assertThat(navigator.getXValueAxis().getUpperBound()).isLessThan(chartXUpperBound);
 		assertThat(navigator.getXValueAxis().getUpperBound() - navigator.getXValueAxis().getLowerBound()).isEqualTo(chartWidth, Offset.offset(0.01));
-		assertThat(navigator.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound, Offset.offset(0.01));
-		assertThat(navigator.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound, Offset.offset(0.01));
 
 		// Testing PAN RIGHT...
 		System.out.println("    - Testing PAN RIGHT...");
@@ -188,8 +186,6 @@ public class NavigatorUITest extends ApplicationTest {
 		assertThat(navigator.getXValueAxis().getLowerBound()).isGreaterThan(chartXLowerBound);
 		assertThat(navigator.getXValueAxis().getUpperBound()).isGreaterThan(chartXUpperBound);
 		assertThat(navigator.getXValueAxis().getUpperBound() - navigator.getXValueAxis().getLowerBound()).isEqualTo(chartWidth, Offset.offset(0.01));
-		assertThat(navigator.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound, Offset.offset(0.01));
-		assertThat(navigator.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound, Offset.offset(0.01));
 
 		// Testing ZOOM IN...
 		System.out.println("    - Testing ZOOM IN...");
@@ -280,6 +276,8 @@ public class NavigatorUITest extends ApplicationTest {
 	private void navigatorResetChartMoveAndClick ( FxRobot robot, Point2D offset, boolean reset ) {
 
 		if ( reset ) {
+			navigator.getXValueAxis().setAutoRanging(chartXAutoRange);
+			navigator.getYValueAxis().setAutoRanging(chartYAutoRange);
 			navigator.getXValueAxis().setLowerBound(chartXLowerBound);
 			navigator.getXValueAxis().setUpperBound(chartXUpperBound);
 			navigator.getYValueAxis().setLowerBound(chartYLowerBound);

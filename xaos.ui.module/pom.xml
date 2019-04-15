@@ -23,8 +23,8 @@
 		<classgraph.version>4.8.24</classgraph.version>
 		<commons-lang3.version>3.9</commons-lang3.version>
 		<commons-text.version>1.6</commons-text.version>
-		<ikonli.version>11.2.0</ikonli.version>
-		<javafx.version>11.0.2</javafx.version>
+		<ikonli.version>11.3.0</ikonli.version>
+		<javafx.version>12</javafx.version>
 		<testfx.version>4.0.15-alpha</testfx.version>
 		<xaos.version>${project.version}</xaos.version>
 	</properties>

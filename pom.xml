@@ -39,9 +39,9 @@
 	</scm>
 
 	<properties>
-		<java.release>11</java.release>
-		<maven.compiler.source>${java.release}</maven.compiler.source>
-		<maven.compiler.target>${java.release}</maven.compiler.target>
+		<java.release>12</java.release>
+		<maven.compiler.source>12</maven.compiler.source>
+		<maven.compiler.target>12</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- Auxiliary programs -->
 		<dot.executable>/usr/local/bin/dot</dot.executable>

@@ -221,8 +221,10 @@ public final class Panner extends Plugin implements AxisConstrained {
 		if ( isPanOngoing() && isInsidePlotArea(event) ) {
 
 			Point2D mouseLocation = getLocationInPlotArea(event);
-			double xOffset = startingDataPoint.getXValue().doubleValue() - getXValueForDisplayAsDouble(mouseLocation.getX());
-			double yOffset = startingDataPoint.getYValue().doubleValue() - getYValueForDisplayAsDouble(mouseLocation.getY());
+			double xPosition = getXValueForDisplayAsDouble(mouseLocation.getX());
+			double yPosition = getYValueForDisplayAsDouble(mouseLocation.getY());
+			double xOffset = startingDataPoint.getXValue().doubleValue() - xPosition;
+			double yOffset = startingDataPoint.getYValue().doubleValue() - yPosition;
 
 			if ( !shiftWasDown && event.isShiftDown() ) {
 				
@@ -249,6 +251,8 @@ public final class Panner extends Plugin implements AxisConstrained {
 			if ( overriddenConstraints == AxisConstraints.Y_ONLY || overriddenConstraints == AxisConstraints.X_AND_Y ) {
 				panHelper.moveVertically(yOffset);
 			}
+
+//			startingDataPoint = new Data<>(xPosition, yPosition);
 
 			//	Job done, consume the event...
 			event.consume();

@@ -84,8 +84,10 @@ public class ChartUndoManagerUITest extends ApplicationTest {
 	}
 
 	private LineChartFX<Number, Number> chart;
+	private boolean chartXAutoRange;
 	private double chartXLowerBound;
 	private double chartXUpperBound;
+	private boolean chartYAutoRange;
 	private double chartYLowerBound;
 	private double chartYUpperBound;
 	private Plugin keyboardAccelerators;
@@ -163,8 +165,10 @@ public class ChartUndoManagerUITest extends ApplicationTest {
 		ChartUndoManager undoManager = ChartUndoManager.get(navigator.getChart());
 
 		//	Get chart's reference bounds...
+		chartXAutoRange  = panner.getXValueAxis().isAutoRanging();
 		chartXLowerBound = navigator.getXValueAxis().getLowerBound();
 		chartXUpperBound = navigator.getXValueAxis().getUpperBound();
+		chartYAutoRange  = panner.getYValueAxis().isAutoRanging();
 		chartYLowerBound = navigator.getYValueAxis().getLowerBound();
 		chartYUpperBound = navigator.getYValueAxis().getUpperBound();
 
@@ -696,6 +700,8 @@ public class ChartUndoManagerUITest extends ApplicationTest {
 	private void acceleratorsResetChartAndPress ( FxRobot robot, KeyCodeCombination combination, boolean reset ) {
 
 		if ( reset ) {
+			keyboardAccelerators.getXValueAxis().setAutoRanging(chartXAutoRange);
+			keyboardAccelerators.getYValueAxis().setAutoRanging(chartYAutoRange);
 			keyboardAccelerators.getXValueAxis().setLowerBound(chartXLowerBound);
 			keyboardAccelerators.getXValueAxis().setUpperBound(chartXUpperBound);
 			keyboardAccelerators.getYValueAxis().setLowerBound(chartYLowerBound);
@@ -744,6 +750,8 @@ public class ChartUndoManagerUITest extends ApplicationTest {
 	private void navigatorResetChartMoveAndClick ( FxRobot robot, Point2D offset, boolean reset ) {
 
 		if ( reset ) {
+			navigator.getXValueAxis().setAutoRanging(chartXAutoRange);
+			navigator.getYValueAxis().setAutoRanging(chartYAutoRange);
 			navigator.getXValueAxis().setLowerBound(chartXLowerBound);
 			navigator.getXValueAxis().setUpperBound(chartXUpperBound);
 			navigator.getYValueAxis().setLowerBound(chartYLowerBound);

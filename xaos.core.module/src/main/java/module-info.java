@@ -21,7 +21,7 @@
 module xaos.core {
 
 	requires java.logging;
-	requires transitive io.reactivex.rxjava2;
+	requires io.reactivex.rxjava2;
 
 	exports se.europeanspallationsource.xaos.core.util;
 	exports se.europeanspallationsource.xaos.core.util.io;

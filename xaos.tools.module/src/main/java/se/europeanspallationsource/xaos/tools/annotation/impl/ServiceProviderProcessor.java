@@ -57,7 +57,7 @@ import javax.tools.StandardLocation;
 import se.europeanspallationsource.xaos.tools.annotation.ServiceProvider;
 import se.europeanspallationsource.xaos.tools.annotation.ServiceProviders;
 
-import static javax.lang.model.SourceVersion.RELEASE_11;
+import static javax.lang.model.SourceVersion.RELEASE_12;
 import static javax.lang.model.element.ElementKind.CLASS;
 import static javax.lang.model.element.ElementKind.PACKAGE;
 import static javax.lang.model.element.Modifier.ABSTRACT;
@@ -75,7 +75,7 @@ import static javax.tools.StandardLocation.SOURCE_PATH;
  * @author claudio.rosati@esss.se
  * @see <a href="http://bits.netbeans.org/8.1/javadoc/org-openide-util-lookup/overview-summary.html">NetBeans Lookup API</a>
  */
-@SupportedSourceVersion( RELEASE_11 )
+@SupportedSourceVersion( RELEASE_12 )
 @SupportedAnnotationTypes( {
 	"se.europeanspallationsource.xaos.tools.annotation.ServiceProvider",
 	"se.europeanspallationsource.xaos.tools.annotation.ServiceProviders"
