@@ -74,8 +74,8 @@ public final class Navigator extends Plugin {
 		popup.setOnPanRight(e -> panHelper.panRight());
 		popup.setOnPanUp(e -> panHelper.panUp());
 
-		popup.setOnZoomIn(e -> zoomHelper.zoomIn());
-		popup.setOnZoomOut(e -> zoomHelper.zoomOut());
+		popup.setOnZoomIn(e -> zoomHelper.zoomIn(true));
+		popup.setOnZoomOut(e -> zoomHelper.zoomOut(true));
 		popup.setOnZoomToOne(e -> zoomHelper.autoScale());
 
 		popup.setOnRedo(e -> ChartUndoManager.get(getChart()).redo(this));
@@ -108,7 +108,7 @@ public final class Navigator extends Plugin {
 		chart.removeEventHandler(MouseEvent.MOUSE_MOVED, mouseMovedHandler);
 		chart.removeEventHandler(MouseEvent.MOUSE_EXITED, mouseExitedHandler);
 		chart.removeEventHandler(MouseEvent.MOUSE_ENTERED, mouseEnteredHandler);
-		chart.addEventFilter(KeyEvent.KEY_PRESSED, keyPressedHandler);
+		chart.removeEventFilter(KeyEvent.KEY_PRESSED, keyPressedHandler);
 
 	}
 

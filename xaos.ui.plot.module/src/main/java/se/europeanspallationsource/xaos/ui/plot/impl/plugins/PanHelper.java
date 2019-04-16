@@ -92,9 +92,11 @@ class PanHelper {
 
 	}
 
-	void scroll( double xOffset, double yOffset ) {
+	void scroll( double xOffset, double yOffset, boolean captureUndoable ) {
 
-		ChartUndoManager.get(plugin.getChart()).captureUndoable(plugin);
+		if ( captureUndoable ) {
+			ChartUndoManager.get(plugin.getChart()).captureUndoable(plugin);
+		}
 
 		double plotWidth = plugin.getXValueAxis().getUpperBound() - plugin.getXValueAxis().getLowerBound();
 		double plotHeight = plugin.getYValueAxis().getUpperBound() - plugin.getYValueAxis().getLowerBound();
@@ -104,9 +106,11 @@ class PanHelper {
 
 	}
 
-	void scrollHorizontally( double offset ) {
+	void scrollHorizontally( double offset, boolean captureUndoable ) {
 
-		ChartUndoManager.get(plugin.getChart()).captureUndoable(plugin);
+		if ( captureUndoable ) {
+			ChartUndoManager.get(plugin.getChart()).captureUndoable(plugin);
+		}
 
 		double plotWidth = plugin.getXValueAxis().getUpperBound() - plugin.getXValueAxis().getLowerBound();
 
@@ -114,9 +118,11 @@ class PanHelper {
 
 	}
 
-	void scrollVertically( double offset ) {
+	void scrollVertically( double offset, boolean captureUndoable ) {
 
-		ChartUndoManager.get(plugin.getChart()).captureUndoable(plugin);
+		if ( captureUndoable ) {
+			ChartUndoManager.get(plugin.getChart()).captureUndoable(plugin);
+		}
 
 		double plotHeight = plugin.getYValueAxis().getUpperBound() - plugin.getYValueAxis().getLowerBound();
 

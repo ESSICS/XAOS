@@ -22,6 +22,7 @@ import org.junit.runners.Suite;
 
 
 /**
+ * TODO:CR create tests for all plugins.
  * @author claudio.rosati@esss.se
  */
 @RunWith( Suite.class )

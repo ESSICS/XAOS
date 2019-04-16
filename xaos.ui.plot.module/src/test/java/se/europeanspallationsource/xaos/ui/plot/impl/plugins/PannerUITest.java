@@ -131,7 +131,7 @@ public class PannerUITest extends ApplicationTest {
 	@Test
 	public void testMouseDrag() {
 
-		System.out.println("  Testing ''Panner''...");
+		System.out.println("  Testing ''Panner (drag)''...");
 
 		FxRobot robot = new FxRobot();
 
@@ -226,7 +226,7 @@ public class PannerUITest extends ApplicationTest {
 	@Test
 	public void testMouseScroll() {
 
-		System.out.println("  Testing ''Panner''...");
+		System.out.println("  Testing ''Panner (scroll)''...");
 
 		FxRobot robot = new FxRobot();
 

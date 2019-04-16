@@ -92,9 +92,9 @@ public class KeyboardAccelerators extends Plugin {
 					ChartUndoManager.get(chart).undo(this);
 				}
 			} else if ( ZOOM_IN_ACCELERATOR.match(event) ) {
-				zoomHelper.zoomIn();
+				zoomHelper.zoomIn(true);
 			} else if ( ZOOM_OUT_ACCELERATOR.match(event) ) {
-				zoomHelper.zoomOut();
+				zoomHelper.zoomOut(true);
 			} else if ( ZOOM_TO_ONE_ACCELERATOR.match(event) ) {
 				zoomHelper.autoScale();
 			} else {

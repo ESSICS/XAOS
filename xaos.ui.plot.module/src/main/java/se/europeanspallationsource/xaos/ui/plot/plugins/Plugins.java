@@ -24,6 +24,7 @@ import se.europeanspallationsource.xaos.ui.control.NavigatorPopup;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.KeyboardAccelerators;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.Navigator;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.Panner;
+import se.europeanspallationsource.xaos.ui.plot.impl.plugins.Zoomer;
 import se.europeanspallationsource.xaos.ui.plot.plugins.AxisConstrained.AxisConstraints;
 
 
@@ -42,14 +43,14 @@ public class Plugins {
 	 *         method of the lister returned by {@link Pluggable#getPlugins()}.
 	 * @see #keyboardAccelerators
 	 * @see #navigator()
-	 * @see #panner() 
+	 * @see #panner()
 	 */
 	public static Plugin[] all() {
 		return new Plugin[] {
 			navigator(),
 			keyboardAccelerators(),
-			panner()
-//			new Zoom(),
+			panner(),
+			zoomer()
 //			new CoordinatesLines(),
 //			new CoordinatesLabel(),
 //			new DataPointTooltip(),
@@ -59,20 +60,20 @@ public class Plugins {
 	}
 
 	/**
-	 * Returns a plugin that allow panner and zoom operations to be performed 
+	 * Returns a plugin that allow panner and zoom operations to be performed
 	 * using keyboards accelerators (Shortcut stands for Ctrl on Windows or
 	 * Linux, and Command on macOS):
 	 * <table>
-	 *   <caption>&nbsp;</caption>
-	 *   <tr><td>Panner Down</td><td>Shortcut+DOWN</td></tr>
-	 *   <tr><td>Panner Left</td><td>Shortcut+LEFT</td></tr>
-	 *   <tr><td>Panner Right</td><td>Shortcut+RIGHT</td></tr>
-	 *   <tr><td>Panner Up</td><td>Shortcut+UP</td></tr>
-	 *   <tr><td>Redo</td><td>Shift+Shortcut+Z</td></tr>
-	 *   <tr><td>Undo</td><td>Shortcut+Z</td></tr>
-	 *   <tr><td>Zoom In</td><td>Shift+Shortcut+UP</td></tr>
-	 *   <tr><td>Zoom Out</td><td>Shift+Shortcut+DOWN</td></tr>
-	 *   <tr><td>Zoom To One</td><td>Shortcut+EQUALS</td></tr>
+	 * <caption>&nbsp;</caption>
+	 * <tr><td>Panner Down</td><td>Shortcut+DOWN</td></tr>
+	 * <tr><td>Panner Left</td><td>Shortcut+LEFT</td></tr>
+	 * <tr><td>Panner Right</td><td>Shortcut+RIGHT</td></tr>
+	 * <tr><td>Panner Up</td><td>Shortcut+UP</td></tr>
+	 * <tr><td>Redo</td><td>Shift+Shortcut+Z</td></tr>
+	 * <tr><td>Undo</td><td>Shortcut+Z</td></tr>
+	 * <tr><td>Zoom In</td><td>Shift+Shortcut+UP</td></tr>
+	 * <tr><td>Zoom Out</td><td>Shift+Shortcut+DOWN</td></tr>
+	 * <tr><td>Zoom To One</td><td>Shortcut+EQUALS</td></tr>
 	 * </table>
 	 *
 	 * @return A navigator plugin.
@@ -136,7 +137,7 @@ public class Plugins {
 	 * specified axis.
 	 * <p>
 	 * If {@code constraints} parameter is set to
-	 * {@link AxisConstraints#X_AND_Y X_AND_Y}, then pressing SHIFT when 
+	 * {@link AxisConstraints#X_AND_Y X_AND_Y}, then pressing SHIFT when
 	 * panning will restrict the movement to {@link AxisConstraints#X_ONLY X_ONLY}
 	 * or {@link AxisConstraints#Y_ONLY Y_ONLY} according to the direction of the
 	 * initial movement of the gesture.</p>
@@ -147,11 +148,71 @@ public class Plugins {
 	 * possible to scroll on both axis).</p>
 	 *
 	 * @param constraints Initial value for the panner plugin's
-                    {@link Panner#constraintsProperty() constraints} property.
+	 *                    {@link Panner#constraintsProperty() constraints}
+	 *                    property.
 	 * @return A panner plugin.
 	 */
 	public static Plugin panner( AxisConstraints constraints ) {
 		return new Panner(constraints);
+	}
+
+	/**
+	 * Return a plugin that allows zooming-by-dragging operation along the
+	 * specified axis.
+	 * <p>
+	 * The plugin is activated by pressing SHORTCUT (COMMAND on macOS, CTRL on
+	 * Windows and Linux) and then dragging the rectangle to zoom in, or
+	 * double-clicking to auto-scale.</p>
+	 * <p>
+	 * Pressing also SHIFT will constrain zooming on a single axis according to
+	 * the longest side of the drawn rectangle.</p>
+	 *
+	 * @return A zoomer plugin.
+	 */
+	public static Plugin zoomer() {
+		return new Zoomer();
+	}
+
+	/**
+	 * Return a plugin that allows zooming-by-dragging operation along the
+	 * specified axis.
+	 * <p>
+	 * The plugin is activated by pressing SHORTCUT (COMMAND on macOS, CTRL on
+	 * Windows and Linux) and then dragging the rectangle to zoom in, or
+	 * double-clicking to auto-scale.</p>
+	 * <p>
+	 * Pressing also SHIFT will constrain zooming on a single axis according to
+	 * the longest side of the drawn rectangle.</p>
+	 *
+	 * @param constraints Initial value for the
+	 *                    {@link Zoomer#constraintsProperty() constraints}
+	 *                    property.
+	 * @return A zoomer plugin.
+	 */
+	public static Plugin zoomer( AxisConstraints constraints ) {
+		return new Zoomer(constraints);
+	}
+
+	/**
+	 * Return a plugin that allows zooming-by-dragging operation along the
+	 * specified axis.
+	 * <p>
+	 * The plugin is activated by pressing SHORTCUT (COMMAND on macOS, CTRL on
+	 * Windows and Linux) and then dragging the rectangle to zoom in, or
+	 * double-clicking to auto-scale.</p>
+	 * <p>
+	 * Pressing also SHIFT will constrain zooming on a single axis according to
+	 * the longest side of the drawn rectangle.</p>
+	 *
+	 * @param constraints Initial value for the
+	 *                    {@link Zoomer#constraintsProperty() constraints}
+	 *                    property.
+	 * @param animated    {@code true} if the zoom must be animated,
+	 *                    {@code false} otherwise.
+	 * @return A zoomer plugin.
+	 */
+	public static Plugin zoomer( AxisConstraints constraints, boolean animated ) {
+		return new Zoomer(constraints, animated);
 	}
 
 	private Plugins() {

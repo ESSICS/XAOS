@@ -97,6 +97,7 @@ public class ChartUndoManagerUITest extends ApplicationTest {
 	private Plugin keyboardAccelerators;
 	private Plugin navigator;
 	private Plugin panner;
+	private Plugin zoomer;
 
 	@Override
 	@SuppressWarnings( "NestedAssignment" )
@@ -115,8 +116,8 @@ public class ChartUndoManagerUITest extends ApplicationTest {
 		chart.getPlugins().addAll(
 			navigator            = Plugins.navigator(),
 			keyboardAccelerators = Plugins.keyboardAccelerators(),
-			panner               = Plugins.panner()
-//			new Zoom(),
+			panner               = Plugins.panner(),
+			zoomer               = Plugins.zoomer()
 //			new CoordinatesLines(),
 //			new CoordinatesLabel(),
 //			new DataPointTooltip(),

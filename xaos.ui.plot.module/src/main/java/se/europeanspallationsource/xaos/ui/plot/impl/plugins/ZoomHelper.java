@@ -18,6 +18,11 @@ package se.europeanspallationsource.xaos.ui.plot.impl.plugins;
 
 
 import chart.Plugin;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.scene.chart.ValueAxis;
+import javafx.util.Duration;
 import se.europeanspallationsource.xaos.ui.plot.impl.util.ChartUndoManager;
 
 
@@ -29,7 +34,10 @@ import se.europeanspallationsource.xaos.ui.plot.impl.util.ChartUndoManager;
 @SuppressWarnings( "ClassWithoutLogger" )
 class ZoomHelper {
 
+	static final Duration DEFAULT_ANIMATION_DURATION = Duration.millis(500);
+
 	private final Plugin plugin;
+	private Timeline zoomTimeline = new Timeline();;
 
 	ZoomHelper( Plugin plugin ) {
 		this.plugin = plugin;
@@ -41,35 +49,82 @@ class ZoomHelper {
 		plugin.getYValueAxis().setAutoRanging(true);
 	}
 
-	void zoomIn() {
+	void zoomIn( boolean captureUndoable ) {
 
-		ChartUndoManager.get(plugin.getChart()).captureUndoable(plugin);
+		if ( captureUndoable ) {
+			ChartUndoManager.get(plugin.getChart()).captureUndoable(plugin);
+		}
 
-		double plotHeight = plugin.getYValueAxis().getUpperBound() - plugin.getYValueAxis().getLowerBound();
-		double plotWidth  = plugin.getXValueAxis().getUpperBound() - plugin.getXValueAxis().getLowerBound();
+		ValueAxis<?> xAxis = plugin.getXValueAxis();
+		ValueAxis<?> yAxis = plugin.getYValueAxis();
+		double plotHeight = yAxis.getUpperBound() - yAxis.getLowerBound();
+		double plotWidth  = xAxis.getUpperBound() - xAxis.getLowerBound();
 
-		plugin.getXValueAxis().setAutoRanging(false);
-		plugin.getYValueAxis().setAutoRanging(false);
-		plugin.getXValueAxis().setLowerBound(plugin.getXValueAxis().getLowerBound() + 0.1 * plotWidth);
-		plugin.getXValueAxis().setUpperBound(plugin.getXValueAxis().getUpperBound() - 0.1 * plotWidth);
-		plugin.getYValueAxis().setLowerBound(plugin.getYValueAxis().getLowerBound() + 0.1 * plotHeight);
-		plugin.getYValueAxis().setUpperBound(plugin.getYValueAxis().getUpperBound() - 0.1 * plotHeight);
+		xAxis.setAutoRanging(false);
+		yAxis.setAutoRanging(false);
+		xAxis.setLowerBound(xAxis.getLowerBound() + 0.1 * plotWidth);
+		xAxis.setUpperBound(xAxis.getUpperBound() - 0.1 * plotWidth);
+		yAxis.setLowerBound(yAxis.getLowerBound() + 0.1 * plotHeight);
+		yAxis.setUpperBound(yAxis.getUpperBound() - 0.1 * plotHeight);
 
 	}
 
-	void zoomOut() {
+	void zoomOut( boolean captureUndoable ) {
+
+		if ( captureUndoable ) {
+			ChartUndoManager.get(plugin.getChart()).captureUndoable(plugin);
+		}
+
+		ValueAxis<?> xAxis = plugin.getXValueAxis();
+		ValueAxis<?> yAxis = plugin.getYValueAxis();
+		double plotHeight = yAxis.getUpperBound() - yAxis.getLowerBound();
+		double plotWidth  = xAxis.getUpperBound() - xAxis.getLowerBound();
+
+		xAxis.setAutoRanging(false);
+		yAxis.setAutoRanging(false);
+		xAxis.setLowerBound(xAxis.getLowerBound() - 0.1 * plotWidth);
+		xAxis.setUpperBound(xAxis.getUpperBound() + 0.1 * plotWidth);
+		yAxis.setLowerBound(yAxis.getLowerBound() - 0.1 * plotHeight);
+		yAxis.setUpperBound(yAxis.getUpperBound() + 0.1 * plotHeight);
+
+	}
+
+	void zoom ( double xLowerBound, double xUpperBound, double yLowerBound, double yUpperBound, boolean animated, Duration duration ) {
+
+		zoomTimeline.stop();
 
 		ChartUndoManager.get(plugin.getChart()).captureUndoable(plugin);
 
-		double plotHeight = plugin.getYValueAxis().getUpperBound() - plugin.getYValueAxis().getLowerBound();
-		double plotWidth  = plugin.getXValueAxis().getUpperBound() - plugin.getXValueAxis().getLowerBound();
+		ValueAxis<?> xAxis = plugin.getXValueAxis();
+		ValueAxis<?> yAxis = plugin.getYValueAxis();
 
-		plugin.getXValueAxis().setAutoRanging(false);
-		plugin.getYValueAxis().setAutoRanging(false);
-		plugin.getXValueAxis().setLowerBound(plugin.getXValueAxis().getLowerBound() - 0.1 * plotWidth);
-		plugin.getXValueAxis().setUpperBound(plugin.getXValueAxis().getUpperBound() + 0.1 * plotWidth);
-		plugin.getYValueAxis().setLowerBound(plugin.getYValueAxis().getLowerBound() - 0.1 * plotHeight);
-		plugin.getYValueAxis().setUpperBound(plugin.getYValueAxis().getUpperBound() + 0.1 * plotHeight);
+		xAxis.setAutoRanging(false);
+		yAxis.setAutoRanging(false);
+
+		if ( animated ) {
+			zoomTimeline.getKeyFrames().setAll(
+				new KeyFrame(
+					Duration.ZERO,
+					new KeyValue(xAxis.lowerBoundProperty(), xAxis.getLowerBound()),
+					new KeyValue(xAxis.upperBoundProperty(), xAxis.getUpperBound()),
+					new KeyValue(yAxis.lowerBoundProperty(), yAxis.getLowerBound()),
+					new KeyValue(yAxis.upperBoundProperty(), yAxis.getUpperBound())
+				),
+				new KeyFrame(
+					duration == null ? DEFAULT_ANIMATION_DURATION : duration,
+					new KeyValue(xAxis.lowerBoundProperty(), xLowerBound),
+					new KeyValue(xAxis.upperBoundProperty(), xUpperBound),
+					new KeyValue(yAxis.lowerBoundProperty(), yLowerBound),
+					new KeyValue(yAxis.upperBoundProperty(), yUpperBound)
+				)
+			);
+			zoomTimeline.play();
+		} else {
+			xAxis.setLowerBound(xLowerBound);
+			xAxis.setUpperBound(xUpperBound);
+			yAxis.setLowerBound(yLowerBound);
+			yAxis.setUpperBound(yUpperBound);
+		}
 
 	}
 

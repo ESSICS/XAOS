@@ -66,10 +66,15 @@ public final class Panner extends Plugin implements AxisConstrained {
 	private final EventHandler<MouseEvent> mouseEnteredHandler = this::mouseEntered;
 	private final EventHandler<MouseEvent> mouseExitedHandler = this::mouseExited;
 	private final EventHandler<MouseEvent> mouseReleasedHandler = this::mouseReleased;
+	private double oldMouseXLocation;
+	private double oldMouseYLocation;
 	private Cursor originalCursor = Cursor.DEFAULT;
 	private AxisConstraints overriddenConstraints;
 	private final PanHelper panHelper = new PanHelper(this);
+	private final EventHandler<ScrollEvent> scrollFinishedHandler = this::scrollFinished;
 	private final EventHandler<ScrollEvent> scrollHandler = this::scroll;
+	private final EventHandler<ScrollEvent> scrollStartedHandler = this::scrollStarted;
+	private boolean scrolling = false;
 	private boolean shiftWasDown = false;
 	private Data<Number, Number> startingDataPoint = null;
 
@@ -80,7 +85,7 @@ public final class Panner extends Plugin implements AxisConstrained {
 	/*
 	 * ---- constraints --------------------------------------------------------
 	 */
-	private final ObjectProperty<AxisConstraints> constraints = new SimpleObjectProperty<AxisConstraints>( Panner.this, "constraints", AxisConstraints.X_AND_Y) {
+	private final ObjectProperty<AxisConstraints> constraints = new SimpleObjectProperty<>( Panner.this, "constraints", AxisConstraints.X_AND_Y) {
 		@Override protected void invalidated() {
 			Validate.notNull(get(), "Null '%1$s' property.", getName());
 		}
@@ -160,13 +165,17 @@ public final class Panner extends Plugin implements AxisConstrained {
 		chart.addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEnteredHandler);
 		chart.addEventHandler(MouseEvent.MOUSE_EXITED, mouseExitedHandler);
 		chart.addEventHandler(MouseEvent.MOUSE_RELEASED, mouseReleasedHandler);
+		chart.addEventHandler(ScrollEvent.SCROLL_STARTED, scrollStartedHandler);
 		chart.addEventHandler(ScrollEvent.SCROLL, scrollHandler);
+		chart.addEventHandler(ScrollEvent.SCROLL_FINISHED, scrollFinishedHandler);
 
 	}
 
 	@Override
 	protected void chartDisconnected( Chart chart ) {
+		chart.addEventHandler(ScrollEvent.SCROLL_FINISHED, scrollFinishedHandler);
 		chart.addEventHandler(ScrollEvent.SCROLL, scrollHandler);
+		chart.addEventHandler(ScrollEvent.SCROLL_STARTED, scrollStartedHandler);
 		chart.removeEventHandler(MouseEvent.MOUSE_RELEASED, mouseReleasedHandler);
 		chart.removeEventHandler(MouseEvent.MOUSE_EXITED, mouseExitedHandler);
 		chart.removeEventHandler(MouseEvent.MOUSE_ENTERED, mouseEnteredHandler);
@@ -187,18 +196,20 @@ public final class Panner extends Plugin implements AxisConstrained {
 
 				ChartUndoManager.get(chart).captureUndoable(this);
 
-				//	Capture initial pan location.
-				Point2D mouseLocation = getLocationInPlotArea(event);
-
-				startingDataPoint = new Data<>(
-					getXValueForDisplayAsDouble(mouseLocation.getX()),
-					getYValueForDisplayAsDouble(mouseLocation.getY())
-				);
-
 				//	Set the PAN cursor...
 				originalCursor = chart.getScene().getCursor();
 
 				chart.getScene().setCursor(PAN_CURSOR);
+
+				//	Capture initial pan location.
+				Point2D mouseLocation = getLocationInPlotArea(event);
+
+				oldMouseXLocation = mouseLocation.getX();
+				oldMouseYLocation = mouseLocation.getY();
+				startingDataPoint = new Data<>(
+					getXValueForDisplayAsDouble(oldMouseXLocation),
+					getYValueForDisplayAsDouble(oldMouseYLocation)
+				);
 
 				//	Add drag listener...
 				chart.addEventHandler(MouseEvent.MOUSE_DRAGGED, draggedHandler);
@@ -221,8 +232,10 @@ public final class Panner extends Plugin implements AxisConstrained {
 		if ( isPanOngoing() && isInsidePlotArea(event) ) {
 
 			Point2D mouseLocation = getLocationInPlotArea(event);
-			double xPosition = getXValueForDisplayAsDouble(mouseLocation.getX());
-			double yPosition = getYValueForDisplayAsDouble(mouseLocation.getY());
+			double mouseXLocation = mouseLocation.getX();
+			double mouseYLocation = mouseLocation.getY();
+			double xPosition = getXValueForDisplayAsDouble(mouseXLocation);
+			double yPosition = getYValueForDisplayAsDouble(mouseYLocation);
 			double xOffset = startingDataPoint.getXValue().doubleValue() - xPosition;
 			double yOffset = startingDataPoint.getYValue().doubleValue() - yPosition;
 
@@ -232,7 +245,7 @@ public final class Panner extends Plugin implements AxisConstrained {
 				overriddenConstraints = getConstraints();
 
 				if ( overriddenConstraints == AxisConstraints.X_AND_Y ) {
-					if ( Math.abs(xOffset) > Math.abs(yOffset) ) {
+					if ( Math.abs(mouseXLocation - oldMouseXLocation) > Math.abs(mouseYLocation - oldMouseYLocation) ) {
 						overriddenConstraints = AxisConstraints.X_ONLY;
 					} else {
 						overriddenConstraints = AxisConstraints.Y_ONLY;
@@ -251,6 +264,9 @@ public final class Panner extends Plugin implements AxisConstrained {
 			if ( overriddenConstraints == AxisConstraints.Y_ONLY || overriddenConstraints == AxisConstraints.X_AND_Y ) {
 				panHelper.moveVertically(yOffset);
 			}
+
+			oldMouseXLocation = mouseXLocation;
+			oldMouseYLocation = mouseYLocation;
 
 			//	Job done, consume the event...
 			event.consume();
@@ -297,21 +313,25 @@ public final class Panner extends Plugin implements AxisConstrained {
 
 	private void mouseReleased( MouseEvent event ) {
 
-		//	Clear starting point...
-		startingDataPoint = null;
-		shiftWasDown = false;
-		overriddenConstraints = getConstraints();
+		if ( isPanOngoing() ) {
 
-		//	Remove drag listener...
-		Chart chart = getChart();
+			//	Clear starting point...
+			startingDataPoint = null;
+			shiftWasDown = false;
+			overriddenConstraints = getConstraints();
 
-		chart.removeEventHandler(MouseEvent.MOUSE_DRAGGED, draggedHandler);
+			//	Remove drag listener...
+			Chart chart = getChart();
 
-		//	Restore original cursor...
-		chart.getScene().setCursor(originalCursor);
+			chart.removeEventHandler(MouseEvent.MOUSE_DRAGGED, draggedHandler);
 
-		//	Job done, consume the event...
-		event.consume();
+			//	Restore original cursor...
+			chart.getScene().setCursor(originalCursor);
+
+			//	Job done, consume the event...
+			event.consume();
+
+		}
 
 	};
 
@@ -343,16 +363,47 @@ public final class Panner extends Plugin implements AxisConstrained {
 
 			switch ( overriddenConstraints ) {
 				case X_ONLY:
-					panHelper.scrollHorizontally(- xOffset);
+					panHelper.scrollHorizontally(- xOffset, !scrolling);
 					break;
 				case Y_ONLY:
-					panHelper.scrollVertically(yOffset);
+					panHelper.scrollVertically(yOffset, !scrolling);
 					break;
 				case X_AND_Y:
 				default:
-					panHelper.scroll(- xOffset, yOffset);
+					panHelper.scroll(- xOffset, yOffset, !scrolling);
 					break;
 			}
+
+			//	Job done, consume the event...
+			event.consume();
+
+		}
+
+	}
+
+	private void scrollFinished ( ScrollEvent event ) {
+
+		if ( scrolling ) {
+
+			scrolling = false;
+
+			//	Job done, consume the event...
+			event.consume();
+
+		}
+
+	}
+
+	private void scrollStarted ( ScrollEvent event ) {
+
+		if ( !isPanOngoing() && !event.isAltDown() ) {
+
+			scrolling = true;
+
+			//	Capture undo status...
+			Chart chart = getChart();
+
+			ChartUndoManager.get(chart).captureUndoable(this);
 
 			//	Job done, consume the event...
 			event.consume();
