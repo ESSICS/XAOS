@@ -252,8 +252,6 @@ public final class Panner extends Plugin implements AxisConstrained {
 				panHelper.moveVertically(yOffset);
 			}
 
-//			startingDataPoint = new Data<>(xPosition, yPosition);
-
 			//	Job done, consume the event...
 			event.consume();
 
@@ -321,9 +319,6 @@ public final class Panner extends Plugin implements AxisConstrained {
 
 		if ( !isPanOngoing() && !event.isAltDown() ) {
 
-			//	Capture undo status...
-			ChartUndoManager.get(getChart()).captureUndoable(this);
-
 			//	Perform scroll...
 			double xOffset = event.isShortcutDown() ? event.getDeltaY() : event.getDeltaX();
 			double yOffset = event.isShortcutDown() ? event.getDeltaX() : event.getDeltaY();
@@ -346,12 +341,17 @@ public final class Panner extends Plugin implements AxisConstrained {
 				overriddenConstraints = getConstraints();
 			}
 
-			if ( overriddenConstraints == AxisConstraints.X_ONLY || overriddenConstraints == AxisConstraints.X_AND_Y ) {
-				panHelper.scrollHorizontally(- xOffset);
-			}
-
-			if ( overriddenConstraints == AxisConstraints.Y_ONLY || overriddenConstraints == AxisConstraints.X_AND_Y ) {
-				panHelper.scrollVertically(yOffset);
+			switch ( overriddenConstraints ) {
+				case X_ONLY:
+					panHelper.scrollHorizontally(- xOffset);
+					break;
+				case Y_ONLY:
+					panHelper.scrollVertically(yOffset);
+					break;
+				case X_AND_Y:
+				default:
+					panHelper.scroll(- xOffset, yOffset);
+					break;
 			}
 
 			//	Job done, consume the event...

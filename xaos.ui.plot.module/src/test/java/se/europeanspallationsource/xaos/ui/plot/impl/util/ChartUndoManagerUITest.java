@@ -28,6 +28,7 @@ import java.util.concurrent.TimeoutException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
+import javafx.geometry.VerticalDirection;
 import javafx.scene.Scene;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -40,9 +41,12 @@ import org.junit.Test;
 import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
+import se.europeanspallationsource.xaos.core.util.ThreadUtils;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
 
 import static javafx.geometry.Pos.CENTER;
+import static javafx.geometry.VerticalDirection.DOWN;
+import static javafx.geometry.VerticalDirection.UP;
 import static javafx.scene.input.KeyCode.ALT;
 import static javafx.scene.input.MouseButton.PRIMARY;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -162,15 +166,15 @@ public class ChartUndoManagerUITest extends ApplicationTest {
 		System.out.println("  Testing ''ChartUndoManager'' on KayboardAccelerators...");
 
 		FxRobot robot = new FxRobot();
-		ChartUndoManager undoManager = ChartUndoManager.get(navigator.getChart());
+		ChartUndoManager undoManager = ChartUndoManager.get(keyboardAccelerators.getChart());
 
 		//	Get chart's reference bounds...
-		chartXAutoRange  = panner.getXValueAxis().isAutoRanging();
-		chartXLowerBound = navigator.getXValueAxis().getLowerBound();
-		chartXUpperBound = navigator.getXValueAxis().getUpperBound();
-		chartYAutoRange  = panner.getYValueAxis().isAutoRanging();
-		chartYLowerBound = navigator.getYValueAxis().getLowerBound();
-		chartYUpperBound = navigator.getYValueAxis().getUpperBound();
+		chartXAutoRange  = keyboardAccelerators.getXValueAxis().isAutoRanging();
+		chartXLowerBound = keyboardAccelerators.getXValueAxis().getLowerBound();
+		chartXUpperBound = keyboardAccelerators.getXValueAxis().getUpperBound();
+		chartYAutoRange  = keyboardAccelerators.getYValueAxis().isAutoRanging();
+		chartYLowerBound = keyboardAccelerators.getYValueAxis().getLowerBound();
+		chartYUpperBound = keyboardAccelerators.getYValueAxis().getUpperBound();
 
 		//	Activate the tool...
 		robot.moveTo(chart);
@@ -185,24 +189,24 @@ public class ChartUndoManagerUITest extends ApplicationTest {
 		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) PAN_DOWN_ACCELERATOR);
 		assertFalse(undoManager.isRedoable());
 		assertTrue(undoManager.isUndoable());
-		assertThat(navigator.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
-		assertThat(navigator.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
-		assertThat(navigator.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
-		assertThat(navigator.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
 		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) UNDO_ACCELERATOR, false);
 		assertTrue(undoManager.isRedoable());
 		assertFalse(undoManager.isUndoable());
-		assertThat(navigator.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
-		assertThat(navigator.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
-		assertThat(navigator.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
-		assertThat(navigator.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
 		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) REDO_ACCELERATOR, false);
 		assertFalse(undoManager.isRedoable());
 		assertTrue(undoManager.isUndoable());
-		assertThat(navigator.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
-		assertThat(navigator.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
-		assertThat(navigator.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
-		assertThat(navigator.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
 		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) UNDO_ACCELERATOR, false);
 		assertTrue(undoManager.isRedoable());
 		assertFalse(undoManager.isUndoable());
@@ -212,24 +216,24 @@ public class ChartUndoManagerUITest extends ApplicationTest {
 		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) PAN_UP_ACCELERATOR);
 		assertFalse(undoManager.isRedoable());
 		assertTrue(undoManager.isUndoable());
-		assertThat(navigator.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
-		assertThat(navigator.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
-		assertThat(navigator.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
-		assertThat(navigator.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
 		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) UNDO_ACCELERATOR, false);
 		assertTrue(undoManager.isRedoable());
 		assertFalse(undoManager.isUndoable());
-		assertThat(navigator.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
-		assertThat(navigator.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
-		assertThat(navigator.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
-		assertThat(navigator.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
 		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) REDO_ACCELERATOR, false);
 		assertFalse(undoManager.isRedoable());
 		assertTrue(undoManager.isUndoable());
-		assertThat(navigator.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
-		assertThat(navigator.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
-		assertThat(navigator.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
-		assertThat(navigator.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
 		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) UNDO_ACCELERATOR, false);
 		assertTrue(undoManager.isRedoable());
 		assertFalse(undoManager.isUndoable());
@@ -239,24 +243,24 @@ public class ChartUndoManagerUITest extends ApplicationTest {
 		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) PAN_LEFT_ACCELERATOR);
 		assertFalse(undoManager.isRedoable());
 		assertTrue(undoManager.isUndoable());
-		assertThat(navigator.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
-		assertThat(navigator.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
-		assertThat(navigator.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
-		assertThat(navigator.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
 		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) UNDO_ACCELERATOR, false);
 		assertTrue(undoManager.isRedoable());
 		assertFalse(undoManager.isUndoable());
-		assertThat(navigator.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
-		assertThat(navigator.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
-		assertThat(navigator.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
-		assertThat(navigator.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
 		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) REDO_ACCELERATOR, false);
 		assertFalse(undoManager.isRedoable());
 		assertTrue(undoManager.isUndoable());
-		assertThat(navigator.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
-		assertThat(navigator.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
-		assertThat(navigator.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
-		assertThat(navigator.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
 		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) UNDO_ACCELERATOR, false);
 		assertTrue(undoManager.isRedoable());
 		assertFalse(undoManager.isUndoable());
@@ -266,24 +270,24 @@ public class ChartUndoManagerUITest extends ApplicationTest {
 		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) PAN_RIGHT_ACCELERATOR);
 		assertFalse(undoManager.isRedoable());
 		assertTrue(undoManager.isUndoable());
-		assertThat(navigator.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
-		assertThat(navigator.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
-		assertThat(navigator.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
-		assertThat(navigator.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
 		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) UNDO_ACCELERATOR, false);
 		assertTrue(undoManager.isRedoable());
 		assertFalse(undoManager.isUndoable());
-		assertThat(navigator.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
-		assertThat(navigator.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
-		assertThat(navigator.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
-		assertThat(navigator.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
 		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) REDO_ACCELERATOR, false);
 		assertFalse(undoManager.isRedoable());
 		assertTrue(undoManager.isUndoable());
-		assertThat(navigator.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
-		assertThat(navigator.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
-		assertThat(navigator.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
-		assertThat(navigator.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
 		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) UNDO_ACCELERATOR, false);
 		assertTrue(undoManager.isRedoable());
 		assertFalse(undoManager.isUndoable());
@@ -293,24 +297,24 @@ public class ChartUndoManagerUITest extends ApplicationTest {
 		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) ZOOM_IN_ACCELERATOR);
 		assertFalse(undoManager.isRedoable());
 		assertTrue(undoManager.isUndoable());
-		assertThat(navigator.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
-		assertThat(navigator.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
-		assertThat(navigator.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
-		assertThat(navigator.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
 		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) UNDO_ACCELERATOR, false);
 		assertTrue(undoManager.isRedoable());
 		assertFalse(undoManager.isUndoable());
-		assertThat(navigator.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
-		assertThat(navigator.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
-		assertThat(navigator.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
-		assertThat(navigator.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
 		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) REDO_ACCELERATOR, false);
 		assertFalse(undoManager.isRedoable());
 		assertTrue(undoManager.isUndoable());
-		assertThat(navigator.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
-		assertThat(navigator.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
-		assertThat(navigator.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
-		assertThat(navigator.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
 		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) UNDO_ACCELERATOR, false);
 		assertTrue(undoManager.isRedoable());
 		assertFalse(undoManager.isUndoable());
@@ -320,24 +324,24 @@ public class ChartUndoManagerUITest extends ApplicationTest {
 		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) ZOOM_OUT_ACCELERATOR);
 		assertFalse(undoManager.isRedoable());
 		assertTrue(undoManager.isUndoable());
-		assertThat(navigator.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
-		assertThat(navigator.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
-		assertThat(navigator.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
-		assertThat(navigator.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
 		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) UNDO_ACCELERATOR, false);
 		assertTrue(undoManager.isRedoable());
 		assertFalse(undoManager.isUndoable());
-		assertThat(navigator.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
-		assertThat(navigator.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
-		assertThat(navigator.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
-		assertThat(navigator.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
 		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) REDO_ACCELERATOR, false);
 		assertFalse(undoManager.isRedoable());
 		assertTrue(undoManager.isUndoable());
-		assertThat(navigator.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
-		assertThat(navigator.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
-		assertThat(navigator.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
-		assertThat(navigator.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
 		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) UNDO_ACCELERATOR, false);
 		assertTrue(undoManager.isRedoable());
 		assertFalse(undoManager.isUndoable());
@@ -348,38 +352,38 @@ public class ChartUndoManagerUITest extends ApplicationTest {
 		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) ZOOM_TO_ONE_ACCELERATOR, false);
 		assertFalse(undoManager.isRedoable());
 		assertTrue(undoManager.isUndoable());
-		assertThat(navigator.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
-		assertThat(navigator.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
-		assertThat(navigator.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
-		assertThat(navigator.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
 		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) UNDO_ACCELERATOR, false);
 		assertTrue(undoManager.isRedoable());
 		assertTrue(undoManager.isUndoable());
-		assertThat(navigator.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
-		assertThat(navigator.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
-		assertThat(navigator.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
-		assertThat(navigator.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
 		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) REDO_ACCELERATOR, false);
 		assertFalse(undoManager.isRedoable());
 		assertTrue(undoManager.isUndoable());
-		assertThat(navigator.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
-		assertThat(navigator.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
-		assertThat(navigator.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
-		assertThat(navigator.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
 		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) UNDO_ACCELERATOR, false);
 		assertTrue(undoManager.isRedoable());
 		assertTrue(undoManager.isUndoable());
-		assertThat(navigator.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
-		assertThat(navigator.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
-		assertThat(navigator.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
-		assertThat(navigator.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
 		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) UNDO_ACCELERATOR, false);
 		assertTrue(undoManager.isRedoable());
 		assertFalse(undoManager.isUndoable());
-		assertThat(navigator.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
-		assertThat(navigator.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
-		assertThat(navigator.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
-		assertThat(navigator.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(keyboardAccelerators.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(keyboardAccelerators.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
 		assertTrue(undoManager.isRedoable());
 		assertFalse(undoManager.isUndoable());
 
@@ -436,8 +440,10 @@ public class ChartUndoManagerUITest extends ApplicationTest {
 		ChartUndoManager undoManager = ChartUndoManager.get(navigator.getChart());
 
 		//	Get chart's reference bounds...
+		chartXAutoRange  = navigator.getXValueAxis().isAutoRanging();
 		chartXLowerBound = navigator.getXValueAxis().getLowerBound();
 		chartXUpperBound = navigator.getXValueAxis().getUpperBound();
+		chartYAutoRange  = navigator.getYValueAxis().isAutoRanging();
 		chartYLowerBound = navigator.getYValueAxis().getLowerBound();
 		chartYUpperBound = navigator.getYValueAxis().getUpperBound();
 
@@ -693,6 +699,318 @@ public class ChartUndoManagerUITest extends ApplicationTest {
 
 	}
 
+	/**
+	 * Test UNDO and REDO on Panner drag operations.
+	 */
+	@Test
+	public void testPannerDrag() {
+
+		System.out.println("  Testing ''ChartUndoManager'' on Panner (drag)...");
+
+		FxRobot robot = new FxRobot();
+		ChartUndoManager undoManager = ChartUndoManager.get(panner.getChart());
+
+		//	Get chart's reference bounds...
+		chartXAutoRange  = panner.getXValueAxis().isAutoRanging();
+		chartXLowerBound = panner.getXValueAxis().getLowerBound();
+		chartXUpperBound = panner.getXValueAxis().getUpperBound();
+		chartYAutoRange  = panner.getYValueAxis().isAutoRanging();
+		chartYLowerBound = panner.getYValueAxis().getLowerBound();
+		chartYUpperBound = panner.getYValueAxis().getUpperBound();
+
+		//	Activate the tool...
+		robot.moveTo(chart);
+		robot.clickOn(PRIMARY);
+
+		//	Assert initial conditions...
+		assertFalse(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+
+		// Testing mouse DRAG DOWN...
+		System.out.println("    - Testing mouse mouse DRAG DOWN...");
+		mouseResetChartAndDrag(robot, new Point2D(0, 100));
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(panner.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		undoManager.undo(panner);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+		assertThat(panner.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(panner.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		undoManager.redo(panner);
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(panner.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		undoManager.undo(panner);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+
+		// Testing mouse DRAG UP...
+		System.out.println("    - Testing mouse DRAG UP...");
+		mouseResetChartAndDrag(robot, new Point2D(0, -100));
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(panner.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		undoManager.undo(panner);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+		assertThat(panner.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(panner.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		undoManager.redo(panner);
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(panner.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		undoManager.undo(panner);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+
+		// Testing mouse DRAG LEFT...
+		System.out.println("    - Testing mouse DRAG LEFT...");
+		mouseResetChartAndDrag(robot, new Point2D(-100, 0));
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(panner.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		undoManager.undo(panner);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+		assertThat(panner.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(panner.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		undoManager.redo(panner);
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(panner.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		undoManager.undo(panner);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+
+		// Testing mouse DRAG RIGHT...
+		System.out.println("    - Testing mouse PAN RIGHT...");
+		mouseResetChartAndDrag(robot, new Point2D(100, 0));
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(panner.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		undoManager.undo(panner);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+		assertThat(panner.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(panner.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		undoManager.redo(panner);
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(panner.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		undoManager.undo(panner);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+
+		// Testing mouse DRAG DOWN-LEFT...
+		System.out.println("    - Testing mouse mouse DRAG DOWN-LEFT...");
+		mouseResetChartAndDrag(robot, new Point2D(-100, 100));
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(panner.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		assertThat(panner.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		undoManager.undo(panner);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+		assertThat(panner.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(panner.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		undoManager.redo(panner);
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(panner.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		assertThat(panner.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		undoManager.undo(panner);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+
+		// Testing mouse DRAG DOWN-RIGHT...
+		System.out.println("    - Testing mouse mouse DRAG DOWN-RIGHT...");
+		mouseResetChartAndDrag(robot, new Point2D(100, 100));
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(panner.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		assertThat(panner.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		undoManager.undo(panner);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+		assertThat(panner.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(panner.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		undoManager.redo(panner);
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(panner.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		assertThat(panner.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		undoManager.undo(panner);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+
+		// Testing mouse DRAG UP-LEFT...
+		System.out.println("    - Testing mouse DRAG UP-LEFT...");
+		mouseResetChartAndDrag(robot, new Point2D(-100, -100));
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(panner.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		assertThat(panner.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		undoManager.undo(panner);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+		assertThat(panner.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(panner.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		undoManager.redo(panner);
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(panner.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		assertThat(panner.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		undoManager.undo(panner);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+
+		// Testing mouse DRAG UP-RIGHT...
+		System.out.println("    - Testing mouse DRAG UP-RIGHT...");
+		mouseResetChartAndDrag(robot, new Point2D(100, -100));
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(panner.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		assertThat(panner.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		undoManager.undo(panner);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+		assertThat(panner.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(panner.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		undoManager.redo(panner);
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(panner.getXValueAxis().getLowerBound()).isNotEqualTo(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isNotEqualTo(chartXUpperBound);
+		assertThat(panner.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		undoManager.undo(panner);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+
+	}
+
+	/**
+	 * Test UNDO and REDO on Panner scroll operations.
+	 */
+	@Test
+	public void testPannerScroll() {
+
+		System.out.println("  Testing ''ChartUndoManager'' on Panner (scroll)...");
+
+		FxRobot robot = new FxRobot();
+		ChartUndoManager undoManager = ChartUndoManager.get(panner.getChart());
+
+		//	Get chart's reference bounds...
+		chartXAutoRange  = panner.getXValueAxis().isAutoRanging();
+		chartXLowerBound = panner.getXValueAxis().getLowerBound();
+		chartXUpperBound = panner.getXValueAxis().getUpperBound();
+		chartYAutoRange  = panner.getYValueAxis().isAutoRanging();
+		chartYLowerBound = panner.getYValueAxis().getLowerBound();
+		chartYUpperBound = panner.getYValueAxis().getUpperBound();
+
+		//	Activate the tool...
+		robot.moveTo(chart);
+		robot.clickOn(PRIMARY);
+
+		//	Assert initial conditions...
+		assertFalse(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+
+		// Testing SCROLL DOWN...
+		System.out.println("    - Testing SCROLL DOWN...");
+		mouseResetChartAndScroll(robot, DOWN, 1);
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(panner.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(panner.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		undoManager.undo(panner);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+		assertThat(panner.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(panner.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		undoManager.redo(panner);
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(panner.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(panner.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		undoManager.undo(panner);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+
+		// Testing SCROLL UP...
+		System.out.println("    - Testing SCROLL UP...");
+		mouseResetChartAndScroll(robot, UP, 1);
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(panner.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(panner.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) UNDO_ACCELERATOR, false);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+		assertThat(panner.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(panner.getYValueAxis().getLowerBound()).isEqualTo(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isEqualTo(chartYUpperBound);
+		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) REDO_ACCELERATOR, false);
+		assertFalse(undoManager.isRedoable());
+		assertTrue(undoManager.isUndoable());
+		assertThat(panner.getXValueAxis().getLowerBound()).isEqualTo(chartXLowerBound);
+		assertThat(panner.getXValueAxis().getUpperBound()).isEqualTo(chartXUpperBound);
+		assertThat(panner.getYValueAxis().getLowerBound()).isNotEqualTo(chartYLowerBound);
+		assertThat(panner.getYValueAxis().getUpperBound()).isNotEqualTo(chartYUpperBound);
+		acceleratorsResetChartAndPress(robot, (KeyCodeCombination) UNDO_ACCELERATOR, false);
+		assertTrue(undoManager.isRedoable());
+		assertFalse(undoManager.isUndoable());
+
+	}
+
 	private void acceleratorsResetChartAndPress ( FxRobot robot, KeyCodeCombination combination ) {
 		acceleratorsResetChartAndPress(robot, combination, true);
 	}
@@ -740,6 +1058,51 @@ public class ChartUndoManagerUITest extends ApplicationTest {
 		}
 
 		return data;
+
+	}
+
+	private void mouseResetChartAndDrag ( FxRobot robot, Point2D offset ) {
+		mouseResetChartAndDrag(robot, offset, true);
+	}
+
+	private void mouseResetChartAndDrag ( FxRobot robot, Point2D offset, boolean reset ) {
+
+		if ( reset ) {
+			panner.getXValueAxis().setAutoRanging(chartXAutoRange);
+			panner.getYValueAxis().setAutoRanging(chartYAutoRange);
+			panner.getXValueAxis().setLowerBound(chartXLowerBound);
+			panner.getXValueAxis().setUpperBound(chartXUpperBound);
+			panner.getYValueAxis().setLowerBound(chartYLowerBound);
+			panner.getYValueAxis().setUpperBound(chartYUpperBound);
+		}
+
+		robot.moveTo(chart, CENTER, Point2D.ZERO, DEFAULT);
+		robot.press(PRIMARY);
+		robot.moveTo(chart, CENTER, offset, DEFAULT);
+
+		//	Necessary to give the robot the time to perform the movement.
+		ThreadUtils.sleep(200);
+		robot.release(PRIMARY);
+
+	}
+
+	private void mouseResetChartAndScroll ( FxRobot robot, VerticalDirection direction, int amount ) {
+		mouseResetChartAndScroll(robot, direction, amount, true);
+	}
+
+	private void mouseResetChartAndScroll ( FxRobot robot, VerticalDirection direction, int amount, boolean reset ) {
+
+		if ( reset ) {
+			panner.getXValueAxis().setAutoRanging(chartXAutoRange);
+			panner.getYValueAxis().setAutoRanging(chartYAutoRange);
+			panner.getXValueAxis().setLowerBound(chartXLowerBound);
+			panner.getXValueAxis().setUpperBound(chartXUpperBound);
+			panner.getYValueAxis().setLowerBound(chartYLowerBound);
+			panner.getYValueAxis().setUpperBound(chartYUpperBound);
+		}
+
+		robot.moveTo(chart, CENTER, Point2D.ZERO, DEFAULT);
+		robot.scroll(amount, direction);
 
 	}
 

@@ -92,13 +92,25 @@ public class PanHelper {
 
 	}
 
+	public void scroll( double xOffset, double yOffset ) {
+
+		ChartUndoManager.get(plugin.getChart()).captureUndoable(plugin);
+
+		double plotWidth = plugin.getXValueAxis().getUpperBound() - plugin.getXValueAxis().getLowerBound();
+		double plotHeight = plugin.getYValueAxis().getUpperBound() - plugin.getYValueAxis().getLowerBound();
+
+		moveHorizontally(xOffset * SCROLL_FACTOR * plotWidth);
+		moveVertically(yOffset * SCROLL_FACTOR * plotHeight);
+
+	}
+
 	public void scrollHorizontally( double offset ) {
 
 		ChartUndoManager.get(plugin.getChart()).captureUndoable(plugin);
 
-		double plotHeight = plugin.getXValueAxis().getUpperBound() - plugin.getXValueAxis().getLowerBound();
+		double plotWidth = plugin.getXValueAxis().getUpperBound() - plugin.getXValueAxis().getLowerBound();
 
-		moveHorizontally(offset * SCROLL_FACTOR * plotHeight);
+		moveHorizontally(offset * SCROLL_FACTOR * plotWidth);
 
 	}
 
