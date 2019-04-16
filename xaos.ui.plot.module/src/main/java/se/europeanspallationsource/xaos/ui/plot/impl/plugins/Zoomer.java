@@ -187,15 +187,6 @@ public final class Zoomer extends Plugin implements AxisConstrained {
 	}
 
 	@Override
-	protected void chartDisconnected( Chart chart ) {
-		chart.removeEventHandler(MouseEvent.MOUSE_RELEASED, mouseReleasedHandler);
-		chart.removeEventHandler(MouseEvent.MOUSE_EXITED, mouseExitedHandler);
-		chart.removeEventHandler(MouseEvent.MOUSE_ENTERED, mouseEnteredHandler);
-		chart.removeEventHandler(MouseEvent.MOUSE_CLICKED, mouseClickedHandler);
-		chart.removeEventHandler(MouseEvent.DRAG_DETECTED, dragDetectedHandler);
-	}
-
-	@Override
 	protected void chartConnected( Chart chart ) {
 
 		if ( chart instanceof BarChart ) {
@@ -217,6 +208,15 @@ public final class Zoomer extends Plugin implements AxisConstrained {
 		chart.addEventHandler(MouseEvent.MOUSE_EXITED, mouseExitedHandler);
 		chart.addEventHandler(MouseEvent.MOUSE_RELEASED, mouseReleasedHandler);
 
+	}
+
+	@Override
+	protected void chartDisconnected( Chart chart ) {
+		chart.removeEventHandler(MouseEvent.MOUSE_RELEASED, mouseReleasedHandler);
+		chart.removeEventHandler(MouseEvent.MOUSE_EXITED, mouseExitedHandler);
+		chart.removeEventHandler(MouseEvent.MOUSE_ENTERED, mouseEnteredHandler);
+		chart.removeEventHandler(MouseEvent.MOUSE_CLICKED, mouseClickedHandler);
+		chart.removeEventHandler(MouseEvent.DRAG_DETECTED, dragDetectedHandler);
 	}
 
 	private void dragDetected( MouseEvent event ) {

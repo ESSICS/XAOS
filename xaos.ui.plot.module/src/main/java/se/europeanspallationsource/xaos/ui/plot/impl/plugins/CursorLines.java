@@ -38,6 +38,7 @@ import javafx.scene.shape.Line;
 public final class CursorLines extends Plugin {
 
 	private final Line horizontalLine = new Line();
+	private final EventHandler<MouseEvent> dragDetectedHandler = this::dragDetected;
 	private final EventHandler<MouseEvent> mouseEnteredHandler = this::mouseEntered;
 	private final EventHandler<MouseEvent> mouseExitedHandler = this::mouseExited;
 	private final EventHandler<MouseEvent> mouseMoveHandler = this::mouseMove;
@@ -61,6 +62,7 @@ public final class CursorLines extends Plugin {
 
 	@Override
 	protected void chartConnected( Chart chart ) {
+		chart.addEventHandler(MouseEvent.DRAG_DETECTED, dragDetectedHandler);
 		chart.addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEnteredHandler);
 		chart.addEventHandler(MouseEvent.MOUSE_EXITED, mouseExitedHandler);
 	}
@@ -69,6 +71,12 @@ public final class CursorLines extends Plugin {
 	protected void chartDisconnected( Chart chart ) {
 		chart.removeEventHandler(MouseEvent.MOUSE_EXITED, mouseExitedHandler);
 		chart.removeEventHandler(MouseEvent.MOUSE_ENTERED, mouseEnteredHandler);
+		chart.removeEventHandler(MouseEvent.DRAG_DETECTED, dragDetectedHandler);
+	}
+
+	private void dragDetected( MouseEvent event ) {
+		horizontalLine.setVisible(false);
+		verticalLine.setVisible(false);
 	}
 
 	private void mouseEntered( MouseEvent event ) {
