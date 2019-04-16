@@ -75,17 +75,17 @@
 					<!-- THE FOLLOWING "excludes" AND "includes" SHOULD BE   -->
 					<!-- USED TO ALLOW EXECUTION OF A SINGLE SPECIFIC TEST.  -->
 					<!-- Otherwise they should be commented out.             -->
-
+<!--
 					<excludes>
 						<exclude>**/*Suite.java</exclude>
 					</excludes>
 					<includes>
-						<!--<include>**/KeyboardAcceleratorsUITest.java</include>-->
-						<!--<include>**/NavigatorUITest.java</include>-->
-						<!--<include>**/PannerUITest.java</include>-->
+						<include>**/KeyboardAcceleratorsUITest.java</include>
+						<include>**/NavigatorUITest.java</include>
+						<include>**/PannerUITest.java</include>
 						<include>**/ChartUndoManagerUITest.java</include>
 					</includes>
-
+-->
 				</configuration>
 			</plugin>
 		</plugins>

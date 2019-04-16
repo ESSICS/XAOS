@@ -27,21 +27,21 @@ import se.europeanspallationsource.xaos.ui.plot.impl.util.ChartUndoManager;
  * @author claudio.rosati@esss.se
  */
 @SuppressWarnings( "ClassWithoutLogger" )
-public class ZoomHelper {
+class ZoomHelper {
 
 	private final Plugin plugin;
 
-	public ZoomHelper( Plugin plugin ) {
+	ZoomHelper( Plugin plugin ) {
 		this.plugin = plugin;
 	}
 
-	public void autoScale() {
+	void autoScale() {
 		ChartUndoManager.get(plugin.getChart()).captureUndoable(plugin);
 		plugin.getXValueAxis().setAutoRanging(true);
 		plugin.getYValueAxis().setAutoRanging(true);
 	}
 
-	public void zoomIn() {
+	void zoomIn() {
 
 		ChartUndoManager.get(plugin.getChart()).captureUndoable(plugin);
 
@@ -57,7 +57,7 @@ public class ZoomHelper {
 
 	}
 
-	public void zoomOut() {
+	void zoomOut() {
 
 		ChartUndoManager.get(plugin.getChart()).captureUndoable(plugin);
 

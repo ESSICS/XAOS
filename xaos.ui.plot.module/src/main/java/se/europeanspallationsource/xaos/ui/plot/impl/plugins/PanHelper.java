@@ -27,32 +27,32 @@ import se.europeanspallationsource.xaos.ui.plot.impl.util.ChartUndoManager;
  * @author claudio.rosati@esss.se
  */
 @SuppressWarnings( "ClassWithoutLogger" )
-public class PanHelper {
+class PanHelper {
 
 	private static final double PAN_FACTOR = 0.1;
 	private static final double SCROLL_FACTOR = 0.005;
 
 	private final Plugin plugin;
 
-	public PanHelper( Plugin plugin ) {
+	PanHelper( Plugin plugin ) {
 		this.plugin = plugin;
 	}
 
-	public void moveHorizontally ( double offset ) {
+	void moveHorizontally ( double offset ) {
 		plugin.getXValueAxis().setAutoRanging(false);
 		plugin.getYValueAxis().setAutoRanging(false);
 		plugin.getXValueAxis().setLowerBound(plugin.getXValueAxis().getLowerBound() + offset);
 		plugin.getXValueAxis().setUpperBound(plugin.getXValueAxis().getUpperBound() + offset);
 	}
 
-	public void moveVertically ( double offset ) {
+	void moveVertically ( double offset ) {
 		plugin.getXValueAxis().setAutoRanging(false);
 		plugin.getYValueAxis().setAutoRanging(false);
 		plugin.getYValueAxis().setLowerBound(plugin.getYValueAxis().getLowerBound() + offset);
 		plugin.getYValueAxis().setUpperBound(plugin.getYValueAxis().getUpperBound() + offset);
 	}
 
-	public void panDown() {
+	void panDown() {
 
 		ChartUndoManager.get(plugin.getChart()).captureUndoable(plugin);
 
@@ -62,7 +62,7 @@ public class PanHelper {
 
 	}
 
-	public void panLeft() {
+	void panLeft() {
 
 		ChartUndoManager.get(plugin.getChart()).captureUndoable(plugin);
 
@@ -72,7 +72,7 @@ public class PanHelper {
 
 	}
 
-	public void panRight() {
+	void panRight() {
 
 		ChartUndoManager.get(plugin.getChart()).captureUndoable(plugin);
 
@@ -82,7 +82,7 @@ public class PanHelper {
 
 	}
 
-	public void panUp() {
+	void panUp() {
 
 		ChartUndoManager.get(plugin.getChart()).captureUndoable(plugin);
 
@@ -92,7 +92,7 @@ public class PanHelper {
 
 	}
 
-	public void scroll( double xOffset, double yOffset ) {
+	void scroll( double xOffset, double yOffset ) {
 
 		ChartUndoManager.get(plugin.getChart()).captureUndoable(plugin);
 
@@ -104,7 +104,7 @@ public class PanHelper {
 
 	}
 
-	public void scrollHorizontally( double offset ) {
+	void scrollHorizontally( double offset ) {
 
 		ChartUndoManager.get(plugin.getChart()).captureUndoable(plugin);
 
@@ -114,7 +114,7 @@ public class PanHelper {
 
 	}
 
-	public void scrollVertically( double offset ) {
+	void scrollVertically( double offset ) {
 
 		ChartUndoManager.get(plugin.getChart()).captureUndoable(plugin);
 
