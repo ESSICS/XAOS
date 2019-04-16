@@ -53,6 +53,8 @@ import static se.europeanspallationsource.xaos.ui.plot.util.Assertions.assertVal
  * <p>
  * Pressing also SHIFT will constrain zooming on a single axis according to
  * the longest side of the drawn rectangle.</p>
+ * <p>
+ * CSS style class name: {@code chart-zoom-rect}</p>
  *
  * @author claudio.rosati@esss.se
  */

@@ -21,6 +21,7 @@ import chart.Plugin;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.Chart;
 import se.europeanspallationsource.xaos.ui.control.NavigatorPopup;
+import se.europeanspallationsource.xaos.ui.plot.impl.plugins.CursorLines;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.KeyboardAccelerators;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.Navigator;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.Panner;
@@ -50,13 +51,24 @@ public class Plugins {
 			navigator(),
 			keyboardAccelerators(),
 			panner(),
-			zoomer()
+			zoomer(),
+			cursorLines()
 //			new CoordinatesLines(),
 //			new CoordinatesLabel(),
 //			new DataPointTooltip(),
 //			new AreaValueTooltip(),
 //			new PropertyMenu()
 		};
+	}
+
+	/**
+	 * Returns a plugin that shows horizontal and vertical lines drawn on the
+	 * plot area, crossing at the mouse cursor location.
+	 *
+	 * @return A cursor lines plugin.
+	 */
+	public static Plugin cursorLines() {
+		return new CursorLines();
 	}
 
 	/**

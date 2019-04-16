@@ -3,7 +3,7 @@
 }
 
 .chart-legend {
-   -fx-background-color: transparent;
+	-fx-background-color: transparent;
 }
 
 .chart-coordinates-label {
@@ -24,10 +24,8 @@
 }
 
 .chart-coordinates-line {
-	-fx-stroke: maroon;
-	-fx-stroke-dash-array: 5 5;
-	-fx-stroke-width: 1;
-        visibility: visible;
+	-fx-stroke: -fx-accent;
+	-fx-stroke-width: 0.7;
 }
 
 .chart-zoom-rect {
