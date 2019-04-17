@@ -1,9 +1,56 @@
-.chart-coordinates-label {
-    -fx-background-color: rgba(255, 255, 128, 0.5);
-    -fx-border-color: black;
-    -fx-border-radius: 3;
-    visibility: visible;
+/*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ * Copyright (C) 2018-2019 by European Spallation Source ERIC.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
+/*******************************************************************************
+ * PLUGINS                                                                     *
+ *******************************************************************************/
+
+.chart-cursor-display {
+	-fx-alignment: center;
+    -fx-background-color: rgba(22, 22, 22, 0.75);
+    -fx-background-radius: 20;
+    -fx-border-color: rgba(8, 8, 8, 0.8);
+    -fx-border-radius: 20;
+    -fx-border-width: 1.7;
+	-fx-font: bold 10.7 monospace;
+    -fx-padding: 0.5 5 0.5 5;
+	-fx-text-fill: white;
+	-fx-text-alignment: center
 }
+
+.chart-cursor-lines {
+    -fx-stroke: -fx-accent;
+    -fx-stroke-width: 0.6;
+}
+
+.chart-zoomer {
+    -fx-fill: -fx-faint-focus-color;
+    -fx-stroke: -fx-focus-color;
+    -fx-stroke-type: centered;
+    -fx-stroke-width: 1.333;
+}
+
+
+
+
+
+
+
 
 .chart-fitting-label {
     -fx-background-color: white;
@@ -12,32 +59,10 @@
     visibility: visible;
 }
 
-.chart-data-tooltip-label {
-    -fx-background-color: rgb(153, 204, 204);
-    -fx-border-color: black;
-    -fx-border-radius: 3;
-    -fx-font-size: 12;    
-    -fx-font-weight: bold;
-    -fx-text-alignment: center;
-    visibility: visible;
-}
-
-.chart-coordinates-line {
-    -fx-stroke: -fx-accent;
-    -fx-stroke-width: 0.7;
-}
-
 .chart-error-line {
     -fx-stroke: black;
     -fx-stroke-width: 1;
     visibility: visible;
-}
-
-.chart-zoom-rect {
-    -fx-fill: -fx-faint-focus-color;
-    -fx-stroke: -fx-focus-color;
-    -fx-stroke-type: centered;
-    -fx-stroke-width: 1.333;
 }
 
 .chart-series-line {    

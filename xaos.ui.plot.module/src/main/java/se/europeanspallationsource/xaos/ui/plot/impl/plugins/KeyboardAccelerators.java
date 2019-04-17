@@ -53,7 +53,7 @@ import static se.europeanspallationsource.xaos.ui.control.NavigatorController.ZO
  * @author claudio.rosati@esss.se
  */
 @SuppressWarnings( "ClassWithoutLogger" )
-public class KeyboardAccelerators extends Plugin {
+public final class KeyboardAccelerators extends Plugin {
 
 	private final EventHandler<KeyEvent> keyPresseddHandler = this::keyPressed;
 	private final PanHelper panHelper = new PanHelper(this);

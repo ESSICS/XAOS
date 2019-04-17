@@ -18,12 +18,16 @@ package se.europeanspallationsource.xaos.ui.plot.plugins;
 
 
 import chart.Plugin;
+import java.text.Format;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.Chart;
 import se.europeanspallationsource.xaos.ui.control.NavigatorPopup;
+import se.europeanspallationsource.xaos.ui.plot.impl.plugins.AbscissaCursorDisplay;
+import se.europeanspallationsource.xaos.ui.plot.impl.plugins.CursorDisplay.Position;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.CursorLines;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.KeyboardAccelerators;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.Navigator;
+import se.europeanspallationsource.xaos.ui.plot.impl.plugins.OrdinateCursorDisplay;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.Panner;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.Zoomer;
 import se.europeanspallationsource.xaos.ui.plot.plugins.AxisConstrained.AxisConstraints;
@@ -39,6 +43,40 @@ import se.europeanspallationsource.xaos.ui.plot.plugins.AxisConstrained.AxisCons
 public class Plugins {
 
 	/**
+	 * Returns a plugin displaying at the {@link Position#BOTTOM} the abscissa
+	 * value at mouse cursor position.
+	 *
+	 * @return An abscissa cursor display.
+	 */
+	public static Plugin abscissaCursorDisplay() {
+		return new AbscissaCursorDisplay();
+	}
+
+	/**
+	 * Returns a plugin displaying at the given {@code position} the abscissa
+	 * value at mouse cursor position.
+	 *
+	 * @param position Where the abscissa value must be displayed.
+	 * @return An abscissa cursor display.
+	 */
+	public static Plugin abscissaCursorDisplay( Position position ) {
+		return new AbscissaCursorDisplay(position);
+	}
+
+	/**
+	 * Returns a plugin displaying at the given {@code position} the abscissa
+	 * value at mouse cursor position, using the given {@code formatter} to
+	 * format the abscissa value.
+	 *
+	 * @param position Where the abscissa value must be displayed.
+	 * @param formatter The formatter used to format the abscissa value.
+	 * @return An abscissa cursor display.
+	 */
+	public static Plugin abscissaCursorDisplay( Position position, Format formatter ) {
+		return new AbscissaCursorDisplay(position, formatter);
+	}
+
+	/**
 	 * @return All available {@link Plugin}s, in the right order, to be
 	 *         used as parameter for the {@link ObservableList#addAll(java.lang.Object...)}
 	 *         method of the lister returned by {@link Pluggable#getPlugins()}.
@@ -52,11 +90,11 @@ public class Plugins {
 			keyboardAccelerators(),
 			panner(),
 			zoomer(),
-			cursorLines()
-//			new CoordinatesLines(),
-//			new CoordinatesLabel(),
-//			new DataPointTooltip(),
-//			new AreaValueTooltip(),
+			cursorLines(),
+			abscissaCursorDisplay(),
+			ordinateCursorDisplay()
+//			new DataPointTooltip()
+//			new AreaValueTooltip()
 //			new PropertyMenu()
 		};
 	}
@@ -124,6 +162,40 @@ public class Plugins {
 	 */
 	public static Plugin navigator() {
 		return new Navigator();
+	}
+
+	/**
+	 * Returns a plugin displaying at the {@link Position#BOTTOM} the ordinate
+	 * value at mouse cursor position.
+	 *
+	 * @return An ordinate cursor display.
+	 */
+	public static Plugin ordinateCursorDisplay() {
+		return new OrdinateCursorDisplay();
+	}
+
+	/**
+	 * Returns a plugin displaying at the given {@code position} the ordinate
+	 * value at mouse cursor position.
+	 *
+	 * @param position Where the ordinate value must be displayed.
+	 * @return An ordinate cursor display.
+	 */
+	public static Plugin ordinateCursorDisplay( Position position ) {
+		return new OrdinateCursorDisplay(position);
+	}
+
+	/**
+	 * Returns a plugin displaying at the given {@code position} the ordinate
+	 * value at mouse cursor position, using the given {@code formatter} to
+	 * format the ordinate value.
+	 *
+	 * @param position Where the ordinate value must be displayed.
+	 * @param formatter The formatter used to format the ordinate value.
+	 * @return An ordinate cursor display.
+	 */
+	public static Plugin ordinateCursorDisplay( Position position, Format formatter ) {
+		return new OrdinateCursorDisplay(position, formatter);
 	}
 
 	/**

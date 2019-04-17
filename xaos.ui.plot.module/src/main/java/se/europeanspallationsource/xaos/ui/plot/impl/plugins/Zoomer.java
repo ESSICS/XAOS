@@ -54,7 +54,7 @@ import static se.europeanspallationsource.xaos.ui.plot.util.Assertions.assertVal
  * Pressing also SHIFT will constrain zooming on a single axis according to
  * the longest side of the drawn rectangle.</p>
  * <p>
- * CSS style class name: {@code chart-zoom-rect}</p>
+ * CSS style class name: {@code chart-zoomer}</p>
  *
  * @author claudio.rosati@esss.se
  */
@@ -93,16 +93,16 @@ public final class Zoomer extends Plugin implements AxisConstrained {
 	 */
 	private final BooleanProperty animated = new SimpleBooleanProperty(Zoomer.this, "animated", false);
 
-	public BooleanProperty animatedProperty() {
+	public final BooleanProperty animatedProperty() {
 		return animated;
 	}
 
-	public boolean isAnimated() {
-		return animated.get();
+	public final boolean isAnimated() {
+		return animatedProperty().get();
 	}
 
-	public void setAnimated( boolean value ) {
-		animated.set(value);
+	public final void setAnimated( boolean value ) {
+		animatedProperty().set(value);
 	}
 
 	/*
@@ -114,16 +114,16 @@ public final class Zoomer extends Plugin implements AxisConstrained {
 	 * @return The animation duration property. Duration of the animated zoom
 	 * will be in milliseconds, by default initialized to 500ms.
 	 */
-	public ObjectProperty<Duration> animationDurationProperty() {
+	public final ObjectProperty<Duration> animationDurationProperty() {
 		return animationDuration;
 	}
 
-	public Duration getAnimationDuration() {
-		return animationDuration.get();
+	public final Duration getAnimationDuration() {
+		return animationDurationProperty().get();
 	}
 
-	public void setAnimationDuration( Duration value ) {
-		animationDuration.set(value);
+	public final void setAnimationDuration( Duration value ) {
+		animationDurationProperty().set(value);
 	}
 
 	/*
@@ -136,7 +136,7 @@ public final class Zoomer extends Plugin implements AxisConstrained {
 	};
 
 	@Override
-	public ObjectProperty<AxisConstraints> constraintsProperty() {
+	public final ObjectProperty<AxisConstraints> constraintsProperty() {
 		return constraints;
 	}
 
@@ -180,13 +180,14 @@ public final class Zoomer extends Plugin implements AxisConstrained {
 
 		zoomRectangle.setManaged(false);
 		zoomRectangle.setVisible(false);
-		zoomRectangle.getStyleClass().add("chart-zoom-rect");
+		zoomRectangle.getStyleClass().add("chart-zoomer");
 
 		getPlotChildren().add(zoomRectangle);
 
 	}
 
 	@Override
+	@SuppressWarnings( "null" )
 	protected void chartConnected( Chart chart ) {
 
 		if ( chart instanceof BarChart ) {

@@ -19,19 +19,25 @@ package se.europeanspallationsource.xaos.ui.plot.impl.plugins;
 
 import chart.DensityChartFX;
 import chart.Plugin;
+import java.text.MessageFormat;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
+import javafx.scene.chart.BarChart;
 import javafx.scene.chart.Chart;
+import javafx.scene.chart.ValueAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Line;
+
+import static se.europeanspallationsource.xaos.ui.plot.util.Assertions.assertValueAxis;
 
 
 /**
  * Horizontal and vertical {@link Line}s drawn on the plot area, crossing at the
  * mouse cursor location.
  * <p>
- * CSS style class name: {@code chart-coordinates-line}</p>
+ * CSS style class name: {@code chart-cursor-lines}</p>
  *
  * @author Grzegorz Kruk
  */
@@ -49,10 +55,10 @@ public final class CursorLines extends Plugin {
 	 */
 	public CursorLines() {
 
-		verticalLine.getStyleClass().add("chart-coordinates-line");
+		verticalLine.getStyleClass().add("chart-cursor-lines");
 		verticalLine.setManaged(false);
 		verticalLine.setVisible(false);
-		horizontalLine.getStyleClass().add("chart-coordinates-line");
+		horizontalLine.getStyleClass().add("chart-cursor-lines");
 		horizontalLine.setManaged(false);
 		horizontalLine.setVisible(false);
 
@@ -61,10 +67,26 @@ public final class CursorLines extends Plugin {
 	}
 
 	@Override
+	@SuppressWarnings( "null" )
 	protected void chartConnected( Chart chart ) {
+
+		if ( chart instanceof BarChart ) {
+			throw new UnsupportedOperationException(MessageFormat.format(
+				"{0} non supported.",
+				chart.getClass().getSimpleName()
+			));
+		} else if ( chart instanceof XYChart<?, ?> ) {
+			assertValueAxis(( (XYChart<?, ?>) chart ).getXAxis(), "X");
+			assertValueAxis(( (XYChart<?, ?>) chart ).getYAxis(), "Y");
+		} else if ( chart instanceof DensityChartFX<?, ?> ) {
+			assertValueAxis(( (DensityChartFX<?, ?>) chart ).getXAxis(), "X");
+			assertValueAxis(( (DensityChartFX<?, ?>) chart ).getYAxis(), "Y");
+		}
+
 		chart.addEventHandler(MouseEvent.DRAG_DETECTED, dragDetectedHandler);
 		chart.addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEnteredHandler);
 		chart.addEventHandler(MouseEvent.MOUSE_EXITED, mouseExitedHandler);
+
 	}
 
 	@Override
@@ -92,35 +114,35 @@ public final class CursorLines extends Plugin {
 		if ( isInsidePlotArea(event) ) {
 
 			Point2D mouseLocation = getLocationInPlotArea(event);
+			double mouseX = mouseLocation.getX();
+			double mouseY = mouseLocation.getY();
 			Bounds plotAreaBounds = getPlotAreaBounds();
 
 			if ( getChart() instanceof DensityChartFX<?, ?> ) {
 
-				mouseLocation = mouseLocation.add(new Point2D(getXValueAxis().getLayoutX(), 0.0));
+				ValueAxis<?> xAxis = getXValueAxis();
+				ValueAxis<?> yAxis = getYValueAxis();
 
-				horizontalLine.setStartX(getXValueAxis().getLayoutX());
-				horizontalLine.setEndX(getXValueAxis().getWidth() + getXValueAxis().getLayoutX());
-				horizontalLine.setStartY(mouseLocation.getY());
-				horizontalLine.setEndY(mouseLocation.getY());
+				mouseLocation = mouseLocation.add(new Point2D(xAxis.getLayoutX(), yAxis.getLayoutY()));
+				mouseX = mouseLocation.getX();
+				mouseY = mouseLocation.getY();
 
-				verticalLine.setStartY(getYValueAxis().getLayoutY());
-				verticalLine.setStartX(mouseLocation.getX());
-				verticalLine.setEndX(mouseLocation.getX());
-				verticalLine.setEndY(getYValueAxis().getHeight() + getYValueAxis().getLayoutY());
+				horizontalLine.setStartX(xAxis.getLayoutX());
+				horizontalLine.setEndX(xAxis.getWidth() + xAxis.getLayoutX());
+				verticalLine.setStartY(yAxis.getLayoutY());
+				verticalLine.setEndY(yAxis.getHeight() + yAxis.getLayoutY());
 
 			} else {
-
 				horizontalLine.setStartX(0);
-				horizontalLine.setStartY(mouseLocation.getY());
 				horizontalLine.setEndX(plotAreaBounds.getWidth());
-				horizontalLine.setEndY(mouseLocation.getY());
-
-				verticalLine.setStartX(mouseLocation.getX());
 				verticalLine.setStartY(0);
-				verticalLine.setEndX(mouseLocation.getX());
 				verticalLine.setEndY(plotAreaBounds.getHeight());
-
 			}
+
+			horizontalLine.setStartY(mouseY);
+			horizontalLine.setEndY(mouseY);
+			verticalLine.setStartX(mouseX);
+			verticalLine.setEndX(mouseX);
 
 			if ( !horizontalLine.isVisible() ) {
 				horizontalLine.setVisible(true);
