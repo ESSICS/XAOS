@@ -124,7 +124,7 @@ public final class DataPointCursorDisplay extends FormattedCursorDisplay {
 		Object xValue = ( (XYChart<?, ?>) getChart() ).getXAxis().getValueForDisplay(mouseLocation.getX());
 
 		@SuppressWarnings( "unchecked" )
-		Optional<Data<?, ?>> findFirst = (Optional<Data<?, ?>>) ( (XYChart<?, ?>) getChart() )
+		Optional<Data<?, ?>> nearestPoint = (Optional<Data<?, ?>>) ( (XYChart<?, ?>) getChart() )
 			.getData()
 			.parallelStream()
 			.flatMap(series -> series.getData().stream())
@@ -134,6 +134,7 @@ public final class DataPointCursorDisplay extends FormattedCursorDisplay {
 			.map(p -> p.getKey())
 			.findFirst();
 
+		return nearestPoint.orElse(null);
 
 
 
@@ -170,8 +171,6 @@ public final class DataPointCursorDisplay extends FormattedCursorDisplay {
 //            }
 //        }
 //        return nearestDataPoint;
-
-		return null;
 
 	}
 

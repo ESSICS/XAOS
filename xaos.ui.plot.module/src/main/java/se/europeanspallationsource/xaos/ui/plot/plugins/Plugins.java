@@ -25,6 +25,7 @@ import se.europeanspallationsource.xaos.ui.control.NavigatorPopup;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.AbscissaCursorDisplay;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.CursorDisplay.Position;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.CursorLines;
+import se.europeanspallationsource.xaos.ui.plot.impl.plugins.DataPointCursorDisplay;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.KeyboardAccelerators;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.Navigator;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.OrdinateCursorDisplay;
@@ -92,7 +93,8 @@ public class Plugins {
 			zoomer(),
 			cursorLines(),
 			abscissaCursorDisplay(),
-			ordinateCursorDisplay()
+			ordinateCursorDisplay(),
+			new DataPointCursorDisplay()
 //			new DataPointTooltip()
 //			new AreaValueTooltip()
 //			new PropertyMenu()
