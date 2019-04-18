@@ -22,7 +22,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
-import javafx.scene.paint.Color;
 
 
 /**
@@ -164,21 +163,6 @@ public class FXUtils {
 
 		}
 
-	}
-
-	/**
-	 * Converts
-	 * @param color
-	 * @return
-	 */
-	public static String toWeb ( Color color ) {
-		//	TODO:CR implement AND test
-//	The following is cood only if color is opaque.
-//	A different one must be in place for transparent colours.
-//        return String.format("#%02X%02X%02X",
-//                (int) (color.getRed() * 255),
-//                (int) (color.getGreen() * 255),
-//                (int) (color.getBlue() * 255));
 	}
 
 	private FXUtils() {
