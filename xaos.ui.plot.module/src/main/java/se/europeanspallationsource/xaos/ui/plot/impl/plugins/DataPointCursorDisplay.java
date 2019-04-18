@@ -23,10 +23,12 @@ import java.util.Optional;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
+import javafx.scene.layout.StackPane;
 import javafx.util.Pair;
 
 /**
@@ -47,6 +49,8 @@ import javafx.util.Pair;
  */
 @SuppressWarnings( "ClassWithoutLogger" )
 public final class DataPointCursorDisplay extends FormattedCursorDisplay {
+
+	private static final MessageFormat FORMATTER = new MessageFormat("{0,number,0.000}:{1,number,0.000}");
 
 	/* *********************************************************************** *
 	 * START OF JAVAFX PROPERTIES                                              *
@@ -111,79 +115,64 @@ public final class DataPointCursorDisplay extends FormattedCursorDisplay {
 
 	@Override
 	protected String formatValue( Object value ) {
+
 		if ( value == null ) {
 			return null;
 		} else {
-			return super.formatValue(value);
+
+			Data<?, ?> dataPoint = (Data<?, ?>) value;
+			Node node = dataPoint.getNode();
+
+			if ( node instanceof StackPane ) {
+
+				//	TODO:CR use FXUtil.toWeb(color) and change the "-fx-background-color" css style.
+
+				getDisplay().setBackground(((StackPane) node).getBackground());
+			}
+
+			return FORMATTER.format(new Object[] { dataPoint.getXValue(), dataPoint.getYValue() });
+
 		}
+
+
+
+
+//        Node node = dataPoint.getNode();
+//        if (node instanceof StackPane) {
+//            StackPane stackPane = (StackPane) node;
+//            // YL: This background makes the text hard to read if it is a dark colour, e.g. blue
+//            label.setBackground(stackPane.getBackground());
+//            label.setBorder(stackPane.getBorder());
+//            label.setPadding(new Insets(2, 3, 2, 3));
+//        }
+
+
+
+
 	}
 
 	@Override
 	protected Object valueAtPosition( Point2D mouseLocation ) {
 
-		Object xValue = ( (XYChart<?, ?>) getChart() ).getXAxis().getValueForDisplay(mouseLocation.getX());
+		Axis xAxis = ( (XYChart<?, ?>) getChart() ).getXAxis();
+		Axis yAxis = ( (XYChart<?, ?>) getChart() ).getYAxis();
 
 		@SuppressWarnings( "unchecked" )
 		Optional<Data<?, ?>> nearestPoint = (Optional<Data<?, ?>>) ( (XYChart<?, ?>) getChart() )
 			.getData()
 			.parallelStream()
 			.flatMap(series -> series.getData().stream())
-			.map(d -> new Pair<>(d, mouseLocation.distance(toDisplayPoint(d))))
+			.map(d -> new Pair<>(d, mouseLocation.distance(new Point2D(
+				xAxis.getDisplayPosition(d.getXValue()),
+				yAxis.getDisplayPosition(d.getYValue())
+			))))
 			.filter(p -> p.getValue() <= getPickingDistance())
+			.unordered()
 			.sorted(( p1, p2 ) -> p1.getValue() < p2.getValue() ? -1 : p1.getValue() > p2.getValue() ? 1 : 0)
 			.map(p -> p.getKey())
 			.findFirst();
-
+		
 		return nearestPoint.orElse(null);
-
-
-
-
-//		List<Data<?, ?>> neighborPoints = findNeighborPoints(xValue);
-//		if ( neighborPoints.isEmpty() ) {
-//			return null;
-//		}
-//		return pickNearestPointWithinPickingDistance(neighborPoints, mouseLocation);
-//
-//
-//
-//
-//
-//		Data<?, ?> dataPoint = toDataPoint(mouseLocation);
-//
-//		return ( dataPoint != null ) ? dataPoint.getXValue() : null;
-
-
-//        Data<?, ?> nearestDataPoint = null;
-//        Point2D nearestDisplayPoint = new Point2D(Double.MAX_VALUE, Double.MAX_VALUE);
-//        for (Data<?, ?> dataPoint : dataPoints) {
-//            Node node = dataPoint.getNode();
-//            if (node != null && node.isVisible() && node.getBoundsInParent().contains(mouseLocation)) {
-//                nearestDataPoint = dataPoint;
-//                break;
-//            } else {
-//                Point2D displayPoint = toDisplayPoint(dataPoint);
-//                if (mouseLocation.distance(displayPoint) <= getPickingDistance()
-//                        && displayPoint.distance(mouseLocation) < nearestDisplayPoint.distance(mouseLocation)) {
-//                    nearestDataPoint = dataPoint;
-//                    nearestDisplayPoint = displayPoint;
-//                }
-//            }
-//        }
-//        return nearestDataPoint;
-
-	}
-
-	private Point2D toDisplayPoint( Data<?, ?> dataPoint ) {
-
-		Axis xAxis = ( (XYChart<?, ?>) getChart() ).getXAxis();
-		Axis yAxis = ( (XYChart<?, ?>) getChart() ).getYAxis();
-		@SuppressWarnings( "unchecked" )
-		double displayX = xAxis.getDisplayPosition(dataPoint.getXValue());
-		@SuppressWarnings( "unchecked" )
-		double displayY = yAxis.getDisplayPosition(dataPoint.getYValue());
-
-		return new Point2D(displayX, displayY);
 
 	}
 

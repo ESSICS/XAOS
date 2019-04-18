@@ -68,7 +68,7 @@ public class FXMLController implements Initializable {
     private AreaChartGenerator      areaChartGen    = new AreaChartGenerator();
     private BarChartGenerator       barChartGen     = new BarChartGenerator();
     
-    private Integer NB_OF_POINTS = 1000;
+    private Integer NB_OF_POINTS = 10000;
     private ObservableList< ErrorBars> errorBarsToInclude = FXCollections.observableArrayList();
    @Override
     public void initialize(URL url, ResourceBundle rb) {
