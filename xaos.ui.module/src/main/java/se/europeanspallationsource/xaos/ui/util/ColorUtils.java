@@ -41,34 +41,43 @@ public class ColorUtils {
 	 * @param others The array of {@link Color}s from which the best contrasting
 	 *               one must be chosen.
 	 * @return The best contrasting color.
-	 * @see <a href="https://thoughtbot.com/blog/closer-look-color-lightness#weighted-methods">Weighted Methods</a>
+	 * @see #getLuma(javafx.scene.paint.Color)
 	 */
-	public static Color bestConstrast( Color color, Color... others ) {
+	public static Color bestConstrasting( Color color, Color... others ) {
 
 		Validate.notNull(color, "Null 'color' parameter.");
 		Validate.notNull(others, "Null 'others' parameter.");
 		Validate.notEmpty(others, "Empty 'others' array.");
 
-		double luma = Math.sqrt(
-			0.299 * color.getRed()   * color.getRed()
-		  + 0.587 * color.getGreen() * color.getGreen()
-		  + 0.114 * color.getBlue()  * color.getBlue()
-		);
+		double luma = getLuma(color);
 
 		Optional<Pair<Color, Double>> best = Arrays.asList(others)
 			.parallelStream()
-			.map(c -> new Pair<>(
-				c,
-				Math.sqrt(
-					0.299 * c.getRed()   * c.getRed()
-						+ 0.587 * c.getGreen() * c.getGreen()
-						+ 0.114 * c.getBlue()  * c.getBlue()
-				)
-			))
-			.sorted(( p1, p2 ) -> (int) Math.signum((luma - p2.getValue() ) - ( luma - p1.getValue() )))
+			.map(c -> new Pair<>(c, getLuma(c)))
+			.sorted(( p1, p2 ) -> (int) Math.signum(( luma - p2.getValue() ) - ( luma - p1.getValue() )))
 			.findFirst();
 
 		return best.get().getKey();
+
+	}
+
+	/**
+	 * Returns the weighted brightness (luma) according to the HSP color model.
+	 *
+	 * @param color The color whose perceived brightness must be returned.
+	 * @return The weighted brightness (luma).
+	 * @see <a href="http://alienryderflex.com/hsp.html">HSP Color Model</a>
+	 * @see <a href="https://thoughtbot.com/blog/closer-look-color-lightness#weighted-methods">Weighted Methods</a>.
+	 */
+	public static double getLuma( Color color ) {
+
+		Validate.notNull(color, "Null 'color' parameter.");
+
+		double r = color.getRed();
+		double g = color.getGreen();
+		double b = color.getBlue();
+
+		return Math.sqrt(0.299 * r * r + 0.587 * g * g + 0.114 * b * b);
 
 	}
 
@@ -84,24 +93,24 @@ public class ColorUtils {
 	 * @param color The {@link Color} to be converted.
 	 * @return A {@link String} representation of the given {@code color}.
 	 */
-	public static String toWeb ( Color color ) {
+	public static String toWeb( Color color ) {
 
 		Validate.notNull(color, "Null 'color' parameter.");
 
 		if ( color.isOpaque() ) {
 			return String.format(
 				"#%02X%02X%02X",
-				(int) (color.getRed()   * 255),
-				(int) (color.getGreen() * 255),
-				(int) (color.getBlue()  * 255)
+				(int) ( color.getRed() * 255 ),
+				(int) ( color.getGreen() * 255 ),
+				(int) ( color.getBlue() * 255 )
 			);
 		} else {
 			return String.format(
 				"#%02X%02X%02X%02X",
-				(int) (color.getRed()   * 255),
-				(int) (color.getGreen() * 255),
-				(int) (color.getBlue()  * 255),
-				(int) (color.getOpacity() * 255)
+				(int) ( color.getRed() * 255 ),
+				(int) ( color.getGreen() * 255 ),
+				(int) ( color.getBlue() * 255 ),
+				(int) ( color.getOpacity() * 255 )
 			);
 		}
 

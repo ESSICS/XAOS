@@ -22,14 +22,14 @@
 
 .chart-cursor-display {
 	-fx-alignment: center;
-    -fx-background-color: rgba(22, 22, 22, 0.75);
+    -fx-background-color: rgba(24, 23, 22, 0.75);
     -fx-background-radius: 20;
     -fx-border-color: rgba(8, 8, 8, 0.8);
     -fx-border-radius: 20;
     -fx-border-width: 1.7;
 	-fx-font: bold 10.7 monospace;
     -fx-padding: 0.5 5 0.5 5;
-	-fx-text-fill: white;
+	-fx-text-fill: rgb(235, 234, 233);
 	-fx-text-alignment: center
 }
 
