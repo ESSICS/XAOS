@@ -17,6 +17,7 @@
 
 package se.europeanspallationsource.xaos.ui.plot.impl.plugins;
 
+import chart.Plugin;
 import java.text.Format;
 import java.text.MessageFormat;
 import java.util.Optional;
@@ -28,6 +29,7 @@ import javafx.scene.chart.Axis;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
+import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.util.Pair;
 

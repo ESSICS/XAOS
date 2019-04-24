@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.core.util;
+package se.europeanspallationsource.xaos.core.util.function;
 
 
 import java.util.Objects;

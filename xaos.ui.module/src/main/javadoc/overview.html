@@ -45,18 +45,28 @@ limitations under the License.
 		<h2>Icons and Icon Providers</h2>
 
 		<p>
-			The {@link se.europeanspallationsource.xaos.ui.control.CommonIcons}
+			The {@link se.europeanspallationsource.xaos.ui.control.CommonIcons CommonIcons}
 			provides a set of common icons used, for example, by file browsers based
 			on {@link javafx.scene.control.TreeView}.
 		</p>
 		<p>
-			Moreover the {@link se.europeanspallationsource.xaos.ui.control.Icons}
+			Moreover the {@link se.europeanspallationsource.xaos.ui.control.Icons Icons}
 			class allows for run-time discovery of key-mapped icons provided by
 			implementations of the services defined inside the
 			{@code se.europeanspallationsource.xaos.ui.spi} package.
 		</p>
 
 		<h2>Controls</h2>
+
+		<h3>Navigator</h3>
+
+		<p>
+			The {@link se.europeanspallationsource.xaos.ui.control.NavigatorController NavigatorController}
+			is a JavaFX control with 9 buttons to navigate a graphical area.
+			Zoom, pan and undo/redo buttons are provided and can be bound to the
+			application code. A popup version of the same control is also
+			available ({@link se.europeanspallationsource.xaos.ui.control.NavigatorPopup NavigatorPopup}).
+		</p>
 
 		<h3>SVG Support</h3>
 
@@ -103,10 +113,10 @@ limitations under the License.
 		<h4>Tree Directory Monitor</h4>
 
 		<p>
-			{@link se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryMonitor}
-			combines a {@link se.europeanspallationsource.xaos.core.util.io.DirectoryWatcher},
-			a {@link se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryModel},
-			and a {@link se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryAsynchronousIO}.
+			{@link se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryMonitor TreeDirectoryMonitor}
+			combines a {@link se.europeanspallationsource.xaos.core.util.io.DirectoryWatcher DirectoryWatcher},
+			a {@link se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryModel TreeDirectoryModel},
+			and a {@link se.europeanspallationsource.xaos.ui.control.tree.directory.TreeDirectoryAsynchronousIO TreeDirectoryAsynchronousIO}.
 			The added value of this combination is that the tree model is updated
 			automatically to reflect the current state of the file-system, and
 			the application can distinguish file-system changes made via the I/O
@@ -114,22 +124,22 @@ limitations under the License.
 		</p>
 		<p>
 			The directory model can then be used directly as a model for
-			{@link javafx.scene.control.TreeView}s.
+			{@link javafx.scene.control.TreeView TreeView}s.
 		</p>
 
 		<h4>Filterable Tree Items</h4>
 
 		<p>
-			{@link se.europeanspallationsource.xaos.ui.control.tree.FilterableTreeItem}
-			is an extension of {@link javafx.scene.control.TreeItem} with the
+			{@link se.europeanspallationsource.xaos.ui.control.tree.FilterableTreeItem FilterableTreeItem}
+			is an extension of {@link javafx.scene.control.TreeItem TreeItem} with the
 			possibility to filter its children.
 		</p>
 
 		<h4>Tree Item Walker</h4>
 
 		<p>
-			{@link se.europeanspallationsource.xaos.ui.control.tree.TreeItemWalker}
-			walks a {@link javafx.scene.control.TreeItem}s tree depth-first. It
+			{@link se.europeanspallationsource.xaos.ui.control.tree.TreeItemWalker TreeItemWalker}
+			walks a {@link javafx.scene.control.TreeItem TreeItem}s tree depth-first. It
 			supports streaming, visitor pattern and iterator pattern.
 		</p>
 
@@ -138,6 +148,13 @@ limitations under the License.
 		<p>
 			{@link se.europeanspallationsource.xaos.ui.control.tree.TreeItems}
 			provides methods to manipulate trees made of {@link javafx.scene.control.TreeItem}s.
+		</p>
+
+		<h2>Utilities</h2>
+
+		<p>
+			The {@code se.europeanspallationsource.xaos.ui.util} package contains
+			various utility classes to deal with clipboard, colors, resources, etc.
 		</p>
 
     </body>

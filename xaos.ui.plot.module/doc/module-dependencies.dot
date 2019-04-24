@@ -19,6 +19,7 @@ digraph "summary" {
   "xaos.ui"                                          -> "javafx.graphics";
   "xaos.ui"                                          -> "org.kordamp.ikonli.javafx";
   "xaos.ui"                                          -> "xaos.core";
+  "org.kordamp.iconli.core"                          -> "java.base (java.base)";
   "xaos.ui.plot"                                     -> "commons.math3";
   "xaos.ui.plot"                                     -> "java.base (java.base)";
   "xaos.ui.plot"                                     -> "java.desktop (java.desktop)";
@@ -40,7 +41,6 @@ digraph "summary" {
   "javafx.fxml"                                      -> "java.xml (java.xml)";
   "javafx.fxml"                                      -> "javafx.base";
   "javafx.fxml"                                      -> "javafx.graphics";
-  "org.kordamp.iconli.core"                          -> "java.base (java.base)";
   "org.kordamp.ikonli.javafx"                        -> "java.base (java.base)";
   "org.kordamp.ikonli.javafx"                        -> "javafx.base";
   "org.kordamp.ikonli.javafx"                        -> "javafx.graphics";

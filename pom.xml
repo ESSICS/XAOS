@@ -231,18 +231,46 @@
 				<version>3.0.1</version>
 				<configuration>
 					<additionalOptions>--javafx</additionalOptions>
+					<additionalJOptions>
+						<additionalJOption>-J-Djavafx.javadoc=true</additionalJOption>
+					</additionalJOptions>
 					<detectJavaApiLink>true</detectJavaApiLink>
 					<detectLinks>false</detectLinks>
 					<detectOfflineLinks>true</detectOfflineLinks>
 					<docfilessubdirs>true</docfilessubdirs>
+					<failOnError>false</failOnError>
 					<isOffline>false</isOffline>
 					<links>
 						<link>https://docs.oracle.com/en/java/javase/${java.release}/docs/api</link>
 						<link>https://openjfx.io/javadoc/${java.release}</link>
 					</links>
 					<source>${java.release}</source>
+					<tags>
+						<tag>
+							<name>def.val</name>
+							<placement>a</placement>
+							<head>Default Value:</head>
+						</tag>
+						<tag>
+							<name>api.note</name>
+							<placement>a</placement>
+							<head>API Note:</head>
+						</tag>
+						<tag>
+							<name>impl.note</name>
+							<placement>a</placement>
+							<head>Implementation Note:</head>
+						</tag>
+					</tags>
 				</configuration>
 				<executions>
+					<execution>
+                        <id>make-docs</id>     <!-- this is used for inheritance merges -->
+                        <phase>package</phase> <!-- bind to the packaging phase -->
+                        <goals>
+                            <goal>aggregate</goal>
+                        </goals>
+                    </execution>
 					<execution>
 						<id>attach-javadocs</id>
 						<goals>

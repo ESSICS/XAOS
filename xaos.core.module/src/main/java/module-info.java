@@ -24,6 +24,7 @@ module xaos.core {
 	requires io.reactivex.rxjava2;
 
 	exports se.europeanspallationsource.xaos.core.util;
+	exports se.europeanspallationsource.xaos.core.util.function;
 	exports se.europeanspallationsource.xaos.core.util.io;
 
 }

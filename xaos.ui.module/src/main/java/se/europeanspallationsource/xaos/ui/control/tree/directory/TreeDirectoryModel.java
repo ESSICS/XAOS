@@ -35,7 +35,7 @@ import java.util.stream.Stream;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import se.europeanspallationsource.xaos.core.util.TriFunction;
+import se.europeanspallationsource.xaos.core.util.function.TriFunction;
 import se.europeanspallationsource.xaos.ui.control.Icons;
 import se.europeanspallationsource.xaos.ui.control.tree.DirectoryModel;
 

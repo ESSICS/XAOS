@@ -50,7 +50,7 @@ import static javafx.scene.input.MouseButton.PRIMARY;
 
 
 /**
- * A JavaFX controller with 9 buttons to navigate a graphical area. Zoom, pan
+ * A JavaFX control with 9 buttons to navigate a graphical area. Zoom, pan
  * and undo/redo buttons are provided and can be bound to the application
  * code through the provided {@link EventHandler} methods.
  * <p>
