@@ -22,6 +22,7 @@ import java.util.Optional;
 import javafx.scene.paint.Color;
 import javafx.util.Pair;
 import org.apache.commons.lang3.Validate;
+import se.europeanspallationsource.xaos.core.util.MathUtils;
 
 
 /**
@@ -41,23 +42,56 @@ public class ColorUtils {
 	 * @param others The array of {@link Color}s from which the best contrasting
 	 *               one must be chosen.
 	 * @return The best contrasting color.
+	 * @throws NullPointerException     If {@code color} or {@code others} is
+	 *                                  {@code null}.
+	 * @throws IllegalArgumentException If {@code others} is an empty array.
 	 * @see #getLuma(javafx.scene.paint.Color)
 	 */
 	public static Color bestConstrasting( Color color, Color... others ) {
 
 		Validate.notNull(color, "Null 'color' parameter.");
-		Validate.notNull(others, "Null 'others' parameter.");
-		Validate.notEmpty(others, "Empty 'others' array.");
+		Validate.notEmpty(others, "Empty or null 'others' array.");
+		
+		if ( others.length == 1 ) {
+			return others[0];
+		}
 
 		double luma = getLuma(color);
 
 		Optional<Pair<Color, Double>> best = Arrays.asList(others)
 			.parallelStream()
-			.map(c -> new Pair<>(c, getLuma(c)))
-			.sorted(( p1, p2 ) -> (int) Math.signum(( luma - p2.getValue() ) - ( luma - p1.getValue() )))
+			.map(c -> new Pair<>(c, Math.abs(luma - getLuma(c))))
+			.sorted(( p1, p2 ) -> (int) Math.signum(p2.getValue() - p1.getValue()))
 			.findFirst();
 
 		return best.get().getKey();
+
+	}
+
+	/**
+	 * Adds the given {@code offset} to the {@code color}'s opacity. Negative
+	 * values will increase transparency (lower opacity), positive values will
+	 * increase opacity.
+	 *
+	 * @param color  The {@link Color} whose opacity must be changed.
+	 * @param offset The opacity offset to be added to the current
+	 *               {@code color}'s opacity.
+	 * @return The changed {@link Color}.
+	 * @throws NullPointerException     If {@code color} is null.
+	 * @throws IllegalArgumentException If {@code offset} is not in the
+	 *                                  {@code [0, 1]} range.
+	 */
+	public static Color changeOpacity ( Color color, double offset ) {
+
+		Validate.notNull(color, "Null 'color' parameter.");
+		Validate.inclusiveBetween(-1.0, 1.0, offset, "'offset' out of [-1.0, 1.0] range.");
+
+		return new Color(
+			color.getRed(),
+			color.getGreen(),
+			color.getBlue(),
+			MathUtils.clamp(color.getOpacity() + offset, 0.0, 1.0)
+		);
 
 	}
 
@@ -66,6 +100,7 @@ public class ColorUtils {
 	 *
 	 * @param color The color whose perceived brightness must be returned.
 	 * @return The weighted brightness (luma).
+	 * @throws NullPointerException If {@code color} is null.
 	 * @see <a href="http://alienryderflex.com/hsp.html">HSP Color Model</a>
 	 * @see <a href="https://thoughtbot.com/blog/closer-look-color-lightness#weighted-methods">Weighted Methods</a>.
 	 */
@@ -92,6 +127,7 @@ public class ColorUtils {
 	 *
 	 * @param color The {@link Color} to be converted.
 	 * @return A {@link String} representation of the given {@code color}.
+	 * @throws NullPointerException If {@code color} is null.
 	 */
 	public static String toWeb( Color color ) {
 

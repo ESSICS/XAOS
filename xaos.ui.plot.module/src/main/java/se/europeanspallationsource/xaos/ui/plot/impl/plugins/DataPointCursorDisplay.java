@@ -31,7 +31,9 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.util.Pair;
+import se.europeanspallationsource.xaos.ui.util.ColorUtils;
 
 /**
  * A {@link Plugin} displaying a {@link Label} next to the mouse cursor, showing
@@ -52,6 +54,8 @@ import javafx.util.Pair;
 @SuppressWarnings( "ClassWithoutLogger" )
 public final class DataPointCursorDisplay extends FormattedCursorDisplay {
 
+	private static final Color BACKGROUND1 = Color.rgb(33, 33, 33, 0.9);
+	private static final Color BACKGROUND2 = Color.rgb(222, 222, 222, 0.9);
 	private static final MessageFormat FORMATTER = new MessageFormat("{0,number,0.000}:{1,number,0.000}");
 
 	/* *********************************************************************** *
@@ -126,30 +130,26 @@ public final class DataPointCursorDisplay extends FormattedCursorDisplay {
 			Node node = dataPoint.getNode();
 
 			if ( node instanceof StackPane ) {
+				try {
 
-				//	TODO:CR use FXUtil.toWeb(color) and change the "-fx-background-color" css style.
+					Color dataColor = (Color) ((StackPane) node).getBackground().getFills().get(0).getFill();
 
-				getDisplay().setBackground(((StackPane) node).getBackground());
+					getDisplay().setStyle(MessageFormat.format(
+						"-xaos-chart-cursor-display-background-color: {0}; "
+					  + "-xaos-chart-cursor-display-text-color: {1};",
+						ColorUtils.toWeb(ColorUtils.changeOpacity(dataColor.desaturate(), -0.2)),
+						ColorUtils.toWeb(ColorUtils.bestConstrasting(dataColor, Color.BLACK, Color.WHITE))
+					));
+
+				} catch ( NullPointerException npex ) {
+					//	Can happen that in certain situations dataColor evaluation
+					//	will throw NPE because some element in the call path is null.
+				}
 			}
 
 			return FORMATTER.format(new Object[] { dataPoint.getXValue(), dataPoint.getYValue() });
 
 		}
-
-
-
-
-//        Node node = dataPoint.getNode();
-//        if (node instanceof StackPane) {
-//            StackPane stackPane = (StackPane) node;
-//            // YL: This background makes the text hard to read if it is a dark colour, e.g. blue
-//            label.setBackground(stackPane.getBackground());
-//            label.setBorder(stackPane.getBorder());
-//            label.setPadding(new Insets(2, 3, 2, 3));
-//        }
-
-
-
 
 	}
 
@@ -178,290 +178,4 @@ public final class DataPointCursorDisplay extends FormattedCursorDisplay {
 
 	}
 
-//	private List<Data<?, ?>> findNeighborPoints( Object xValue ) {
-//		if ( isDataInXAscendingOrder() ) {
-//			return findNeighborPointsWithBinarySearch(xValue);
-//		} else {
-//			List<Data<?, ?>> points = new LinkedList<>();
-//			for ( Series<?, ?> series : ( (XYChart<?, ?>) getChart() ).getData() ) {
-//				points.addAll(series.getData());
-//			}
-//			return points;
-//		}
-//	}
-
-
-//    private static final int DEFAULT_Y_OFFSET = -25;
-//
-//    private AbscissaDataComparator xValueComparator;
-//
-//    /**
-//     * Creates and initalizes a new instance of DataPointCursorDisplay class with {{@link #pickingDistanceProperty() picking
-//     * distance} initialized to 10.
-//     */
-//    public DataPointCursorDisplay() {
-//        label.getStyleClass().add("chart-data-tooltip-label");
-//        setOffsetY(DEFAULT_Y_OFFSET);
-//    }
-//
-//    /**
-//     * Creates and initalizes a new instance of DataPointCursorDisplay class.
-//     *
-//     * @param pickingDistance the initial value for the {@link #pickingDistanceProperty() pickingDistance} property
-//     */
-//    public DataPointCursorDisplay(double pickingDistance) {
-//        this();
-//        setPickingDistance(pickingDistance);
-//    }
-//
-//    @Override
-//    protected void chartConnected(Chart newChart) {
-//        if(newChart instanceof XYChart<?, ?>){
-//            super.chartConnected(newChart);
-//            xValueComparator = new AbscissaDataComparator(((XYChart<?, ?>)newChart).getXAxis());
-//        }
-//    }
-//
-//    @Override
-//    protected Data<?, ?> getDataPoint(Point2D mouseLocation) {
-//        Object xValue = ((XYChart<?, ?>)getChart()).getXAxis().getValueForDisplay(mouseLocation.getX());
-//        List<Data<?, ?>> neighborPoints = findNeighborPoints(xValue);
-//        if (neighborPoints.isEmpty()) {
-//            return null;
-//        }
-//        return pickNearestPointWithinPickingDistance(neighborPoints, mouseLocation);
-//    }
-//
-//    @Override
-//    protected void prepareLabel(Point2D mouseLocation, Data<?, ?> dataPoint) {
-//        super.prepareLabel(mouseLocation, dataPoint);
-//        Node node = dataPoint.getNode();
-//        if (node instanceof StackPane) {
-//            StackPane stackPane = (StackPane) node;
-//            // YL: This background makes the text hard to read if it is a dark colour, e.g. blue
-//            label.setBackground(stackPane.getBackground());
-//            label.setBorder(stackPane.getBorder());
-//            label.setPadding(new Insets(2, 3, 2, 3));
-//        }
-//    }
-//
-//    @SuppressWarnings({ "unchecked", "rawtypes" })
-//    private boolean isDataInXAscendingOrder() {
-//        Axis xAxis = ((XYChart<?, ?>)getChart()).getXAxis();
-//        for (Series<?, ?> series : ((XYChart<?, ?>)getChart()).getData()) {
-//            double prevX = Double.MIN_VALUE;
-//            for (Data<?, ?> point : series.getData()) {
-//                double x = xAxis.toNumericValue(point.getXValue());
-//                if (x < prevX) {
-//                    return false;
-//                }
-//                prevX = x;
-//            }
-//        }
-//        return true;
-//    }
-//
-//    private List<Data<?, ?>> findNeighborPointsWithBinarySearch(Object xValue) {
-//        List<Data<?, ?>> points = new LinkedList<>();
-//        for (Series<?, ?> series : ((XYChart<?, ?>)getChart()).getData()) {
-//            int index = Collections.binarySearch(series.getData(), AbscissaDataComparator.key(xValue), xValueComparator);
-//            if (index >= 0) {
-//                points.add(series.getData().get(index));
-//            } else {
-//                index = -index - 1;
-//                int seriesSize = series.getData().size();
-//                if (index < seriesSize) {
-//                    points.add(series.getData().get(index));
-//                }
-//                if (index > 0) {
-//                    points.add(series.getData().get(index - 1));
-//                }
-//            }
-//        }
-//        return points;
-//    }
-//
-//    private Data<?, ?> pickNearestPointWithinPickingDistance(List<Data<?, ?>> dataPoints, Point2D mouseLocation) {
-//        Data<?, ?> nearestDataPoint = null;
-//        Point2D nearestDisplayPoint = new Point2D(Double.MAX_VALUE, Double.MAX_VALUE);
-//        for (Data<?, ?> dataPoint : dataPoints) {
-//            Node node = dataPoint.getNode();
-//            if (node != null && node.isVisible() && node.getBoundsInParent().contains(mouseLocation)) {
-//                nearestDataPoint = dataPoint;
-//                break;
-//            } else {
-//                Point2D displayPoint = toDisplayPoint(dataPoint);
-//                if (mouseLocation.distance(displayPoint) <= getPickingDistance()
-//                        && displayPoint.distance(mouseLocation) < nearestDisplayPoint.distance(mouseLocation)) {
-//                    nearestDataPoint = dataPoint;
-//                    nearestDisplayPoint = displayPoint;
-//                }
-//            }
-//        }
-//        return nearestDataPoint;
-//    }
-//
-//    @SuppressWarnings({ "unchecked", "rawtypes" })
-//    private Point2D toDisplayPoint(Data<?, ?> dataPoint) {
-//        Axis xAxis = ((XYChart<?, ?>)getChart()).getXAxis();
-//        Axis yAxis = ((XYChart<?, ?>)getChart()).getYAxis();
-//        double displayX = xAxis.getDisplayPosition(dataPoint.getXValue());
-//        double displayY = yAxis.getDisplayPosition(dataPoint.getYValue());
-//        return new Point2D(displayX, displayY);
-//    }
-//    private static final int DEFAULT_PICKING_DISTANCE = 10;
-//    private static final int DEFAULT_Y_OFFSET = -25;
-//
-//    /**
-//     * Distance of the mouse cursor from the data point (expressed in display units) that should trigger showing the
-//     * tool tip.
-//     */
-//    private final DoubleProperty pickingDistance = new DoublePropertyBase(DEFAULT_PICKING_DISTANCE) {
-//        @Override protected void invalidated() {
-//			if ( get() <= 0 ) {
-//				throw new IllegalArgumentException("The picking distance must be a positive value.");
-//			}
-//        }
-//
-//        @Override public Object getBean() {
-//            return DataPointCursorDisplay.this;
-//        }
-//
-//        @Override public String getName() {
-//            return "pickingDistance";
-//        }
-//    };
-//
-//    public double getPickingDistance() { return pickingDistance.get(); }
-//    public void setPickingDistance(double value) { pickingDistance.set(value); }
-//    public DoubleProperty pickingDistanceProperty() { return pickingDistance; }
-//
-//    private AbscissaDataComparator xValueComparator;
-//
-//    /**
-//     * Creates and initalizes a new instance of DataPointCursorDisplay class with {{@link #pickingDistanceProperty() picking
-//     * distance} initialized to 10.
-//     */
-//    public DataPointCursorDisplay() {
-//        label.getStyleClass().add("chart-data-tooltip-label");
-//        setOffsetY(DEFAULT_Y_OFFSET);
-//    }
-//
-//    /**
-//     * Creates and initalizes a new instance of DataPointCursorDisplay class.
-//     *
-//     * @param pickingDistance the initial value for the {@link #pickingDistanceProperty() pickingDistance} property
-//     */
-//    public DataPointCursorDisplay(double pickingDistance) {
-//        this();
-//        setPickingDistance(pickingDistance);
-//    }
-//
-//    @Override
-//    protected void chartConnected(Chart newChart) {
-//        if(newChart instanceof XYChart<?, ?>){
-//            super.chartConnected(newChart);
-//            xValueComparator = new AbscissaDataComparator(((XYChart<?, ?>)newChart).getXAxis());
-//        }
-//    }
-//
-//    @Override
-//    protected Data<?, ?> getDataPoint(Point2D mouseLocation) {
-//        Object xValue = ((XYChart<?, ?>)getChart()).getXAxis().getValueForDisplay(mouseLocation.getX());
-//        List<Data<?, ?>> neighborPoints = findNeighborPoints(xValue);
-//        if (neighborPoints.isEmpty()) {
-//            return null;
-//        }
-//        return pickNearestPointWithinPickingDistance(neighborPoints, mouseLocation);
-//    }
-//
-//    @Override
-//    protected void prepareLabel(Point2D mouseLocation, Data<?, ?> dataPoint) {
-//        super.prepareLabel(mouseLocation, dataPoint);
-//        Node node = dataPoint.getNode();
-//        if (node instanceof StackPane) {
-//            StackPane stackPane = (StackPane) node;
-//            // YL: This background makes the text hard to read if it is a dark colour, e.g. blue
-//            label.setBackground(stackPane.getBackground());
-//            label.setBorder(stackPane.getBorder());
-//            label.setPadding(new Insets(2, 3, 2, 3));
-//        }
-//    }
-//
-//    private List<Data<?, ?>> findNeighborPoints(Object xValue) {
-//        if (isDataInXAscendingOrder()) {
-//            return findNeighborPointsWithBinarySearch(xValue);
-//        } else {
-//            List<Data<?, ?>> points = new LinkedList<>();
-//            for (Series<?, ?> series : ((XYChart<?, ?>)getChart()).getData()) {
-//                points.addAll(series.getData());
-//            }
-//            return points;
-//        }
-//    }
-//
-//    @SuppressWarnings({ "unchecked", "rawtypes" })
-//    private boolean isDataInXAscendingOrder() {
-//        Axis xAxis = ((XYChart<?, ?>)getChart()).getXAxis();
-//        for (Series<?, ?> series : ((XYChart<?, ?>)getChart()).getData()) {
-//            double prevX = Double.MIN_VALUE;
-//            for (Data<?, ?> point : series.getData()) {
-//                double x = xAxis.toNumericValue(point.getXValue());
-//                if (x < prevX) {
-//                    return false;
-//                }
-//                prevX = x;
-//            }
-//        }
-//        return true;
-//    }
-//
-//    private List<Data<?, ?>> findNeighborPointsWithBinarySearch(Object xValue) {
-//        List<Data<?, ?>> points = new LinkedList<>();
-//        for (Series<?, ?> series : ((XYChart<?, ?>)getChart()).getData()) {
-//            int index = Collections.binarySearch(series.getData(), AbscissaDataComparator.key(xValue), xValueComparator);
-//            if (index >= 0) {
-//                points.add(series.getData().get(index));
-//            } else {
-//                index = -index - 1;
-//                int seriesSize = series.getData().size();
-//                if (index < seriesSize) {
-//                    points.add(series.getData().get(index));
-//                }
-//                if (index > 0) {
-//                    points.add(series.getData().get(index - 1));
-//                }
-//            }
-//        }
-//        return points;
-//    }
-//
-//    private Data<?, ?> pickNearestPointWithinPickingDistance(List<Data<?, ?>> dataPoints, Point2D mouseLocation) {
-//        Data<?, ?> nearestDataPoint = null;
-//        Point2D nearestDisplayPoint = new Point2D(Double.MAX_VALUE, Double.MAX_VALUE);
-//        for (Data<?, ?> dataPoint : dataPoints) {
-//            Node node = dataPoint.getNode();
-//            if (node != null && node.isVisible() && node.getBoundsInParent().contains(mouseLocation)) {
-//                nearestDataPoint = dataPoint;
-//                break;
-//            } else {
-//                Point2D displayPoint = toDisplayPoint(dataPoint);
-//                if (mouseLocation.distance(displayPoint) <= getPickingDistance()
-//                        && displayPoint.distance(mouseLocation) < nearestDisplayPoint.distance(mouseLocation)) {
-//                    nearestDataPoint = dataPoint;
-//                    nearestDisplayPoint = displayPoint;
-//                }
-//            }
-//        }
-//        return nearestDataPoint;
-//    }
-//
-//    @SuppressWarnings({ "unchecked", "rawtypes" })
-//    private Point2D toDisplayPoint(Data<?, ?> dataPoint) {
-//        Axis xAxis = ((XYChart<?, ?>)getChart()).getXAxis();
-//        Axis yAxis = ((XYChart<?, ?>)getChart()).getYAxis();
-//        double displayX = xAxis.getDisplayPosition(dataPoint.getXValue());
-//        double displayY = yAxis.getDisplayPosition(dataPoint.getYValue());
-//        return new Point2D(displayX, displayY);
-//    }
 }
