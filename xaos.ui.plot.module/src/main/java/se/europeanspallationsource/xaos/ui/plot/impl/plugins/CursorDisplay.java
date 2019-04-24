@@ -46,7 +46,7 @@ import static se.europeanspallationsource.xaos.ui.plot.util.Assertions.assertVal
  * @css.class {@code chart-cursor-display}
  */
 @SuppressWarnings( "ClassWithoutLogger" )
-public abstract class CursorDisplay extends Plugin {
+public abstract class CursorDisplay extends AbstractCursorPlugin {
 
 	private static final int OFFSET = 5;
 

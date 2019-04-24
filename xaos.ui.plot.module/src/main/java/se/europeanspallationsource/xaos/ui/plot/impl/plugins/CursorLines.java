@@ -18,7 +18,6 @@ package se.europeanspallationsource.xaos.ui.plot.impl.plugins;
 
 
 import chart.DensityChartFX;
-import chart.Plugin;
 import java.text.MessageFormat;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
@@ -37,13 +36,14 @@ import static se.europeanspallationsource.xaos.ui.plot.util.Assertions.assertVal
  * Horizontal and vertical {@link Line}s drawn on the plot area, crossing at the
  * mouse cursor location.
  *
- * @author Grzegorz Kruk
+ * @author claudio.rosati@esss.se
  * @css.class {@code chart-cursor-lines}
  */
-public final class CursorLines extends Plugin {
+@SuppressWarnings( "ClassWithoutLogger" )
+public final class CursorLines extends AbstractCursorPlugin {
 
-	private final Line horizontalLine = new Line();
 	private final EventHandler<MouseEvent> dragDetectedHandler = this::dragDetected;
+	private final Line horizontalLine = new Line();
 	private final EventHandler<MouseEvent> mouseEnteredHandler = this::mouseEntered;
 	private final EventHandler<MouseEvent> mouseExitedHandler = this::mouseExited;
 	private final EventHandler<MouseEvent> mouseMoveHandler = this::mouseMove;
