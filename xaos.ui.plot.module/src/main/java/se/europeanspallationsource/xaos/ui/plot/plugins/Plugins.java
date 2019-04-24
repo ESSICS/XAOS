@@ -69,7 +69,7 @@ public class Plugins {
 	 * value at mouse cursor position, using the given {@code formatter} to
 	 * format the abscissa value.
 	 *
-	 * @param position Where the abscissa value must be displayed.
+	 * @param position  Where the abscissa value must be displayed.
 	 * @param formatter The formatter used to format the abscissa value.
 	 * @return An abscissa cursor display.
 	 */
@@ -78,6 +78,21 @@ public class Plugins {
 	}
 
 	/**
+	 * Returns all available {@link Plugin}s, in the right order. It is
+	 * equivalent to:
+	 * <pre>
+	 *   Plugin plugins = new Plugin[] {
+	 *     navigator(),
+	 *     keyboardAccelerators(),
+	 *     panner(),
+	 *     zoomer(),
+	 *     cursorLines(),
+	 *     abscissaCursorDisplay(),
+	 *     ordinateCursorDisplay(),
+	 *     dataPointCursorDisplay()
+	 *   };
+	 * </pre>
+	 *
 	 * @return All available {@link Plugin}s, in the right order, to be
 	 *         used as parameter for the {@link ObservableList#addAll(java.lang.Object...)}
 	 *         method of the lister returned by {@link Pluggable#getPlugins()}.
@@ -94,7 +109,7 @@ public class Plugins {
 			cursorLines(),
 			abscissaCursorDisplay(),
 			ordinateCursorDisplay(),
-			new DataPointCursorDisplay()
+			dataPointCursorDisplay()
 //			new DataPointTooltip()
 //			new AreaValueTooltip()
 //			new PropertyMenu()
@@ -109,6 +124,42 @@ public class Plugins {
 	 */
 	public static Plugin cursorLines() {
 		return new CursorLines();
+	}
+
+	/**
+	 * Returns a plugin displaying at the {@link Position#CENTER} the
+	 * coordinates of the closest chart data point at mouse cursor position.
+	 *
+	 * @return An abscissa cursor display.
+	 */
+	public static Plugin dataPointCursorDisplay() {
+		return new DataPointCursorDisplay();
+	}
+
+	/**
+	 * Returns a plugin displaying at the given {@code position} the
+	 * coordinates of the closest chart data point at mouse cursor position.
+	 *
+	 * @param position Where the chart data point must be displayed.
+	 * @return An abscissa cursor display.
+	 */
+	public static Plugin dataPointCursorDisplay( Position position ) {
+		return new DataPointCursorDisplay(position);
+	}
+
+	/**
+	 * Returns a plugin displaying at the given {@code position} the
+	 * coordinates of the closest chart data point at mouse cursor position,
+	 * using the given {@code formatter} to format the abscissa and ordinate
+	 * values of the picked chart data point.
+	 *
+	 * @param position  Where the chart data point must be displayed.
+	 * @param formatter The formatter used to format the abscissa and ordinate
+	 *                  values of the picked chart data point.
+	 * @return An abscissa cursor display.
+	 */
+	public static Plugin dataPointCursorDisplay( Position position, Format formatter ) {
+		return new DataPointCursorDisplay(position, formatter);
 	}
 
 	/**
@@ -192,7 +243,7 @@ public class Plugins {
 	 * value at mouse cursor position, using the given {@code formatter} to
 	 * format the ordinate value.
 	 *
-	 * @param position Where the ordinate value must be displayed.
+	 * @param position  Where the ordinate value must be displayed.
 	 * @param formatter The formatter used to format the ordinate value.
 	 * @return An ordinate cursor display.
 	 */

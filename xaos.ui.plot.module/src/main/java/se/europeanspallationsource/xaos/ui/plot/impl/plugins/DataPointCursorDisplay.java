@@ -46,10 +46,9 @@ import se.europeanspallationsource.xaos.ui.util.ColorUtils;
  * <p>
  * The formatter used can be adjusted by the
  * {@link #formatterProperty() formatter} property.</p>
- * <p>
- * CSS style class name: {@code chart-data-tooltip-label}</p>
  *
  * @author claudio.rosati@esss.se
+ * @css.class {@code chart-data-tooltip-label}
  */
 @SuppressWarnings( "ClassWithoutLogger" )
 public final class DataPointCursorDisplay extends FormattedCursorDisplay {
@@ -75,9 +74,10 @@ public final class DataPointCursorDisplay extends FormattedCursorDisplay {
     };
 
     /**
-     * Distance of the mouse cursor from the data point (expressed in display
-	 * units) that should trigger showing the tool tip.
-     */
+	 * @return A {@link DoubleProperty} representing the distance of the mouse
+	 *         cursor from the data point (expressed in display units) that
+	 *         should trigger showing the tool tip.
+	 */
 	public DoubleProperty pickingDistanceProperty() {
 		return pickingDistance;
 	}
@@ -95,11 +95,11 @@ public final class DataPointCursorDisplay extends FormattedCursorDisplay {
 	 * *********************************************************************** */
 
 	public DataPointCursorDisplay() {
-		super(Position.CENTER);
+		super(Position.CENTER, FORMATTER);
 	}
 
 	public DataPointCursorDisplay( Position position ) {
-		super(position);
+		super(position, FORMATTER);
 	}
 
 	public DataPointCursorDisplay( Position position, Format formatter ) {
@@ -147,7 +147,7 @@ public final class DataPointCursorDisplay extends FormattedCursorDisplay {
 				}
 			}
 
-			return FORMATTER.format(new Object[] { dataPoint.getXValue(), dataPoint.getYValue() });
+			return getFormatter().format(new Object[] { dataPoint.getXValue(), dataPoint.getYValue() });
 
 		}
 

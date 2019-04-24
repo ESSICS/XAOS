@@ -247,6 +247,11 @@
 					<source>${java.release}</source>
 					<tags>
 						<tag>
+							<name>css.class</name>
+							<placement>a</placement>
+							<head>CSS Style Class Name:</head>
+						</tag>
+						<tag>
 							<name>def.val</name>
 							<placement>a</placement>
 							<head>Default Value:</head>
@@ -264,13 +269,6 @@
 					</tags>
 				</configuration>
 				<executions>
-					<execution>
-                        <id>make-docs</id>     <!-- this is used for inheritance merges -->
-                        <phase>package</phase> <!-- bind to the packaging phase -->
-                        <goals>
-                            <goal>aggregate</goal>
-                        </goals>
-                    </execution>
 					<execution>
 						<id>attach-javadocs</id>
 						<goals>

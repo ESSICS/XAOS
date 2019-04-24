@@ -53,10 +53,9 @@ import static se.europeanspallationsource.xaos.ui.plot.util.Assertions.assertVal
  * <p>
  * Pressing also SHIFT will constrain zooming on a single axis according to
  * the longest side of the drawn rectangle.</p>
- * <p>
- * CSS style class name: {@code chart-zoomer}</p>
  *
  * @author claudio.rosati@esss.se
+ * @css.class {@code chart-zoomer}
  */
 @SuppressWarnings( "ClassWithoutLogger" )
 public final class Zoomer extends Plugin implements AxisConstrained {

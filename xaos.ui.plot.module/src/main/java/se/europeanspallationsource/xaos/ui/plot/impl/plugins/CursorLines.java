@@ -36,10 +36,9 @@ import static se.europeanspallationsource.xaos.ui.plot.util.Assertions.assertVal
 /**
  * Horizontal and vertical {@link Line}s drawn on the plot area, crossing at the
  * mouse cursor location.
- * <p>
- * CSS style class name: {@code chart-cursor-lines}</p>
  *
  * @author Grzegorz Kruk
+ * @css.class {@code chart-cursor-lines}
  */
 public final class CursorLines extends Plugin {
 

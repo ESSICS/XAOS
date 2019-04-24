@@ -41,10 +41,9 @@ import static se.europeanspallationsource.xaos.ui.plot.util.Assertions.assertVal
  * <p>
  * The display's relative position to the mouse cursor can be adjusted using the
  * {@link #positionProperty() position} property.</p>
- * <p>
- * CSS style class name: {@code chart-cursor-display}.</p>
  *
  * @author claudio.rosati@esss.se
+ * @css.class {@code chart-cursor-display}
  */
 @SuppressWarnings( "ClassWithoutLogger" )
 public abstract class CursorDisplay extends Plugin {
