@@ -109,6 +109,17 @@ public abstract class CursorDisplay extends AbstractCursorPlugin {
 	}
 
 	@Override
+	protected void boundsChanged() {
+
+		Point2D mouseLocation = getSceneMouseLocation();
+
+		if ( mouseLocation != null ) {
+			performMove(mouseLocation);
+		}
+
+	}
+
+	@Override
 	@SuppressWarnings( "null" )
 	protected void chartConnected( Chart chart ) {
 
@@ -129,13 +140,24 @@ public abstract class CursorDisplay extends AbstractCursorPlugin {
 		chart.addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEnteredHandler);
 		chart.addEventHandler(MouseEvent.MOUSE_EXITED, mouseExitedHandler);
 
+		super.chartConnected(chart);
+
 	}
 
 	@Override
 	protected void chartDisconnected( Chart chart ) {
+
+		super.chartDisconnected(chart);
+
 		chart.removeEventHandler(MouseEvent.MOUSE_EXITED, mouseExitedHandler);
 		chart.removeEventHandler(MouseEvent.MOUSE_ENTERED, mouseEnteredHandler);
 		chart.removeEventHandler(MouseEvent.DRAG_DETECTED, dragDetectedHandler);
+
+	}
+
+	@Override
+	protected void dragDetected( MouseEvent event ) {
+		label.setVisible(false);
 	}
 
 	/**
@@ -145,33 +167,18 @@ public abstract class CursorDisplay extends AbstractCursorPlugin {
 		return label;
 	}
 
-	/**
-	 * Returns the text to be displayed at the given mouse cursor location.
-	 *
-	 * @param mouseLocation The current mouse cursor location where some text
-	 *                      must be displayed.
-	 * @return A text {@link String} or {@code null}.
-	 */
-	protected abstract String textAtPosition( Point2D mouseLocation );
-
-	private void dragDetected( MouseEvent event ) {
-		label.setVisible(false);
+	@Override
+	protected void mouseMove( MouseEvent event ) {
+		super.mouseMove(event);
+		performMove(getSceneMouseLocation());
 	}
 
-	private void mouseEntered( MouseEvent event ) {
-		getChart().addEventHandler(MouseEvent.MOUSE_MOVED, mouseMoveHandler);
-	}
+	private void performMove( Point2D sceneMouseLocation ) {
 
-	private void mouseExited( MouseEvent event ) {
-		getChart().removeEventHandler(MouseEvent.MOUSE_MOVED, mouseMoveHandler);
-	}
-
-	private void mouseMove( MouseEvent event ) {
-
-		if ( isInsidePlotArea(event) ) {
+		if ( isInsidePlotArea(sceneMouseLocation) ) {
 
 			boolean hideLabel = false;
-			Point2D mouseLocation = getLocationInPlotArea(event);
+			Point2D mouseLocation = getLocationInPlotArea(sceneMouseLocation);
 			String text = textAtPosition(mouseLocation);
 
 			if ( text == null ) {
@@ -268,6 +275,15 @@ public abstract class CursorDisplay extends AbstractCursorPlugin {
 		}
 
 	}
+
+	/**
+	 * Returns the text to be displayed at the given mouse cursor location.
+	 *
+	 * @param mouseLocation The current mouse cursor location where some text
+	 *                      must be displayed.
+	 * @return A text {@link String} or {@code null}.
+	 */
+	protected abstract String textAtPosition( Point2D mouseLocation );
 
 	/**
 	 * Defines the possible positions of the cursor display relative to the

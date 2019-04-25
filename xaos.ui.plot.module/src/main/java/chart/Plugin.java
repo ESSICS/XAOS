@@ -192,17 +192,27 @@ public abstract class Plugin {
      * @throws NullPointerException if the plugin hasn't been added to any chart
      */
     protected final Point2D getLocationInPlotArea(MouseEvent event) {
-        Point2D mouseLocationInScene = new Point2D(event.getSceneX(), event.getSceneY());
+		return getLocationInPlotArea(new Point2D(event.getSceneX(), event.getSceneY()));
+    }
+
+    /**
+     * Converts mouse location within the scene to the location relative to the plot area.
+     *
+     * @param mouseLocationInScene mouse location in scene coordinates system
+     * @return location within the plot area
+     * @throws NullPointerException if the plugin hasn't been added to any chart
+     */
+    protected final Point2D getLocationInPlotArea(Point2D mouseLocationInScene) {
         double xInAxis = 0.0;
         double yInAxis = 0.0;
         if(getChart() instanceof XYChart<?, ?>){
             xInAxis =((XYChart<?, ?>) getChart()).getXAxis().sceneToLocal(mouseLocationInScene).getX();
             yInAxis = ((XYChart<?, ?>) getChart()).getYAxis().sceneToLocal(mouseLocationInScene).getY();
-        } else if(getChart() instanceof DensityChartFX<?, ?>){ 
+        } else if(getChart() instanceof DensityChartFX<?, ?>){
             xInAxis =((DensityChartFX<?, ?>) getChart()).getXAxis().sceneToLocal(mouseLocationInScene).getX();
             yInAxis = ((DensityChartFX<?, ?>) getChart()).getYAxis().sceneToLocal(mouseLocationInScene).getY();
-        } 
-        
+        }
+
         return new Point2D(xInAxis, yInAxis);
     }
 
@@ -215,8 +225,20 @@ public abstract class Plugin {
      * @throws NullPointerException If the plugin hasn't been added to any chart.
 	 */
 	protected final boolean isInsidePlotArea( MouseEvent event ) {
+		return isInsidePlotArea(new Point2D(event.getSceneX(), event.getSceneY()));
+	}
 
-		Point2D mouseLocation = getLocationInPlotArea(event);
+	/**
+	 * Returns {@code true} if the mouse cursor is inside the plot area.
+	 *
+    * @param mouseLocationInScene mouse location in scene coordinates system
+ 	 * @return {@code true} if the mouse cursor is inside the plot area,
+	 *         {@code false} otherwise.
+     * @throws NullPointerException If the plugin hasn't been added to any chart.
+	 */
+	protected final boolean isInsidePlotArea( Point2D mouseLocationInScene ) {
+
+		Point2D mouseLocation = getLocationInPlotArea(mouseLocationInScene);
 		double valueX = getXValueForDisplayAsDouble(mouseLocation.getX());
 		ValueAxis<?> xValueAxis = getXValueAxis();
 

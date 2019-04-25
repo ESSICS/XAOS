@@ -66,6 +66,11 @@ public final class CursorLines extends AbstractCursorPlugin {
 	}
 
 	@Override
+	protected void boundsChanged() {
+		//	Nothing to do.
+	}
+
+	@Override
 	@SuppressWarnings( "null" )
 	protected void chartConnected( Chart chart ) {
 
@@ -86,33 +91,35 @@ public final class CursorLines extends AbstractCursorPlugin {
 		chart.addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEnteredHandler);
 		chart.addEventHandler(MouseEvent.MOUSE_EXITED, mouseExitedHandler);
 
+		super.chartConnected(chart);
+
 	}
 
 	@Override
 	protected void chartDisconnected( Chart chart ) {
+
+		super.chartDisconnected(chart);
+
 		chart.removeEventHandler(MouseEvent.MOUSE_EXITED, mouseExitedHandler);
 		chart.removeEventHandler(MouseEvent.MOUSE_ENTERED, mouseEnteredHandler);
 		chart.removeEventHandler(MouseEvent.DRAG_DETECTED, dragDetectedHandler);
+
 	}
 
-	private void dragDetected( MouseEvent event ) {
+	@Override
+	protected void dragDetected( MouseEvent event ) {
 		horizontalLine.setVisible(false);
 		verticalLine.setVisible(false);
 	}
 
-	private void mouseEntered( MouseEvent event ) {
-		getChart().addEventHandler(MouseEvent.MOUSE_MOVED, mouseMoveHandler);
-	}
+	@Override
+	protected void mouseMove( MouseEvent event ) {
 
-	private void mouseExited( MouseEvent event ) {
-		getChart().removeEventHandler(MouseEvent.MOUSE_MOVED, mouseMoveHandler);
-	}
+		super.mouseMove(event);
 
-	private void mouseMove( MouseEvent event ) {
+		if ( isInsidePlotArea(getSceneMouseLocation()) ) {
 
-		if ( isInsidePlotArea(event) ) {
-
-			Point2D mouseLocation = getLocationInPlotArea(event);
+			Point2D mouseLocation = getLocationInPlotArea(getSceneMouseLocation());
 			double mouseX = mouseLocation.getX();
 			double mouseY = mouseLocation.getY();
 			Bounds plotAreaBounds = getPlotAreaBounds();
