@@ -19,20 +19,13 @@ package se.europeanspallationsource.xaos.ui.plot.impl.plugins;
 
 import chart.DensityChartFX;
 import chart.Plugin;
-import java.text.MessageFormat;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.Chart;
 import javafx.scene.chart.ValueAxis;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
-
-import static se.europeanspallationsource.xaos.ui.plot.util.Assertions.assertValueAxis;
 
 
 /**
@@ -50,11 +43,7 @@ public abstract class CursorDisplay extends AbstractCursorPlugin {
 
 	private static final int OFFSET = 5;
 
-	private final EventHandler<MouseEvent> dragDetectedHandler = this::dragDetected;
 	private final Label label = new Label();
-	private final EventHandler<MouseEvent> mouseEnteredHandler = this::mouseEntered;
-	private final EventHandler<MouseEvent> mouseExitedHandler = this::mouseExited;
-	private final EventHandler<MouseEvent> mouseMoveHandler = this::mouseMove;
 
 	/* *********************************************************************** *
 	 * START OF JAVAFX PROPERTIES                                              *
@@ -116,42 +105,6 @@ public abstract class CursorDisplay extends AbstractCursorPlugin {
 		if ( mouseLocation != null ) {
 			performMove(mouseLocation);
 		}
-
-	}
-
-	@Override
-	@SuppressWarnings( "null" )
-	protected void chartConnected( Chart chart ) {
-
-		if ( chart instanceof BarChart ) {
-			throw new UnsupportedOperationException(MessageFormat.format(
-				"{0} non supported.",
-				chart.getClass().getSimpleName()
-			));
-		} else if ( chart instanceof XYChart<?, ?> ) {
-			assertValueAxis(( (XYChart<?, ?>) chart ).getXAxis(), "X");
-			assertValueAxis(( (XYChart<?, ?>) chart ).getYAxis(), "Y");
-		} else if ( chart instanceof DensityChartFX<?, ?> ) {
-			assertValueAxis(( (DensityChartFX<?, ?>) chart ).getXAxis(), "X");
-			assertValueAxis(( (DensityChartFX<?, ?>) chart ).getYAxis(), "Y");
-		}
-
-		chart.addEventHandler(MouseEvent.DRAG_DETECTED, dragDetectedHandler);
-		chart.addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEnteredHandler);
-		chart.addEventHandler(MouseEvent.MOUSE_EXITED, mouseExitedHandler);
-
-		super.chartConnected(chart);
-
-	}
-
-	@Override
-	protected void chartDisconnected( Chart chart ) {
-
-		super.chartDisconnected(chart);
-
-		chart.removeEventHandler(MouseEvent.MOUSE_EXITED, mouseExitedHandler);
-		chart.removeEventHandler(MouseEvent.MOUSE_ENTERED, mouseEnteredHandler);
-		chart.removeEventHandler(MouseEvent.DRAG_DETECTED, dragDetectedHandler);
 
 	}
 
@@ -303,6 +256,7 @@ public abstract class CursorDisplay extends AbstractCursorPlugin {
 	 *                       │ BOTTOM
 	 * </pre>
 	 */
+	@SuppressWarnings( "PublicInnerClass" )
 	public static enum Position {
 
 		/**

@@ -17,10 +17,16 @@
 package se.europeanspallationsource.xaos.ui.plot.impl.plugins;
 
 
+import chart.DensityChartFX;
+import java.text.MessageFormat;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
+import javafx.scene.chart.BarChart;
 import javafx.scene.chart.Chart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.input.MouseEvent;
+
+import static se.europeanspallationsource.xaos.ui.plot.util.Assertions.assertValueAxis;
 
 
 /**
@@ -30,11 +36,6 @@ import javafx.scene.input.MouseEvent;
  */
 public abstract class AbstractCursorPlugin extends AbstractBoundedPlugin {
 
-	//	TODO:CR Listen to change in the chart's area and update the displayed
-	//			value at the cursor position.
-	//	TODO:CR Define the following handlers. Give default implementation.
-	//			mouseMove by default shoult record the cursor's position.
-
 	private final EventHandler<MouseEvent> dragDetectedHandler = this::dragDetected;
 	private final EventHandler<MouseEvent> mouseEnteredHandler = this::mouseEntered;
 	private final EventHandler<MouseEvent> mouseExitedHandler = this::mouseExited;
@@ -42,13 +43,39 @@ public abstract class AbstractCursorPlugin extends AbstractBoundedPlugin {
 	private Point2D sceneMouseLocation = null;
 
 	@Override
-	protected void chartConnected( Chart newChart ) {
-		super.chartConnected(newChart);
+	@SuppressWarnings( "null" )
+	protected void chartConnected( Chart chart ) {
+
+		if ( chart instanceof BarChart ) {
+			throw new UnsupportedOperationException(MessageFormat.format(
+				"{0} non supported.",
+				chart.getClass().getSimpleName()
+			));
+		} else if ( chart instanceof XYChart<?, ?> ) {
+			assertValueAxis(( (XYChart<?, ?>) chart ).getXAxis(), "X");
+			assertValueAxis(( (XYChart<?, ?>) chart ).getYAxis(), "Y");
+		} else if ( chart instanceof DensityChartFX<?, ?> ) {
+			assertValueAxis(( (DensityChartFX<?, ?>) chart ).getXAxis(), "X");
+			assertValueAxis(( (DensityChartFX<?, ?>) chart ).getYAxis(), "Y");
+		}
+
+		chart.addEventHandler(MouseEvent.DRAG_DETECTED, dragDetectedHandler);
+		chart.addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEnteredHandler);
+		chart.addEventHandler(MouseEvent.MOUSE_EXITED, mouseExitedHandler);
+
+		super.chartConnected(chart);
+
 	}
 
 	@Override
-	protected void chartDisconnected( Chart oldChart ) {
-		super.chartDisconnected(oldChart);
+	protected void chartDisconnected( Chart chart ) {
+
+		super.chartDisconnected(chart);
+
+		chart.removeEventHandler(MouseEvent.MOUSE_EXITED, mouseExitedHandler);
+		chart.removeEventHandler(MouseEvent.MOUSE_ENTERED, mouseEnteredHandler);
+		chart.removeEventHandler(MouseEvent.DRAG_DETECTED, dragDetectedHandler);
+
 	}
 
 	/**

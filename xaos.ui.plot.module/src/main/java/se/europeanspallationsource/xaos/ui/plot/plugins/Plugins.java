@@ -23,6 +23,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.chart.Chart;
 import se.europeanspallationsource.xaos.ui.control.NavigatorPopup;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.AbscissaCursorDisplay;
+import se.europeanspallationsource.xaos.ui.plot.impl.plugins.AreaValueCursorDisplay;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.CursorDisplay.Position;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.CursorLines;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.DataPointCursorDisplay;
@@ -78,6 +79,41 @@ public class Plugins {
 	}
 
 	/**
+	 * Returns a plugin displaying at the {@link Position#TOP} the chart area
+	 * value under mouse cursor position.
+	 *
+	 * @return An abscissa cursor display.
+	 */
+	public static Plugin areaValueCursorDisplay() {
+		return new AreaValueCursorDisplay();
+	}
+
+	/**
+	 * Returns a plugin displaying at the given {@code position} the chart area
+	 * value under mouse cursor position.
+	 *
+	 * @param position Where the chart area value must be displayed.
+	 * @return An abscissa cursor display.
+	 */
+	public static Plugin areaValueCursorDisplay( Position position ) {
+		return new AreaValueCursorDisplay(position);
+	}
+
+	/**
+	 * Returns a plugin displaying at the given {@code position} the chart area
+	 * value under mouse cursor position, using the given {@code formatter} to
+	 * format the area value.
+	 *
+	 * @param position  Where the chart area value must be displayed.
+	 * @param formatter The formatter used to format the abscissa and ordinate
+	 *                  values of the picked chart data point.
+	 * @return An abscissa cursor display.
+	 */
+	public static Plugin areaValueCursorDisplay( Position position, Format formatter ) {
+		return new AreaValueCursorDisplay(position, formatter);
+	}
+
+	/**
 	 * Returns all available {@link Plugin}s, in the right order. It is
 	 * equivalent to:
 	 * <pre>
@@ -89,7 +125,8 @@ public class Plugins {
 	 *     cursorLines(),
 	 *     abscissaCursorDisplay(),
 	 *     ordinateCursorDisplay(),
-	 *     dataPointCursorDisplay()
+	 *     dataPointCursorDisplay(),
+	 *     areaValueCursorDisplay()
 	 *   };
 	 * </pre>
 	 *
@@ -109,10 +146,10 @@ public class Plugins {
 			cursorLines(),
 			abscissaCursorDisplay(),
 			ordinateCursorDisplay(),
-			dataPointCursorDisplay()
-//			new DataPointTooltip()
-//			new AreaValueTooltip()
+			dataPointCursorDisplay(),
+			areaValueCursorDisplay()
 //			new PropertyMenu()
+//			new ErrorBars()
 		};
 	}
 

@@ -20,7 +20,6 @@ package se.europeanspallationsource.xaos.ui.plot.impl.plugins;
 import chart.Plugin;
 import java.text.Format;
 import java.text.MessageFormat;
-import java.util.Optional;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Point2D;
@@ -30,6 +29,7 @@ import javafx.scene.chart.Chart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.util.Pair;
@@ -48,13 +48,10 @@ import se.europeanspallationsource.xaos.ui.util.ColorUtils;
  * {@link #formatterProperty() formatter} property.</p>
  *
  * @author claudio.rosati@esss.se
- * @css.class {@code chart-data-tooltip-label}
  */
 @SuppressWarnings( "ClassWithoutLogger" )
 public final class DataPointCursorDisplay extends FormattedCursorDisplay {
 
-	private static final Color BACKGROUND1 = Color.rgb(33, 33, 33, 0.9);
-	private static final Color BACKGROUND2 = Color.rgb(222, 222, 222, 0.9);
 	private static final MessageFormat FORMATTER = new MessageFormat("{0,number,0.000}:{1,number,0.000}");
 
 	/* *********************************************************************** *
@@ -107,7 +104,7 @@ public final class DataPointCursorDisplay extends FormattedCursorDisplay {
 	}
 
 	@Override
-	@SuppressWarnings( "unchecked" )
+	@SuppressWarnings( { "unchecked", "null" } )
 	protected void chartConnected( Chart chart ) {
 		if ( ! ( chart instanceof XYChart<?, ?> ) ) {
 			throw new UnsupportedOperationException(MessageFormat.format(
@@ -132,7 +129,7 @@ public final class DataPointCursorDisplay extends FormattedCursorDisplay {
 			if ( node instanceof StackPane ) {
 				try {
 
-					Color dataColor = (Color) ((StackPane) node).getBackground().getFills().get(0).getFill();
+					Color dataColor = (Color) ((Region) node).getBackground().getFills().get(0).getFill();
 
 					getDisplay().setStyle(MessageFormat.format(
 						"-xaos-chart-cursor-display-background-color: {0}; "
@@ -154,13 +151,13 @@ public final class DataPointCursorDisplay extends FormattedCursorDisplay {
 	}
 
 	@Override
+	@SuppressWarnings( "unchecked" )
 	protected Object valueAtPosition( Point2D mouseLocation ) {
 
 		Axis xAxis = ( (XYChart<?, ?>) getChart() ).getXAxis();
 		Axis yAxis = ( (XYChart<?, ?>) getChart() ).getYAxis();
 
-		@SuppressWarnings( "unchecked" )
-		Optional<Data<?, ?>> nearestPoint = (Optional<Data<?, ?>>) ( (XYChart<?, ?>) getChart() )
+		return ((XYChart<?, ?>) getChart())
 			.getData()
 			.parallelStream()
 			.flatMap(series -> series.getData().stream())
@@ -172,9 +169,8 @@ public final class DataPointCursorDisplay extends FormattedCursorDisplay {
 			.unordered()
 			.sorted(( p1, p2 ) -> p1.getValue() < p2.getValue() ? -1 : p1.getValue() > p2.getValue() ? 1 : 0)
 			.map(p -> p.getKey())
-			.findFirst();
-		
-		return nearestPoint.orElse(null);
+			.findFirst()
+			.orElse(null);
 
 	}
 
