@@ -52,7 +52,7 @@ import se.europeanspallationsource.xaos.ui.util.ColorUtils;
 @SuppressWarnings( "ClassWithoutLogger" )
 public class AreaValueCursorDisplay extends FormattedCursorDisplay {
 
-	private static final MessageFormat FORMATTER = new MessageFormat("{0,number,0.000} [{1}]");
+	private static final MessageFormat FORMATTER = new MessageFormat("Area: {0,number,0.000}");
 
 	public AreaValueCursorDisplay() {
 		super(Position.TOP, FORMATTER);
@@ -118,6 +118,7 @@ public class AreaValueCursorDisplay extends FormattedCursorDisplay {
 
 			}
 
+			//	Inside MessageFormat {0} will be the series area value, {1} the series name.
 			return getFormatter().format(new Object[] { seriesArea, seriesName });
 
 		}

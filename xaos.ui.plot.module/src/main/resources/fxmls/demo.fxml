@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Demo.FXMLController">
+	<top>
+		<ToolBar prefHeight="40.0">
+			<items>
+				<ComboBox fx:id="chartchoice" prefWidth="150.0" promptText="Examples" />
+				<Pane minWidth="10" HBox.hgrow="ALWAYS" />
+				<Button mnemonicParsing="false" text="Log X Axis" onAction="#handleXLogButton" />
+				<Button mnemonicParsing="false" text="Log Y Axis" onAction="#handleYLogButton" />
+				<Button mnemonicParsing="false" text="Reset Axes" onAction="#handleResetButton" />
+				<Pane minWidth="10" HBox.hgrow="ALWAYS" />
+				<Button fx:id="errorBars" mnemonicParsing="false" text="Error Bars" onAction="#handleErrorButton" />
+			</items>
+		</ToolBar>
+	</top>
+	<center>
+		<BorderPane fx:id="borderpane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+	</center>
+</BorderPane>

@@ -41,7 +41,7 @@ public class MainApp extends Application {
             }
         });
         
-        Parent root = FXMLLoader.load(getClass().getResource("/fxmls/Scene.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxmls/demo.fxml"));
         
         Scene scene = new Scene(root);
         scene.getStylesheets().add("/styles/Styles.css");

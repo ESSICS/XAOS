@@ -29,7 +29,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import chart.LineChartFX;
 import chart.BarChartFX;
 import chart.ScatterChartFX;
@@ -38,6 +37,7 @@ import javafx.scene.chart.XYChart;
 import plugins.ErrorBars;
 
 import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import plugins.PropertyMenu;
@@ -45,11 +45,11 @@ import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries;
 public class FXMLController implements Initializable {
     
     @FXML
-    private Label label;
-    @FXML
     private ComboBox chartchoice;
     @FXML
     private BorderPane borderpane;
+	@FXML
+	private Button errorBars;
     
     ObservableList<String> options = 
     FXCollections.observableArrayList(
@@ -104,6 +104,8 @@ public class FXMLController implements Initializable {
                 }
             requestFocusOnClick();}  
             });
+
+			errorBars.prefWidthProperty().bind(chartchoice.widthProperty());
     
             }
     
