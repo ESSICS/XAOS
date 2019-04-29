@@ -14,9 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.ui.plot.impl.plugins;
+package se.europeanspallationsource.xaos.ui.plot.plugins;
 
 
+import se.europeanspallationsource.xaos.ui.plot.plugins.AbstractBoundedPlugin;
 import chart.DensityChartFX;
 import java.text.MessageFormat;
 import javafx.event.EventHandler;
