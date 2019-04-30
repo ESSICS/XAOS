@@ -108,24 +108,53 @@ public class AreaChartFX<X, Y> extends AreaChart<X, Y> implements Pluggable {
         getPlotChildren().add(pluginsNodesGroup);
     }
 
-    public final void setSeriesAsHorizontal(Integer index){
+	public static final int HORIZONTAL = 0;
+	public static final int VERTICAL = 1;
+	public static final int LONGITUDINAL = 2;
 
-        colorStyle = colorStyle+"\n"+"-color"+index+": -horizontal;";
-        this.lookup(".chart").setStyle(colorStyle);
+	@SuppressWarnings( "AssignmentToMethodParameter" )
+    public final void setSeriesAsHorizontal(int index){
+
+		if ( index < getData().size() ) {
+			getData().add(HORIZONTAL, getData().remove(index));
+		}
+
+//		index = 1 + index % 8;
+//
+//        colorStyle = colorStyle+"\n"+"CHART_COLOR_"+index+": -xaos-chart-horizontal;";
+//        colorStyle = colorStyle+"\n"+"CHART_COLOR_"+index+"_TRANS_20: -xaos-chart-horizontal-trans20;";
+//        colorStyle = colorStyle+"\n"+"CHART_COLOR_"+index+"_TRANS_70: -xaos-chart-horizontal-trans70;";
+//        this.lookup(".chart").setStyle(colorStyle);
 
     }
 
-    public final void setSeriesAsVertical(Integer index){
+    public final void setSeriesAsVertical(int index){
 
-        colorStyle = colorStyle+"\n"+"-color"+index+": -vertical;";
-        this.lookup(".chart").setStyle(colorStyle);
+		if ( index < getData().size() ) {
+			getData().add(VERTICAL, getData().remove(index));
+		}
+
+//		index = 1 + index % 8;
+//
+//        colorStyle = colorStyle+"\n"+"CHART_COLOR_"+index+": -xaos-chart-vertical;";
+//        colorStyle = colorStyle+"\n"+"CHART_COLOR_"+index+"_TRANS_20: -xaos-chart-vertical-trans20;";
+//        colorStyle = colorStyle+"\n"+"CHART_COLOR_"+index+"_TRANS_70: -xaos-chart-vertical-trans70;";
+//        this.lookup(".chart").setStyle(colorStyle);
 
     }
 
-    public final void setSeriesAsLongitudinal(Integer index){
+    public final void setSeriesAsLongitudinal(int index){
 
-        colorStyle = colorStyle+"\n"+"-color"+index+": -longitudinal;";
-        this.lookup(".chart").setStyle(colorStyle);
+		if ( index < getData().size() ) {
+			getData().add(LONGITUDINAL, getData().remove(index));
+		}
+
+//		index = 1 + index % 8;
+//
+//        colorStyle = colorStyle+"\n"+"CHART_COLOR_"+index+": -xaos-chart-longitudinal;";
+//        colorStyle = colorStyle+"\n"+"CHART_COLOR_"+index+"_TRANS_20: -xaos-chart-longitudinal-trans20;";
+//        colorStyle = colorStyle+"\n"+"CHART_COLOR_"+index+"_TRANS_70: -xaos-chart-longitudinal-trans70;";
+//        this.lookup(".chart").setStyle(colorStyle);
 
     }
 
@@ -156,9 +185,10 @@ public class AreaChartFX<X, Y> extends AreaChart<X, Y> implements Pluggable {
 				legenditem.getSymbol().getStyleClass().addAll(
 					"chart-area-symbol",
 					"area-legend-symbol",
-					"default-color" + i,
+					"default-color" + ( i % 8 ),
 					"series" + i
 				);
+
 //                final CheckBox cb = new CheckBox(series.getName());
 //                seriesDrawnInPlot.add(series.getName());
 //                cb.setUserData(series);

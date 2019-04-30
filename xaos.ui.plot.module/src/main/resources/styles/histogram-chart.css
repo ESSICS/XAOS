@@ -48,7 +48,7 @@
     visibility: visible;
 }
 
-.chart{
+/*.chart{
 	-color0 : green;
 	-color1 : navy;
 	-color2 : firebrick;
@@ -64,7 +64,7 @@
 	-horizontal: #ff0000;
 	-vertical: #006ddb;
 	-longitudinal: #24ff24;
-}
+}*/
 
 .default-color0.chart-line-symbol { -fx-background-color: -color0, -color0; -fx-border-radius: 0 0 0 0; -fx-background-radius: 0 0 0 0;}
 .default-color1.chart-line-symbol { -fx-background-color: -color1, -color1; -fx-border-radius: 0 0 0 0; -fx-background-radius: 0 0 0 0;}

@@ -48,6 +48,7 @@
     visibility: visible;
 }
 
+/*
 .chart{
 	-color0 : green;
 	-color1 : navy;
@@ -153,6 +154,7 @@
 .default-color7.chart-bar { -fx-background-color: -color7; }
 .default-color8.chart-bar { -fx-background-color: -color8; }
 .default-color9.chart-bar { -fx-background-color: -color9; }
+*/
 
 /*
 .chart-alternative-row-fill {

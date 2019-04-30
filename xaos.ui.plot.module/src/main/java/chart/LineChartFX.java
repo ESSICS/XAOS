@@ -105,21 +105,21 @@ public class LineChartFX<X, Y> extends LineChart<X, Y> implements Pluggable {
 
     public final void setSeriesAsHorizontal(Integer index){        
                         
-        colorStyle = colorStyle+"\n"+"-color"+index+": -horizontal;";
+        colorStyle = colorStyle+"\n"+"-color"+index+": -xaos-chart-horizontal;";
         this.lookup(".chart").setStyle(colorStyle);
                
     }
     
     public final void setSeriesAsVertical(Integer index){        
                 
-        colorStyle = colorStyle+"\n"+"-color"+index+": -vertical;";
+        colorStyle = colorStyle+"\n"+"-color"+index+": -xaos-chart-vertical;";
         this.lookup(".chart").setStyle(colorStyle);  
                
     }
     
     public final void setSeriesAsLongitudinal(Integer index){        
         
-        colorStyle = colorStyle+"\n"+"-color"+index+": -longitudinal;";
+        colorStyle = colorStyle+"\n"+"-color"+index+": -xaos-chart-longitudinal;";
         this.lookup(".chart").setStyle(colorStyle);  
                
     }

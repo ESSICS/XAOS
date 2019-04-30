@@ -105,9 +105,8 @@ public class AreaValueCursorDisplay extends FormattedCursorDisplay {
 
 						getDisplay().setStyle(MessageFormat.format(
 							"-xaos-chart-cursor-display-background-color: {0}; "
-						  + "-xaos-chart-cursor-display-text-color: {1};",
-							ColorUtils.toWeb(ColorUtils.changeOpacity(areaColor.desaturate(), -0.2)),
-							ColorUtils.toWeb(ColorUtils.bestConstrasting(areaColor, Color.BLACK, Color.WHITE))
+						  + "-xaos-chart-cursor-display-text-color: #000000;",
+							ColorUtils.toWeb(areaColor)
 						));
 
 					} catch ( NullPointerException npex ) {

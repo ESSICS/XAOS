@@ -14,8 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package Demo;
+
 
 import chart.NumberAxis;
 import chart.ScatterChartFX;
@@ -30,100 +30,101 @@ import javafx.scene.chart.ValueAxis;
 import javafx.scene.chart.XYChart;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
 
+
 /**
  *
  * @author reubenlindroos
  */
 public class ScatterChartGenerator {
-    private DataReducingSeries<Number, Number> series0;
-    private DataReducingSeries<Number, Number> series1;
-    private DataReducingSeries<Number, Number> series2;
-    private ScatterChartFX<Number,Number> chart ;
-    
-    private ValueAxis xAxis = new NumberAxis();
-    private ValueAxis yAxis = new NumberAxis();
-    
-     private static final Random RANDOM = new Random(System.currentTimeMillis());
-    
-     
-  public ScatterChartFX getChart(Integer NB_OF_POINTS) {
-        if (chart == null) {
-        generateChart(NB_OF_POINTS);
-    } 
-    //
-    return chart; }
-    
-    
-    
-    public void generateChart(Integer NB_OF_POINTS) {
-        xAxis.setAnimated(false);
-        yAxis.setAnimated(false);
 
-        chart = new ScatterChartFX<Number, Number>(xAxis, yAxis);
-        chart.setTitle("Test data");
-        chart.setAnimated(false);
-        chart.getPlugins().addAll(Plugins.all());
-        
-        if (series0==null){
-        series0 = new DataReducingSeries<>();
-        series0.setName("Generated test data-horizontal");
-        series0.setData(generateData(NB_OF_POINTS));
-        
-        
-        series1 = new DataReducingSeries<>();
-        series1.setName("Generated test data-vertical");
-        series1.setData(generateData(NB_OF_POINTS));
-        
-        
-        series2 = new DataReducingSeries<>();
-        series2.setName("Generated test data-longitudinal");
-        series2.setData(generateData(NB_OF_POINTS));}
-        
-        
-        chart.getData().add(series0.getSeries());
-        chart.getData().add(series1.getSeries());
-        chart.getData().add(series2.getSeries());
-        
-        
-        chart.setSeriesAsHorizontal(0);//red
-        chart.setSeriesAsVertical(1);//blue
-        chart.setSeriesAsLongitudinal(2);//horrible green
-    }
+	private DataReducingSeries<Number, Number> series0;
+	private DataReducingSeries<Number, Number> series1;
+	private DataReducingSeries<Number, Number> series2;
+	private ScatterChartFX<Number, Number> chart;
 
+	private ValueAxis xAxis = new NumberAxis();
+	private ValueAxis yAxis = new NumberAxis();
 
-    private static ObservableList<XYChart.Data<Number, Number>> generateData(int nbOfPoints) {
-        int[] yValues = generateIntArray(0, 5, nbOfPoints);
-        List<XYChart.Data<Number, Number>> data = new ArrayList<>(nbOfPoints);
-        for (int i = 0; i < yValues.length; i++) {
-            data.add(new XYChart.Data<Number, Number>(i, yValues[i]));
-        }
-        return FXCollections.observableArrayList(data);
-    }
-    public static int[] generateIntArray(int firstValue, int variance, int size) {
-        int[] data = new int[size];
-        data[0] = firstValue;
-        for (int i = 1; i < data.length; i++) {
-            int sign = RANDOM.nextBoolean() ? 1 : -1;
-            data[i] = data[i - 1] + (int) (variance * RANDOM.nextDouble()) * sign;
-        }
-        return data;
-    }
+	private static final Random RANDOM = new Random(System.currentTimeMillis());
 
-    public ScatterChartFX setYLogAxis(Integer nb_of_points) {
-        yAxis = new LogAxis();
-        generateChart(nb_of_points);
-        return chart;
-    }
-      public ScatterChartFX setXLogAxis(Integer nb_of_points) {
-        xAxis = new LogAxis();
-        generateChart(nb_of_points);
-        return chart;
-    }
-      public ScatterChartFX resetAxes(Integer nb_of_points) {
-          xAxis = new NumberAxis();
-          yAxis = new NumberAxis();
-          generateChart(nb_of_points);
-          return chart;
-      }
+	public ScatterChartFX getChart( Integer NB_OF_POINTS ) {
+		if ( chart == null ) {
+			generateChart(NB_OF_POINTS);
+		}
+		//
+		return chart;
+	}
+
+	public void generateChart( Integer NB_OF_POINTS ) {
+		xAxis.setAnimated(false);
+		yAxis.setAnimated(false);
+
+		chart = new ScatterChartFX<Number, Number>(xAxis, yAxis);
+		chart.setTitle("Test data");
+		chart.setAnimated(false);
+		chart.getPlugins().addAll(Plugins.all());
+
+		if ( series0 == null ) {
+
+			series0 = new DataReducingSeries<>();
+			series0.setName("Generated test data-horizontal");
+			series0.setData(generateData(NB_OF_POINTS));
+
+			series1 = new DataReducingSeries<>();
+			series1.setName("Generated test data-vertical");
+			series1.setData(generateData(NB_OF_POINTS));
+
+			series2 = new DataReducingSeries<>();
+			series2.setName("Generated test data-longitudinal");
+			series2.setData(generateData(NB_OF_POINTS));
+
+		}
+
+		chart.getData().add(series0.getSeries());
+		chart.getData().add(series1.getSeries());
+		chart.getData().add(series2.getSeries());
+
+		chart.setSeriesAsHorizontal(0);//red
+		chart.setSeriesAsVertical(1);//blue
+		chart.setSeriesAsLongitudinal(2);//horrible green
+	}
+
+	private static ObservableList<XYChart.Data<Number, Number>> generateData( int nbOfPoints ) {
+		int[] yValues = generateIntArray(0, 5, nbOfPoints);
+		List<XYChart.Data<Number, Number>> data = new ArrayList<>(nbOfPoints);
+		for ( int i = 0; i < yValues.length; i++ ) {
+			data.add(new XYChart.Data<Number, Number>(i, yValues[i]));
+		}
+		return FXCollections.observableArrayList(data);
+	}
+
+	public static int[] generateIntArray( int firstValue, int variance, int size ) {
+		int[] data = new int[size];
+		data[0] = firstValue;
+		for ( int i = 1; i < data.length; i++ ) {
+			int sign = RANDOM.nextBoolean() ? 1 : -1;
+			data[i] = data[i - 1] + (int) ( variance * RANDOM.nextDouble() ) * sign;
+		}
+		return data;
+	}
+
+	public ScatterChartFX setYLogAxis( Integer nb_of_points ) {
+		yAxis = new LogAxis();
+		generateChart(nb_of_points);
+		return chart;
+	}
+
+	public ScatterChartFX setXLogAxis( Integer nb_of_points ) {
+		xAxis = new LogAxis();
+		generateChart(nb_of_points);
+		return chart;
+	}
+
+	public ScatterChartFX resetAxes( Integer nb_of_points ) {
+		xAxis = new NumberAxis();
+		yAxis = new NumberAxis();
+		generateChart(nb_of_points);
+		return chart;
+	}
 
 }
