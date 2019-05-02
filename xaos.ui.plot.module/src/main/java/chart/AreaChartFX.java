@@ -26,6 +26,7 @@ import javafx.scene.Group;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.Axis;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Pluggable;
+import se.europeanspallationsource.xaos.ui.plot.util.SeriesColorUtils;
 
 /**
  * A thin extension of the FX {@link AreaChart} supporting custom {@link Plugin} plugin implementations.
@@ -44,7 +45,7 @@ public class AreaChartFX<X, Y> extends AreaChart<X, Y> implements Pluggable {
     private final List<String> noShowInLegend = new ArrayList<>();
     private final List<String> seriesDrawnInPlot = new ArrayList<>();
 
-    // Variable that stored the color line setup
+    // Variable that stored the cumulative color line setup
     private String colorStyle = new String();
 
     /**
@@ -108,55 +109,40 @@ public class AreaChartFX<X, Y> extends AreaChart<X, Y> implements Pluggable {
         getPlotChildren().add(pluginsNodesGroup);
     }
 
-	public static final int HORIZONTAL = 0;
-	public static final int VERTICAL = 1;
-	public static final int LONGITUDINAL = 2;
+	public final void setHVLSeries( int horizontal, int vertical, int longitudinal ) {
+		lookup(".chart").setStyle(SeriesColorUtils.styles(horizontal, vertical, longitudinal));
+	}
 
-	@SuppressWarnings( "AssignmentToMethodParameter" )
-    public final void setSeriesAsHorizontal(int index){
 
-		if ( index < getData().size() ) {
-			getData().add(HORIZONTAL, getData().remove(index));
-		}
-
-//		index = 1 + index % 8;
+//	public final void setSeriesAsHorizontal( int index ) {
 //
-//        colorStyle = colorStyle+"\n"+"CHART_COLOR_"+index+": -xaos-chart-horizontal;";
-//        colorStyle = colorStyle+"\n"+"CHART_COLOR_"+index+"_TRANS_20: -xaos-chart-horizontal-trans20;";
-//        colorStyle = colorStyle+"\n"+"CHART_COLOR_"+index+"_TRANS_70: -xaos-chart-horizontal-trans70;";
-//        this.lookup(".chart").setStyle(colorStyle);
-
-    }
-
-    public final void setSeriesAsVertical(int index){
-
-		if ( index < getData().size() ) {
-			getData().add(VERTICAL, getData().remove(index));
-		}
-
-//		index = 1 + index % 8;
+//		Validate.inclusiveBetween(0, getData().size(), index, "Out of range 'index' parameter.");
 //
-//        colorStyle = colorStyle+"\n"+"CHART_COLOR_"+index+": -xaos-chart-vertical;";
-//        colorStyle = colorStyle+"\n"+"CHART_COLOR_"+index+"_TRANS_20: -xaos-chart-vertical-trans20;";
-//        colorStyle = colorStyle+"\n"+"CHART_COLOR_"+index+"_TRANS_70: -xaos-chart-vertical-trans70;";
-//        this.lookup(".chart").setStyle(colorStyle);
-
-    }
-
-    public final void setSeriesAsLongitudinal(int index){
-
-		if ( index < getData().size() ) {
-			getData().add(LONGITUDINAL, getData().remove(index));
-		}
-
-//		index = 1 + index % 8;
+//		colorStyle += SeriesColorUtils.styleFor(HORIZONTAL, index);
 //
-//        colorStyle = colorStyle+"\n"+"CHART_COLOR_"+index+": -xaos-chart-longitudinal;";
-//        colorStyle = colorStyle+"\n"+"CHART_COLOR_"+index+"_TRANS_20: -xaos-chart-longitudinal-trans20;";
-//        colorStyle = colorStyle+"\n"+"CHART_COLOR_"+index+"_TRANS_70: -xaos-chart-longitudinal-trans70;";
-//        this.lookup(".chart").setStyle(colorStyle);
-
-    }
+//		this.lookup(".chart").setStyle(colorStyle);
+//
+//	}
+//
+//	public final void setSeriesAsVertical( int index ) {
+//
+//		Validate.inclusiveBetween(0, getData().size(), index, "Out of range 'index' parameter.");
+//
+//		colorStyle += SeriesColorUtils.styleFor(VERTICAL, index);
+//
+//		this.lookup(".chart").setStyle(colorStyle);
+//
+//	}
+//
+//	public final void setSeriesAsLongitudinal( int index ) {
+//
+//		Validate.inclusiveBetween(0, getData().size(), index, "Out of range 'index' parameter.");
+//
+//		colorStyle += SeriesColorUtils.styleFor(LONGITUDINAL, index);
+//
+//		this.lookup(".chart").setStyle(colorStyle);
+//
+//	}
 
     public final void setNoShowInLegend(String name){
         noShowInLegend.add(name);

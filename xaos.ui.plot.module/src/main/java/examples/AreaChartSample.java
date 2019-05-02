@@ -102,16 +102,16 @@ public class AreaChartSample extends Application {
         }        
 
         //Series 0
-        chart.setSeriesAsHorizontal(0);//red
+//        chart.setSeriesAsHorizontal(0);//red
         chart.getPlugins().add(new ErrorBars(new ErrorSeries(error0),0));
 
 
         //Series 1
-        chart.setSeriesAsVertical(1);//blue
+//        chart.setSeriesAsVertical(1);//blue
         chart.getPlugins().add(new ErrorBars(new ErrorSeries(error1),1));
 
         //Series 2
-        chart.setSeriesAsLongitudinal(2);//horrible green
+//        chart.setSeriesAsLongitudinal(2);//horrible green
         chart.getPlugins().add(new ErrorBars(new ErrorSeries(error2),2));
        
         
