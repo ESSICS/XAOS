@@ -113,8 +113,7 @@ public class AreaChartGenerator {
 		chart.getData().add(series5.getSeries());
 		chart.getData().add(series6.getSeries());
 		chart.getData().add(series7.getSeries());
-		chart.setHVLSeries(-1, -1, -1);
-//		chart.setHVLSeries(0, 1, 2);
+		chart.setHVLSeries(0, 1, 2);
 	}
 
 	private static ObservableList<XYChart.Data<Number, Number>> generateData( int nbOfPoints ) {

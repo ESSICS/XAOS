@@ -17,7 +17,6 @@
 
 package chart;
 
-import com.sun.javafx.charts.Legend;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.FXCollections;
@@ -25,6 +24,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.Axis;
+import se.europeanspallationsource.xaos.ui.plot.impl.Legend;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Pluggable;
 import se.europeanspallationsource.xaos.ui.plot.util.SeriesColorUtils;
 
@@ -201,6 +201,7 @@ public class AreaChartFX<X, Y> extends AreaChart<X, Y> implements Pluggable {
 //                legenditem.setText("");
 //                legenditem.setSymbol(cb);
                 legend.getItems().add(legenditem);
+System.out.println("*** LEGEND ITEM ADDED");
             }
         }
         setLegend(legend);

@@ -17,12 +17,15 @@
 package se.europeanspallationsource.xaos.ui.plot.impl;
 
 
-import java.text.DecimalFormat;
-import java.text.Format;
+import java.util.stream.Collectors;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
@@ -30,15 +33,29 @@ import javafx.scene.control.ContentDisplay;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.TilePane;
 
+import static javafx.geometry.Orientation.HORIZONTAL;
+import static javafx.geometry.Orientation.VERTICAL;
+
 
 /**
  * A chart legend that displays a list of items with symbols in a {@link TilePane}.
  *
  * @author claudio.rosati@esss.se
  */
+@SuppressWarnings( "ClassWithoutLogger" )
 public class Legend extends TilePane {
 
 	private static final int GAP = 5;
+
+	private ListChangeListener<LegendItem> itemsListener = c -> {
+
+		getChildren().setAll(getItems().stream().map(i -> i.checkBox).collect(Collectors.toList()));
+
+		if ( isVisible() ) {
+			requestLayout();
+		}
+
+	};
 
 	/*
 	 * *********************************************************************** *
@@ -47,23 +64,73 @@ public class Legend extends TilePane {
 	 */
 
 	/*
-	 * ---- formatter ----------------------------------------------------------
+	 * ---- items --------------------------------------------------------------
 	 */
-	private final ObjectProperty<Format> formatter = new SimpleObjectProperty<>(this, "formatter", new DecimalFormat("0.000"));
+	private ObjectProperty<ObservableList<LegendItem>> items = new SimpleObjectProperty<>(this, "items", FXCollections.observableArrayList()) {
+
+		ObservableList<LegendItem> oldItems = null;
+
+		@Override protected void invalidated() {
+
+			if ( oldItems != null ) {
+				oldItems.removeListener(itemsListener);
+			}
+
+			getChildren().clear();
+
+			ObservableList<LegendItem> newItems = get();
+
+			if ( newItems != null ) {
+				newItems.addListener(itemsListener);
+				getChildren().addAll(newItems.stream().map(i -> i.checkBox).collect(Collectors.toList()));
+			}
+
+			oldItems = newItems;
+
+			requestLayout();
+
+		}
+
+	};
 
 	/**
-	 * @return The {@link Format} of the cursor display.
+	 * @return The legend items to display in this legend.
 	 */
-	public final ObjectProperty<Format> formatterProperty() {
-		return formatter;
+	public final ObjectProperty<ObservableList<LegendItem>> itemsProperty() {
+		return items;
 	}
 
-	public final Format getFormatter() {
-		return formatterProperty().get();
+	public final void setItems( ObservableList<LegendItem> value ) {
+		itemsProperty().set(value);
 	}
 
-	public final void setFormatter( Format value ) {
-		formatterProperty().set(value);
+	public final ObservableList<LegendItem> getItems() {
+		return items.get();
+	}
+
+	/*
+	 * ---- vertical -----------------------------------------------------------
+	 */
+	private BooleanProperty vertical = new SimpleBooleanProperty(this, "vertical", false) {
+		@Override protected void invalidated() {
+			setOrientation(get() ? VERTICAL : HORIZONTAL);
+		}
+	};
+
+    /**
+	 * @return Whether legend items should be laid out vertically in columns
+	 *         rather than horizontally in rows.
+	 */
+	public final BooleanProperty verticalProperty() {
+		return vertical;
+	}
+
+	public final boolean isVertical() {
+		return vertical.get();
+	}
+
+	public final void setVertical( boolean value ) {
+		vertical.set(value);
 	}
 
 	/*
@@ -71,6 +138,24 @@ public class Legend extends TilePane {
 	 * END OF JAVAFX PROPERTIES *
 	 * ***********************************************************************
 	 */
+
+	public Legend() {
+		super(GAP, GAP);
+		setTileAlignment(Pos.CENTER_LEFT);
+		getStyleClass().setAll("chart-legend");
+	}
+
+	@Override
+	protected double computePrefHeight( double forWidth ) {
+		//	Legend prefHeight is zero if there are no legend items.
+		return ( getItems().size() > 0 ) ? super.computePrefHeight(forWidth) : 0;
+	}
+
+	@Override
+	protected double computePrefWidth( double forHeight ) {
+		//	Legend prefWidth is zero if there are no legend items.
+		return ( getItems().size() > 0 ) ? super.computePrefWidth(forHeight) : 0;
+	}
 
 	/**
 	 * A item to be displayed on a Legend.
@@ -99,7 +184,8 @@ public class Legend extends TilePane {
 		/**
 		 * CheckBox used to represent the legend item.
 		 */
-		private CheckBox checkBox = new CheckBox();
+		@SuppressWarnings( "PackageVisibleField" )
+		CheckBox checkBox = new CheckBox();
 
 		/*
 		 * ******************************************************************* *
@@ -123,16 +209,6 @@ public class Legend extends TilePane {
 				checkBox.setGraphic(symbol);
 
 			}
-
-			@Override
-			public Object getBean() {
-				return LegendItem.this;
-			}
-
-			@Override
-			public String getName() {
-				return "symbol";
-			}
 		};
 
 		/**
@@ -154,25 +230,16 @@ public class Legend extends TilePane {
 		/*
 		 * ---- text -----------------------------------------------------------
 		 */
-		private StringProperty text = new SimpleStringProperty(LegendItem.this, "text", checkBox.getText()) {
-			@Override protected void invalidated() {
-				checkBox.setText(get());
-			}
-		};
-
-		/**
-		 * @return The item text.
-		 */
 		public final StringProperty textProperty() {
-			return text;
+			return checkBox.textProperty();
 		}
 
 		public final String getText() {
-			return text.getValue();
+			return checkBox.getText();
 		}
 
 		public final void setText( String value ) {
-			text.setValue(value);
+			checkBox.setText(value);
 		}
 
 		/*
@@ -197,7 +264,7 @@ public class Legend extends TilePane {
 			this(text);
 			setSymbol(symbol);
 		}
-		
+
 	}
 
 }
