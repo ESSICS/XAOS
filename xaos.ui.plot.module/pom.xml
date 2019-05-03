@@ -82,11 +82,12 @@
 					</excludes>
 <!--
 					<includes>
+						<include>**/ChartUndoManagerUITest.java</include>
 						<include>**/KeyboardAcceleratorsUITest.java</include>
+						<include>**/LegendUITest.java</include>
 						<include>**/NavigatorUITest.java</include>
 						<include>**/PannerUITest.java</include>
 						<include>**/ZoomerUITest.java</include>
-						<include>**/ChartUndoManagerUITest.java</include>
 					</includes>
 -->
 				</configuration>

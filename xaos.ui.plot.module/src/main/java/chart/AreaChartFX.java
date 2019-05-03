@@ -69,7 +69,7 @@ public class AreaChartFX<X, Y> extends AreaChart<X, Y> implements Pluggable {
      */
     public AreaChartFX(Axis<X> xAxis, Axis<Y> yAxis, ObservableList<Series<X, Y>> data) {
         super(xAxis, yAxis, data);
-        getStylesheets().add("/styles/chart.css");
+        getStylesheets().add(getClass().getResource("/styles/chart.css").toExternalForm());
         getPlotChildren().add(pluginsNodesGroup);
     }
 
@@ -166,8 +166,22 @@ public class AreaChartFX<X, Y> extends AreaChart<X, Y> implements Pluggable {
         for (int i = 0; i < getData().size(); i++)
         {
 			final Series<X, Y> series = getData().get(i);
-            if(!noShowInLegend.contains(series.getName())){
-                Legend.LegendItem legenditem = new Legend.LegendItem(series.getName());
+			final String seriesName = series.getName();
+            if(!noShowInLegend.contains(seriesName)){
+                Legend.LegendItem legenditem = new Legend.LegendItem(seriesName, selected -> {
+
+                    series.getNode().setVisible(selected);
+                    series.getData().forEach(d -> d.getNode().setVisible(selected));
+
+					if ( selected ) {
+						if ( !seriesDrawnInPlot.contains(seriesName) ) {
+							seriesDrawnInPlot.add(seriesName);
+						}
+					} else {
+						seriesDrawnInPlot.remove(seriesName);
+					}
+				
+				});
 				legenditem.getSymbol().getStyleClass().addAll(
 					"chart-area-symbol",
 					"area-legend-symbol",
@@ -175,33 +189,9 @@ public class AreaChartFX<X, Y> extends AreaChart<X, Y> implements Pluggable {
 					"series" + i
 				);
 
-//                final CheckBox cb = new CheckBox(series.getName());
-//                seriesDrawnInPlot.add(series.getName());
-//                cb.setUserData(series);
-//                cb.setSelected(true);
-//                //cb.setPadding(new Insets(0,10,0,0));
-//                cb.setStyle("-fx-text-fill: -color"+this.getData().indexOf(series)+" ;");
-//                cb.addEventHandler(ActionEvent.ACTION, e ->{
-//                    final CheckBox box = (CheckBox) e.getSource();
-//                    @SuppressWarnings("unchecked")
-//                    final Series<Number, Number> s = (Series<Number, Number>) box.getUserData();
-//                    s.getNode().setVisible(box.isSelected());
-//                    s.getData().forEach(data ->{
-//                        StackPane stackPane = (StackPane) data.getNode();
-//                        stackPane.setVisible(box.isSelected());
-//                    });
-//                    if(box.isSelected()){
-//                        if (!seriesDrawnInPlot.contains(s.getName())){
-//                            seriesDrawnInPlot.add(s.getName());
-//                        }
-//                    } else {
-//                        seriesDrawnInPlot.remove(s.getName());
-//                    }
-//                });
-//                legenditem.setText("");
-//                legenditem.setSymbol(cb);
+                seriesDrawnInPlot.add(seriesName);
                 legend.getItems().add(legenditem);
-System.out.println("*** LEGEND ITEM ADDED");
+
             }
         }
         setLegend(legend);

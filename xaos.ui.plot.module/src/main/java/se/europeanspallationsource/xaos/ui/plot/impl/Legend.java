@@ -17,6 +17,7 @@
 package se.europeanspallationsource.xaos.ui.plot.impl;
 
 
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
@@ -45,7 +46,7 @@ import static javafx.geometry.Orientation.VERTICAL;
 @SuppressWarnings( "ClassWithoutLogger" )
 public class Legend extends TilePane {
 
-	private static final int GAP = 5;
+	private static final int GAP = 6;
 
 	private ListChangeListener<LegendItem> itemsListener = c -> {
 
@@ -66,7 +67,7 @@ public class Legend extends TilePane {
 	/*
 	 * ---- items --------------------------------------------------------------
 	 */
-	private ObjectProperty<ObservableList<LegendItem>> items = new SimpleObjectProperty<>(this, "items", FXCollections.observableArrayList()) {
+	private ObjectProperty<ObservableList<LegendItem>> items = new SimpleObjectProperty<>(this, "items") {
 
 		ObservableList<LegendItem> oldItems = null;
 
@@ -140,9 +141,14 @@ public class Legend extends TilePane {
 	 */
 
 	public Legend() {
+
 		super(GAP, GAP);
-		setTileAlignment(Pos.CENTER_LEFT);
+
 		getStyleClass().setAll("chart-legend");
+		setId("legend");
+		setTileAlignment(Pos.CENTER_LEFT);
+		setItems(FXCollections.observableArrayList());
+
 	}
 
 	@Override
@@ -185,7 +191,7 @@ public class Legend extends TilePane {
 		 * CheckBox used to represent the legend item.
 		 */
 		@SuppressWarnings( "PackageVisibleField" )
-		CheckBox checkBox = new CheckBox();
+		final CheckBox checkBox = new CheckBox();
 
 		/*
 		 * ******************************************************************* *
@@ -248,20 +254,27 @@ public class Legend extends TilePane {
 		 * *******************************************************************
 		 */
 
-		public LegendItem( String text ) {
+		public LegendItem( String text, Consumer<Boolean> checkBoxSelectionHandler ) {
 
 			checkBox.getStyleClass().add("chart-legend-item");
 			checkBox.setAlignment(Pos.CENTER_LEFT);
 			checkBox.setContentDisplay(ContentDisplay.LEFT);
 			checkBox.setGraphic(getSymbol());
+			checkBox.setId("legend-check-box: " + text);
+			checkBox.setSelected(true);
+			checkBox.selectedProperty().addListener(( ob, ov, nv ) -> {
+				if ( checkBoxSelectionHandler != null ) {
+					checkBoxSelectionHandler.accept(nv);
+				}
+			});
 
 			getSymbol().getStyleClass().setAll("chart-legend-item-symbol");
 			setText(text);
 
 		}
 
-		public LegendItem( String text, Node symbol ) {
-			this(text);
+		public LegendItem( String text, Node symbol, Consumer<Boolean> checkBoxSelectionHandler ) {
+			this(text, checkBoxSelectionHandler);
 			setSymbol(symbol);
 		}
 
