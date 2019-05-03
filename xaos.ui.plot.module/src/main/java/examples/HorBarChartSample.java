@@ -21,7 +21,7 @@ import chart.BarChartFX;
 
 import chart.NumberAxis;
 import chart.Plugin;
-import plugins.ErrorBars;
+import se.europeanspallationsource.xaos.ui.plot.impl.plugins.ErrorBars;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

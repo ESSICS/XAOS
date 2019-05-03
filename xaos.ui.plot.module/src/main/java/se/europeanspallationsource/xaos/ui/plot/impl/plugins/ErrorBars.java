@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package plugins;
+package se.europeanspallationsource.xaos.ui.plot.impl.plugins;
 
 import chart.BarChartFX;
 import chart.HistogramChartFX;

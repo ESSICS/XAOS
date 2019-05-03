@@ -67,7 +67,7 @@ public class Legend extends TilePane {
 	/*
 	 * ---- items --------------------------------------------------------------
 	 */
-	private ObjectProperty<ObservableList<LegendItem>> items = new SimpleObjectProperty<>(this, "items") {
+	private final ObjectProperty<ObservableList<LegendItem>> items = new SimpleObjectProperty<>(this, "items") {
 
 		ObservableList<LegendItem> oldItems = null;
 
@@ -106,13 +106,13 @@ public class Legend extends TilePane {
 	}
 
 	public final ObservableList<LegendItem> getItems() {
-		return items.get();
+		return itemsProperty().get();
 	}
 
 	/*
 	 * ---- vertical -----------------------------------------------------------
 	 */
-	private BooleanProperty vertical = new SimpleBooleanProperty(this, "vertical", false) {
+	private final BooleanProperty vertical = new SimpleBooleanProperty(this, "vertical", false) {
 		@Override protected void invalidated() {
 			setOrientation(get() ? VERTICAL : HORIZONTAL);
 		}
@@ -127,11 +127,11 @@ public class Legend extends TilePane {
 	}
 
 	public final boolean isVertical() {
-		return vertical.get();
+		return verticalProperty().get();
 	}
 
 	public final void setVertical( boolean value ) {
-		vertical.set(value);
+		verticalProperty().set(value);
 	}
 
 	/*

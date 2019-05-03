@@ -27,12 +27,14 @@ import se.europeanspallationsource.xaos.ui.plot.impl.plugins.AreaValueCursorDisp
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.CursorDisplay.Position;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.CursorLines;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.DataPointCursorDisplay;
+import se.europeanspallationsource.xaos.ui.plot.impl.plugins.ErrorBars;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.KeyboardAccelerators;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.Navigator;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.OrdinateCursorDisplay;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.Panner;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.Zoomer;
 import se.europeanspallationsource.xaos.ui.plot.plugins.AxisConstrained.AxisConstraints;
+import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries;
 
 
 /**
@@ -147,9 +149,9 @@ public class Plugins {
 			abscissaCursorDisplay(),
 			ordinateCursorDisplay(),
 			dataPointCursorDisplay(),
-			areaValueCursorDisplay()
+			areaValueCursorDisplay(),
+			errorBars()
 //			new PropertyMenu()
-//			new ErrorBars()
 		};
 	}
 
@@ -197,6 +199,33 @@ public class Plugins {
 	 */
 	public static Plugin dataPointCursorDisplay( Position position, Format formatter ) {
 		return new DataPointCursorDisplay(position, formatter);
+	}
+
+	/**
+	 * Returns a plugin that shows horizontal and vertical error bars around
+	 * chart data points.
+	 *
+	 * @param <X> Type of X values.
+	 * @param <Y> Type of Y values.
+	 * @return An error bar plugin.
+	 */
+	public static <X, Y> Plugin errorBars() {
+		return new ErrorBars<X, Y>();
+	}
+
+	/**
+	 * Returns a plugin that shows horizontal and vertical error bars around
+	 * chart data points.
+	 *
+	 * @param <X>         Type of X values.
+	 * @param <Y>         Type of Y values.
+	 * @param data        List of error data to be displayed in chart.
+	 * @param seriesIndex Index of the series to which the error data should be
+	 *                    added to.
+	 * @return An error bar plugin.
+	 */
+	public static <X, Y> Plugin errorBars( ErrorSeries<X,Y> data, int seriesIndex ) {
+		return new ErrorBars<>(data, seriesIndex);
 	}
 
 	/**

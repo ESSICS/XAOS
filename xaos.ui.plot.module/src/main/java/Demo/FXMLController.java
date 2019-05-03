@@ -34,7 +34,7 @@ import chart.BarChartFX;
 import chart.ScatterChartFX;
 import javafx.scene.chart.XYChart;
 
-import plugins.ErrorBars;
+import se.europeanspallationsource.xaos.ui.plot.impl.plugins.ErrorBars;
 
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
