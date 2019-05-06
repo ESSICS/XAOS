@@ -29,6 +29,7 @@ import javafx.scene.chart.Chart;
 import javafx.scene.chart.ValueAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
+import javafx.scene.chart.XYChart.Series;
 import javafx.scene.input.MouseEvent;
 
 
@@ -296,6 +297,20 @@ public abstract class Plugin {
     protected final double getYValueForDisplayAsDouble(double yDisplayValue) {
         return ((Number) getYValueForDisplay(yDisplayValue)).doubleValue();
     }
+
+	/**
+	 * Called by charts when the visibility of a series changed.
+	 *
+	 * @param <X>     Type of X values.
+	 * @param <Y>     Type of Y values.
+	 * @param chart   The chart where the {@code series} visibility change occurred.
+	 * @param series  The {@link Series} whose visibility changed.
+	 * @param visible The current visibility state of the given {@code series}.
+	 */
+	@SuppressWarnings( "NoopMethodInAbstractClass" )
+	public <X, Y> void seriesVisibilityUpdated ( Chart chart, Series<X, Y> series, boolean visible ) {
+		//	Nothing done in the default implementation.
+	}
     
    
 }

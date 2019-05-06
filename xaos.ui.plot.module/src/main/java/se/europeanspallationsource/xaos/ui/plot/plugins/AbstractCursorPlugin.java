@@ -17,7 +17,6 @@
 package se.europeanspallationsource.xaos.ui.plot.plugins;
 
 
-import se.europeanspallationsource.xaos.ui.plot.plugins.AbstractBoundedPlugin;
 import chart.DensityChartFX;
 import java.text.MessageFormat;
 import javafx.event.EventHandler;

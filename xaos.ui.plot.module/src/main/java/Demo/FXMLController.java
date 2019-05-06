@@ -31,16 +31,17 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import chart.LineChartFX;
 import chart.BarChartFX;
+import chart.Plugin;
 import chart.ScatterChartFX;
 import javafx.scene.chart.XYChart;
 
-import se.europeanspallationsource.xaos.ui.plot.impl.plugins.ErrorBars;
 
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import plugins.PropertyMenu;
+import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
 import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries;
 
 
@@ -71,7 +72,7 @@ public class FXMLController implements Initializable {
 	private BarChartGenerator barChartGen = new BarChartGenerator();
 
 	private Integer NB_OF_POINTS = 10000;
-	private ObservableList< ErrorBars> errorBarsToInclude = FXCollections.observableArrayList();
+	private ObservableList< Plugin> errorBarsToInclude = FXCollections.observableArrayList();
 
 	@Override
 	public void initialize( URL url, ResourceBundle rb ) {
@@ -237,9 +238,9 @@ public class FXMLController implements Initializable {
 			error2.getData().add(new ErrorSeries.ErrorData<Number, Number>(chart.getData().get(2).getData().get(ind), 0.05, 0.01));
 		}
 		errorBarsToInclude = FXCollections.observableArrayList(
-			new ErrorBars(error0, 0),
-			new ErrorBars(error1, 1),
-			new ErrorBars(error2, 2));
+			Plugins.errorBars(error0, 0),
+			Plugins.errorBars(error1, 1),
+			Plugins.errorBars(error2, 2));
 
 	}
 
@@ -256,9 +257,9 @@ public class FXMLController implements Initializable {
 		}
 
 		errorBarsToInclude = FXCollections.observableArrayList(
-			new ErrorBars(error0, 0),
-			new ErrorBars(error1, 1),
-			new ErrorBars(error2, 2));
+			Plugins.errorBars(error0, 0),
+			Plugins.errorBars(error1, 1),
+			Plugins.errorBars(error2, 2));
 
 	}
 

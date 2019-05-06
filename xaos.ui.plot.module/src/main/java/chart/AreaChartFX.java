@@ -31,9 +31,9 @@ import se.europeanspallationsource.xaos.ui.plot.util.SeriesColorUtils;
 /**
  * A thin extension of the FX {@link AreaChart} supporting custom {@link Plugin} plugin implementations.
  *
- * @author Grzegorz Kruk
  * @param <X> type of X values
  * @param <Y> type of Y values
+ * @author Grzegorz Kruk
  */
 public class AreaChartFX<X, Y> extends AreaChart<X, Y> implements Pluggable {
 
@@ -180,6 +180,8 @@ public class AreaChartFX<X, Y> extends AreaChart<X, Y> implements Pluggable {
 					} else {
 						seriesDrawnInPlot.remove(seriesName);
 					}
+
+					getPlugins().forEach(p -> p.seriesVisibilityUpdated(this, series, selected));
 				
 				});
 				legenditem.getSymbol().getStyleClass().addAll(

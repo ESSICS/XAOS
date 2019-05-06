@@ -81,41 +81,6 @@ public class Plugins {
 	}
 
 	/**
-	 * Returns a plugin displaying at the {@link Position#TOP} the chart area
-	 * value under mouse cursor position.
-	 *
-	 * @return An abscissa cursor display.
-	 */
-	public static Plugin areaValueCursorDisplay() {
-		return new AreaValueCursorDisplay();
-	}
-
-	/**
-	 * Returns a plugin displaying at the given {@code position} the chart area
-	 * value under mouse cursor position.
-	 *
-	 * @param position Where the chart area value must be displayed.
-	 * @return An abscissa cursor display.
-	 */
-	public static Plugin areaValueCursorDisplay( Position position ) {
-		return new AreaValueCursorDisplay(position);
-	}
-
-	/**
-	 * Returns a plugin displaying at the given {@code position} the chart area
-	 * value under mouse cursor position, using the given {@code formatter} to
-	 * format the area value.
-	 *
-	 * @param position  Where the chart area value must be displayed.
-	 * @param formatter The formatter used to format the abscissa and ordinate
-	 *                  values of the picked chart data point.
-	 * @return An abscissa cursor display.
-	 */
-	public static Plugin areaValueCursorDisplay( Position position, Format formatter ) {
-		return new AreaValueCursorDisplay(position, formatter);
-	}
-
-	/**
 	 * Returns all available {@link Plugin}s, in the right order. It is
 	 * equivalent to:
 	 * <pre>
@@ -150,9 +115,43 @@ public class Plugins {
 			ordinateCursorDisplay(),
 			dataPointCursorDisplay(),
 			areaValueCursorDisplay(),
-			errorBars()
 //			new PropertyMenu()
 		};
+	}
+
+	/**
+	 * Returns a plugin displaying at the {@link Position#TOP} the chart area
+	 * value under mouse cursor position.
+	 *
+	 * @return An abscissa cursor display.
+	 */
+	public static Plugin areaValueCursorDisplay() {
+		return new AreaValueCursorDisplay();
+	}
+
+	/**
+	 * Returns a plugin displaying at the given {@code position} the chart area
+	 * value under mouse cursor position.
+	 *
+	 * @param position Where the chart area value must be displayed.
+	 * @return An abscissa cursor display.
+	 */
+	public static Plugin areaValueCursorDisplay( Position position ) {
+		return new AreaValueCursorDisplay(position);
+	}
+
+	/**
+	 * Returns a plugin displaying at the given {@code position} the chart area
+	 * value under mouse cursor position, using the given {@code formatter} to
+	 * format the area value.
+	 *
+	 * @param position  Where the chart area value must be displayed.
+	 * @param formatter The formatter used to format the abscissa and ordinate
+	 *                  values of the picked chart data point.
+	 * @return An abscissa cursor display.
+	 */
+	public static Plugin areaValueCursorDisplay( Position position, Format formatter ) {
+		return new AreaValueCursorDisplay(position, formatter);
 	}
 
 	/**
@@ -199,18 +198,6 @@ public class Plugins {
 	 */
 	public static Plugin dataPointCursorDisplay( Position position, Format formatter ) {
 		return new DataPointCursorDisplay(position, formatter);
-	}
-
-	/**
-	 * Returns a plugin that shows horizontal and vertical error bars around
-	 * chart data points.
-	 *
-	 * @param <X> Type of X values.
-	 * @param <Y> Type of Y values.
-	 * @return An error bar plugin.
-	 */
-	public static <X, Y> Plugin errorBars() {
-		return new ErrorBars<X, Y>();
 	}
 
 	/**
