@@ -28,7 +28,6 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.shape.HLineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
-import javafx.scene.shape.StrokeType;
 import javafx.scene.shape.VLineTo;
 
 
@@ -38,6 +37,8 @@ import javafx.scene.shape.VLineTo;
  * @param <X> The X type of the series.
  * @param <Y> The Y type of the series.
  * @author natalia.milas@esss.se
+ * @author claudio.rosati@esss.se
+ * @css.class {@code chart-error-paths}
  */
 @SuppressWarnings( "ClassWithoutLogger" )
 public class ErrorSeries<X, Y> {
@@ -207,6 +208,21 @@ public class ErrorSeries<X, Y> {
 	public static final class ErrorData<X, Y> {
 
 		/**
+		 * The size in pixels of the closing segment.
+		 * <pre>
+		 *   -----
+		 *     |
+		 *     |
+		 *     x
+		 *     |
+		 *     |
+		 *   -----
+		 *   &lt;---&gt; CLOSING_SEGMENT_SIZE
+		 * </pre>
+		 */
+		private static final double CLOSING_SEGMENT_SIZE = 5;
+
+		/**
 		 * Data point connected to the error bar.
 		 */
 		private XYChart.Data<X, Y> dataPoint = new XYChart.Data<>();
@@ -277,23 +293,21 @@ public class ErrorSeries<X, Y> {
 
 			dataPoint = data;
 
-			xErrorPath.getElements().add(new MoveTo(-0.5, -0.5));
-			xErrorPath.getElements().add(new VLineTo(1.0));
+			xErrorPath.getElements().add(new MoveTo(-0.5, -CLOSING_SEGMENT_SIZE / 2));
+			xErrorPath.getElements().add(new VLineTo(CLOSING_SEGMENT_SIZE));
 			xErrorPath.getElements().add(new MoveTo(-0.5, 0.0));
 			xErrorPath.getElements().add(new HLineTo(1.0));
-			xErrorPath.getElements().add(new MoveTo(0.5, -0.5));
-			xErrorPath.getElements().add(new VLineTo(1.0));
-			xErrorPath.setStrokeType(StrokeType.CENTERED);
-			xErrorPath.setStrokeWidth(0.75);
+			xErrorPath.getElements().add(new MoveTo(0.5, -CLOSING_SEGMENT_SIZE / 2));
+			xErrorPath.getElements().add(new VLineTo(CLOSING_SEGMENT_SIZE));
+			xErrorPath.getStyleClass().add("chart-error-paths");
 
-			yErrorPath.getElements().add(new MoveTo(-0.5, -0.5));
-			yErrorPath.getElements().add(new HLineTo(1.0));
+			yErrorPath.getElements().add(new MoveTo(-CLOSING_SEGMENT_SIZE / 2, -0.5));
+			yErrorPath.getElements().add(new HLineTo(CLOSING_SEGMENT_SIZE));
 			yErrorPath.getElements().add(new MoveTo(0.0, -0.5));
 			yErrorPath.getElements().add(new VLineTo(1.0));
-			yErrorPath.getElements().add(new MoveTo(-0.5, 0.5));
-			yErrorPath.getElements().add(new VLineTo(1.0));
-			yErrorPath.setStrokeType(StrokeType.CENTERED);
-			yErrorPath.setStrokeWidth(0.75);
+			yErrorPath.getElements().add(new MoveTo(-CLOSING_SEGMENT_SIZE / 2, 0.5));
+			yErrorPath.getElements().add(new VLineTo(CLOSING_SEGMENT_SIZE));
+			yErrorPath.getStyleClass().add("chart-error-paths");
 
 		}
 
@@ -348,6 +362,22 @@ public class ErrorSeries<X, Y> {
 		 */
 		public Path getYErrorPath() {
 			return yErrorPath;
+		}
+
+		/**
+		 * @return Return {@code true} if the X error around the data point is
+		 *         not {@link Double#NaN}.
+		 */
+		public boolean isXErrorValid() {
+			return !Double.isNaN(xError);
+		}
+
+		/**
+		 * @return Return {@code true} if the Y error around the data point is
+		 *         not {@link Double#NaN}.
+		 */
+		public boolean isYErrorValid() {
+			return !Double.isNaN(yError);
 		}
 
 		/**

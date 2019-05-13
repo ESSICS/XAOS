@@ -26,12 +26,6 @@
     visibility: visible;
 }
 
-.chart-error-line {
-    -fx-stroke: black;
-    -fx-stroke-width: 1;
-    visibility: visible;
-}
-
 .chart-series-line {    
     -fx-stroke-width: 1px;
     -fx-effect: null;}

@@ -19,17 +19,15 @@ package se.europeanspallationsource.xaos.ui.plot.impl.plugins;
 
 import chart.BarChartFX;
 import chart.HistogramChartFX;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Point2D;
-import javafx.scene.chart.Axis;
+import javafx.scene.Node;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
-import javafx.scene.control.CheckBox;
 import javafx.scene.input.MouseEvent;
+import org.apache.commons.lang3.Validate;
 import se.europeanspallationsource.xaos.ui.plot.plugins.AbstractBoundedPlugin;
 import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries;
 import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries.ErrorData;
@@ -45,35 +43,29 @@ import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries.ErrorData;
 @SuppressWarnings( "ClassWithoutLogger" )
 public class ErrorBars<X, Y> extends AbstractBoundedPlugin {
 
-	private ObservableList<ErrorSeries<X, Y>> xyError = FXCollections.observableArrayList();
+	private final ErrorSeries<X, Y> errorData;
+	private Series<?, ?> series = null;
 
 	/**
 	 * @param errorData      List of error data for display in chart
-	 * @param indexRefSeries Index of series to must own the error data.
+	 * @param indexRefSeries Index of series to must own the error data. Note
+	 *                       that this value will be set to the given error
+	 *                       series, overwriting any previously set value.
+	 * @throws NullPointerException If {@code
 	 */
 	public ErrorBars( ErrorSeries<X, Y> errorData, int indexRefSeries ) {
+		
+		Validate.notNull(errorData, "Null 'errorData' parameter.");
 
-		xyError.add(errorData);
+		this.errorData = errorData;
+
 		errorData.setSeriesRef(indexRefSeries);
 
-		addError(indexRefSeries);
-
-	}
-
-	public void removeError( Integer seriesIndex ) {
-		xyError.forEach(series -> {
-			if ( series.getSeriesRef() == seriesIndex ) {
-				series.getData().forEach(marker -> {
-					getPlotChildren().remove(marker.getXErrorLine());
-					getPlotChildren().remove(marker.getYErrorLine());
-				});
-			}
-		});
 	}
 
 	@Override
-	public <X, Y> void seriesVisibilityUpdated( Chart chart, Series<X, Y> series, boolean visible ) {
-		if ( visible ) {
+	public <X, Y> void seriesVisibilityUpdated( Chart chart, Series<X, Y> series, int index, boolean visible ) {
+		if ( this.series == series && visible ) {
 			drawErrorBars();
 		} else {
 			hideErrorBars();
@@ -82,23 +74,59 @@ public class ErrorBars<X, Y> extends AbstractBoundedPlugin {
 
 	@Override
 	protected void boundsChanged() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		if ( series != null ) {
+			seriesVisibilityUpdated(getChart(), series, errorData.getSeriesRef(), isSeriesVisible(series));
+		}
 	}
 
 	@Override
 	protected void chartConnected( Chart chart ) {
-		super.chartConnected(chart); //To change body of generated methods, choose Tools | Templates.
+
+		super.chartConnected(chart);
+
+		errorData.getData().forEach(marker -> {
+
+			ObservableList<Node> plotChildren = getPlotChildren();
+
+			if ( marker.isXErrorValid() ) {
+				plotChildren.add(marker.getXErrorPath());
+			}
+
+			if ( marker.isYErrorValid() ) {
+				plotChildren.add(marker.getYErrorPath());
+			}
+
+		});
+
+		int index = errorData.getSeriesRef();
+
+		series = ((XYChart<?, ?>) chart).getData().get(index);
+		
+		seriesVisibilityUpdated(chart, series, index, isSeriesVisible(series));
+
 	}
 
-	private void addError( Integer seriesIndex ) {
-		xyError.forEach(series -> {
-			if ( series.getSeriesRef() == seriesIndex ) {
-				series.getData().forEach(marker -> {
-					getPlotChildren().add(marker.getXErrorLine());
-					getPlotChildren().add(marker.getYErrorLine());
-				});
+	@Override
+	protected void chartDisconnected( Chart chart ) {
+
+		errorData.getData().forEach(marker -> {
+
+			ObservableList<Node> plotChildren = getPlotChildren();
+
+			if ( marker.isXErrorValid() ) {
+				plotChildren.remove(marker.getXErrorPath());
 			}
+
+			if ( marker.isYErrorValid() ) {
+				plotChildren.remove(marker.getYErrorPath());
+			}
+
 		});
+
+		series = null;
+
+		super.chartDisconnected(chart);
+
 	}
 
 	/**
@@ -107,6 +135,10 @@ public class ErrorBars<X, Y> extends AbstractBoundedPlugin {
 	 * in order for the format to work.
 	 */
 	private void drawErrorBars() {
+
+		if ( series == null ) {
+			return;
+		}
 
 		xyError.forEach(series -> {
 			series.getData().forEach(data -> {
@@ -150,30 +182,37 @@ public class ErrorBars<X, Y> extends AbstractBoundedPlugin {
 		}
 		getLegendChart().getItems().forEach(legendItem -> legendItem.getSymbol().removeEventHandler(MouseEvent.MOUSE_CLICKED, clikcMoveHandler));
 		getLegendChart().getItems().forEach(legendItem -> legendItem.getSymbol().addEventHandler(MouseEvent.MOUSE_CLICKED, clikcMoveHandler));
+
+
+//		errorData.getData().forEach(marker -> {
+//			if ( marker.isXErrorValid() ) {
+//				marker.getXErrorPath().setVisible(true);
+//			}
+//			if ( marker.isYErrorValid() ) {
+//				marker.getYErrorPath().setVisible(true);
+//			}
+//		});
+
+
+
+
 	}
 
 	private void hideErrorBars() {
-		for ( ErrorSeries<X, Y> errorSeries : xyError ) {
-			XYChart.Series<?, ?> displaySeries = ( (XYChart<?, ?>) getChart() ).getData().get(errorSeries.getSeriesRef());
-			for ( LegendItem leg : getLegendChart().getItems() ) {
-				CheckBox cb = (CheckBox) leg.getSymbol();
-				if ( cb.getText().equals(displaySeries.getName()) ) {
-					errorSeries.getData().forEach(errorData -> {
-						errorData.getXErrorLine().setVisible(cb.isSelected());
-						errorData.getYErrorLine().setVisible(cb.isSelected());
-					});
-				}
-			}
-		}
-	}
 
-	@SuppressWarnings( { "unchecked", "rawtypes" } )
-	private Point2D toDisplayPoint( Data<?, ?> dataPoint ) {
-		Axis xAxis = ( (XYChart<?, ?>) getChart() ).getXAxis();
-		Axis yAxis = ( (XYChart<?, ?>) getChart() ).getYAxis();
-		double displayX = xAxis.getDisplayPosition(dataPoint.getXValue());
-		double displayY = yAxis.getDisplayPosition(dataPoint.getYValue());
-		return new Point2D(displayX, displayY);
+		if ( series == null ) {
+			return;
+		}
+
+		errorData.getData().forEach(marker -> {
+			if ( marker.isXErrorValid() ) {
+				marker.getXErrorPath().setVisible(false);
+			}
+			if ( marker.isYErrorValid() ) {
+				marker.getYErrorPath().setVisible(false);
+			}
+		});
+
 	}
 
 }

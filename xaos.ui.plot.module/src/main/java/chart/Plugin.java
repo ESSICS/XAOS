@@ -24,6 +24,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.chart.Axis;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.ValueAxis;
@@ -31,6 +32,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.input.MouseEvent;
+import org.apache.commons.lang3.Validate;
 
 
 /**
@@ -270,6 +272,15 @@ public abstract class Plugin {
                 getYValueForDisplay(displayPoint.getY()));
     }
 
+	@SuppressWarnings( { "unchecked", "rawtypes" } )
+	protected Point2D toDisplayPoint( Data<?, ?> dataPoint ) {
+		Axis xAxis = ( (XYChart<?, ?>) getChart() ).getXAxis();
+		Axis yAxis = ( (XYChart<?, ?>) getChart() ).getYAxis();
+		double displayX = xAxis.getDisplayPosition(dataPoint.getXValue());
+		double displayY = yAxis.getDisplayPosition(dataPoint.getYValue());
+		return new Point2D(displayX, displayY);
+	}
+
     protected final Object getXValueForDisplay(double xDisplayValue) {
         if(getChart() instanceof XYChart<?, ?>){
             return ((XYChart<?, ?>) getChart()).getXAxis().getValueForDisplay(xDisplayValue);
@@ -305,11 +316,32 @@ public abstract class Plugin {
 	 * @param <Y>     Type of Y values.
 	 * @param chart   The chart where the {@code series} visibility change occurred.
 	 * @param series  The {@link Series} whose visibility changed.
+	 * @param index   Index of (@code series} inside the {@code chart}'s data.
 	 * @param visible The current visibility state of the given {@code series}.
 	 */
 	@SuppressWarnings( "NoopMethodInAbstractClass" )
-	public <X, Y> void seriesVisibilityUpdated ( Chart chart, Series<X, Y> series, boolean visible ) {
+	public <X, Y> void seriesVisibilityUpdated ( Chart chart, Series<X, Y> series, int index, boolean visible ) {
 		//	Nothing done in the default implementation.
+	}
+
+	/**
+	 * @param <X>    Type of X values.
+	 * @param <Y>    Type of Y values.
+	 * @param series The data {@link Series} whose visibility is queried.
+	 * @return {@code true} if the series' {@link Node} is visible.
+	 * @throws NullPointerException If {@code series} or its {@link Node} are
+	 *                              {code null}.
+	 */
+	public <X, Y> boolean isSeriesVisible ( Series<X, Y> series ) {
+
+		Validate.notNull(series, "Null 'series' parameter.");
+
+		Node node = series.getNode();
+
+		Validate.notNull(node, "Null 'series' parameter's node.");
+
+		return node.isVisible();
+
 	}
     
    

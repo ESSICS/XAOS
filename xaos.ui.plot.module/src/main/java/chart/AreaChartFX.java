@@ -165,7 +165,8 @@ public class AreaChartFX<X, Y> extends AreaChart<X, Y> implements Pluggable {
         legend.getItems().clear();
         for (int i = 0; i < getData().size(); i++)
         {
-			final Series<X, Y> series = getData().get(i);
+			final int seriesIndex = i;
+			final Series<X, Y> series = getData().get(seriesIndex);
 			final String seriesName = series.getName();
             if(!noShowInLegend.contains(seriesName)){
                 Legend.LegendItem legenditem = new Legend.LegendItem(seriesName, selected -> {
@@ -181,14 +182,14 @@ public class AreaChartFX<X, Y> extends AreaChart<X, Y> implements Pluggable {
 						seriesDrawnInPlot.remove(seriesName);
 					}
 
-					getPlugins().forEach(p -> p.seriesVisibilityUpdated(this, series, selected));
+					getPlugins().forEach(p -> p.seriesVisibilityUpdated(this, series, seriesIndex, selected));
 				
 				});
 				legenditem.getSymbol().getStyleClass().addAll(
 					"chart-area-symbol",
 					"area-legend-symbol",
-					"default-color" + ( i % 8 ),
-					"series" + i
+					"default-color" + ( seriesIndex % 8 ),
+					"series" + seriesIndex
 				);
 
                 seriesDrawnInPlot.add(seriesName);
