@@ -38,7 +38,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import chart.data.DataReducingSeries;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
-import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries;
+import se.europeanspallationsource.xaos.ui.plot.data.ErrorSeries;
 
 
 public class LineChartSample extends Application {

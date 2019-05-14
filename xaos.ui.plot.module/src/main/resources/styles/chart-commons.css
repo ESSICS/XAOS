@@ -58,7 +58,7 @@
 .chart-error-paths {
     -fx-stroke: black;
 	-fx-stroke-type: centered;
-    -fx-stroke-width: 0.75;
+    -fx-stroke-width: 0.85;
 }
 
 .chart-cursor-lines {

@@ -33,6 +33,7 @@ import chart.LineChartFX;
 import chart.BarChartFX;
 import chart.Plugin;
 import chart.ScatterChartFX;
+import java.util.Random;
 import javafx.scene.chart.XYChart;
 
 
@@ -42,10 +43,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import plugins.PropertyMenu;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
-import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries;
+import se.europeanspallationsource.xaos.ui.plot.data.ErrorSeries;
 
 
 public class FXMLController implements Initializable {
+
+	private static final Random RANDOM = new Random(System.nanoTime());
 
 	@FXML
 	private ComboBox chartchoice;
@@ -71,7 +74,7 @@ public class FXMLController implements Initializable {
 	private AreaChartGenerator areaChartGen = new AreaChartGenerator();
 	private BarChartGenerator barChartGen = new BarChartGenerator();
 
-	private Integer NB_OF_POINTS = 10000;
+	private Integer NB_OF_POINTS = 10000;//10000;
 	private ObservableList< Plugin> errorBarsToInclude = FXCollections.observableArrayList();
 
 	@Override
@@ -233,9 +236,9 @@ public class FXMLController implements Initializable {
 		ErrorSeries<Number, Number> error2 = new ErrorSeries();
 
 		for ( int ind = 0; ind < chart.getData().get(0).getData().size(); ind++ ) {
-			error0.getData().add(new ErrorSeries.ErrorData<Number, Number>(chart.getData().get(0).getData().get(ind), 0.02, 0.02));
-			error1.getData().add(new ErrorSeries.ErrorData<Number, Number>(chart.getData().get(1).getData().get(ind), 0.015, 0.02));
-			error2.getData().add(new ErrorSeries.ErrorData<Number, Number>(chart.getData().get(2).getData().get(ind), 0.05, 0.01));
+			error0.getData().add(new ErrorSeries.ErrorData<Number, Number>(chart.getData().get(0).getData().get(ind), RANDOM.nextDouble(), RANDOM.nextDouble()));
+			error1.getData().add(new ErrorSeries.ErrorData<Number, Number>(chart.getData().get(1).getData().get(ind), RANDOM.nextDouble(), RANDOM.nextDouble()));
+			error2.getData().add(new ErrorSeries.ErrorData<Number, Number>(chart.getData().get(2).getData().get(ind), RANDOM.nextDouble(), RANDOM.nextDouble()));
 		}
 		errorBarsToInclude = FXCollections.observableArrayList(
 			Plugins.errorBars(error0, 0),
@@ -251,9 +254,9 @@ public class FXMLController implements Initializable {
 
 		//DataReducingObservableList.Data<Number,Number> error0 = FXCollections.observableArrayList();
 		for ( int ind = 0; ind < chart.getData().get(0).getData().size(); ind++ ) {
-			error0.getData().add(new ErrorSeries.ErrorData<String, Number>(chart.getData().get(0).getData().get(ind), 0.2));
-			error1.getData().add(new ErrorSeries.ErrorData<String, Number>(chart.getData().get(1).getData().get(ind), 0.15));
-			error2.getData().add(new ErrorSeries.ErrorData<String, Number>(chart.getData().get(2).getData().get(ind), 0.05));
+			error0.getData().add(new ErrorSeries.ErrorData<String, Number>(chart.getData().get(0).getData().get(ind), RANDOM.nextDouble()));
+			error1.getData().add(new ErrorSeries.ErrorData<String, Number>(chart.getData().get(1).getData().get(ind), RANDOM.nextDouble()));
+			error2.getData().add(new ErrorSeries.ErrorData<String, Number>(chart.getData().get(2).getData().get(ind), RANDOM.nextDouble()));
 		}
 
 		errorBarsToInclude = FXCollections.observableArrayList(

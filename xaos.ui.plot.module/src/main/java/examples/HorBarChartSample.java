@@ -30,7 +30,7 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
-import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries;
+import se.europeanspallationsource.xaos.ui.plot.data.ErrorSeries;
 
 
 public class HorBarChartSample extends Application {

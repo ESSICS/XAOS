@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.ui.plot.util;
+package se.europeanspallationsource.xaos.ui.plot.data;
 
 
 import javafx.beans.property.ObjectProperty;
@@ -24,10 +24,12 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.chart.Axis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.shape.HLineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
+import javafx.scene.shape.PathElement;
 import javafx.scene.shape.VLineTo;
 
 
@@ -208,7 +210,7 @@ public class ErrorSeries<X, Y> {
 	public static final class ErrorData<X, Y> {
 
 		/**
-		 * The size in pixels of the closing segment.
+		 * Half the size in pixels of the closing segment.
 		 * <pre>
 		 *   -----
 		 *     |
@@ -217,10 +219,12 @@ public class ErrorSeries<X, Y> {
 		 *     |
 		 *     |
 		 *   -----
-		 *   &lt;---&gt; CLOSING_SEGMENT_SIZE
+		 *     &lt;-&gt; CLOSING_SEGMENT_SIZE
 		 * </pre>
 		 */
-		private static final double CLOSING_SEGMENT_SIZE = 5;
+		private static final double CLOSING_SEGMENT_SIZE = 3.25;
+
+		private static final Double ZERO = Double.valueOf(0);
 
 		/**
 		 * Data point connected to the error bar.
@@ -238,6 +242,26 @@ public class ErrorSeries<X, Y> {
 		 */
 		private double yError = Double.NaN;
 		private final Path yErrorPath = new Path();
+
+		/*
+		 * X error bar elements.
+		 */
+		private final MoveTo xm1 = new MoveTo(-0.5, -CLOSING_SEGMENT_SIZE);
+		private final VLineTo xvl1 = new VLineTo(CLOSING_SEGMENT_SIZE);
+		private final MoveTo xm2 = new MoveTo(-0.5, 0.0);
+		private final HLineTo xhl1 = new HLineTo(1.0);
+		private final MoveTo xm3 = new MoveTo(0.5, -CLOSING_SEGMENT_SIZE);
+		private final VLineTo xvl2 = new VLineTo(CLOSING_SEGMENT_SIZE);
+
+		/*
+		 * Y error bar elements.
+		 */
+		private final MoveTo ym1 = new MoveTo(-CLOSING_SEGMENT_SIZE, -0.5);
+		private final HLineTo yhl1 = new HLineTo(CLOSING_SEGMENT_SIZE);
+		private final MoveTo ym2 = new MoveTo(0.0, -0.5);
+		private final VLineTo yvl1 = new VLineTo(1.0);
+		private final MoveTo ym3 = new MoveTo(-CLOSING_SEGMENT_SIZE, 0.5);
+		private final HLineTo yhl2 = new HLineTo(CLOSING_SEGMENT_SIZE);
 
 		/**
 		 * Creates an error data element without no X error data.
@@ -293,29 +317,40 @@ public class ErrorSeries<X, Y> {
 
 			dataPoint = data;
 
-			xErrorPath.getElements().add(new MoveTo(-0.5, -CLOSING_SEGMENT_SIZE / 2));
-			xErrorPath.getElements().add(new VLineTo(CLOSING_SEGMENT_SIZE));
-			xErrorPath.getElements().add(new MoveTo(-0.5, 0.0));
-			xErrorPath.getElements().add(new HLineTo(1.0));
-			xErrorPath.getElements().add(new MoveTo(0.5, -CLOSING_SEGMENT_SIZE / 2));
-			xErrorPath.getElements().add(new VLineTo(CLOSING_SEGMENT_SIZE));
+			ObservableList<PathElement> xElements = xErrorPath.getElements();
+
+			xElements.add(xm1);
+			xElements.add(xvl1);
+			xElements.add(xm2);
+			xElements.add(xhl1);
+			xElements.add(xm3);
+			xElements.add(xvl2);
 			xErrorPath.getStyleClass().add("chart-error-paths");
 
-			yErrorPath.getElements().add(new MoveTo(-CLOSING_SEGMENT_SIZE / 2, -0.5));
-			yErrorPath.getElements().add(new HLineTo(CLOSING_SEGMENT_SIZE));
-			yErrorPath.getElements().add(new MoveTo(0.0, -0.5));
-			yErrorPath.getElements().add(new VLineTo(1.0));
-			yErrorPath.getElements().add(new MoveTo(-CLOSING_SEGMENT_SIZE / 2, 0.5));
-			yErrorPath.getElements().add(new VLineTo(CLOSING_SEGMENT_SIZE));
+			ObservableList<PathElement> yElements = yErrorPath.getElements();
+
+			yElements.add(ym1);
+			yElements.add(yhl1);
+			yElements.add(ym2);
+			yElements.add(yvl1);
+			yElements.add(ym3);
+			yElements.add(yhl2);
 			yErrorPath.getStyleClass().add("chart-error-paths");
 
 		}
-
+		
 		/**
 		 * @return The data point around which the error exists.
 		 */
-		public XYChart.Data<?, ?> getDataPoint() {
+		public XYChart.Data<X, Y> getDataPoint() {
 			return dataPoint;
+		}
+
+		/**
+		 * @return The data point's {@link Node}.
+		 */
+		public Node getNode() {
+			return dataPoint.getNode();
 		}
 
 		/**
@@ -331,6 +366,13 @@ public class ErrorSeries<X, Y> {
 		 */
 		public Path getXErrorPath() {
 			return xErrorPath;
+		}
+
+		/**
+		 * @return {@link #getDataPoint()}{@code .getXValue()}.
+		 */
+		public X getXValue() {
+			return dataPoint.getXValue();
 		}
 
 		/**
@@ -365,6 +407,13 @@ public class ErrorSeries<X, Y> {
 		}
 
 		/**
+		 * @return {@link #getDataPoint()}{@code .getYValue()}.
+		 */
+		public Y getYValue() {
+			return dataPoint.getYValue();
+		}
+
+		/**
 		 * @return Return {@code true} if the X error around the data point is
 		 *         not {@link Double#NaN}.
 		 */
@@ -378,6 +427,17 @@ public class ErrorSeries<X, Y> {
 		 */
 		public boolean isYErrorValid() {
 			return !Double.isNaN(yError);
+		}
+
+		/**
+		 * @param dataPoint The data point to be compared with the one in this
+		 *                  object.
+		 * @return {@code true} if the given data point matches the one stored
+		 *         in this object.
+		 */
+		public boolean match ( XYChart.Data<X, Y> dataPoint ) {
+			return this.dataPoint.getXValue().equals(dataPoint.getXValue())
+				&& this.dataPoint.getYValue().equals(dataPoint.getYValue());
 		}
 
 		/**
@@ -430,6 +490,56 @@ public class ErrorSeries<X, Y> {
 		 */
 		public void setYErrorBar( double yError ) {
 			this.yError = yError;
+		}
+
+		/**
+		 * Shows the error bar(s) at the given center point.
+		 *
+		 * @param xAxis The X axis.
+		 * @param yAxis The Y axis.
+		 * @param dataX The display data X coordinate.
+		 * @param dataY The display data Y coordinate.
+		 */
+		public void show ( Axis<X> xAxis, Axis<Y> yAxis, double dataX, double dataY ) {
+
+			if ( isXErrorValid() ) {
+
+				@SuppressWarnings( "unchecked" )
+				double s1 = xAxis.getDisplayPosition((X) ZERO);
+				@SuppressWarnings( { "UnnecessaryBoxing", "unchecked" } )
+				double s2 = xAxis.getDisplayPosition((X) Double.valueOf(xError));
+				double hsx = Math.abs(s2 - s1) / 2;
+
+				xm1.setX(-hsx);
+				xm2.setX(-hsx);
+				xhl1.setX(hsx);
+				xm3.setX(hsx);
+
+				xErrorPath.setLayoutX(dataX);
+				xErrorPath.setLayoutY(dataY);
+				xErrorPath.setVisible(true);
+
+			}
+
+			if ( isYErrorValid() ) {
+
+				@SuppressWarnings( "unchecked" )
+				double s1 = yAxis.getDisplayPosition((Y) ZERO);
+				@SuppressWarnings( { "UnnecessaryBoxing", "unchecked" } )
+				double s2 = yAxis.getDisplayPosition((Y) Double.valueOf(yError));
+				double hsy = Math.abs(s2 - s1) / 2;
+
+				ym1.setY(-hsy);
+				ym2.setY(-hsy);
+				yvl1.setY(hsy);
+				ym3.setY(hsy);
+
+				yErrorPath.setLayoutX(dataX);
+				yErrorPath.setLayoutY(dataY);
+				yErrorPath.setVisible(true);
+
+			}
+
 		}
 
 	}

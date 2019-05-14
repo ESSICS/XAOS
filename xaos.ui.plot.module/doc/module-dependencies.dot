@@ -1,7 +1,7 @@
 digraph "summary" {
+  "org.apache.commons.lang3"                         -> "java.base (java.base)";
   "xaos.core"                                        -> "java.base (java.base)";
   "xaos.core"                                        -> "java.logging (java.logging)";
-  "org.apache.commons.lang3"                         -> "java.base (java.base)";
   "javafx.graphics"                                  -> "java.base (java.base)";
   "javafx.graphics"                                  -> "java.desktop (java.desktop)";
   "javafx.graphics"                                  -> "java.xml (java.xml)";

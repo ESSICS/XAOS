@@ -42,8 +42,8 @@ import se.europeanspallationsource.xaos.ui.plot.impl.plugins.ErrorBars;
 import static javafx.application.Application.launch;
 
 import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
-import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries;
-import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries.ErrorData;
+import se.europeanspallationsource.xaos.ui.plot.data.ErrorSeries;
+import se.europeanspallationsource.xaos.ui.plot.data.ErrorSeries.ErrorData;
 
 
 public class ScatterChartSample extends Application {

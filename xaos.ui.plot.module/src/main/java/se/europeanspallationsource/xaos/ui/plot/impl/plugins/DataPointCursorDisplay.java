@@ -30,7 +30,6 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.util.Pair;
 import se.europeanspallationsource.xaos.ui.util.ColorUtils;
@@ -126,7 +125,7 @@ public final class DataPointCursorDisplay extends FormattedCursorDisplay {
 			Data<?, ?> dataPoint = (Data<?, ?>) value;
 			Node node = dataPoint.getNode();
 
-			if ( node instanceof StackPane ) {
+			if ( node instanceof Region ) {
 				try {
 
 					Color dataColor = (Color) ((Region) node).getBackground().getFills().get(0).getFill();

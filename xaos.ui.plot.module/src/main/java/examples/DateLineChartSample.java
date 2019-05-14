@@ -43,7 +43,7 @@ import chart.Plugin;
 import java.util.concurrent.TimeUnit;
 import javafx.scene.chart.XYChart.Series;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
-import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries;
+import se.europeanspallationsource.xaos.ui.plot.data.ErrorSeries;
 
 
 public class DateLineChartSample extends Application {

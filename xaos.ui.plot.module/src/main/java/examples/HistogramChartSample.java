@@ -29,7 +29,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.ErrorBars;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
-import se.europeanspallationsource.xaos.ui.plot.util.ErrorSeries;
+import se.europeanspallationsource.xaos.ui.plot.data.ErrorSeries;
 
 public class HistogramChartSample extends Application{
     private static final Random RANDOM = new Random(System.currentTimeMillis());

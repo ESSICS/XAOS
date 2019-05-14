@@ -76,11 +76,10 @@
 					<!-- USED TO ALLOW EXECUTION OF A SINGLE SPECIFIC TEST.  -->
 					<!-- Otherwise they should be commented out.             -->
 
-					<!-- TODO:CR COMMENT-OUT -->
+<!--
 					<excludes>
 						<exclude>**/*Suite.java</exclude>
 					</excludes>
-<!--
 					<includes>
 						<include>**/ChartUndoManagerUITest.java</include>
 						<include>**/KeyboardAcceleratorsUITest.java</include>
