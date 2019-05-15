@@ -35,7 +35,7 @@ import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
  *
  * @author reubenlindroos
  */
-public class ScatterChartGenerator {
+public class ScatterChartGenerator implements ChartGenerator {
 
 	private DataReducingSeries<Number, Number> series0;
 	private DataReducingSeries<Number, Number> series1;
@@ -62,6 +62,7 @@ public class ScatterChartGenerator {
 		chart = new ScatterChartFX<Number, Number>(xAxis, yAxis);
 		chart.setTitle("Test data");
 		chart.setAnimated(false);
+		chart.setOnMouseClicked(event -> chart.requestFocus());
 		chart.getPlugins().addAll(Plugins.all());
 
 		if ( series0 == null ) {

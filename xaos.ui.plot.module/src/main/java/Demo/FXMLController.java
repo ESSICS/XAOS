@@ -17,194 +17,264 @@
 package Demo;
 
 
-import Demo.AreaChartGenerator;
 import chart.AreaChartFX;
+import chart.BarChartFX;
+import chart.LineChartFX;
+import chart.LogAxis;
+import chart.Plugin;
+import chart.ScatterChartFX;
 import java.net.URL;
+import java.util.Random;
 import java.util.ResourceBundle;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ComboBox;
-import chart.LineChartFX;
-import chart.BarChartFX;
-import chart.Plugin;
-import chart.ScatterChartFX;
-import java.util.Random;
 import javafx.scene.chart.XYChart;
-
-
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.BorderPane;
-import plugins.PropertyMenu;
-import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
 import se.europeanspallationsource.xaos.ui.plot.data.ErrorSeries;
+import se.europeanspallationsource.xaos.ui.plot.impl.plugins.ErrorBars;
+import se.europeanspallationsource.xaos.ui.plot.plugins.Pluggable;
+import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
 
 
+/**
+ * @author reubenlindroos
+ * @author claudio.rosati@esss.se
+ */
 public class FXMLController implements Initializable {
 
+	private static final int NB_OF_POINTS = 100;//10000;
 	private static final Random RANDOM = new Random(System.nanoTime());
 
 	@FXML
-	private ComboBox chartchoice;
-	@FXML
 	private BorderPane borderpane;
 	@FXML
-	private Button errorBars;
+	private ComboBox<String> chartchoice;
+	@FXML
+	private Button errorBarsButton;
+	@FXML
+	private Button logXButton;
+	@FXML
+	private Button logYButton;
+	@FXML
+	private Button resetButton;
 
-	ObservableList<String> options
-		= FXCollections.observableArrayList(
-			"LineChartFX",
-			"ScatterChartFX",
-			"BarChartFX",
-			"AreaChartFX"
-		);
-	private LineChartFX<Number, Number> lineChart;
-	private ScatterChartFX<Number, Number> scatterChart;
+	private final ObservableList<String> options = FXCollections.observableArrayList(
+		"AreaChartFX",
+		"BarChartFX",
+		"LineChartFX",
+		"ScatterChartFX"
+	);
+
 	private AreaChartFX<Number, Number> areaChart;
 	private BarChartFX<String, Number> barChart;
+	private LineChartFX<Number, Number> lineChart;
+	private ScatterChartFX<Number, Number> scatterChart;
 
-	private LineChartGenerator lineChartGen = new LineChartGenerator();
-	private ScatterChartGenerator scatterChartGen = new ScatterChartGenerator();
-	private AreaChartGenerator areaChartGen = new AreaChartGenerator();
-	private BarChartGenerator barChartGen = new BarChartGenerator();
-
-	private Integer NB_OF_POINTS = 10000;//10000;
-	private ObservableList< Plugin> errorBarsToInclude = FXCollections.observableArrayList();
+	private final AreaChartGenerator areaChartGen = new AreaChartGenerator();
+	private final BarChartGenerator barChartGen = new BarChartGenerator();
+	private final LineChartGenerator lineChartGen = new LineChartGenerator();
+	private final ScatterChartGenerator scatterChartGen = new ScatterChartGenerator();
 
 	@Override
+	@SuppressWarnings( "unchecked" )
 	public void initialize( URL url, ResourceBundle rb ) {
 
 		chartchoice.setItems(options);
-		chartchoice.valueProperty().addListener(new ChangeListener<String>() {
-			@Override
-			public void changed( ObservableValue ov, String t, String t1 ) {
-				if ( "LineChartFX".equals(t1) ) {
-					lineChart = lineChartGen.getChart(NB_OF_POINTS);
-					borderpane.setCenter(lineChart);
-					lineChart.getPlugins().add(new PropertyMenu());
-
+		chartchoice.valueProperty().addListener(( ob, ov, nv ) -> {
+			if ( nv != null ) {
+				switch ( nv ) {
+					case "LineChartFX":
+						lineChart = (LineChartFX<Number, Number>) initializeChart(lineChartGen, NB_OF_POINTS);
+						break;
+					case "ScatterChartFX":
+						scatterChart = (ScatterChartFX<Number, Number>) initializeChart(scatterChartGen, NB_OF_POINTS);
+						break;
+					case "AreaChartFX":
+						areaChart = (AreaChartFX<Number, Number>) initializeChart(areaChartGen, NB_OF_POINTS);
+						break;
+					case "BarChartFX":
+						barChart = (BarChartFX<String, Number>) initializeChart(barChartGen, NB_OF_POINTS);
+						break;
+					default:
+						break;
 				}
-				if ( "ScatterChartFX".equals(t1) ) {
-					scatterChart = scatterChartGen.getChart(NB_OF_POINTS);
-					borderpane.setCenter(scatterChart);
-					scatterChart.getPlugins().add(new PropertyMenu());
-
-				}
-
-				if ( "AreaChartFX".equals(t1) ) {
-					areaChart = areaChartGen.getChart(NB_OF_POINTS);
-					borderpane.setCenter(areaChart);
-					areaChart.getPlugins().add(new PropertyMenu());
-
-				}
-				if ( "BarChartFX".equals(t1) ) {
-					barChart = barChartGen.getChart();
-					borderpane.setCenter(barChart);
-					barChart.getPlugins().add(new PropertyMenu());
-
-				}
-				requestFocusOnClick();
 			}
 		});
 
-		errorBars.prefWidthProperty().bind(chartchoice.widthProperty());
+		errorBarsButton.prefWidthProperty().bind(chartchoice.widthProperty());
+		resetButton.disableProperty().bind(Bindings.createBooleanBinding(
+			() -> {
+				if ( chartchoice.getValue() == null ) {
+					return true;
+				} else {
+					return logXButton.isDisabled() || logYButton.isDisabled();
+				}
+			},
+			logXButton.disableProperty(),
+			logYButton.disableProperty()
+		));
 
 	}
+
+	private ObservableList<Plugin> errorGenerator( XYChart<Number, Number> chart ) {
+
+		ErrorSeries<Number, Number> error0 = new ErrorSeries<>();
+		ErrorSeries<Number, Number> error1 = new ErrorSeries<>();
+		ErrorSeries<Number, Number> error2 = new ErrorSeries<>();
+
+		for ( int ind = 0; ind < chart.getData().get(0).getData().size(); ind++ ) {
+			error0.getData().add(new ErrorSeries.ErrorData<>(chart.getData().get(0).getData().get(ind), RANDOM.nextDouble(), RANDOM.nextDouble()));
+			error1.getData().add(new ErrorSeries.ErrorData<>(chart.getData().get(1).getData().get(ind), RANDOM.nextDouble(), RANDOM.nextDouble()));
+			error2.getData().add(new ErrorSeries.ErrorData<>(chart.getData().get(2).getData().get(ind), RANDOM.nextDouble(), RANDOM.nextDouble()));
+		}
+
+		return FXCollections.observableArrayList(
+			Plugins.errorBars(error0, 0),
+			Plugins.errorBars(error1, 1),
+			Plugins.errorBars(error2, 2)
+		);
+
+	}
+
+	private ObservableList<Plugin> errorGenerator( BarChartFX<String, Number> chart ) {
+
+		ErrorSeries<String, Number> error0 = new ErrorSeries<>();
+		ErrorSeries<String, Number> error1 = new ErrorSeries<>();
+		ErrorSeries<String, Number> error2 = new ErrorSeries<>();
+
+		for ( int ind = 0; ind < chart.getData().get(0).getData().size(); ind++ ) {
+			error0.getData().add(new ErrorSeries.ErrorData<>(chart.getData().get(0).getData().get(ind), RANDOM.nextDouble()));
+			error1.getData().add(new ErrorSeries.ErrorData<>(chart.getData().get(1).getData().get(ind), RANDOM.nextDouble()));
+			error2.getData().add(new ErrorSeries.ErrorData<>(chart.getData().get(2).getData().get(ind), RANDOM.nextDouble()));
+		}
+
+		return FXCollections.observableArrayList(
+			Plugins.errorBars(error0, 0),
+			Plugins.errorBars(error1, 1),
+			Plugins.errorBars(error2, 2)
+		);
+
+	}
+
+	private XYChart<?, Number> initializeChart ( ChartGenerator generator, int numberOfPoints ) {
+
+		@SuppressWarnings( "unchecked" )
+		XYChart<?, Number> chart = generator.getNewChart(numberOfPoints, false, false);
+
+		((Pluggable) chart).getPlugins().add(new PropertyMenu());
+		borderpane.setCenter(chart);
+
+		updateButtons(chart);
+
+		return chart;
+
+	}
+
+	private XYChart<?, Number> initializeChart ( XYChart<?, Number> oldChart, ChartGenerator generator, int numberOfPoints ) {
+
+		@SuppressWarnings( "unchecked" )
+		XYChart<?, Number> chart = generator.getNewChart(numberOfPoints, false, false);
+
+		((Pluggable) chart).getPlugins().add(new PropertyMenu());
+		borderpane.setCenter(chart);
+
+		return chart;
+
+	}
+
+	private void updateButtons( XYChart<?, Number> chart ) {
+
+		logXButton.setDisable(!( chart.getXAxis() instanceof LogAxis ));
+		logYButton.setDisable(!( chart.getYAxis() instanceof LogAxis ));
+
+		if ( chart instanceof Pluggable ) {
+
+			Pluggable pchart = (Pluggable) chart;
+
+			errorBarsButton.setDisable(
+				pchart.getPlugins().stream()
+					.filter(p -> p instanceof ErrorBars)
+					.count() > 0
+			);
+
+		}
+
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	@FXML
 	private void handleErrorButton( ActionEvent event ) {
-		if ( "LineChartFX".equals(chartchoice.getValue().toString()) ) {
-			if ( errorBarsToInclude.isEmpty() ) {
-				errorGenerator(lineChart);
+		if ( chartchoice.getValue() != null ) {
+			switch ( chartchoice.getValue() ) {
+				case "AreaChartFX":
+					if ( errorBarsToInclude.isEmpty() ) {
+						errorGenerator(areaChart);
+					}
+					if ( !areaChart.getPlugins().containsAll(errorBarsToInclude) ) {
+						areaChart.getPlugins().addAll(errorBarsToInclude);
+					} else {
+						areaChart.getPlugins().removeAll(errorBarsToInclude);
+						errorBarsToInclude.clear();
+					}
+					break;
+				case "BarChartFX":
+					if ( errorBarsToInclude.isEmpty() ) {
+						errorGenerator(barChart);
+					}
+					if ( !barChart.getPlugins().containsAll(errorBarsToInclude) ) {
+						barChart.getPlugins().addAll(errorBarsToInclude);
+					} else {
+						barChart.getPlugins().removeAll(errorBarsToInclude);
+						errorBarsToInclude.clear();
+					}
+					break;
+				case "LineChartFX":
+					if ( errorBarsToInclude.isEmpty() ) {
+						errorGenerator(lineChart);
+					}
+					if ( !lineChart.getPlugins().containsAll(errorBarsToInclude) ) {
+						lineChart.getPlugins().addAll(errorBarsToInclude);
+					} else {
+						lineChart.getPlugins().removeAll(errorBarsToInclude);
+						errorBarsToInclude.clear();
+					}
+					break;
+				case "ScatterChartFX":
+					if ( errorBarsToInclude.isEmpty() ) {
+						errorGenerator(scatterChart);
+					}
+					if ( !scatterChart.getPlugins().containsAll(errorBarsToInclude) ) {
+						scatterChart.getPlugins().addAll(errorBarsToInclude);
+					} else {
+						scatterChart.getPlugins().removeAll(errorBarsToInclude);
+						errorBarsToInclude.clear();
+					}
+					break;
+				default:
+					break;
 			}
-			if ( !lineChart.getPlugins().containsAll(errorBarsToInclude) ) {
-				lineChart.getPlugins().addAll(errorBarsToInclude);
-			} else {
-				lineChart.getPlugins().removeAll(errorBarsToInclude);
-				errorBarsToInclude.clear();
-			}
-		}
-
-		if ( "ScatterChartFX".equals(chartchoice.getValue().toString()) ) {
-			if ( errorBarsToInclude.isEmpty() ) {
-				errorGenerator(scatterChart);
-			}
-			if ( !scatterChart.getPlugins().containsAll(errorBarsToInclude) ) {
-				scatterChart.getPlugins().addAll(errorBarsToInclude);
-			} else {
-				scatterChart.getPlugins().removeAll(errorBarsToInclude);
-				errorBarsToInclude.clear();
-			}
-		}
-
-		if ( "AreaChartFX".equals(chartchoice.getValue().toString()) ) {
-			if ( errorBarsToInclude.isEmpty() ) {
-				errorGenerator(areaChart);
-			}
-			if ( !areaChart.getPlugins().containsAll(errorBarsToInclude) ) {
-				areaChart.getPlugins().addAll(errorBarsToInclude);
-			} else {
-				areaChart.getPlugins().removeAll(errorBarsToInclude);
-				errorBarsToInclude.clear();
-			}
-		}
-
-		if ( "BarChartFX".equals(chartchoice.getValue().toString()) ) {
-			if ( errorBarsToInclude.isEmpty() ) {
-				errorGenerator(barChart);
-			}
-			if ( !barChart.getPlugins().containsAll(errorBarsToInclude) ) {
-				barChart.getPlugins().addAll(errorBarsToInclude);
-			} else {
-				barChart.getPlugins().removeAll(errorBarsToInclude);
-				errorBarsToInclude.clear();
-			}
-		}
-
-		requestFocusOnClick();
-	}
-
-	@FXML
-	private void handleYLogButton( ActionEvent event ) {
-		borderpane.getChildren().clear();
-		if ( "ScatterChartFX".equals(chartchoice.getValue().toString()) ) {
-			scatterChart = scatterChartGen.setYLogAxis(NB_OF_POINTS);
-			borderpane.setCenter(scatterChart);
-		}
-		if ( "LineChartFX".equals(chartchoice.getValue().toString()) ) {
-			lineChart = lineChartGen.setYLogAxis(NB_OF_POINTS);
-			borderpane.setCenter(lineChart);
-		}
-		if ( "AreaChartFX".equals(chartchoice.getValue().toString()) ) {
-			areaChart = areaChartGen.setYLogAxis(NB_OF_POINTS);
-			borderpane.setCenter(areaChart);
-		}
-
-		requestFocusOnClick();
-	}
-
-	@FXML
-	private void handleXLogButton( ActionEvent event ) {
-		borderpane.getChildren().clear();
-		if ( "LineChartFX".equals(chartchoice.getValue().toString()) ) {
-			lineChart = lineChartGen.setXLogAxis(NB_OF_POINTS);
-			borderpane.setCenter(lineChart);
-		}
-
-		if ( "ScatterChartFX".equals(chartchoice.getValue().toString()) ) {
-			scatterChart = scatterChartGen.setXLogAxis(NB_OF_POINTS);
-			borderpane.setCenter(scatterChart);
-		}
-
-		if ( "AreaChartFX".equals(chartchoice.getValue().toString()) ) {
-			areaChart = areaChartGen.setXLogAxis(NB_OF_POINTS);
-			borderpane.setCenter(areaChart);
 		}
 
 		requestFocusOnClick();
@@ -230,64 +300,44 @@ public class FXMLController implements Initializable {
 		requestFocusOnClick();
 	}
 
-	private void errorGenerator( XYChart<Number, Number> chart ) {
-		ErrorSeries<Number, Number> error0 = new ErrorSeries();
-		ErrorSeries<Number, Number> error1 = new ErrorSeries();
-		ErrorSeries<Number, Number> error2 = new ErrorSeries();
-
-		for ( int ind = 0; ind < chart.getData().get(0).getData().size(); ind++ ) {
-			error0.getData().add(new ErrorSeries.ErrorData<Number, Number>(chart.getData().get(0).getData().get(ind), RANDOM.nextDouble(), RANDOM.nextDouble()));
-			error1.getData().add(new ErrorSeries.ErrorData<Number, Number>(chart.getData().get(1).getData().get(ind), RANDOM.nextDouble(), RANDOM.nextDouble()));
-			error2.getData().add(new ErrorSeries.ErrorData<Number, Number>(chart.getData().get(2).getData().get(ind), RANDOM.nextDouble(), RANDOM.nextDouble()));
-		}
-		errorBarsToInclude = FXCollections.observableArrayList(
-			Plugins.errorBars(error0, 0),
-			Plugins.errorBars(error1, 1),
-			Plugins.errorBars(error2, 2));
-
-	}
-
-	private void errorGenerator( BarChartFX<String, Number> chart ) {
-		ErrorSeries<String, Number> error0 = new ErrorSeries();
-		ErrorSeries<String, Number> error1 = new ErrorSeries();
-		ErrorSeries<String, Number> error2 = new ErrorSeries();
-
-		//DataReducingObservableList.Data<Number,Number> error0 = FXCollections.observableArrayList();
-		for ( int ind = 0; ind < chart.getData().get(0).getData().size(); ind++ ) {
-			error0.getData().add(new ErrorSeries.ErrorData<String, Number>(chart.getData().get(0).getData().get(ind), RANDOM.nextDouble()));
-			error1.getData().add(new ErrorSeries.ErrorData<String, Number>(chart.getData().get(1).getData().get(ind), RANDOM.nextDouble()));
-			error2.getData().add(new ErrorSeries.ErrorData<String, Number>(chart.getData().get(2).getData().get(ind), RANDOM.nextDouble()));
-		}
-
-		errorBarsToInclude = FXCollections.observableArrayList(
-			Plugins.errorBars(error0, 0),
-			Plugins.errorBars(error1, 1),
-			Plugins.errorBars(error2, 2));
-
-	}
-
-	private void requestFocusOnClick( XYChart<Number, Number> chart ) {
-		chart.setOnMouseClicked(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle( MouseEvent event ) {
-				chart.requestFocus();
-			}
-		});
-	}
-
-	private void requestFocusOnClick() {
+	@FXML
+	private void handleXLogButton( ActionEvent event ) {
+		borderpane.getChildren().clear();
 		if ( "LineChartFX".equals(chartchoice.getValue().toString()) ) {
-			requestFocusOnClick(lineChart);
+			lineChart = lineChartGen.setXLogAxis(NB_OF_POINTS);
+			borderpane.setCenter(lineChart);
 		}
 
 		if ( "ScatterChartFX".equals(chartchoice.getValue().toString()) ) {
-			requestFocusOnClick(scatterChart);
+			scatterChart = scatterChartGen.setXLogAxis(NB_OF_POINTS);
+			borderpane.setCenter(scatterChart);
 		}
 
 		if ( "AreaChartFX".equals(chartchoice.getValue().toString()) ) {
-			requestFocusOnClick(areaChart);
-
+			areaChart = areaChartGen.setXLogAxis(NB_OF_POINTS);
+			borderpane.setCenter(areaChart);
 		}
+
+		requestFocusOnClick();
+	}
+
+	@FXML
+	private void handleYLogButton( ActionEvent event ) {
+		borderpane.getChildren().clear();
+		if ( "ScatterChartFX".equals(chartchoice.getValue().toString()) ) {
+			scatterChart = scatterChartGen.setYLogAxis(NB_OF_POINTS);
+			borderpane.setCenter(scatterChart);
+		}
+		if ( "LineChartFX".equals(chartchoice.getValue().toString()) ) {
+			lineChart = lineChartGen.setYLogAxis(NB_OF_POINTS);
+			borderpane.setCenter(lineChart);
+		}
+		if ( "AreaChartFX".equals(chartchoice.getValue().toString()) ) {
+			areaChart = areaChartGen.setYLogAxis(NB_OF_POINTS);
+			borderpane.setCenter(areaChart);
+		}
+
+		requestFocusOnClick();
 	}
 
 }

@@ -34,7 +34,7 @@ import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
  *
  * @author reubenlindroos
  */
-public class LineChartGenerator {
+public class LineChartGenerator implements ChartGenerator {
     private DataReducingSeries<Number, Number> series0;
     private DataReducingSeries<Number, Number> series1;
     private DataReducingSeries<Number, Number> series2;
@@ -62,6 +62,7 @@ public class LineChartGenerator {
         chart = new LineChartFX<Number, Number>(xAxis, yAxis);
         chart.setTitle("Test data");
         chart.setAnimated(false);
+		chart.setOnMouseClicked(event -> chart.requestFocus());
         chart.getPlugins().addAll(Plugins.all());
         
         if (series0==null){

@@ -11,13 +11,13 @@
 	<top>
 		<ToolBar prefHeight="40.0">
 			<items>
-				<ComboBox fx:id="chartchoice" prefWidth="150.0" promptText="Examples" />
+				<ComboBox fx:id="chartchoice" promptText="Select an Example" />
 				<Pane minWidth="10" HBox.hgrow="ALWAYS" />
-				<Button mnemonicParsing="false" text="Log X Axis" onAction="#handleXLogButton" />
-				<Button mnemonicParsing="false" text="Log Y Axis" onAction="#handleYLogButton" />
-				<Button mnemonicParsing="false" text="Reset Axes" onAction="#handleResetButton" />
+				<Button fx:id="logXButton" disable="true" mnemonicParsing="false" onAction="#handleXLogButton" text="Log X Axis" />
+				<Button fx:id="logYButton" disable="true" mnemonicParsing="false" onAction="#handleYLogButton" text="Log Y Axis" />
+				<Button fx:id="resetButton" disable="true" mnemonicParsing="false" onAction="#handleResetButton" text="Reset Axes" />
 				<Pane minWidth="10" HBox.hgrow="ALWAYS" />
-				<Button fx:id="errorBars" mnemonicParsing="false" text="Error Bars" onAction="#handleErrorButton" />
+				<Button fx:id="errorBarsButton" disable="true" mnemonicParsing="false" onAction="#handleErrorButton" text="Error Bars" />
 			</items>
 		</ToolBar>
 	</top>

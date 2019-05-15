@@ -30,7 +30,7 @@ import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
  *
  * @author reubenlindroos
  */
-public class BarChartGenerator {
+public class BarChartGenerator implements ChartGenerator {
     private static String usefulCode = "Useful Code";
     private static String bugs = "Bugs";
     private BarChartFX<String,Number> chart ;
@@ -51,6 +51,7 @@ public class BarChartGenerator {
     public void generateChart() {
         chart = new BarChartFX<String,Number>(xAxis,yAxis);
         chart.setTitle("Employee quarterly Summary");
+		chart.setOnMouseClicked(event -> chart.requestFocus());
         chart.getPlugins().addAll(Plugins.all());
         XYChart.Series series1 = new XYChart.Series();
         series1.setName("Natalia");       
