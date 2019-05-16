@@ -17,6 +17,11 @@
 package Demo;
 
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
 
 
@@ -29,6 +34,39 @@ import javafx.scene.chart.XYChart;
  */
 public interface ChartGenerator<X, Y> {
 
-	public XYChart<X, Y> getNewChart( int numberOfPoints, boolean logXAxis, boolean logYAxis );
+	static final Random RANDOM = new Random(System.currentTimeMillis());
+
+	XYChart<X, Y> getNewChart( int numberOfPoints, boolean logXAxis, boolean logYAxis );
+
+	static int[] generateIntArray( int firstValue, int variance, int size ) {
+
+		int[] data = new int[size];
+
+		data[0] = firstValue;
+
+		for ( int i = 1; i < data.length; i++ ) {
+
+			int sign = RANDOM.nextBoolean() ? 1 : -1;
+
+			data[i] = data[i - 1] + (int) ( variance * RANDOM.nextDouble() ) * sign;
+
+		}
+
+		return data;
+
+	}
+
+	static ObservableList<XYChart.Data<Number, Number>> generateData( int numberOfPoints ) {
+
+		int[] yValues = generateIntArray(0, 5, numberOfPoints);
+		List<XYChart.Data<Number, Number>> data = new ArrayList<>(numberOfPoints);
+
+		for ( int i = 0; i < yValues.length; i++ ) {
+			data.add(new XYChart.Data<>(i, yValues[i]));
+		}
+
+		return FXCollections.observableArrayList(data);
+
+	}
 
 }

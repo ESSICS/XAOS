@@ -21,6 +21,7 @@ import chart.Plugin;
 import java.text.Format;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.Chart;
+import plugins.PropertyMenu;
 import se.europeanspallationsource.xaos.ui.control.NavigatorPopup;
 import se.europeanspallationsource.xaos.ui.plot.data.ErrorSeries;
 import se.europeanspallationsource.xaos.ui.plot.impl.plugins.AbscissaCursorDisplay;
@@ -115,7 +116,7 @@ public class Plugins {
 			ordinateCursorDisplay(),
 			dataPointCursorDisplay(),
 			areaValueCursorDisplay(),
-//			new PropertyMenu()
+	new PropertyMenu()
 		};
 	}
 

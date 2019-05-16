@@ -21,54 +21,19 @@ import chart.AreaChartFX;
 import chart.LogAxis;
 import chart.NumberAxis;
 import chart.data.DataReducingSeries;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.chart.ValueAxis;
 import javafx.scene.chart.XYChart;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
+
+import static Demo.ChartGenerator.generateData;
 
 
 /**
  * @author reubenlindroos
  * @author claudio.rosati@esss.se
  */
+@SuppressWarnings( "ClassWithoutLogger" )
 public class AreaChartGenerator implements ChartGenerator<Number, Number> {
-
-	private static final Random RANDOM = new Random(System.currentTimeMillis());
-
-	public static int[] generateIntArray( int firstValue, int variance, int size ) {
-
-		int[] data = new int[size];
-
-		data[0] = firstValue;
-
-		for ( int i = 1; i < data.length; i++ ) {
-
-			int sign = RANDOM.nextBoolean() ? 1 : -1;
-
-			data[i] = data[i - 1] + (int) ( variance * RANDOM.nextDouble() ) * sign;
-
-		}
-
-		return data;
-
-	}
-
-	private static ObservableList<XYChart.Data<Number, Number>> generateData( int nbOfPoints ) {
-
-		int[] yValues = generateIntArray(0, 5, nbOfPoints);
-		List<XYChart.Data<Number, Number>> data = new ArrayList<>(nbOfPoints);
-
-		for ( int i = 0; i < yValues.length; i++ ) {
-			data.add(new XYChart.Data<>(i, yValues[i]));
-		}
-
-		return FXCollections.observableArrayList(data);
-
-	}
 
 	private DataReducingSeries<Number, Number> series0;
 	private DataReducingSeries<Number, Number> series1;
@@ -82,7 +47,6 @@ public class AreaChartGenerator implements ChartGenerator<Number, Number> {
 	@Override
 	public XYChart<Number, Number> getNewChart( int numberOfPoints, boolean logXAxis, boolean logYAxis ) {
 
-
 		ValueAxis<Number> xAxis = logXAxis ? new LogAxis() : new NumberAxis();
 		ValueAxis<Number> yAxis = logYAxis ? new LogAxis() : new NumberAxis();
 
@@ -91,7 +55,7 @@ public class AreaChartGenerator implements ChartGenerator<Number, Number> {
 
 		AreaChartFX<Number, Number> chart = new AreaChartFX<Number, Number>(xAxis, yAxis);
 
-		chart.setTitle("Test data");
+		chart.setTitle("Area Test Data");
 		chart.setAnimated(false);
 		chart.setOnMouseClicked(event -> chart.requestFocus());
 		chart.getPlugins().addAll(Plugins.all());
