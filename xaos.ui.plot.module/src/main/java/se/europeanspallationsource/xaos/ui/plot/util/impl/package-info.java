@@ -17,8 +17,8 @@
 
 
 /**
- * This contains implementation classes for the {@code plot} package.
+ * This contains implementation classes for the {@code util} package.
  *
  * @author claudio.rosati@esss.se
  */
-package se.europeanspallationsource.xaos.ui.plot.impl;
+package se.europeanspallationsource.xaos.ui.plot.impl.util;

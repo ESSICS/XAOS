@@ -42,20 +42,16 @@ public abstract class AbstractBoundedPlugin extends Plugin {
 
 		super.chartConnected(chart);
 
-		getXValueAxis().lowerBoundProperty().addListener(boundsListener);
-		getXValueAxis().upperBoundProperty().addListener(boundsListener);
-		getYValueAxis().lowerBoundProperty().addListener(boundsListener);
-		getYValueAxis().upperBoundProperty().addListener(boundsListener);
+		getXValueAxis().scaleProperty().addListener(boundsListener);
+		getYValueAxis().scaleProperty().addListener(boundsListener);
 
 	}
 
 	@Override
 	protected void chartDisconnected( Chart chart ) {
 
-		getYValueAxis().upperBoundProperty().removeListener(boundsListener);
-		getYValueAxis().lowerBoundProperty().removeListener(boundsListener);
-		getXValueAxis().upperBoundProperty().removeListener(boundsListener);
-		getXValueAxis().lowerBoundProperty().removeListener(boundsListener);
+		getYValueAxis().scaleProperty().removeListener(boundsListener);
+		getXValueAxis().scaleProperty().removeListener(boundsListener);
 
 		super.chartDisconnected(chart);
 

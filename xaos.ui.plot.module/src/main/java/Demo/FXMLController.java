@@ -39,7 +39,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.BorderPane;
 import se.europeanspallationsource.xaos.ui.plot.data.ErrorSeries;
-import se.europeanspallationsource.xaos.ui.plot.impl.plugins.ErrorBars;
+import se.europeanspallationsource.xaos.ui.plot.plugins.impl.ErrorBars;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Pluggable;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
 
@@ -91,18 +91,42 @@ public class FXMLController implements Initializable {
 		chartchoice.valueProperty().addListener(( ob, ov, nv ) -> {
 			if ( nv != null ) {
 				switch ( nv ) {
-					case "AreaChartFX":
-						areaChart = (AreaChartFX<Number, Number>) initializeChart(areaChartGen, NB_OF_POINTS);
-						break;
-					case "BarChartFX":
-						barChart = (BarChartFX<String, Number>) initializeChart(barChartGen, NB_OF_POINTS);
-						break;
-					case "LineChartFX":
-						lineChart = (LineChartFX<Number, Number>) initializeChart(lineChartGen, NB_OF_POINTS);
-						break;
-					case "ScatterChartFX":
-						scatterChart = (ScatterChartFX<Number, Number>) initializeChart(scatterChartGen, NB_OF_POINTS);
-						break;
+				case "AreaChartFX":
+					areaChart = (AreaChartFX<Number, Number>) initializeChart(
+						areaChart,
+						areaChartGen,
+						NB_OF_POINTS,
+						( areaChart == null ) ? false : areaChart.getXAxis() instanceof LogAxis,
+						( areaChart == null ) ? false : areaChart.getYAxis() instanceof LogAxis
+					);
+					break;
+				case "BarChartFX":
+					barChart = (BarChartFX<String, Number>) initializeChart(
+						barChart,
+						barChartGen,
+						NB_OF_POINTS,
+						false,
+						( barChart == null ) ? false : barChart.getYAxis() instanceof LogAxis
+					);
+					break;
+				case "LineChartFX":
+					lineChart = (LineChartFX<Number, Number>) initializeChart(
+						lineChart,
+						lineChartGen,
+						NB_OF_POINTS,
+						( lineChart == null ) ? false : lineChart.getXAxis() instanceof LogAxis,
+						( lineChart == null ) ? false : lineChart.getYAxis() instanceof LogAxis
+					);
+					break;
+				case "ScatterChartFX":
+					scatterChart = (ScatterChartFX<Number, Number>) initializeChart(
+						scatterChart,
+						scatterChartGen,
+						NB_OF_POINTS,
+						( scatterChart == null ) ? false : scatterChart.getXAxis() instanceof LogAxis,
+						( scatterChart == null ) ? false : scatterChart.getYAxis() instanceof LogAxis
+					);
+				break;
 					default:
 						break;
 				}
@@ -115,7 +139,7 @@ public class FXMLController implements Initializable {
 				if ( chartchoice.getValue() == null ) {
 					return true;
 				} else {
-					return logXButton.isDisabled() || logYButton.isDisabled();
+					return !( logXButton.isDisabled() || logYButton.isDisabled() );
 				}
 			},
 			logXButton.disableProperty(),
@@ -307,10 +331,6 @@ public class FXMLController implements Initializable {
 		}
 	}
 
-	private XYChart<?, Number> initializeChart ( ChartGenerator generator, int numberOfPoints ) {
-		return initializeChart(generator, numberOfPoints, false, false);
-	}
-
 	private XYChart<?, Number> initializeChart ( ChartGenerator generator, int numberOfPoints, boolean logXAxis, boolean logYAxis ) {
 
 		@SuppressWarnings( "unchecked" )
@@ -330,19 +350,25 @@ public class FXMLController implements Initializable {
 
 	private XYChart<?, Number> initializeChart ( XYChart<?, Number> oldChart, ChartGenerator generator, int numberOfPoints, boolean logXAxis, boolean logYAxis ) {
 
-		List<Plugin> plugins = ((Pluggable) oldChart).getPlugins()
-			.stream()
-			.filter(p -> p instanceof ErrorBars)
-			.collect(Collectors.toList());
+		if ( oldChart != null ) {
 
-		XYChart<?, Number> chart = initializeChart(generator, numberOfPoints, logXAxis, logYAxis);
+			List<Plugin> plugins = ((Pluggable) oldChart).getPlugins()
+				.stream()
+				.filter(p -> p instanceof ErrorBars)
+				.collect(Collectors.toList());
 
-		if ( !plugins.isEmpty() ) {
-			((Pluggable) chart).getPlugins().addAll(plugins);
-			updateButtons(chart);
+			XYChart<?, Number> chart = initializeChart(generator, numberOfPoints, logXAxis, logYAxis);
+
+			if ( !plugins.isEmpty() ) {
+				((Pluggable) chart).getPlugins().addAll(plugins);
+				updateButtons(chart);
+			}
+
+			return chart;
+
+		} else {
+			return initializeChart(generator, numberOfPoints, logXAxis, logYAxis);
 		}
-
-		return chart;
 
 	}
 

@@ -43,13 +43,13 @@ module xaos.ui {
 	uses se.europeanspallationsource.xaos.ui.spi.MIMETypeIconProvider;
 
 	provides se.europeanspallationsource.xaos.ui.spi.ClassIconProvider
-		with se.europeanspallationsource.xaos.ui.impl.spi.DefaultJavaFXClassIconProvider;
+		with se.europeanspallationsource.xaos.ui.spi.impl.DefaultJavaFXClassIconProvider;
 	provides se.europeanspallationsource.xaos.ui.spi.FileExtensionIconProvider
-		with se.europeanspallationsource.xaos.ui.impl.spi.DefaultFileExtensionIconProvider;
+		with se.europeanspallationsource.xaos.ui.spi.impl.DefaultFileExtensionIconProvider;
 	provides se.europeanspallationsource.xaos.ui.spi.IconProvider
-		with se.europeanspallationsource.xaos.ui.impl.spi.DefaultCommonIconProvider;
+		with se.europeanspallationsource.xaos.ui.spi.impl.DefaultCommonIconProvider;
 	provides se.europeanspallationsource.xaos.ui.spi.MIMETypeIconProvider
-		with se.europeanspallationsource.xaos.ui.impl.spi.DefaultMIMETypeIconProvider;
+		with se.europeanspallationsource.xaos.ui.spi.impl.DefaultMIMETypeIconProvider;
 
 	exports se.europeanspallationsource.xaos.ui.control;
 	exports se.europeanspallationsource.xaos.ui.control.svg;

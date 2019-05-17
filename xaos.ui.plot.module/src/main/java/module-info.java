@@ -36,6 +36,7 @@ module xaos.ui.plot {
 	requires transitive xaos.ui;
 
 	exports se.europeanspallationsource.xaos.ui.plot;
+	exports se.europeanspallationsource.xaos.ui.plot.data;
 	exports se.europeanspallationsource.xaos.ui.plot.plugins;
 	exports se.europeanspallationsource.xaos.ui.plot.util;
 

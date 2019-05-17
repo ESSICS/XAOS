@@ -37,7 +37,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-import se.europeanspallationsource.xaos.ui.plot.impl.plugins.ErrorBars;
+import se.europeanspallationsource.xaos.ui.plot.plugins.impl.ErrorBars;
 import chart.TimeAxis;
 import chart.Plugin;
 import java.util.concurrent.TimeUnit;

@@ -14,11 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package se.europeanspallationsource.xaos.ui.plot.util.impl;
+
+
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 
 
 /**
- * This contains implementation classes for the {@code plot} package.
- *
  * @author claudio.rosati@esss.se
  */
-package se.europeanspallationsource.xaos.ui.plot.impl;
+@RunWith( Suite.class )
+@Suite.SuiteClasses( {
+	ChartUndoManagerUITest.class
+} )
+@SuppressWarnings( { "ClassMayBeInterface", "ClassWithoutLogger", "UtilityClassWithoutPrivateConstructor" } )
+public class UtilSuite {
+
+}

@@ -21,20 +21,19 @@ import chart.Plugin;
 import java.text.Format;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.Chart;
-import plugins.PropertyMenu;
 import se.europeanspallationsource.xaos.ui.control.NavigatorPopup;
 import se.europeanspallationsource.xaos.ui.plot.data.ErrorSeries;
-import se.europeanspallationsource.xaos.ui.plot.impl.plugins.AbscissaCursorDisplay;
-import se.europeanspallationsource.xaos.ui.plot.impl.plugins.AreaValueCursorDisplay;
-import se.europeanspallationsource.xaos.ui.plot.impl.plugins.CursorDisplay.Position;
-import se.europeanspallationsource.xaos.ui.plot.impl.plugins.CursorLines;
-import se.europeanspallationsource.xaos.ui.plot.impl.plugins.DataPointCursorDisplay;
-import se.europeanspallationsource.xaos.ui.plot.impl.plugins.ErrorBars;
-import se.europeanspallationsource.xaos.ui.plot.impl.plugins.KeyboardAccelerators;
-import se.europeanspallationsource.xaos.ui.plot.impl.plugins.Navigator;
-import se.europeanspallationsource.xaos.ui.plot.impl.plugins.OrdinateCursorDisplay;
-import se.europeanspallationsource.xaos.ui.plot.impl.plugins.Panner;
-import se.europeanspallationsource.xaos.ui.plot.impl.plugins.Zoomer;
+import se.europeanspallationsource.xaos.ui.plot.plugins.impl.AbscissaCursorDisplay;
+import se.europeanspallationsource.xaos.ui.plot.plugins.impl.AreaValueCursorDisplay;
+import se.europeanspallationsource.xaos.ui.plot.plugins.impl.CursorDisplay.Position;
+import se.europeanspallationsource.xaos.ui.plot.plugins.impl.CursorLines;
+import se.europeanspallationsource.xaos.ui.plot.plugins.impl.DataPointCursorDisplay;
+import se.europeanspallationsource.xaos.ui.plot.plugins.impl.ErrorBars;
+import se.europeanspallationsource.xaos.ui.plot.plugins.impl.KeyboardAccelerators;
+import se.europeanspallationsource.xaos.ui.plot.plugins.impl.Navigator;
+import se.europeanspallationsource.xaos.ui.plot.plugins.impl.OrdinateCursorDisplay;
+import se.europeanspallationsource.xaos.ui.plot.plugins.impl.Panner;
+import se.europeanspallationsource.xaos.ui.plot.plugins.impl.Zoomer;
 import se.europeanspallationsource.xaos.ui.plot.plugins.AxisConstrained.AxisConstraints;
 
 
@@ -116,7 +115,7 @@ public class Plugins {
 			ordinateCursorDisplay(),
 			dataPointCursorDisplay(),
 			areaValueCursorDisplay(),
-	new PropertyMenu()
+//	new PropertyMenu()
 		};
 	}
 
