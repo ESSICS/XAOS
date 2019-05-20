@@ -222,7 +222,7 @@ public class ErrorSeries<X, Y> {
 		 *     &lt;-&gt; CLOSING_SEGMENT_SIZE
 		 * </pre>
 		 */
-		private static final double CLOSING_SEGMENT_SIZE = 3.25;
+		private static final double CLOSING_SEGMENT_SIZE = 2.75;
 
 		private static final Double ZERO = Double.valueOf(0);
 
@@ -305,6 +305,20 @@ public class ErrorSeries<X, Y> {
 
 			this.xError = xError;
 			this.yError = yError;
+
+		}
+
+		/**
+		 * Copy-constructor.
+		 *
+		 * @param edata The {@link ErrorData} to be copied.
+		 */
+		public ErrorData( ErrorData<X, Y> edata ) {
+			
+			this(edata.getDataPoint());
+
+			this.xError = edata.getXError();
+			this.yError = edata.getYError();
 
 		}
 

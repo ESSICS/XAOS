@@ -17,16 +17,26 @@
 package se.europeanspallationsource.xaos.ui.plot.plugins.impl;
 
 
+import java.text.MessageFormat;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.ObservableList;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
+import javafx.util.Pair;
 import org.apache.commons.lang3.Validate;
 import se.europeanspallationsource.xaos.ui.plot.data.ErrorSeries;
-import se.europeanspallationsource.xaos.ui.plot.plugins.AbstractBoundedPlugin;
+import se.europeanspallationsource.xaos.ui.plot.data.ErrorSeries.ErrorData;
+import se.europeanspallationsource.xaos.ui.plot.plugins.AbstractCursorPlugin;
+import se.europeanspallationsource.xaos.ui.util.ColorUtils;
 
 
 /**
@@ -37,10 +47,53 @@ import se.europeanspallationsource.xaos.ui.plot.plugins.AbstractBoundedPlugin;
  * @author claudio.rosati@esss.se
  */
 @SuppressWarnings( "ClassWithoutLogger" )
-public class ErrorBars<X, Y> extends AbstractBoundedPlugin {
+public class ErrorBars<X, Y> extends AbstractCursorPlugin {
 
+	private static final String DEFAULT_STYLE = "-fx-stroke-width: 0.85; -fx-stroke: black;";
+	private static final String FALLBACK_STYLE = "-fx-stroke-width: 2.35;";
+	private static final String HIGHLIGHT_STYLE = "-fx-stroke-width: 2.35; -fx-stroke: {0};";
+
+	private String highlightStyle = null;
 	private final ErrorSeries<X, Y> errorSeries;
-	private Series<?, ?> series = null;
+	private ErrorData<X, Y> marker = null;
+	private Series<X, Y> series = null;
+
+	/* *********************************************************************** *
+	 * START OF JAVAFX PROPERTIES                                              *
+	 * *********************************************************************** */
+
+	/*
+	 * ---- pickingDistance ----------------------------------------------------
+	 */
+    private final DoubleProperty pickingDistance = new SimpleDoubleProperty(ErrorBars.this, "pickingDistance", 10) {
+        @Override
+		protected void invalidated() {
+			if ( get() <= 0 ) {
+				throw new IllegalArgumentException("The picking distance must be a positive value.");
+			}
+        }
+    };
+
+    /**
+	 * @return A {@link DoubleProperty} representing the distance of the mouse
+	 *         cursor from the data point (expressed in display units) that
+	 *         should trigger showing the tool tip.
+	 */
+	public DoubleProperty pickingDistanceProperty() {
+		return pickingDistance;
+	}
+
+	public double getPickingDistance() {
+		return pickingDistanceProperty().get();
+	}
+
+	public void setPickingDistance( double value ) {
+		pickingDistanceProperty().set(value);
+	}
+
+	/* *********************************************************************** *
+	 * END OF JAVAFX PROPERTIES                                                *
+	 * *********************************************************************** */
 
 	/**
 	 * @param errorSeries    List of error data for display in chart
@@ -78,27 +131,28 @@ public class ErrorBars<X, Y> extends AbstractBoundedPlugin {
 	}
 
 	@Override
+	@SuppressWarnings( "unchecked" )
 	protected void chartConnected( Chart chart ) {
 
 		super.chartConnected(chart);
 
-		errorSeries.getData().forEach(marker -> {
+		ObservableList<Node> plotChildren = getPlotChildren();
 
-			ObservableList<Node> plotChildren = getPlotChildren();
+		errorSeries.getData().forEach(errorData -> {
 
-			if ( marker.isXErrorValid() ) {
-				plotChildren.add(marker.getXErrorPath());
+			if ( errorData.isXErrorValid() ) {
+				plotChildren.add(errorData.getXErrorPath());
 			}
 
-			if ( marker.isYErrorValid() ) {
-				plotChildren.add(marker.getYErrorPath());
+			if ( errorData.isYErrorValid() ) {
+				plotChildren.add(errorData.getYErrorPath());
 			}
 
 		});
 
 		int index = errorSeries.getSeriesRef();
 
-		series = ((XYChart<?, ?>) chart).getData().get(index);
+		series = ((XYChart<X, Y>) chart).getData().get(index);
 		
 		seriesVisibilityUpdated(chart, series, index, isSeriesVisible(series));
 
@@ -107,16 +161,16 @@ public class ErrorBars<X, Y> extends AbstractBoundedPlugin {
 	@Override
 	protected void chartDisconnected( Chart chart ) {
 
-		errorSeries.getData().forEach(marker -> {
+		ObservableList<Node> plotChildren = getPlotChildren();
 
-			ObservableList<Node> plotChildren = getPlotChildren();
+		errorSeries.getData().forEach(ErrorData -> {
 
-			if ( marker.isXErrorValid() ) {
-				plotChildren.remove(marker.getXErrorPath());
+			if ( ErrorData.isXErrorValid() ) {
+				plotChildren.remove(ErrorData.getXErrorPath());
 			}
 
-			if ( marker.isYErrorValid() ) {
-				plotChildren.remove(marker.getYErrorPath());
+			if ( ErrorData.isYErrorValid() ) {
+				plotChildren.remove(ErrorData.getYErrorPath());
 			}
 
 		});
@@ -125,6 +179,17 @@ public class ErrorBars<X, Y> extends AbstractBoundedPlugin {
 
 		super.chartDisconnected(chart);
 
+	}
+
+	@Override
+	protected void dragDetected( MouseEvent e ) {
+		//	Nothing to do.
+	}
+
+	@Override
+	protected void mouseMove( MouseEvent event ) {
+		super.mouseMove(event);
+		performMove(getSceneMouseLocation());
 	}
 
 	/**
@@ -167,14 +232,92 @@ public class ErrorBars<X, Y> extends AbstractBoundedPlugin {
 			return;
 		}
 
-		errorSeries.getData().forEach(marker -> {
-			if ( marker.isXErrorValid() ) {
-				marker.getXErrorPath().setVisible(false);
+		errorSeries.getData().forEach(errorData -> {
+			if ( errorData.isXErrorValid() ) {
+				errorData.getXErrorPath().setVisible(false);
 			}
-			if ( marker.isYErrorValid() ) {
-				marker.getYErrorPath().setVisible(false);
+			if ( errorData.isYErrorValid() ) {
+				errorData.getYErrorPath().setVisible(false);
 			}
 		});
+
+	}
+
+	@SuppressWarnings( "unchecked" )
+	private void performMove( Point2D sceneMouseLocation ) {
+
+		if ( isInsidePlotArea(sceneMouseLocation) ) {
+
+			Point2D mouseLocation = getLocationInPlotArea(sceneMouseLocation);
+			Axis<X> xAxis = ( (XYChart<X, Y>) getChart() ).getXAxis();
+			Axis<Y> yAxis = ( (XYChart<X, Y>) getChart() ).getYAxis();
+
+			errorSeries.getData().parallelStream()
+				.map(d -> new Pair<>(d, mouseLocation.distance(new Point2D(
+					xAxis.getDisplayPosition(d.getXValue()),
+					yAxis.getDisplayPosition(d.getYValue())
+				))))
+				.filter(p -> p.getValue() <= getPickingDistance())
+				.sorted(( p1, p2 ) -> p1.getValue() < p2.getValue() ? -1 : p1.getValue() > p2.getValue() ? 1 : 0)
+				.map(p -> p.getKey())
+				.findFirst()
+				.ifPresentOrElse(
+					pickedErrorData -> {
+						if ( marker == null || marker != pickedErrorData ) {
+
+							if ( marker != null ) {
+								if ( marker.isXErrorValid() ) {
+									marker.getXErrorPath().setStyle(DEFAULT_STYLE);
+								}
+								if ( marker.isYErrorValid() ) {
+									marker.getYErrorPath().setStyle(DEFAULT_STYLE);
+								}
+							}
+
+							Node node = pickedErrorData.getNode();
+
+							if ( highlightStyle == null && node instanceof Region ) {
+								try {
+
+									Color dataColor = (Color) ((Region) node).getBackground().getFills().get(0).getFill();
+
+									highlightStyle = MessageFormat.format(HIGHLIGHT_STYLE, ColorUtils.toWeb(dataColor));
+
+								} catch ( NullPointerException npex ) {
+									//	Can happen that in certain situations dataColor evaluation
+									//	will throw NPE because some element in the call path is null.
+									highlightStyle = FALLBACK_STYLE;
+								}
+							}
+
+							marker = pickedErrorData;
+
+							if ( marker.isXErrorValid() ) {
+								marker.getXErrorPath().setStyle(highlightStyle);
+							}
+							if ( marker.isYErrorValid() ) {
+								marker.getYErrorPath().setStyle(highlightStyle);
+							}
+
+						}
+					},
+					() -> {
+						if ( marker != null ) {
+
+							if ( marker.isXErrorValid() ) {
+								marker.getXErrorPath().setStyle("-fx-stroke-width: 0.85; -fx-stroke: black;");
+							}
+							if ( marker.isYErrorValid() ) {
+								marker.getYErrorPath().setStyle("-fx-stroke-width: 0.85; -fx-stroke: black;");
+							}
+
+							marker = null;
+
+						}
+					}
+				);
+
+		}
 
 	}
 
