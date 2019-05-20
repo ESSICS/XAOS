@@ -134,6 +134,7 @@ public class AreaValueCursorDisplay extends FormattedCursorDisplay {
 		return ((AreaChartFX<?, ?>) getChart())
 			.getData()
 			.parallelStream()
+			.filter(series -> isSeriesVisible(series))
 			.map(series -> new Pair<>(series, series.getNode()))
 			.filter(pair -> pair.getValue().contains(mouseLocation))
 			.map(pair -> new XYChart.Data<>(

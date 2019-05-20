@@ -128,9 +128,7 @@ public class ErrorBars<X, Y> extends AbstractBoundedPlugin {
 	}
 
 	/**
-	 * drawErrorBars redraws the error bars already connected to the chart.
-	 * Note: Horrible hack in order to collect the display info with function toDisplayPoint(). The other data point is only included
-	 * in order for the format to work.
+	 * {@code drawErrorBars} redraws the error bars already connected to the chart.
 	 *
 	 * @param chart  The chart where the {@code series} visibility change occurred.
 	 * @param series The {@link Series} whose visibility changed.
@@ -148,9 +146,6 @@ public class ErrorBars<X, Y> extends AbstractBoundedPlugin {
 		errorSeries.getData().forEach(errorData -> {
 
 			Node dataNode = errorData.getNode();
-//			Color dataColor = ( dataNode instanceof Region )
-//							? (Color) ((Region) dataNode).getBackground().getFills().get(0).getFill()
-//							: Color.BLACK;
 			@SuppressWarnings( "null" )
 			double dataX = ( xAxis instanceof CategoryAxis )
 						 ? dataNode.getBoundsInParent().getMaxX() - dataNode.getBoundsInParent().getWidth() / 2

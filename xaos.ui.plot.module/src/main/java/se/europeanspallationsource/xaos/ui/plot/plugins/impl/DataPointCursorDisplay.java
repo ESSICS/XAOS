@@ -159,6 +159,7 @@ public final class DataPointCursorDisplay extends FormattedCursorDisplay {
 		return ((XYChart<?, ?>) getChart())
 			.getData()
 			.parallelStream()
+			.filter(series -> isSeriesVisible(series))
 			.flatMap(series -> series.getData().stream())
 			.map(d -> new Pair<>(d, mouseLocation.distance(new Point2D(
 				xAxis.getDisplayPosition(d.getXValue()),
