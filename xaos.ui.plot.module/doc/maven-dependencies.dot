@@ -29,6 +29,7 @@ digraph "xaos.ui.plot" {
   "org.kordamp.ikonli:ikonli-javafx:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.kordamp.ikonli<br/>ikonli-javafx<br/>11.3.3>]
   "org.kordamp.ikonli:ikonli-fontawesome-pack:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.kordamp.ikonli<br/>ikonli-fontawesome-pack<br/>11.3.3>]
   "se.europeanspallationsource:xaos.tools:jar"[shape="box",style="rounded, filled",fillcolor="#7DE1FF",label=<se.europeanspallationsource<br/>xaos.tools<br/>0.4.0-SNAPSHOT>]
+  "org.controlsfx:controlsfx:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.controlsfx<br/>controlsfx<br/>11.0.0>]
   "org.testfx:testfx-core:jar"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">org.testfx</font><br/>testfx-core<font color="grey55" point-size="10"><br/>4.0.15-alpha</font><font color="grey55" point-size="10"><br/>(test)</font>>]
   "org.hamcrest:hamcrest-core:jar"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">org.hamcrest</font><br/>hamcrest-core<font color="grey55" point-size="10"><br/>1.3</font><font color="grey55" point-size="10"><br/>(test)</font>>]
   "org.assertj:assertj-core:jar"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">org.assertj</font><br/>assertj-core<font color="grey55" point-size="10"><br/>3.12.2</font><font color="grey55" point-size="10"><br/>(test)</font>>]
@@ -76,6 +77,12 @@ digraph "xaos.ui.plot" {
   "se.europeanspallationsource:xaos.ui:jar" -> "se.europeanspallationsource:xaos.tools:jar"
   "se.europeanspallationsource:xaos.ui:jar" -> "se.europeanspallationsource:xaos.core:jar"[style="dotted"]
   "se.europeanspallationsource:xaos.ui.plot:jar" -> "se.europeanspallationsource:xaos.ui:jar"
+  "org.controlsfx:controlsfx:jar" -> "org.openjfx:javafx-base:jar"[style="dashed",color="red",fontcolor="red",label="11"]
+  "org.controlsfx:controlsfx:jar" -> "org.openjfx:javafx-graphics:jar"[style="dashed",color="red",fontcolor="red",label="11"]
+  "org.controlsfx:controlsfx:jar" -> "org.openjfx:javafx-controls:jar"[style="dashed",color="red",fontcolor="red",label="11"]
+  "org.controlsfx:controlsfx:jar" -> "org.openjfx:javafx-media:jar"[style="dashed",color="red",fontcolor="red",label="11"]
+  "org.controlsfx:controlsfx:jar" -> "org.openjfx:javafx-web:jar"[style="dashed",color="red",fontcolor="red",label="11"]
+  "se.europeanspallationsource:xaos.ui.plot:jar" -> "org.controlsfx:controlsfx:jar"
   "org.testfx:testfx-core:jar" -> "org.hamcrest:hamcrest-core:jar"
   "org.testfx:testfx-core:jar" -> "org.assertj:assertj-core:jar"[style="dashed",color="red",fontcolor="red",label="3.11.1"]
   "se.europeanspallationsource:xaos.ui.plot:jar" -> "org.testfx:testfx-core:jar"

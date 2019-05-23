@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.scene.layout.Region;
 
 
 /**
@@ -32,6 +33,23 @@ import javafx.application.Platform;
 public class FXUtils {
 
 	private static final Logger LOGGER = Logger.getLogger(FXUtils.class.getName());
+
+	/**
+	 * Sets the minimum and the preferred size of the given {@code region} to
+	 * the given {@code size}.
+	 *
+	 * @param region The {@code Region} to be squared.
+	 * @param size   The new width and height dimension of the given {@code region}.
+	 * @return The given {@code region}.
+	 */
+	public static Region makeSquare ( Region region, double size ) {
+
+		region.setMinSize(size, size);
+		region.setPrefSize(size, size);
+
+		return region;
+
+	}
 
 	/**
 	 * Execute the given {@code task} on the JavaFX event thread via

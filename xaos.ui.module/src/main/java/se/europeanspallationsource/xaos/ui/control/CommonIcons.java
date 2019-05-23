@@ -35,6 +35,8 @@ public enum CommonIcons {
 	FOLDER_COLLAPSED,
 	FOLDER_EXPANDED,
 	FORWARD,
+	INFO,
+	PIN,
 	REPLY,
 	REPLY_ALL,
 	SEARCH,

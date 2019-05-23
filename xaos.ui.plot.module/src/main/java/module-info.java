@@ -32,6 +32,7 @@ module xaos.ui.plot {
 	requires transitive javafx.graphics;
 	requires javafx.swing;
 	requires org.apache.commons.lang3;
+	requires transitive org.controlsfx.controls;
 	requires transitive xaos.core;
 	requires transitive xaos.ui;
 

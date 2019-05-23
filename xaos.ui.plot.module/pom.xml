@@ -21,6 +21,7 @@
 		<!-- Dependencies Versions -->
 		<commons-lang3.version>3.9</commons-lang3.version>
 		<commons-math3.version>3.6.1</commons-math3.version>
+		<controlsfx.version>11.0.0</controlsfx.version>
 		<javafx.version>12</javafx.version>
 		<testfx.version>4.0.15-alpha</testfx.version>
 		<xaos.version>${project.version}</xaos.version>
@@ -154,6 +155,13 @@
             <artifactId>xaos.ui</artifactId>
             <version>${xaos.version}</version>
         </dependency>
+
+		<!-- Other Libraries  - - - - - - - - - - - - - - - - - - - - - - - - -->
+		<dependency>
+			<groupId>org.controlsfx</groupId>
+			<artifactId>controlsfx</artifactId>
+			<version>${controlsfx.version}</version>
+		</dependency>
 
 		<!-- Test - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 		<dependency>

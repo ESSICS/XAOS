@@ -23,6 +23,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.chart.Chart;
 import se.europeanspallationsource.xaos.ui.control.NavigatorPopup;
 import se.europeanspallationsource.xaos.ui.plot.data.ErrorSeries;
+import se.europeanspallationsource.xaos.ui.plot.plugins.AxisConstrained.AxisConstraints;
 import se.europeanspallationsource.xaos.ui.plot.plugins.impl.AbscissaCursorDisplay;
 import se.europeanspallationsource.xaos.ui.plot.plugins.impl.AreaValueCursorDisplay;
 import se.europeanspallationsource.xaos.ui.plot.plugins.impl.CursorDisplay.Position;
@@ -34,7 +35,6 @@ import se.europeanspallationsource.xaos.ui.plot.plugins.impl.Navigator;
 import se.europeanspallationsource.xaos.ui.plot.plugins.impl.OrdinateCursorDisplay;
 import se.europeanspallationsource.xaos.ui.plot.plugins.impl.Panner;
 import se.europeanspallationsource.xaos.ui.plot.plugins.impl.Zoomer;
-import se.europeanspallationsource.xaos.ui.plot.plugins.AxisConstrained.AxisConstraints;
 
 
 /**
@@ -115,7 +115,6 @@ public class Plugins {
 			ordinateCursorDisplay(),
 			dataPointCursorDisplay(),
 			areaValueCursorDisplay(),
-//	new PropertyMenu()
 		};
 	}
 

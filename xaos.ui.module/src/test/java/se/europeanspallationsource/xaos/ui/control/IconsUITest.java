@@ -153,6 +153,8 @@ import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FILE_LINK;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FOLDER_COLLAPSED;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FOLDER_EXPANDED;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FORWARD;
+import static se.europeanspallationsource.xaos.ui.control.CommonIcons.INFO;
+import static se.europeanspallationsource.xaos.ui.control.CommonIcons.PIN;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.REPLY;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.REPLY_ALL;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.SEARCH;
@@ -1482,6 +1484,14 @@ public class IconsUITest extends ApplicationTest {
 			.isNotNull()
 			.isInstanceOf(Text.class)
 			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.FORWARD.getCode()));
+		assertThat(Icons.iconFor(INFO, DEFAULT_SIZE))
+			.isNotNull()
+			.isInstanceOf(Text.class)
+			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.INFO.getCode()));
+		assertThat(Icons.iconFor(PIN, DEFAULT_SIZE))
+			.isNotNull()
+			.isInstanceOf(Text.class)
+			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.MAP_PIN.getCode()));
 		assertThat(Icons.iconFor(REPLY, DEFAULT_SIZE))
 			.isNotNull()
 			.isInstanceOf(Text.class)
