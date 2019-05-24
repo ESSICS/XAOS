@@ -20,7 +20,7 @@
  */
 module xaos.ui.plot {
 
-	//	The following is an "automatic module", whose name is derived from the
+	//	The following are "automatic modules", whose name is derived from the
 	//	JAR name.
 	requires commons.math3;
 	

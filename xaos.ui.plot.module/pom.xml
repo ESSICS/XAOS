@@ -23,6 +23,7 @@
 		<commons-math3.version>3.6.1</commons-math3.version>
 		<controlsfx.version>11.0.0</controlsfx.version>
 		<javafx.version>12</javafx.version>
+		<jlibs-i18n.version>2.2.2</jlibs-i18n.version>
 		<testfx.version>4.0.15-alpha</testfx.version>
 		<xaos.version>${project.version}</xaos.version>
 	</properties>
