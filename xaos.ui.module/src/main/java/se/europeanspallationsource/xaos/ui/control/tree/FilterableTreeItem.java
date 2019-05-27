@@ -131,40 +131,40 @@ public class FilterableTreeItem<T> extends CheckBoxTreeItem<T> {
 
 		filteredList.predicateProperty().bind(Bindings.createObjectBinding(() -> {
 
-			Predicate<TreeItem<T>> p = child -> {
+				Predicate<TreeItem<T>> p = child -> {
 
-				//	It should never happen...
-				if ( child == null ) {
-					LOGGER.warning("Predicate invoked with a null parameter.");
-					return false;
-				}
+					//	It should never happen...
+					if ( child == null ) {
+						LOGGER.warning("Predicate invoked with a null parameter.");
+						return false;
+					}
 
-				//	Set the predicate of child items to force filtering.
-				if ( child instanceof FilterableTreeItem ) {
-					( (FilterableTreeItem<T>) child ).setPredicate(getPredicate());
-				}
+					//	Set the predicate of child items to force filtering.
+					if ( child instanceof FilterableTreeItem ) {
+						( (FilterableTreeItem<T>) child ).setPredicate(getPredicate());
+					}
 
-				//	If there is no predicate, keep this tree item.
-				if ( getPredicate() == null ) {
-					return true;
-				}
+					//	If there is no predicate, keep this tree item.
+					if ( getPredicate() == null ) {
+						return true;
+					}
 
-				//	If child is not a leaf (usually meaning it has children),
-				//	keep this tree item.
-				if ( !child.isLeaf() ) {
-					return true;
-				}
+					//	If child is not a leaf (usually meaning it has children),
+					//	keep this tree item.
+					if ( !child.isLeaf() ) {
+						return true;
+					}
 
-				//	Otherwise ask the TreeItemPredicate.
-				return getPredicate().test(this, child.getValue());
+					//	Otherwise ask the TreeItemPredicate.
+					return getPredicate().test(this, child.getValue());
 
-			};
+				};
 
-			return p;
+				return p;
 
-		},
-			this.predicate)
-		);
+			},
+			this.predicate
+		));
 
 		setHiddenFieldChildren(this.filteredList);
 
