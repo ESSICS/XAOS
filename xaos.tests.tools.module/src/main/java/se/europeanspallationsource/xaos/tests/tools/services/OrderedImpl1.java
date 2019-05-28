@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.tests.tools;
+package se.europeanspallationsource.xaos.tests.tools.services;
 
 
 import se.europeanspallationsource.xaos.tools.annotation.ServiceProvider;
@@ -23,8 +23,8 @@ import se.europeanspallationsource.xaos.tools.annotation.ServiceProvider;
 /**
  * @author claudio.rosati@esss.se
  */
-@ServiceProvider( service = BasicUsageInterface.class )
+@ServiceProvider( service = OrderedInterface.class )
 @SuppressWarnings( "ClassMayBeInterface" )
-public class BasicUsageImplementation implements BasicUsageInterface {
+public class OrderedImpl1 implements OrderedInterface {
 
 }

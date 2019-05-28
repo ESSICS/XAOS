@@ -14,12 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.tests.tools;
+package se.europeanspallationsource.xaos.tools.annotation;
+
 
 /**
+ * This annotation provides the way of changing the resource bundle name from
+ * the default "Bundle.properties" to something else.
+ * <p>
+ * <b>Note:</b> This annotation cannot be applied to inner classes/interface.</p>
+ *
  * @author claudio.rosati@esss.se
  */
-@SuppressWarnings( "MarkerInterface" )
-public interface MultipleRegistrationsInterface2 {
+public @interface Bundle {
+
+	/**
+	 * The name (without extension and path) of the resource bundle for the
+	 * class or interface annotated by this annotation. The resource bundle
+	 * generated will be in the same packaged of the annotated class/interface
+	 * with the standard {@code .properties} extension.
+	 *
+	 * @return The resource bundle name.
+	 */
+	String name();
 
 }

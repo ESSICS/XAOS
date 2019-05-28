@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.tests.tools;
+package se.europeanspallationsource.xaos.tests.tools.services;
 
 /**
  * @author claudio.rosati@esss.se
  */
 @SuppressWarnings( "MarkerInterface" )
-public interface MultipleRegistrationsInterface1 {
+public interface MultipleRegistrationsInterface2 {
 
 }

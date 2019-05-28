@@ -16,15 +16,21 @@
 package se.europeanspallationsource.xaos.tests.tools;
 
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.ServiceLoader;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import se.europeanspallationsource.xaos.tests.tools.services.BasicUsageImplementation;
+import se.europeanspallationsource.xaos.tests.tools.services.BasicUsageInterface;
+import se.europeanspallationsource.xaos.tests.tools.services.MultipleRegistrationsImpl;
+import se.europeanspallationsource.xaos.tests.tools.services.MultipleRegistrationsInterface1;
+import se.europeanspallationsource.xaos.tests.tools.services.MultipleRegistrationsInterface2;
+import se.europeanspallationsource.xaos.tests.tools.services.OrderedImpl1;
+import se.europeanspallationsource.xaos.tests.tools.services.OrderedImpl2;
+import se.europeanspallationsource.xaos.tests.tools.services.OrderedImpl3;
+import se.europeanspallationsource.xaos.tests.tools.services.OrderedImpl4;
+import se.europeanspallationsource.xaos.tests.tools.services.OrderedInterface;
 import se.europeanspallationsource.xaos.tools.annotation.ServiceLoaderUtilities;
 
 import static org.junit.Assert.assertEquals;
@@ -86,31 +92,6 @@ public class ServiceProviderProcessorTest {
         assertEquals(
 			OrderedImpl3.class,
 			ServiceLoaderUtilities.findFirst(ServiceLoader.load(OrderedInterface.class)).orElseThrow().getClass()
-		);
-
-		// Order in file should also be fixed, for benefit of ServiceLoader.
-		BufferedReader r = new BufferedReader(
-			new InputStreamReader(
-				ServiceProviderProcessorTest.class.getResourceAsStream("/META-INF/services/" + OrderedInterface.class.getName())
-			)
-		);
-		List<String> lines = new ArrayList<>(3);
-		String line;
-
-		while ( ( line = r.readLine() ) != null ) {
-			lines.add(line);
-		}
-
-		assertEquals(Arrays.asList(
-				OrderedImpl3.class.getName(),
-				"# end-of-order=100",
-				OrderedImpl2.class.getName(),
-				"# end-of-order=200",
-				OrderedImpl1.class.getName(),
-				"# end-of-order=" + ( Integer.MAX_VALUE - 1 ),
-				OrderedImpl4.class.getName()
-			),
-			lines
 		);
 
 	}

@@ -14,22 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package se.europeanspallationsource.xaos.tests.tools.services;
 
 /**
  * @author claudio.rosati@esss.se
  */
-module xaos.tools {
-
-	requires java.compiler;
-	requires java.logging;
-
-	exports se.europeanspallationsource.xaos.tools.annotation;
-	exports se.europeanspallationsource.xaos.tools.lang;
-
-	uses javax.annotation.processing.Processor;
-
-	provides javax.annotation.processing.Processor
-		with se.europeanspallationsource.xaos.tools.annotation.impl.ServiceProviderProcessor,
-			 se.europeanspallationsource.xaos.tools.annotation.impl.BundleProcessor;
+@SuppressWarnings( "MarkerInterface" )
+public interface BasicUsageInterface {
 
 }

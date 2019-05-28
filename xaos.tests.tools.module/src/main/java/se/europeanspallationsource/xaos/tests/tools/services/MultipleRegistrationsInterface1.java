@@ -14,17 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.tests.tools;
-
-
-import se.europeanspallationsource.xaos.tools.annotation.ServiceProvider;
-
+package se.europeanspallationsource.xaos.tests.tools.services;
 
 /**
  * @author claudio.rosati@esss.se
  */
-@ServiceProvider( service = OrderedInterface.class, order = 200 )
-@SuppressWarnings( "ClassMayBeInterface" )
-public class OrderedImpl2 implements OrderedInterface {
+@SuppressWarnings( "MarkerInterface" )
+public interface MultipleRegistrationsInterface1 {
 
 }

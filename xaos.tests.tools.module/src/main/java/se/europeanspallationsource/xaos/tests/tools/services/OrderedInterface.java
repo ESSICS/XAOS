@@ -14,13 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.tests.tools;
-
+package se.europeanspallationsource.xaos.tests.tools.services;
 
 /**
  * @author claudio.rosati@esss.se
  */
-@SuppressWarnings( "ClassMayBeInterface" )
-public class OrderedImpl4 implements OrderedInterface {
+@SuppressWarnings( "MarkerInterface" )
+public interface OrderedInterface {
 
 }

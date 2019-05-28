@@ -14,17 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.tests.tools;
+package se.europeanspallationsource.xaos.tools.annotation;
 
 
-import se.europeanspallationsource.xaos.tools.annotation.ServiceProvider;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
 /**
+ * Similar to {@link BundleItem} but permits multiple registrations of one item.
+ *
  * @author claudio.rosati@esss.se
+ * @see BundleItem
  */
-@ServiceProvider( service = OrderedInterface.class )
-@SuppressWarnings( "ClassMayBeInterface" )
-public class OrderedImpl1 implements OrderedInterface {
+@Documented
+@Retention( RUNTIME )
+@Target( { FIELD, METHOD, TYPE } )
+public @interface BundleItems {
+
+	/**
+	 * @return The list of bundle items.
+	 */
+	BundleItem[] value();
 
 }

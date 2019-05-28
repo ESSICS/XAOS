@@ -16,46 +16,33 @@
 package se.europeanspallationsource.xaos.tools.annotation.impl;
 
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
-import java.nio.file.NoSuchFileException;
-import java.util.ArrayList;
+import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.WeakHashMap;
-import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Completion;
-import javax.annotation.processing.Filer;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.element.AnnotationMirror;
-import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.ModuleElement;
+import javax.lang.model.element.ModuleElement.ProvidesDirective;
 import javax.lang.model.element.QualifiedNameable;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.ElementFilter;
-import javax.tools.FileObject;
-import javax.tools.StandardLocation;
 import se.europeanspallationsource.xaos.tools.annotation.ServiceProvider;
 import se.europeanspallationsource.xaos.tools.annotation.ServiceProviders;
+import se.europeanspallationsource.xaos.tools.lang.AbstractAnnotationProcessor;
 
 import static javax.lang.model.SourceVersion.RELEASE_12;
 import static javax.lang.model.element.ElementKind.CLASS;
@@ -63,10 +50,10 @@ import static javax.lang.model.element.ElementKind.PACKAGE;
 import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.lang.model.element.Modifier.PUBLIC;
 import static javax.lang.model.element.Modifier.STATIC;
+import static javax.lang.model.element.ModuleElement.DirectiveKind.PROVIDES;
 import static javax.lang.model.type.TypeKind.DECLARED;
 import static javax.tools.Diagnostic.Kind.ERROR;
-import static javax.tools.StandardLocation.CLASS_OUTPUT;
-import static javax.tools.StandardLocation.SOURCE_PATH;
+import static javax.tools.Diagnostic.Kind.WARNING;
 
 
 /**
@@ -81,10 +68,8 @@ import static javax.tools.StandardLocation.SOURCE_PATH;
 	"se.europeanspallationsource.xaos.tools.annotation.ServiceProviders"
 } )
 @SuppressWarnings( "ClassWithoutLogger" )
-public class ServiceProviderProcessor extends AbstractProcessor {
+public class ServiceProviderProcessor extends AbstractAnnotationProcessor {
 
-	private final Map<Filer, Map<String, List<Element>>> originatingElementsByProcessor = new WeakHashMap<>();
-	private final Map<Filer, Map<String, SortedSet<ServiceLoaderLine>>> outputFilesByProcessor = new WeakHashMap<>();
 	private final Map<TypeElement, Boolean> verifiedClasses = new WeakHashMap<>();
 
 	public ServiceProviderProcessor() {
@@ -102,7 +87,7 @@ public class ServiceProviderProcessor extends AbstractProcessor {
 			return Collections.emptyList();
 		}
 
-		TypeElement jlObject = processingEnv.getElementUtils().getTypeElement("java.lang.Object");
+		TypeElement jlObject = getEnvironment().getElementUtils().getTypeElement("java.lang.Object");
 
 		if ( jlObject == null ) {
 			return Collections.emptyList();
@@ -125,7 +110,7 @@ public class ServiceProviderProcessor extends AbstractProcessor {
 			parents.addAll(c.getInterfaces());
 			parents.stream()
 				.filter(tm -> tm != null && tm.getKind() == DECLARED)
-				.map(tm -> (TypeElement) processingEnv.getTypeUtils().asElement(tm))
+				.map(tm -> (TypeElement) getEnvironment().getTypeUtils().asElement(tm))
 				.filter(type -> !jlObject.equals(type))
 				.forEachOrdered(type -> toProcess.add(type));
 
@@ -142,9 +127,6 @@ public class ServiceProviderProcessor extends AbstractProcessor {
 		}
 
 		if ( roundEnv.processingOver() ) {
-			writeServices();
-			outputFilesByProcessor.clear();
-			originatingElementsByProcessor.clear();
 			return true;
 		} else {
 			return handleProcess(annotations, roundEnv);
@@ -153,25 +135,69 @@ public class ServiceProviderProcessor extends AbstractProcessor {
 	}
 
 	/**
-	 * Register a service.
-	 * If the class does not have an appropriate signature, an error will be printed and the registration skipped.
+	 * The regular body of {@link #process}. Called during regular rounds if
+	 * there are no outstanding errors. In the last round, one of the processors
+	 * will write out generated registrations.
+	 *
+	 * @param annotations As in {@link #process}.
+	 * @param roundEnvironment    As in {@link #process}.
+	 * @return As in {@link #process}.
+	 */
+	private boolean handleProcess( Set<? extends TypeElement> annotations, RoundEnvironment roundEnvironment ) {
+
+		roundEnvironment.getElementsAnnotatedWith(ServiceProvider.class).forEach(element -> {
+
+			ServiceProvider sp = element.getAnnotation(ServiceProvider.class);
+
+			if ( sp != null ) {
+				handleProcess(element, ServiceProvider.class, sp);
+			}
+
+		});
+
+		roundEnvironment.getElementsAnnotatedWith(ServiceProviders.class).forEach(element -> {
+
+			ServiceProviders spp = element.getAnnotation(ServiceProviders.class);
+
+			if ( spp != null ) {
+				for ( ServiceProvider sp : spp.value() ) {
+					handleProcess(element, ServiceProviders.class, sp);
+				}
+			}
+
+		});
+
+		return true;
+
+	}
+
+	private void handleProcess( Element clazz, Class<? extends Annotation> annotation, ServiceProvider svc ) {
+		try {
+			//	A trick to capture the TypeMirror of the service class.
+			svc.service();
+		} catch ( MirroredTypeException ex ) {
+			handleProcess(clazz, annotation, ex.getTypeMirror());
+		}
+	}
+
+	/**
+	 * If the class does not have an appropriate signature, an error will be printed and the handling skipped.
 	 *
 	 * @param el         The annotated element.
 	 * @param annotation The (top-level) annotation registering the service, for diagnostic purposes.
 	 * @param type       The type to which the implementation must be assignable.
-	 * @param order      A position at which to register, or {@link Integer#MAX_VALUE} to skip.
 	 */
-	protected final void register( Element el, Class<? extends Annotation> annotation, TypeMirror type, int order ) {
+	private void handleProcess( Element el, Class<? extends Annotation> annotation, TypeMirror type ) {
 
 		if ( el.getKind() != CLASS ) {
-			processingEnv.getMessager().printMessage(
+			getMessager().printMessage(
 				ERROR,
 				annotation.getName() + " is not applicable to a " + el.getKind(),
 				el
 			);
 			return;
 		} else if ( el.getEnclosingElement().getKind() == CLASS && !el.getModifiers().contains(STATIC) ) {
-			processingEnv.getMessager().printMessage(
+			getMessager().printMessage(
 				ERROR,
 				"Inner class needs to be static to be annotated with @ServiceProvider",
 				el
@@ -180,25 +206,24 @@ public class ServiceProviderProcessor extends AbstractProcessor {
 		}
 
 		TypeElement clazz = (TypeElement) el;
-		String impl = processingEnv.getElementUtils().getBinaryName(clazz).toString();
-		String xface = processingEnv.getElementUtils().getBinaryName((TypeElement) processingEnv.getTypeUtils().asElement(type)).toString();
+		String impl = binaryName(clazz);
+		String xface = binaryName((TypeElement) getEnvironment().getTypeUtils().asElement(type));
 
-		if ( !processingEnv.getTypeUtils().isAssignable(clazz.asType(), type) ) {
+		if ( !getEnvironment().getTypeUtils().isAssignable(clazz.asType(), type) ) {
 
 			AnnotationMirror ann = findAnnotationMirror(clazz, annotation);
 
-			processingEnv.getMessager().printMessage(
+			getMessager().printMessage(
 				ERROR,
 				impl + " is not assignable to " + xface,
 				clazz,
 				ann,
 				findAnnotationValue(ann, "service")
 			);
-
 			return;
+
 		}
 
-		String rsrc = "META-INF/services/" + xface;
 		Boolean verify = verifiedClasses.get(clazz);
 
 		if ( verify == null ) {
@@ -213,180 +238,34 @@ public class ServiceProviderProcessor extends AbstractProcessor {
 			return;
 		}
 
-		registerImpl(clazz, impl, rsrc, order);
+		handleProcess(clazz, (TypeElement) getEnvironment().getTypeUtils().asElement(type));
 
 	}
 
-	/**
-	 * @param element    A source element.
-	 * @param annotation A type of annotation.
-	 * @return The instance of that annotation on the element, or {@code null}
-	 *         if not found.
-	 */
-	private AnnotationMirror findAnnotationMirror( Element element, Class<? extends Annotation> annotation ) {
+	private void handleProcess( TypeElement providerElement, TypeElement serviceElement ) {
 
-		for ( AnnotationMirror ann : element.getAnnotationMirrors() ) {
-			if ( processingEnv.getElementUtils().getBinaryName((TypeElement) ann.getAnnotationType().asElement()).contentEquals(annotation.getName()) ) {
-				return ann;
-			}
+		ModuleElement moduleElement = getEnvironment().getElementUtils().getModuleOf(providerElement);
+		long count = moduleElement.getDirectives().stream()
+			.filter(d -> d.getKind() == PROVIDES)
+			.filter(d -> ( (ProvidesDirective) d ).getService().getQualifiedName().equals(serviceElement.getQualifiedName()))
+			.filter(d -> ( (ProvidesDirective) d ).getImplementations().stream().filter(e -> e.getQualifiedName().equals(providerElement.getQualifiedName())).count() > 0)
+			.count();
+
+		if ( count == 0 ) {
+			getMessager().printMessage(
+				WARNING,
+				MessageFormat.format(
+					"Missing ''provides'' directive for {0} annotated service provider."
+				  + "\nAdd the following directives to the ''module-info.java'' class:"
+				  + "\n"
+				  + "\nuses {1};"
+				  + "\nprovides {1}"
+				  + "\n    with {0};",
+					binaryName(providerElement),
+					binaryName(serviceElement)
+				)
+			);
 		}
-
-		return null;
-
-	}
-
-	/**
-	 * @param annotation An annotation instance ({@code null} permitted).
-	 * @param name       The name of an attribute of that annotation.
-	 * @return The corresponding value if found.
-	 */
-	private AnnotationValue findAnnotationValue( AnnotationMirror annotation, String name ) {
-
-		if ( annotation != null ) {
-			for ( Map.Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : annotation.getElementValues().entrySet() ) {
-				if ( entry.getKey().getSimpleName().contentEquals(name) ) {
-					return entry.getValue();
-				}
-			}
-		}
-
-		return null;
-
-	}
-
-	/**
-	 * The regular body of {@link #process}. Called during regular rounds if
-	 * there are no outstanding errors. In the last round, one of the processors
-	 * will write out generated registrations.
-	 *
-	 * @param annotations As in {@link #process}.
-	 * @param roundEnv    As in {@link #process}.
-	 * @return As in {@link #process}.
-	 */
-	private boolean handleProcess( Set<? extends TypeElement> annotations, RoundEnvironment roundEnv ) {
-
-		roundEnv.getElementsAnnotatedWith(ServiceProvider.class).forEach(( el ) -> {
-
-			ServiceProvider sp = el.getAnnotation(ServiceProvider.class);
-
-			if ( sp != null ) {
-				register(el, ServiceProvider.class, sp);
-			}
-
-		});
-
-		roundEnv.getElementsAnnotatedWith(ServiceProviders.class).forEach(( el ) -> {
-
-			ServiceProviders spp = el.getAnnotation(ServiceProviders.class);
-
-			if ( spp != null ) {
-				for ( ServiceProvider sp : spp.value() ) {
-					register(el, ServiceProviders.class, sp);
-				}
-			}
-
-		});
-
-		return true;
-
-	}
-
-	private void register( Element clazz, Class<? extends Annotation> annotation, ServiceProvider svc ) {
-		try {
-			svc.service();
-			assert false;
-		} catch ( MirroredTypeException ex ) {
-			register(clazz, annotation, ex.getTypeMirror(), svc.order());
-		}
-	}
-
-	private void registerImpl( TypeElement clazz, String impl, String rsrc, int order ) {
-
-		Filer filer = processingEnv.getFiler();
-		Map<String, List<Element>> originatingElements = originatingElementsByProcessor.get(filer);
-
-		if ( originatingElements == null ) {
-
-			originatingElements = new HashMap<>(3);
-
-			originatingElementsByProcessor.put(filer, originatingElements);
-
-		}
-
-		List<Element> origEls = originatingElements.get(rsrc);
-
-		if ( origEls == null ) {
-
-			origEls = new ArrayList<>(3);
-
-			originatingElements.put(rsrc, origEls);
-
-		}
-
-		origEls.add(clazz);
-
-		Map<String, SortedSet<ServiceLoaderLine>> outputFiles = outputFilesByProcessor.get(filer);
-
-		if ( outputFiles == null ) {
-
-			outputFiles = new HashMap<>(3);
-
-			outputFilesByProcessor.put(filer, outputFiles);
-
-		}
-
-		SortedSet<ServiceLoaderLine> lines = outputFiles.get(rsrc);
-
-		if ( lines == null ) {
-
-			lines = new TreeSet<>();
-
-			try {
-
-				try {
-
-					FileObject in = filer.getResource(SOURCE_PATH, "", rsrc);
-
-					in.openInputStream().close();
-					processingEnv.getMessager().printMessage(
-						ERROR,
-						"Cannot generate " + rsrc + " because it already exists in sources: " + in.toUri()
-					);
-
-					return;
-
-				} catch ( NullPointerException ex ) {
-					// trying to prevent java.lang.NullPointerException
-					// at com.sun.tools.javac.util.DefaultFileManager.getFileForOutput(DefaultFileManager.java:1078)
-					// at com.sun.tools.javac.util.DefaultFileManager.getFileForOutput(DefaultFileManager.java:1054)
-					// at com.sun.tools.javac.processing.JavacFiler.getResource(JavacFiler.java:434)
-					// at org.netbeans.modules.openide.util.AbstractServiceProviderProcessor.register(AbstractServiceProviderProcessor.java:163)
-					// at org.netbeans.modules.openide.util.ServiceProviderProcessor.register(ServiceProviderProcessor.java:99)
-				} catch ( FileNotFoundException | NoSuchFileException x ) {
-					// Good.
-				}
-
-				try {
-
-					FileObject in = filer.getResource(CLASS_OUTPUT, "", rsrc);
-
-					try ( InputStream is = in.openInputStream() ) {
-						ServiceLoaderLine.parse(new InputStreamReader(is, "UTF-8"), lines); // NOI18N
-					}
-
-				} catch ( FileNotFoundException | NoSuchFileException x ) {
-					// OK, created for the first time
-				}
-			} catch ( IOException x ) {
-				processingEnv.getMessager().printMessage(ERROR, x.toString());
-				return;
-			}
-
-			outputFiles.put(rsrc, lines);
-
-		}
-
-		lines.add(new ServiceLoaderLine(impl, order));
 
 	}
 
@@ -395,13 +274,13 @@ public class ServiceProviderProcessor extends AbstractProcessor {
 		AnnotationMirror ann = findAnnotationMirror(clazz, annotation);
 
 		if ( !clazz.getModifiers().contains(PUBLIC) ) {
-			processingEnv.getMessager().printMessage(ERROR, clazz + " must be public", clazz, ann);
+			getMessager().printMessage(ERROR, clazz + " must be public", clazz, ann);
 			return false;
 		} else if ( clazz.getModifiers().contains(ABSTRACT) ) {
-			processingEnv.getMessager().printMessage(ERROR, clazz + " must not be abstract", clazz, ann);
+			getMessager().printMessage(ERROR, clazz + " must not be abstract", clazz, ann);
 			return false;
 		} else if ( clazz.getEnclosingElement().getKind() != PACKAGE && !clazz.getModifiers().contains(STATIC) ) {
-			processingEnv.getMessager().printMessage(ERROR, clazz + " must be static", clazz, ann);
+			getMessager().printMessage(ERROR, clazz + " must be static", clazz, ann);
 			return false;
 		}
 
@@ -415,47 +294,11 @@ public class ServiceProviderProcessor extends AbstractProcessor {
 		}
 
 		if ( !hasDefaultCtor ) {
-			processingEnv.getMessager().printMessage(ERROR, clazz + " must have a public no-argument constructor", clazz, ann);
+			getMessager().printMessage(ERROR, clazz + " must have a public no-argument constructor", clazz, ann);
 			return false;
 		}
 
 		return true;
-
-	}
-
-	private void writeServices() {
-
-		outputFilesByProcessor.entrySet().forEach(outputFiles -> {
-
-			Filer filer = outputFiles.getKey();
-
-			outputFiles.getValue().entrySet().forEach(entry -> {
-				try {
-
-					List<Element> elements = originatingElementsByProcessor.get(filer).get(entry.getKey());
-					FileObject out = filer.createResource(
-						StandardLocation.CLASS_OUTPUT,
-						"",
-						entry.getKey(),
-						elements.toArray(new Element[elements.size()])
-					);
-
-					try (
-						OutputStream os = out.openOutputStream();
-						PrintWriter w = new PrintWriter(new OutputStreamWriter(os, "UTF-8")) ) {
-						entry.getValue().forEach(line -> line.write(w));
-						w.flush();
-					}
-
-				} catch ( IOException x ) {
-					processingEnv.getMessager().printMessage(
-						ERROR,
-						"Failed to write to " + entry.getKey() + ": " + x.toString()
-					);
-				}
-			});
-
-		});
 
 	}
 

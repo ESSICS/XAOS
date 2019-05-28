@@ -22,23 +22,23 @@ module xaos.tests {
 
 	requires xaos.tools;
 
-	uses se.europeanspallationsource.xaos.tests.tools.BasicUsageInterface;
-	uses se.europeanspallationsource.xaos.tests.tools.MultipleRegistrationsInterface1;
-	uses se.europeanspallationsource.xaos.tests.tools.MultipleRegistrationsInterface2;
-	uses se.europeanspallationsource.xaos.tests.tools.OrderedInterface;
+	uses se.europeanspallationsource.xaos.tests.tools.services.BasicUsageInterface;
+	uses se.europeanspallationsource.xaos.tests.tools.services.MultipleRegistrationsInterface1;
+	uses se.europeanspallationsource.xaos.tests.tools.services.MultipleRegistrationsInterface2;
+	uses se.europeanspallationsource.xaos.tests.tools.services.OrderedInterface;
 
-	provides se.europeanspallationsource.xaos.tests.tools.BasicUsageInterface
-		with se.europeanspallationsource.xaos.tests.tools.BasicUsageImplementation;
-	provides se.europeanspallationsource.xaos.tests.tools.MultipleRegistrationsInterface1
-		with se.europeanspallationsource.xaos.tests.tools.MultipleRegistrationsImpl;
-	provides se.europeanspallationsource.xaos.tests.tools.MultipleRegistrationsInterface2
-		with se.europeanspallationsource.xaos.tests.tools.MultipleRegistrationsImpl;
-	provides se.europeanspallationsource.xaos.tests.tools.OrderedInterface
-		with se.europeanspallationsource.xaos.tests.tools.OrderedImpl1,
-			 se.europeanspallationsource.xaos.tests.tools.OrderedImpl2,
-			 se.europeanspallationsource.xaos.tests.tools.OrderedImpl3,
-			 se.europeanspallationsource.xaos.tests.tools.OrderedImpl4;
+	provides se.europeanspallationsource.xaos.tests.tools.services.BasicUsageInterface
+		with se.europeanspallationsource.xaos.tests.tools.services.BasicUsageImplementation;
+	provides se.europeanspallationsource.xaos.tests.tools.services.MultipleRegistrationsInterface1
+		with se.europeanspallationsource.xaos.tests.tools.services.MultipleRegistrationsImpl;
+	provides se.europeanspallationsource.xaos.tests.tools.services.MultipleRegistrationsInterface2
+		with se.europeanspallationsource.xaos.tests.tools.services.MultipleRegistrationsImpl;
+	provides se.europeanspallationsource.xaos.tests.tools.services.OrderedInterface
+		with se.europeanspallationsource.xaos.tests.tools.services.OrderedImpl1,
+			 se.europeanspallationsource.xaos.tests.tools.services.OrderedImpl2,
+			 se.europeanspallationsource.xaos.tests.tools.services.OrderedImpl3,
+			 se.europeanspallationsource.xaos.tests.tools.services.OrderedImpl4;
 
-	opens se.europeanspallationsource.xaos.tests.tools to xaos.tools;
+	opens se.europeanspallationsource.xaos.tests.tools.services to xaos.tools;
 
 }

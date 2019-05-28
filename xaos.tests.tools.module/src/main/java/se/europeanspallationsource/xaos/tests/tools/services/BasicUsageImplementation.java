@@ -14,21 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.tests.tools;
+package se.europeanspallationsource.xaos.tests.tools.services;
 
 
 import se.europeanspallationsource.xaos.tools.annotation.ServiceProvider;
-import se.europeanspallationsource.xaos.tools.annotation.ServiceProviders;
 
 
 /**
  * @author claudio.rosati@esss.se
  */
-@ServiceProviders( {
-	@ServiceProvider( service = MultipleRegistrationsInterface1.class, order = 200 ),
-	@ServiceProvider( service = MultipleRegistrationsInterface2.class )
-} )
+@ServiceProvider( service = BasicUsageInterface.class )
 @SuppressWarnings( "ClassMayBeInterface" )
-public class MultipleRegistrationsImpl implements MultipleRegistrationsInterface1, MultipleRegistrationsInterface2 {
+public class BasicUsageImplementation implements BasicUsageInterface {
 
 }

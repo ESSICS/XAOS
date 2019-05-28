@@ -13,8 +13,8 @@ tasks.
 ## Service Providers
 
 The _ServiceProvider_ annotation will simplify providing service implementations,
-taking care of publishing them in the proper file inside the `META-INF/service`
-folder.
+taking care of verifying the provider is valid and the required directive in the
+module-info.java file is present.
 
 ```java
 package my.module;
@@ -51,6 +51,9 @@ following flag being added to the command line launching the application:
 ```
   --add-opens module/package=xaos.tools
 ```
+
+The _ModelUtils_ class provides few methods to simplify the creation of
+annotation processors.
 
 
 ## Using XAOS Tools

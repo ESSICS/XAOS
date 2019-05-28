@@ -37,6 +37,8 @@ import javax.lang.model.type.ArrayType;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.Elements;
+import javax.lang.model.util.Types;
 
 
 /**
@@ -47,7 +49,7 @@ import javax.lang.model.type.TypeMirror;
 @SuppressWarnings( "ClassWithoutLogger" )
 public class ModelUtils {
 
-	private static final Map<String, String> PRIMITIVE_WRAPPER = new HashMap<String, String>(8);
+	private static final Map<String, String> PRIMITIVE_WRAPPER = new HashMap<>(8);
 
 	/*
 	 * Static initialiser.
@@ -70,11 +72,11 @@ public class ModelUtils {
 	 * @param <T>        The type of the annotation {@link Class}.
 	 * @param element    The {@link Element} for which the annotation mirror
 	 *                   must be returned.
-	 * @param annotation The annotation {@link Cladd}.
+	 * @param annotation The annotation {@link Class}.
 	 * @return The annotation mirror of the given {@code annotation} for the
 	 *         given {@link Element}, or {@code null}.
 	 */
-	public static <T> AnnotationMirror getAnnotationMirror( Element element, Class<T> annotation ) {
+	public static <T> AnnotationMirror annotationMirror( Element element, Class<T> annotation ) {
 		return element.getAnnotationMirrors().stream()
 			.filter(mirror -> matches(mirror, annotation))
 			.findFirst()
@@ -82,26 +84,50 @@ public class ModelUtils {
 	}
 
 	/**
-	 * Returns the first {@link Modifier} in the given {@code modifiers} array
-	 * that is contained into the given {@link Set}.
+	 * Returns an annotation value from the given {@code mirror} for the given
+	 * {@code method} (or annotation parameter).
 	 *
-	 * @param set       A {@link Set} of {@link Modifier}s. The method will
-	 *                  return {@code null} if none of the given {@code modifiers}
-	 *                  is contained in this set.
-	 * @param modifiers The array of {@link Modifier}s. The first of them found
-	 *                  in the given {@code set} will be returned.
-	 * @return The first of the {@code modifiers} found in the given {@code set}
-	 *         or {@code null}.
+	 * @param <T>         The type of the returned annotation value.
+	 * @param environment The {@link ProcessingEnvironment} used to get the
+	 *                    elements with default values.
+	 * @param element     The annotated element.
+	 * @param mirror      The {@link AnnotationMirror} describing the annotation.
+	 * @param method      The method (or annotation parameter) name.
+	 * @return An annotation value from the given {@code mirror} for the given
+	 *         {@code method} (or annotation parameter).
+	 * @throws AnnotationError If not value can be found.
 	 */
-	public static Modifier getModifier( Set<Modifier> set, Modifier... modifiers ) {
+	@SuppressWarnings( "unchecked" )
+	public static <T> T annotationValue( ProcessingEnvironment environment, Element element, AnnotationMirror mirror, String method ) {
+		return (T) rawAnnotationValue(environment, element, mirror, method).getValue();
+	}
 
-		for ( Modifier modifier : modifiers ) {
-			if ( set.contains(modifier) ) {
-				return modifier;
-			}
+	/**
+	 * Returns an annotation value from the given {@code annotation} class for
+	 * the given {@code method} (or annotation parameter).
+	 *
+	 * @param <A>         The type of the anotation class.
+	 * @param <T>         The type of the returned annotation value.
+	 * @param environment The {@link ProcessingEnvironment} used to get the
+	 *                    elements with default values.
+	 * @param element     The annotated element.
+	 * @param annotation  The annotation {@link Class}.
+	 * @param method      The method (or annotation parameter) name.
+	 * @return An annotation value from the given {@code annotation} class for
+	 *         the given {@code method} (or annotation parameter), or
+	 *         {@code null}.
+	 * @throws AnnotationError If not value can be found.
+	 */
+	@SuppressWarnings( "unchecked" )
+	public static <A, T> T annotationValue( ProcessingEnvironment environment, Element element, Class<A> annotation, String method ) {
+
+		AnnotationMirror mirror = annotationMirror(element, annotation);
+
+		if ( mirror != null ) {
+			return (T) ModelUtils.annotationValue(environment, element, mirror, method);
+		} else {
+			return null;
 		}
-
-		return null;
 
 	}
 
@@ -120,38 +146,6 @@ public class ModelUtils {
 
 		return ( (QualifiedNameable) element ).getQualifiedName().toString();
 
-	}
-
-	/**
-	 * Returns the element representing the requested parameter of the
-	 * {@code method} element.
-	 *
-	 * @param method        The {@link ExecutableElement} representing the method
-	 *                      whose specified parameter must be returned.
-	 * @param parameterName The name of the parameter whose element descriptor must
-	 *                      be returned.
-	 * @return The element representing the requested parameter of the
-	 *         {@code method} element.
-	 */
-	public static VariableElement getParameter( ExecutableElement method, String parameterName ) {
-		return method.getParameters().stream()
-			.filter(parameter -> parameter.getSimpleName().contentEquals(parameterName))
-			.findFirst()
-			.orElse(null);
-	}
-
-	public static AnnotationValue getRawAnnotationValue( ProcessingEnvironment environment, Element pos, AnnotationMirror mirror, String method ) {
-		for ( Map.Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : mirror.getElementValues().entrySet() ) {
-			if ( entry.getKey().getSimpleName().contentEquals(method) ) {
-				return entry.getValue();
-			}
-		}
-		for ( Map.Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : environment.getElementUtils().getElementValuesWithDefaults(mirror).entrySet() ) {
-			if ( entry.getKey().getSimpleName().contentEquals(method) ) {
-				return entry.getValue();
-			}
-		}
-		throw new AnnotationError(pos, mirror, "annotation " + ( (TypeElement) mirror.getAnnotationType().asElement() ).getQualifiedName() + " is missing " + method);
 	}
 
 	/**
@@ -187,7 +181,7 @@ public class ModelUtils {
 	 */
 	public static boolean isAccessible( Element element, boolean samePackage, boolean subClass ) {
 
-		Modifier modifier = getModifier(element.getModifiers(), Modifier.PUBLIC, Modifier.PROTECTED, Modifier.PRIVATE);
+		Modifier modifier = modifier(element.getModifiers(), Modifier.PUBLIC, Modifier.PROTECTED, Modifier.PRIVATE);
 
 		if ( modifier == null ) {
 			return samePackage;
@@ -283,6 +277,37 @@ public class ModelUtils {
 		return ( (QualifiedNameable) mirror.getAnnotationType().asElement() ).getQualifiedName().contentEquals(annotation.getCanonicalName());
 	}
 
+	public static <T> TypeMirror mirror( ProcessingEnvironment environment, Class<T> clazz ) {
+
+		Elements elements = environment.getElementUtils();
+		Types types = environment.getTypeUtils();
+
+		if ( clazz.isArray() ) {
+			return environment.getTypeUtils().getArrayType(mirror(types, elements, clazz.getComponentType()));
+		} else {
+			return mirror(types, elements, clazz);
+		}
+
+	}
+
+	/**
+	 * Returns the element representing the requested parameter of the
+	 * {@code method} element.
+	 *
+	 * @param method        The {@link ExecutableElement} representing the method
+	 *                      whose specified parameter must be returned.
+	 * @param parameterName The name of the parameter whose element descriptor must
+	 *                      be returned.
+	 * @return The element representing the requested parameter of the
+	 *         {@code method} element.
+	 */
+	public static VariableElement parameter( ExecutableElement method, String parameterName ) {
+		return method.getParameters().stream()
+			.filter(parameter -> parameter.getSimpleName().contentEquals(parameterName))
+			.findFirst()
+			.orElse(null);
+	}
+
 	/**
 	 * Returns the first enclosing parent of the given {@code type}.
 	 *
@@ -314,9 +339,9 @@ public class ModelUtils {
 	 */
 	public static String signature( ExecutableElement method, boolean useParamNames ) {
 
-		StringBuilder builder = new StringBuilder();
+		StringBuilder builder = new StringBuilder(128);
 		Set<Modifier> modifiers = method.getModifiers();
-		Modifier modifier = getModifier(modifiers, Modifier.PUBLIC, Modifier.PROTECTED, Modifier.PRIVATE);
+		Modifier modifier = modifier(modifiers, Modifier.PUBLIC, Modifier.PROTECTED, Modifier.PRIVATE);
 
 		if ( modifier != null ) {
 			builder.append(modifier).append(' ');
@@ -437,6 +462,116 @@ public class ModelUtils {
 				);
 		}
 
+	}
+
+	/**
+	 * Returns a raw {@link AnnotationValue} from the given {@code mirror} for the
+	 * given {@code method} (or annotation parameter).
+	 *
+	 * @param environment The {@link ProcessingEnvironment} used to get the
+	 *                    elements with default values.
+	 * @param element     The annotated element.
+	 * @param mirror      The {@link AnnotationMirror} describing the annotation.
+	 * @param method      The method (or annotation parameter) name.
+	 * @return A raw {@link AnnotationValue} from the given {@code mirror} for
+	 *         the given {@code method} (or annotation parameter).
+	 * @throws AnnotationError If not value can be found.
+	 */
+	static AnnotationValue rawAnnotationValue( ProcessingEnvironment environment, Element element, AnnotationMirror mirror, String method ) {
+
+		for ( Map.Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : mirror.getElementValues().entrySet() ) {
+			if ( entry.getKey().getSimpleName().contentEquals(method) ) {
+				return entry.getValue();
+			}
+		}
+
+		for ( Map.Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : environment.getElementUtils().getElementValuesWithDefaults(mirror).entrySet() ) {
+			if ( entry.getKey().getSimpleName().contentEquals(method) ) {
+				return entry.getValue();
+			}
+		}
+
+		throw new AnnotationError(
+			element,
+			mirror,
+			MessageFormat.format(
+				"Annotation ''{0}'' is missing ''{1}'' method.",
+				( (QualifiedNameable) mirror.getAnnotationType().asElement() ).getQualifiedName(),
+				method
+			)
+		);
+
+	}
+
+	private static <T> TypeMirror mirror( Types types, Elements elements, Class<T> clazz ) {
+
+		TypeMirror mirror = null;
+
+		if ( clazz.isPrimitive() ) {
+			if ( Boolean.TYPE.equals(clazz) ) {
+				mirror = types.getPrimitiveType(TypeKind.BOOLEAN);
+			} else if ( Byte.TYPE.equals(clazz) ) {
+				mirror = types.getPrimitiveType(TypeKind.BYTE);
+			} else if ( Character.TYPE.equals(clazz) ) {
+				mirror = types.getPrimitiveType(TypeKind.CHAR);
+			} else if ( Double.TYPE.equals(clazz) ) {
+				mirror = types.getPrimitiveType(TypeKind.DOUBLE);
+			} else if ( Float.TYPE.equals(clazz) ) {
+				mirror = types.getPrimitiveType(TypeKind.FLOAT);
+			} else if ( Integer.TYPE.equals(clazz) ) {
+				mirror = types.getPrimitiveType(TypeKind.INT);
+			} else if ( Long.TYPE.equals(clazz) ) {
+				mirror = types.getPrimitiveType(TypeKind.LONG);
+			} else if ( Short.TYPE.equals(clazz) ) {
+				mirror = types.getPrimitiveType(TypeKind.SHORT);
+			}
+		} else {
+
+			TypeElement element = elements.getTypeElement(clazz.getCanonicalName());
+
+			mirror = ( element != null ) ? types.getDeclaredType(element) : null;
+
+		}
+
+		if ( mirror != null ) {
+			return mirror;
+		} else {
+			throw new AssertionError(
+				MessageFormat.format(
+					"Couldn't find a type mirror for class [{0}].",
+					clazz
+				)
+			);
+		}
+
+	}
+
+	/**
+	 * Returns the first {@link Modifier} in the given {@code modifiers} array
+	 * that is contained into the given {@link Set}.
+	 *
+	 * @param set       A {@link Set} of {@link Modifier}s. The method will
+	 *                  return {@code null} if none of the given {@code modifiers}
+	 *                  is contained in this set.
+	 * @param modifiers The array of {@link Modifier}s. The first of them found
+	 *                  in the given {@code set} will be returned.
+	 * @return The first of the {@code modifiers} found in the given {@code set}
+	 *         or {@code null}.
+	 */
+	private static Modifier modifier( Set<Modifier> set, Modifier... modifiers ) {
+
+		for ( Modifier modifier : modifiers ) {
+			if ( set.contains(modifier) ) {
+				return modifier;
+			}
+		}
+
+		return null;
+
+	}
+
+	private ModelUtils() {
+		//	Nothing to do.
 	}
 
 }
