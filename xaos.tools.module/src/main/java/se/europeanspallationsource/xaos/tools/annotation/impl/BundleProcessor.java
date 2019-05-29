@@ -17,6 +17,7 @@
 package se.europeanspallationsource.xaos.tools.annotation.impl;
 
 
+import java.text.MessageFormat;
 import java.util.Set;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
@@ -79,7 +80,10 @@ public class BundleProcessor extends AbstractAnnotationProcessor {
 		} else if ( element.getEnclosingElement().getKind() == CLASS || element.getEnclosingElement().getKind() == INTERFACE ) {
 			getMessager().printMessage(
 				ERROR,
-				"Inner class/interface cannot be be annotated with @Bundle.",
+				MessageFormat.format(
+					"Inner class/interface [{0}] cannot be be annotated with @Bundle.",
+					element.getSimpleName()
+				),
 				element
 			);
 			return;

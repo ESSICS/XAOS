@@ -13,5 +13,11 @@
 # limitations under the License.
 #
 # @author claudio.rosati@esss.se
+#
+# Note: Since Java 9 this file should not be necessary anymore thanks to the
+#       corresponding directive in the module-info file. Anyway, some IDEs and
+#       tools seems to being using the old "class-path" way of working, and for
+#       them this file is still necessary.
 
+se.europeanspallationsource.xaos.tools.annotation.impl.BundleProcessor
 se.europeanspallationsource.xaos.tools.annotation.impl.ServiceProviderProcessor

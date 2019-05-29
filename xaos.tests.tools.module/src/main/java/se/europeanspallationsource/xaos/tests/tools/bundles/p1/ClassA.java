@@ -14,22 +14,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package se.europeanspallationsource.xaos.tests.tools.bundles.p1;
+
 
 /**
  * @author claudio.rosati@esss.se
  */
-module xaos.tools {
+public class ClassA {
 
-	requires java.compiler;
-	requires java.logging;
+	private String fieldA1 = "";
+	private boolean fieldA2 = false;
 
-	exports se.europeanspallationsource.xaos.tools.annotation;
-	exports se.europeanspallationsource.xaos.tools.lang;
+	public void methodAa() {
 
-	uses javax.annotation.processing.Processor;
+	}
 
-	provides javax.annotation.processing.Processor
-		with se.europeanspallationsource.xaos.tools.annotation.impl.BundleProcessor,
-			 se.europeanspallationsource.xaos.tools.annotation.impl.ServiceProviderProcessor;
+	public void methodAb( int p1, boolean p2, String p3 ) {
+
+	}
+
+	public class ClassAA {
+
+		private String fieldAA1 = "";
+		private boolean fieldAA2 = false;
+
+		public void methodAAa() {
+
+		}
+
+		public void methodAAb( int p1, boolean p2, String p3 ) {
+
+		}
+
+	}
 
 }

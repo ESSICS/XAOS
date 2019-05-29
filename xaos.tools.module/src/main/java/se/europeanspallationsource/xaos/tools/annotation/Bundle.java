@@ -17,6 +17,14 @@
 package se.europeanspallationsource.xaos.tools.annotation;
 
 
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+
 /**
  * This annotation provides the way of changing the resource bundle name from
  * the default "Bundle.properties" to something else.
@@ -25,6 +33,9 @@ package se.europeanspallationsource.xaos.tools.annotation;
  *
  * @author claudio.rosati@esss.se
  */
+@Documented
+@Retention( RUNTIME )
+@Target( TYPE )
 public @interface Bundle {
 
 	/**

@@ -257,10 +257,11 @@ public class ServiceProviderProcessor extends AbstractAnnotationProcessor {
 				MessageFormat.format(
 					"Missing ''provides'' directive for {0} annotated service provider."
 				  + "\nAdd the following directives to the ''module-info.java'' class:"
-				  + "\n"
+				  + "\n------------------------------------------------------------------------"
 				  + "\nuses {1};"
 				  + "\nprovides {1}"
-				  + "\n    with {0};",
+				  + "\n    with {0};"
+				  + "\n------------------------------------------------------------------------",
 					binaryName(providerElement),
 					binaryName(serviceElement)
 				)

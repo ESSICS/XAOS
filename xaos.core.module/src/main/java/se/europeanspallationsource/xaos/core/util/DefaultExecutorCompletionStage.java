@@ -44,9 +44,9 @@ import java.util.function.Function;
  *
  * where {@code executor} is the executor this stage was created with.
  *
- * @author claudio.rosati@esss.se
  * @param <T> The type passed to the consumers of this {@link CompletionStage}
  *            methods.
+ * @author claudio.rosati@esss.se
  * @see <a href="https://github.com/TomasMikula/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.CompletionStageWithDefaultExecutor</a>
  */
 @SuppressWarnings( "ClassWithoutLogger" )

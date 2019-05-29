@@ -1438,7 +1438,7 @@ public class IconsUITest extends ApplicationTest {
 		//	No default provider, so null is the only result possible.
 		System.out.println("  Testing 'iconFor(Object)'...");
 
-		assertThat(CommonIcons.values().length).isEqualTo(21);
+		assertThat(CommonIcons.values().length).isEqualTo(23);
 
 		assertThat(Icons.iconFor(CHEVRON_DOWN, DEFAULT_SIZE))
 			.isNotNull()

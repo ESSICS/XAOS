@@ -14,22 +14,50 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package se.europeanspallationsource.xaos.tests.tools.bundles.p1;
+
+
+import se.europeanspallationsource.xaos.tools.annotation.Bundle;
+
 
 /**
  * @author claudio.rosati@esss.se
  */
-module xaos.tools {
+@Bundle( name = "Messages" )
+public class ClassB {
 
-	requires java.compiler;
-	requires java.logging;
+	private static String staticFieldB1 = "";
+	private boolean fieldB2 = false;
 
-	exports se.europeanspallationsource.xaos.tools.annotation;
-	exports se.europeanspallationsource.xaos.tools.lang;
+	public void methodBa() {
 
-	uses javax.annotation.processing.Processor;
+	}
 
-	provides javax.annotation.processing.Processor
-		with se.europeanspallationsource.xaos.tools.annotation.impl.BundleProcessor,
-			 se.europeanspallationsource.xaos.tools.annotation.impl.ServiceProviderProcessor;
+	public void methodBb( int p1, boolean p2, String p3 ) {
+
+	}
+
+	public static class ClassBB {
+
+		private String fieldBB1 = "";
+		private boolean fieldBB2 = false;
+
+		public void methodBBa() {
+
+		}
+
+		public void methodBBb( int p1, boolean p2, String p3 ) {
+
+		}
+
+	}
+
+	public interface InterfaceBA {
+
+		public void methodBAa();
+
+		public void methodBAb( int p1, boolean p2, String p3 );
+
+	}
 
 }
