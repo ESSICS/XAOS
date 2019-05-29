@@ -20,10 +20,10 @@
 
 	<properties>
 		<!-- Dependencies Versions -->
-		<classgraph.version>4.8.25</classgraph.version>
+		<classgraph.version>4.8.37</classgraph.version>
 		<commons-lang3.version>3.9</commons-lang3.version>
 		<commons-text.version>1.6</commons-text.version>
-		<ikonli.version>11.3.3</ikonli.version>
+		<ikonli.version>11.3.4</ikonli.version>
 		<javafx.version>12</javafx.version>
 		<testfx.version>4.0.15-alpha</testfx.version>
 		<xaos.version>${project.version}</xaos.version>
@@ -35,7 +35,7 @@
 			<plugin>
 				<groupId>com.github.ferstl</groupId>
 				<artifactId>depgraph-maven-plugin</artifactId>
-				<version>3.2.2</version>
+				<version>3.3.0</version>
 				<configuration>
 					<customStyleConfiguration>${project.basedir}/../doc/maven-dependencies.json</customStyleConfiguration>
 				</configuration>
@@ -43,7 +43,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.0</version>
+				<version>3.8.1</version>
 				<configuration>
 					<annotationProcessorPaths>
 						<path>

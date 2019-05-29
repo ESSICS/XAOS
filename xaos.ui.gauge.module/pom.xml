@@ -24,7 +24,7 @@
 			<plugin>
 				<groupId>com.github.ferstl</groupId>
 				<artifactId>depgraph-maven-plugin</artifactId>
-				<version>3.2.2</version>
+				<version>3.3.0</version>
 				<configuration>
 					<customStyleConfiguration>${project.basedir}/../doc/maven-dependencies.json</customStyleConfiguration>
 				</configuration>

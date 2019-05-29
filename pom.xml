@@ -76,7 +76,7 @@
 			<plugin>
 				<groupId>com.github.ferstl</groupId>
 				<artifactId>depgraph-maven-plugin</artifactId>
-				<version>3.2.2</version>
+				<version>3.3.0</version>
 				<configuration>
 					<createImage>true</createImage>
 					<customStyleConfiguration>${project.basedir}/doc/maven-dependencies.json</customStyleConfiguration>
@@ -114,7 +114,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.0</version>
+				<version>3.8.1</version>
 				<configuration>
 					<release>${java.release}</release>
 					<showDeprecation>true</showDeprecation>
@@ -183,7 +183,7 @@
 						<configuration>
 							<rules>
 								<requireMavenVersion>
-									<version>3.5.4</version>
+									<version>3.6.0</version>
 								</requireMavenVersion>
 							</rules>
 						</configuration>
@@ -193,7 +193,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>2.22.1</version>
+				<version>3.0.0-M3</version>
 				<configuration>
 					<argLine>
 						--illegal-access=permit
@@ -229,21 +229,21 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.0.1</version>
+				<version>3.1.0</version>
 				<configuration>
 					<additionalOptions>--javafx</additionalOptions>
 					<additionalJOptions>
 						<additionalJOption>-J-Djavafx.javadoc=true</additionalJOption>
 					</additionalJOptions>
-					<detectJavaApiLink>true</detectJavaApiLink>
+					<detectJavaApiLink>false</detectJavaApiLink>
 					<detectLinks>false</detectLinks>
 					<detectOfflineLinks>true</detectOfflineLinks>
 					<docfilessubdirs>true</docfilessubdirs>
 					<failOnError>false</failOnError>
 					<isOffline>false</isOffline>
 					<links>
-						<link>https://docs.oracle.com/en/java/javase/${java.release}/docs/api</link>
-						<link>https://openjfx.io/javadoc/${java.release}</link>
+						<link>https://docs.oracle.com/en/java/javase/${java.release}/docs/api/</link>
+						<link>https://openjfx.io/javadoc/${java.release}/</link>
 					</links>
 					<source>${java.release}</source>
 					<tags>
@@ -293,7 +293,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>3.0.1</version>
+				<version>3.1.0</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
@@ -362,6 +362,7 @@
 						<id>maven-plugins-version-check</id>
 						<goals>
 							<goal>display-dependency-updates</goal>
+							<goal>display-plugin-updates</goal>
 						</goals>
 					</execution>
 				</executions>
