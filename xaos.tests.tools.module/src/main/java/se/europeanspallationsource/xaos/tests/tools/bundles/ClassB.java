@@ -18,14 +18,19 @@ package se.europeanspallationsource.xaos.tests.tools.bundles;
 
 
 import se.europeanspallationsource.xaos.tools.annotation.Bundle;
+import se.europeanspallationsource.xaos.tools.annotation.BundleItem;
 
 
 /**
  * @author claudio.rosati@esss.se
  */
-@Bundle( name = "Messages" )
+@Bundle( "Messages" )
 public class ClassB {
 
+	@BundleItem(
+		key = "staticFieldB1.default",
+		message = "Some initial B1 value."
+	)
 	private static String staticFieldB1 = "";
 	private boolean fieldB2 = false;
 

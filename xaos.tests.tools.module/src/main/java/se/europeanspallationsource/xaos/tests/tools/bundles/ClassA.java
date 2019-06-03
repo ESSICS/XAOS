@@ -28,7 +28,7 @@ public class ClassA {
 
 	@BundleItem(
 		key = "fieldA1.default",
-		message = "Some initial value."
+		message = "Some initial A1 value."
 	)
 	private String fieldA1 = "";
 	private boolean fieldA2 = false;

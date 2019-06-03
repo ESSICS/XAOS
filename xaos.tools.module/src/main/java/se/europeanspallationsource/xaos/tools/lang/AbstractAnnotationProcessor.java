@@ -27,6 +27,8 @@ import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.util.Elements;
+import javax.lang.model.util.Types;
 
 
 /**
@@ -86,6 +88,13 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
 	}
 
 	/**
+	 * @return {@link ProcessingEnvironment#getElementUtils()}.
+	 */
+	protected Elements getElements() {
+		return processingEnv.getElementUtils();
+	}
+
+	/**
 	 * A clean way of accessing {@link #processingEnv}.
 	 *
 	 * @return {@link #processingEnv}.
@@ -100,6 +109,13 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
 	 */
 	protected Messager getMessager() {
 		return processingEnv.getMessager();
+	}
+
+	/**
+	 * @return {@link ProcessingEnvironment#getTypeUtils()}.
+	 */
+	protected Types getTypes() {
+		return processingEnv.getTypeUtils();
 	}
 
 }

@@ -18,10 +18,16 @@ package se.europeanspallationsource.xaos.tools.annotation.impl;
 
 
 import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
+import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
@@ -49,6 +55,14 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 @SuppressWarnings( "ClassWithoutLogger" )
 public class BundleProcessor extends AbstractAnnotationProcessor {
 
+	private static final String DEFAULT_BUNDLE_NAME = "Boundle";
+
+	/*
+	 * Keys are package names.
+	 * Values are maps whos keys are bundle names and values are bundle descriptors.
+	 */
+	private final Map<String, Map<String, BundleDescriptor>> descriptorsMap = new HashMap<>(32);
+
 	public BundleProcessor() {
 		//	public for ServiceLoader
 	}
@@ -65,6 +79,34 @@ public class BundleProcessor extends AbstractAnnotationProcessor {
 		} else {
 			return handleProcess(annotations, roundEnv);
 		}
+
+	}
+
+	private BundleDescriptor addBundleDescriptor( String packageName, String className, String bundleName ) {
+
+		Map<String, BundleDescriptor> descriptors = descriptorsMap.get(packageName);
+
+		if ( descriptors == null ) {
+
+			descriptors = new HashMap<>(8);
+
+			descriptorsMap.put(packageName, descriptors);
+
+		}
+
+		BundleDescriptor descriptor = descriptors.get(bundleName);
+
+		if ( descriptor == null ) {
+
+			descriptor = new BundleDescriptor(packageName, className, bundleName);
+
+			descriptors.put(bundleName, descriptor);
+
+		} else {
+			descriptor.addProperties(className);
+		}
+
+		return descriptor;
 
 	}
 
@@ -89,17 +131,70 @@ public class BundleProcessor extends AbstractAnnotationProcessor {
 			return;
 		}
 
-		PackageElement pckage = getEnvironment().getElementUtils().getPackageOf(element);
+		PackageElement packageElement = getElements().getPackageOf(element);
+		String packageName = packageElement.getQualifiedName().toString();
+		String className = element.getSimpleName().toString();
+		String bundleName = bundle.value();
 
+		addBundleDescriptor(packageName, className, bundleName);
 
-
-
-
-		//	TODO:CR To be implemented.
 	}
 
+	@SuppressWarnings( "AssignmentToMethodParameter" )
 	private void handleBundleItem( Element element, Class<?> annotation, BundleItem bundleItem ) {
-		//	TODO:CR To be implemented.
+
+		String className;
+
+		switch ( element.getKind() ) {
+			case CLASS:
+			case INTERFACE:
+				className = element.getSimpleName().toString();
+				break;
+			case FIELD:
+			case METHOD: {
+
+					Element elmnt = element;
+
+					while ( elmnt.getEnclosingElement().getKind() == CLASS
+						 || elmnt.getEnclosingElement().getKind() == INTERFACE ) {
+						elmnt = elmnt.getEnclosingElement();
+					}
+
+					className = elmnt.getSimpleName().toString();
+
+				}
+				break;
+			default:
+				getMessager().printMessage(
+					ERROR,
+					MessageFormat.format(
+						"@{0} is not applicable to a {1}.",
+						annotation.getSimpleName(),
+						element.getKind()
+					),
+					element
+				);
+				return;
+		}
+
+		String bundleName = DEFAULT_BUNDLE_NAME;
+		PackageElement packageElement = getElements().getPackageOf(element);
+		String packageName = packageElement.getQualifiedName().toString();
+		TypeElement typeElement = getElements().getTypeElement​(packageName + "." + className);
+		Optional<? extends AnnotationMirror> optionalMirror = getElements().getAllAnnotationMirrors(typeElement).stream()
+			.filter(am -> am.getAnnotationType().asElement().getSimpleName().contentEquals(Bundle.class.getSimpleName()))
+			.findFirst();
+
+		if ( optionalMirror.isPresent() ) {
+			bundleName = optionalMirror.get().getElementValues().entrySet().stream()
+				.filter(e -> e.getKey().getSimpleName().contentEquals("value()"))
+				.map(e -> e.getValue().toString())
+				.findFirst()
+				.orElse(DEFAULT_BUNDLE_NAME);
+		}
+
+		addBundleDescriptor(packageName, className, bundleName).addProperties(className, bundleItem);
+
 	}
 
 	private boolean handleProcess( Set<? extends TypeElement> annotations, RoundEnvironment roundEnvironment ) {
@@ -141,8 +236,122 @@ public class BundleProcessor extends AbstractAnnotationProcessor {
 	}
 
 	private boolean writeResourceBundles() {
+		
+		StringBuilder builder = new StringBuilder("----------------------------------------------------");
+
+		descriptorsMap.values().stream()
+			.flatMap(descriptorMap -> descriptorMap.values().stream())
+			.forEach(descriptor -> {
+
+				builder.append("\n  ")
+					.append(descriptor.packageName)
+					.append('.')
+					.append(descriptor.bundleName)
+					.append(".properties");
+
+				descriptor.itemsMap.entrySet().forEach(entry -> {
+
+					String className = entry.getKey();
+
+					entry.getValue().values().forEach(bundleItem -> {
+
+						if ( bundleItem.comment()... )
+
+						builder.append("\n    ")
+							.append(className)
+							.append('.')
+							.append(bundleItem.key())
+							.append('=')
+							.append(bundleItem.message());
+						builder.append("\n    ")
+							.append(className)
+							.append('.')
+							.append(bundleItem.key())
+							.append('=')
+							.append(bundleItem.message());
+
+
+
+
+					});
+
+
+
+				});
+
+
+
+
+			});
+
+
+
+		descriptorsMap.entrySet().forEach(descriptorsEntry -> {
+
+			builder.append("\n").append("  Package: ").append(descriptorsEntry.getKey());
+
+			descriptorsEntry.getValue().entrySet().forEach(descriptorEntry -> {
+
+				builder.append("\n").append("    Bundle: ").append(descriptorEntry.getKey());
+
+
+
+			});
+
+
+		});
+
+
+
+
+
+
+
+
 		//	TODO:CR To be implemented.
 		return true;
+	}
+
+	private class BundleDescriptor {
+
+		private final String bundleName;
+		/*
+		 * Keys are class names.
+		 * Values are maps whose keys are property keys, and values are bundle
+		 * items.
+		 */
+		private final SortedMap<String, SortedMap<String, BundleItem>> itemsMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+		private final String packageName;
+
+		BundleDescriptor ( String packageName, String className, String bundleName ) {
+
+			this.packageName = packageName;
+			this.bundleName = bundleName;
+
+			addProperties(className);
+
+		}
+
+		private SortedMap<String, BundleItem> addProperties ( String className ) {
+
+			SortedMap<String, BundleItem> items = itemsMap.get(className);
+
+			if ( items == null ) {
+
+				items = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+
+				itemsMap.put(className, items);
+
+			}
+
+			return items;
+
+		}
+
+		private void addProperties ( String className, BundleItem bundleItem ) {
+			addProperties(className).put(bundleItem.key(), bundleItem);
+		}
+
 	}
 
 }

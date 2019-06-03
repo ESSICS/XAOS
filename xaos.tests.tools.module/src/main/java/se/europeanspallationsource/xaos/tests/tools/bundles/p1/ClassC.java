@@ -23,7 +23,7 @@ import se.europeanspallationsource.xaos.tools.annotation.Bundle;
 /**
  * @author claudio.rosati@esss.se
  */
-@Bundle(name = "Messages")
+@Bundle("Messages")
 public class ClassC {
 
 	public void methodCa() {
