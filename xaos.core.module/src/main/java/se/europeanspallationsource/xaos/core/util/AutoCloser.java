@@ -46,10 +46,9 @@ import java.util.function.Supplier;
  * {@link AutoCloser} simplify things without requiring to modify
  * {@code NotAutoclosable} to implement {@link AutoCloseable}:</p>
  * <pre>
- *   try { var nacs = AutoCloser.of(new NotAutoclosable()).by(sp -> sp.get().dispose()) ) {
+ *   try { var nacs = AutoCloser.of(new NotAutoclosable()).by(sp -&gt; sp.get().dispose()) ) {
  *     ...use nacs.get().xxx methods...
- *	 }
- * </pre>
+ *   }</pre>
  *
  * @author Peter Verhas
  * @author claudio.rosati@esss.se
