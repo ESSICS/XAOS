@@ -46,7 +46,7 @@ import java.util.function.Supplier;
  * {@link AutoCloser} simplify things without requiring to modify
  * {@code NotAutoclosable} to implement {@link AutoCloseable}:</p>
  * <pre>
- *   try { var nacs = AutoCloser.get(new NotAutoclosable()).using(sp -> sp.get().dispose()) ) {
+ *   try { var nacs = AutoCloser.of(new NotAutoclosable()).by(sp -> sp.get().dispose()) ) {
  *     ...use nacs.get().xxx methods...
  *	 }
  * </pre>
@@ -60,12 +60,14 @@ import java.util.function.Supplier;
 public class AutoCloser<T> {
 
 	/**
-	 * Returns an instance of this class wrapping 
-	 * @param <T>
-	 * @param resource
-	 * @return
+	 * Returns an instance of this class, wrapping the given {@code resource},
+	 * to be used in an auto-closable context.
+	 *
+	 * @param <T>      The type of the wrapped {@code resource}.
+	 * @param resource The non-{@link AutoCloseable} resource to be wrapped.
+	 * @return An instance of this class to be used an auto-closable context.
 	 */
-	public static <T> AutoCloser<T> get( T resource ) {
+	public static <T> AutoCloser<T> of( T resource ) {
 		return new AutoCloser<>(resource);
 	}
 
@@ -75,7 +77,22 @@ public class AutoCloser<T> {
 		this.resource = resource;
 	}
 
-	public AutoClosableSupplier using( Consumer<Supplier<T>> closer ) {
+	/**
+	 * Provides this wrapping class the mean to "close" the wrapped resource in
+	 * an auto-closable context.
+	 *
+	 * @param closer A consumer whose {@link Consumer#accept(Object)} method
+	 *               will be called in an auto-closable context to close the
+	 *               wrapped resource. The parameter of the {@code accept}
+	 *               method will be an instance of {@link AutoClosableSupplier},
+	 *               a supplier whose {@link Supplier#get()} method will return
+	 *               the wrapped resource.
+	 * @return An {@link AutoClosableSupplier} instance that will be passed
+	 *         as parameter to the {@code closer}'s {@code accept} method when
+	 *         the wrapped resource needs to be closed in an auto-closable
+	 *         context.
+	 */
+	public AutoClosableSupplier by( Consumer<Supplier<T>> closer ) {
 		return new AutoClosableSupplier(closer);
 	}
 
@@ -93,6 +110,9 @@ public class AutoCloser<T> {
 			closer.accept(this);
 		}
 
+		/**
+		 * @return The wrapped resource.
+		 */
 		@Override
 		public T get() {
 			return resource;
