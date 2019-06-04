@@ -46,6 +46,6 @@ public @interface Bundle {
 	 *
 	 * @return The resource bundle name.
 	 */
-	String value();
+	String name();
 
 }

@@ -20,6 +20,7 @@ package se.europeanspallationsource.xaos.tools.lang;
 import java.lang.annotation.Annotation;
 import java.util.Map;
 import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.AnnotationMirror;
@@ -101,6 +102,13 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
 	 */
 	protected ProcessingEnvironment getEnvironment() {
 		return processingEnv;
+	}
+
+	/**
+	 * @return {@link ProcessingEnvironment#getFiler()}.
+	 */
+	protected Filer getFiler() {
+		return processingEnv.getFiler();
 	}
 
 	/**

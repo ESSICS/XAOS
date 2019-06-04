@@ -16,11 +16,19 @@
  */
 package se.europeanspallationsource.xaos.tests.tools.bundles;
 
+
+import se.europeanspallationsource.xaos.tools.annotation.BundleItem;
+
+
 /**
  * @author claudio.rosati@esss.se
  */
 public class ClassC {
 
+	@BundleItem(
+		key = "staticMethodCa.message",
+		message = "Some Ca message."
+	)
 	public void methodCa() {
 
 	}

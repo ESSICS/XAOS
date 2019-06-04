@@ -1,4 +1,6 @@
 digraph "summary" {
+  "org.apache.commons.lang3"                         -> "java.base (java.base)";
   "xaos.tools"                                       -> "java.base (java.base)";
   "xaos.tools"                                       -> "java.compiler (java.compiler)";
+  "xaos.tools"                                       -> "org.apache.commons.lang3";
 }

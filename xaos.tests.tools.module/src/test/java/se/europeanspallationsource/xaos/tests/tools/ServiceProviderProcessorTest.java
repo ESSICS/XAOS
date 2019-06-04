@@ -42,10 +42,6 @@ import static org.junit.Assert.assertEquals;
 @SuppressWarnings( { "ClassWithoutLogger", "UseOfSystemOutOrSystemErr" } )
 public class ServiceProviderProcessorTest {
 
-	@Test
-	public void test() {
-	}
-
 	@BeforeClass
 	public static void setUpClass() {
 		System.out.println("---- ServiceProviderProcessorTest ------------------------------");

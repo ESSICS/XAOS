@@ -17,6 +17,8 @@
 package se.europeanspallationsource.xaos.tools.annotation.impl;
 
 
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +33,8 @@ import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
+import javax.tools.FileObject;
+import org.apache.commons.lang3.StringUtils;
 import se.europeanspallationsource.xaos.tools.annotation.Bundle;
 import se.europeanspallationsource.xaos.tools.annotation.BundleItem;
 import se.europeanspallationsource.xaos.tools.annotation.BundleItems;
@@ -40,6 +44,7 @@ import static javax.lang.model.SourceVersion.RELEASE_12;
 import static javax.lang.model.element.ElementKind.CLASS;
 import static javax.lang.model.element.ElementKind.INTERFACE;
 import static javax.tools.Diagnostic.Kind.ERROR;
+import static javax.tools.StandardLocation.CLASS_OUTPUT;
 
 
 /**
@@ -55,7 +60,7 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 @SuppressWarnings( "ClassWithoutLogger" )
 public class BundleProcessor extends AbstractAnnotationProcessor {
 
-	private static final String DEFAULT_BUNDLE_NAME = "Boundle";
+	public static final String DEFAULT_BUNDLE_NAME = "Bundle";
 
 	/*
 	 * Keys are package names.
@@ -110,6 +115,36 @@ public class BundleProcessor extends AbstractAnnotationProcessor {
 
 	}
 
+	/**
+	 * Fixes up comments adding the '#' character if needed.
+	 *
+	 * @param comment The comment to be fixed up.
+	 * @return The fixed up comment splitted in lines.
+	 */
+	private String[] fixup( String comment ) {
+
+		String prefix = "";
+
+		if ( !comment.startsWith("#") ) {
+
+			prefix = "#";
+
+			if ( !comment.startsWith(" ") ) {
+				prefix += " ";
+			}
+
+		}
+
+		String[] lines = comment.split("\n");
+
+		for ( int i = 0; i < lines.length; i++ ) {
+			lines[i] = prefix + lines[i];
+		}
+
+		return lines;
+
+	}
+
 	private void handleBundle( Element element, Bundle bundle ) {
 
 		if ( element.getKind() != CLASS && element.getKind() != INTERFACE ) {
@@ -134,7 +169,7 @@ public class BundleProcessor extends AbstractAnnotationProcessor {
 		PackageElement packageElement = getElements().getPackageOf(element);
 		String packageName = packageElement.getQualifiedName().toString();
 		String className = element.getSimpleName().toString();
-		String bundleName = bundle.value();
+		String bundleName = bundle.name();
 
 		addBundleDescriptor(packageName, className, bundleName);
 
@@ -177,9 +212,12 @@ public class BundleProcessor extends AbstractAnnotationProcessor {
 				return;
 		}
 
-		String bundleName = DEFAULT_BUNDLE_NAME;
 		PackageElement packageElement = getElements().getPackageOf(element);
 		String packageName = packageElement.getQualifiedName().toString();
+		String bundleName = DEFAULT_BUNDLE_NAME;
+
+		//	If the class/interfate containing the @BundleItem annotation is
+		//	annotated with @Bundle, get the bundle name from this annotation.
 		TypeElement typeElement = getElements().getTypeElement​(packageName + "." + className);
 		Optional<? extends AnnotationMirror> optionalMirror = getElements().getAllAnnotationMirrors(typeElement).stream()
 			.filter(am -> am.getAnnotationType().asElement().getSimpleName().contentEquals(Bundle.class.getSimpleName()))
@@ -187,8 +225,8 @@ public class BundleProcessor extends AbstractAnnotationProcessor {
 
 		if ( optionalMirror.isPresent() ) {
 			bundleName = optionalMirror.get().getElementValues().entrySet().stream()
-				.filter(e -> e.getKey().getSimpleName().contentEquals("value()"))
-				.map(e -> e.getValue().toString())
+				.filter(e -> e.getKey().getSimpleName().contentEquals("name"))
+				.map(e -> e.getValue().getValue().toString())
 				.findFirst()
 				.orElse(DEFAULT_BUNDLE_NAME);
 		}
@@ -237,91 +275,107 @@ public class BundleProcessor extends AbstractAnnotationProcessor {
 
 	private boolean writeResourceBundles() {
 		
-		StringBuilder builder = new StringBuilder("----------------------------------------------------");
-
 		descriptorsMap.values().stream()
 			.flatMap(descriptorMap -> descriptorMap.values().stream())
 			.forEach(descriptor -> {
+				try {
 
-				builder.append("\n  ")
-					.append(descriptor.packageName)
-					.append('.')
-					.append(descriptor.bundleName)
-					.append(".properties");
+					FileObject resource = getFiler().createResource(
+						CLASS_OUTPUT,
+						descriptor.packageName,
+						descriptor.bundleName + ".properties"
+					);
 
-				descriptor.itemsMap.entrySet().forEach(entry -> {
+					try ( BufferedWriter writer = new BufferedWriter(resource.openWriter()) ) {
+						descriptor.itemsMap.entrySet().forEach(entry -> {
 
-					String className = entry.getKey();
+							String className = entry.getKey();
 
-					entry.getValue().values().forEach(bundleItem -> {
+							entry.getValue().values().forEach(bundleItem -> {
 
-						if ( bundleItem.comment()... )
+								try {
 
-						builder.append("\n    ")
-							.append(className)
-							.append('.')
-							.append(bundleItem.key())
-							.append('=')
-							.append(bundleItem.message());
-						builder.append("\n    ")
-							.append(className)
-							.append('.')
-							.append(bundleItem.key())
-							.append('=')
-							.append(bundleItem.message());
+									if ( StringUtils.isNotBlank(bundleItem.comment()) ) {
 
+										String[] commentLines = fixup(bundleItem.comment());
 
+										for ( String line : commentLines )  {
+											writer.write(line);
+											writer.newLine();
+										}
 
+									}
 
-					});
+									writer.write(className);
+									writer.write(".");
+									writer.write(bundleItem.key());
+									writer.write("=");
+									writer.write(bundleItem.message());
+									writer.newLine();
 
+								} catch ( IOException ex ) {
+									getMessager().printMessage(
+										ERROR,
+										MessageFormat.format(
+											"Unable to write a bundle item [bundle: {0}.{1}.properties, key: {2}, message: {3}, {4}: {5}].",
+											descriptor.packageName,
+											descriptor.bundleName,
+											bundleItem.key(),
+											bundleItem.message(),
+											ex.getClass().getName(),
+											ex.getMessage()
+										)
+									);
+								}
 
+							});
 
-				});
+							try {
+								writer.newLine();
+							} catch ( IOException ex ) {
+								getMessager().printMessage(
+									ERROR,
+									MessageFormat.format(
+										"Unable to write new line [bundle: {0}.{1}.properties, {2}: {3}].",
+										descriptor.packageName,
+										descriptor.bundleName,
+										ex.getClass().getName(),
+										ex.getMessage()
+									)
+								);
+							}
 
+						});
+					}
 
-
-
+				} catch ( IOException ex ) {
+					getMessager().printMessage(
+						ERROR,
+						MessageFormat.format(
+							"Unable to create resource {0}.{1}.properties [{2}: {3}].",
+							descriptor.packageName,
+							descriptor.bundleName,
+							ex.getClass().getName(),
+							ex.getMessage()
+						)
+					);
+				}
 			});
 
-
-
-		descriptorsMap.entrySet().forEach(descriptorsEntry -> {
-
-			builder.append("\n").append("  Package: ").append(descriptorsEntry.getKey());
-
-			descriptorsEntry.getValue().entrySet().forEach(descriptorEntry -> {
-
-				builder.append("\n").append("    Bundle: ").append(descriptorEntry.getKey());
-
-
-
-			});
-
-
-		});
-
-
-
-
-
-
-
-
-		//	TODO:CR To be implemented.
 		return true;
+
 	}
 
 	private class BundleDescriptor {
 
-		private final String bundleName;
+		final String bundleName;
 		/*
 		 * Keys are class names.
 		 * Values are maps whose keys are property keys, and values are bundle
 		 * items.
 		 */
-		private final SortedMap<String, SortedMap<String, BundleItem>> itemsMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-		private final String packageName;
+		final SortedMap<String, SortedMap<String, BundleItem>> itemsMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+		final String packageName;
 
 		BundleDescriptor ( String packageName, String className, String bundleName ) {
 
@@ -332,7 +386,7 @@ public class BundleProcessor extends AbstractAnnotationProcessor {
 
 		}
 
-		private SortedMap<String, BundleItem> addProperties ( String className ) {
+		final SortedMap<String, BundleItem> addProperties ( String className ) {
 
 			SortedMap<String, BundleItem> items = itemsMap.get(className);
 
@@ -348,7 +402,7 @@ public class BundleProcessor extends AbstractAnnotationProcessor {
 
 		}
 
-		private void addProperties ( String className, BundleItem bundleItem ) {
+		final void addProperties ( String className, BundleItem bundleItem ) {
 			addProperties(className).put(bundleItem.key(), bundleItem);
 		}
 

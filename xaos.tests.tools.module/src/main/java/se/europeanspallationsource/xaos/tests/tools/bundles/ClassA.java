@@ -36,10 +36,10 @@ public class ClassA {
 	@BundleItems({
 		@BundleItem(key="methodAa.1", message="First message of method Aa."),
 		@BundleItem(
-			key = "methodAa.1",
-			comment = "Message thrown when a connection attempt falied."
-					+ "{0} Value of field A1.\n"
-					+ "{1} Value of field A2.",
+			key = "methodAa.2",
+			comment = "Message thrown when a connection attempt falied.\n"
+					+ "  {0} Value of field A1.\n"
+					+ "  {1} Value of field A2.",
 			message = "fieldA1: {0}, fieldA2: {1}"
 		)
 	})
@@ -56,10 +56,12 @@ public class ClassA {
 		private String fieldAA1 = "";
 		private boolean fieldAA2 = false;
 
+		@BundleItem(key="methodAAa", message="First message of method AAa.")
 		public void methodAAa() {
 
 		}
 
+		@BundleItem(key="methodAAb", message="First message of method AAb.")
 		public void methodAAb( int p1, boolean p2, String p3 ) {
 
 		}

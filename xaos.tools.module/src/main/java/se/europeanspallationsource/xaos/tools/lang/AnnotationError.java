@@ -45,24 +45,6 @@ public class AnnotationError extends Error {
 		this.element = element;
 	}
 
-	public <T> AnnotationError( Element element, Class<T> annotation, String message ) {
-		this(element, ModelUtils.annotationMirror(element, annotation), message);
-	}
-
-	public <T> AnnotationError( ProcessingEnvironment environment, Element element, Class<T> annotation, String method, String message ) {
-		this(
-			element,
-			ModelUtils.annotationMirror(element, annotation),
-			ModelUtils.rawAnnotationValue(
-				environment,
-				element,
-				ModelUtils.annotationMirror(element, annotation),
-				method
-			),
-			message
-		);
-	}
-
 	public AnnotationError( Element element, AnnotationMirror mirror, String message ) {
 		this(element, message);
 		this.mirror = mirror;

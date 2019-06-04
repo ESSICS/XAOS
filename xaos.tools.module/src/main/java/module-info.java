@@ -20,8 +20,13 @@
  */
 module xaos.tools {
 
+	//	The following are "automatic modules", whose name is derived from the
+	//	JAR name.
+	requires cache2k.api;
+
 	requires java.compiler;
 	requires java.logging;
+	requires org.apache.commons.lang3;
 
 	exports se.europeanspallationsource.xaos.tools.annotation;
 	exports se.europeanspallationsource.xaos.tools.lang;

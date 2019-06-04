@@ -17,9 +17,13 @@
 package se.europeanspallationsource.xaos.tests.tools.bundles.p1;
 
 
+import se.europeanspallationsource.xaos.tools.annotation.Bundle;
+
+
 /**
  * @author claudio.rosati@esss.se
  */
+@Bundle( name = "LocalizedMessages" )
 public class ClassA {
 
 	private String fieldA1 = "";

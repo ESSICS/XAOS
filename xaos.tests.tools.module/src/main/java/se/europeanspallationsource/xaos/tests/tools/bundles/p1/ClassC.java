@@ -18,18 +18,27 @@ package se.europeanspallationsource.xaos.tests.tools.bundles.p1;
 
 
 import se.europeanspallationsource.xaos.tools.annotation.Bundle;
+import se.europeanspallationsource.xaos.tools.annotation.BundleItem;
 
 
 /**
  * @author claudio.rosati@esss.se
  */
-@Bundle("Messages")
+@Bundle( name = "Messages" )
 public class ClassC {
 
 	public void methodCa() {
 
 	}
 
+	@BundleItem(
+		key = "methodCb.message",
+		comment = "Message thrown when a I/O attempt falied.\n"
+				+ "  {0} Value of parameter p1.\n"
+				+ "  {1} Value of parameter p2.\n"
+				+ "  {2} Value of parameter p3.",
+		message = "Some Cb message [{0}, {1}, {2}]."
+	)
 	public void methodCb( int p1, boolean p2, String p3 ) {
 
 	}

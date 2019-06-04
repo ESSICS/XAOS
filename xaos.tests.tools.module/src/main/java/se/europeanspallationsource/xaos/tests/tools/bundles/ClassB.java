@@ -24,12 +24,12 @@ import se.europeanspallationsource.xaos.tools.annotation.BundleItem;
 /**
  * @author claudio.rosati@esss.se
  */
-@Bundle( "Messages" )
+@Bundle( name = "Messages" )
 public class ClassB {
 
 	@BundleItem(
-		key = "staticFieldB1.default",
-		message = "Some initial B1 value."
+		 key = "staticFieldB1.default",
+		 message = "Some initial B1 value."
 	)
 	private static String staticFieldB1 = "";
 	private boolean fieldB2 = false;
@@ -67,6 +67,7 @@ public class ClassB {
 		//@Bundle( name = "Messages3" )
 		public void methodBAa();
 
+		@BundleItem(key="methodBAb", message="First message of method BAb [{0}].")
 		public void methodBAb( int p1, boolean p2, String p3 );
 
 	}
