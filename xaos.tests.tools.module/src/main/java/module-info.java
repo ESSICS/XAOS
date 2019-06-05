@@ -18,7 +18,7 @@
 /**
  * @author claudio.rosati@esss.se
  */
-module xaos.tests {
+module xaos.tests.tools {
 
 	requires xaos.tools;
 
