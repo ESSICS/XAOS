@@ -39,6 +39,7 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
  * resource bundle file.</p>
  *
  * @author claudio.rosati@esss.se
+ * @see Bundles
  */
 @Documented
 @Repeatable( BundleItems.class )

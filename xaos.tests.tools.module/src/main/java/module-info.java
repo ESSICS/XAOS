@@ -39,6 +39,8 @@ module xaos.tests {
 			 se.europeanspallationsource.xaos.tests.tools.services.OrderedImpl3,
 			 se.europeanspallationsource.xaos.tests.tools.services.OrderedImpl4;
 
+	opens se.europeanspallationsource.xaos.tests.tools.bundles to xaos.tools;
+	opens se.europeanspallationsource.xaos.tests.tools.bundles.p1 to xaos.tools;
 	opens se.europeanspallationsource.xaos.tests.tools.services to xaos.tools;
 
 }

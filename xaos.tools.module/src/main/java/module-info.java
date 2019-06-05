@@ -20,10 +20,7 @@
  */
 module xaos.tools {
 
-	//	The following are "automatic modules", whose name is derived from the
-	//	JAR name.
-	requires cache2k.api;
-
+	requires com.github.benmanes.caffeine;
 	requires java.compiler;
 	requires java.logging;
 	requires org.apache.commons.lang3;

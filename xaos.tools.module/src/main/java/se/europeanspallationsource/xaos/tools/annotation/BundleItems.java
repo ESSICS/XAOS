@@ -32,6 +32,7 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
  *
  * @author claudio.rosati@esss.se
  * @see BundleItem
+ * @see Bundles
  */
 @Documented
 @Retention( SOURCE )

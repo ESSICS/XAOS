@@ -32,6 +32,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * <b>Note:</b> This annotation cannot be applied to inner classes/interface.</p>
  *
  * @author claudio.rosati@esss.se
+ * @see Bundles
  */
 @Documented
 @Retention( RUNTIME )

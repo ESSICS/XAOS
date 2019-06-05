@@ -23,6 +23,10 @@ import java.util.ResourceBundle;
 import org.assertj.core.api.Fail;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import se.europeanspallationsource.xaos.tests.tools.bundles.ClassA;
+import se.europeanspallationsource.xaos.tests.tools.bundles.ClassB;
+import se.europeanspallationsource.xaos.tests.tools.bundles.ClassC;
+import se.europeanspallationsource.xaos.tools.annotation.Bundles;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -68,6 +72,25 @@ public class BundleProcessorTest {
 
 		checkItem(bundle, "ClassB.staticFieldB1.default", "Some initial static B1 value.");
 		checkItem(bundle, "ClassC.methodCb.message", "Some Cb message [{0}, {1}, {2}].");
+
+	}
+
+	@Test
+	public void testMessageRetrieval() {
+
+		System.out.println("  Message Retrieval");
+
+		assertThat(Bundles.get(ClassA.class, "fieldA1.default")).isEqualTo("Some initial A1 value.");
+		assertThat(Bundles.get(ClassA.class, "methodAa.1")).isEqualTo("First message of method Aa.");
+		assertThat(Bundles.get(ClassA.class, "methodAa.2", 123, "blabla")).isEqualTo("fieldA1: 123, fieldA2: blabla");
+		assertThat(Bundles.get(ClassA.class, "methodAAa")).isEqualTo("First message of method AAa.");
+		assertThat(Bundles.get(ClassA.class, "methodAAb")).isEqualTo("First message of method AAb.");
+		assertThat(Bundles.get(ClassB.class, "staticFieldB1.default")).isEqualTo("Some initial B1 value.");
+		assertThat(Bundles.get(ClassB.class, "methodBAb", 342)).isEqualTo("First message of method BAb [342].");
+		assertThat(Bundles.get(ClassC.class, "staticMethodCa.message")).isEqualTo("Some Ca message.");
+
+		assertThat(Bundles.get(se.europeanspallationsource.xaos.tests.tools.bundles.p1.ClassB.class, "staticFieldB1.default")).isEqualTo("Some initial static B1 value.");
+		assertThat(Bundles.get(se.europeanspallationsource.xaos.tests.tools.bundles.p1.ClassC.class, "methodCb.message", 123, 'A', "abc")).isEqualTo("Some Cb message [123, A, abc].");
 
 	}
 

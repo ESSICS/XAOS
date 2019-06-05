@@ -28,9 +28,9 @@ import java.util.stream.Stream;
  * Provides few more methods to {@link ServiceLoader}.
  * <p>
  * <b>Note:</b> when using {@link ServiceLoaderUtilities} the service provider
- * interface type must be listed in the {@code module-info} class inside a
- * <b>uses</b> statement.
- * </p>
+ * interface type's package must be opened to the {@code xaos.tools} module, i.e.
+ * it must be included into an <b>opens</b> statement in the {@code module-info}
+ * class.</p>
  *
  * @author claudio.rosati@esss.se
  */

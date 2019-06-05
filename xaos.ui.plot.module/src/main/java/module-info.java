@@ -20,8 +20,8 @@
  */
 module xaos.ui.plot {
 
-	//	The following are "automatic modules", whose name is derived from the
-	//	JAR name.
+	//	The following are "filename-based automodules", whose name is derived
+	//  from the JAR name.
 	requires commons.math3;
 	
 	requires java.logging;

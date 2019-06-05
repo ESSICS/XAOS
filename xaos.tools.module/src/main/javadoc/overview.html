@@ -83,6 +83,41 @@ limitations under the License.
 			{@code module-info} class inside a <b>uses</b> statement.
 		</p>
 
+		<h3>Bundle Annotations</h3>
+
+		<p>
+			The {@link se.europeanspallationsource.xaos.tools.annotation.Bundle Bundle},
+			{@link se.europeanspallationsource.xaos.tools.annotation.BundleItem BundleItem},
+			{@link se.europeanspallationsource.xaos.tools.annotation.BundleItems BundleItems}
+			annotations and the {@link se.europeanspallationsource.xaos.tools.annotation.Bundles Bundles}
+			class will simplify dealing with resource bundles allowing to define
+			the default bundle entries close to the code that uses them.
+		</p>
+
+<pre>
+  &#64;Bundle( name = "Messages" )
+  public class SomeClass {
+
+    &#64;BundleItem(
+      key = "exception.message",
+      comment = "Message used in the thrown illegal state exception.\n"
+              + "  {0} Message from the original exception.",
+      message = "Operation not permitted [original message: {0}]."
+    )
+    public void doSomething() {
+      try {
+        ...
+      } catch ( Exception ex ) {
+        throw new IllegalStateException(
+          Bundles.get(getClass(), "exception.message", ex.getMessage()),
+          ex
+        );
+      }
+    }
+
+  }
+</pre>
+
 		<h3>Java Language Tools</h3>
 
 		<p>
@@ -100,6 +135,11 @@ limitations under the License.
 <pre>
   --add-opens module/package=xaos.tools
 </pre>
+
+		<p>
+			The {@link se.europeanspallationsource.xaos.tools.lang.AbstractAnnotationProcessor AbstractAnnotationProcessor}
+			class provides a starting point to implement annotation processors.
+		</p>
 
     </body>
 

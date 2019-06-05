@@ -36,7 +36,39 @@ must be listed in the _module-info_ class inside a `uses` statement. Moreover a
 provider for the parameter class.
 
 **Note:** when using _ServiceLoaderUtilities_ the service provider interface
-type must be listed in the _module-info_ class inside a `uses` statement.
+type must be listed in the _module-info_ class inside a `opens ... to xaos.tools;`
+statement.
+
+
+## Bundle Annotations
+
+The _@Bundle_, _@BundleItem_, _@BundleItems_ annotations and the _Bundles_ 
+class will simplify dealing with resource bundles allowing to define the default
+bundle entries close to the code that uses them.
+
+```java
+@Bundle( name = "Messages" )
+public class SomeClass {
+
+  @BundleItem(
+    key = "exception.message",
+    comment = "Message used in the thrown illegal state exception.\n"
+            + "  {0} Message from the original exception.",
+    message = "Operation not permitted [original message: {0}]."
+  )
+  public void doSomething() {
+    try {
+      ...
+    } catch ( Exception ex ) {
+      throw new IllegalStateException(
+        Bundles.get(getClass(), "exception.message", ex.getMessage()),
+        ex
+      );
+    }
+  }
+
+}
+```
 
 
 ## Java Language Tools
@@ -52,7 +84,7 @@ following flag being added to the command line launching the application:
   --add-opens module/package=xaos.tools
 ```
 
-The _ModelUtils_ class provides few methods to simplify the creation of
+The _AbstractAnnotationProcessor_ class provides a starting point to implement
 annotation processors.
 
 

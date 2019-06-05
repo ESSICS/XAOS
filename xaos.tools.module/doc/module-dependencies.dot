@@ -1,5 +1,11 @@
 digraph "summary" {
   "org.apache.commons.lang3"                         -> "java.base (java.base)";
+  "error.prone.annotations"                          -> "java.base (java.base)";
+  "com.github.benmanes.caffeine"                     -> "JDK removed internal API (jdk8internals)";
+  "com.github.benmanes.caffeine"                     -> "error.prone.annotations";
+  "com.github.benmanes.caffeine"                     -> "java.base (java.base)";
+  "com.github.benmanes.caffeine"                     -> "java.logging (java.logging)";
+  "xaos.tools"                                       -> "com.github.benmanes.caffeine";
   "xaos.tools"                                       -> "java.base (java.base)";
   "xaos.tools"                                       -> "java.compiler (java.compiler)";
   "xaos.tools"                                       -> "org.apache.commons.lang3";
