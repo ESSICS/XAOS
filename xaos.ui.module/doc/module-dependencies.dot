@@ -17,6 +17,8 @@ digraph "summary" {
   "org.kordamp.ikonli.javafx"                        -> "javafx.graphics";
   "org.kordamp.ikonli.javafx"                        -> "org.kordamp.iconli.core";
   "xaos.tools"                                       -> "java.base (java.base)";
+  "io.reactivex.rxjava2"                             -> "java.base (java.base)";
+  "io.reactivex.rxjava2"                             -> "org.reactivestreams";
   "org.apache.commons.lang3"                         -> "java.base (java.base)";
   "org.apache.commons.text"                          -> "java.base (java.base)";
   "javafx.fxml"                                      -> "java.base (java.base)";
@@ -39,8 +41,6 @@ digraph "summary" {
   "xaos.ui"                                          -> "org.kordamp.ikonli.javafx";
   "xaos.ui"                                          -> "xaos.core";
   "xaos.ui"                                          -> "xaos.tools";
-  "io.reactivex.rxjava2"                             -> "java.base (java.base)";
-  "io.reactivex.rxjava2"                             -> "org.reactivestreams";
   "org.kordamp.iconli.core"                          -> "java.base (java.base)";
   "org.kordamp.ikonli.fontawesome"                   -> "java.base (java.base)";
   "org.kordamp.ikonli.fontawesome"                   -> "org.kordamp.iconli.core";

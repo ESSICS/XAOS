@@ -153,6 +153,11 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>xaos.tools</artifactId>
+            <version>${xaos.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>xaos.ui</artifactId>
             <version>${xaos.version}</version>
         </dependency>

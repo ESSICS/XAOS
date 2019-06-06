@@ -50,7 +50,7 @@ public class ServiceProviderProcessorTest {
 	@Test
 	public void testBasicUsage() {
 
-		System.out.println("  Basic Usage");
+		System.out.println("  Basic Usage...");
 
 		assertEquals(
 			Collections.singletonList(BasicUsageImplementation.class),
@@ -62,7 +62,7 @@ public class ServiceProviderProcessorTest {
 	@Test
     public void testMultipleRegistrations() throws Exception {
 
-		System.out.println("  Multiple Registrations Usage");
+		System.out.println("  Multiple Registrations Usage...");
 
         assertEquals(
 			Collections.singletonList(MultipleRegistrationsImpl.class),
@@ -79,7 +79,7 @@ public class ServiceProviderProcessorTest {
 	@SuppressWarnings("NestedAssignment")
 	public void testOrder() throws Exception {
 
-		System.out.println("  Order Usage");
+		System.out.println("  Order Usage...");
 
 		assertEquals(
 			Arrays.<Class<?>>asList(OrderedImpl3.class, OrderedImpl2.class, OrderedImpl1.class, OrderedImpl4.class),

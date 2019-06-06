@@ -34,6 +34,7 @@ module xaos.ui.plot {
 	requires org.apache.commons.lang3;
 	requires transitive org.controlsfx.controls;
 	requires transitive xaos.core;
+	requires transitive xaos.tools;
 	requires transitive xaos.ui;
 
 	exports se.europeanspallationsource.xaos.ui.plot;
@@ -41,6 +42,7 @@ module xaos.ui.plot {
 	exports se.europeanspallationsource.xaos.ui.plot.plugins;
 	exports se.europeanspallationsource.xaos.ui.plot.util;
 
+	opens se.europeanspallationsource.xaos.ui.plot to xaos.tools;
 	opens icons.properties to xaos.ui;
 
 }

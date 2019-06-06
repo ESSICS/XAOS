@@ -17,7 +17,6 @@
 package se.europeanspallationsource.xaos.ui.plot;
 
 
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
@@ -25,15 +24,14 @@ import javafx.scene.Node;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToolBar;
-import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import org.controlsfx.control.HiddenSidesPane;
+import se.europeanspallationsource.xaos.tools.annotation.BundleItem;
+import se.europeanspallationsource.xaos.tools.annotation.BundleItems;
 import se.europeanspallationsource.xaos.ui.control.Icons;
-import se.europeanspallationsource.xaos.ui.plot.util.impl.Bundles;
 
-import static javafx.geometry.Side.TOP;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.INFO;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.PIN;
 import static se.europeanspallationsource.xaos.ui.util.FXUtils.makeSquare;
@@ -50,7 +48,7 @@ import static se.europeanspallationsource.xaos.ui.util.FXUtils.makeSquare;
  * @author claudio.rosati@esss.se
  * @css.class {@code chart-container-toolbar}
  */
-public class TooledUpChartContainer extends HiddenSidesPane {
+public class ChartContainer extends HiddenSidesPane {
 
 	private final ToolBar toolbar = new ToolBar();
 
@@ -61,7 +59,7 @@ public class TooledUpChartContainer extends HiddenSidesPane {
 	/*
 	 * ---- chart --------------------------------------------------------------
 	 */
-    private final ObjectProperty<XYChart<?, ?>> chart = new SimpleObjectProperty<>(TooledUpChartContainer.this, "chart") {
+    private final ObjectProperty<XYChart<?, ?>> chart = new SimpleObjectProperty<>(ChartContainer.this, "chart") {
         @Override
 		protected void invalidated() {
 			setContent(get());
@@ -87,7 +85,11 @@ public class TooledUpChartContainer extends HiddenSidesPane {
 	/**
 	 * Creates a new instance of this container.
 	 */
-	public TooledUpChartContainer() {
+	@BundleItems({
+		@BundleItem(key = "infoButton.tooltip", message = "Open/close the plugins info dialog."),
+		@BundleItem(key = "pinButton.tooltip", message = "Pin/unpin toolbar.")
+	})
+	public ChartContainer() {
 
 		//	Horizontal filler...
 		Pane filler = new Pane();
@@ -96,18 +98,18 @@ public class TooledUpChartContainer extends HiddenSidesPane {
 
 		//	Info/Help button...
 		ToggleButton infoButton = new ToggleButton(null, Icons.iconFor(INFO, 14));
-		infoButton.setOnAction(e -> handleInfoButton(infoButton));
-		infoButton.setTooltip(new Tooltip(Bundles.getLocalizedString("TooledUpChartContainer.infoButton.tooltip")));
-		infoButton.disableProperty().bind(Bindings.isNull(chartProperty()));
+//		infoButton.setOnAction(e -> handleInfoButton(infoButton));
+//		infoButton.setTooltip(new Tooltip(Bundles.getLocalizedString("TooledUpChartContainer.infoButton.tooltip")));
+//		infoButton.disableProperty().bind(Bindings.isNull(chartProperty()));
 
 		//	Pin button...
 		ToggleButton pinButton = new ToggleButton(null, Icons.iconFor(PIN, 14));
 
-		pinButton.setOnAction(e -> setPinnedSide(pinButton.isSelected() ? TOP : null));
-		pinButton.setTooltip(new Tooltip(Bundles.getLocalizedString("TooledUpChartContainer.pinButton.tooltip")));
+//		pinButton.setOnAction(e -> setPinnedSide(pinButton.isSelected() ? TOP : null));
+//		pinButton.setTooltip(new Tooltip(Bundles.getLocalizedString("TooledUpChartContainer.pinButton.tooltip")));
 
 		//	Setup the toolbar
-		toolbar.setOpacity(0.66);
+//		toolbar.setOpacity(0.66);
 
 		ObservableList<Node> tItems = toolbar.getItems();
 
@@ -127,7 +129,7 @@ public class TooledUpChartContainer extends HiddenSidesPane {
 	 *
 	 * @param chart The {@link XYChart} to be contained.
 	 */
-	public TooledUpChartContainer( XYChart<?, ?> chart ) {
+	public ChartContainer( XYChart<?, ?> chart ) {
 		this();
 		setChart(chart);
 	}

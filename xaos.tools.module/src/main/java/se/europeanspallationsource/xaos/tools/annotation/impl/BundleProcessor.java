@@ -185,6 +185,7 @@ public class BundleProcessor extends AbstractAnnotationProcessor {
 			case INTERFACE:
 				className = element.getSimpleName().toString();
 				break;
+			case CONSTRUCTOR:
 			case FIELD:
 			case METHOD: {
 

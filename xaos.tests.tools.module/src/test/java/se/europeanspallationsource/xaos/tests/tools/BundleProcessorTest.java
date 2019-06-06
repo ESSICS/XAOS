@@ -46,7 +46,7 @@ public class BundleProcessorTest {
 	@Test
 	public void testBundlesCreation() {
 
-		System.out.println("  Bundles Creation");
+		System.out.println("  Bundles Creation...");
 
 		String resource = "se.europeanspallationsource.xaos.tests.tools.bundles.Bundle";
 		ResourceBundle bundle = checkBundle(resource, 6);
@@ -78,7 +78,7 @@ public class BundleProcessorTest {
 	@Test
 	public void testMessageRetrieval() {
 
-		System.out.println("  Message Retrieval");
+		System.out.println("  Message Retrieval...");
 
 		assertThat(Bundles.get(ClassA.class, "fieldA1.default")).isEqualTo("Some initial A1 value.");
 		assertThat(Bundles.get(ClassA.class, "methodAa.1")).isEqualTo("First message of method Aa.");

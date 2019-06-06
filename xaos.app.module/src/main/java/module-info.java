@@ -29,6 +29,5 @@ module xaos.app {
 	requires transitive xaos.ui;
 
 	exports se.europeanspallationsource.xaos.app;
-	exports se.europeanspallationsource.xaos.app.util;
 
 }

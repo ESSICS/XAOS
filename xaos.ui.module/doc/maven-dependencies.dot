@@ -24,7 +24,10 @@ digraph "xaos.ui" {
   "org.kordamp.ikonli:ikonli-javafx:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.kordamp.ikonli<br/>ikonli-javafx<br/>11.3.4>]
   "org.kordamp.ikonli:ikonli-fontawesome-pack:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.kordamp.ikonli<br/>ikonli-fontawesome-pack<br/>11.3.4>]
   "se.europeanspallationsource:xaos.tools:jar"[shape="box",style="rounded, filled",fillcolor="#7DE1FF",label=<se.europeanspallationsource<br/>xaos.tools<br/>0.4.0-SNAPSHOT>]
-  "io.reactivex.rxjava2:rxjava:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<io.reactivex.rxjava2<br/>rxjava<br/>2.2.8>]
+  "com.github.ben-manes.caffeine:caffeine:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<com.github.ben-manes.caffeine<br/>caffeine<br/>2.7.0>]
+  "org.checkerframework:checker-qual:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.checkerframework<br/>checker-qual<br/>2.6.0>]
+  "com.google.errorprone:error_prone_annotations:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<com.google.errorprone<br/>error_prone_annotations<br/>2.3.3>]
+  "io.reactivex.rxjava2:rxjava:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<io.reactivex.rxjava2<br/>rxjava<br/>2.2.9>]
   "org.reactivestreams:reactive-streams:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.reactivestreams<br/>reactive-streams<br/>1.0.2>]
   "se.europeanspallationsource:xaos.core:jar"[shape="box",style="rounded, filled",fillcolor="#7DE1FF",label=<se.europeanspallationsource<br/>xaos.core<br/>0.4.0-SNAPSHOT>]
   "org.testfx:testfx-core:jar"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">org.testfx</font><br/>testfx-core<font color="grey55" point-size="10"><br/>4.0.15-alpha</font><font color="grey55" point-size="10"><br/>(test)</font>>]
@@ -63,6 +66,10 @@ digraph "xaos.ui" {
   "se.europeanspallationsource:xaos.ui:jar" -> "org.kordamp.ikonli:ikonli-javafx:jar"
   "org.kordamp.ikonli:ikonli-fontawesome-pack:jar" -> "org.kordamp.ikonli:ikonli-core:jar"[style="dotted"]
   "se.europeanspallationsource:xaos.ui:jar" -> "org.kordamp.ikonli:ikonli-fontawesome-pack:jar"
+  "se.europeanspallationsource:xaos.tools:jar" -> "org.apache.commons:commons-lang3:jar"[style="dotted"]
+  "com.github.ben-manes.caffeine:caffeine:jar" -> "org.checkerframework:checker-qual:jar"
+  "com.github.ben-manes.caffeine:caffeine:jar" -> "com.google.errorprone:error_prone_annotations:jar"
+  "se.europeanspallationsource:xaos.tools:jar" -> "com.github.ben-manes.caffeine:caffeine:jar"
   "se.europeanspallationsource:xaos.ui:jar" -> "se.europeanspallationsource:xaos.tools:jar"
   "io.reactivex.rxjava2:rxjava:jar" -> "org.reactivestreams:reactive-streams:jar"
   "se.europeanspallationsource:xaos.core:jar" -> "io.reactivex.rxjava2:rxjava:jar"

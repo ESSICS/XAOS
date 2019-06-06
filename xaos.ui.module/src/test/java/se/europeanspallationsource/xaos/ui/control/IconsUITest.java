@@ -139,6 +139,8 @@ import org.junit.Test;
 import org.kordamp.ikonli.fontawesome.FontAwesome;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
+import se.europeanspallationsource.xaos.core.util.ThreadUtils;
+import se.europeanspallationsource.xaos.ui.util.FXUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNull;
@@ -179,10 +181,12 @@ public class IconsUITest extends ApplicationTest {
 		System.out.println("---- IconsTest -------------------------------------------------");
 	}
 
+	private final TilePane tilePane = new TilePane();
+
 	@Override
 	public void start( Stage stage ) throws IOException {
 
-		stage.setScene(new Scene(new AnchorPane(), 800, 500));
+		stage.setScene(new Scene(tilePane, 800, 500));
 		stage.show();
 
 	}
@@ -1320,17 +1324,27 @@ public class IconsUITest extends ApplicationTest {
 			WebView.class
 		));
 
-		//	Testing Object.clas...
+		//	Testing Object.class...
 		assertThat(Icons.iconFor(Object.class, DEFAULT_SIZE)).isNull();
 
 		//	Testing all other classes...
 		new HashSet<>(supportedClasses).forEach(type -> {
 			if ( supportedClasses.contains(type) ) {
+
 				supportedClasses.remove(type);
-				assertThat(Icons.iconFor(type, DEFAULT_SIZE))
+
+				Node icon = Icons.iconFor(type, DEFAULT_SIZE);
+				
+				assertThat(icon)
 					.overridingErrorMessage("Expecting actual icon not to be null for %1$s", type.getName())
 					.isNotNull()
 					.isInstanceOf(ImageView.class);
+
+				try {
+					FXUtils.runOnFXThreadAndWait(() -> tilePane.getChildren().add(icon));
+				} catch ( InterruptedException ex ) {
+				}
+
 			} else {
 				assertThat(Icons.iconFor(type, DEFAULT_SIZE)).isNull();
 			}
@@ -1345,6 +1359,8 @@ public class IconsUITest extends ApplicationTest {
 				.forEach(n -> System.out.println(MessageFormat.format("      {0}", n)));
 			Assert.fail(MessageFormat.format("{0} unmatched classes:", supportedClasses.size()));
 		}
+
+		ThreadUtils.sleep(2000);
 
 	}
 
@@ -1433,7 +1449,7 @@ public class IconsUITest extends ApplicationTest {
 	 * Test of iconFor method, of class Icons.
 	 */
 	@Test
-	public void testIconFor_Object() {
+	public void testIconFor_Object() throws InterruptedException {
 
 		//	No default provider, so null is the only result possible.
 		System.out.println("  Testing 'iconFor(Object)'...");
@@ -1536,6 +1552,14 @@ public class IconsUITest extends ApplicationTest {
 		assertThat(Icons.iconFor("txt", DEFAULT_SIZE)).isNull();
 		assertThat(Icons.iconFor(new Object(), DEFAULT_SIZE)).isNull();
 		assertThat(Icons.iconFor(this, DEFAULT_SIZE)).isNull();
+
+		FXUtils.runOnFXThreadAndWait(() -> {
+			for ( CommonIcons icon : CommonIcons.values() ) {
+				tilePane.getChildren().add(Icons.iconFor(icon, DEFAULT_SIZE));
+			}
+		});
+
+		ThreadUtils.sleep(2000);
 
 	}
 
