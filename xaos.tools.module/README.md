@@ -13,7 +13,8 @@ tasks.
 ## Service Providers
 
 The _ServiceProvider_ annotation will simplify providing service implementations,
-taking care of verifying the provider is valid and the required directive in the
+taking care of publishing them in the proper file inside the `META-INF/service`
+folder, and verifying the provider is valid and the required directive in the
 module-info.java file is present.
 
 ```java

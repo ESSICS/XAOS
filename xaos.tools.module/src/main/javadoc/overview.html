@@ -48,9 +48,11 @@ limitations under the License.
 
 		<p>
 			The {@link se.europeanspallationsource.xaos.tools.annotation.ServiceProvider ServiceProvider}
-			annotation will simplify providing service implementations, taking care of
-			verifying the provider is valid and the required <b>provides … with</b>
-			directive in the {@code module-info.java} file is present.
+			annotation will simplify providing service implementations, taking 
+			care of publishing them in the proper file inside the <code>META-INF/service</code>
+			folder, and verifying the provider is valid and the required
+			 <b>provides … with</b> directive in the {@code module-info.java}
+			 file is present.
 		</p>
 
 <pre>
