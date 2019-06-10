@@ -17,6 +17,7 @@
 package se.europeanspallationsource.xaos.tests.tools;
 
 
+import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -51,6 +52,7 @@ public class BundleProcessorTest {
 		String resource = "se.europeanspallationsource.xaos.tests.tools.bundles.Bundle";
 		ResourceBundle bundle = checkBundle(resource, 6);
 
+		System.out.println("    " + resource);
 		checkItem(bundle, "ClassA.fieldA1.default", "Some initial A1 value.");
 		checkItem(bundle, "ClassA.methodAa.1", "First message of method Aa.");
 		checkItem(bundle, "ClassA.methodAa.2", "fieldA1: {0}, fieldA2: {1}");
@@ -61,15 +63,23 @@ public class BundleProcessorTest {
 		resource = "se.europeanspallationsource.xaos.tests.tools.bundles.Messages";
 		bundle = checkBundle(resource, 2);
 
+		System.out.println("    " + resource);
 		checkItem(bundle, "ClassB.staticFieldB1.default", "Some initial B1 value.");
 		checkItem(bundle, "ClassB.methodBAb", "First message of method BAb [{0}].");
 
 		resource = "se.europeanspallationsource.xaos.tests.tools.bundles.p1.LocalizedMessages";
 		bundle = checkBundle(resource, 0);
 
-		resource = "se.europeanspallationsource.xaos.tests.tools.bundles.p1.Messages";
-		bundle = checkBundle(resource, 2);
+		System.out.println("    " + resource);
 
+		resource = "se.europeanspallationsource.xaos.tests.tools.bundles.p1.Messages";
+		bundle = checkBundle(resource, 2 + 2);	//	2 generated, 2 already existing.
+
+		System.out.println("    " + resource);
+		//	Start cheching already existing keys in bundle are still there...
+		checkItem(bundle, "a.predefined.key1", "a.predefined.message1");
+		checkItem(bundle, "a.predefined.key2", "a.predefined.message2");
+		//	...then check for the generated ones.
 		checkItem(bundle, "ClassB.staticFieldB1.default", "Some initial static B1 value.");
 		checkItem(bundle, "ClassC.methodCb.message", "Some Cb message [{0}, {1}, {2}].");
 
@@ -114,7 +124,10 @@ public class BundleProcessorTest {
 	}
 
 	private void checkItem ( ResourceBundle bundle, String key, String message ) {
-		assertTrue(bundle.containsKey(key));
+		assertTrue(
+			MessageFormat.format("Key ''{0}'' not contained in bundle.", key),
+			bundle.containsKey(key)
+		);
 		assertThat(bundle.getString(key)).isEqualTo(message);
 	}
 

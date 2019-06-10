@@ -17,8 +17,11 @@
 package se.europeanspallationsource.xaos.tools.annotation.impl;
 
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.StringWriter;
+import java.nio.file.NoSuchFileException;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -61,6 +64,10 @@ import static javax.tools.StandardLocation.CLASS_OUTPUT;
 public class BundleProcessor extends AbstractAnnotationProcessor {
 
 	public static final String DEFAULT_BUNDLE_NAME = "Bundle";
+
+	private static final String HEADER = "# -----------------------------------------------\n"
+									   + "#     Generated from @BundleItem annotations.\n"
+									   + "# -----------------------------------------------\n\n";
 
 	/*
 	 * Keys are package names.
@@ -274,6 +281,7 @@ public class BundleProcessor extends AbstractAnnotationProcessor {
 
 	}
 
+	@SuppressWarnings( "NestedAssignment" )
 	private boolean writeResourceBundles() {
 		
 		descriptorsMap.values().stream()
@@ -281,13 +289,77 @@ public class BundleProcessor extends AbstractAnnotationProcessor {
 			.forEach(descriptor -> {
 				try {
 
-					FileObject resource = getFiler().createResource(
+					//	Check if the bundle already exists in the sources and
+					//	read it...
+					FileObject resourceReader = getFiler().getResource(
 						CLASS_OUTPUT,
 						descriptor.packageName,
 						descriptor.bundleName + ".properties"
 					);
 
-					try ( BufferedWriter writer = new BufferedWriter(resource.openWriter()) ) {
+					StringWriter existingContent = new StringWriter();
+
+					try ( BufferedReader reader = new BufferedReader(resourceReader.openReader(true)) ) {
+
+						String line;
+
+						while ( ( line = reader.readLine()) != null ) {
+							existingContent.append(line).append("\n");
+						}
+
+						existingContent.append("\n\n");
+
+					} catch ( NoSuchFileException fnfex ) {
+						//	No original content exists.
+					}
+
+					//	Write existing content first (if exists), and then the
+					//	generated one.
+					FileObject resourceWriter = getFiler().createResource(
+						CLASS_OUTPUT,
+						descriptor.packageName,
+						descriptor.bundleName + ".properties"
+					);
+
+					try ( BufferedWriter writer = new BufferedWriter(resourceWriter.openWriter()) ) {
+
+						//	Write existing content (if exists)...
+						String existingContentString = existingContent.toString();
+
+						if ( StringUtils.isNotBlank(existingContentString) ) {
+							try {
+								writer.write(existingContentString);
+							} catch ( IOException ex ) {
+								getMessager().printMessage(
+									ERROR,
+									MessageFormat.format(
+										"Unable to write existing content [bundle: {0}.{1}.properties, {2}: {3}].",
+										descriptor.packageName,
+										descriptor.bundleName,
+										ex.getClass().getName(),
+										ex.getMessage()
+									)
+								);
+							}
+						}
+
+						//	Write header...
+						try {
+							writer.write(HEADER);
+						} catch ( IOException ex ) {
+							getMessager().printMessage(
+								ERROR,
+								MessageFormat.format(
+									"Unable to write header content [bundle: {0}.{1}.properties, {2}: {3}].",
+									descriptor.packageName,
+									descriptor.bundleName,
+									ex.getClass().getName(),
+									ex.getMessage()
+								)
+							);
+						}
+
+						//	Generate content...
 						descriptor.itemsMap.entrySet().forEach(entry -> {
 
 							String className = entry.getKey();
