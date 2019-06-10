@@ -159,6 +159,11 @@ public class DensityChartFX<X,Y> extends Chart implements Pluggable {
         getStylesheets().add(DensityChartFX.class.getResource("/styles/density-map-chart.css").toExternalForm());
     }
 
+	@Override
+	public Chart getChart() {
+		return this;
+	}
+
     /**
      * Returns the x axis.
      *

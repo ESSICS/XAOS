@@ -44,8 +44,17 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.1</version>
 				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>${project.groupId}</groupId>
+							<artifactId>xaos.tools</artifactId>
+							<version>${project.version}</version>
+						</path>
+						<!-- ... more ... -->
+					</annotationProcessorPaths>
 					<compilerArgs>
 						<arg>--add-exports=javafx.controls/com.sun.javafx.charts=xaos.ui.plot</arg>
+						<arg>-implicit:none</arg>
 					</compilerArgs>
 				</configuration>
 			</plugin>
@@ -127,6 +136,12 @@
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-swing</artifactId>
+			<version>${javafx.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-web</artifactId>
 			<version>${javafx.version}</version>
 			<scope>compile</scope>
 		</dependency>

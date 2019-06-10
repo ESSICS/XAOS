@@ -1,4 +1,7 @@
 digraph "summary" {
+  "javafx.media"                                     -> "java.base (java.base)";
+  "javafx.media"                                     -> "javafx.graphics";
+  "javafx.media"                                     -> "not found";
   "org.controlsfx.controls"                          -> "java.base (java.base)";
   "org.controlsfx.controls"                          -> "javafx.base";
   "org.controlsfx.controls"                          -> "javafx.controls";
@@ -18,9 +21,11 @@ digraph "summary" {
   "xaos.ui.plot"                                     -> "javafx.fxml";
   "xaos.ui.plot"                                     -> "javafx.graphics";
   "xaos.ui.plot"                                     -> "javafx.swing";
+  "xaos.ui.plot"                                     -> "javafx.web";
   "xaos.ui.plot"                                     -> "org.apache.commons.lang3";
   "xaos.ui.plot"                                     -> "org.controlsfx.controls";
   "xaos.ui.plot"                                     -> "xaos.core";
+  "xaos.ui.plot"                                     -> "xaos.tools";
   "xaos.ui.plot"                                     -> "xaos.ui";
   "javafx.swing"                                     -> "java.base (java.base)";
   "javafx.swing"                                     -> "java.desktop (java.desktop)";
@@ -30,10 +35,23 @@ digraph "summary" {
   "javafx.fxml"                                      -> "java.xml (java.xml)";
   "javafx.fxml"                                      -> "javafx.base";
   "javafx.fxml"                                      -> "javafx.graphics";
+  "com.github.benmanes.caffeine"                     -> "error.prone.annotations";
+  "com.github.benmanes.caffeine"                     -> "java.base (java.base)";
+  "com.github.benmanes.caffeine"                     -> "java.logging (java.logging)";
+  "com.github.benmanes.caffeine"                     -> "jdk.unsupported (jdk.unsupported)";
+  "error.prone.annotations"                          -> "java.base (java.base)";
   "commons.math3"                                    -> "java.base (java.base)";
   "xaos.core"                                        -> "java.base (java.base)";
   "xaos.core"                                        -> "java.logging (java.logging)";
   "org.apache.commons.lang3"                         -> "java.base (java.base)";
+  "javafx.web"                                       -> "java.base (java.base)";
+  "javafx.web"                                       -> "java.desktop (java.desktop)";
+  "javafx.web"                                       -> "java.xml (java.xml)";
+  "javafx.web"                                       -> "javafx.base";
+  "javafx.web"                                       -> "javafx.controls";
+  "javafx.web"                                       -> "javafx.graphics";
+  "javafx.web"                                       -> "javafx.media";
+  "javafx.web"                                       -> "jdk.jsobject (jdk.jsobject)";
   "javafx.graphics"                                  -> "java.base (java.base)";
   "javafx.graphics"                                  -> "java.desktop (java.desktop)";
   "javafx.graphics"                                  -> "java.xml (java.xml)";
@@ -52,4 +70,8 @@ digraph "summary" {
   "xaos.ui"                                          -> "org.kordamp.ikonli.javafx";
   "xaos.ui"                                          -> "xaos.core";
   "org.kordamp.iconli.core"                          -> "java.base (java.base)";
+  "xaos.tools"                                       -> "com.github.benmanes.caffeine";
+  "xaos.tools"                                       -> "java.base (java.base)";
+  "xaos.tools"                                       -> "java.compiler (java.compiler)";
+  "xaos.tools"                                       -> "org.apache.commons.lang3";
 }

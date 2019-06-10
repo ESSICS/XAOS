@@ -28,6 +28,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.chart.Axis;
+import javafx.scene.chart.Chart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.ValueAxis;
 import javafx.scene.chart.XYChart;
@@ -148,6 +149,11 @@ public class HistogramChartFX<X,Y> extends LineChart<X,Y> implements Pluggable {
               
     }
     
+	@Override
+	public Chart getChart() {
+		return this;
+	}
+
     public void addDataList(ObservableList<Double> data, Integer nbins){
         Collections.sort(data);
         Series<X,Y> binnedDataSet = new Series<X,Y>();

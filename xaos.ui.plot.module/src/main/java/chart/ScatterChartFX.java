@@ -27,6 +27,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.chart.Axis;
+import javafx.scene.chart.Chart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.control.CheckBox;
@@ -87,6 +88,11 @@ public class ScatterChartFX<X, Y> extends LineChart<X, Y> implements Pluggable {
         return pluginManager.getPlugins();
     }
     
+	@Override
+	public Chart getChart() {
+		return this;
+	}
+
     /**
      * More robust method for adding plugins to chart.
      * Note: Only necessary if more than one plugin is being added at once. 

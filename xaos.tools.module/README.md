@@ -103,8 +103,8 @@ annotation processors.
 </dependency>
 ```
 
-To use the _ServiceProvider_ annotation the following must be added to the
-project's plugin list:
+To use the various annotations the following must be added to the project's
+plugin list:
 
 ```xml
 <plugin>

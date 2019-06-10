@@ -38,7 +38,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.BorderPane;
-import se.europeanspallationsource.xaos.ui.plot.ChartContainer;
+import se.europeanspallationsource.xaos.ui.plot.PluggableChartContainer;
 import se.europeanspallationsource.xaos.ui.plot.data.ErrorSeries;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Pluggable;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
@@ -84,7 +84,7 @@ public class FXMLController implements Initializable {
 	private final LineChartGenerator lineChartGen = new LineChartGenerator();
 	private final ScatterChartGenerator scatterChartGen = new ScatterChartGenerator();
 
-	private final ChartContainer chartContainer = new ChartContainer();
+	private final PluggableChartContainer chartContainer = new PluggableChartContainer();
 
 	@Override
 	@SuppressWarnings( "unchecked" )
@@ -341,7 +341,7 @@ public class FXMLController implements Initializable {
 		@SuppressWarnings( "unchecked" )
 		XYChart<?, Number> chart = generator.getNewChart(numberOfPoints, logXAxis, logYAxis);
 
-		chartContainer.setChart(chart);
+		chartContainer.setPluggable((Pluggable) chart);
 		updateButtons(chart);
 
 		return chart;

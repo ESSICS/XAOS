@@ -27,6 +27,7 @@ import javafx.scene.chart.Axis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.layout.StackPane;
 import javafx.event.ActionEvent;
+import javafx.scene.chart.Chart;
 import javafx.scene.control.CheckBox;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Pluggable;
 
@@ -86,6 +87,11 @@ public class LineChartFX<X, Y> extends LineChart<X, Y> implements Pluggable {
         this.getData().add(dataSet);
         getStylesheets().add("/styles/chart.css");                         
     }
+
+	@Override
+	public Chart getChart() {
+		return this;
+	}
 
 	@Override
     public final ObservableList<Plugin> getPlugins() {

@@ -19,6 +19,7 @@ package se.europeanspallationsource.xaos.ui.plot.plugins;
 
 import chart.Plugin;
 import javafx.collections.ObservableList;
+import javafx.scene.chart.Chart;
 
 
 /**
@@ -30,8 +31,11 @@ import javafx.collections.ObservableList;
 public interface Pluggable {
 
 	/**
-	 * Returns a list of plugins added to a plot chart.
-	 *
+	 * @return The "pluggable" chart.
+	 */
+	Chart getChart();
+
+	/**
 	 * @return A non-{@code null} list of plugins added to the chart.
 	 */
 	ObservableList<Plugin> getPlugins();

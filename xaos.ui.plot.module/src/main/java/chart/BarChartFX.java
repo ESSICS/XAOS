@@ -27,6 +27,7 @@ import javafx.scene.Group;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.BarChart;
+import javafx.scene.chart.Chart;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.StackPane;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Pluggable;
@@ -79,6 +80,11 @@ public class BarChartFX<X, Y> extends BarChart<X, Y> implements Pluggable {
     }
     
     
+
+	@Override
+	public Chart getChart() {
+		return this;
+	}
 
 	@Override
     public final ObservableList<Plugin> getPlugins() {

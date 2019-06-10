@@ -31,6 +31,7 @@ module xaos.ui.plot {
 	requires javafx.fxml;
 	requires transitive javafx.graphics;
 	requires javafx.swing;
+	requires javafx.web;
 	requires org.apache.commons.lang3;
 	requires transitive org.controlsfx.controls;
 	requires transitive xaos.core;

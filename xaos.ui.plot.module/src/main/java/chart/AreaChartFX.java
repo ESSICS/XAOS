@@ -25,6 +25,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.Axis;
+import javafx.scene.chart.Chart;
 import org.apache.commons.lang3.Validate;
 import se.europeanspallationsource.xaos.ui.plot.impl.Legend;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Pluggable;
@@ -74,6 +75,11 @@ public class AreaChartFX<X, Y> extends AreaChart<X, Y> implements Pluggable {
 		super(xAxis, yAxis, data);
 		getStylesheets().add(getClass().getResource("/styles/chart.css").toExternalForm());
 		getPlotChildren().add(pluginsNodesGroup);
+	}
+
+	@Override
+	public Chart getChart() {
+		return this;
 	}
 
 	@Override
