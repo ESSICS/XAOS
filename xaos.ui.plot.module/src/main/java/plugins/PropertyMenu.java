@@ -114,7 +114,12 @@ public class PropertyMenu extends Plugin{
         menuFit =  new ImageView(ResourceUtils.getImage("/icons/properties/fit.png"));
         menuProp =  new ImageView(ResourceUtils.getImage("/icons/properties/properties.png"));
         propertiesTool = getImages();
-    }        
+    }
+	
+	@Override
+	public String getName() {
+		return "Property Menu";
+	}
     
     public static ImageView[] getImages() {     
         ImageView[] imageCollection ={menuPrint, menuSave, menuFit, menuAxis, menuProp};

@@ -62,6 +62,11 @@ public abstract class Plugin {
     }
 
 	/**
+	 * @return The display name of this plugin.
+	 */
+	public abstract String getName();
+
+	/**
 	 * @return A well formatted HTML page describing the plugin. The default
 	 *         implementation will return an HTML page with the simple class
 	 *         name of the plugin as title.
@@ -69,11 +74,11 @@ public abstract class Plugin {
 	public String getHTMLDescription() {
 		return "<html>\n"
 			 + "  <head>\n"
-			 + "    <title>TODO supply a title</title>\n"
+			 + "    <title>" + getName() + "</title>\n"
 			 + "    <meta charset=\"UTF-8\">\n"
 			 + "  </head>\n"
 			 + "  <body>\n"
-			 + "    <div>TODO write content</div>\n"
+			 + "    <p>TODO: write content</p>\n"
 			 + "  </body>\n"
 			 + "</html>";
 	}

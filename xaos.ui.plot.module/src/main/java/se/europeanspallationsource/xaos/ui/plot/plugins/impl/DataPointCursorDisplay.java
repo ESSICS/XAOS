@@ -49,9 +49,10 @@ import se.europeanspallationsource.xaos.ui.util.ColorUtils;
  * @author claudio.rosati@esss.se
  */
 @SuppressWarnings( "ClassWithoutLogger" )
-public final class DataPointCursorDisplay extends FormattedCursorDisplay {
+public class DataPointCursorDisplay extends FormattedCursorDisplay {
 
 	private static final MessageFormat FORMATTER = new MessageFormat("{0,number,0.000}:{1,number,0.000}");
+	private static final String NAME = "Data Point Cursor Display";
 
 	/* *********************************************************************** *
 	 * START OF JAVAFX PROPERTIES                                              *
@@ -91,15 +92,15 @@ public final class DataPointCursorDisplay extends FormattedCursorDisplay {
 	 * *********************************************************************** */
 
 	public DataPointCursorDisplay() {
-		super(Position.CENTER, FORMATTER);
+		super(NAME, Position.CENTER, FORMATTER);
 	}
 
 	public DataPointCursorDisplay( Position position ) {
-		super(position, FORMATTER);
+		super(NAME, position, FORMATTER);
 	}
 
 	public DataPointCursorDisplay( Position position, Format formatter ) {
-		super(position, formatter);
+		super(NAME, position, formatter);
 	}
 
 	@Override

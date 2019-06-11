@@ -18,7 +18,6 @@ package se.europeanspallationsource.xaos.ui.plot.plugins.impl;
 
 
 import chart.DensityChartFX;
-import chart.Plugin;
 import java.text.MessageFormat;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -32,6 +31,7 @@ import javafx.scene.chart.XYChart.Data;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import org.apache.commons.lang3.Validate;
+import se.europeanspallationsource.xaos.ui.plot.plugins.AbstractNamedPlugin;
 import se.europeanspallationsource.xaos.ui.plot.plugins.AxisConstrained;
 import se.europeanspallationsource.xaos.ui.plot.util.impl.ChartUndoManager;
 
@@ -57,8 +57,9 @@ import static se.europeanspallationsource.xaos.ui.plot.util.Assertions.assertVal
  * @author claudio.rosati@esss.se
  */
 @SuppressWarnings( "ClassWithoutLogger" )
-public final class Panner extends Plugin implements AxisConstrained {
+public final class Panner extends AbstractNamedPlugin implements AxisConstrained {
 
+	private static final String NAME = "Panner";
 	private static final Cursor PAN_CURSOR = Cursor.OPEN_HAND;
 	
 	private final EventHandler<MouseEvent> dragDetectedHandler = this::dragDetected;
@@ -137,6 +138,8 @@ public final class Panner extends Plugin implements AxisConstrained {
 	 *                    {@link #constraintsProperty() constraints} property.
 	 */
 	public Panner( AxisConstraints constraints ) {
+
+		super(NAME);
 
 		setConstraints(constraints);
 

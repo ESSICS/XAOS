@@ -36,6 +36,8 @@ import se.europeanspallationsource.xaos.ui.plot.plugins.AbstractCursorPlugin;
 @SuppressWarnings( "ClassWithoutLogger" )
 public final class CursorLines extends AbstractCursorPlugin {
 
+	private static final String NAME = "Cursor Lines";
+
 	private final Line horizontalLine = new Line();
 	private final Line verticalLine = new Line();
 
@@ -43,6 +45,8 @@ public final class CursorLines extends AbstractCursorPlugin {
 	 * Creates a new instance of this plugin.
 	 */
 	public CursorLines() {
+
+		super(NAME);
 
 		verticalLine.getStyleClass().add("chart-cursor-lines");
 		verticalLine.setManaged(false);

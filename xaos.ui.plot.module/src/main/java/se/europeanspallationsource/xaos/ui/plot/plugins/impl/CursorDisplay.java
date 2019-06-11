@@ -77,18 +77,23 @@ public abstract class CursorDisplay extends AbstractCursorPlugin {
 	/**
 	 * Creates a new instance of this class, where the display's position is
 	 * set to {@link Position#CENTER}.
+	 *
+	 * @param name The display name of this plugin.
 	 */
-	public CursorDisplay() {
-		this(Position.CENTER);
+	public CursorDisplay( String name ) {
+		this(name, Position.CENTER);
 	}
 
 	/**
 	 * Creates a new instance of this class, where the display's position is
 	 * set to the given one.
 	 * 
+	 * @param name     The display name of this plugin.
 	 * @param position The position of the cursor display.
 	 */
-	public CursorDisplay( Position position ) {
+	public CursorDisplay( String name, Position position ) {
+
+		super(name);
 
 		label.getStyleClass().add("chart-cursor-display");
 		label.setManaged(false);

@@ -38,18 +38,20 @@ import javafx.scene.control.Label;
  * @author claudio.rosati@esss.se
  */
 @SuppressWarnings( "ClassWithoutLogger" )
-public final class AbscissaCursorDisplay extends FormattedCursorDisplay {
+public class AbscissaCursorDisplay extends FormattedCursorDisplay {
+
+	private static final String NAME = "Abscissa Cursor Display";
 
 	public AbscissaCursorDisplay() {
-		super(Position.BOTTOM);
+		super(NAME, Position.BOTTOM);
 	}
 
 	public AbscissaCursorDisplay( Position position ) {
-		super(position);
+		super(NAME, position);
 	}
 
 	public AbscissaCursorDisplay( Position position, Format formatter ) {
-		super(position, formatter);
+		super(NAME, position, formatter);
 	}
 
 	@Override

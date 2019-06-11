@@ -53,17 +53,18 @@ import se.europeanspallationsource.xaos.ui.util.ColorUtils;
 public class AreaValueCursorDisplay extends FormattedCursorDisplay {
 
 	private static final MessageFormat FORMATTER = new MessageFormat("Area: {0,number,0.000}");
+	private static final String NAME = "Area Value Cursor Display";
 
 	public AreaValueCursorDisplay() {
-		super(Position.TOP, FORMATTER);
+		super(NAME, Position.TOP, FORMATTER);
 	}
 
 	public AreaValueCursorDisplay( Position position ) {
-		super(position, FORMATTER);
+		super(NAME, position, FORMATTER);
 	}
 
 	public AreaValueCursorDisplay( Position position, Format formatter ) {
-		super(position, formatter);
+		super(NAME, position, formatter);
 	}
 
 	@Override

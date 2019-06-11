@@ -17,13 +17,13 @@
 package se.europeanspallationsource.xaos.ui.plot.plugins.impl;
 
 
-import chart.Plugin;
 import javafx.beans.binding.Bindings;
 import javafx.event.EventHandler;
 import javafx.scene.chart.Chart;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import se.europeanspallationsource.xaos.ui.control.NavigatorPopup;
+import se.europeanspallationsource.xaos.ui.plot.plugins.AbstractNamedPlugin;
 import se.europeanspallationsource.xaos.ui.plot.util.impl.ChartUndoManager;
 
 
@@ -54,7 +54,9 @@ import se.europeanspallationsource.xaos.ui.plot.util.impl.ChartUndoManager;
  * @author claudio.rosati@esss.se
  */
 @SuppressWarnings( "ClassWithoutLogger" )
-public final class Navigator extends Plugin {
+public final class Navigator extends AbstractNamedPlugin {
+
+	private static final String NAME = "Navigator";
 
 	private double cursorScreenX;
 	private double cursorScreenY;
@@ -68,6 +70,8 @@ public final class Navigator extends Plugin {
 	private final ZoomHelper zoomHelper = new ZoomHelper(this);
 
 	public Navigator() {
+
+		super(NAME);
 
 		popup.setOnPanDown(e -> panHelper.panDown());
 		popup.setOnPanLeft(e -> panHelper.panLeft());

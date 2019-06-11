@@ -22,6 +22,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Accordion;
@@ -110,30 +111,32 @@ public class PluggableChartContainer extends HiddenSidesPane {
 
 		HBox.setHgrow(filler, Priority.ALWAYS);
 
-		//	Info/Help button...
+		//	Buttons created all together in order to be passed to handling
+		//	callbacks.
 		ToggleButton infoButton = new ToggleButton(null, Icons.iconFor(INFO, 14));
+		ToggleButton pinButton = new ToggleButton(null, Icons.iconFor(PIN, 14));
 
-		infoButton.setOnAction(e -> handleInfoButton(infoButton));
-		infoButton.setTooltip(new Tooltip(Bundles.get(getClass(), "infoButton.tooltip")));
+		//	Info/Help button...
+		infoButton.setOnAction(e -> handleInfoButton(infoButton, pinButton));
+		infoButton.setTooltip(new Tooltip(Bundles.get(PluggableChartContainer.class, "infoButton.tooltip")));
 		infoButton.disableProperty().bind(Bindings.or(
 			Bindings.isNull(pluggableProperty()),
 			Bindings.selectBoolean(pluggableProperty(), "plugins", "empty")
 		));
 
-		//	Pin button...
-		ToggleButton pinButton = new ToggleButton(null, Icons.iconFor(PIN, 14));
 
+		//	Pin button...
 		pinButton.setOnAction(e -> setPinnedSide(pinButton.isSelected() ? TOP : null));
-		pinButton.setTooltip(new Tooltip(Bundles.get(getClass(), "pinButton.tooltip")));
+		pinButton.setTooltip(new Tooltip(Bundles.get(PluggableChartContainer.class, "pinButton.tooltip")));
 
 		//	Setup the toolbar
 		toolbar.setOpacity(0.66);
 
 		ObservableList<Node> tItems = toolbar.getItems();
 
+//		tItems.add(new Separator());
 		tItems.add(filler);
 		tItems.add(makeSquare(infoButton, 22));
-//		tItems.add(new Separator());
 		tItems.add(makeSquare(pinButton, 22));
 
 		setTop(toolbar);
@@ -162,7 +165,7 @@ public class PluggableChartContainer extends HiddenSidesPane {
 			//	In theory this block of code should never be executed because of
 			//	the bindings of the infoButton... but just in case something
 			//	goes wrong...
-			Label noPluginsLabel = new Label(Bundles.get(getClass(), "infoPopOver.noPluginsLabel"));
+			Label noPluginsLabel = new Label(Bundles.get(PluggableChartContainer.class, "infoPopOver.noPluginsLabel"));
 
 			noPluginsLabel.setAlignment(Pos.CENTER);
 			noPluginsLabel.setTextAlignment(TextAlignment.CENTER);
@@ -176,20 +179,23 @@ public class PluggableChartContainer extends HiddenSidesPane {
 
 			accordion.setMinSize(300, 200);
 
-			plggbl.getPlugins().forEach(p -> {
+			plggbl.getPlugins().stream()
+				.sorted(( p1, p2 ) -> p1.getName().compareToIgnoreCase(p2.getName()))
+				.forEach(p -> {
 
-				String descriptionPage = p.getHTMLDescription();
+					String descriptionPage = p.getHTMLDescription();
 
-				if ( StringUtils.isNotBlank(descriptionPage) ) {
+					if ( StringUtils.isNotBlank(descriptionPage) ) {
 
-					WebView view = new WebView();
+						WebView view = new WebView();
 
-					view.getEngine().loadContent(descriptionPage);
-					accordion.getPanes().add(new TitledPane("bla bla bla", view));
+						view.getEngine().loadContent(descriptionPage);
+						view.setPrefSize(500, 300);
+						accordion.getPanes().add(new TitledPane(p.getName(), view));
 
-				}
+					}
 
-			});
+				});
 
 			return accordion;
 
@@ -198,7 +204,13 @@ public class PluggableChartContainer extends HiddenSidesPane {
 	}
 
 	@BundleItem( key = "infoPopOver.title", message = "Plugins Info")
-	private void handleInfoButton( ToggleButton infoButton ) {
+	private void handleInfoButton( ToggleButton infoButton, ToggleButton pinButton ) {
+
+		infoButton.setCursor(Cursor.WAIT);
+
+		if ( !pinButton.isSelected() ) {
+			pinButton.fire();
+		}
 
 		PopOver popOver = new PopOver(createInfoContent());
 
@@ -207,9 +219,14 @@ public class PluggableChartContainer extends HiddenSidesPane {
 		popOver.setDetachable(true);
 		popOver.setHeaderAlwaysVisible(true);
 		popOver.setArrowLocation(TOP_RIGHT);
-		popOver.setOnShown(e -> popOver.getContentNode().requestFocus());
+		popOver.setOnShown(e -> { 
+			popOver.getContentNode().requestFocus();
+			infoButton.setCursor(Cursor.DEFAULT);
+		});
 		popOver.setOnHidden(e -> infoButton.setSelected(false));
-		popOver.setTitle(Bundles.get(getClass(), "infoPopOver.title"));
+		popOver.setTitle(Bundles.get(PluggableChartContainer.class, "infoPopOver.title"));
+
+
 		popOver.show(infoButton);
 
 	}

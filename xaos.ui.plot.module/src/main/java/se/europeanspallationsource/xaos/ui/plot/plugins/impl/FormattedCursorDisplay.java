@@ -71,16 +71,37 @@ public abstract class FormattedCursorDisplay extends CursorDisplay {
 	 * END OF JAVAFX PROPERTIES                                                *
 	 * *********************************************************************** */
 
-	public FormattedCursorDisplay() {
-		super();
+	/**
+	 * Creates an instance of this class using the default {@code DecimalFormat("0.000")}
+	 * formatter and {@link Position#CENTER} position.
+	 *
+	 * @param name The display name of this plugin.
+	 */
+	public FormattedCursorDisplay( String name ) {
+		super(name);
 	}
 
-	public FormattedCursorDisplay( Position position ) {
-		super(position);
+	/**
+	 * Creates an instance of this class using the default {@code DecimalFormat("0.000")}
+	 * formatter and the given {@code position}.
+	 *
+	 * @param name     The display name of this plugin.
+	 * @param position The position of the cursor display.
+	 */
+	public FormattedCursorDisplay( String name, Position position ) {
+		super(name, position);
 	}
 
-	public FormattedCursorDisplay( Position position, Format formatter ) {
-		this(position);
+	/**
+	 * Creates an instance of this class using the given {@code formatter} and
+	 * {@code position}.
+	 *
+	 * @param name      The display name of this plugin.
+	 * @param position  The position of the cursor display.
+	 * @param formatter The {@link Format} of the cursor display.
+	 */
+	public FormattedCursorDisplay( String name, Position position, Format formatter ) {
+		this(name, position);
 		setFormatter(formatter);
 	}
 

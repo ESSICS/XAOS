@@ -52,9 +52,10 @@ public class ErrorBars<X, Y> extends AbstractCursorPlugin {
 	private static final String DEFAULT_STYLE = "-fx-stroke-width: 0.85; -fx-stroke: black;";
 	private static final String FALLBACK_STYLE = "-fx-stroke-width: 2.35;";
 	private static final String HIGHLIGHT_STYLE = "-fx-stroke-width: 2.35; -fx-stroke: {0};";
+	private static final String NAME = "Error Bars";
 
-	private String highlightStyle = null;
 	private final ErrorSeries<X, Y> errorSeries;
+	private String highlightStyle = null;
 	private ErrorData<X, Y> marker = null;
 	private Series<X, Y> series = null;
 
@@ -73,6 +74,15 @@ public class ErrorBars<X, Y> extends AbstractCursorPlugin {
 			}
         }
     };
+
+	@Override
+	public String getName() {
+		if ( series == null ) {
+			return MessageFormat.format("{0} [{1}]", super.getName(), errorSeries.getSeriesRef());
+		} else {
+			return MessageFormat.format("{0} [{1}]", super.getName(), series.getName());
+		}
+	}
 
     /**
 	 * @return A {@link DoubleProperty} representing the distance of the mouse
@@ -103,6 +113,8 @@ public class ErrorBars<X, Y> extends AbstractCursorPlugin {
 	 * @throws NullPointerException If {@code errorSeries} is {@code null}.
 	 */
 	public ErrorBars( ErrorSeries<X, Y> errorSeries, int indexRefSeries ) {
+
+		super(NAME);
 		
 		Validate.notNull(errorSeries, "Null 'errorSeries' parameter.");
 

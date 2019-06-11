@@ -17,10 +17,10 @@
 package se.europeanspallationsource.xaos.ui.plot.plugins.impl;
 
 
-import chart.Plugin;
 import javafx.event.EventHandler;
 import javafx.scene.chart.Chart;
 import javafx.scene.input.KeyEvent;
+import se.europeanspallationsource.xaos.ui.plot.plugins.AbstractNamedPlugin;
 import se.europeanspallationsource.xaos.ui.plot.util.impl.ChartUndoManager;
 
 import static se.europeanspallationsource.xaos.ui.control.NavigatorController.PAN_DOWN_ACCELERATOR;
@@ -53,11 +53,17 @@ import static se.europeanspallationsource.xaos.ui.control.NavigatorController.ZO
  * @author claudio.rosati@esss.se
  */
 @SuppressWarnings( "ClassWithoutLogger" )
-public final class KeyboardAccelerators extends Plugin {
+public final class KeyboardAccelerators extends AbstractNamedPlugin {
+
+	private static final String NAME = "Keyboard Accelerators";
 
 	private final EventHandler<KeyEvent> keyPresseddHandler = this::keyPressed;
 	private final PanHelper panHelper = new PanHelper(this);
 	private final ZoomHelper zoomHelper = new ZoomHelper(this);
+
+	public KeyboardAccelerators() {
+		super(NAME);
+	}
 
 	@Override
 	protected void chartConnected( Chart chart ) {

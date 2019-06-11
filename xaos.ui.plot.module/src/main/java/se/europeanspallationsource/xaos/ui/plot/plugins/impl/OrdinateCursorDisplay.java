@@ -38,18 +38,20 @@ import javafx.scene.control.Label;
  * @author claudio.rosati@esss.se
  */
 @SuppressWarnings( "ClassWithoutLogger" )
-public final class OrdinateCursorDisplay extends FormattedCursorDisplay {
+public class OrdinateCursorDisplay extends FormattedCursorDisplay {
+
+	private static final String NAME = "Ordinate Cursor Display";
 
 	public OrdinateCursorDisplay() {
-		super(Position.LEFT);
+		super(NAME, Position.LEFT);
 	}
 
 	public OrdinateCursorDisplay( Position position ) {
-		super(position);
+		super(NAME, position);
 	}
 
 	public OrdinateCursorDisplay( Position position, Format formatter ) {
-		super(position, formatter);
+		super(NAME, position, formatter);
 	}
 
 	@Override

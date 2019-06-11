@@ -18,7 +18,6 @@ package se.europeanspallationsource.xaos.ui.plot.plugins.impl;
 
 
 import chart.DensityChartFX;
-import chart.Plugin;
 import java.text.MessageFormat;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
@@ -37,8 +36,9 @@ import javafx.scene.input.ZoomEvent;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import org.apache.commons.lang3.Validate;
-import se.europeanspallationsource.xaos.ui.plot.util.impl.ChartUndoManager;
+import se.europeanspallationsource.xaos.ui.plot.plugins.AbstractNamedPlugin;
 import se.europeanspallationsource.xaos.ui.plot.plugins.AxisConstrained;
+import se.europeanspallationsource.xaos.ui.plot.util.impl.ChartUndoManager;
 
 import static se.europeanspallationsource.xaos.ui.plot.plugins.impl.ZoomHelper.DEFAULT_ANIMATION_DURATION;
 import static se.europeanspallationsource.xaos.ui.plot.util.Assertions.assertValueAxis;
@@ -58,8 +58,9 @@ import static se.europeanspallationsource.xaos.ui.plot.util.Assertions.assertVal
  * @css.class {@code chart-zoomer}
  */
 @SuppressWarnings( "ClassWithoutLogger" )
-public final class Zoomer extends Plugin implements AxisConstrained {
+public final class Zoomer extends AbstractNamedPlugin implements AxisConstrained {
 
+	private static final String NAME = "Zoomer";
 	private static final Cursor ZOOM_CURSOR = Cursor.HAND;
 	private static final int ZOOM_RECT_MIN_SIZE = 10;
 
@@ -171,6 +172,8 @@ public final class Zoomer extends Plugin implements AxisConstrained {
 	 *                    property.
 	 */
 	public Zoomer( AxisConstraints constraints, boolean animated ) {
+
+		super(NAME);
 
 		setConstraints(constraints);
 		setAnimated(animated);

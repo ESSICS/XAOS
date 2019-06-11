@@ -42,6 +42,13 @@ public abstract class AbstractCursorPlugin extends AbstractBoundedPlugin {
 	private final EventHandler<MouseEvent> mouseMoveHandler = this::mouseMove;
 	private Point2D sceneMouseLocation = null;
 
+	/**
+	 * @param name The display name of this plugin.
+	 */
+	public AbstractCursorPlugin( String name ) {
+		super(name);
+	}
+
 	@Override
 	@SuppressWarnings( "null" )
 	protected void chartConnected( Chart chart ) {

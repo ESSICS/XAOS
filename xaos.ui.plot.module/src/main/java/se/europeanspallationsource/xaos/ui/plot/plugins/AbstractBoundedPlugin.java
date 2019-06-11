@@ -17,7 +17,6 @@
 package se.europeanspallationsource.xaos.ui.plot.plugins;
 
 
-import chart.Plugin;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.chart.Chart;
 
@@ -28,9 +27,16 @@ import javafx.scene.chart.Chart;
  *
  * @author claudio.rosati@esss.se
  */
-public abstract class AbstractBoundedPlugin extends Plugin {
+public abstract class AbstractBoundedPlugin extends AbstractNamedPlugin {
 
 	private final ChangeListener<Number> boundsListener = ( ob, ov, nv ) -> boundsChanged();
+
+	/**
+	 * @param name The display name of this plugin.
+	 */
+	public AbstractBoundedPlugin( String name ) {
+		super(name);
+	}
 
 	/**
 	 * Called when lower and/or upper bounds of X and/or Y axis change.
