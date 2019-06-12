@@ -53,6 +53,9 @@ public class DefaultCommonIconProvider extends BaseProvider implements IconProvi
 		map.put(CommonIcons.CHEVRON_LEFT, FontAwesome.CHEVRON_LEFT);
 		map.put(CommonIcons.CHEVRON_RIGHT, FontAwesome.CHEVRON_RIGHT);
 		map.put(CommonIcons.CHEVRON_UP, FontAwesome.CHEVRON_UP);
+		map.put(CommonIcons.COPY, FontAwesome.COPY);
+		map.put(CommonIcons.CUT, FontAwesome.CUT);
+		map.put(CommonIcons.DELETE, FontAwesome.REMOVE);
 		map.put(CommonIcons.FILE, FontAwesome.FILE_O);
 		map.put(CommonIcons.FILE_EXECUTABLE, FontAwesome.PLAY_CIRCLE_O);
 		map.put(CommonIcons.FILE_HIDDEN, FontAwesome.FILE);
@@ -61,6 +64,7 @@ public class DefaultCommonIconProvider extends BaseProvider implements IconProvi
 		map.put(CommonIcons.FOLDER_EXPANDED, FontAwesome.FOLDER_OPEN_O);
 		map.put(CommonIcons.FORWARD, FontAwesome.FORWARD);
 		map.put(CommonIcons.INFO, FontAwesome.INFO);
+		map.put(CommonIcons.PASTE, FontAwesome.PASTE);
 		map.put(CommonIcons.PIN, FontAwesome.MAP_PIN);
 		map.put(CommonIcons.REPLY, FontAwesome.REPLY);
 		map.put(CommonIcons.REPLY_ALL, FontAwesome.REPLY_ALL);

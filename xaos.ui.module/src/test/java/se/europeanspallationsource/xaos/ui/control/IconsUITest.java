@@ -148,6 +148,9 @@ import static se.europeanspallationsource.xaos.ui.control.CommonIcons.CHEVRON_DO
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.CHEVRON_LEFT;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.CHEVRON_RIGHT;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.CHEVRON_UP;
+import static se.europeanspallationsource.xaos.ui.control.CommonIcons.COPY;
+import static se.europeanspallationsource.xaos.ui.control.CommonIcons.CUT;
+import static se.europeanspallationsource.xaos.ui.control.CommonIcons.DELETE;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FILE;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FILE_EXECUTABLE;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FILE_HIDDEN;
@@ -156,6 +159,7 @@ import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FOLDER_COL
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FOLDER_EXPANDED;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FORWARD;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.INFO;
+import static se.europeanspallationsource.xaos.ui.control.CommonIcons.PASTE;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.PIN;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.REPLY;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.REPLY_ALL;
@@ -1454,7 +1458,7 @@ public class IconsUITest extends ApplicationTest {
 		//	No default provider, so null is the only result possible.
 		System.out.println("  Testing 'iconFor(Object)'...");
 
-		assertThat(CommonIcons.values().length).isEqualTo(23);
+		assertThat(CommonIcons.values().length).isEqualTo(27);
 
 		assertThat(Icons.iconFor(CHEVRON_DOWN, DEFAULT_SIZE))
 			.isNotNull()
@@ -1472,6 +1476,18 @@ public class IconsUITest extends ApplicationTest {
 			.isNotNull()
 			.isInstanceOf(Text.class)
 			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.CHEVRON_UP.getCode()));
+		assertThat(Icons.iconFor(COPY, DEFAULT_SIZE))
+			.isNotNull()
+			.isInstanceOf(Text.class)
+			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.COPY.getCode()));
+		assertThat(Icons.iconFor(CUT, DEFAULT_SIZE))
+			.isNotNull()
+			.isInstanceOf(Text.class)
+			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.CUT.getCode()));
+		assertThat(Icons.iconFor(DELETE, DEFAULT_SIZE))
+			.isNotNull()
+			.isInstanceOf(Text.class)
+			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.REMOVE.getCode()));
 		assertThat(Icons.iconFor(FILE, DEFAULT_SIZE))
 			.isNotNull()
 			.isInstanceOf(Text.class)
@@ -1504,6 +1520,10 @@ public class IconsUITest extends ApplicationTest {
 			.isNotNull()
 			.isInstanceOf(Text.class)
 			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.INFO.getCode()));
+		assertThat(Icons.iconFor(PASTE, DEFAULT_SIZE))
+			.isNotNull()
+			.isInstanceOf(Text.class)
+			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.PASTE.getCode()));
 		assertThat(Icons.iconFor(PIN, DEFAULT_SIZE))
 			.isNotNull()
 			.isInstanceOf(Text.class)
