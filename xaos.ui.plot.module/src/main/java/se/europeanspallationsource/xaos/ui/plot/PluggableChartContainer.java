@@ -17,6 +17,7 @@
 package se.europeanspallationsource.xaos.ui.plot;
 
 
+import java.net.URL;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -32,7 +33,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.web.WebView;
-import org.apache.commons.lang3.StringUtils;
 import org.controlsfx.control.HiddenSidesPane;
 import org.controlsfx.control.PopOver;
 import se.europeanspallationsource.xaos.tools.annotation.BundleItem;
@@ -153,7 +153,15 @@ public class PluggableChartContainer extends HiddenSidesPane {
 		setPluggable(pluggable);
 	}
 
-	@BundleItem( key = "infoPopOver.title", message = "Plugins Info")
+	@BundleItems({
+		@BundleItem(
+			key = "html.language.variation",
+			comment = "The extension will be added to class name, before the '.html' extension.\n"
+					+ "It could be something like '_it', or '_fr'.",
+			message = ""
+		),
+		@BundleItem( key = "infoPopOver.title", message = "Plugins Info")
+	})
 	private void handleInfoButton( ToggleButton infoButton, ToggleButton pinButton ) {
 
 		if ( !pinButton.isSelected() ) {
@@ -166,13 +174,23 @@ public class PluggableChartContainer extends HiddenSidesPane {
 			.sorted(( p1, p2 ) -> p1.getName().compareToIgnoreCase(p2.getName()))
 			.forEach(p -> {
 
-				String descriptionPage = p.getHTMLDescription();
+				//	Looking at the "htmls" package for an HTML file named
+				//	"class-name.html", where "class-name" is the actual plugin
+				//	simple class name. That HTML page should contain a
+				//	descritpion for the user about what the plugin does.
+				//	The HTML file name can have locale extensions. See the
+				//	above BundleItem entry.
+				String htmlResourceName = "/htmls/"
+										+ p.getClass().getSimpleName()
+										+ Bundles.get(PluggableChartContainer.class, "html.language.variation")
+										+ ".html";
+				URL htmlResourceURL = getClass().getResource(htmlResourceName);
 
-				if ( StringUtils.isNotBlank(descriptionPage) ) {
+				if ( htmlResourceURL != null ) {
 
 					WebView view = new WebView();
 
-					view.getEngine().loadContent(descriptionPage);
+					view.getEngine().load(htmlResourceURL.toExternalForm());
 					view.setPrefSize(500, 250);
 					accordion.getPanes().add(new TitledPane(p.getName(), view));
 

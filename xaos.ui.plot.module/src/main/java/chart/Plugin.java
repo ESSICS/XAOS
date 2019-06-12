@@ -66,23 +66,6 @@ public abstract class Plugin {
 	 */
 	public abstract String getName();
 
-	/**
-	 * @return A well formatted HTML page describing the plugin. The default
-	 *         implementation will return an HTML page with the simple class
-	 *         name of the plugin as title.
-	 */
-	public String getHTMLDescription() {
-		return "<html>\n"
-			 + "  <head>\n"
-			 + "    <title>" + getName() + "</title>\n"
-			 + "    <meta charset=\"UTF-8\">\n"
-			 + "  </head>\n"
-			 + "  <body>\n"
-			 + "    <p>TODO: write content</p>\n"
-			 + "  </body>\n"
-			 + "</html>";
-	}
-
     public final ValueAxis<?> getXValueAxis() {
         if(getChart() instanceof XYChart<?, ?>){
             if (((XYChart<?, ?>) getChart()).getXAxis() instanceof CategoryAxis) {

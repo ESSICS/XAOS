@@ -18,22 +18,11 @@ package se.europeanspallationsource.xaos.ui.plot.plugins;
 
 
 import chart.Plugin;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringWriter;
-import java.text.MessageFormat;
 import java.util.logging.Logger;
-import se.europeanspallationsource.xaos.tools.annotation.BundleItem;
-import se.europeanspallationsource.xaos.tools.annotation.Bundles;
 
 
 /**
- * A {@link Plugin} with a name. It will also look at the {@code htmls} package
- * for an HTML file named <i>class-name.html</i>, where {@code class-name} is
- * the actual plugin class simple name, and will return its content when
- * {@link #getHTMLDescription()} is invoked.
+ * A {@link Plugin} with a name.
  *
  * @author claudio.rosati@esss.se
  */
@@ -49,49 +38,6 @@ public class AbstractNamedPlugin extends Plugin {
 	 */
 	protected AbstractNamedPlugin( String name ) {
 		this.name = name;
-	}
-
-	@BundleItem(
-		key = "html.language.variation",
-		comment = "The extension will be added to class name, before the '.html' extension.\n"
-				+ "It could be something like '_it', or '_fr'.",
-		message = ""
-	)
-	@Override
-	@SuppressWarnings( "NestedAssignment" )
-	public String getHTMLDescription() {
-
-		String htmlResourceName = "/htmls/"
-								+ getClass().getSimpleName()
-								+ Bundles.get(AbstractNamedPlugin.class, "html.language.variation")
-								+ ".html";
-		InputStream htmlResource = getClass().getResourceAsStream(htmlResourceName);
-
-		if ( htmlResource != null ) {
-
-			StringWriter writer = new StringWriter();
-
-			try ( BufferedReader reader = new BufferedReader(new InputStreamReader(htmlResource)) ) {
-
-				String line;
-
-				while ( ( line = reader.readLine() ) != null ) {
-					writer.write(line);
-					writer.write('\n');
-				}
-
-			} catch ( IOException ex ) {
-				LOGGER.warning(MessageFormat.format("HTML resource ''{0}'' not found or not reatable [{1}].", htmlResourceName, ex.getMessage()));
-			}
-
-			return writer.toString();
-
-		} else {
-			LOGGER.warning(MessageFormat.format("HTML resource ''{0}'' not found.", htmlResourceName));
-		}
-
-		return super.getHTMLDescription();
-
 	}
 
 	@Override
