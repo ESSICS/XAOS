@@ -49,7 +49,7 @@ import static se.europeanspallationsource.xaos.ui.plot.util.Assertions.assertVal
  * {@link AxisConstraints#Y_ONLY Y_ONLY} according to the direction of the
  * initial movement of the gesture.</p>
  * <p>
- * Scroll can be performed with a track-pad or a mouse wheel. Shift will lock
+ * Scroll can be performed with a track-pad or a mouse wheel. SHIFT will lock
  * the scroll on the prominent axis, while Shortcut (Command on macOS, Ctrl
  * on Windows and Linux) will swap the axis (so with a mouse wheel will be
  * possible to scroll on both axis).</p>

@@ -21,12 +21,9 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
-import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Accordion;
-import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToolBar;
@@ -34,7 +31,6 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
-import javafx.scene.text.TextAlignment;
 import javafx.scene.web.WebView;
 import org.apache.commons.lang3.StringUtils;
 import org.controlsfx.control.HiddenSidesPane;
@@ -121,9 +117,11 @@ public class PluggableChartContainer extends HiddenSidesPane {
 		infoButton.setTooltip(new Tooltip(Bundles.get(PluggableChartContainer.class, "infoButton.tooltip")));
 		infoButton.disableProperty().bind(Bindings.or(
 			Bindings.isNull(pluggableProperty()),
-			Bindings.selectBoolean(pluggableProperty(), "plugins", "empty")
+			Bindings.or(
+				Bindings.selectBoolean(pluggableProperty(), "plugins", "empty"),
+				infoButton.selectedProperty()
+			)
 		));
-
 
 		//	Pin button...
 		pinButton.setOnAction(e -> setPinnedSide(pinButton.isSelected() ? TOP : null));
@@ -155,79 +153,51 @@ public class PluggableChartContainer extends HiddenSidesPane {
 		setPluggable(pluggable);
 	}
 
-	@BundleItem( key = "infoPopOver.noPluginsLabel", message = "No plugins.")
-	private Node createInfoContent() {
-
-		Pluggable plggbl = getPluggable();
-
-		if ( plggbl == null || plggbl.getPlugins().isEmpty() ) {
-
-			//	In theory this block of code should never be executed because of
-			//	the bindings of the infoButton... but just in case something
-			//	goes wrong...
-			Label noPluginsLabel = new Label(Bundles.get(PluggableChartContainer.class, "infoPopOver.noPluginsLabel"));
-
-			noPluginsLabel.setAlignment(Pos.CENTER);
-			noPluginsLabel.setTextAlignment(TextAlignment.CENTER);
-			noPluginsLabel.setMinSize(300, 200);
-
-			return noPluginsLabel;
-
-		} else {
-
-			Accordion accordion = new Accordion();
-
-			accordion.setMinSize(300, 200);
-
-			plggbl.getPlugins().stream()
-				.sorted(( p1, p2 ) -> p1.getName().compareToIgnoreCase(p2.getName()))
-				.forEach(p -> {
-
-					String descriptionPage = p.getHTMLDescription();
-
-					if ( StringUtils.isNotBlank(descriptionPage) ) {
-
-						WebView view = new WebView();
-
-						view.getEngine().loadContent(descriptionPage);
-						view.setPrefSize(500, 300);
-						accordion.getPanes().add(new TitledPane(p.getName(), view));
-
-					}
-
-				});
-
-			return accordion;
-
-		}
-
-	}
-
 	@BundleItem( key = "infoPopOver.title", message = "Plugins Info")
 	private void handleInfoButton( ToggleButton infoButton, ToggleButton pinButton ) {
-
-		infoButton.setCursor(Cursor.WAIT);
 
 		if ( !pinButton.isSelected() ) {
 			pinButton.fire();
 		}
 
-		PopOver popOver = new PopOver(createInfoContent());
+		Accordion accordion = new Accordion();
 
-		popOver.setAnimated(true);
+		getPluggable().getPlugins().stream()
+			.sorted(( p1, p2 ) -> p1.getName().compareToIgnoreCase(p2.getName()))
+			.forEach(p -> {
+
+				String descriptionPage = p.getHTMLDescription();
+
+				if ( StringUtils.isNotBlank(descriptionPage) ) {
+
+					WebView view = new WebView();
+
+					view.getEngine().loadContent(descriptionPage);
+					view.setPrefSize(500, 250);
+					accordion.getPanes().add(new TitledPane(p.getName(), view));
+
+				}
+
+			});
+
+		accordion.setExpandedPane(accordion.getPanes().get(0));
+
+		PopOver popOver = new PopOver(accordion);
+
+		popOver.setAnimated(false);
 		popOver.setCloseButtonEnabled(true);
 		popOver.setDetachable(true);
 		popOver.setHeaderAlwaysVisible(true);
 		popOver.setArrowLocation(TOP_RIGHT);
-		popOver.setOnShown(e -> { 
-			popOver.getContentNode().requestFocus();
-			infoButton.setCursor(Cursor.DEFAULT);
-		});
+		popOver.setOnShown(e -> popOver.getContentNode().requestFocus());
 		popOver.setOnHidden(e -> infoButton.setSelected(false));
+		popOver.setMaxSize(500, 300);
+		popOver.setMinSize(500, 300);
+		popOver.setPrefSize(500, 300);
 		popOver.setTitle(Bundles.get(PluggableChartContainer.class, "infoPopOver.title"));
 
-
 		popOver.show(infoButton);
+
 
 	}
 

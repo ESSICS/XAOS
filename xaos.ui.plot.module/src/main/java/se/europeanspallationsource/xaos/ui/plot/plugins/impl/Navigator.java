@@ -31,13 +31,13 @@ import se.europeanspallationsource.xaos.ui.plot.util.impl.ChartUndoManager;
  * Opens a {@link NavigatorPopup} when ALT key is pressed within the chart.
  * <p>The popup can be opened pressing ALT on a focused chart. If the popup
  * is still opened, pressing ALT again will move it under the current mouse
- * cursor position. The popup can be closed pressing ESC or clicking outside
+ * cursor position. The popup can be closed pressing ESC key or clicking outside
  * it.</p>
  * <p>
  * Once the popup is open, buttons can be navigated with TAB, and pressing
- * SPACE/ENTER will press the button. Button can be activated pressing keyboard
- * accelerators (Shortcut stands for Ctrl on Windows or Linux, and Command on
- * macOS):</p>
+ * SPACE/ENTER will press the button. Button can be activated pressing the 
+ * following keyboard accelerators (Shortcut stands for Ctrl on Windows or Linux,
+ * and Command on macOS):</p>
  * <table>
  *   <caption>&nbsp;</caption>
  *   <tr><td>Pan Down</td><td>Shortcut+DOWN</td></tr>
