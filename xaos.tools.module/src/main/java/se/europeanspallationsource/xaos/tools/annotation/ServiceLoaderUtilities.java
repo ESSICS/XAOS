@@ -45,7 +45,7 @@ public class ServiceLoaderUtilities {
 	 * <p>
 	 * This is equivalent to call
 	 * </p><pre>
-	 *   ServiceLoaderUtilities.stream(service)
+	 *   ServiceLoaderUtilities.stream(loader)
 	 *     .map(Provider::type)
 	 *     .collect(Collectors.toList());</pre>
 	 *
@@ -62,12 +62,11 @@ public class ServiceLoaderUtilities {
 
 	/**
 	 * Load the first available service provider of the given service provider
-	 * interface ({@code spi}). A {@link ServiceLoader} is created for the given
-	 * {@code service} type, using the current thread's context class loader.
+	 * interface ({@code spi}). 
 	 * <p>
 	 * This is equivalent to call
 	 * </p><pre>
-	 *   ServiceLoaderUtilities.stream(service)
+	 *   ServiceLoaderUtilities.stream(loader)
 	 *     .map(Provider::get)
 	 *     .findFirst();</pre><p>
 	 * The following example loads the first available service provider. If no
@@ -89,12 +88,11 @@ public class ServiceLoaderUtilities {
 
 	/**
 	 * Returns the {@link List} of implementers of the given service provider
-	 * interface ({@code spi}). A {@link ServiceLoader} is created for the given
-	 * {@code service} type, using the current thread's context class loader.
+	 * interface ({@code spi}). 
 	 * <p>
 	 * This is equivalent to call
 	 * </p><pre>
-	 *   ServiceLoaderUtilities.stream(service)
+	 *   ServiceLoaderUtilities.stream(loader)
 	 *     .map(Provider::get)
 	 *     .collect(Collectors.toList());</pre>
 	 *
@@ -111,13 +109,11 @@ public class ServiceLoaderUtilities {
 
 	/**
 	 * Returns the {@link List} of {@link Provider}s implementing the given
-	 * service provider interface ({@code spi}). A {@link ServiceLoader} is
-	 * created for the given {@code service} type, using the current thread's
-	 * context class loader.
+	 * service provider interface ({@code spi}).
 	 * <p>
 	 * This is equivalent to call
 	 * </p><pre>
-	 *   ServiceLoaderUtilities.stream(service)
+	 *   ServiceLoaderUtilities.stream(loader)
 	 *     .collect(Collectors.toList());</pre>
 	 *
 	 * @param <S>    The service provider interface type.

@@ -154,6 +154,7 @@ import static se.europeanspallationsource.xaos.ui.control.CommonIcons.DELETE;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FILE;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FILE_EXECUTABLE;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FILE_HIDDEN;
+import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FILE_IMAGE;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FILE_LINK;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FOLDER_COLLAPSED;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FOLDER_EXPANDED;
@@ -1458,7 +1459,7 @@ public class IconsUITest extends ApplicationTest {
 		//	No default provider, so null is the only result possible.
 		System.out.println("  Testing 'iconFor(Object)'...");
 
-		assertThat(CommonIcons.values().length).isEqualTo(27);
+		assertThat(CommonIcons.values().length).isEqualTo(28);
 
 		assertThat(Icons.iconFor(CHEVRON_DOWN, DEFAULT_SIZE))
 			.isNotNull()
@@ -1500,6 +1501,10 @@ public class IconsUITest extends ApplicationTest {
 			.isNotNull()
 			.isInstanceOf(Text.class)
 			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.FILE.getCode()));
+		assertThat(Icons.iconFor(FILE_IMAGE, DEFAULT_SIZE))
+			.isNotNull()
+			.isInstanceOf(Text.class)
+			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.FILE_IMAGE_O.getCode()));
 		assertThat(Icons.iconFor(FILE_LINK, DEFAULT_SIZE))
 			.isNotNull()
 			.isInstanceOf(Text.class)

@@ -24,6 +24,7 @@ module xaos.ui.plot {
 	//  from the JAR name.
 	requires commons.math3;
 	
+	requires java.desktop;
 	requires java.logging;
 	requires java.sql;
 	requires transitive javafx.base;
@@ -38,13 +39,20 @@ module xaos.ui.plot {
 	requires transitive xaos.tools;
 	requires transitive xaos.ui;
 
+	uses se.europeanspallationsource.xaos.ui.plot.spi.ToolbarContributor;
+	
+	provides se.europeanspallationsource.xaos.ui.plot.spi.ToolbarContributor
+		with se.europeanspallationsource.xaos.ui.plot.spi.impl.SaveChartAsImageContributor;
+
 	exports se.europeanspallationsource.xaos.ui.plot;
 	exports se.europeanspallationsource.xaos.ui.plot.data;
 	exports se.europeanspallationsource.xaos.ui.plot.plugins;
+	exports se.europeanspallationsource.xaos.ui.plot.spi;
 	exports se.europeanspallationsource.xaos.ui.plot.util;
 
 	opens se.europeanspallationsource.xaos.ui.plot to xaos.tools;
 	opens se.europeanspallationsource.xaos.ui.plot.plugins to xaos.tools;
+	opens se.europeanspallationsource.xaos.ui.plot.spi.impl to xaos.tools;
 	opens icons.properties to xaos.ui;
 
 }

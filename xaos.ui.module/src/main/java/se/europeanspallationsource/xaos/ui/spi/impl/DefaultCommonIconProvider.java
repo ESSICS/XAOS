@@ -59,6 +59,7 @@ public class DefaultCommonIconProvider extends BaseProvider implements IconProvi
 		map.put(CommonIcons.FILE, FontAwesome.FILE_O);
 		map.put(CommonIcons.FILE_EXECUTABLE, FontAwesome.PLAY_CIRCLE_O);
 		map.put(CommonIcons.FILE_HIDDEN, FontAwesome.FILE);
+		map.put(CommonIcons.FILE_IMAGE, FontAwesome.FILE_IMAGE_O);
 		map.put(CommonIcons.FILE_LINK, FontAwesome.LINK);
 		map.put(CommonIcons.FOLDER_COLLAPSED, FontAwesome.FOLDER_O);
 		map.put(CommonIcons.FOLDER_EXPANDED, FontAwesome.FOLDER_OPEN_O);

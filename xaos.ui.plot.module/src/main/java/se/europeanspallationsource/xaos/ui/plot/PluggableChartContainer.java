@@ -18,6 +18,9 @@ package se.europeanspallationsource.xaos.ui.plot;
 
 
 import java.net.URL;
+import java.text.MessageFormat;
+import java.util.ServiceLoader;
+import java.util.logging.Logger;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -25,6 +28,9 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Accordion;
+import javafx.scene.control.ButtonBase;
+import javafx.scene.control.Control;
+import javafx.scene.control.Separator;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToolBar;
@@ -38,8 +44,10 @@ import org.controlsfx.control.PopOver;
 import se.europeanspallationsource.xaos.tools.annotation.BundleItem;
 import se.europeanspallationsource.xaos.tools.annotation.BundleItems;
 import se.europeanspallationsource.xaos.tools.annotation.Bundles;
+import se.europeanspallationsource.xaos.tools.annotation.ServiceLoaderUtilities;
 import se.europeanspallationsource.xaos.ui.control.Icons;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Pluggable;
+import se.europeanspallationsource.xaos.ui.plot.spi.ToolbarContributor;
 
 import static javafx.geometry.Side.TOP;
 import static org.controlsfx.control.PopOver.ArrowLocation.TOP_RIGHT;
@@ -61,6 +69,7 @@ import static se.europeanspallationsource.xaos.ui.util.FXUtils.makeSquare;
  */
 public class PluggableChartContainer extends HiddenSidesPane {
 
+	private static final Logger LOGGER = Logger.getLogger(PluggableChartContainer.class.getName());
 	private final ToolBar toolbar = new ToolBar();
 
 	/* *********************************************************************** *
@@ -132,7 +141,26 @@ public class PluggableChartContainer extends HiddenSidesPane {
 
 		ObservableList<Node> tItems = toolbar.getItems();
 
-//		tItems.add(new Separator());
+		ServiceLoaderUtilities.of(ServiceLoader.load(ToolbarContributor.class)).forEach(tc -> {
+
+			if ( tc.isPrecededBySeparator() ) {
+				tItems.add(new Separator());
+			}
+
+			Control element = tc.provide(this);
+
+			if ( element != null ) {
+				if ( element instanceof ButtonBase ) {
+					tItems.add(makeSquare(element, 22));
+				} else {
+					tItems.add(element);
+				}
+			} else {
+				LOGGER.warning(MessageFormat.format("Null component provided by ''{0}''.", tc.getClass()));
+			}
+
+		});
+
 		tItems.add(filler);
 		tItems.add(makeSquare(infoButton, 22));
 		tItems.add(makeSquare(pinButton, 22));
