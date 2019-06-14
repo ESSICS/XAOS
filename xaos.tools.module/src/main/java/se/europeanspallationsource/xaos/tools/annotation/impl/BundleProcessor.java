@@ -17,11 +17,10 @@
 package se.europeanspallationsource.xaos.tools.annotation.impl;
 
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.StringWriter;
-import java.nio.file.NoSuchFileException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -297,19 +296,11 @@ public class BundleProcessor extends AbstractAnnotationProcessor {
 						descriptor.bundleName + ".properties"
 					);
 
-					StringWriter existingContent = new StringWriter();
+					String existingContentString = null;
 
-					try ( BufferedReader reader = new BufferedReader(resourceReader.openReader(true)) ) {
-
-						String line;
-
-						while ( ( line = reader.readLine()) != null ) {
-							existingContent.append(line).append("\n");
-						}
-
-						existingContent.append("\n\n");
-
-					} catch ( NoSuchFileException fnfex ) {
+					try {
+						existingContentString = Files.readString(Paths.get(resourceReader.toUri()));
+					} catch ( IOException ex ) {
 						//	No original content exists.
 					}
 
@@ -324,11 +315,10 @@ public class BundleProcessor extends AbstractAnnotationProcessor {
 					try ( BufferedWriter writer = new BufferedWriter(resourceWriter.openWriter()) ) {
 
 						//	Write existing content (if exists)...
-						String existingContentString = existingContent.toString();
-
 						if ( StringUtils.isNotBlank(existingContentString) ) {
 							try {
 								writer.write(existingContentString);
+								writer.write("\n\n");
 							} catch ( IOException ex ) {
 								getMessager().printMessage(
 									ERROR,

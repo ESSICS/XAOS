@@ -170,6 +170,7 @@ import static se.europeanspallationsource.xaos.ui.control.CommonIcons.SQUARE_DOW
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.SQUARE_LEFT;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.SQUARE_RIGHT;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.SQUARE_UP;
+import static se.europeanspallationsource.xaos.ui.control.CommonIcons.TABLE;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.ZOOM_IN;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.ZOOM_OUT;
 import static se.europeanspallationsource.xaos.ui.control.Icons.DEFAULT_SIZE;
@@ -1459,7 +1460,7 @@ public class IconsUITest extends ApplicationTest {
 		//	No default provider, so null is the only result possible.
 		System.out.println("  Testing 'iconFor(Object)'...");
 
-		assertThat(CommonIcons.values().length).isEqualTo(28);
+		assertThat(CommonIcons.values().length).isEqualTo(29);
 
 		assertThat(Icons.iconFor(CHEVRON_DOWN, DEFAULT_SIZE))
 			.isNotNull()
@@ -1561,6 +1562,10 @@ public class IconsUITest extends ApplicationTest {
 			.isNotNull()
 			.isInstanceOf(Text.class)
 			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.CARET_SQUARE_O_RIGHT.getCode()));
+		assertThat(Icons.iconFor(TABLE, DEFAULT_SIZE))
+			.isNotNull()
+			.isInstanceOf(Text.class)
+			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.TABLE.getCode()));
 		assertThat(Icons.iconFor(SQUARE_UP, DEFAULT_SIZE))
 			.isNotNull()
 			.isInstanceOf(Text.class)

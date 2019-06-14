@@ -50,6 +50,7 @@ public enum CommonIcons {
 	SQUARE_LEFT,
 	SQUARE_RIGHT,
 	SQUARE_UP,
+	TABLE,
 	ZOOM_IN,
 	ZOOM_OUT
 }

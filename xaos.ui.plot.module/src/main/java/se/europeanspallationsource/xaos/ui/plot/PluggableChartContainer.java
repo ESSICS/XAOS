@@ -123,7 +123,7 @@ public class PluggableChartContainer extends HiddenSidesPane {
 
 		//	Info/Help button...
 		infoButton.setOnAction(e -> handleInfoButton(infoButton, pinButton));
-		infoButton.setTooltip(new Tooltip(Bundles.get(PluggableChartContainer.class, "infoButton.tooltip")));
+		infoButton.setTooltip(new Tooltip(getString("infoButton.tooltip")));
 		infoButton.disableProperty().bind(Bindings.or(
 			Bindings.isNull(pluggableProperty()),
 			Bindings.or(
@@ -134,7 +134,7 @@ public class PluggableChartContainer extends HiddenSidesPane {
 
 		//	Pin button...
 		pinButton.setOnAction(e -> setPinnedSide(pinButton.isSelected() ? TOP : null));
-		pinButton.setTooltip(new Tooltip(Bundles.get(PluggableChartContainer.class, "pinButton.tooltip")));
+		pinButton.setTooltip(new Tooltip(getString("pinButton.tooltip")));
 
 		//	Setup the toolbar
 		toolbar.setOpacity(0.66);
@@ -181,6 +181,10 @@ public class PluggableChartContainer extends HiddenSidesPane {
 		setPluggable(pluggable);
 	}
 
+	private String getString ( String key ) {
+		return Bundles.get(PluggableChartContainer.class, key);
+	}
+
 	@BundleItems({
 		@BundleItem(
 			key = "html.language.variation",
@@ -210,7 +214,7 @@ public class PluggableChartContainer extends HiddenSidesPane {
 				//	above BundleItem entry.
 				String htmlResourceName = "/htmls/"
 										+ p.getClass().getSimpleName()
-										+ Bundles.get(PluggableChartContainer.class, "html.language.variation")
+										+ getString("html.language.variation")
 										+ ".html";
 				URL htmlResourceURL = getClass().getResource(htmlResourceName);
 
@@ -240,7 +244,7 @@ public class PluggableChartContainer extends HiddenSidesPane {
 		popOver.setMaxSize(500, 300);
 		popOver.setMinSize(500, 300);
 		popOver.setPrefSize(500, 300);
-		popOver.setTitle(Bundles.get(PluggableChartContainer.class, "infoPopOver.title"));
+		popOver.setTitle(getString("infoPopOver.title"));
 
 		popOver.show(infoButton);
 
