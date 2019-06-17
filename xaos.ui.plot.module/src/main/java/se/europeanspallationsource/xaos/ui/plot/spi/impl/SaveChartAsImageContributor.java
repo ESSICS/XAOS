@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javafx.beans.binding.Bindings;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.Chart;
@@ -51,6 +52,7 @@ import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FILE_IMAGE
  * chart into an image file.
  *
  * @author claudio.rosati@esss.se
+ * @srvc.order 100
  */
 @ServiceProvider( service = ToolbarContributor.class, order = 100 )
 public class SaveChartAsImageContributor implements ToolbarContributor {
@@ -65,6 +67,7 @@ public class SaveChartAsImageContributor implements ToolbarContributor {
 
 		Button button = new Button(null, Icons.iconFor(FILE_IMAGE, 14));
 
+		button.disableProperty().bind(Bindings.isNull(chartContainer.pluggableProperty()));
 		button.setTooltip(new Tooltip(getString("button.tooltip")));
 		button.setOnAction(e -> saveChartAsImage(chartContainer.getPluggable().getChart()));
 
@@ -78,14 +81,7 @@ public class SaveChartAsImageContributor implements ToolbarContributor {
 
 	@BundleItems( {
 		@BundleItem( key = "chooser.filter", message = "Image Files" ),
-		@BundleItem( key = "chooser.title", message = "Save Chart as Image" ),
-		@BundleItem(
-			key = "warning.message",
-			comment = "Message used to notify user the selected file already exists."
-					+ "  {0} - The selected file.",
-			message = "File ''{0}'' already exist!\nDo you want to overwrite it?"
-		),
-		@BundleItem( key = "warning.title", message = "File Already Exists" )
+		@BundleItem( key = "chooser.title", message = "Save Chart as Image" )
 	} )
 	private void saveChartAsImage( Chart chart ) {
 

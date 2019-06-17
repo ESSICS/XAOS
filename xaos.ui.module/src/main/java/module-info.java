@@ -34,6 +34,7 @@ module xaos.ui {
 	requires org.kordamp.iconli.core;
 	requires org.kordamp.ikonli.fontawesome;
 	requires org.kordamp.ikonli.javafx;
+	requires org.kordamp.ikonli.materialdesign;
 	requires transitive xaos.core;
 	requires transitive xaos.tools;
 

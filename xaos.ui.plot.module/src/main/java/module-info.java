@@ -38,12 +38,16 @@ module xaos.ui.plot {
 	requires transitive xaos.core;
 	requires transitive xaos.tools;
 	requires transitive xaos.ui;
+	requires java.base;
 
 	uses se.europeanspallationsource.xaos.ui.plot.spi.ToolbarContributor;
 	
 	provides se.europeanspallationsource.xaos.ui.plot.spi.ToolbarContributor
-		with se.europeanspallationsource.xaos.ui.plot.spi.impl.SaveChartAsImageContributor,
-			 se.europeanspallationsource.xaos.ui.plot.spi.impl.SaveChartDataContributor;
+		with se.europeanspallationsource.xaos.ui.plot.spi.impl.AxesPropertiesContributor,
+			 se.europeanspallationsource.xaos.ui.plot.spi.impl.FitContributor,
+			 se.europeanspallationsource.xaos.ui.plot.spi.impl.SaveChartAsImageContributor,
+			 se.europeanspallationsource.xaos.ui.plot.spi.impl.SaveChartDataContributor,
+			 se.europeanspallationsource.xaos.ui.plot.spi.impl.StatisticsContributor;
 
 	exports se.europeanspallationsource.xaos.ui.plot;
 	exports se.europeanspallationsource.xaos.ui.plot.data;

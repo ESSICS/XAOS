@@ -70,6 +70,7 @@ import static se.europeanspallationsource.xaos.ui.util.FXUtils.makeSquare;
 public class PluggableChartContainer extends HiddenSidesPane {
 
 	private static final Logger LOGGER = Logger.getLogger(PluggableChartContainer.class.getName());
+	private final ToggleButton pinButton = new ToggleButton(null, Icons.iconFor(PIN, 14));
 	private final ToolBar toolbar = new ToolBar();
 
 	/* *********************************************************************** *
@@ -85,6 +86,10 @@ public class PluggableChartContainer extends HiddenSidesPane {
 			setContent(get().getChart());
         }
     };
+
+	public ToggleButton getPinButton() {
+		return pinButton;
+	}
 
 	public final ObjectProperty<Pluggable> pluggableProperty() {
 		return pluggable;
@@ -119,10 +124,9 @@ public class PluggableChartContainer extends HiddenSidesPane {
 		//	Buttons created all together in order to be passed to handling
 		//	callbacks.
 		ToggleButton infoButton = new ToggleButton(null, Icons.iconFor(INFO, 14));
-		ToggleButton pinButton = new ToggleButton(null, Icons.iconFor(PIN, 14));
 
 		//	Info/Help button...
-		infoButton.setOnAction(e -> handleInfoButton(infoButton, pinButton));
+		infoButton.setOnAction(e -> handleInfoButton(infoButton));
 		infoButton.setTooltip(new Tooltip(getString("infoButton.tooltip")));
 		infoButton.disableProperty().bind(Bindings.or(
 			Bindings.isNull(pluggableProperty()),
@@ -194,7 +198,7 @@ public class PluggableChartContainer extends HiddenSidesPane {
 		),
 		@BundleItem( key = "infoPopOver.title", message = "Plugins Info")
 	})
-	private void handleInfoButton( ToggleButton infoButton, ToggleButton pinButton ) {
+	private void handleInfoButton( ToggleButton infoButton ) {
 
 		if ( !pinButton.isSelected() ) {
 			pinButton.fire();
@@ -239,11 +243,7 @@ public class PluggableChartContainer extends HiddenSidesPane {
 		popOver.setDetachable(true);
 		popOver.setHeaderAlwaysVisible(true);
 		popOver.setArrowLocation(TOP_RIGHT);
-		popOver.setOnShown(e -> popOver.getContentNode().requestFocus());
 		popOver.setOnHidden(e -> infoButton.setSelected(false));
-		popOver.setMaxSize(500, 300);
-		popOver.setMinSize(500, 300);
-		popOver.setPrefSize(500, 300);
 		popOver.setTitle(getString("infoPopOver.title"));
 
 		popOver.show(infoButton);

@@ -267,6 +267,11 @@
 							<placement>a</placement>
 							<head>Implementation Note:</head>
 						</tag>
+						<tag>
+							<name>srvc.order</name>
+							<placement>a</placement>
+							<head>Service Provider Order:</head>
+						</tag>
 					</tags>
 				</configuration>
 				<executions>

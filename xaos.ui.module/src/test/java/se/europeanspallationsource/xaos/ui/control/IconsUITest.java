@@ -137,6 +137,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.kordamp.ikonli.fontawesome.FontAwesome;
+import org.kordamp.ikonli.materialdesign.MaterialDesign;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
 import se.europeanspallationsource.xaos.core.util.ThreadUtils;
@@ -159,6 +160,7 @@ import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FILE_LINK;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FOLDER_COLLAPSED;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FOLDER_EXPANDED;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FORWARD;
+import static se.europeanspallationsource.xaos.ui.control.CommonIcons.GEARS;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.INFO;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.PASTE;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.PIN;
@@ -170,10 +172,12 @@ import static se.europeanspallationsource.xaos.ui.control.CommonIcons.SQUARE_DOW
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.SQUARE_LEFT;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.SQUARE_RIGHT;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.SQUARE_UP;
+import static se.europeanspallationsource.xaos.ui.control.CommonIcons.STATISTICS;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.TABLE;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.ZOOM_IN;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.ZOOM_OUT;
 import static se.europeanspallationsource.xaos.ui.control.Icons.DEFAULT_SIZE;
+import static se.europeanspallationsource.xaos.ui.control.CommonIcons.BLUR_OFF;
 
 
 /**
@@ -1460,8 +1464,12 @@ public class IconsUITest extends ApplicationTest {
 		//	No default provider, so null is the only result possible.
 		System.out.println("  Testing 'iconFor(Object)'...");
 
-		assertThat(CommonIcons.values().length).isEqualTo(29);
+		assertThat(CommonIcons.values().length).isEqualTo(32);
 
+		assertThat(Icons.iconFor(BLUR_OFF, DEFAULT_SIZE))
+			.isNotNull()
+			.isInstanceOf(Text.class)
+			.hasFieldOrPropertyWithValue("text", String.valueOf(MaterialDesign.MDI_BLUR_OFF.getCode()));
 		assertThat(Icons.iconFor(CHEVRON_DOWN, DEFAULT_SIZE))
 			.isNotNull()
 			.isInstanceOf(Text.class)
@@ -1522,6 +1530,10 @@ public class IconsUITest extends ApplicationTest {
 			.isNotNull()
 			.isInstanceOf(Text.class)
 			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.FORWARD.getCode()));
+		assertThat(Icons.iconFor(GEARS, DEFAULT_SIZE))
+			.isNotNull()
+			.isInstanceOf(Text.class)
+			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.GEARS.getCode()));
 		assertThat(Icons.iconFor(INFO, DEFAULT_SIZE))
 			.isNotNull()
 			.isInstanceOf(Text.class)
@@ -1562,6 +1574,10 @@ public class IconsUITest extends ApplicationTest {
 			.isNotNull()
 			.isInstanceOf(Text.class)
 			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.CARET_SQUARE_O_RIGHT.getCode()));
+		assertThat(Icons.iconFor(STATISTICS, DEFAULT_SIZE))
+			.isNotNull()
+			.isInstanceOf(Text.class)
+			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.SIGNAL.getCode()));
 		assertThat(Icons.iconFor(TABLE, DEFAULT_SIZE))
 			.isNotNull()
 			.isInstanceOf(Text.class)

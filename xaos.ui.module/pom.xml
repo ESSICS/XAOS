@@ -20,7 +20,7 @@
 
 	<properties>
 		<!-- Dependencies Versions -->
-		<classgraph.version>4.8.37</classgraph.version>
+		<classgraph.version>4.8.41</classgraph.version>
 		<commons-lang3.version>3.9</commons-lang3.version>
 		<commons-text.version>1.6</commons-text.version>
 		<ikonli.version>11.3.4</ikonli.version>
@@ -86,48 +86,48 @@
 
 	<dependencies>
 
-        <!-- JavaFX - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+		<!-- JavaFX - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-base</artifactId>
 			<version>${javafx.version}</version>
-            <scope>compile</scope>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-controls</artifactId>
 			<version>${javafx.version}</version>
-            <scope>compile</scope>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-fxml</artifactId>
 			<version>${javafx.version}</version>
-            <scope>compile</scope>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-graphics</artifactId>
 			<version>${javafx.version}</version>
-            <scope>compile</scope>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-media</artifactId>
 			<version>${javafx.version}</version>
-            <scope>compile</scope>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-swing</artifactId>
 			<version>${javafx.version}</version>
-            <scope>compile</scope>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-web</artifactId>
 			<version>${javafx.version}</version>
-            <scope>compile</scope>
+			<scope>compile</scope>
 		</dependency>
 
 		<!-- Apache - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -160,6 +160,12 @@
 		<dependency>
 			<groupId>org.kordamp.ikonli</groupId>
 			<artifactId>ikonli-fontawesome-pack</artifactId>
+			<version>${ikonli.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.kordamp.ikonli</groupId>
+			<artifactId>ikonli-materialdesign-pack</artifactId>
 			<version>${ikonli.version}</version>
 			<scope>compile</scope>
 		</dependency>

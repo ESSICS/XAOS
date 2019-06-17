@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="319.0" minWidth="400.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="se.europeanspallationsource.xaos.ui.plot.spi.impl.FitController">
+  <columnConstraints>
+      <ColumnConstraints hgrow="NEVER" maxWidth="20.0" minWidth="20.0" prefWidth="20.0" />
+    <ColumnConstraints hgrow="NEVER" />
+      <ColumnConstraints fillWidth="false" hgrow="NEVER" maxWidth="5.0" minWidth="5.0" prefWidth="5.0" />
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+      <ColumnConstraints fillWidth="false" hgrow="NEVER" maxWidth="20.0" minWidth="20.0" prefWidth="20.0" />
+  </columnConstraints>
+  <rowConstraints>
+      <RowConstraints fillHeight="false" maxHeight="20.0" minHeight="20.0" prefHeight="20.0" vgrow="NEVER" />
+    <RowConstraints minHeight="10.0" vgrow="NEVER" />
+    <RowConstraints fillHeight="false" maxHeight="10.0" minHeight="10.0" prefHeight="10.0" vgrow="NEVER" />
+    <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
+      <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="20.0" vgrow="NEVER" />
+      <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
+      <RowConstraints fillHeight="false" maxHeight="10.0" minHeight="10.0" prefHeight="10.0" vgrow="NEVER" />
+      <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
+      <RowConstraints fillHeight="false" maxHeight="10.0" minHeight="10.0" prefHeight="10.0" vgrow="NEVER" />
+      <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
+      <RowConstraints fillHeight="false" maxHeight="10.0" minHeight="10.0" prefHeight="10.0" vgrow="NEVER" />
+      <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
+      <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
+      <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="20.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <Label text="%data.set.caption" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+      <ComboBox fx:id="dataSetValue" maxWidth="1.7976931348623157E308" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+      <Label text="%fitting.caption" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+      <ComboBox fx:id="fittingValue" maxWidth="1.7976931348623157E308" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+      <Label fx:id="degreeOrOffsetCaption" text="%degree.caption" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+      <Spinner fx:id="degreeOrOffsetValue" editable="true" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+      <Label text="%discretization.caption" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="7" GridPane.valignment="CENTER" />
+      <Spinner fx:id="discretizationValue" editable="true" GridPane.columnIndex="3" GridPane.rowIndex="7" />
+      <Label text="%min.x.caption" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="9" GridPane.valignment="CENTER" />
+      <Spinner fx:id="minXValue" editable="true" GridPane.columnIndex="3" GridPane.rowIndex="9" />
+      <Label text="%max.x.caption" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="11" GridPane.valignment="CENTER" />
+      <Spinner fx:id="maxXValue" editable="true" GridPane.columnIndex="3" GridPane.rowIndex="11" />
+      <GridPane alignment="CENTER_RIGHT" maxWidth="-Infinity" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="13" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="NEVER" minWidth="10.0" percentWidth="30.0" />
+            <ColumnConstraints hgrow="ALWAYS" maxWidth="10.0" minWidth="10.0" percentWidth="5.0" prefWidth="10.0" />
+          <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="30.0" />
+            <ColumnConstraints hgrow="ALWAYS" maxWidth="10.0" minWidth="10.0" percentWidth="5.0" prefWidth="10.0" />
+          <ColumnConstraints hgrow="NEVER" minWidth="10.0" percentWidth="30.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" vgrow="NEVER" />
+        </rowConstraints>
+         <children>
+            <Button fx:id="clearAllButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clearAll" text="%clear.all.button" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <Button fx:id="clearButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clear" text="%clear.button" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <Button fx:id="applyButton" defaultButton="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#apply" text="%apply.button" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+         </children>
+      </GridPane>
+   </children>
+</GridPane>

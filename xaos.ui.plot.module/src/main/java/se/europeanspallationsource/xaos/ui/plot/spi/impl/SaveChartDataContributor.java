@@ -24,6 +24,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.logging.Logger;
+import javafx.beans.binding.Bindings;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
@@ -49,6 +50,7 @@ import static se.europeanspallationsource.xaos.ui.control.CommonIcons.TABLE;
  * into a {@code .csv} file.
  *
  * @author claudio.rosati@esss.se
+ * @srvc.order 200
  */
 @BundleItems( {
 	@BundleItem( key = "button.tooltip", message = "Save current chart data into a ''.csv'' file." ),
@@ -67,6 +69,7 @@ public class SaveChartDataContributor implements ToolbarContributor {
 
 		Button button = new Button(null, Icons.iconFor(TABLE, 14));
 
+		button.disableProperty().bind(Bindings.isNull(chartContainer.pluggableProperty()));
 		button.setTooltip(new Tooltip(getString("button.tooltip")));
 		button.setOnAction(e -> saveChartData(chartContainer.getPluggable().getChart()));
 
