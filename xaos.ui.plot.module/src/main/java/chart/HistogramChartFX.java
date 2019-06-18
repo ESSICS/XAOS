@@ -17,14 +17,12 @@
 
 package chart;
 
-import com.sun.javafx.charts.Legend;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.chart.Axis;
@@ -33,12 +31,12 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.ValueAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
-import javafx.scene.control.CheckBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
+import se.europeanspallationsource.xaos.ui.plot.Legend;
+import se.europeanspallationsource.xaos.ui.plot.Legend.LegendItem;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Pluggable;
 
 
@@ -304,43 +302,56 @@ public class HistogramChartFX<X,Y> extends LineChart<X,Y> implements Pluggable {
      @Override
     protected void updateLegend()
     {
-        final Legend legend = new Legend();     
-        seriesDrawnInPlot.clear();
-        legend.getItems().clear();
-        for (final Series<X, Y> series : getData())
-        {            
-            if(!noShowInLegend.contains(series.getName())){
-                Legend.LegendItem legenditem = new Legend.LegendItem(series.getName());                
-                final CheckBox cb = new CheckBox(series.getName());                
-                seriesDrawnInPlot.add(series.getName());
-                cb.setUserData(series);
-                cb.setSelected(true); 
-                //cb.setPadding(new Insets(0,10,0,0));
-                cb.setStyle("-fx-text-fill: -color"+this.getData().indexOf(series)+" ;");
-                cb.addEventHandler(ActionEvent.ACTION, e ->{
-                    final CheckBox box = (CheckBox) e.getSource();
-                    @SuppressWarnings("unchecked")
-                    final Series<Number, Number> s = (Series<Number, Number>) box.getUserData();
-                    s.getNode().setVisible(box.isSelected());
-                    s.getData().forEach(data ->{
-                        StackPane stackPane = (StackPane) data.getNode();
-                        stackPane.setVisible(box.isSelected());
-                    }); 
-                    if(box.isSelected()){
-                        if (!seriesDrawnInPlot.contains(s.getName())){
-                            seriesDrawnInPlot.add(s.getName());
-                        }
-                    } else {
-                        seriesDrawnInPlot.remove(s.getName());
-                    }
-                });
-                legenditem.setText("");
-                legenditem.setSymbol(cb);
-                legend.getItems().add(legenditem);
-            }
-        }
-        setLegend(legend);
+//        final Legend legend = new Legend();
+//        seriesDrawnInPlot.clear();
+//        legend.getItems().clear();
+//        for (final Series<X, Y> series : getData())
+//        {
+//            if(!noShowInLegend.contains(series.getName())){
+//                Legend.LegendItem legenditem = new Legend.LegendItem(series.getName());
+//                final CheckBox cb = new CheckBox(series.getName());
+//                seriesDrawnInPlot.add(series.getName());
+//                cb.setUserData(series);
+//                cb.setSelected(true);
+//                //cb.setPadding(new Insets(0,10,0,0));
+//                cb.setStyle("-fx-text-fill: -color"+this.getData().indexOf(series)+" ;");
+//                cb.addEventHandler(ActionEvent.ACTION, e ->{
+//                    final CheckBox box = (CheckBox) e.getSource();
+//                    @SuppressWarnings("unchecked")
+//                    final Series<Number, Number> s = (Series<Number, Number>) box.getUserData();
+//                    s.getNode().setVisible(box.isSelected());
+//                    s.getData().forEach(data ->{
+//                        StackPane stackPane = (StackPane) data.getNode();
+//                        stackPane.setVisible(box.isSelected());
+//                    });
+//                    if(box.isSelected()){
+//                        if (!seriesDrawnInPlot.contains(s.getName())){
+//                            seriesDrawnInPlot.add(s.getName());
+//                        }
+//                    } else {
+//                        seriesDrawnInPlot.remove(s.getName());
+//                    }
+//                });
+//                legenditem.setText("");
+//                legenditem.setSymbol(cb);
+//                legend.getItems().add(legenditem);
+//            }
+//        }
+//        setLegend(legend);
     }
     
+	@Override
+	public ObservableList<LegendItem> getLegendItems() {
+
+		Node legend = getLegend();
+
+		if ( legend instanceof Legend ) {
+			return ((Legend) legend).getItems();
+		} else {
+			return FXCollections.emptyObservableList();
+		}
+
+	}
+
 }
 

@@ -14,21 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.ui.plot.impl;
-
-
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
 
 
 /**
+ * This contains implementation classes for the {@code spi} package.
+ *
  * @author claudio.rosati@esss.se
  */
-@RunWith( Suite.class )
-@Suite.SuiteClasses( {
-	LegendUITest.class
-} )
-@SuppressWarnings( { "ClassMayBeInterface", "ClassWithoutLogger", "UtilityClassWithoutPrivateConstructor" } )
-public class ImplSuite {
-
-}
+package se.europeanspallationsource.xaos.ui.plot.spi.impl;

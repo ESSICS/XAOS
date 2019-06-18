@@ -45,6 +45,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
@@ -73,6 +74,7 @@ import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
+import se.europeanspallationsource.xaos.ui.plot.Legend.LegendItem;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Pluggable;
 
 /**
@@ -1403,4 +1405,17 @@ public class DensityChartFX<X,Y> extends Chart implements Pluggable {
         return getClassCssMetaData();
     }    
     
+	@Override
+	public ObservableList<LegendItem> getLegendItems() {
+
+		Node legend = getLegend();
+
+		if ( legend instanceof se.europeanspallationsource.xaos.ui.plot.Legend ) {
+			return ((se.europeanspallationsource.xaos.ui.plot.Legend) legend).getItems();
+		} else {
+			return FXCollections.emptyObservableList();
+		}
+
+	}
+
 }

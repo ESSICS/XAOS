@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.ui.plot.impl;
+package se.europeanspallationsource.xaos.ui.plot;
 
 
 import java.util.function.Consumer;
@@ -202,7 +202,7 @@ public class Legend extends TilePane {
 		/*
 		 * ---- symbol ---------------------------------------------------------
 		 */
-		private ObjectProperty<Node> symbol = new SimpleObjectProperty<>(LegendItem.this, "symbol", new Region()) {
+		private final ObjectProperty<Node> symbol = new SimpleObjectProperty<>(LegendItem.this, "symbol", new Region()) {
 			@Override
 			protected void invalidated() {
 
@@ -276,6 +276,11 @@ public class Legend extends TilePane {
 		public LegendItem( String text, Node symbol, Consumer<Boolean> checkBoxSelectionHandler ) {
 			this(text, checkBoxSelectionHandler);
 			setSymbol(symbol);
+		}
+
+		@Override
+		public String toString() {
+			return getText();
 		}
 
 	}

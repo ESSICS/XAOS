@@ -242,6 +242,7 @@ public class PluggableChartContainer extends HiddenSidesPane {
 		popOver.setCloseButtonEnabled(true);
 		popOver.setDetachable(true);
 		popOver.setHeaderAlwaysVisible(true);
+		popOver.setHideOnEscape(true);
 		popOver.setArrowLocation(TOP_RIGHT);
 		popOver.setOnHidden(e -> infoButton.setSelected(false));
 		popOver.setTitle(getString("infoPopOver.title"));

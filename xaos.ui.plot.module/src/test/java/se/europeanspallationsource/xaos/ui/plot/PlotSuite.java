@@ -17,13 +17,18 @@
 package se.europeanspallationsource.xaos.ui.plot;
 
 
-import se.europeanspallationsource.xaos.ui.plot.*;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 
 
 /**
- *
- * @author claudiorosati
+ * @author claudio.rosati@esss.se
  */
-public class Placeholder2 {
+@RunWith( Suite.class )
+@Suite.SuiteClasses( {
+	LegendUITest.class
+} )
+@SuppressWarnings( { "ClassMayBeInterface", "ClassWithoutLogger", "UtilityClassWithoutPrivateConstructor" } )
+public class PlotSuite {
 
 }

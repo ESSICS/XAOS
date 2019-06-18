@@ -14,9 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.ui.plot.impl;
+package se.europeanspallationsource.xaos.ui.plot;
 
 
+import se.europeanspallationsource.xaos.ui.plot.Legend;
 import chart.AreaChartFX;
 import chart.data.DataReducingSeries;
 import java.io.IOException;
@@ -39,7 +40,7 @@ import org.junit.Test;
 import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
-import se.europeanspallationsource.xaos.ui.plot.impl.Legend.LegendItem;
+import se.europeanspallationsource.xaos.ui.plot.Legend.LegendItem;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
 
 import static javafx.scene.input.MouseButton.PRIMARY;

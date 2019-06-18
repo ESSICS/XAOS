@@ -625,7 +625,7 @@ public class NavigatorController extends AnchorPane {
 
 	private void init() {
 
-		URL resource = getClass().getResource("/se/europeanspallationsource/xaos/ui/impl/control/fxml/navigator.fxml");
+		URL resource = NavigatorController.class.getResource("impl/fxml/navigator.fxml");
 
 		try {
 
@@ -639,7 +639,7 @@ public class NavigatorController extends AnchorPane {
 			LOGGER.log(
 				SEVERE,
 				MessageFormat.format(
-					"Unable to load 'navigator.xml' resource [{0}].",
+					"Unable to load ''navigator.xml'' resource [{0}].",
 					resource.toExternalForm()
 				),
 				ex

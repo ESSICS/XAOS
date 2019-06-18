@@ -27,7 +27,8 @@ import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.Chart;
 import org.apache.commons.lang3.Validate;
-import se.europeanspallationsource.xaos.ui.plot.impl.Legend;
+import se.europeanspallationsource.xaos.ui.plot.Legend;
+import se.europeanspallationsource.xaos.ui.plot.Legend.LegendItem;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Pluggable;
 import se.europeanspallationsource.xaos.ui.plot.util.SeriesColorUtils;
 
@@ -80,6 +81,19 @@ public class AreaChartFX<X, Y> extends AreaChart<X, Y> implements Pluggable {
 	@Override
 	public Chart getChart() {
 		return this;
+	}
+
+	@Override
+	public ObservableList<LegendItem> getLegendItems() {
+
+		Node legend = getLegend();
+
+		if ( legend instanceof Legend ) {
+			return ((Legend) legend).getItems();
+		} else {
+			return FXCollections.emptyObservableList();
+		}
+
 	}
 
 	@Override
@@ -158,10 +172,6 @@ public class AreaChartFX<X, Y> extends AreaChart<X, Y> implements Pluggable {
 		final Legend legend = new Legend();
 
 		seriesDrawnInPlot.clear();
-
-		getData().forEach(series -> {
-
-		});
 
 		for ( int i = 0; i < getData().size(); i++ ) {
 

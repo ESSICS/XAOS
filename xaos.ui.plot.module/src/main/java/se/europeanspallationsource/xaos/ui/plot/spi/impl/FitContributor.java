@@ -17,17 +17,13 @@
 package se.europeanspallationsource.xaos.ui.plot.spi.impl;
 
 
-import java.io.IOException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.binding.Bindings;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Control;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
-import javafx.scene.layout.Region;
 import org.controlsfx.control.PopOver;
 import se.europeanspallationsource.xaos.tools.annotation.BundleItem;
 import se.europeanspallationsource.xaos.tools.annotation.BundleItems;
@@ -37,7 +33,6 @@ import se.europeanspallationsource.xaos.ui.control.Icons;
 import se.europeanspallationsource.xaos.ui.plot.PluggableChartContainer;
 import se.europeanspallationsource.xaos.ui.plot.spi.ToolbarContributor;
 
-import static java.util.ResourceBundle.getBundle;
 import static org.controlsfx.control.PopOver.ArrowLocation.TOP_CENTER;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.BLUR_OFF;
 
@@ -99,33 +94,19 @@ public class FitContributor implements ToolbarContributor {
 			pinButton.fire();
 		}
 
-		try {
+		FitController controller = new FitController(chartContainer.getPluggable());
+		PopOver popOver = new PopOver(controller);
 
-			FXMLLoader loader = new FXMLLoader(FitController.class.getResource("Fit.fxml"));
+		popOver.setAnimated(false);
+		popOver.setCloseButtonEnabled(true);
+		popOver.setDetachable(true);
+		popOver.setHeaderAlwaysVisible(true);
+		popOver.setHideOnEscape(true);
+		popOver.setArrowLocation(TOP_CENTER);
+		popOver.setOnHidden(e -> button.setSelected(false));
+		popOver.setTitle(getString("popOver.title"));
 
-			loader.setResources(getBundle(FitController.class.getPackageName() + ".FitBundle"));
-
-			Region content = loader.load();
-			FitController controller = (FitController) loader.getController();
-			
-			controller.setChart((XYChart<?, ?>) chartContainer.getPluggable().getChart());
-
-			PopOver popOver = new PopOver(content);
-
-			popOver.setAnimated(false);
-			popOver.setCloseButtonEnabled(true);
-			popOver.setDetachable(true);
-			popOver.setHeaderAlwaysVisible(true);
-			popOver.setArrowLocation(TOP_CENTER);
-			popOver.setOnHidden(e -> button.setSelected(false));
-			popOver.setTitle(getString("popOver.title"));
-
-			popOver.show(button);
-
-		} catch ( IOException ex ) {
-			LOGGER.log(Level.SEVERE, "Unable to load FXML resource [Fit.fxml].", ex);
-			button.setSelected(false);
-		}
+		popOver.show(button);
 
 	}
 

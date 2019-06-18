@@ -67,32 +67,41 @@ public abstract class Plugin {
 	public abstract String getName();
 
     public final ValueAxis<?> getXValueAxis() {
-        if(getChart() instanceof XYChart<?, ?>){
-            if (((XYChart<?, ?>) getChart()).getXAxis() instanceof CategoryAxis) {
-                return new NumberAxis();
-            } else {
-            return (ValueAxis<?>) ((XYChart<?, ?>) getChart()).getXAxis();}
-        } else if(getChart() instanceof DensityChartFX<?, ?>){ 
-            return (ValueAxis<?>) ((DensityChartFX<?, ?>) getChart()).getXAxis();
-        } else {
-            return null;
-        }
+		return getXValueAxis(getChart());
     }
     
 
     public final ValueAxis<?> getYValueAxis() {
-        if(getChart() instanceof XYChart<?, ?>){
-            if (((XYChart<?, ?>) getChart()).getYAxis() instanceof CategoryAxis) {
-                return new NumberAxis();}
-            else {
-            return (ValueAxis<?>) ((XYChart<?, ?>) getChart()).getYAxis();}
-        } else if(getChart() instanceof DensityChartFX<?, ?>){ 
-            return (ValueAxis<?>) ((DensityChartFX<?, ?>) getChart()).getYAxis();
+		return getYValueAxis(getChart());
+    }
+    
+    public static final ValueAxis<?> getXValueAxis( Chart chart ) {
+        if(chart instanceof XYChart<?, ?>){
+            if (((XYChart<?, ?>) chart).getXAxis() instanceof CategoryAxis) {
+                return new NumberAxis();
+            } else {
+            return (ValueAxis<?>) ((XYChart<?, ?>) chart).getXAxis();}
+        } else if(chart instanceof DensityChartFX<?, ?>){
+            return (ValueAxis<?>) ((DensityChartFX<?, ?>) chart).getXAxis();
         } else {
             return null;
         }
     }
-    
+
+
+    public final ValueAxis<?> getYValueAxis( Chart chart ) {
+        if(chart instanceof XYChart<?, ?>){
+            if (((XYChart<?, ?>) chart).getYAxis() instanceof CategoryAxis) {
+                return new NumberAxis();}
+            else {
+            return (ValueAxis<?>) ((XYChart<?, ?>) chart).getYAxis();}
+        } else if(chart instanceof DensityChartFX<?, ?>){
+            return (ValueAxis<?>) ((DensityChartFX<?, ?>) chart).getYAxis();
+        } else {
+            return null;
+        }
+    }
+
     protected final double getWindowWidth() {
         return getChart().getMaxWidth();
     }

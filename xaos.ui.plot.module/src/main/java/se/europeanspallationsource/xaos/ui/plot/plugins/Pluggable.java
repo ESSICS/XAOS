@@ -20,6 +20,8 @@ package se.europeanspallationsource.xaos.ui.plot.plugins;
 import chart.Plugin;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.Chart;
+import se.europeanspallationsource.xaos.ui.plot.Legend;
+import se.europeanspallationsource.xaos.ui.plot.Legend.LegendItem;
 
 
 /**
@@ -34,6 +36,12 @@ public interface Pluggable {
 	 * @return The "pluggable" chart.
 	 */
 	Chart getChart();
+
+	/**
+	 * @return The an {@link ObservableList} of {@link LegendItem} displayed in
+	 *         the {@link Legend} of the pluggable chart.
+	 */
+	public ObservableList<LegendItem> getLegendItems();
 
 	/**
 	 * @return A non-{@code null} list of plugins added to the chart.
