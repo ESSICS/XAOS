@@ -143,12 +143,14 @@ public class BarChartFX<X, Y> extends BarChart<X, Y> implements Pluggable {
                
     }
     
-    public final void setNoShowInLegend(String name){                
+	@Override
+    public final void setNotShowInLegend(String name){
         noShowInLegend.add(name);
         updateLegend();
     }    
     
-    public boolean isNoShowInLegend(String name){                
+	@Override
+    public boolean isNotShowInLegend(String name){
         return noShowInLegend.contains(name);
     }
     
@@ -209,6 +211,11 @@ public class BarChartFX<X, Y> extends BarChart<X, Y> implements Pluggable {
 			return FXCollections.emptyObservableList();
 		}
 
+	}
+
+	@Override
+	public ObservableList<Node> getPlotChildren() {
+		return super.getPlotChildren();
 	}
 
 }

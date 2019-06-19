@@ -241,15 +241,22 @@ public class HistogramChartFX<X,Y> extends LineChart<X,Y> implements Pluggable {
                
     }
     
-    public final void setNoShowInLegend(String name){                
+	@Override
+    public final void setNotShowInLegend(String name){
         noShowInLegend.add(name);
         updateLegend();
     }    
     
-    public boolean isNoShowInLegend(String name){                
+	@Override
+    public boolean isNotShowInLegend(String name){
         return noShowInLegend.contains(name);
     }
     
+	@Override
+	public ObservableList<Node> getPlotChildren() {
+		return super.getPlotChildren();
+	}
+
     public boolean isSeriesDrawn(String name){
         return seriesDrawnInPlot.contains(name);
     }    

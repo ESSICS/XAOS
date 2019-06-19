@@ -50,10 +50,10 @@
       <Spinner fx:id="maxXValue" editable="true" GridPane.columnIndex="3" GridPane.rowIndex="11" />
       <TilePane alignment="CENTER" hgap="10.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="13" GridPane.valignment="CENTER">
          <children>
-            <Button fx:id="closeButton" cancelButton="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#close" text="%close.button" />
             <Button fx:id="clearAllButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clearAll" text="%clear.all.button" />
             <Button fx:id="clearButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clear" text="%clear.button" />
             <Button fx:id="applyButton" defaultButton="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#apply" text="%apply.button" />
+            <Button fx:id="closeButton" cancelButton="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#close" text="%close.button" />
          </children>
       </TilePane>
    </children>

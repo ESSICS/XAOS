@@ -224,6 +224,11 @@ public class DensityChartFX<X,Y> extends Chart implements Pluggable {
       
     };
 
+	@Override
+	public boolean isNotShowInLegend( String seriesName ) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
     /**
      * Indicates whether projections are visible or not.
      *
@@ -241,6 +246,11 @@ public class DensityChartFX<X,Y> extends Chart implements Pluggable {
     public final boolean isProjectionLinesVisible() {
         return projectionLinesVisibleProperty().get();
     }
+
+	@Override
+	public void setNotShowInLegend( String seriesName ) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
 
     /**
      * Sets the value of the {@link #projectionLinesVisibleProperty()}.
@@ -335,7 +345,7 @@ public class DensityChartFX<X,Y> extends Chart implements Pluggable {
      *
      * @return Observable list of plot children
      */
-    protected ObservableList<Node> getPlotChildren() {
+    public ObservableList<Node> getPlotChildren() {
         return getChartChildren();
     }        
 

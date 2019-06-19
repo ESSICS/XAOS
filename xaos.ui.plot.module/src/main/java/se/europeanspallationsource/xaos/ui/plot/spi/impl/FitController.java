@@ -18,20 +18,37 @@ package se.europeanspallationsource.xaos.ui.plot.spi.impl;
 
 
 import chart.Plugin;
+import chart.data.ExpTrendLine;
+import chart.data.GaussianTrendLine;
+import chart.data.LogTrendLine;
+import chart.data.PolyTrendLine;
+import chart.data.PowerTrendLine;
+import chart.data.TrendLine;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.WeakHashMap;
 import java.util.logging.Logger;
 import javafx.beans.binding.Bindings;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Data;
+import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -42,6 +59,7 @@ import javafx.scene.control.SpinnerValueFactory.DoubleSpinnerValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
@@ -142,6 +160,17 @@ public class FitController extends GridPane implements Initializable {
 
 	};
 	private static final Logger LOGGER = Logger.getLogger(FitController.class.getName());
+	private static final Random RANDOM = new Random(System.nanoTime());
+	/**
+	 * Map of the lists of series labels added by the fitting function. These
+	 * are saved so that can removed even if the fit popup is closed.
+	 */
+	private static final Map<Pluggable, List<Label>> SERIES_LABEL_MAP = new WeakHashMap<>(1);
+	/**
+	 * Map of the lists of series added by the fitting function. These are saved
+	 * so that can removed even if the fit popup is closed.
+	 */
+	private static final Map<Pluggable, ObservableList<XYChart.Series<Number, Number>>> SERIES_MAP = new WeakHashMap<>(1);
 
 	@FXML private Button applyButton;
 	@FXML private Button clearAllButton;
@@ -151,15 +180,37 @@ public class FitController extends GridPane implements Initializable {
 	@FXML private Label degreeCaption;
 	@FXML private Spinner<Double> degreeOrOffsetValue;
 	@FXML private Spinner<Double> discretizationValue;
+		  private List<Label> fittingLabelsList;
+		  private ObservableList<XYChart.Series<Number, Number>> fittingSeriesList;
 	@FXML private ComboBox<String> fittingValue;
 	@FXML private Spinner<Double> maxXValue;
 	@FXML private Spinner<Double> minXValue;
 	@FXML private Label offsetCaption;
 		  private final Pluggable pluggable;
 
+
 	public FitController( Pluggable pluggable ) {
 
 		this.pluggable = pluggable;
+		this.fittingSeriesList = SERIES_MAP.get(pluggable);
+
+		if ( this.fittingSeriesList == null ) {
+
+			this.fittingSeriesList = FXCollections.observableArrayList();
+
+			SERIES_MAP.put(pluggable, this.fittingSeriesList);
+
+		}
+
+		this.fittingLabelsList = SERIES_LABEL_MAP.get(pluggable);
+
+		if ( this.fittingLabelsList == null ) {
+
+			this.fittingLabelsList = new ArrayList<>(4);
+
+			SERIES_LABEL_MAP.put(pluggable, this.fittingLabelsList);
+
+		}
 
 		init();
 
@@ -255,15 +306,164 @@ public class FitController extends GridPane implements Initializable {
 			setConverter(DOUBLE_CONVERTER);
 		}});
 
+		clearAllButton.disableProperty().bind(Bindings.isEmpty(fittingSeriesList));
+		clearButton.disableProperty().bind(Bindings.isEmpty(fittingSeriesList));
+
 	}
 
+	@BundleItems( {
+		@BundleItem( key = "exponential.series.name", message = "Exponential Trend Line [{0}]" ),
+		@BundleItem( key = "gaussian.series.name", message = "Gaussian Trend Line [{0}]" ),
+		@BundleItem( key = "logarithmic.series.name", message = "Logarithmic Trend Line [{0}]" ),
+		@BundleItem( key = "polynomial.series.name", message = "Polynomial Trend Line [{0}]" ),
+		@BundleItem( key = "power.series.name", message = "Power Trend Line [{0}]" )
+	} )
 	@FXML
+	@SuppressWarnings( "null" )
 	void apply( ActionEvent event ) {
+
+		@SuppressWarnings( "unchecked" )
+		XYChart<Number, Number> chart = (XYChart<Number, Number>) pluggable.getChart();
+		LegendItem selection = dataSetValue.getValue();
+		@SuppressWarnings( "unchecked" )
+		Series<Number, Number> series = chart.getData().stream()
+			.filter(s -> s.getName().equals(selection.getText()))
+			.findFirst()
+			.get();
+		List<Double> x = new ArrayList<>(series.getData().size());
+		List<Double> y = new ArrayList<>(series.getData().size());
+		boolean polyOrLog = getString("polynomial.trend.line").equals(fittingValue.getValue())
+						 || getString("logarithmic.trend.line").equals(fittingValue.getValue());
+		double maxXVal = maxXValue.getValue();
+		double minXVal = minXValue.getValue();
+		double degreeOrOffset = degreeOrOffsetValue.getValue();
+
+		series.getData().forEach(data -> {
+			if ( data.getXValue().doubleValue() >= minXVal && data.getXValue().doubleValue() <= maxXVal ) {
+				x.add(data.getXValue().doubleValue());
+				y.add(data.getYValue().doubleValue() - ( polyOrLog ? 0 : degreeOrOffset ));
+			}
+		});
+
+		Double disc = discretizationValue.getValue();
+		double maxX = x.stream().mapToDouble(v -> v).max().getAsDouble();
+		double minX = x.stream().mapToDouble(v -> v).min().getAsDouble();
+		double range = maxX - minX;
+		XYChart.Series<Number, Number> interpolatedVals = new Series<>();
+		TrendLine t = null;
+
+		if ( getString("polynomial.trend.line").equals(fittingValue.getValue()) ) {
+
+			t = new PolyTrendLine((int) degreeOrOffset);
+
+			t.setValues(y.stream().mapToDouble(d -> d).toArray(), x.stream().mapToDouble(d -> d).toArray());
+
+			for ( int i = 0; i <= disc; i++ ) {
+				interpolatedVals.getData().add(new Data<>(minX + range / disc * i, t.predict(minX + range / disc * i)));
+			}
+
+			interpolatedVals.setName(getString("polynomial.series.name", selection.getText()));
+
+		} else if ( getString("logarithmic.trend.line").equals(fittingValue.getValue()) ) {
+			
+			t = new LogTrendLine();
+
+			t.setValues(y.stream().mapToDouble(d -> d).toArray(), x.stream().mapToDouble(d -> d).toArray());
+
+			for ( int i = 0; i <= disc; i++ ) {
+				interpolatedVals.getData().add(new Data<>(minX + range / disc * i, t.predict(minX + range / disc * i)));
+			}
+
+			interpolatedVals.setName(getString("logarithmic.series.name", selection.getText()));
+
+		} else if ( getString("power.trend.line").equals(fittingValue.getValue()) ) {
+
+			t = new PowerTrendLine(degreeOrOffset);
+
+			t.setValues(y.stream().mapToDouble(d -> d).toArray(), x.stream().mapToDouble(d -> d).toArray());
+
+			for ( int i = 0; i <= disc; i++ ) {
+				interpolatedVals.getData().add(new Data<>(minX + range / disc * i, t.predict(minX + range / disc * i) + t.getOffset()));
+			}
+
+			interpolatedVals.setName(getString("power.series.name", selection.getText()));
+
+		} else if ( getString("exponential.trend.line").equals(fittingValue.getValue()) ) {
+
+			t = new ExpTrendLine(degreeOrOffset);
+
+			t.setValues(y.stream().mapToDouble(d -> d).toArray(), x.stream().mapToDouble(d -> d).toArray());
+
+			for ( int i = 0; i <= disc; i++ ) {
+				interpolatedVals.getData().add(new Data<>(minX + range / disc * i, t.predict(minX + range / disc * i) + t.getOffset()));
+			}
+
+			interpolatedVals.setName(getString("exponential.series.name", selection.getText()));
+
+		} else if ( getString("gaussian.trend.line").equals(fittingValue.getValue()) ) {
+
+			t = new GaussianTrendLine();
+
+			t.setValues(y.stream().mapToDouble(d -> d).toArray(), x.stream().mapToDouble(d -> d).toArray());
+
+			for ( int i = 0; i <= disc; i++ ) {
+				interpolatedVals.getData().add(new Data<>(minX + range / disc * i, t.predict(minX + range / disc * i) + degreeOrOffset));
+			}
+
+			interpolatedVals.setName(getString("gaussian.series.name", selection.getText()));
+
+		}
+
+		chart.getData().add(interpolatedVals);
+		pluggable.setNotShowInLegend(interpolatedVals.getName());
+
+		interpolatedVals.getData().forEach(data -> data.getNode().setVisible(false));
+
+		String[] styles = createStyles();
+
+		if ( interpolatedVals.getNode() instanceof Group ) {
+
+			Group group = (Group) interpolatedVals.getNode();
+
+			for ( int i = 0; i < group.getChildren().size() - 1; i++ ) {
+				group.getChildren().get(i).setStyle("-fx-fill: null;");
+			}
+
+			group.getChildren().get(group.getChildren().size() - 1).setStyle(styles[0]);
+
+
+		} else {
+			interpolatedVals.getNode().setStyle(styles[0]);
+		}
+
+		fittingSeriesList.add(interpolatedVals);
+
+		Label fittingLabel = new Label(t.getResultText(interpolatedVals.getName()));
+
+		fittingLabel.getStyleClass().add("chart-fitting-label");
+		fittingLabel.setStyle(styles[1]);
+		fittingLabel.setManaged(false);;
+		fittingLabel.resizeRelocate(
+			chart.getLayoutX() + 10,
+			chart.getLayoutY() + fittingLabelsList.size() * 60 + 10,
+			getLabelWidth(fittingLabel.getText()),
+			50
+		);
+
+		fittingLabelsList.add(fittingLabel);
+		pluggable.getPlotChildren().add(fittingLabel);
 
 	}
 
 	@FXML
 	void clear( ActionEvent event ) {
+
+		@SuppressWarnings( "unchecked" )
+		XYChart<Number, Number> chart = (XYChart<Number, Number>) pluggable.getChart();
+		int index = fittingSeriesList.size() - 1;
+
+		chart.getData().remove(fittingSeriesList.remove(index));
+		pluggable.getPlotChildren().remove(fittingLabelsList.remove(index));
 
 	}
 
@@ -274,10 +474,58 @@ public class FitController extends GridPane implements Initializable {
 
 	@FXML
 	void clearAll( ActionEvent event ) {
+		while ( !fittingSeriesList.isEmpty() ) {
+			clear(event);
+		}
+	}
 
+	void dispose() {
+		clearAllButton.disableProperty().unbind();
+		clearButton.disableProperty().unbind();
 	}
 
 	void setChart( XYChart<?, ?> xyChart ) {
+	}
+
+	/**
+	 * @return The style for the fitting line at index 0, and the style for the
+	 *         corresponding label border at index 1.
+	 */
+	private String[] createStyles() {
+
+		int phases = 1 + RANDOM.nextInt(3);
+		String[] styles = new String[] { "", "" };
+
+		for ( int i = 0; i < phases; i++ ) {
+
+			int empty = 3 + RANDOM.nextInt(8);
+			int full = 3 + RANDOM.nextInt(10);
+
+			styles[0] = styles[0] + " "  + empty + "px "  + full + "px";
+			styles[1] = styles[1] + ", " + empty + "px, " + full + "px";
+
+		}
+
+		styles[0] = styles[0].substring(1);
+		styles[1] = styles[1].substring(2);
+
+		styles[0] = "-fx-stroke: black; -fx-stroke-dash-array: " + styles[0] + "; -fx-stroke-width: 2.2;";
+		styles[1] = "-fx-border-style: segments(" + styles[1] + ") centered;";
+
+		return styles;
+
+	}
+
+	@SuppressWarnings( "ResultOfObjectAllocationIgnored" )
+	private double getLabelWidth ( String string ) {
+
+		Text text = new Text(string);
+
+		new Scene(new Group(text));
+		text.applyCss();
+
+		return 25 + text.getLayoutBounds().getWidth();
+
 	}
 
 	private String getString( String key, Object... parameters ) {

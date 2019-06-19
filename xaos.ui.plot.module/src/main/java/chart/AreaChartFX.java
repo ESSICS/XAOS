@@ -121,6 +121,11 @@ public class AreaChartFX<X, Y> extends AreaChart<X, Y> implements Pluggable {
 	}
 
 	@Override
+	public ObservableList<Node> getPlotChildren() {
+		return super.getPlotChildren();
+	}
+
+	@Override
 	protected void layoutPlotChildren() {
 
 		//	Move plugins nodes oo front.
@@ -153,12 +158,14 @@ public class AreaChartFX<X, Y> extends AreaChart<X, Y> implements Pluggable {
 
 	}
 
-	public final void setNoShowInLegend( String name ) {
+	@Override
+	public final void setNotShowInLegend( String name ) {
 		noShowInLegend.add(name);
 		updateLegend();
 	}
 
-	public boolean isNoShowInLegend( String name ) {
+	@Override
+	public boolean isNotShowInLegend( String name ) {
 		return noShowInLegend.contains(name);
 	}
 

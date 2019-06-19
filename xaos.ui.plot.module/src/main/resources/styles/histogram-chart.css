@@ -19,13 +19,6 @@
 @import "chart-commons.css";
 
 
-.chart-fitting-label {
-    -fx-background-color: white;
-    -fx-border-radius: 3;
-    -fx-stroke-width: 4;
-    visibility: visible;
-}
-
 .chart-series-line {    
     -fx-stroke-width: 1px;
     -fx-effect: null;}

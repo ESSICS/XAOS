@@ -103,7 +103,10 @@ public class FitContributor implements ToolbarContributor {
 		popOver.setHeaderAlwaysVisible(true);
 		popOver.setHideOnEscape(true);
 		popOver.setArrowLocation(TOP_CENTER);
-		popOver.setOnHidden(e -> button.setSelected(false));
+		popOver.setOnHidden(e -> {
+			controller.dispose();
+			button.setSelected(false);
+		});
 		popOver.setTitle(getString("popOver.title"));
 
 		popOver.show(button);

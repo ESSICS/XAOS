@@ -19,6 +19,7 @@ package se.europeanspallationsource.xaos.ui.plot.plugins;
 
 import chart.Plugin;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.chart.Chart;
 import se.europeanspallationsource.xaos.ui.plot.Legend;
 import se.europeanspallationsource.xaos.ui.plot.Legend.LegendItem;
@@ -41,11 +42,34 @@ public interface Pluggable {
 	 * @return The an {@link ObservableList} of {@link LegendItem} displayed in
 	 *         the {@link Legend} of the pluggable chart.
 	 */
-	public ObservableList<LegendItem> getLegendItems();
+	ObservableList<LegendItem> getLegendItems();
+
+	/**
+	 * @return The pluggable chart's plot children list.
+	 */
+	ObservableList<Node> getPlotChildren();
 
 	/**
 	 * @return A non-{@code null} list of plugins added to the chart.
 	 */
 	ObservableList<Plugin> getPlugins();
+
+	/**
+	 * Returns whether the series with the given name is displayed in chart
+	 * {@link Legend} or not.
+	 *
+	 * @param seriesName The name of the series to be checked.
+	 * @return {@code true} if the series with the given name is not shown in
+	 *         chart {@link Legend}.
+	 */
+	boolean isNotShowInLegend( String seriesName );
+
+	/**
+	 * Specifies a series to not be shown in chart {@link Legend}.
+	 *
+	 * @param seriesName The name of the series to not be shown in chart
+	 *                   {@link Legend}.
+	 */
+	void setNotShowInLegend( String seriesName );
 
 }

@@ -78,3 +78,11 @@
  * CHARTS                                                                      *
  *******************************************************************************/
 
+.chart-fitting-label {
+    -fx-background-color: #F0F0F0EE;
+	-fx-border-color: black;
+	-fx-padding: 6px;
+    -fx-border-radius: 6px;
+	-fx-border-width: 1.7px;
+}
+

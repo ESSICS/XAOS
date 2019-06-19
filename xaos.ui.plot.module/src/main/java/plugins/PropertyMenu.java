@@ -48,6 +48,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.AreaChart;
@@ -70,7 +71,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 
 import static javafx.scene.paint.Color.WHITE;
 
@@ -403,26 +403,27 @@ public class PropertyMenu extends Plugin{
                     
                 ((XYChart<Number, Number>)getChart()).getData().add(interpolatedVals);                    
                 if(getChart() instanceof LineChartFX<?, ?>){                    
-                    ((LineChartFX<Number, Number>)getChart()).setNoShowInLegend(interpolatedVals.getName());
+                    ((LineChartFX<Number, Number>)getChart()).setNotShowInLegend(interpolatedVals.getName());
                 } else if (getChart() instanceof HistogramChartFX<?, ?> ){
-                    ((HistogramChartFX<Number, Number>)getChart()).setNoShowInLegend(interpolatedVals.getName());
+                    ((HistogramChartFX<Number, Number>)getChart()).setNotShowInLegend(interpolatedVals.getName());
                 } else if (getChart() instanceof ScatterChartFX<?, ?> ){
-                    ((ScatterChartFX<Number, Number>)getChart()).setNoShowInLegend(interpolatedVals.getName());
+                    ((ScatterChartFX<Number, Number>)getChart()).setNotShowInLegend(interpolatedVals.getName());
                 } else if (getChart() instanceof AreaChartFX<?, ?> ){
-                    ((AreaChartFX<Number, Number>)getChart()).setNoShowInLegend(interpolatedVals.getName());
+                    ((AreaChartFX<Number, Number>)getChart()).setNotShowInLegend(interpolatedVals.getName());
                 }
                 interpolatedVals.getData().forEach(data ->{
-                    StackPane stackPane = (StackPane) data.getNode();
-                    stackPane.setVisible(false);
-                });                   
-                interpolatedVals.getNode().setStyle("-fx-stroke: black ; -fx-stroke-dash-array: 2 12 12 2 ; -fx-stroke-width: 2;");
+                    data.getNode().setVisible(false);
+                });
+
+				((Group) interpolatedVals.getNode()).getChildren().get(0).setStyle("-fx-fill: null;");
+				((Group) interpolatedVals.getNode()).getChildren().get(1).setStyle("-fx-stroke: black; -fx-stroke-dash-array: 2 6; -fx-stroke-width: 2.2;");
                 interpolatedValsList.add(interpolatedVals);
                 
                 getPlotChildren().removeAll(fittingLabel);
                 fittingLabel.add(new Label());
                 Integer index = fittingLabel.size()-1;
                 fittingLabel.get(index).getStyleClass().add("chart-fitting-label");
-                fittingLabel.get(index).setStyle("-fx-border-color: -color"+((XYChart<?, ?>)getChart()).getData().indexOf(series)+";");
+                fittingLabel.get(index).setStyle("-fx-stroke: black; -fx-stroke-dash-array: 2 6;");
                 fittingLabel.get(index).setManaged(false);                
                 if(t instanceof TrendLine){
                     fittingLabel.get(index).setText(t.getResultText(interpolatedVals.getName()));
