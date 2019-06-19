@@ -35,17 +35,18 @@
       <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="20.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Label text="%data.set.caption" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+      <Label alignment="CENTER_RIGHT" text="%data.set.caption" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
       <ComboBox fx:id="dataSetValue" maxWidth="1.7976931348623157E308" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-      <Label text="%fitting.caption" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+      <Label alignment="CENTER_RIGHT" text="%fitting.caption" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
       <ComboBox fx:id="fittingValue" maxWidth="1.7976931348623157E308" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-      <Label fx:id="degreeOrOffsetCaption" text="%degree.caption" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+      <Label fx:id="degreeCaption" alignment="CENTER_RIGHT" text="%degree.caption" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+      <Label fx:id="offsetCaption" alignment="CENTER_RIGHT" text="%offset.caption" visible="false" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
       <Spinner fx:id="degreeOrOffsetValue" editable="true" GridPane.columnIndex="3" GridPane.rowIndex="5" />
-      <Label text="%discretization.caption" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="7" GridPane.valignment="CENTER" />
+      <Label alignment="CENTER_RIGHT" text="%discretization.caption" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="7" GridPane.valignment="CENTER" />
       <Spinner fx:id="discretizationValue" editable="true" GridPane.columnIndex="3" GridPane.rowIndex="7" />
-      <Label text="%min.x.caption" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="9" GridPane.valignment="CENTER" />
+      <Label alignment="CENTER_RIGHT" text="%min.x.caption" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="9" GridPane.valignment="CENTER" />
       <Spinner fx:id="minXValue" editable="true" GridPane.columnIndex="3" GridPane.rowIndex="9" />
-      <Label text="%max.x.caption" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="11" GridPane.valignment="CENTER" />
+      <Label alignment="CENTER_RIGHT" text="%max.x.caption" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="11" GridPane.valignment="CENTER" />
       <Spinner fx:id="maxXValue" editable="true" GridPane.columnIndex="3" GridPane.rowIndex="11" />
       <TilePane alignment="CENTER" hgap="10.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="13" GridPane.valignment="CENTER">
          <children>

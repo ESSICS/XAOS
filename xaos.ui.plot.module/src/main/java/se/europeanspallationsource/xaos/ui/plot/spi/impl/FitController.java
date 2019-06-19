@@ -65,6 +65,8 @@ import static javafx.stage.WindowEvent.WINDOW_CLOSE_REQUEST;
 @Bundle( name = "FitBundle" )
 public class FitController extends GridPane implements Initializable {
 
+	//	TODO:CR The fitting algorithms should be pluggable.
+
 	private static final StringConverter<Double> DOUBLE_CONVERTER = new StringConverter<Double>() {
 
 		private final DecimalFormat format = new DecimalFormat("0.00##");
@@ -146,12 +148,13 @@ public class FitController extends GridPane implements Initializable {
 	@FXML private Button clearButton;
 	@FXML private Button closeButton;
 	@FXML private ComboBox<LegendItem> dataSetValue;
-	@FXML private Label degreeOrOffsetCaption;
+	@FXML private Label degreeCaption;
 	@FXML private Spinner<Double> degreeOrOffsetValue;
 	@FXML private Spinner<Double> discretizationValue;
 	@FXML private ComboBox<String> fittingValue;
 	@FXML private Spinner<Double> maxXValue;
 	@FXML private Spinner<Double> minXValue;
+	@FXML private Label offsetCaption;
 		  private final Pluggable pluggable;
 
 	public FitController( Pluggable pluggable ) {
@@ -167,9 +170,7 @@ public class FitController extends GridPane implements Initializable {
 		@BundleItem( key = "gaussian.trend.line", message = "Gaussian Trend Line" ),
 		@BundleItem( key = "logarithmic.trend.line", message = "Logarithmic Trend Line" ),
 		@BundleItem( key = "polynomial.trend.line", message = "Polynomial Trend Line" ),
-		@BundleItem( key = "power.trend.line", message = "Power Trend Line" ),
-		@BundleItem( key = "degree.caption", message = "Polynomial Degree:" ),
-		@BundleItem( key = "offset.caption", message = "Offset:" )
+		@BundleItem( key = "power.trend.line", message = "Power Trend Line" )
 	} )
 	@Override
 	public void initialize( URL url, ResourceBundle rb ) {
@@ -203,15 +204,22 @@ public class FitController extends GridPane implements Initializable {
 		);
 		fittingValue.setValue(getString("polynomial.trend.line"));
 
-		degreeOrOffsetCaption.disableProperty().bind(Bindings.createBooleanBinding(
+		degreeCaption.disableProperty().bind(Bindings.createBooleanBinding(
 			() -> getString("logarithmic.trend.line").equals(fittingValue.getValue()),
 			fittingValue.valueProperty()
 		));
-		degreeOrOffsetCaption.textProperty().bind(Bindings.createStringBinding(
-			() -> getString("polynomial.trend.line").equals(fittingValue.getValue())
-				  ? getString("degree.caption")
-				  : getString("offset.caption"),
+		degreeCaption.visibleProperty().bind(Bindings.equal(
+			fittingValue.valueProperty(), 
+			getString("polynomial.trend.line")
+		));
+
+		offsetCaption.disableProperty().bind(Bindings.createBooleanBinding(
+			() -> getString("logarithmic.trend.line").equals(fittingValue.getValue()),
 			fittingValue.valueProperty()
+		));
+		offsetCaption.visibleProperty().bind(Bindings.notEqual(
+			fittingValue.valueProperty(),
+			getString("polynomial.trend.line")
 		));
 
 		degreeOrOffsetValue.disableProperty().bind(Bindings.createBooleanBinding(
