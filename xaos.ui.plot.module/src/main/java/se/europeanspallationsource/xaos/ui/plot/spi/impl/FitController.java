@@ -484,9 +484,6 @@ public class FitController extends GridPane implements Initializable {
 		clearButton.disableProperty().unbind();
 	}
 
-	void setChart( XYChart<?, ?> xyChart ) {
-	}
-
 	/**
 	 * @return The style for the fitting line at index 0, and the style for the
 	 *         corresponding label border at index 1.

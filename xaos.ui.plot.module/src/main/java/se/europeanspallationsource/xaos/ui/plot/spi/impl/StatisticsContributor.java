@@ -18,12 +18,10 @@ package se.europeanspallationsource.xaos.ui.plot.spi.impl;
 
 
 import javafx.beans.binding.Bindings;
-import javafx.geometry.Pos;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Control;
-import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
-import javafx.scene.text.TextAlignment;
 import org.controlsfx.control.PopOver;
 import se.europeanspallationsource.xaos.tools.annotation.BundleItem;
 import se.europeanspallationsource.xaos.tools.annotation.BundleItems;
@@ -55,8 +53,12 @@ public class StatisticsContributor implements ToolbarContributor {
 
 		button.setTooltip(new Tooltip(getString("button.tooltip")));
 		button.setOnAction(e -> handleButton(chartContainer, button));
-		button.disableProperty().bind(Bindings.or(
-			Bindings.isNull(chartContainer.pluggableProperty()),
+		button.disableProperty().bind(Bindings.createBooleanBinding(() -> {
+				return chartContainer.getPluggable() == null
+					|| !( chartContainer.getPluggable().getChart() instanceof XYChart )
+					|| button.isSelected();
+			},
+			chartContainer.pluggableProperty(),
 			button.selectedProperty()
 		));
 
@@ -79,33 +81,19 @@ public class StatisticsContributor implements ToolbarContributor {
 			pinButton.fire();
 		}
 
-
-
-
-
-
-		Label content = new Label("<no content>");
-		
-		content.setAlignment(Pos.CENTER);
-		content.setTextAlignment(TextAlignment.CENTER);
-		content.setMaxSize(300, 300);
-		content.setMinSize(300, 300);
-		content.setPrefSize(300, 300);
-
-
-
-
-
-			
-		PopOver popOver = new PopOver(content);
+		StatisticsController controller = new StatisticsController(chartContainer.getPluggable());
+		PopOver popOver = new PopOver(controller);
 
 		popOver.setAnimated(false);
 		popOver.setCloseButtonEnabled(true);
 		popOver.setDetachable(true);
 		popOver.setHeaderAlwaysVisible(true);
+		popOver.setHideOnEscape(true);
 		popOver.setArrowLocation(TOP_CENTER);
-		popOver.setOnShown(e -> popOver.getContentNode().requestFocus());
-		popOver.setOnHidden(e -> button.setSelected(false));
+		popOver.setOnHidden(e -> {
+			controller.dispose();
+			button.setSelected(false);
+		});
 		popOver.setTitle(getString("popOver.title"));
 
 		popOver.show(button);
