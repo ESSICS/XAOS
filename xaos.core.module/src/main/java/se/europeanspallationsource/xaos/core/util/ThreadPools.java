@@ -19,6 +19,7 @@ package se.europeanspallationsource.xaos.core.util;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -146,6 +147,13 @@ public class ThreadPools {
 			FIXED_THREAD_POOL_LOCK.readLock().unlock();
 		}
 
+	}
+
+	/**
+	 * @return The JDK {@link ForkJoinPool#commonPool()}.
+	 */
+	public static ForkJoinPool jdkCommonPool() {
+		return ForkJoinPool.commonPool();
 	}
 
 	/**
