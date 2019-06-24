@@ -17,11 +17,15 @@
 
 package chart.data;
 
+
+import se.europeanspallationsource.xaos.ui.plot.data.BaseOLSTrendLine;
+
+
 /**
  *
  * @author reubenlindroos
  */
-public class ExpTrendLine extends OLSTrendLine {
+public class ExpTrendLine extends BaseOLSTrendLine {
     
     final double offset;
     
@@ -41,12 +45,12 @@ public class ExpTrendLine extends OLSTrendLine {
     protected boolean logY() {return true;}
 
     @Override
-    public Integer getDegree() {
+    public int getDegree() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public String getResultText(String seriesName) {
+    public String nameFor(String seriesName) {
         String text = new String();        
         double a = Math.exp(getCoefficients()[0]);
         double b = getCoefficients()[1];
@@ -56,7 +60,7 @@ public class ExpTrendLine extends OLSTrendLine {
     }
 
     @Override
-    public Double getOffset() {
+    public double getOffset() {
         return offset;
     }
        

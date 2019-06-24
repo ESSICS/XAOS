@@ -36,7 +36,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import chart.data.DataReducingSeries;
+import se.europeanspallationsource.xaos.ui.plot.data.DataReducingSeries;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
 import se.europeanspallationsource.xaos.ui.plot.data.ErrorSeries;
 

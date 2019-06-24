@@ -19,11 +19,11 @@ package se.europeanspallationsource.xaos.ui.plot.spi.impl;
 
 import chart.Plugin;
 import chart.data.ExpTrendLine;
-import chart.data.GaussianTrendLine;
+import se.europeanspallationsource.xaos.ui.plot.data.GaussianTrendLine;
 import chart.data.LogTrendLine;
-import chart.data.PolyTrendLine;
+import se.europeanspallationsource.xaos.ui.plot.data.PolynomialTrendLine;
 import chart.data.PowerTrendLine;
-import chart.data.TrendLine;
+import se.europeanspallationsource.xaos.ui.plot.data.TrendLine;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -59,6 +59,9 @@ import javafx.scene.control.SpinnerValueFactory.DoubleSpinnerValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
@@ -354,7 +357,7 @@ public class FitController extends GridPane implements Initializable {
 
 		if ( getString("polynomial.trend.line").equals(fittingValue.getValue()) ) {
 
-			t = new PolyTrendLine((int) degreeOrOffset);
+			t = new PolynomialTrendLine((int) degreeOrOffset);
 
 			t.setValues(y.stream().mapToDouble(d -> d).toArray(), x.stream().mapToDouble(d -> d).toArray());
 
@@ -438,8 +441,9 @@ public class FitController extends GridPane implements Initializable {
 
 		fittingSeriesList.add(interpolatedVals);
 
-		Label fittingLabel = new Label(t.getResultText(interpolatedVals.getName()));
+		Label fittingLabel = new Label(t.nameFor(interpolatedVals.getName()));
 
+		fittingLabel.setFont(Font.font("Source Sans Pro", FontWeight.BOLD, FontPosture.REGULAR, 12));
 		fittingLabel.getStyleClass().add("chart-fitting-label");
 		fittingLabel.setStyle(styles[1]);
 		fittingLabel.setManaged(false);;

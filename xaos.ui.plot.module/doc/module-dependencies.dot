@@ -42,8 +42,6 @@ digraph "summary" {
   "error.prone.annotations"                          -> "java.base (java.base)";
   "commons.math3"                                    -> "java.base (java.base)";
   "org.apache.commons.lang3"                         -> "java.base (java.base)";
-  "xaos.core"                                        -> "java.base (java.base)";
-  "xaos.core"                                        -> "java.logging (java.logging)";
   "javafx.web"                                       -> "java.base (java.base)";
   "javafx.web"                                       -> "java.desktop (java.desktop)";
   "javafx.web"                                       -> "java.xml (java.xml)";
@@ -52,6 +50,8 @@ digraph "summary" {
   "javafx.web"                                       -> "javafx.graphics";
   "javafx.web"                                       -> "javafx.media";
   "javafx.web"                                       -> "jdk.jsobject (jdk.jsobject)";
+  "xaos.core"                                        -> "java.base (java.base)";
+  "xaos.core"                                        -> "java.logging (java.logging)";
   "javafx.graphics"                                  -> "java.base (java.base)";
   "javafx.graphics"                                  -> "java.desktop (java.desktop)";
   "javafx.graphics"                                  -> "java.xml (java.xml)";

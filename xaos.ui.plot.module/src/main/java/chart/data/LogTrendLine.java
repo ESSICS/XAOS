@@ -17,11 +17,15 @@
 
 package chart.data;
 
+
+import se.europeanspallationsource.xaos.ui.plot.data.BaseOLSTrendLine;
+
+
 /**
  *
  * @author reubenlindroos
  */
-public class LogTrendLine extends OLSTrendLine {
+public class LogTrendLine extends BaseOLSTrendLine {
            
     
     @Override
@@ -33,12 +37,12 @@ public class LogTrendLine extends OLSTrendLine {
     protected boolean logY() {return false;}
 
     @Override
-    public Integer getDegree() {
+    public int getDegree() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public String getResultText(String seriesName) {
+    public String nameFor(String seriesName) {
         String text = new String();
         text=seriesName+String.format("\n f(x) = %+.2f %+.2f * Ln(x)\n", getCoefficients()[0], getCoefficients()[1]);
         
@@ -46,7 +50,7 @@ public class LogTrendLine extends OLSTrendLine {
     }
 
     @Override
-    public Double getOffset() {
+    public double getOffset() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
