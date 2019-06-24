@@ -23,7 +23,6 @@ import chart.NumberAxis;
 import chart.data.DataReducingSeries;
 import javafx.scene.chart.ValueAxis;
 import javafx.scene.chart.XYChart;
-import plugins.PropertyMenu;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
 
 import static Demo.ChartGenerator.generateData;
@@ -61,9 +60,6 @@ public class AreaChartGenerator implements ChartGenerator<Number, Number> {
 		chart.setOnMouseClicked(event -> chart.requestFocus());
 		chart.getPlugins().addAll(Plugins.all());
 		
-		//	TODO:CR remove!
-		chart.getPlugins().add(new PropertyMenu());
-
 		if ( series0 == null ) {
 
 			series0 = new DataReducingSeries<>();
