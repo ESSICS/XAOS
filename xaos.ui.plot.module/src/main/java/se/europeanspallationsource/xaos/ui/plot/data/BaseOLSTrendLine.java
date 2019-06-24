@@ -110,7 +110,7 @@ public abstract class BaseOLSTrendLine implements TrendLine {
 	protected abstract boolean logY();
 
 	/**
-	 * @param x
+	 * @param x The x value.
 	 * @return A vector of values for the given {@code x}.
 	 */
 	protected abstract double[] xVector( double x );

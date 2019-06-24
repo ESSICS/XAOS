@@ -53,7 +53,7 @@ public interface TrendLine {
 	double getOffset();
 
 	/**
-	 * @param seriesName
+	 * @param seriesName The name of the series.
 	 * @return Returns a proper name of this trend line for the given series name.
 	 */
 	String nameFor( String seriesName );

@@ -22,7 +22,9 @@ package se.europeanspallationsource.xaos.ui.plot.data;
 @SuppressWarnings( "ClassWithoutLogger" )
 public class PolynomialTrendLine extends BaseOLSTrendLine {
 
-	final int degree;
+	private static final char[] SUPERSCRIPT_CHARS = { '⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹' };
+
+	private final int degree;
 
 	public PolynomialTrendLine( int degree ) {
 
@@ -53,27 +55,29 @@ public class PolynomialTrendLine extends BaseOLSTrendLine {
 
 		for ( int i = 0; i <= getDegree(); i++ ) {
 
-			builder.append(String.format("%+.2f⋅x", getCoefficients()[i]));
+			builder.append(String.format("%+.2f", getCoefficients()[i]));
 
-			String exponent = String.format("%d", i);
+			if ( i > 0 ) {
 
-			for ( int e = 0; e < exponent.length(); e++ ) {
-//				builder.append((char) ( '⁰' + ( exponent.charAt(e) - '0' ) ));
-				builder.append((char) ( '¹' - 1 + ( exponent.charAt(e) - '0' ) ));
+				builder.append("⋅x");
+
+				if ( i > 1 ) {
+
+					String exponent = String.format("%d", i);
+
+					for ( int e = 0; e < exponent.length(); e++ ) {
+						builder.append(SUPERSCRIPT_CHARS[exponent.charAt(e) - '0']);
+					}
+
+				}
+
 			}
+
 
 		}
 
 		return builder.toString();
 
-
-//		String text = new String();
-//		text = seriesName + ;
-//		for ( int i = 0; i <= getDegree(); i++ ) {
-//			text = text + String.format("%+.2f x^%d", getCoefficients()[i], i);
-//		}
-//        text=text+"\n";
-//		return text;
 	}
 
 	@Override

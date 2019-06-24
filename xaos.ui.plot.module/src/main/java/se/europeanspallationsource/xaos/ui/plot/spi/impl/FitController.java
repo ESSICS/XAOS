@@ -59,9 +59,6 @@ import javafx.scene.control.SpinnerValueFactory.DoubleSpinnerValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
@@ -443,7 +440,6 @@ public class FitController extends GridPane implements Initializable {
 
 		Label fittingLabel = new Label(t.nameFor(interpolatedVals.getName()));
 
-		fittingLabel.setFont(Font.font("Source Sans Pro", FontWeight.BOLD, FontPosture.REGULAR, 12));
 		fittingLabel.getStyleClass().add("chart-fitting-label");
 		fittingLabel.setStyle(styles[1]);
 		fittingLabel.setManaged(false);;
