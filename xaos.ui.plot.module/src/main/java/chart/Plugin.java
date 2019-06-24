@@ -89,7 +89,7 @@ public abstract class Plugin {
     }
 
 
-    public final ValueAxis<?> getYValueAxis( Chart chart ) {
+    public static final ValueAxis<?> getYValueAxis( Chart chart ) {
         if(chart instanceof XYChart<?, ?>){
             if (((XYChart<?, ?>) chart).getYAxis() instanceof CategoryAxis) {
                 return new NumberAxis();}

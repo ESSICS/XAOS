@@ -9,12 +9,12 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.TilePane?>
 
-<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="319.0" minWidth="400.0" prefHeight="319.0" prefWidth="500.0" type="GridPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="319.0" minWidth="400.0" type="GridPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
       <ColumnConstraints hgrow="NEVER" maxWidth="20.0" minWidth="20.0" prefWidth="20.0" />
-    <ColumnConstraints hgrow="NEVER" />
+    <ColumnConstraints hgrow="NEVER" minWidth="100.0" />
       <ColumnConstraints fillWidth="false" hgrow="NEVER" maxWidth="5.0" minWidth="5.0" prefWidth="5.0" />
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+    <ColumnConstraints hgrow="NEVER" minWidth="100.0" />
       <ColumnConstraints fillWidth="false" hgrow="NEVER" maxWidth="20.0" minWidth="20.0" prefWidth="20.0" />
   </columnConstraints>
   <rowConstraints>
@@ -36,7 +36,7 @@
   </rowConstraints>
    <children>
       <Label alignment="CENTER_RIGHT" text="%data.set.caption" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-      <ComboBox fx:id="dataSetValue" maxWidth="1.7976931348623157E308" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+      <ComboBox fx:id="dataSetValue" maxWidth="1.7976931348623157E308" prefWidth="240.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
       <Label alignment="CENTER_RIGHT" text="%fitting.caption" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
       <ComboBox fx:id="fittingValue" maxWidth="1.7976931348623157E308" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
       <Label fx:id="degreeCaption" alignment="CENTER_RIGHT" text="%degree.caption" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="5" GridPane.valignment="CENTER" />

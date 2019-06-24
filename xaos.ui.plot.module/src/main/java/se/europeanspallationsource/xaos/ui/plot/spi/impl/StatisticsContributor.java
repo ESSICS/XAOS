@@ -36,8 +36,8 @@ import static se.europeanspallationsource.xaos.ui.control.CommonIcons.STATISTICS
 
 
 /**
- * A {@link ToolbarContributor} that allows to save a snapshot of the current
- * chart into an image file.
+ * A {@link ToolbarContributor} that shows statistics for the various chart
+ * series.
  *
  * @author claudio.rosati@esss.se
  * @srvc.order 400
