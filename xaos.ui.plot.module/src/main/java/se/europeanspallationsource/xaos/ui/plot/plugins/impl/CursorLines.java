@@ -17,12 +17,12 @@
 package se.europeanspallationsource.xaos.ui.plot.plugins.impl;
 
 
-import chart.DensityChartFX;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.chart.ValueAxis;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Line;
+import se.europeanspallationsource.xaos.ui.plot.DensityChartFX;
 import se.europeanspallationsource.xaos.ui.plot.plugins.AbstractCursorPlugin;
 
 

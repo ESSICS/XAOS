@@ -17,12 +17,12 @@
 package Demo;
 
 
-import chart.BarChartFX;
-import chart.LogAxis;
-import chart.NumberAxis;
+import se.europeanspallationsource.xaos.ui.plot.LogAxis;
+import se.europeanspallationsource.xaos.ui.plot.NumberAxis;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.ValueAxis;
 import javafx.scene.chart.XYChart;
+import se.europeanspallationsource.xaos.ui.plot.BarChartFX;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
 
 

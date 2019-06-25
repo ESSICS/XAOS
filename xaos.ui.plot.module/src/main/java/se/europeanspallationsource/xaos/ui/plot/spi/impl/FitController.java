@@ -17,7 +17,6 @@
 package se.europeanspallationsource.xaos.ui.plot.spi.impl;
 
 
-import chart.Plugin;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -65,6 +64,7 @@ import se.europeanspallationsource.xaos.tools.annotation.BundleItems;
 import se.europeanspallationsource.xaos.tools.annotation.Bundles;
 import se.europeanspallationsource.xaos.ui.control.Icons;
 import se.europeanspallationsource.xaos.ui.plot.Legend.LegendItem;
+import se.europeanspallationsource.xaos.ui.plot.Plugin;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Pluggable;
 import se.europeanspallationsource.xaos.ui.plot.spi.impl.trend.ExponentialTrendLine;
 import se.europeanspallationsource.xaos.ui.plot.spi.impl.trend.GaussianTrendLine;

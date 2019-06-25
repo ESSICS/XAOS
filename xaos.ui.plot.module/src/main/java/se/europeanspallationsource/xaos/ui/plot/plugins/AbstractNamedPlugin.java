@@ -17,8 +17,8 @@
 package se.europeanspallationsource.xaos.ui.plot.plugins;
 
 
-import chart.Plugin;
 import java.util.logging.Logger;
+import se.europeanspallationsource.xaos.ui.plot.Plugin;
 
 
 /**

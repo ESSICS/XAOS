@@ -17,12 +17,12 @@
 package se.europeanspallationsource.xaos.ui.plot.plugins.impl;
 
 
-import chart.Plugin;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.scene.chart.ValueAxis;
 import javafx.util.Duration;
+import se.europeanspallationsource.xaos.ui.plot.Plugin;
 import se.europeanspallationsource.xaos.ui.plot.util.impl.ChartUndoManager;
 
 

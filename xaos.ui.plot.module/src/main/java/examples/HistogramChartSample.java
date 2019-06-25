@@ -17,8 +17,8 @@
 
 package examples;
 
-import chart.HistogramChartFX;
-import chart.NumberAxis;
+import se.europeanspallationsource.xaos.ui.plot.HistogramChartFX;
+import se.europeanspallationsource.xaos.ui.plot.NumberAxis;
 import java.util.Random;
 import javafx.application.Application;
 import javafx.collections.FXCollections;

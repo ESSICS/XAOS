@@ -17,8 +17,8 @@
 package se.europeanspallationsource.xaos.ui.plot.util.impl;
 
 
-import chart.LineChartFX;
-import chart.Plugin;
+import se.europeanspallationsource.xaos.ui.plot.LineChartFX;
+import se.europeanspallationsource.xaos.ui.plot.Plugin;
 import se.europeanspallationsource.xaos.ui.plot.data.DataReducingSeries;
 import java.io.IOException;
 import java.util.ArrayList;

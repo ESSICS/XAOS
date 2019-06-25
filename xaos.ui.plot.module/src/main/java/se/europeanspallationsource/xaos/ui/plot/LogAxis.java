@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package chart;
+package se.europeanspallationsource.xaos.ui.plot;
 
 /**
  * A logarithmic axis implementation for JavaFX 2 charts<br>

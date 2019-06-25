@@ -17,8 +17,8 @@
 
 package examples;
 
-import chart.AreaChartFX;
-import chart.NumberAxis;
+import se.europeanspallationsource.xaos.ui.plot.AreaChartFX;
+import se.europeanspallationsource.xaos.ui.plot.NumberAxis;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

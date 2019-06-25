@@ -17,8 +17,8 @@
 package examples;
 
 
-import chart.LineChartFX;
-import chart.NumberAxis;
+import se.europeanspallationsource.xaos.ui.plot.LineChartFX;
+import se.europeanspallationsource.xaos.ui.plot.NumberAxis;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -38,8 +38,8 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import se.europeanspallationsource.xaos.ui.plot.plugins.impl.ErrorBars;
-import chart.TimeAxis;
-import chart.Plugin;
+import se.europeanspallationsource.xaos.ui.plot.TimeAxis;
+import se.europeanspallationsource.xaos.ui.plot.Plugin;
 import java.util.concurrent.TimeUnit;
 import javafx.scene.chart.XYChart.Series;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;

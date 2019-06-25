@@ -17,8 +17,6 @@
 package se.europeanspallationsource.xaos.ui.plot.plugins.impl;
 
 
-import chart.AreaChartFX;
-import chart.Plugin;
 import java.text.Format;
 import java.text.MessageFormat;
 import javafx.collections.ObservableList;
@@ -33,6 +31,8 @@ import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 import javafx.util.Pair;
+import se.europeanspallationsource.xaos.ui.plot.AreaChartFX;
+import se.europeanspallationsource.xaos.ui.plot.Plugin;
 import se.europeanspallationsource.xaos.ui.util.ColorUtils;
 
 

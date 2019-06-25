@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package chart;
+package se.europeanspallationsource.xaos.ui.plot;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;

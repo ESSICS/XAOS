@@ -15,8 +15,9 @@
  * limitations under the License.
  */
 
-package chart;
+package se.europeanspallationsource.xaos.ui.plot;
 
+import se.europeanspallationsource.xaos.ui.plot.NumberAxis;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 import javafx.beans.value.ChangeListener;

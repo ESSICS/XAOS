@@ -15,8 +15,10 @@
  * limitations under the License.
  */
 
-package chart;
+package se.europeanspallationsource.xaos.ui.plot;
 
+import se.europeanspallationsource.xaos.ui.plot.Plugin;
+import se.europeanspallationsource.xaos.ui.plot.PluginManager;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

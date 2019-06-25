@@ -17,8 +17,6 @@
 package se.europeanspallationsource.xaos.ui.plot.plugins.impl;
 
 
-import chart.DensityChartFX;
-import chart.Plugin;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Bounds;
@@ -26,6 +24,8 @@ import javafx.geometry.Point2D;
 import javafx.scene.chart.ValueAxis;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import se.europeanspallationsource.xaos.ui.plot.DensityChartFX;
+import se.europeanspallationsource.xaos.ui.plot.Plugin;
 import se.europeanspallationsource.xaos.ui.plot.plugins.AbstractCursorPlugin;
 
 

@@ -17,7 +17,6 @@
 
 package se.europeanspallationsource.xaos.ui.plot.plugins.impl;
 
-import chart.Plugin;
 import java.text.Format;
 import java.text.MessageFormat;
 import javafx.beans.property.DoubleProperty;
@@ -32,6 +31,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.util.Pair;
+import se.europeanspallationsource.xaos.ui.plot.Plugin;
 import se.europeanspallationsource.xaos.ui.util.ColorUtils;
 
 /**

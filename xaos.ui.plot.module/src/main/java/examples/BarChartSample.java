@@ -17,9 +17,8 @@
 package examples;
 
 
-import chart.BarChartFX;
-import chart.NumberAxis;
-import chart.Plugin;
+import se.europeanspallationsource.xaos.ui.plot.NumberAxis;
+import se.europeanspallationsource.xaos.ui.plot.Plugin;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,6 +26,7 @@ import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
+import se.europeanspallationsource.xaos.ui.plot.BarChartFX;
 import se.europeanspallationsource.xaos.ui.plot.plugins.impl.ErrorBars;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
 import se.europeanspallationsource.xaos.ui.plot.data.ErrorSeries;

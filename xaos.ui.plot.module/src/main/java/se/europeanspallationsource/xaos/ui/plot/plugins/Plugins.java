@@ -17,11 +17,11 @@
 package se.europeanspallationsource.xaos.ui.plot.plugins;
 
 
-import chart.Plugin;
 import java.text.Format;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.Chart;
 import se.europeanspallationsource.xaos.ui.control.NavigatorPopup;
+import se.europeanspallationsource.xaos.ui.plot.Plugin;
 import se.europeanspallationsource.xaos.ui.plot.data.ErrorSeries;
 import se.europeanspallationsource.xaos.ui.plot.plugins.AxisConstrained.AxisConstraints;
 import se.europeanspallationsource.xaos.ui.plot.plugins.impl.AbscissaCursorDisplay;

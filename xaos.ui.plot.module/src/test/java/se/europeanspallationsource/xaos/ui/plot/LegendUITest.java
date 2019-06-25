@@ -18,7 +18,6 @@ package se.europeanspallationsource.xaos.ui.plot;
 
 
 import se.europeanspallationsource.xaos.ui.plot.Legend;
-import chart.AreaChartFX;
 import se.europeanspallationsource.xaos.ui.plot.data.DataReducingSeries;
 import java.io.IOException;
 import java.util.ArrayList;

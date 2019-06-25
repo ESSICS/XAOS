@@ -17,9 +17,9 @@
 package Demo;
 
 
-import chart.AreaChartFX;
-import chart.LogAxis;
-import chart.NumberAxis;
+import se.europeanspallationsource.xaos.ui.plot.AreaChartFX;
+import se.europeanspallationsource.xaos.ui.plot.LogAxis;
+import se.europeanspallationsource.xaos.ui.plot.NumberAxis;
 import se.europeanspallationsource.xaos.ui.plot.data.DataReducingSeries;
 import javafx.scene.chart.ValueAxis;
 import javafx.scene.chart.XYChart;

@@ -17,12 +17,11 @@
 package Demo;
 
 
-import chart.AreaChartFX;
-import chart.BarChartFX;
-import chart.LineChartFX;
-import chart.LogAxis;
-import chart.Plugin;
-import chart.ScatterChartFX;
+import se.europeanspallationsource.xaos.ui.plot.AreaChartFX;
+import se.europeanspallationsource.xaos.ui.plot.LineChartFX;
+import se.europeanspallationsource.xaos.ui.plot.LogAxis;
+import se.europeanspallationsource.xaos.ui.plot.Plugin;
+import se.europeanspallationsource.xaos.ui.plot.ScatterChartFX;
 import java.net.URL;
 import java.util.List;
 import java.util.Random;
@@ -38,6 +37,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.BorderPane;
+import se.europeanspallationsource.xaos.ui.plot.BarChartFX;
 import se.europeanspallationsource.xaos.ui.plot.PluggableChartContainer;
 import se.europeanspallationsource.xaos.ui.plot.data.ErrorSeries;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Pluggable;

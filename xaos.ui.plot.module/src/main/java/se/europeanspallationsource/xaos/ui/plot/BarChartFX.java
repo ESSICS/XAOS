@@ -1,3 +1,5 @@
+package se.europeanspallationsource.xaos.ui.plot;
+
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * Copyright (C) 2018-2019 by European Spallation Source ERIC.
@@ -15,8 +17,10 @@
  * limitations under the License.
  */
 
-package chart;
 
+
+import se.europeanspallationsource.xaos.ui.plot.Plugin;
+import se.europeanspallationsource.xaos.ui.plot.PluginManager;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.FXCollections;

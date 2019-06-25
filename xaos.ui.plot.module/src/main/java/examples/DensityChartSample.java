@@ -17,10 +17,10 @@
 
 package examples;
 
-import chart.DensityChartFX;
-import chart.DensityChartFX.Data;
-import chart.DensityChartFX.DefaultData;
-import chart.NumberAxis;
+import se.europeanspallationsource.xaos.ui.plot.DensityChartFX;
+import se.europeanspallationsource.xaos.ui.plot.DensityChartFX.Data;
+import se.europeanspallationsource.xaos.ui.plot.DensityChartFX.DefaultData;
+import se.europeanspallationsource.xaos.ui.plot.NumberAxis;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Random;

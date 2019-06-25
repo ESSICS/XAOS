@@ -17,13 +17,13 @@
 package se.europeanspallationsource.xaos.ui.plot.plugins.impl;
 
 
-import chart.Plugin;
 import java.text.DecimalFormat;
 import java.text.Format;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Label;
+import se.europeanspallationsource.xaos.ui.plot.Plugin;
 
 
 /**

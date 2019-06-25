@@ -17,8 +17,8 @@
 package examples;
 
 
-import chart.LineChartFX;
-import chart.NumberAxis;
+import se.europeanspallationsource.xaos.ui.plot.LineChartFX;
+import se.europeanspallationsource.xaos.ui.plot.NumberAxis;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

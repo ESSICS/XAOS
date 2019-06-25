@@ -17,7 +17,6 @@
 package se.europeanspallationsource.xaos.ui.plot.plugins.impl;
 
 
-import chart.DensityChartFX;
 import java.text.MessageFormat;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -31,6 +30,7 @@ import javafx.scene.chart.XYChart.Data;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import org.apache.commons.lang3.Validate;
+import se.europeanspallationsource.xaos.ui.plot.DensityChartFX;
 import se.europeanspallationsource.xaos.ui.plot.plugins.AbstractNamedPlugin;
 import se.europeanspallationsource.xaos.ui.plot.plugins.AxisConstrained;
 import se.europeanspallationsource.xaos.ui.plot.util.impl.ChartUndoManager;

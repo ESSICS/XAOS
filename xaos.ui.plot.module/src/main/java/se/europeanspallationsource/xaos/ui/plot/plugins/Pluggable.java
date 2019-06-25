@@ -17,12 +17,12 @@
 package se.europeanspallationsource.xaos.ui.plot.plugins;
 
 
-import chart.Plugin;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.chart.Chart;
 import se.europeanspallationsource.xaos.ui.plot.Legend;
 import se.europeanspallationsource.xaos.ui.plot.Legend.LegendItem;
+import se.europeanspallationsource.xaos.ui.plot.Plugin;
 
 
 /**

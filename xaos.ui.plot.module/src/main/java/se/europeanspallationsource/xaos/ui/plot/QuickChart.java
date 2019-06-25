@@ -15,8 +15,9 @@
  * limitations under the License.
  */
 
-package chart;
+package se.europeanspallationsource.xaos.ui.plot;
 
+import se.europeanspallationsource.xaos.ui.plot.LineChartFX;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.chart.XYChart;

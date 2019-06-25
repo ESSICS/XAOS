@@ -17,7 +17,6 @@
 package se.europeanspallationsource.xaos.ui.plot.plugins;
 
 
-import chart.DensityChartFX;
 import java.text.MessageFormat;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
@@ -25,6 +24,7 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.input.MouseEvent;
+import se.europeanspallationsource.xaos.ui.plot.DensityChartFX;
 
 import static se.europeanspallationsource.xaos.ui.plot.util.Assertions.assertValueAxis;
 

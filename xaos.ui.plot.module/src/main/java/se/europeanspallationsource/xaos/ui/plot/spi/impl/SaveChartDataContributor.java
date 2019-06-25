@@ -17,7 +17,6 @@
 package se.europeanspallationsource.xaos.ui.plot.spi.impl;
 
 
-import chart.DensityChartFX;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -38,6 +37,7 @@ import se.europeanspallationsource.xaos.tools.annotation.BundleItems;
 import se.europeanspallationsource.xaos.tools.annotation.Bundles;
 import se.europeanspallationsource.xaos.tools.annotation.ServiceProvider;
 import se.europeanspallationsource.xaos.ui.control.Icons;
+import se.europeanspallationsource.xaos.ui.plot.DensityChartFX;
 import se.europeanspallationsource.xaos.ui.plot.PluggableChartContainer;
 import se.europeanspallationsource.xaos.ui.plot.spi.ToolbarContributor;
 

@@ -17,7 +17,6 @@
 package se.europeanspallationsource.xaos.ui.plot.spi.impl;
 
 
-import chart.Plugin;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -41,6 +40,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.WindowEvent;
 import javafx.util.StringConverter;
 import org.apache.commons.lang3.StringUtils;
+import se.europeanspallationsource.xaos.ui.plot.Plugin;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Pluggable;
 
 import static java.util.logging.Level.SEVERE;

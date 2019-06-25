@@ -17,7 +17,7 @@
 package se.europeanspallationsource.xaos.ui.plot.plugins.impl;
 
 
-import chart.Plugin;
+import se.europeanspallationsource.xaos.ui.plot.Plugin;
 import se.europeanspallationsource.xaos.ui.plot.util.impl.ChartUndoManager;
 
 

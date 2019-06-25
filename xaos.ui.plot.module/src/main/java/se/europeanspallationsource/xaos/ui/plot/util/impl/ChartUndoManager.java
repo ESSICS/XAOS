@@ -17,7 +17,6 @@
 package se.europeanspallationsource.xaos.ui.plot.util.impl;
 
 
-import chart.Plugin;
 import java.util.Map;
 import java.util.WeakHashMap;
 import javafx.beans.binding.Bindings;
@@ -28,6 +27,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.Chart;
 import org.apache.commons.lang3.Validate;
+import se.europeanspallationsource.xaos.ui.plot.Plugin;
 
 
 /**

@@ -17,11 +17,11 @@
 package se.europeanspallationsource.xaos.ui.plot.plugins.impl;
 
 
-import chart.Plugin;
 import java.text.Format;
 import javafx.geometry.Point2D;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.Label;
+import se.europeanspallationsource.xaos.ui.plot.Plugin;
 
 
 /**

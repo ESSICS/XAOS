@@ -15,7 +15,10 @@
  * limitations under the License.
  */
 
-package chart;
+package se.europeanspallationsource.xaos.ui.plot;
+
+import se.europeanspallationsource.xaos.ui.plot.Plugin;
+import se.europeanspallationsource.xaos.ui.plot.PluginManager;
 
 import static java.util.Objects.requireNonNull;
 import static javafx.geometry.Side.LEFT;
