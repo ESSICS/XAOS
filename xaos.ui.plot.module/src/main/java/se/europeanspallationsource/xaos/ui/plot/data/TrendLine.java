@@ -22,22 +22,6 @@ package se.europeanspallationsource.xaos.ui.plot.data;
 public interface TrendLine {
 
 	/**
-	 * Gets a predicted <em>y = f(x)</em> for a given {@code x}.
-	 *
-	 * @param x The abscissa value for which an ordinate mus be predicted.
-	 * @return The predicted <em>y = f(x)</em> for a given {@code x}.
-	 */
-	double predict( double x );
-
-	/**
-	 * Sets the known points.
-	 *
-	 * @param y The ordinate of the known points.
-	 * @param x The abscissa of the known points.
-	 */
-	void setValues( double[] y, double[] x );
-
-	/**
 	 * @return The coefficients of the fitting function.
 	 */
 	double[] getCoefficients();
@@ -53,9 +37,31 @@ public interface TrendLine {
 	double getOffset();
 
 	/**
+	 * @return {@code true} if one or more errors occurred on any method call
+	 *         since the construction of this trend line.
+	 */
+	boolean isErrorOccurred();
+
+	/**
 	 * @param seriesName The name of the series.
 	 * @return Returns a proper name of this trend line for the given series name.
 	 */
 	String nameFor( String seriesName );
+
+	/**
+	 * Gets a predicted <em>y = f(x)</em> for a given {@code x}.
+	 *
+	 * @param x The abscissa value for which an ordinate mus be predicted.
+	 * @return The predicted <em>y = f(x)</em> for a given {@code x}.
+	 */
+	double predict( double x );
+
+	/**
+	 * Sets the known points.
+	 *
+	 * @param y The ordinate of the known points.
+	 * @param x The abscissa of the known points.
+	 */
+	void setValues( double[] y, double[] x );
 
 }

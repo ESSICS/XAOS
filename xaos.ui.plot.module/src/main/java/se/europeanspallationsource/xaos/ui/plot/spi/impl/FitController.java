@@ -18,7 +18,7 @@ package se.europeanspallationsource.xaos.ui.plot.spi.impl;
 
 
 import chart.Plugin;
-import chart.data.ExpTrendLine;
+import se.europeanspallationsource.xaos.ui.plot.data.ExponentialTrendLine;
 import se.europeanspallationsource.xaos.ui.plot.data.GaussianTrendLine;
 import chart.data.LogTrendLine;
 import se.europeanspallationsource.xaos.ui.plot.data.PolynomialTrendLine;
@@ -51,6 +51,7 @@ import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -68,11 +69,13 @@ import se.europeanspallationsource.xaos.tools.annotation.Bundle;
 import se.europeanspallationsource.xaos.tools.annotation.BundleItem;
 import se.europeanspallationsource.xaos.tools.annotation.BundleItems;
 import se.europeanspallationsource.xaos.tools.annotation.Bundles;
+import se.europeanspallationsource.xaos.ui.control.Icons;
 import se.europeanspallationsource.xaos.ui.plot.Legend.LegendItem;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Pluggable;
 
 import static java.util.logging.Level.SEVERE;
 import static javafx.stage.WindowEvent.WINDOW_CLOSE_REQUEST;
+import static se.europeanspallationsource.xaos.ui.control.CommonIcons.WARNING;
 
 
 /**
@@ -390,7 +393,7 @@ public class FitController extends GridPane implements Initializable {
 
 		} else if ( getString("exponential.trend.line").equals(fittingValue.getValue()) ) {
 
-			t = new ExpTrendLine(degreeOrOffset);
+			t = new ExponentialTrendLine(degreeOrOffset);
 
 			t.setValues(y.stream().mapToDouble(d -> d).toArray(), x.stream().mapToDouble(d -> d).toArray());
 
@@ -449,6 +452,19 @@ public class FitController extends GridPane implements Initializable {
 			getLabelWidth(fittingLabel.getText()),
 			50
 		);
+
+		if ( t.isErrorOccurred() ) {
+
+			Text icon = (Text) Icons.iconFor(WARNING, 16);
+
+			icon.setFill(Color.RED);
+
+			fittingLabel.setGraphic(icon);
+			fittingLabel.setContentDisplay(ContentDisplay.RIGHT);
+			fittingLabel.setGraphicTextGap(6);
+			fittingLabel.resize(getLabelWidth(fittingLabel.getText()) + 10, 50);
+
+		}
 
 		fittingLabelsList.add(fittingLabel);
 		pluggable.getPlotChildren().add(fittingLabel);

@@ -145,6 +145,7 @@ import se.europeanspallationsource.xaos.ui.util.FXUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNull;
+import static se.europeanspallationsource.xaos.ui.control.CommonIcons.BLUR_OFF;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.CHEVRON_DOWN;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.CHEVRON_LEFT;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.CHEVRON_RIGHT;
@@ -174,10 +175,10 @@ import static se.europeanspallationsource.xaos.ui.control.CommonIcons.SQUARE_RIG
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.SQUARE_UP;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.STATISTICS;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.TABLE;
+import static se.europeanspallationsource.xaos.ui.control.CommonIcons.WARNING;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.ZOOM_IN;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.ZOOM_OUT;
 import static se.europeanspallationsource.xaos.ui.control.Icons.DEFAULT_SIZE;
-import static se.europeanspallationsource.xaos.ui.control.CommonIcons.BLUR_OFF;
 
 
 /**
@@ -1464,7 +1465,7 @@ public class IconsUITest extends ApplicationTest {
 		//	No default provider, so null is the only result possible.
 		System.out.println("  Testing 'iconFor(Object)'...");
 
-		assertThat(CommonIcons.values().length).isEqualTo(32);
+		assertThat(CommonIcons.values().length).isEqualTo(33);
 
 		assertThat(Icons.iconFor(BLUR_OFF, DEFAULT_SIZE))
 			.isNotNull()
@@ -1574,6 +1575,10 @@ public class IconsUITest extends ApplicationTest {
 			.isNotNull()
 			.isInstanceOf(Text.class)
 			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.CARET_SQUARE_O_RIGHT.getCode()));
+		assertThat(Icons.iconFor(SQUARE_UP, DEFAULT_SIZE))
+			.isNotNull()
+			.isInstanceOf(Text.class)
+			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.CARET_SQUARE_O_UP.getCode()));
 		assertThat(Icons.iconFor(STATISTICS, DEFAULT_SIZE))
 			.isNotNull()
 			.isInstanceOf(Text.class)
@@ -1582,10 +1587,10 @@ public class IconsUITest extends ApplicationTest {
 			.isNotNull()
 			.isInstanceOf(Text.class)
 			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.TABLE.getCode()));
-		assertThat(Icons.iconFor(SQUARE_UP, DEFAULT_SIZE))
+		assertThat(Icons.iconFor(WARNING, DEFAULT_SIZE))
 			.isNotNull()
 			.isInstanceOf(Text.class)
-			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.CARET_SQUARE_O_UP.getCode()));
+			.hasFieldOrPropertyWithValue("text", String.valueOf(FontAwesome.WARNING.getCode()));
 		assertThat(Icons.iconFor(ZOOM_IN, DEFAULT_SIZE))
 			.isNotNull()
 			.isInstanceOf(Text.class)

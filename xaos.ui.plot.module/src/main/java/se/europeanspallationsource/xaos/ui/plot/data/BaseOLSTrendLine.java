@@ -33,6 +33,7 @@ public abstract class BaseOLSTrendLine implements TrendLine {
 
 	//	Will hold prediction coefs once we get values.
 	private RealMatrix coefficients = null;
+	private boolean errorOccurred = false;
 
 	@Override
 	public double[] getCoefficients() {
@@ -45,6 +46,11 @@ public abstract class BaseOLSTrendLine implements TrendLine {
 
 		return coefs;
 
+	}
+
+	@Override
+	public final boolean isErrorOccurred() {
+		return errorOccurred;
 	}
 
 	@Override
@@ -62,16 +68,24 @@ public abstract class BaseOLSTrendLine implements TrendLine {
 
 	}
 
+	public final void setErrorOccurred() {
+		this.errorOccurred = true;
+	}
+
 	@Override
 	@SuppressWarnings( "AssignmentToMethodParameter" )
 	public void setValues( double[] y, double[] x ) {
 
 		if ( x.length != y.length ) {
+
+			setErrorOccurred();
+
 			throw new IllegalArgumentException(String.format(
 				"The numbers of y and x values must be equal (%d != %d)",
 				y.length,
 				x.length
 			));
+
 		}
 
 		double[][] xData = new double[x.length][];
@@ -88,7 +102,17 @@ public abstract class BaseOLSTrendLine implements TrendLine {
 			y = Arrays.copyOf(y, y.length);
 
 			for ( int i = 0; i < x.length; i++ ) {
+				
 				y[i] = Math.log(y[i]);
+
+				if ( !Double.isFinite(y[i])) {
+
+					setErrorOccurred();
+					
+					y[i] = 0;
+					
+				}
+
 			}
 
 		}

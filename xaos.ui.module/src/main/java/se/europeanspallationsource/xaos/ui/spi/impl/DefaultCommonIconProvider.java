@@ -80,6 +80,7 @@ public class DefaultCommonIconProvider extends BaseProvider implements IconProvi
 		map.put(CommonIcons.SQUARE_UP, FontAwesome.CARET_SQUARE_O_UP);
 		map.put(CommonIcons.STATISTICS, FontAwesome.SIGNAL);
 		map.put(CommonIcons.TABLE, FontAwesome.TABLE);
+		map.put(CommonIcons.WARNING, FontAwesome.WARNING);
 		map.put(CommonIcons.ZOOM_IN, FontAwesome.SEARCH_PLUS);
 		map.put(CommonIcons.ZOOM_OUT, FontAwesome.SEARCH_MINUS);
 

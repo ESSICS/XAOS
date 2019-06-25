@@ -47,6 +47,11 @@ public class GaussianTrendLine implements TrendLine {
 	}
 
 	@Override
+	public boolean isErrorOccurred() {
+		return false;
+	}
+
+	@Override
 	public String nameFor( String seriesName ) {
 		return seriesName + String.format(
 			"\n f(x) = %+.2f * Exp[-(x %+.2f)²/(2 * %.2f)²]\n",

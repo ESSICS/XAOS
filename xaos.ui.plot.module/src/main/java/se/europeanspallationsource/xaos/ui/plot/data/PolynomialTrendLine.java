@@ -29,6 +29,7 @@ public class PolynomialTrendLine extends BaseOLSTrendLine {
 	public PolynomialTrendLine( int degree ) {
 
 		if ( degree < 0 ) {
+			setErrorOccurred();
 			throw new IllegalArgumentException("The degree of the polynomial cannot be negative.");
 		}
 
@@ -87,6 +88,7 @@ public class PolynomialTrendLine extends BaseOLSTrendLine {
 
 	@Override
 	protected double[] xVector( double x ) {
+		
 		//	{1, x, x*x, x*x*x, ...}
 		double[] poly = new double[degree + 1];
 		double xi = 1;

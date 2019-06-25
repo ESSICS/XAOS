@@ -54,6 +54,7 @@ public enum CommonIcons {
 	SQUARE_UP,
 	STATISTICS,
 	TABLE,
+	WARNING, 
 	ZOOM_IN,
 	ZOOM_OUT
 }
