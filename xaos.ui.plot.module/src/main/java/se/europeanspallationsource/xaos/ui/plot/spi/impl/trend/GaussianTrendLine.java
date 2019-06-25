@@ -17,6 +17,9 @@
 package se.europeanspallationsource.xaos.ui.plot.spi.impl.trend;
 
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.commons.math3.exception.MathIllegalStateException;
 import org.apache.commons.math3.fitting.GaussianCurveFitter;
 import org.apache.commons.math3.fitting.WeightedObservedPoints;
 
@@ -28,10 +31,14 @@ import org.apache.commons.math3.fitting.WeightedObservedPoints;
 @SuppressWarnings( "ClassWithoutLogger" )
 public class GaussianTrendLine implements TrendLine {
 
+	private static final Logger LOGGER = Logger.getLogger(GaussianTrendLine.class.getName());
+
+	private boolean errorOccurred = false;
 	private final WeightedObservedPoints obs = new WeightedObservedPoints();
 	private double[] parameters;
 
 	@Override
+	@SuppressWarnings( "ReturnOfCollectionOrArrayField" )
 	public double[] getCoefficients() {
 		return parameters;
 	}
@@ -48,7 +55,7 @@ public class GaussianTrendLine implements TrendLine {
 
 	@Override
 	public boolean isErrorOccurred() {
-		return false;
+		return errorOccurred;
 	}
 
 	@Override
@@ -81,7 +88,16 @@ public class GaussianTrendLine implements TrendLine {
 			obs.add(x[j], y[j]);
 		}
 
-		parameters = GaussianCurveFitter.create().fit(obs.toList());
+		try {
+			parameters = GaussianCurveFitter.create().fit(obs.toList());
+		} catch ( MathIllegalStateException misex ) {
+
+			LOGGER.log(Level.WARNING, "Unable to performa gaussian fitting.", misex);
+
+			errorOccurred = true;
+			parameters = new double[] { 0.0, 0.0, 0.0 };
+			
+		}
 
 	}
 
