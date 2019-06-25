@@ -20,52 +20,48 @@ package se.europeanspallationsource.xaos.ui.plot.data;
  * @author claudio.rosati@esss.se
  */
 @SuppressWarnings( "ClassWithoutLogger" )
-public class ExponentialTrendLine extends BaseOLSTrendLine {
-
-	private final double offset;
-
-	public ExponentialTrendLine( double offset ) {
-		
-		if ( !Double.isFinite(offset) ) {
-
-			setErrorOccurred();
-
-			this.offset = 0;
-
-		} else {
-			this.offset = offset;
-		}
-		
-	}
+public class LogarithmicTrendLine extends BaseOLSTrendLine {
 
 	@Override
 	public int getDegree() {
-		throw new UnsupportedOperationException("Not supported for ExponentialTrendLine.");
+		throw new UnsupportedOperationException("Not supported for LogarithmicTrendLine.");
 	}
 
 	@Override
 	public double getOffset() {
-		return offset;
+		throw new UnsupportedOperationException("Not supported for LogarithmicTrendLine.");
 	}
 
 	@Override
 	public String nameFor( String seriesName ) {
-
-		double a = Math.exp(getCoefficients()[0]);
-		double b = getCoefficients()[1];
-
-		return seriesName + String.format("\n f(x) = %+.2f⋅Exp(%+.2f * x)", a, b);
+		return seriesName + String.format(
+			"\n f(x) = %+.2f %+.2f⋅Ln(x)",
+			getCoefficients()[0],
+			getCoefficients()[1]
+		);
 
 	}
 
 	@Override
 	protected boolean logY() {
-		return true;
+		return false;
 	}
 
 	@Override
 	protected double[] xVector( double x ) {
-		return new double[] { 1, x };
+
+		double logx = Math.log(x);
+
+		if ( !Double.isFinite(logx) ) {
+
+			setErrorOccurred();
+			
+			logx = 0;
+
+		}
+
+		return new double[] { 1, logx };
+
 	}
 
 }

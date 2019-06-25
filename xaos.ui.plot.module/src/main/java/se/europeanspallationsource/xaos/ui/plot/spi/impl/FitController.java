@@ -20,9 +20,9 @@ package se.europeanspallationsource.xaos.ui.plot.spi.impl;
 import chart.Plugin;
 import se.europeanspallationsource.xaos.ui.plot.data.ExponentialTrendLine;
 import se.europeanspallationsource.xaos.ui.plot.data.GaussianTrendLine;
-import chart.data.LogTrendLine;
+import se.europeanspallationsource.xaos.ui.plot.data.LogarithmicTrendLine;
 import se.europeanspallationsource.xaos.ui.plot.data.PolynomialTrendLine;
-import chart.data.PowerTrendLine;
+import se.europeanspallationsource.xaos.ui.plot.data.PowerTrendLine;
 import se.europeanspallationsource.xaos.ui.plot.data.TrendLine;
 import java.io.IOException;
 import java.net.URL;
@@ -369,7 +369,7 @@ public class FitController extends GridPane implements Initializable {
 
 		} else if ( getString("logarithmic.trend.line").equals(fittingValue.getValue()) ) {
 			
-			t = new LogTrendLine();
+			t = new LogarithmicTrendLine();
 
 			t.setValues(y.stream().mapToDouble(d -> d).toArray(), x.stream().mapToDouble(d -> d).toArray());
 
