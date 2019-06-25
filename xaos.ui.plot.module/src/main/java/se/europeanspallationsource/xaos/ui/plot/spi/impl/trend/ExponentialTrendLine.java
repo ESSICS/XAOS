@@ -14,54 +14,58 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.ui.plot.data;
+package se.europeanspallationsource.xaos.ui.plot.spi.impl.trend;
 
 /**
  * @author claudio.rosati@esss.se
  */
 @SuppressWarnings( "ClassWithoutLogger" )
-public class LogarithmicTrendLine extends BaseOLSTrendLine {
+public class ExponentialTrendLine extends BaseOLSTrendLine {
+
+	private final double offset;
+
+	public ExponentialTrendLine( double offset ) {
+		
+		if ( !Double.isFinite(offset) ) {
+
+			setErrorOccurred();
+
+			this.offset = 0;
+
+		} else {
+			this.offset = offset;
+		}
+		
+	}
 
 	@Override
 	public int getDegree() {
-		throw new UnsupportedOperationException("Not supported for LogarithmicTrendLine.");
+		throw new UnsupportedOperationException("Not supported for ExponentialTrendLine.");
 	}
 
 	@Override
 	public double getOffset() {
-		throw new UnsupportedOperationException("Not supported for LogarithmicTrendLine.");
+		return offset;
 	}
 
 	@Override
 	public String nameFor( String seriesName ) {
-		return seriesName + String.format(
-			"\n f(x) = %+.2f %+.2f⋅Ln(x)",
-			getCoefficients()[0],
-			getCoefficients()[1]
-		);
+
+		double a = Math.exp(getCoefficients()[0]);
+		double b = getCoefficients()[1];
+
+		return seriesName + String.format("\n f(x) = %+.2f⋅Exp(%+.2f * x)", a, b);
 
 	}
 
 	@Override
 	protected boolean logY() {
-		return false;
+		return true;
 	}
 
 	@Override
 	protected double[] xVector( double x ) {
-
-		double logx = Math.log(x);
-
-		if ( !Double.isFinite(logx) ) {
-
-			setErrorOccurred();
-			
-			logx = 0;
-
-		}
-
-		return new double[] { 1, logx };
-
+		return new double[] { 1, x };
 	}
 
 }

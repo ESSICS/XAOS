@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.ui.plot.data;
+package se.europeanspallationsource.xaos.ui.plot.spi.impl.trend;
 
 
 import java.util.Arrays;

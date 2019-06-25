@@ -18,12 +18,6 @@ package se.europeanspallationsource.xaos.ui.plot.spi.impl;
 
 
 import chart.Plugin;
-import se.europeanspallationsource.xaos.ui.plot.data.ExponentialTrendLine;
-import se.europeanspallationsource.xaos.ui.plot.data.GaussianTrendLine;
-import se.europeanspallationsource.xaos.ui.plot.data.LogarithmicTrendLine;
-import se.europeanspallationsource.xaos.ui.plot.data.PolynomialTrendLine;
-import se.europeanspallationsource.xaos.ui.plot.data.PowerTrendLine;
-import se.europeanspallationsource.xaos.ui.plot.data.TrendLine;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -72,6 +66,12 @@ import se.europeanspallationsource.xaos.tools.annotation.Bundles;
 import se.europeanspallationsource.xaos.ui.control.Icons;
 import se.europeanspallationsource.xaos.ui.plot.Legend.LegendItem;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Pluggable;
+import se.europeanspallationsource.xaos.ui.plot.spi.impl.trend.ExponentialTrendLine;
+import se.europeanspallationsource.xaos.ui.plot.spi.impl.trend.GaussianTrendLine;
+import se.europeanspallationsource.xaos.ui.plot.spi.impl.trend.LogarithmicTrendLine;
+import se.europeanspallationsource.xaos.ui.plot.spi.impl.trend.PolynomialTrendLine;
+import se.europeanspallationsource.xaos.ui.plot.spi.impl.trend.PowerTrendLine;
+import se.europeanspallationsource.xaos.ui.plot.spi.impl.trend.TrendLine;
 
 import static java.util.logging.Level.SEVERE;
 import static javafx.stage.WindowEvent.WINDOW_CLOSE_REQUEST;
