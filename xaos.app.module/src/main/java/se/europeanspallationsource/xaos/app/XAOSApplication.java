@@ -32,6 +32,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import se.europeanspallationsource.xaos.core.util.LogUtils;
 import se.europeanspallationsource.xaos.core.util.ThreadPools;
 
 import static java.util.logging.Level.SEVERE;
@@ -100,7 +101,7 @@ public class XAOSApplication extends Application {
 				//	Call the startApplication() method.
 				startApplication((BorderPane) scene.getRoot());
 			} catch ( Exception ex ) {
-				LOGGER.log(SEVERE, "Exception when starting the application.", ex);
+				LogUtils.log(LOGGER, SEVERE, ex, "Exception when starting the application.");
 				notifyPreloader(new ErrorNotification(
 					"XAOSApplication#startApplication",
 					"Exception when starting the application.",

@@ -64,6 +64,7 @@ digraph "xaos.ui.plot" {
   "se.europeanspallationsource:xaos.ui.plot:jar" -> "org.apache.commons:commons-math3:jar"
   "io.reactivex.rxjava2:rxjava:jar" -> "org.reactivestreams:reactive-streams:jar"
   "se.europeanspallationsource:xaos.core:jar" -> "io.reactivex.rxjava2:rxjava:jar"
+  "se.europeanspallationsource:xaos.core:jar" -> "se.europeanspallationsource:xaos.tools:jar"[style="dotted"]
   "se.europeanspallationsource:xaos.ui.plot:jar" -> "se.europeanspallationsource:xaos.core:jar"
   "se.europeanspallationsource:xaos.tools:jar" -> "org.apache.commons:commons-lang3:jar"[style="dotted"]
   "com.github.ben-manes.caffeine:caffeine:jar" -> "org.checkerframework:checker-qual:jar"

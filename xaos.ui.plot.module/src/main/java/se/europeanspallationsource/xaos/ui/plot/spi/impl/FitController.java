@@ -20,7 +20,6 @@ package se.europeanspallationsource.xaos.ui.plot.spi.impl;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
-import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +57,7 @@ import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import org.apache.commons.lang3.StringUtils;
+import se.europeanspallationsource.xaos.core.util.LogUtils;
 import se.europeanspallationsource.xaos.tools.annotation.Bundle;
 import se.europeanspallationsource.xaos.tools.annotation.BundleItem;
 import se.europeanspallationsource.xaos.tools.annotation.BundleItems;
@@ -559,14 +559,7 @@ public class FitController extends GridPane implements Initializable {
 			loader.load();
 
 		} catch ( IOException ex ) {
-			LOGGER.log(
-				SEVERE,
-				MessageFormat.format(
-					"Unable to load ''fit.xml'' resource [{0}].",
-					resource.toExternalForm()
-				),
-				ex
-			);
+			LogUtils.log(LOGGER, SEVERE, ex, "Unable to load ''fit.xml'' resource [{0}].", resource.toExternalForm());
 		}
 
 	}

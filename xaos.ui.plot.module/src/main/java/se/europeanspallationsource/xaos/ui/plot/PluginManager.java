@@ -18,12 +18,16 @@ package se.europeanspallationsource.xaos.ui.plot;
 
 
 import java.util.List;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.chart.Chart;
+import se.europeanspallationsource.xaos.core.util.LogUtils;
+
+import static java.util.logging.Level.WARNING;
 
 
 /**
@@ -33,8 +37,9 @@ import javafx.scene.chart.Chart;
  * @author Grzegorz Kruk (original author).
  * @author claudio.rosati@esss.se
  */
-@SuppressWarnings( "ClassWithoutLogger" )
 class PluginManager {
+
+	private static final Logger LOGGER = Logger.getLogger(PluginManager.class.getName());
 
 	private final Chart chart;
 	private final ListChangeListener<Node> pluginPlotChildrenChanged = change -> {
@@ -70,9 +75,19 @@ class PluginManager {
 
 	private void bindPlugins( List<? extends Plugin> addedPlugins ) {
 		addedPlugins.forEach(plugin -> {
-			plugin.setChart(chart);
-			plugin.getPlotChildren().addListener(pluginPlotChildrenChanged);
-			pluginsNodes.getChildren().addAll(plugin.getPlotChildren());
+			try {
+				plugin.setChart(chart);
+				plugin.getPlotChildren().addListener(pluginPlotChildrenChanged);
+				pluginsNodes.getChildren().addAll(plugin.getPlotChildren());
+			} catch ( Exception ex ) {
+				LogUtils.log(
+					LOGGER,
+					WARNING,
+					"Plugin ''{0}'' cannot be added to chart [reason: {1}].",
+					plugin.getName(),
+					ex.getMessage()
+				);
+			}
 		});
 	}
 

@@ -17,9 +17,9 @@
 package se.europeanspallationsource.xaos.ui.util;
 
 
-import java.text.MessageFormat;
 import java.util.logging.Logger;
 import javafx.scene.image.Image;
+import se.europeanspallationsource.xaos.core.util.LogUtils;
 
 import static java.util.logging.Level.SEVERE;
 
@@ -48,9 +48,9 @@ public class ResourceUtils {
 		try {
 			return new Image(resource);
 		} catch ( NullPointerException npex) {
-            LOGGER.log(SEVERE, "Null 'resource' parameter.");
+            LogUtils.log(LOGGER, SEVERE, "Null 'resource' parameter.");
 		} catch ( IllegalArgumentException iaex) {
-            LOGGER.log(SEVERE, MessageFormat.format("Unable to load \"{0}\" image file.", resource), iaex);
+            LogUtils.log(LOGGER, SEVERE, iaex,"Unable to load \"{0}\" image file.", resource);
 		}
 
 		return null;

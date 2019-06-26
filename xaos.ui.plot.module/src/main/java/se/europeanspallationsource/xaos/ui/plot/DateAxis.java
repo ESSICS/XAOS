@@ -28,8 +28,8 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ObjectPropertyBase;
 import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -60,22 +60,22 @@ import javafx.util.StringConverter;
  * have the chance to specify fix lower and upper bounds, otherwise they are
  * calculated by the chart data.</p>
  * <pre>
- * ObservableList<XYChart.Series<Date, Number>> series = FXCollections.observableArrayList();
+ * ObservableList&lt;XYChart.Series&lt;Date, Number&gt;&gt; series = FXCollections.observableArrayList();
  *
- * ObservableList<XYChart.Data<Date, Number>> series1Data = FXCollections.observableArrayList();
- * series1Data.add(new XYChart.Data<Date, Number>(new GregorianCalendar(2012, 11, 15).getTime(), 2));
- * series1Data.add(new XYChart.Data<Date, Number>(new GregorianCalendar(2014, 5, 3).getTime(), 4));
+ * ObservableList&lt;XYChart.Data&lt;Date, Number&gt;&gt; series1Data = FXCollections.observableArrayList();
+ * series1Data.add(new XYChart.Data&lt;Date, Number&gt;(new GregorianCalendar(2012, 11, 15).getTime(), 2));
+ * series1Data.add(new XYChart.Data&lt;Date, Number&gt;(new GregorianCalendar(2014, 5, 3).getTime(), 4));
  *
- * ObservableList<XYChart.Data<Date, Number>> series2Data = FXCollections.observableArrayList();
- * series2Data.add(new XYChart.Data<Date, Number>(new GregorianCalendar(2014, 0, 13).getTime(), 8));
- * series2Data.add(new XYChart.Data<Date, Number>(new GregorianCalendar(2014, 7, 27).getTime(), 4));
+ * ObservableList&lt;XYChart.Data&lt;Date, Number&gt;&gt; series2Data = FXCollections.observableArrayList();
+ * series2Data.add(new XYChart.Data&lt;Date, Number&gt;(new GregorianCalendar(2014, 0, 13).getTime(), 8));
+ * series2Data.add(new XYChart.Data&lt;Date, Number&gt;(new GregorianCalendar(2014, 7, 27).getTime(), 4));
  *
- * series.add(new XYChart.Series<>("Series1", series1Data));
- * series.add(new XYChart.Series<>("Series2", series2Data));
+ * series.add(new XYChart.Series&lt;&gt;("Series1", series1Data));
+ * series.add(new XYChart.Series&lt;&gt;("Series2", series2Data));
  *
  * NumberAxis numberAxis = new NumberAxis();
  * DateAxis dateAxis = new DateAxis();
- * LineChart<Date, Number> lineChart = new LineChart<>(dateAxis, numberAxis, series);</pre>
+ * LineChart&lt;Date, Number&gt; lineChart = new LineChart&lt;&gt;(dateAxis, numberAxis, series);</pre>
  *
  * @author Christian Schudt (original author).
  * @author Diego Cirujano (original author).
@@ -84,87 +84,46 @@ import javafx.util.StringConverter;
 @SuppressWarnings( "ClassWithoutLogger" )
 public final class DateAxis extends Axis<Date> {
 
-	/**
-	 * These property are used for animation.
-	 */
-	private final LongProperty currentLowerBound = new SimpleLongProperty(this, "currentLowerBound");
-
-	private final LongProperty currentUpperBound = new SimpleLongProperty(this, "currentUpperBound");
-
-	private final ObjectProperty<StringConverter<Date>> tickLabelFormatter = new ObjectPropertyBase<StringConverter<Date>>() {
-		@Override
-		protected void invalidated() {
-			if ( !isAutoRanging() ) {
-				invalidateRange();
-				requestAxisLayout();
-			}
-		}
-
-		@Override
-		public Object getBean() {
-			return DateAxis.this;
-		}
-
-		@Override
-		public String getName() {
-			return "tickLabelFormatter";
-		}
-	};
-
-	/**
-	 * Stores the min and max date of the list of dates which is used.
-	 * If {@link #autoRanging} is true, these values are used as lower and upper bounds.
-	 */
-	private Date minDate, maxDate;
-
-	private ObjectProperty<Date> lowerBound = new ObjectPropertyBase<Date>() {
-		@Override
-		protected void invalidated() {
-			if ( !isAutoRanging() ) {
-				invalidateRange();
-				requestAxisLayout();
-			}
-		}
-
-		@Override
-		public Object getBean() {
-			return DateAxis.this;
-		}
-
-		@Override
-		public String getName() {
-			return "lowerBound";
-		}
-	};
-
-	private ObjectProperty<Date> upperBound = new ObjectPropertyBase<Date>() {
-		@Override
-		protected void invalidated() {
-			if ( !isAutoRanging() ) {
-				invalidateRange();
-				requestAxisLayout();
-			}
-		}
-
-		@Override
-		public Object getBean() {
-			return DateAxis.this;
-		}
-
-		@Override
-		public String getName() {
-			return "upperBound";
-		}
-	};
-
-	private ChartLayoutAnimator animator = new ChartLayoutAnimator(this);
-
-	private Object currentAnimationID;
-
 	private Interval actualInterval = Interval.DECADE;
+	private final ChartLayoutAnimator animator = new ChartLayoutAnimator(this);
+	private final EventHandler<MouseEvent> contextMenu = this::handleMouseEvent;
+	private Object currentAnimationID;
+	private final LongProperty currentLowerBound = new SimpleLongProperty(this, "currentLowerBound");
+	private final LongProperty currentUpperBound = new SimpleLongProperty(this, "currentUpperBound");
+	private final ObjectProperty<Date> lowerBound = new SimpleObjectProperty<>(this, "lowerBound") {
+		@Override
+		protected void invalidated() {
+			invalidateAndLayout();
+		}
+	};
+	/**
+	 * Stores the max date of the list of dates which is used. If
+	 * {@link #isAutoRanging()} is {@code true}, the value is used as upper
+	 * bound.
+	 */
+	private Date maxDate;
+	/**
+	 * Stores the min date of the list of dates which is used. If
+	 * {@link #isAutoRanging()} is {@code true}, the value is used as lower
+	 * bound.
+	 */
+	private Date minDate;
+	private final ObjectProperty<StringConverter<Date>> tickLabelFormatter = new SimpleObjectProperty<>(this, "tickLabelFormatter") {
+		@Override
+		protected void invalidated() {
+			invalidateAndLayout();
+		}
+	};
+	private ObjectProperty<Date> upperBound = new SimpleObjectProperty<>(this, "upperBound") {
+		@Override
+		protected void invalidated() {
+			invalidateAndLayout();
+		}
+	};
 
 	/**
-	 * Default constructor. By default the lower and upper bound are calculated by the data.
+	 * Constructs a default date axis where the lower and upper bound are
+	 * calculated by the data.
 	 */
 	public DateAxis() {
 		addEventHandler(MouseEvent.MOUSE_CLICKED, contextMenu);
@@ -177,11 +136,14 @@ public final class DateAxis extends Axis<Date> {
 	 * @param upperBound The upper bound.
 	 */
 	public DateAxis( Date lowerBound, Date upperBound ) {
+
 		this();
+
 		setAutoRanging(false);
 		setLowerBound(lowerBound);
 		setUpperBound(upperBound);
 		addEventHandler(MouseEvent.MOUSE_CLICKED, contextMenu);
+
 	}
 
 	/**
@@ -192,177 +154,26 @@ public final class DateAxis extends Axis<Date> {
 	 * @param upperBound The upper bound.
 	 */
 	public DateAxis( String axisLabel, Date lowerBound, Date upperBound ) {
+
 		this(lowerBound, upperBound);
+
 		setLabel(axisLabel);
 		addEventHandler(MouseEvent.MOUSE_CLICKED, contextMenu);
+
 	}
 
-	private final EventHandler<MouseEvent> contextMenu = ( MouseEvent event ) -> {
-		if ( event.getButton() == MouseButton.SECONDARY ) {
-			Label lowerboundLabel = new Label("Lower bound ");
-			Label upperboundLabel = new Label("Upper bound ");
-			Label axisTitle = new Label(this.getLabel());
-			CheckBox autorangeBox = new CheckBox();
-			TextField lowerboundText = new TextField();
-			TextField upperboundText = new TextField();
-			Button setButton = new Button("Set");
-			setButton.setPrefSize(90, 20);
 
-			axisTitle.setPadding(new Insets(10, 10, 5, 10));
-			axisTitle.setFont(Font.font(Font.getDefault().getName(), FontWeight.BOLD, Font.getDefault().getSize()));
-			axisTitle.setMaxWidth(Double.MAX_VALUE);
-			axisTitle.setAlignment(Pos.CENTER);
 
-			autorangeBox.setText("Autoscale");
-			autorangeBox.setSelected(isAutoRanging());
 
-			lowerboundText.disableProperty().bind(autorangeBox.selectedProperty());
-			upperboundText.disableProperty().bind(autorangeBox.selectedProperty());
 
-			lowerboundText.setText(String.format("%.4f", getLowerBound()));
-			lowerboundText.setPrefSize(90, 20);
-			upperboundText.setText(String.format("%.4f", getUpperBound()));
-			upperboundText.setPrefSize(90, 20);
 
-			setButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
-				@Override
-				public void handle( MouseEvent arg0 ) {
-					if ( autorangeBox.isSelected() ) {
-						setAutoRanging(true);
-					} else {
-						setAutoRanging(false);
-						lowerboundText.setText(String.format("%.4f", getLowerBound()));
-						upperboundText.setText(String.format("%.4f", getUpperBound()));
-					}
-				}
 
-			});
 
-			GridPane chartInfo = new GridPane();
-			chartInfo.setHgap(10);
-			chartInfo.setVgap(10);
-			chartInfo.setPadding(new Insets(10, 10, 5, 10));
 
-			chartInfo.add(lowerboundLabel, 0, 0);
-			chartInfo.add(lowerboundText, 1, 0);
-			chartInfo.add(upperboundLabel, 0, 1);
-			chartInfo.add(upperboundText, 1, 1);
-			chartInfo.add(autorangeBox, 0, 2);
 
-			HBox hbox = new HBox();
-			hbox.setPadding(new Insets(5, 10, 10, 110));
-			hbox.getChildren().addAll(setButton);
 
-			BorderPane secondaryLayout = new BorderPane();
-			secondaryLayout.setTop(axisTitle);
-			secondaryLayout.setCenter(chartInfo);
-			secondaryLayout.setBottom(hbox);
-
-			Scene secondScene = new Scene(secondaryLayout, 205, 200);
-
-			// New window (Stage)
-			Stage newWindow = new Stage();
-			newWindow.setTitle("Axis Properties");
-			newWindow.setScene(secondScene);
-
-			newWindow.show();
-		}
-	};
-
-	@Override
-	public void invalidateRange( List<Date> list ) {
-		super.invalidateRange(list);
-
-		Collections.sort(list);
-		if ( list.isEmpty() ) {
-			minDate = maxDate = new Date();
-		} else if ( list.size() == 1 ) {
-			minDate = maxDate = list.get(0);
-		} else if ( list.size() > 1 ) {
-			minDate = list.get(0);
-			maxDate = list.get(list.size() - 1);
-		}
-	}
-
-	@Override
-	protected Object autoRange( double length ) {
-		if ( isAutoRanging() ) {
-			return new Object[] { minDate, maxDate };
-		} else {
-			if ( getLowerBound() == null || getUpperBound() == null ) {
-				throw new IllegalArgumentException("If autoRanging is false, a lower and upper bound must be set.");
-			}
-			return getRange();
-		}
-	}
-
-	@Override
-	protected void setRange( Object range, boolean animating ) {
-		Object[] r = (Object[]) range;
-		Date oldLowerBound = getLowerBound();
-		Date oldUpperBound = getUpperBound();
-		Date lower = (Date) r[0];
-		Date upper = (Date) r[1];
-		setLowerBound(lower);
-		setUpperBound(upper);
-
-		if ( animating ) {
-//            final Timeline timeline = new Timeline();
-//            timeline.setAutoReverse(false);
-//            timeline.setCycleCount(1);
-//            final AnimationTimer timer = new AnimationTimer() {
-//                @Override
-//                public void handle(long l) {
-//                    requestAxisLayout();
-//                }
-//            };
-//            timer.start();
-//
-//            timeline.setOnFinished(new EventHandler<ActionEvent>() {
-//                @Override
-//                public void handle(ActionEvent actionEvent) {
-//                    timer.stop();
-//                    requestAxisLayout();
-//                }
-//            });
-//
-//            KeyValue keyValue = new KeyValue(currentLowerBound, lower.getTime());
-//            KeyValue keyValue2 = new KeyValue(currentUpperBound, upper.getTime());
-//
-//            timeline.getKeyFrames().addAll(new KeyFrame(Duration.ZERO,
-//                    new KeyValue(currentLowerBound, oldLowerBound.getTime()),
-//                    new KeyValue(currentUpperBound, oldUpperBound.getTime())),
-//                    new KeyFrame(Duration.millis(3000), keyValue, keyValue2));
-//            timeline.play();
-
-			animator.stop(currentAnimationID);
-			currentAnimationID = animator.animate(
-				new KeyFrame(Duration.ZERO,
-					new KeyValue(currentLowerBound, oldLowerBound.getTime()),
-					new KeyValue(currentUpperBound, oldUpperBound.getTime())
-				),
-				new KeyFrame(Duration.millis(700),
-					new KeyValue(currentLowerBound, lower.getTime()),
-					new KeyValue(currentUpperBound, upper.getTime())
-				)
-			);
-
-		} else {
-			currentLowerBound.set(getLowerBound().getTime());
-			currentUpperBound.set(getUpperBound().getTime());
-		}
-	}
-
-	@Override
-	protected Object getRange() {
-		return new Object[] { getLowerBound(), getUpperBound() };
-	}
-
-	@Override
-	public double getZeroPosition() {
-		return 0;
-	}
+	
 
 	@Override
 	public double getDisplayPosition( Date date ) {
@@ -385,6 +196,35 @@ public final class DateAxis extends Axis<Date> {
 		} else {
 			return d * range + getZeroPosition();
 		}
+	}
+
+	/**
+	 * Gets the lower bound of the axis.
+	 *
+	 * @return The lower bound.
+	 * @see #lowerBoundProperty()
+	 */
+	public final Date getLowerBound() {
+		return lowerBound.get();
+	}
+
+	/**
+	 * Gets the tick label formatter for the ticks.
+	 *
+	 * @return The converter.
+	 */
+	public final StringConverter<Date> getTickLabelFormatter() {
+		return tickLabelFormatter.getValue();
+	}
+
+	/**
+	 * Gets the upper bound of the axis.
+	 *
+	 * @return The upper bound.
+	 * @see #upperBoundProperty()
+	 */
+	public final Date getUpperBound() {
+		return upperBound.get();
 	}
 
 	@Override
@@ -410,8 +250,77 @@ public final class DateAxis extends Axis<Date> {
 	}
 
 	@Override
+	public double getZeroPosition() {
+		return 0;
+	}
+
+	@Override
+	public void invalidateRange( List<Date> list ) {
+		super.invalidateRange(list);
+
+		Collections.sort(list);
+		if ( list.isEmpty() ) {
+			minDate = maxDate = new Date();
+		} else if ( list.size() == 1 ) {
+			minDate = maxDate = list.get(0);
+		} else if ( list.size() > 1 ) {
+			minDate = list.get(0);
+			maxDate = list.get(list.size() - 1);
+		}
+	}
+
+	@Override
 	public boolean isValueOnAxis( Date date ) {
 		return date.getTime() > currentLowerBound.get() && date.getTime() < currentUpperBound.get();
+	}
+
+	/**
+	 * Gets the lower bound of the axis.
+	 *
+	 * @return The property.
+	 * @see #getLowerBound()
+	 * @see #setLowerBound(java.util.Date)
+	 */
+	public final ObjectProperty<Date> lowerBoundProperty() {
+		return lowerBound;
+	}
+
+	/**
+	 * Sets the lower bound of the axis.
+	 *
+	 * @param date The lower bound date.
+	 * @see #lowerBoundProperty()
+	 */
+	public final void setLowerBound( Date date ) {
+		lowerBound.set(date);
+	}
+
+	/**
+	 * Sets the tick label formatter for the ticks.
+	 *
+	 * @param value The converter.
+	 */
+	public final void setTickLabelFormatter( StringConverter<Date> value ) {
+		tickLabelFormatter.setValue(value);
+	}
+
+	/**
+	 * Sets the upper bound of the axis.
+	 *
+	 * @param date The upper bound date.
+	 * @see #upperBoundProperty() ()
+	 */
+	public final void setUpperBound( Date date ) {
+		upperBound.set(date);
+	}
+
+	/**
+	 * Gets the tick label formatter for the ticks.
+	 *
+	 * @return The property.
+	 */
+	public final ObjectProperty<StringConverter<Date>> tickLabelFormatterProperty() {
+		return tickLabelFormatter;
 	}
 
 	@Override
@@ -422,6 +331,29 @@ public final class DateAxis extends Axis<Date> {
 	@Override
 	public Date toRealValue( double v ) {
 		return new Date((long) v);
+	}
+
+	/**
+	 * Gets the upper bound of the axis.
+	 *
+	 * @return The property.
+	 * @see #getUpperBound() ()
+	 * @see #setUpperBound(java.util.Date)
+	 */
+	public final ObjectProperty<Date> upperBoundProperty() {
+		return upperBound;
+	}
+
+	@Override
+	protected Object autoRange( double length ) {
+		if ( isAutoRanging() ) {
+			return new Object[] { minDate, maxDate };
+		} else {
+			if ( getLowerBound() == null || getUpperBound() == null ) {
+				throw new IllegalArgumentException("If autoRanging is false, a lower and upper bound must be set.");
+			}
+			return getRange();
+		}
 	}
 
 	@Override
@@ -504,12 +436,8 @@ public final class DateAxis extends Axis<Date> {
 	}
 
 	@Override
-	protected void layoutChildren() {
-		if ( !isAutoRanging() ) {
-			currentLowerBound.set(getLowerBound().getTime());
-			currentUpperBound.set(getUpperBound().getTime());
-		}
-		super.layoutChildren();
+	protected Object getRange() {
+		return new Object[] { getLowerBound(), getUpperBound() };
 	}
 
 	@Override
@@ -549,6 +477,168 @@ public final class DateAxis extends Axis<Date> {
 		}
 		return dateFormat.format(date);
 	}
+
+	@Override
+	protected void layoutChildren() {
+		if ( !isAutoRanging() ) {
+			currentLowerBound.set(getLowerBound().getTime());
+			currentUpperBound.set(getUpperBound().getTime());
+		}
+		super.layoutChildren();
+	}
+
+	@Override
+	protected void setRange( Object range, boolean animating ) {
+		Object[] r = (Object[]) range;
+		Date oldLowerBound = getLowerBound();
+		Date oldUpperBound = getUpperBound();
+		Date lower = (Date) r[0];
+		Date upper = (Date) r[1];
+		setLowerBound(lower);
+		setUpperBound(upper);
+
+		if ( animating ) {
+//            final Timeline timeline = new Timeline();
+//            timeline.setAutoReverse(false);
+//            timeline.setCycleCount(1);
+//            final AnimationTimer timer = new AnimationTimer() {
+//                @Override
+//                public void handle(long l) {
+//                    requestAxisLayout();
+//                }
+//            };
+//            timer.start();
+//
+//            timeline.setOnFinished(new EventHandler<ActionEvent>() {
+//                @Override
+//                public void handle(ActionEvent actionEvent) {
+//                    timer.stop();
+//                    requestAxisLayout();
+//                }
+//            });
+//
+//            KeyValue keyValue = new KeyValue(currentLowerBound, lower.getTime());
+//            KeyValue keyValue2 = new KeyValue(currentUpperBound, upper.getTime());
+//
+//            timeline.getKeyFrames().addAll(new KeyFrame(Duration.ZERO,
+//                    new KeyValue(currentLowerBound, oldLowerBound.getTime()),
+//                    new KeyValue(currentUpperBound, oldUpperBound.getTime())),
+//                    new KeyFrame(Duration.millis(3000), keyValue, keyValue2));
+//            timeline.play();
+
+			animator.stop(currentAnimationID);
+			currentAnimationID = animator.animate(
+				new KeyFrame(Duration.ZERO,
+					new KeyValue(currentLowerBound, oldLowerBound.getTime()),
+					new KeyValue(currentUpperBound, oldUpperBound.getTime())
+				),
+				new KeyFrame(Duration.millis(700),
+					new KeyValue(currentLowerBound, lower.getTime()),
+					new KeyValue(currentUpperBound, upper.getTime())
+				)
+			);
+
+		} else {
+			currentLowerBound.set(getLowerBound().getTime());
+			currentUpperBound.set(getUpperBound().getTime());
+		}
+	}
+
+
+
+
+
+	private void handleMouseEvent ( MouseEvent event ) {
+		if ( event.getButton() == MouseButton.SECONDARY ) {
+			Label lowerboundLabel = new Label("Lower bound ");
+			Label upperboundLabel = new Label("Upper bound ");
+			Label axisTitle = new Label(this.getLabel());
+			CheckBox autorangeBox = new CheckBox();
+			TextField lowerboundText = new TextField();
+			TextField upperboundText = new TextField();
+			Button setButton = new Button("Set");
+			setButton.setPrefSize(90, 20);
+
+			axisTitle.setPadding(new Insets(10, 10, 5, 10));
+			axisTitle.setFont(Font.font(Font.getDefault().getName(), FontWeight.BOLD, Font.getDefault().getSize()));
+			axisTitle.setMaxWidth(Double.MAX_VALUE);
+			axisTitle.setAlignment(Pos.CENTER);
+
+			autorangeBox.setText("Autoscale");
+			autorangeBox.setSelected(isAutoRanging());
+
+			lowerboundText.disableProperty().bind(autorangeBox.selectedProperty());
+			upperboundText.disableProperty().bind(autorangeBox.selectedProperty());
+
+			lowerboundText.setText(String.format("%.4f", getLowerBound()));
+			lowerboundText.setPrefSize(90, 20);
+			upperboundText.setText(String.format("%.4f", getUpperBound()));
+			upperboundText.setPrefSize(90, 20);
+
+			setButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+				@Override
+				public void handle( MouseEvent arg0 ) {
+					if ( autorangeBox.isSelected() ) {
+						setAutoRanging(true);
+					} else {
+						setAutoRanging(false);
+						lowerboundText.setText(String.format("%.4f", getLowerBound()));
+						upperboundText.setText(String.format("%.4f", getUpperBound()));
+					}
+				}
+
+			});
+
+			GridPane chartInfo = new GridPane();
+			chartInfo.setHgap(10);
+			chartInfo.setVgap(10);
+			chartInfo.setPadding(new Insets(10, 10, 5, 10));
+
+			chartInfo.add(lowerboundLabel, 0, 0);
+			chartInfo.add(lowerboundText, 1, 0);
+			chartInfo.add(upperboundLabel, 0, 1);
+			chartInfo.add(upperboundText, 1, 1);
+			chartInfo.add(autorangeBox, 0, 2);
+
+			HBox hbox = new HBox();
+			hbox.setPadding(new Insets(5, 10, 10, 110));
+			hbox.getChildren().addAll(setButton);
+
+			BorderPane secondaryLayout = new BorderPane();
+			secondaryLayout.setTop(axisTitle);
+			secondaryLayout.setCenter(chartInfo);
+			secondaryLayout.setBottom(hbox);
+
+			Scene secondScene = new Scene(secondaryLayout, 205, 200);
+
+			// New window (Stage)
+			Stage newWindow = new Stage();
+			newWindow.setTitle("Axis Properties");
+			newWindow.setScene(secondScene);
+
+			newWindow.show();
+		}
+	};
+
+
+
+
+
+	private void invalidateAndLayout() {
+		if ( !isAutoRanging() ) {
+			invalidateRange();
+			requestAxisLayout();
+		}
+	}
+
+
+
+
+
+
+
+
 
 	/**
 	 * Makes dates even, in the sense of that years always begin in January, months always begin on the 1st and days always at midnight.
@@ -626,95 +716,6 @@ public final class DateAxis extends Axis<Date> {
 		} else {
 			return dates;
 		}
-	}
-
-	/**
-	 * Gets the lower bound of the axis.
-	 *
-	 * @return The property.
-	 * @see #getLowerBound()
-	 * @see #setLowerBound(java.util.Date)
-	 */
-	public final ObjectProperty<Date> lowerBoundProperty() {
-		return lowerBound;
-	}
-
-	/**
-	 * Gets the lower bound of the axis.
-	 *
-	 * @return The lower bound.
-	 * @see #lowerBoundProperty()
-	 */
-	public final Date getLowerBound() {
-		return lowerBound.get();
-	}
-
-	/**
-	 * Sets the lower bound of the axis.
-	 *
-	 * @param date The lower bound date.
-	 * @see #lowerBoundProperty()
-	 */
-	public final void setLowerBound( Date date ) {
-		lowerBound.set(date);
-	}
-
-	/**
-	 * Gets the upper bound of the axis.
-	 *
-	 * @return The property.
-	 * @see #getUpperBound() ()
-	 * @see #setUpperBound(java.util.Date)
-	 */
-	public final ObjectProperty<Date> upperBoundProperty() {
-		return upperBound;
-	}
-
-	/**
-	 * Gets the upper bound of the axis.
-	 *
-	 * @return The upper bound.
-	 * @see #upperBoundProperty()
-	 */
-	public final Date getUpperBound() {
-		return upperBound.get();
-	}
-
-	/**
-	 * Sets the upper bound of the axis.
-	 *
-	 * @param date The upper bound date.
-	 * @see #upperBoundProperty() ()
-	 */
-	public final void setUpperBound( Date date ) {
-		upperBound.set(date);
-	}
-
-	/**
-	 * Gets the tick label formatter for the ticks.
-	 *
-	 * @return The converter.
-	 */
-	public final StringConverter<Date> getTickLabelFormatter() {
-		return tickLabelFormatter.getValue();
-	}
-
-	/**
-	 * Sets the tick label formatter for the ticks.
-	 *
-	 * @param value The converter.
-	 */
-	public final void setTickLabelFormatter( StringConverter<Date> value ) {
-		tickLabelFormatter.setValue(value);
-	}
-
-	/**
-	 * Gets the tick label formatter for the ticks.
-	 *
-	 * @return The property.
-	 */
-	public final ObjectProperty<StringConverter<Date>> tickLabelFormatterProperty() {
-		return tickLabelFormatter;
 	}
 
 	/**

@@ -18,13 +18,13 @@ package Demo;
 
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
-
-
 
 
 /**
@@ -63,6 +63,19 @@ public interface ChartGenerator<X, Y> {
 
 		for ( int i = 0; i < yValues.length; i++ ) {
 			data.add(new XYChart.Data<>(i, yValues[i]));
+		}
+
+		return FXCollections.observableArrayList(data);
+
+	}
+
+	static ObservableList<XYChart.Data<Date, Number>> generateDateData( int numberOfPoints ) {
+
+		int[] yValues = generateIntArray(0, 5, numberOfPoints);
+		List<XYChart.Data<Date, Number>> data = new ArrayList<>(numberOfPoints);
+
+		for ( int i = 0; i < yValues.length; i++ ) {
+			data.add(new XYChart.Data<>(new GregorianCalendar(RANDOM.nextInt(2000), RANDOM.nextInt(12), 7).getTime(), yValues[i]));
 		}
 
 		return FXCollections.observableArrayList(data);

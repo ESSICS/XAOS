@@ -14,32 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.europeanspallationsource.xaos.ui.plot.plugins;
+package se.europeanspallationsource.xaos.core.util;
 
 
-import se.europeanspallationsource.xaos.ui.plot.Plugin;
+import java.util.logging.Level;
 
 
 /**
- * A {@link Plugin} with a name.
+ * Used by {@link LogUtils} to send to the information just logged for further
+ * processing.
  *
  * @author claudio.rosati@esss.se
  */
-@SuppressWarnings( "ClassWithoutLogger" )
-public class AbstractNamedPlugin extends Plugin {
-
-	private final String name;
+public interface LogHandler {
 
 	/**
-	 * @param name The display name of this plugin.
+	 * Called by {@link LogUtils} log methods to further processing log
+	 * information.
+	 *
+	 * @param level      Log level.
+	 * @param className  Name of the class calling one of the {@link LogUtils}
+	 *                   log methods.
+	 * @param methodName Name of the method calling one of the {@link LogUtils}
+	 *                   log methods.
+	 * @param message    Log message.
+	 * @param thrown     Optional exception causing the logging.
 	 */
-	protected AbstractNamedPlugin( String name ) {
-		this.name = name;
-	}
-
-	@Override
-	public String getName() {
-		return name;
-	}
+	void handle( Level level, String className, String methodName, String message, Throwable thrown );
 
 }

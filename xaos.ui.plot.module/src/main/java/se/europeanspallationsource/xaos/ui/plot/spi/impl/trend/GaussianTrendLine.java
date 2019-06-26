@@ -17,11 +17,13 @@
 package se.europeanspallationsource.xaos.ui.plot.spi.impl.trend;
 
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.math3.exception.MathIllegalStateException;
 import org.apache.commons.math3.fitting.GaussianCurveFitter;
 import org.apache.commons.math3.fitting.WeightedObservedPoints;
+import se.europeanspallationsource.xaos.core.util.LogUtils;
+
+import static java.util.logging.Level.WARNING;
 
 
 /**
@@ -92,7 +94,7 @@ public class GaussianTrendLine implements TrendLine {
 			parameters = GaussianCurveFitter.create().fit(obs.toList());
 		} catch ( MathIllegalStateException misex ) {
 
-			LOGGER.log(Level.WARNING, "Unable to performa gaussian fitting.", misex);
+			LogUtils.log(LOGGER, WARNING, misex, "Unable to performa gaussian fitting.");
 
 			errorOccurred = true;
 			parameters = new double[] { 0.0, 0.0, 0.0 };

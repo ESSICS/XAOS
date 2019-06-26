@@ -31,7 +31,10 @@ import javafx.scene.control.CheckBoxTreeItem;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.CheckBoxTreeCell;
+import se.europeanspallationsource.xaos.core.util.LogUtils;
 import se.europeanspallationsource.xaos.tools.lang.Reflections;
+
+import static java.util.logging.Level.WARNING;
 
 
 /**
@@ -135,7 +138,7 @@ public class FilterableTreeItem<T> extends CheckBoxTreeItem<T> {
 
 					//	It should never happen...
 					if ( child == null ) {
-						LOGGER.warning("Predicate invoked with a null parameter.");
+						LogUtils.log(LOGGER, WARNING, "Predicate invoked with a null parameter.");
 						return false;
 					}
 

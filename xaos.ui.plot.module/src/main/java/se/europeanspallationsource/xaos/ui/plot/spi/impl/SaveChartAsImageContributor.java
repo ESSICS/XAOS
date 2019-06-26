@@ -19,7 +19,6 @@ package se.europeanspallationsource.xaos.ui.plot.spi.impl;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -35,6 +34,7 @@ import javafx.scene.image.WritableImage;
 import javafx.stage.FileChooser;
 import javax.imageio.ImageIO;
 import org.apache.commons.lang3.StringUtils;
+import se.europeanspallationsource.xaos.core.util.LogUtils;
 import se.europeanspallationsource.xaos.tools.annotation.BundleItem;
 import se.europeanspallationsource.xaos.tools.annotation.BundleItems;
 import se.europeanspallationsource.xaos.tools.annotation.Bundles;
@@ -118,11 +118,7 @@ public class SaveChartAsImageContributor implements ToolbarContributor {
 			try {
 				ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
 			} catch ( IOException ex ) {
-				LOGGER.log(
-					SEVERE,
-					MessageFormat.format("Unable to save chart as image file [{0}].", file),
-					ex
-				);
+				LogUtils.log(LOGGER, SEVERE, ex, "Unable to save chart as image file [{0}].", file);
 			}
 
 		}

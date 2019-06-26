@@ -23,7 +23,6 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.logging.Logger;
 
 
 /**
@@ -34,10 +33,8 @@ import java.util.logging.Logger;
 @SuppressWarnings( "ClassWithoutLogger" )
 public class ThreadPools {
 
-
 	private final static ReentrantReadWriteLock CACHED_THREAD_POOL_LOCK = new ReentrantReadWriteLock();
 	private final static ReentrantReadWriteLock FIXED_THREAD_POOL_LOCK = new ReentrantReadWriteLock();
-	private static final Logger LOGGER = Logger.getLogger(ThreadPools.class.getName());
 	private final static ReentrantReadWriteLock SINGLE_THREAD_EXECUTOR_LOCK = new ReentrantReadWriteLock();
 	private final static AtomicBoolean WAS_REGISTERED = new AtomicBoolean(false);
 	private final static AtomicBoolean WAS_SHUTDOWN = new AtomicBoolean(false);

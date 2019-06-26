@@ -21,7 +21,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.logging.Logger;
 import javafx.beans.binding.Bindings;
 import javafx.scene.chart.Chart;
@@ -32,6 +31,7 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Tooltip;
 import javafx.stage.FileChooser;
 import org.apache.commons.lang3.StringUtils;
+import se.europeanspallationsource.xaos.core.util.LogUtils;
 import se.europeanspallationsource.xaos.tools.annotation.BundleItem;
 import se.europeanspallationsource.xaos.tools.annotation.BundleItems;
 import se.europeanspallationsource.xaos.tools.annotation.Bundles;
@@ -42,6 +42,7 @@ import se.europeanspallationsource.xaos.ui.plot.PluggableChartContainer;
 import se.europeanspallationsource.xaos.ui.plot.spi.ToolbarContributor;
 
 import static java.util.logging.Level.SEVERE;
+import static java.util.logging.Level.WARNING;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.TABLE;
 
 
@@ -84,11 +85,13 @@ public class SaveChartDataContributor implements ToolbarContributor {
 	private void saveChartData( Chart chart ) {
 
 		if ( !( chart instanceof XYChart ) && !( chart instanceof DensityChartFX ) ) {
-			LOGGER.warning(MessageFormat.format(
+			LogUtils.log(
+				LOGGER,
+				WARNING,
 				"Given chart ({0}) is not a XYChart nor a DensityChartFX [{1}].",
 				chart.getTitle(),
 				chart.getClass().getName()
-			));
+			);
 			return;
 		}
 
@@ -128,11 +131,7 @@ public class SaveChartDataContributor implements ToolbarContributor {
 					writer.write(data.getXValue().toString() + ", " + data.getYValue().toString() + "\n");
 				}
 			} catch ( IOException ex ) {
-				LOGGER.log(
-					SEVERE,
-					MessageFormat.format("Unable to save chart data [{0}].", fileName),
-					ex
-				);
+				LogUtils.log(LOGGER, SEVERE, ex, "Unable to save chart data [{0}].", fileName);
 			}
 
 		});
@@ -154,11 +153,7 @@ public class SaveChartDataContributor implements ToolbarContributor {
 				}
 			}
 		} catch ( IOException ex ) {
-			LOGGER.log(
-				SEVERE,
-				MessageFormat.format("Unable to save chart data [{0}].", file),
-				ex
-			);
+			LogUtils.log(LOGGER, SEVERE, ex, "Unable to save chart data [{0}].", file);
 		}
 
 	}

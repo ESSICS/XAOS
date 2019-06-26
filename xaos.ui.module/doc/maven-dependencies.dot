@@ -76,6 +76,7 @@ digraph "xaos.ui" {
   "se.europeanspallationsource:xaos.ui:jar" -> "se.europeanspallationsource:xaos.tools:jar"
   "io.reactivex.rxjava2:rxjava:jar" -> "org.reactivestreams:reactive-streams:jar"
   "se.europeanspallationsource:xaos.core:jar" -> "io.reactivex.rxjava2:rxjava:jar"
+  "se.europeanspallationsource:xaos.core:jar" -> "se.europeanspallationsource:xaos.tools:jar"[style="dotted"]
   "se.europeanspallationsource:xaos.ui:jar" -> "se.europeanspallationsource:xaos.core:jar"
   "org.testfx:testfx-core:jar" -> "org.hamcrest:hamcrest-core:jar"
   "org.testfx:testfx-core:jar" -> "org.assertj:assertj-core:jar"[style="dashed",color="red",fontcolor="red",label="3.11.1"]

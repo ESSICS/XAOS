@@ -19,10 +19,13 @@ package se.europeanspallationsource.xaos.ui.util;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.scene.layout.Region;
+import se.europeanspallationsource.xaos.core.util.LogUtils;
+
+import static java.util.logging.Level.SEVERE;
+
 
 
 /**
@@ -68,7 +71,7 @@ public class FXUtils {
 			try {
 				task.run();
 			} catch ( Exception ex ) {
-				LOGGER.log(Level.SEVERE, "Exception while running task in the JavaFX event thread.", ex);
+				LogUtils.log(LOGGER, SEVERE, ex, "Exception while running task in the JavaFX event thread.");
 			}
 		} else {
 
@@ -78,7 +81,7 @@ public class FXUtils {
 				try {
 					task.run();
 				} catch ( Exception ex ) {
-					LOGGER.log(Level.SEVERE, "Exception while running task in the JavaFX event thread.", ex);
+					LogUtils.log(LOGGER, SEVERE, ex, "Exception while running task in the JavaFX event thread.");
 				} finally {
 					latch.countDown();
 				}
@@ -114,7 +117,7 @@ public class FXUtils {
 			try {
 				task.run();
 			} catch ( Exception ex ) {
-				LOGGER.log(Level.SEVERE, "Exception while running task in the JavaFX event thread.", ex);
+				LogUtils.log(LOGGER, SEVERE, ex, "Exception while running task in the JavaFX event thread.");
 			}
 
 			return true;
@@ -127,7 +130,7 @@ public class FXUtils {
 				try {
 					task.run();
 				} catch ( Exception ex ) {
-					LOGGER.log(Level.SEVERE, "Exception while running task in the JavaFX event thread.", ex);
+					LogUtils.log(LOGGER, SEVERE, ex, "Exception while running task in the JavaFX event thread.");
 				} finally {
 					latch.countDown();
 				}
@@ -157,7 +160,7 @@ public class FXUtils {
 			try {
 				task.run();
 			} catch ( Exception ex ) {
-				LOGGER.log(Level.SEVERE, "Exception while running task in the JavaFX event thread.", ex);
+				LogUtils.log(LOGGER, SEVERE, ex, "Exception while running task in the JavaFX event thread.");
 			}
 		} else {
 
@@ -167,7 +170,7 @@ public class FXUtils {
 				try {
 					task.run();
 				} catch ( Exception ex ) {
-					LOGGER.log(Level.SEVERE, "Exception while running task in the JavaFX event thread.", ex);
+					LogUtils.log(LOGGER, SEVERE, ex, "Exception while running task in the JavaFX event thread.");
 				} finally {
 					latch.countDown();
 				}
@@ -176,7 +179,7 @@ public class FXUtils {
 			try {
 				latch.await();
 			} catch ( InterruptedException ex ) {
-				LOGGER.log(Level.SEVERE, "Exception while waiting for task being executed in the JavaFX event thread.", ex);
+				LogUtils.log(LOGGER, SEVERE, ex, "Exception while waiting for task being executed in the JavaFX event thread.");
 			}
 
 		}

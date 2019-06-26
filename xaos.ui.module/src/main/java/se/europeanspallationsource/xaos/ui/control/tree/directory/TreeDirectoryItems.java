@@ -38,9 +38,11 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
+import se.europeanspallationsource.xaos.core.util.LogUtils;
 import se.europeanspallationsource.xaos.ui.control.tree.DirectoryModel;
 
 import static java.nio.file.attribute.FileTime.from;
+import static java.util.logging.Level.WARNING;
 
 
 /**
@@ -671,12 +673,14 @@ public class TreeDirectoryItems {
 			try ( Stream<Path> dirStream = Files.list(dir) ) {
 				return dirStream.sorted(PATH_COMPARATOR).collect(Collectors.toList());
 			} catch ( IOException ex ) {
-				LOGGER.warning(MessageFormat.format(
+				LogUtils.log(
+					LOGGER,
+					WARNING,
 					"Exception getting files list for \"{0}\" [{1}: {2}].",
 					dir.toString(),
 					ex.getClass().getSimpleName(),
 					ex.getMessage()
-				));
+				);
 				return Collections.emptyList();
 			}
 		}
@@ -689,12 +693,14 @@ public class TreeDirectoryItems {
 				ft = Files.getLastModifiedTime(file);
 			} catch ( IOException ex ) {
 
-				LOGGER.warning(MessageFormat.format(
+				LogUtils.log(
+					LOGGER,
+					WARNING,
 					"Exception getting the last modified time for \"{0}\": using \"now\" instead [{1}: {2}].",
 					file.toString(),
 					ex.getClass().getSimpleName(),
 					ex.getMessage()
-				));
+				);
 
 				ft = from(Instant.now());
 

@@ -17,8 +17,9 @@
 package se.europeanspallationsource.xaos.core.util;
 
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static java.util.logging.Level.WARNING;
 
 
 /**
@@ -41,7 +42,7 @@ public class ThreadUtils {
 			Thread.sleep(millis);
 			return false;
 		} catch ( InterruptedException ex ) {
-			LOGGER.log(Level.WARNING, "Sleep interrupted.", ex);
+			LogUtils.log(LOGGER, WARNING, ex, "Sleep interrupted.");
 			return true;
 		}
 	}
@@ -58,7 +59,7 @@ public class ThreadUtils {
 			Thread.sleep(millis, nanos);
 			return false;
 		} catch ( InterruptedException ex ) {
-			LOGGER.log(Level.WARNING, "Sleep interrupted.", ex);
+			LogUtils.log(LOGGER, WARNING, ex, "Sleep interrupted.");
 			return true;
 		}
 	}

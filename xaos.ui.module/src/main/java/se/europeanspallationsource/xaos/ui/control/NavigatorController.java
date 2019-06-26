@@ -42,10 +42,12 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.Shape;
 import org.kordamp.ikonli.javafx.FontIcon;
+import se.europeanspallationsource.xaos.core.util.LogUtils;
 import se.europeanspallationsource.xaos.core.util.ThreadPools;
 import se.europeanspallationsource.xaos.core.util.ThreadUtils;
 
 import static java.util.logging.Level.SEVERE;
+import static java.util.logging.Level.WARNING;
 import static javafx.scene.input.MouseButton.PRIMARY;
 
 
@@ -618,7 +620,7 @@ public class NavigatorController extends AnchorPane {
 		} else if ( "zoomToOne".equals(id) ) {
 			Event.fireEvent(source, new Event(this, source, ON_ZOOM_TO_ONE));
 		} else {
-			LOGGER.warning(MessageFormat.format("Unexpected identifier [{0}].", id));
+			LogUtils.log(LOGGER, WARNING, "Unexpected identifier [{0}].", id);
 		}
 
 	}
@@ -636,13 +638,12 @@ public class NavigatorController extends AnchorPane {
 			loader.load();
 
 		} catch ( IOException ex ) {
-			LOGGER.log(
+			LogUtils.log(
+				LOGGER,
 				SEVERE,
-				MessageFormat.format(
-					"Unable to load ''navigator.xml'' resource [{0}].",
-					resource.toExternalForm()
-				),
-				ex
+				ex,
+				"Unable to load ''navigator.xml'' resource [{0}].",
+				resource.toExternalForm()
 			);
 		}
 

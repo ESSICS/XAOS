@@ -20,7 +20,6 @@ package se.europeanspallationsource.xaos.ui.plot.spi.impl;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
-import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -48,6 +47,7 @@ import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import org.apache.commons.lang3.StringUtils;
+import se.europeanspallationsource.xaos.core.util.LogUtils;
 import se.europeanspallationsource.xaos.ui.plot.Legend.LegendItem;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Pluggable;
 
@@ -260,14 +260,7 @@ public class StatisticsController extends GridPane implements Initializable {
 			loader.load();
 
 		} catch ( IOException ex ) {
-			LOGGER.log(
-				SEVERE,
-				MessageFormat.format(
-					"Unable to load ''statistics.xml'' resource [{0}].",
-					resource.toExternalForm()
-				),
-				ex
-			);
+			LogUtils.log(LOGGER, SEVERE, ex, "Unable to load ''statistics.xml'' resource [{0}].", resource.toExternalForm());
 		}
 
 	}

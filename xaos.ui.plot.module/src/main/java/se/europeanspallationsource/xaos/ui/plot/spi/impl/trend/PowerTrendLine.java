@@ -17,8 +17,10 @@
 package se.europeanspallationsource.xaos.ui.plot.spi.impl.trend;
 
 
-import java.text.MessageFormat;
 import java.util.logging.Logger;
+import se.europeanspallationsource.xaos.core.util.LogUtils;
+
+import static java.util.logging.Level.WARNING;
 
 
 /**
@@ -86,11 +88,13 @@ public class PowerTrendLine extends BaseOLSTrendLine {
 				builder.append(SUPERSCRIPT_MINUS);
 			} else {
 				setErrorOccurred();
-				LOGGER.warning(MessageFormat.format(
+				LogUtils.log(
+					LOGGER,
+					WARNING,
 					"Invalid char [{0}]: 0x{1}",
 					String.valueOf(c),
 					Integer.toHexString(c).toUpperCase()
-				));
+				);
 			}
 		}
 

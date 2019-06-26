@@ -1,5 +1,9 @@
 digraph "summary" {
+  "org.apache.commons.lang3"                         -> "java.base (java.base)";
   "xaos.core"                                        -> "java.base (java.base)";
+  "xaos.core"                                        -> "java.logging (java.logging)";
+  "xaos.core"                                        -> "org.apache.commons.lang3";
+  "xaos.core"                                        -> "xaos.tools";
   "javafx.graphics"                                  -> "java.base (java.base)";
   "javafx.graphics"                                  -> "java.desktop (java.desktop)";
   "javafx.graphics"                                  -> "java.xml (java.xml)";
@@ -8,6 +12,7 @@ digraph "summary" {
   "javafx.controls"                                  -> "java.base (java.base)";
   "javafx.controls"                                  -> "javafx.base";
   "javafx.controls"                                  -> "javafx.graphics";
+  "xaos.tools"                                       -> "java.base (java.base)";
   "javafx.base"                                      -> "java.base (java.base)";
   "xaos.app"                                         -> "java.base (java.base)";
   "xaos.app"                                         -> "java.logging (java.logging)";

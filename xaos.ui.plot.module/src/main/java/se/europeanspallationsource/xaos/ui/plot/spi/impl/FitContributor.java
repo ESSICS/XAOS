@@ -17,7 +17,6 @@
 package se.europeanspallationsource.xaos.ui.plot.spi.impl;
 
 
-import java.util.logging.Logger;
 import javafx.beans.binding.Bindings;
 import javafx.scene.Node;
 import javafx.scene.chart.XYChart;
@@ -45,9 +44,8 @@ import static se.europeanspallationsource.xaos.ui.control.CommonIcons.BLUR_OFF;
  * @srvc.order 300
  */
 @ServiceProvider( service = ToolbarContributor.class, order = 300 )
+@SuppressWarnings( "ClassWithoutLogger" )
 public class FitContributor implements ToolbarContributor {
-
-	private static final Logger LOGGER = Logger.getLogger(FitContributor.class.getName());
 
 	@Override
 	public boolean isPrecededBySeparator() {

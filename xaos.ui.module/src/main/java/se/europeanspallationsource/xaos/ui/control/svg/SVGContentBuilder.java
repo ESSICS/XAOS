@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.MessageFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -31,7 +30,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -68,7 +66,9 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import org.apache.commons.lang3.StringUtils;
+import se.europeanspallationsource.xaos.core.util.LogUtils;
 
+import static java.util.logging.Level.WARNING;
 import static se.europeanspallationsource.xaos.ui.control.svg.SVGAttributesStackFrame.ATTR_FILL;
 import static se.europeanspallationsource.xaos.ui.control.svg.SVGAttributesStackFrame.ATTR_ID;
 import static se.europeanspallationsource.xaos.ui.control.svg.SVGAttributesStackFrame.ATTR_OPACITY;
@@ -258,7 +258,7 @@ class SVGContentBuilder {
 						node = buildText(reader, element);
 						break;
 					default:
-						LOGGER.warning(MessageFormat.format("Non Support Element: {0}", element));
+						LogUtils.log(LOGGER, WARNING, "Non Support Element: {0}", element);
 						break;
 				}
 
@@ -332,12 +332,14 @@ class SVGContentBuilder {
 				( rAttribute != null ) ? Double.parseDouble(rAttribute) : 0.0
 			);
 		} catch ( NumberFormatException ex ) {
-			LOGGER.warning(MessageFormat.format(
+			LogUtils.log(
+				LOGGER,
+				WARNING,
 				"A circle's attribute cannot be parsed to double: cx [{0}], cy [{1}], r [{2}].",
 				( cxAttribute != null ) ? cxAttribute : "-",
 				( cyAttribute != null ) ? cyAttribute : "-",
 				( rAttribute != null ) ? rAttribute : "-"
-			));
+			);
 			return null;
 		}
 
@@ -358,13 +360,15 @@ class SVGContentBuilder {
 				( ryAttribute != null && !"auto".equals(ryAttribute) ) ? Double.parseDouble(ryAttribute) : 0.0
 			);
 		} catch ( NumberFormatException ex ) {
-			LOGGER.warning(MessageFormat.format(
+			LogUtils.log(
+				LOGGER,
+				WARNING,
 				"An ellipse's attribute cannot be parsed to double: cx [{0}], cy [{1}], rx [{2}], ry [{3}].",
 				( cxAttribute != null ) ? cxAttribute : "-",
 				( cyAttribute != null ) ? cyAttribute : "-",
 				( rxAttribute != null ) ? rxAttribute : "-",
 				( ryAttribute != null ) ? ryAttribute : "-"
-			));
+			);
 			return null;
 		}
 
@@ -393,10 +397,12 @@ class SVGContentBuilder {
 				try {
 					imageUrl = new URL(url, hrefAttribute);
 				} catch ( MalformedURLException ex2 ) {
-					LOGGER.warning(MessageFormat.format(
+					LogUtils.log(
+						LOGGER,
+						WARNING,
 						"Image's href attribute is not a valid URL [{0}].",
 						hrefAttribute
-					));
+					);
 				}
 			}
 
@@ -425,18 +431,20 @@ class SVGContentBuilder {
 					return imageView;
 
 				} catch ( NumberFormatException ex ) {
-					LOGGER.warning(MessageFormat.format(
+					LogUtils.log(
+						LOGGER,
+						WARNING,
 						"An image's attribute cannot be parsed to double: x [{0}], y [{1}], width [{2}], height [{3}].",
 						( xAttribute != null ) ? xAttribute : "-",
 						( yAttribute != null ) ? yAttribute : "-",
 						( widthAttribute != null ) ? widthAttribute : "-",
 						( heightAttribute != null ) ? heightAttribute : "-"
-					));
+					);
 				}
 			}
 
 		} else {
-			LOGGER.warning("An image's attribute is null: href.");
+			LogUtils.log(LOGGER, WARNING, "An image's attribute is null: href.");
 		}
 
 		return null;
@@ -458,13 +466,15 @@ class SVGContentBuilder {
 				( y2Attribute != null ) ? Double.parseDouble(y2Attribute) : 0.0
 			);
 		} catch ( NumberFormatException ex ) {
-			LOGGER.warning(MessageFormat.format(
+			LogUtils.log(
+			LOGGER,
+			WARNING,
 				"A line's attribute cannot be parsed to double: x1 [{0}], y1 [{1}], x2 [{2}], y2 [{3}].",
 				( x1Attribute != null ) ? x1Attribute : "-",
 				( y1Attribute != null ) ? y1Attribute : "-",
 				( x2Attribute != null ) ? x2Attribute : "-",
 				( y2Attribute != null ) ? y2Attribute : "-"
-			));
+			);
 		}
 
 		return null;
@@ -493,7 +503,7 @@ class SVGContentBuilder {
 					break;
 				case "gradientUnits":
 					if ( !"userSpaceOnUse".equals(attribute.getValue()) ) {
-						LOGGER.warning(MessageFormat.format("LinearGradient supports only userSpaceOnUse: {0}", element));
+						LogUtils.log(LOGGER, WARNING, "LinearGradient supports only userSpaceOnUse: {0}", element);
 						return;
 					}
 					break;
@@ -501,35 +511,35 @@ class SVGContentBuilder {
 					try {
 						x1 = Double.parseDouble(attribute.getValue());
 					} catch ( NumberFormatException ex ) {
-						LOGGER.warning(MessageFormat.format("LinearGradient's x1 attribute cannot be parsed to double [{0}].", attribute.getValue()));
+						LogUtils.log(LOGGER, WARNING, "LinearGradient's x1 attribute cannot be parsed to double [{0}].", attribute.getValue());
 					}
 					break;
 				case "y1":
 					try {
 						y1 = Double.parseDouble(attribute.getValue());
 					} catch ( NumberFormatException ex ) {
-						LOGGER.warning(MessageFormat.format("LinearGradient's y1 attribute cannot be parsed to double [{0}].", attribute.getValue()));
+						LogUtils.log(LOGGER, WARNING, "LinearGradient's y1 attribute cannot be parsed to double [{0}].", attribute.getValue());
 					}
 					break;
 				case "x2":
 					try {
 						x2 = Double.parseDouble(attribute.getValue());
 					} catch ( NumberFormatException ex ) {
-						LOGGER.warning(MessageFormat.format("LinearGradient's x2 attribute cannot be parsed to double [{0}].", attribute.getValue()));
+						LogUtils.log(LOGGER, WARNING, "LinearGradient's x2 attribute cannot be parsed to double [{0}].", attribute.getValue());
 					}
 					break;
 				case "y2":
 					try {
 						y2 = Double.parseDouble(attribute.getValue());
 					} catch ( NumberFormatException ex ) {
-						LOGGER.warning(MessageFormat.format("LinearGradient's y2 attribute cannot be parsed to double [{0}].", attribute.getValue()));
+						LogUtils.log(LOGGER, WARNING, "LinearGradient's y2 attribute cannot be parsed to double [{0}].", attribute.getValue());
 					}
 					break;
 				case "gradientTransform":
 					transform = toTransform(attribute.getValue());
 					break;
 				default:
-					LOGGER.warning(MessageFormat.format("LinearGradient doesn''t supports: {0}:{1}", attribute, element));
+					LogUtils.log(LOGGER, WARNING, "LinearGradient doesn''t supports: {0}:{1}", attribute, element);
 					break;
 			}
 
@@ -573,7 +583,7 @@ class SVGContentBuilder {
 			return path;
 
 		} else {
-			LOGGER.warning("A path's attribute is null: d.");
+			LogUtils.log(LOGGER, WARNING, "A path's attribute is null: d.");
 		}
 
 		return null;
@@ -605,14 +615,16 @@ class SVGContentBuilder {
 				return polygon;
 
 			} catch ( NumberFormatException ex ) {
-				LOGGER.warning(MessageFormat.format(
+				LogUtils.log(
+					LOGGER,
+					WARNING,
 					"A polygon's point coordinate cannot be parsed to double [{0}].",
 					pointsAttribute
-				));
+				);
 			}
 
 		} else {
-			LOGGER.warning("A polygon's attribute is null: points.");
+			LogUtils.log(LOGGER, WARNING, "A polygon's attribute is null: points.");
 		}
 
 		return null;
@@ -644,14 +656,16 @@ class SVGContentBuilder {
 				return polyline;
 
 			} catch ( NumberFormatException ex ) {
-				LOGGER.warning(MessageFormat.format(
+				LogUtils.log(
+					LOGGER,
+					WARNING,
 					"A polyline's point coordinate cannot be parsed to double [{0}].",
 					pointsAttribute
-				));
+				);
 			}
 
 		} else {
-			LOGGER.warning("A polyline's attribute is null: points.");
+			LogUtils.log(LOGGER, WARNING, "A polyline's attribute is null: points.");
 		}
 
 		return null;
@@ -681,7 +695,7 @@ class SVGContentBuilder {
 					break;
 				case "gradientUnits":
 					if ( !"userSpaceOnUse".equals(attribute.getValue()) ) {
-						LOGGER.warning(MessageFormat.format("RadialGradient supports only userSpaceOnUse: {0}", element));
+						LogUtils.log(LOGGER, WARNING, "RadialGradient supports only userSpaceOnUse: {0}", element);
 						return;
 					}
 					break;
@@ -689,42 +703,42 @@ class SVGContentBuilder {
 					try {
 						fx = Double.valueOf(attribute.getValue());
 					} catch ( NumberFormatException ex ) {
-						LOGGER.warning(MessageFormat.format("RadialGradient's fx attribute cannot be parsed to double [{0}].", attribute.getValue()));
+						LogUtils.log(LOGGER, WARNING, "RadialGradient's fx attribute cannot be parsed to double [{0}].", attribute.getValue());
 					}
 					break;
 				case "fy":
 					try {
 						fy = Double.valueOf(attribute.getValue());
 					} catch ( NumberFormatException ex ) {
-						LOGGER.warning(MessageFormat.format("RadialGradient's fy attribute cannot be parsed to double [{0}].", attribute.getValue()));
+						LogUtils.log(LOGGER, WARNING, "RadialGradient's fy attribute cannot be parsed to double [{0}].", attribute.getValue());
 					}
 					break;
 				case "cx":
 					try {
 						cx = Double.valueOf(attribute.getValue());
 					} catch ( NumberFormatException ex ) {
-						LOGGER.warning(MessageFormat.format("RadialGradient's cx attribute cannot be parsed to double [{0}].", attribute.getValue()));
+						LogUtils.log(LOGGER, WARNING, "RadialGradient's cx attribute cannot be parsed to double [{0}].", attribute.getValue());
 					}
 					break;
 				case "cy":
 					try {
 						cy = Double.valueOf(attribute.getValue());
 					} catch ( NumberFormatException ex ) {
-						LOGGER.warning(MessageFormat.format("RadialGradient's cy attribute cannot be parsed to double [{0}].", attribute.getValue()));
+						LogUtils.log(LOGGER, WARNING, "RadialGradient's cy attribute cannot be parsed to double [{0}].", attribute.getValue());
 					}
 					break;
 				case "r":
 					try {
 						r = Double.valueOf(attribute.getValue());
 					} catch ( NumberFormatException ex ) {
-						LOGGER.warning(MessageFormat.format("RadialGradient's r attribute cannot be parsed to double [{0}].", attribute.getValue()));
+						LogUtils.log(LOGGER, WARNING, "RadialGradient's r attribute cannot be parsed to double [{0}].", attribute.getValue());
 					}
 					break;
 				case "gradientTransform":
 					transform = toTransform(attribute.getValue());
 					break;
 				default:
-					LOGGER.log(Level.INFO, "RadialGradient doesn''t supports: {0}", element);
+					LogUtils.log(LOGGER, WARNING, "RadialGradient doesn''t supports: {0}", element);
 					break;
 			}
 
@@ -801,7 +815,9 @@ class SVGContentBuilder {
 			return rectangle;
 
 		} catch ( NumberFormatException ex ) {
-			LOGGER.warning(MessageFormat.format(
+			LogUtils.log(
+				LOGGER,
+				WARNING,
 				"A rect's attribute cannot be parsed to double: x [{0}], y [{1}], width [{2}], height [{3}], rx [{4}], ry [{5}].",
 				( xAttribute != null ) ? xAttribute : "-",
 				( yAttribute != null ) ? yAttribute : "-",
@@ -809,7 +825,7 @@ class SVGContentBuilder {
 				( heightAttribute != null ) ? heightAttribute : "-",
 				( rxAttribute != null ) ? rxAttribute : "-",
 				( ryAttribute != null ) ? ryAttribute : "-"
-			));
+			);
 			return null;
 		}
 
@@ -844,10 +860,12 @@ class SVGContentBuilder {
 								try {
 									offset = Double.parseDouble(attribute.getValue());
 								} catch ( NumberFormatException ex ) {
-									LOGGER.warning(MessageFormat.format(
+									LogUtils.log(
+										LOGGER,
+										WARNING,
 										"LinearGradient's stop offset attribute cannot be parsed to double [{0}].",
 										attribute.getValue()
-									));
+									);
 								}
 								break;
 							case "style": {
@@ -865,18 +883,22 @@ class SVGContentBuilder {
 										try {
 											opacity = Double.parseDouble(item.substring(13));
 										} catch ( NumberFormatException ex ) {
-											LOGGER.warning(MessageFormat.format(
+											LogUtils.log(
+												LOGGER,
+												WARNING,
 												"LinearGradient's stop style opacity attribute cannot be parsed to double [{0}].",
 												attribute.getValue()
-											));
+											);
 										}
 									} else {
-										LOGGER.warning(MessageFormat.format(
+										LogUtils.log(
+											LOGGER,
+											WARNING,
 											"LinearGradient's stop doesn''t supports: {0} [{1}] ''{2}''",
 											attribute,
 											element,
 											item
-										));
+										);
 									}
 
 								}
@@ -884,11 +906,13 @@ class SVGContentBuilder {
 							}
 							break;
 							default:
-								LOGGER.warning(MessageFormat.format(
+								LogUtils.log(
+									LOGGER,
+									WARNING,
 									"LinearGradient's stop doesn''t supports: {0} [{1}]",
 									attribute,
 									element
-								));
+								);
 								break;
 						}
 
@@ -899,7 +923,7 @@ class SVGContentBuilder {
 					}
 
 				} else {
-					LOGGER.warning(MessageFormat.format("LinearGradient doesn''t supports: {0}", element));
+					LogUtils.log(LOGGER, WARNING, "LinearGradient doesn''t supports: {0}", element);
 				}
 
 			}
@@ -926,10 +950,12 @@ class SVGContentBuilder {
 					Double.parseDouble(fontSizeAttribute)
 				);
 			} catch ( NumberFormatException ex ) {
-				LOGGER.warning(MessageFormat.format(
+				LogUtils.log(
+					LOGGER,
+					WARNING,
 					"A text's attribute cannot be parsed to double: font-size [{0}].",
 					fontSizeAttribute
-				));
+				);
 			}
 		}
 
@@ -1041,10 +1067,12 @@ class SVGContentBuilder {
 				case "butt":
 					break;
 				default:
-					LOGGER.warning(MessageFormat.format(
+					LogUtils.log(
+						LOGGER,
+						WARNING,
 						"Unsupported stroke-linecap [{0}]: ''butt'' used instead.",
 						value
-					));
+					);
 					break;
 			}
 		}
@@ -1068,10 +1096,12 @@ class SVGContentBuilder {
 				case "miter":
 					break;
 				default:
-					LOGGER.warning(MessageFormat.format(
+					LogUtils.log(
+						LOGGER,
+						WARNING,
 						"Unsupported stroke-linejoin [{0}]: ''miter'' used instead.",
 						value
-					));
+					);
 					break;
 			}
 		}
@@ -1108,16 +1138,20 @@ class SVGContentBuilder {
 						transform = transform.createConcatenation(Transform.translate(tx, ty));
 
 					} catch ( NumberFormatException ex ) {
-						LOGGER.warning(MessageFormat.format(
+						LogUtils.log(
+							LOGGER,
+							WARNING,
 							"''translate'' transform contains value not parsed to double [{0}].",
 							transformTxt
-						));
+						);
 					}
 				} else {
-					LOGGER.warning(MessageFormat.format(
+					LogUtils.log(
+						LOGGER,
+						WARNING,
 						"''translate'' transform doesn't contain the right number of elements [{0}].",
 						transformTxt
-					));
+					);
 				}
 
 			} else if ( transformTxt.startsWith("scale(") ) {
@@ -1139,16 +1173,20 @@ class SVGContentBuilder {
 						transform = transform.createConcatenation(Transform.scale(sx, sy));
 
 					} catch ( NumberFormatException ex ) {
-						LOGGER.warning(MessageFormat.format(
+						LogUtils.log(
+							LOGGER,
+							WARNING,
 							"''scale'' transform contains value not parsed to double [{0}].",
 							transformTxt
-						));
+						);
 					}
 				} else {
-					LOGGER.warning(MessageFormat.format(
+					LogUtils.log(
+						LOGGER,
+						WARNING,
 						"''scale'' transform doesn't contain the right number of elements [{0}].",
 						transformTxt
-					));
+					);
 				}
 
 			} else if ( transformTxt.startsWith("rotate(") ) {
@@ -1172,16 +1210,20 @@ class SVGContentBuilder {
 						transform = transform.createConcatenation(Transform.rotate(angle, cx, cy));
 
 					} catch ( NumberFormatException ex ) {
-						LOGGER.warning(MessageFormat.format(
+						LogUtils.log(
+							LOGGER,
+							WARNING,
 							"''rotate'' transform contains value not parsed to double [{0}].",
 							transformTxt
-						));
+						);
 					}
 				} else {
-					LOGGER.warning(MessageFormat.format(
+					LogUtils.log(
+						LOGGER,
+						WARNING,
 						"''rotate'' transform doesn't contain the right number of elements [{0}].",
 						transformTxt
-					));
+					);
 				}
 
 			} else if ( transformTxt.startsWith("skewX(") ) {
@@ -1195,10 +1237,12 @@ class SVGContentBuilder {
 					transform = transform.createConcatenation(Transform.shear(Math.tan(Math.toRadians(angle)), 0.0));
 
 				} catch ( NumberFormatException ex ) {
-					LOGGER.warning(MessageFormat.format(
+					LogUtils.log(
+						LOGGER,
+						WARNING,
 						"''skewX'' transform contains value not parsed to double [{0}].",
 						transformTxt
-					));
+					);
 				}
 
 			} else if ( transformTxt.startsWith("skewY(") ) {
@@ -1212,10 +1256,12 @@ class SVGContentBuilder {
 					transform = transform.createConcatenation(Transform.shear(0.0, Math.tan(Math.toRadians(angle))));
 
 				} catch ( NumberFormatException ex ) {
-					LOGGER.warning(MessageFormat.format(
+					LogUtils.log(
+						LOGGER,
+						WARNING,
 						"''skewY'' transform contains value not parsed to double [{0}].",
 						transformTxt
-					));
+					);
 				}
 
 			} else if ( transformTxt.startsWith("matrix(") ) {
@@ -1237,16 +1283,20 @@ class SVGContentBuilder {
 						transform = transform.createConcatenation(Transform.affine(mxx, myx, mxy, myy, tx, ty));
 
 					} catch ( NumberFormatException ex ) {
-						LOGGER.warning(MessageFormat.format(
+						LogUtils.log(
+							LOGGER,
+							WARNING,
 							"''matrix'' transform contains value not parsed to double [{0}].",
 							transformTxt
-						));
+						);
 					}
 				} else {
-					LOGGER.warning(MessageFormat.format(
+					LogUtils.log(
+						LOGGER,
+						WARNING,
 						"''matrix'' transform doesn't contain the right number of elements [{0}].",
 						transformTxt
-					));
+					);
 				}
 
 			}

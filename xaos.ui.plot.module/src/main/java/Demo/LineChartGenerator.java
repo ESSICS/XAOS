@@ -17,12 +17,12 @@
 package Demo;
 
 
+import javafx.scene.chart.ValueAxis;
+import javafx.scene.chart.XYChart;
 import se.europeanspallationsource.xaos.ui.plot.LineChartFX;
 import se.europeanspallationsource.xaos.ui.plot.LogAxis;
 import se.europeanspallationsource.xaos.ui.plot.NumberAxis;
 import se.europeanspallationsource.xaos.ui.plot.data.DataReducingSeries;
-import javafx.scene.chart.ValueAxis;
-import javafx.scene.chart.XYChart;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
 
 import static Demo.ChartGenerator.generateData;

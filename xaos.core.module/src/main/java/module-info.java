@@ -22,9 +22,15 @@ module xaos.core {
 
 	requires java.logging;
 	requires io.reactivex.rxjava2;
+	requires xaos.tools;
+
+	uses se.europeanspallationsource.xaos.core.util.spi.LogHandlerProvider;
 
 	exports se.europeanspallationsource.xaos.core.util;
 	exports se.europeanspallationsource.xaos.core.util.function;
 	exports se.europeanspallationsource.xaos.core.util.io;
+	exports se.europeanspallationsource.xaos.core.util.spi;
+
+	opens se.europeanspallationsource.xaos.core.util to xaos.tools;
 
 }

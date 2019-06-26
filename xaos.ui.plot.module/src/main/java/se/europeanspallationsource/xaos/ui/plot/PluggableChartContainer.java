@@ -18,7 +18,6 @@ package se.europeanspallationsource.xaos.ui.plot;
 
 
 import java.net.URL;
-import java.text.MessageFormat;
 import java.util.ServiceLoader;
 import java.util.logging.Logger;
 import javafx.beans.binding.Bindings;
@@ -41,6 +40,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.web.WebView;
 import org.controlsfx.control.HiddenSidesPane;
 import org.controlsfx.control.PopOver;
+import se.europeanspallationsource.xaos.core.util.LogUtils;
 import se.europeanspallationsource.xaos.tools.annotation.BundleItem;
 import se.europeanspallationsource.xaos.tools.annotation.BundleItems;
 import se.europeanspallationsource.xaos.tools.annotation.Bundles;
@@ -49,6 +49,7 @@ import se.europeanspallationsource.xaos.ui.control.Icons;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Pluggable;
 import se.europeanspallationsource.xaos.ui.plot.spi.ToolbarContributor;
 
+import static java.util.logging.Level.WARNING;
 import static javafx.geometry.Side.TOP;
 import static org.controlsfx.control.PopOver.ArrowLocation.TOP_RIGHT;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.INFO;
@@ -160,7 +161,7 @@ public class PluggableChartContainer extends HiddenSidesPane {
 					tItems.add(element);
 				}
 			} else {
-				LOGGER.warning(MessageFormat.format("Null component provided by ''{0}''.", tc.getClass()));
+				LogUtils.log(LOGGER, WARNING, "Null component provided by ''{0}''.", tc.getClass());
 			}
 
 		});

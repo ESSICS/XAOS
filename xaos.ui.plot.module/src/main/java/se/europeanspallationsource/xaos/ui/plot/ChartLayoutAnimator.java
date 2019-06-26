@@ -84,7 +84,7 @@ public class ChartLayoutAnimator extends AnimationTimer implements EventHandler<
 	}
 
 	/**
-	 * Play the given {@Link Animation}.
+	 * Play the given {@link Animation}.
 	 *
 	 * @param animation The animation to play.
 	 * @return An id reference to the animation that can be used to stop the
