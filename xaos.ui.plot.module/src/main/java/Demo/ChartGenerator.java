@@ -75,7 +75,11 @@ public interface ChartGenerator<X, Y> {
 		List<XYChart.Data<Date, Number>> data = new ArrayList<>(numberOfPoints);
 
 		for ( int i = 0; i < yValues.length; i++ ) {
-			data.add(new XYChart.Data<>(new GregorianCalendar(RANDOM.nextInt(2000), RANDOM.nextInt(12), 7).getTime(), yValues[i]));
+			data.add(new XYChart.Data<>(new GregorianCalendar(
+				2000 + RANDOM.nextInt(10),
+				RANDOM.nextInt(12),
+				RANDOM.nextInt(31)
+			).getTime(), yValues[i]));
 		}
 
 		return FXCollections.observableArrayList(data);

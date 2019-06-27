@@ -88,14 +88,6 @@ public final class DateAxis extends Axis<Date> {
 	private final ChartLayoutAnimator animator = new ChartLayoutAnimator(this);
 	private final EventHandler<MouseEvent> contextMenu = this::handleMouseEvent;
 	private Object currentAnimationID;
-	private final LongProperty currentLowerBound = new SimpleLongProperty(this, "currentLowerBound");
-	private final LongProperty currentUpperBound = new SimpleLongProperty(this, "currentUpperBound");
-	private final ObjectProperty<Date> lowerBound = new SimpleObjectProperty<>(this, "lowerBound") {
-		@Override
-		protected void invalidated() {
-			invalidateAndLayout();
-		}
-	};
 	/**
 	 * Stores the max date of the list of dates which is used. If
 	 * {@link #isAutoRanging()} is {@code true}, the value is used as upper
@@ -108,18 +100,143 @@ public final class DateAxis extends Axis<Date> {
 	 * bound.
 	 */
 	private Date minDate;
+
+	/* *********************************************************************** *
+	 * START OF JAVAFX PROPERTIES                                              *
+	 * *********************************************************************** */
+
+	/*
+	 * ---- currentLowerBound --------------------------------------------------
+	 */
+	private final LongProperty currentLowerBound = new SimpleLongProperty(this, "currentLowerBound");
+
+	/*
+	 * ---- currentUpperBound --------------------------------------------------
+	 */
+	private final LongProperty currentUpperBound = new SimpleLongProperty(this, "currentUpperBound");
+
+	/*
+	 * ---- lowerBound ---------------------------------------------------------
+	 */
+	private final ObjectProperty<Date> lowerBound = new SimpleObjectProperty<>(this, "lowerBound") {
+		@Override
+		protected void invalidated() {
+			invalidateAndLayout();
+		}
+	};
+
+	/**
+	 * Gets the lower bound of the axis.
+	 *
+	 * @return The property.
+	 * @see #getLowerBound()
+	 * @see #setLowerBound(java.util.Date)
+	 */
+	public ObjectProperty<Date> lowerBoundProperty() {
+		return lowerBound;
+	}
+
+	/**
+	 * Gets the lower bound of the axis.
+	 *
+	 * @return The lower bound.
+	 * @see #lowerBoundProperty()
+	 */
+	public Date getLowerBound() {
+		return lowerBound.get();
+	}
+
+	/**
+	 * Sets the lower bound of the axis.
+	 *
+	 * @param date The lower bound date.
+	 * @see #lowerBoundProperty()
+	 */
+	public void setLowerBound( Date date ) {
+		lowerBound.set(date);
+	}
+
+	/*
+	 * ---- tickLabelFormatter -------------------------------------------------
+	 */
 	private final ObjectProperty<StringConverter<Date>> tickLabelFormatter = new SimpleObjectProperty<>(this, "tickLabelFormatter") {
 		@Override
 		protected void invalidated() {
 			invalidateAndLayout();
 		}
 	};
-	private ObjectProperty<Date> upperBound = new SimpleObjectProperty<>(this, "upperBound") {
+
+	/**
+	 * Gets the tick label formatter for the ticks.
+	 *
+	 * @return The property.
+	 */
+	public ObjectProperty<StringConverter<Date>> tickLabelFormatterProperty() {
+		return tickLabelFormatter;
+	}
+
+	/**
+	 * Gets the tick label formatter for the ticks.
+	 *
+	 * @return The converter.
+	 */
+	public StringConverter<Date> getTickLabelFormatter() {
+		return tickLabelFormatter.getValue();
+	}
+
+	/**
+	 * Sets the tick label formatter for the ticks.
+	 *
+	 * @param value The converter.
+	 */
+	public void setTickLabelFormatter( StringConverter<Date> value ) {
+		tickLabelFormatter.setValue(value);
+	}
+
+	/*
+	 * ---- upperBound ---------------------------------------------------------
+	 */
+	private final ObjectProperty<Date> upperBound = new SimpleObjectProperty<>(this, "upperBound") {
 		@Override
 		protected void invalidated() {
 			invalidateAndLayout();
 		}
 	};
+
+	/**
+	 * Gets the upper bound of the axis.
+	 *
+	 * @return The property.
+	 * @see #getUpperBound() ()
+	 * @see #setUpperBound(java.util.Date)
+	 */
+	public ObjectProperty<Date> upperBoundProperty() {
+		return upperBound;
+	}
+
+	/**
+	 * Gets the upper bound of the axis.
+	 *
+	 * @return The upper bound.
+	 * @see #upperBoundProperty()
+	 */
+	public Date getUpperBound() {
+		return upperBound.get();
+	}
+
+	/**
+	 * Sets the upper bound of the axis.
+	 *
+	 * @param date The upper bound date.
+	 * @see #upperBoundProperty() ()
+	 */
+	public void setUpperBound( Date date ) {
+		upperBound.set(date);
+	}
+
+	/* *********************************************************************** *
+	 * END OF JAVAFX PROPERTIES                                                *
+	 * *********************************************************************** */
 
 	/**
 	 * Constructs a default date axis where the lower and upper bound are
@@ -162,6 +279,109 @@ public final class DateAxis extends Axis<Date> {
 
 	}
 
+	@Override
+	public double getDisplayPosition( Date date ) {
+
+		final double length = getSide().isHorizontal() ? getWidth() : getHeight();
+
+		//	Get the difference between the max and min date.
+		double diff = currentUpperBound.get() - currentLowerBound.get();
+
+		//	Get the actual range of the visible area.
+		//	The minimal date should start at the zero position, that's why we
+		//	subtract it.
+		double range = length - getZeroPosition();
+
+		//	Then get the difference from the actual date to the min date and
+		//	divide it by the total difference.
+		//	We get a value between 0 and 1, if the date is within the min and
+		//	max date.
+		double d = ( date.getTime() - currentLowerBound.get() ) / diff;
+
+		//	Multiply this percent value with the range and add the zero offset.
+		if ( getSide().isVertical() ) {
+			return getHeight() - d * range + getZeroPosition();
+		} else {
+			return d * range + getZeroPosition();
+		}
+
+	}
+
+	@Override
+	public Date getValueForDisplay( double displayPosition ) {
+
+		final double length = getSide().isHorizontal() ? getWidth() : getHeight();
+
+		//	Get the difference between the max and min date.
+		double diff = currentUpperBound.get() - currentLowerBound.get();
+
+		//	Get the actual range of the visible area.
+		//	The minimal date should start at the zero position, that's why we
+		//	subtract it.
+		double range = length - getZeroPosition();
+
+		if ( getSide().isVertical() ) {
+			return new Date((long) ( ( displayPosition - getZeroPosition() - getHeight() ) / -range * diff + currentLowerBound.get() ));
+		} else {
+			return new Date((long) ( ( displayPosition - getZeroPosition() ) / range * diff + currentLowerBound.get() ));
+		}
+
+	}
+
+	@Override
+	public double getZeroPosition() {
+		return 0;
+	}
+
+	@Override
+	public void invalidateRange( List<Date> list ) {
+
+		super.invalidateRange(list);
+
+		Collections.sort(list);
+
+		if ( list.isEmpty() ) {
+			minDate = maxDate = new Date();
+		} else if ( list.size() == 1 ) {
+			minDate = maxDate = list.get(0);
+		} else if ( list.size() > 1 ) {
+			minDate = list.get(0);
+			maxDate = list.get(list.size() - 1);
+		}
+
+	}
+
+	@Override
+	public boolean isValueOnAxis( Date date ) {
+		return date.getTime() > currentLowerBound.get() && date.getTime() < currentUpperBound.get();
+	}
+
+	@Override
+	public double toNumericValue( Date date ) {
+		return date.getTime();
+	}
+
+	@Override
+	public Date toRealValue( double v ) {
+		return new Date((long) v);
+	}
+
+	@Override
+	protected Object autoRange( double length ) {
+
+		if ( isAutoRanging() ) {
+			return new Object[] { minDate, maxDate };
+		} else {
+
+			if ( getLowerBound() == null || getUpperBound() == null ) {
+				throw new IllegalArgumentException("If autoRanging is false, a lower and upper bound must be set.");
+			}
+
+			return getRange();
+
+		}
+
+	}
 
 
 
@@ -175,186 +395,6 @@ public final class DateAxis extends Axis<Date> {
 
 	
 
-	@Override
-	public double getDisplayPosition( Date date ) {
-		final double length = getSide().isHorizontal() ? getWidth() : getHeight();
-
-		// Get the difference between the max and min date.
-		double diff = currentUpperBound.get() - currentLowerBound.get();
-
-		// Get the actual range of the visible area.
-		// The minimal date should start at the zero position, that's why we subtract it.
-		double range = length - getZeroPosition();
-
-		// Then get the difference from the actual date to the min date and divide it by the total difference.
-		// We get a value between 0 and 1, if the date is within the min and max date.
-		double d = ( date.getTime() - currentLowerBound.get() ) / diff;
-
-		// Multiply this percent value with the range and add the zero offset.
-		if ( getSide().isVertical() ) {
-			return getHeight() - d * range + getZeroPosition();
-		} else {
-			return d * range + getZeroPosition();
-		}
-	}
-
-	/**
-	 * Gets the lower bound of the axis.
-	 *
-	 * @return The lower bound.
-	 * @see #lowerBoundProperty()
-	 */
-	public final Date getLowerBound() {
-		return lowerBound.get();
-	}
-
-	/**
-	 * Gets the tick label formatter for the ticks.
-	 *
-	 * @return The converter.
-	 */
-	public final StringConverter<Date> getTickLabelFormatter() {
-		return tickLabelFormatter.getValue();
-	}
-
-	/**
-	 * Gets the upper bound of the axis.
-	 *
-	 * @return The upper bound.
-	 * @see #upperBoundProperty()
-	 */
-	public final Date getUpperBound() {
-		return upperBound.get();
-	}
-
-	@Override
-	public Date getValueForDisplay( double displayPosition ) {
-		final double length = getSide().isHorizontal() ? getWidth() : getHeight();
-
-		// Get the difference between the max and min date.
-		double diff = currentUpperBound.get() - currentLowerBound.get();
-
-		// Get the actual range of the visible area.
-		// The minimal date should start at the zero position, that's why we subtract it.
-		double range = length - getZeroPosition();
-
-		if ( getSide().isVertical() ) {
-			// displayPosition = getHeight() - ((date - lowerBound) / diff) * range + getZero
-			// date = displayPosition - getZero - getHeight())/range * diff + lowerBound
-			return new Date((long) ( ( displayPosition - getZeroPosition() - getHeight() ) / -range * diff + currentLowerBound.get() ));
-		} else {
-			// displayPosition = ((date - lowerBound) / diff) * range + getZero
-			// date = displayPosition - getZero)/range * diff + lowerBound
-			return new Date((long) ( ( displayPosition - getZeroPosition() ) / range * diff + currentLowerBound.get() ));
-		}
-	}
-
-	@Override
-	public double getZeroPosition() {
-		return 0;
-	}
-
-	@Override
-	public void invalidateRange( List<Date> list ) {
-		super.invalidateRange(list);
-
-		Collections.sort(list);
-		if ( list.isEmpty() ) {
-			minDate = maxDate = new Date();
-		} else if ( list.size() == 1 ) {
-			minDate = maxDate = list.get(0);
-		} else if ( list.size() > 1 ) {
-			minDate = list.get(0);
-			maxDate = list.get(list.size() - 1);
-		}
-	}
-
-	@Override
-	public boolean isValueOnAxis( Date date ) {
-		return date.getTime() > currentLowerBound.get() && date.getTime() < currentUpperBound.get();
-	}
-
-	/**
-	 * Gets the lower bound of the axis.
-	 *
-	 * @return The property.
-	 * @see #getLowerBound()
-	 * @see #setLowerBound(java.util.Date)
-	 */
-	public final ObjectProperty<Date> lowerBoundProperty() {
-		return lowerBound;
-	}
-
-	/**
-	 * Sets the lower bound of the axis.
-	 *
-	 * @param date The lower bound date.
-	 * @see #lowerBoundProperty()
-	 */
-	public final void setLowerBound( Date date ) {
-		lowerBound.set(date);
-	}
-
-	/**
-	 * Sets the tick label formatter for the ticks.
-	 *
-	 * @param value The converter.
-	 */
-	public final void setTickLabelFormatter( StringConverter<Date> value ) {
-		tickLabelFormatter.setValue(value);
-	}
-
-	/**
-	 * Sets the upper bound of the axis.
-	 *
-	 * @param date The upper bound date.
-	 * @see #upperBoundProperty() ()
-	 */
-	public final void setUpperBound( Date date ) {
-		upperBound.set(date);
-	}
-
-	/**
-	 * Gets the tick label formatter for the ticks.
-	 *
-	 * @return The property.
-	 */
-	public final ObjectProperty<StringConverter<Date>> tickLabelFormatterProperty() {
-		return tickLabelFormatter;
-	}
-
-	@Override
-	public double toNumericValue( Date date ) {
-		return date.getTime();
-	}
-
-	@Override
-	public Date toRealValue( double v ) {
-		return new Date((long) v);
-	}
-
-	/**
-	 * Gets the upper bound of the axis.
-	 *
-	 * @return The property.
-	 * @see #getUpperBound() ()
-	 * @see #setUpperBound(java.util.Date)
-	 */
-	public final ObjectProperty<Date> upperBoundProperty() {
-		return upperBound;
-	}
-
-	@Override
-	protected Object autoRange( double length ) {
-		if ( isAutoRanging() ) {
-			return new Object[] { minDate, maxDate };
-		} else {
-			if ( getLowerBound() == null || getUpperBound() == null ) {
-				throw new IllegalArgumentException("If autoRanging is false, a lower and upper bound must be set.");
-			}
-			return getRange();
-		}
-	}
 
 	@Override
 	protected List<Date> calculateTickValues( double v, Object range ) {
