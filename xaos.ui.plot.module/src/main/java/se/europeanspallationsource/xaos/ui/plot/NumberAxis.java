@@ -53,8 +53,6 @@ import static java.util.logging.Level.WARNING;
  * "tickUnit". You can use any {@link Number} type with this axis, {@link Long},
  * {@link Double}, {@link BigDecimal} etc.
  *
- * @author Christian Schudt (original author).
- * @author Diego Cirujano (original author).
  * @author claudio.rosati@esss.se
  */
 public class NumberAxis extends ValueAxis<Number> {
@@ -116,6 +114,8 @@ public class NumberAxis extends ValueAxis<Number> {
 	/**
 	 * When true zero is always included in the visible range. This only has
 	 * effect if auto-ranging is on.
+	 *
+	 * @return A {@link BooleanProperty}.
 	 */
 	public final BooleanProperty forceZeroInRangeProperty() {
 		return forceZeroInRange;
@@ -154,8 +154,10 @@ public class NumberAxis extends ValueAxis<Number> {
 
 
 	/**
-	 * The value between each major tick mark in data units. This is
+	 * The value between each major tick mark in data units.This is
 	 * automatically set if we are auto-ranging.
+	 *
+	 * @return A {@link DoubleProperty}.
 	 */
 	public final DoubleProperty tickUnitProperty() {
 		return tickUnit;
@@ -334,7 +336,7 @@ public class NumberAxis extends ValueAxis<Number> {
 	protected List<Number> calculateTickValues( double length, Object rangeObj ) {
 
 		Range range = (Range) rangeObj;
-		List<Number> tickValues = new ArrayList<>();
+		List<Number> tickValues = new ArrayList<>(50);
 
 		if ( range.lowerBound == range.upperBound ) {
 			tickValues.add(range.lowerBound);
