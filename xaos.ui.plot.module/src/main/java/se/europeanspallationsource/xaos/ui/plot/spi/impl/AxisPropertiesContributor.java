@@ -41,7 +41,7 @@ import static se.europeanspallationsource.xaos.ui.control.CommonIcons.GEARS;
  * @srvc.order 500
  */
 @ServiceProvider( service = ToolbarContributor.class, order = 500 )
-public class AxesPropertiesContributor implements ToolbarContributor {
+public class AxisPropertiesContributor implements ToolbarContributor {
 
 	@Override
 	@BundleItem( key = "button.tooltip", message = "Axes Properties" )
@@ -61,7 +61,7 @@ public class AxesPropertiesContributor implements ToolbarContributor {
 	}
 
 	private String getString( String key, Object... parameters ) {
-		return Bundles.get(AxesPropertiesContributor.class, key, parameters);
+		return Bundles.get(AxisPropertiesContributor.class, key, parameters);
 	}
 
 	@BundleItems({

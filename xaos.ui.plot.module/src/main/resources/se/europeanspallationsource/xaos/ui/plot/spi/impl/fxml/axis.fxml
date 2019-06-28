@@ -52,12 +52,12 @@
       <Label fx:id="maxCaption" alignment="CENTER_RIGHT" text="%max.caption" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
       <Spinner editable="true" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="5" GridPane.valignment="CENTER" fx:id="xMaxValue" />
       <Spinner fx:id="yMaxValue" editable="true" GridPane.columnIndex="5" GridPane.halignment="LEFT" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
-      <Label alignment="CENTER_RIGHT" text="%gridlines.caption" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="7" GridPane.valignment="CENTER" />
-      <CheckBox mnemonicParsing="false" text="%gridlines.checkbox" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="7" GridPane.valignment="CENTER" fx:id="xGridValue" />
-      <CheckBox fx:id="yGridValue" mnemonicParsing="false" text="%gridlines.checkbox" GridPane.columnIndex="5" GridPane.halignment="LEFT" GridPane.rowIndex="7" GridPane.valignment="CENTER" />
-      <Label alignment="CENTER_RIGHT" text="%scale.caption" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="9" GridPane.valignment="CENTER" />
-      <CheckBox mnemonicParsing="false" text="%scale.checkbox" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="9" GridPane.valignment="CENTER" fx:id="xScaleValue" />
-      <CheckBox fx:id="yScaleValue" mnemonicParsing="false" text="%scale.checkbox" GridPane.columnIndex="5" GridPane.halignment="LEFT" GridPane.rowIndex="9" GridPane.valignment="CENTER" />
+      <Label alignment="CENTER_RIGHT" text="%scale.caption" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="7" GridPane.valignment="CENTER" />
+      <CheckBox mnemonicParsing="false" text="%scale.checkbox" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="7" GridPane.valignment="CENTER" fx:id="xScaleValue" />
+      <CheckBox fx:id="yScaleValue" mnemonicParsing="false" text="%scale.checkbox" GridPane.columnIndex="5" GridPane.halignment="LEFT" GridPane.rowIndex="7" GridPane.valignment="CENTER" />
+      <Label alignment="CENTER_RIGHT" text="%gridlines.caption" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="9" GridPane.valignment="CENTER" />
+      <CheckBox mnemonicParsing="false" text="%gridlines.checkbox" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="9" GridPane.valignment="CENTER" fx:id="xGridValue" />
+      <CheckBox fx:id="yGridValue" mnemonicParsing="false" text="%gridlines.checkbox" GridPane.columnIndex="5" GridPane.halignment="LEFT" GridPane.rowIndex="9" GridPane.valignment="CENTER" />
       <TilePane alignment="CENTER" hgap="10.0" GridPane.columnIndex="1" GridPane.columnSpan="5" GridPane.halignment="CENTER" GridPane.rowIndex="11" GridPane.valignment="CENTER">
          <children>
             <Button fx:id="closeButton" cancelButton="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#close" text="%close.button" />

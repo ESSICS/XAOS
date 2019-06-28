@@ -30,23 +30,7 @@ import javafx.beans.property.LongProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.chart.Axis;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
 
@@ -86,7 +70,6 @@ public final class DateAxis extends Axis<Date> {
 
 	private Interval actualInterval = Interval.DECADE;
 	private final ChartLayoutAnimator animator = new ChartLayoutAnimator(this);
-	private final EventHandler<MouseEvent> contextMenu = this::handleMouseEvent;
 	private Object currentAnimationID;
 	/**
 	 * Stores the max date of the list of dates which is used. If
@@ -243,7 +226,7 @@ public final class DateAxis extends Axis<Date> {
 	 * calculated by the data.
 	 */
 	public DateAxis() {
-		addEventHandler(MouseEvent.MOUSE_CLICKED, contextMenu);
+		//	Nothing to do.
 	}
 
 	/**
@@ -259,7 +242,6 @@ public final class DateAxis extends Axis<Date> {
 		setAutoRanging(false);
 		setLowerBound(lowerBound);
 		setUpperBound(upperBound);
-		addEventHandler(MouseEvent.MOUSE_CLICKED, contextMenu);
 
 	}
 
@@ -275,8 +257,44 @@ public final class DateAxis extends Axis<Date> {
 		this(lowerBound, upperBound);
 
 		setLabel(axisLabel);
-		addEventHandler(MouseEvent.MOUSE_CLICKED, contextMenu);
 
+	}
+
+	/**
+	 * @return The actual interval between ticks as {@link Calendar} codes.
+	 *         Returned value will be one of the following: {@link Calendar#YEAR},
+	 *         {@link Calendar#MONTH}, {@link Calendar#WEEK_OF_YEAR},
+	 *         {@link Calendar#DAY_OF_MONTH}, {@link Calendar#HOUR},
+	 *         {@link Calendar#MINUTE}, {@link Calendar#SECOND}, and
+	 *         {@link Calendar#MILLISECOND}.
+	 */
+	public int getActualInterval() {
+		return actualInterval.interval;
+	}
+
+	/**
+	 * @return A {@link DateFormat} for the {@link #getActualInterval() actual interval}.
+	 */
+	public DateFormat getDateFormat() {
+		switch ( actualInterval.interval ) {
+			case Calendar.YEAR:
+				return new SimpleDateFormat("yyyy");
+			case Calendar.MONTH:
+				return new SimpleDateFormat("yyyy.MM");
+			case Calendar.WEEK_OF_YEAR:
+			case Calendar.DAY_OF_MONTH:
+				return new SimpleDateFormat("yyyy.MM.dd");
+			case Calendar.HOUR:
+				return new SimpleDateFormat("yyyy.MM.dd HH");
+			case Calendar.MINUTE:
+				return new SimpleDateFormat("yyyy.MM.dd HH:mm");
+			case Calendar.SECOND:
+				return new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+			case Calendar.MILLISECOND:
+				return new SimpleDateFormat("yyyy.MM.dd HH:mm:ss.SSS");
+			default:
+				return new SimpleDateFormat("yyyy.MM.dd HH:mm:ss.SSS s");
+		}
 	}
 
 	@Override
@@ -334,6 +352,7 @@ public final class DateAxis extends Axis<Date> {
 	}
 
 	@Override
+	@SuppressWarnings( "NestedAssignment" )
 	public void invalidateRange( List<Date> list ) {
 
 		super.invalidateRange(list);
@@ -383,76 +402,76 @@ public final class DateAxis extends Axis<Date> {
 
 	}
 
-
-
-
-
-
-
-
-
-
-
-	
-
-
 	@Override
 	protected List<Date> calculateTickValues( double v, Object range ) {
+
 		Object[] r = (Object[]) range;
 		Date lower = (Date) r[0];
 		Date upper = (Date) r[1];
-
-		List<Date> dateList = new ArrayList<Date>();
+		List<Date> dateList = new ArrayList<>(100);
+		List<Date> previousDateList = new ArrayList<>(100);
+		Interval previousInterval = Interval.values()[0];
 		Calendar calendar = Calendar.getInstance();
-
-		// The preferred gap which should be between two tick marks.
+		//	The preferred gap which should be between two tick marks.
 		double averageTickGap = 100;
 		double averageTicks = v / averageTickGap;
 
-		List<Date> previousDateList = new ArrayList<Date>();
-
-		Interval previousInterval = Interval.values()[0];
-
 		// Starting with the greatest interval, add one of each calendar unit.
 		for ( Interval interval : Interval.values() ) {
-			// Reset the calendar.
+
+			//	Reset the calendar.
 			calendar.setTime(lower);
-			// Clear the list.
+
+			//	Clear the list.
 			dateList.clear();
 			previousDateList.clear();
+
 			actualInterval = interval;
 
-			// Loop as long we exceeded the upper bound.
+			//	Loop as long we exceeded the upper bound.
 			while ( calendar.getTime().getTime() <= upper.getTime() ) {
 				dateList.add(calendar.getTime());
 				calendar.add(interval.interval, interval.amount);
 			}
-			// Then check the size of the list. If it is greater than the amount of ticks, take that list.
+
+			//	Then check the size of the list. If it is greater than the
+			//	amount of ticks, take that list.
 			if ( dateList.size() > averageTicks ) {
+
 				calendar.setTime(lower);
-				// Recheck if the previous interval is better suited.
+
+				//	Recheck if the previous interval is better suited.
 				while ( calendar.getTime().getTime() <= upper.getTime() ) {
 					previousDateList.add(calendar.getTime());
 					calendar.add(previousInterval.interval, previousInterval.amount);
 				}
+
 				break;
+
 			}
 
 			previousInterval = interval;
+
 		}
+
 		if ( previousDateList.size() - averageTicks > averageTicks - dateList.size() ) {
 			dateList = previousDateList;
 			actualInterval = previousInterval;
 		}
 
-		// At last add the upper bound.
+		//	At last add the upper bound.
 		dateList.add(upper);
 
 		List<Date> evenDateList = makeDatesEven(dateList, calendar);
-		// If there are at least three dates, check if the gap between the lower date and the second date is at least half the gap of the second and third date.
-		// Do the same for the upper bound.
-		// If gaps between dates are to small, remove one of them.
-		// This can occur, e.g. if the lower bound is 25.12.2013 and years are shown. Then the next year shown would be 2014 (01.01.2014) which would be too narrow to 25.12.2013.
+
+		//	If there are at least three dates, check if the gap between the
+		//	lower date and the second date is at least half the gap of the
+		//	second and third date.
+		//	Do the same for the upper bound.
+		//	If gaps between dates are to small, remove one of them.
+		//	This can occur, e.g. if the lower bound is 25.12.2013 and years are
+		//	shown. Then the next year shown would be 2014 (01.01.2014) which
+		//	would be too narrow to 25.12.2013.
 		if ( evenDateList.size() > 2 ) {
 
 			Date secondDate = evenDateList.get(1);
@@ -460,19 +479,21 @@ public final class DateAxis extends Axis<Date> {
 			Date lastDate = evenDateList.get(dateList.size() - 2);
 			Date previousLastDate = evenDateList.get(dateList.size() - 3);
 
-			// If the second date is too near by the lower bound, remove it.
+			//	If the second date is too near by the lower bound, remove it.
 			if ( secondDate.getTime() - lower.getTime() < ( thirdDate.getTime() - secondDate.getTime() ) / 2 ) {
 				evenDateList.remove(secondDate);
 			}
 
-			// If difference from the upper bound to the last date is less than the half of the difference of the previous two dates,
-			// we better remove the last date, as it comes to close to the upper bound.
+			//	If difference from the upper bound to the last date is less than
+			//	the half of the difference of the previous two dates, we better
+			//	remove the last date, as it comes to close to the upper bound.
 			if ( upper.getTime() - lastDate.getTime() < ( lastDate.getTime() - previousLastDate.getTime() ) / 2 ) {
 				evenDateList.remove(lastDate);
 			}
 		}
 
 		return evenDateList;
+		
 	}
 
 	@Override
@@ -484,186 +505,59 @@ public final class DateAxis extends Axis<Date> {
 	protected String getTickMarkLabel( Date date ) {
 
 		StringConverter<Date> converter = getTickLabelFormatter();
+		
 		if ( converter != null ) {
 			return converter.toString(date);
 		}
 
-		DateFormat dateFormat;
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date);
+		return getDateFormat().format(date);
 
-		if ( actualInterval.interval == Calendar.YEAR && calendar.get(Calendar.MONTH) == 0 && calendar.get(Calendar.DATE) == 1 ) {
-			dateFormat = new SimpleDateFormat("yyyy");
-		} else if ( actualInterval.interval == Calendar.MONTH && calendar.get(Calendar.DATE) == 1 ) {
-			dateFormat = new SimpleDateFormat("MMM yy");
-		} else {
-			switch ( actualInterval.interval ) {
-				case Calendar.DATE:
-				case Calendar.WEEK_OF_YEAR:
-				default:
-					dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
-					break;
-				case Calendar.HOUR:
-				case Calendar.MINUTE:
-					dateFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
-					break;
-				case Calendar.SECOND:
-					dateFormat = DateFormat.getTimeInstance(DateFormat.MEDIUM);
-					break;
-				case Calendar.MILLISECOND:
-					dateFormat = DateFormat.getTimeInstance(DateFormat.FULL);
-					break;
-			}
-		}
-		return dateFormat.format(date);
 	}
 
 	@Override
 	protected void layoutChildren() {
+		
 		if ( !isAutoRanging() ) {
 			currentLowerBound.set(getLowerBound().getTime());
 			currentUpperBound.set(getUpperBound().getTime());
 		}
+
 		super.layoutChildren();
+
 	}
 
 	@Override
 	protected void setRange( Object range, boolean animating ) {
+
 		Object[] r = (Object[]) range;
 		Date oldLowerBound = getLowerBound();
 		Date oldUpperBound = getUpperBound();
 		Date lower = (Date) r[0];
 		Date upper = (Date) r[1];
+
 		setLowerBound(lower);
 		setUpperBound(upper);
 
 		if ( animating ) {
-//            final Timeline timeline = new Timeline();
-//            timeline.setAutoReverse(false);
-//            timeline.setCycleCount(1);
-//            final AnimationTimer timer = new AnimationTimer() {
-//                @Override
-//                public void handle(long l) {
-//                    requestAxisLayout();
-//                }
-//            };
-//            timer.start();
-//
-//            timeline.setOnFinished(new EventHandler<ActionEvent>() {
-//                @Override
-//                public void handle(ActionEvent actionEvent) {
-//                    timer.stop();
-//                    requestAxisLayout();
-//                }
-//            });
-//
-//            KeyValue keyValue = new KeyValue(currentLowerBound, lower.getTime());
-//            KeyValue keyValue2 = new KeyValue(currentUpperBound, upper.getTime());
-//
-//            timeline.getKeyFrames().addAll(new KeyFrame(Duration.ZERO,
-//                    new KeyValue(currentLowerBound, oldLowerBound.getTime()),
-//                    new KeyValue(currentUpperBound, oldUpperBound.getTime())),
-//                    new KeyFrame(Duration.millis(3000), keyValue, keyValue2));
-//            timeline.play();
-
 			animator.stop(currentAnimationID);
 			currentAnimationID = animator.animate(
-				new KeyFrame(Duration.ZERO,
+				new KeyFrame(
+					Duration.ZERO,
 					new KeyValue(currentLowerBound, oldLowerBound.getTime()),
 					new KeyValue(currentUpperBound, oldUpperBound.getTime())
 				),
-				new KeyFrame(Duration.millis(700),
+				new KeyFrame(
+					Duration.millis(700),
 					new KeyValue(currentLowerBound, lower.getTime()),
 					new KeyValue(currentUpperBound, upper.getTime())
 				)
 			);
-
 		} else {
 			currentLowerBound.set(getLowerBound().getTime());
 			currentUpperBound.set(getUpperBound().getTime());
 		}
+
 	}
-
-
-
-
-
-	private void handleMouseEvent ( MouseEvent event ) {
-		if ( event.getButton() == MouseButton.SECONDARY ) {
-			Label lowerboundLabel = new Label("Lower bound ");
-			Label upperboundLabel = new Label("Upper bound ");
-			Label axisTitle = new Label(this.getLabel());
-			CheckBox autorangeBox = new CheckBox();
-			TextField lowerboundText = new TextField();
-			TextField upperboundText = new TextField();
-			Button setButton = new Button("Set");
-			setButton.setPrefSize(90, 20);
-
-			axisTitle.setPadding(new Insets(10, 10, 5, 10));
-			axisTitle.setFont(Font.font(Font.getDefault().getName(), FontWeight.BOLD, Font.getDefault().getSize()));
-			axisTitle.setMaxWidth(Double.MAX_VALUE);
-			axisTitle.setAlignment(Pos.CENTER);
-
-			autorangeBox.setText("Autoscale");
-			autorangeBox.setSelected(isAutoRanging());
-
-			lowerboundText.disableProperty().bind(autorangeBox.selectedProperty());
-			upperboundText.disableProperty().bind(autorangeBox.selectedProperty());
-
-			lowerboundText.setText(String.format("%.4f", getLowerBound()));
-			lowerboundText.setPrefSize(90, 20);
-			upperboundText.setText(String.format("%.4f", getUpperBound()));
-			upperboundText.setPrefSize(90, 20);
-
-			setButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-				@Override
-				public void handle( MouseEvent arg0 ) {
-					if ( autorangeBox.isSelected() ) {
-						setAutoRanging(true);
-					} else {
-						setAutoRanging(false);
-						lowerboundText.setText(String.format("%.4f", getLowerBound()));
-						upperboundText.setText(String.format("%.4f", getUpperBound()));
-					}
-				}
-
-			});
-
-			GridPane chartInfo = new GridPane();
-			chartInfo.setHgap(10);
-			chartInfo.setVgap(10);
-			chartInfo.setPadding(new Insets(10, 10, 5, 10));
-
-			chartInfo.add(lowerboundLabel, 0, 0);
-			chartInfo.add(lowerboundText, 1, 0);
-			chartInfo.add(upperboundLabel, 0, 1);
-			chartInfo.add(upperboundText, 1, 1);
-			chartInfo.add(autorangeBox, 0, 2);
-
-			HBox hbox = new HBox();
-			hbox.setPadding(new Insets(5, 10, 10, 110));
-			hbox.getChildren().addAll(setButton);
-
-			BorderPane secondaryLayout = new BorderPane();
-			secondaryLayout.setTop(axisTitle);
-			secondaryLayout.setCenter(chartInfo);
-			secondaryLayout.setBottom(hbox);
-
-			Scene secondScene = new Scene(secondaryLayout, 205, 200);
-
-			// New window (Stage)
-			Stage newWindow = new Stage();
-			newWindow.setTitle("Axis Properties");
-			newWindow.setScene(secondScene);
-
-			newWindow.show();
-		}
-	};
-
-
-
-
 
 	private void invalidateAndLayout() {
 		if ( !isAutoRanging() ) {
@@ -672,36 +566,39 @@ public final class DateAxis extends Axis<Date> {
 		}
 	}
 
-
-
-
-
-
-
-
-
 	/**
-	 * Makes dates even, in the sense of that years always begin in January, months always begin on the 1st and days always at midnight.
+	 * Makes dates even, in the sense of that years always begin in January,
+	 * months always begin on the 1st and days always at midnight.
 	 *
 	 * @param dates The list of dates.
 	 * @return The new list of dates.
 	 */
 	private List<Date> makeDatesEven( List<Date> dates, Calendar calendar ) {
-		// If the dates contain more dates than just the lower and upper bounds, make the dates in between even.
-		if ( dates.size() > 2 ) {
-			List<Date> evenDates = new ArrayList<Date>();
 
-			// For each interval, modify the date slightly by a few millis, to make sure they are different days.
-			// This is because Axis stores each value and won't update the tick labels, if the value is already known.
-			// This happens if you display days and then add a date many years in the future the tick label will still be displayed as day.
+		//	If the dates contain more dates than just the lower and upper bounds,
+		//	make the dates in between even.
+		if ( dates.size() > 2 ) {
+
+			List<Date> evenDates = new ArrayList<>(dates.size());
+
+			//	For each interval, modify the date slightly by a few millis, to
+			//	make sure they are different days.
+			//	This is because Axis stores each value and won't update the tick
+			//	labels, if the value is already known.
+			//	This happens if you display days and then add a date many years
+			//	in the future the tick label will still be displayed as day.
 			for ( int i = 0; i < dates.size(); i++ ) {
+
 				calendar.setTime(dates.get(i));
+
 				switch ( actualInterval.interval ) {
 					case Calendar.YEAR:
-						// If its not the first or last date (lower and upper bound), make the year begin with first month and let the months begin with first day.
+						//	If its not the first or last date (lower and upper
+						//	bound), make the year begin with first month and let
+						//	the months begin with first day.
 						if ( i != 0 && i != dates.size() - 1 ) {
 							calendar.set(Calendar.MONTH, 0);
-							calendar.set(Calendar.DATE, 1);
+							calendar.set(Calendar.DAY_OF_MONTH, 1);
 						}
 						calendar.set(Calendar.HOUR_OF_DAY, 0);
 						calendar.set(Calendar.MINUTE, 0);
@@ -709,9 +606,10 @@ public final class DateAxis extends Axis<Date> {
 						calendar.set(Calendar.MILLISECOND, 6);
 						break;
 					case Calendar.MONTH:
-						// If its not the first or last date (lower and upper bound), make the months begin with first day.
+						//	If its not the first or last date (lower and upper
+						//	bound), make the months begin with first day.
 						if ( i != 0 && i != dates.size() - 1 ) {
-							calendar.set(Calendar.DATE, 1);
+							calendar.set(Calendar.DAY_OF_MONTH, 1);
 						}
 						calendar.set(Calendar.HOUR_OF_DAY, 0);
 						calendar.set(Calendar.MINUTE, 0);
@@ -719,13 +617,13 @@ public final class DateAxis extends Axis<Date> {
 						calendar.set(Calendar.MILLISECOND, 5);
 						break;
 					case Calendar.WEEK_OF_YEAR:
-						// Make weeks begin with first day of week?
+						//	Make weeks begin with first day of week?
 						calendar.set(Calendar.HOUR_OF_DAY, 0);
 						calendar.set(Calendar.MINUTE, 0);
 						calendar.set(Calendar.SECOND, 0);
 						calendar.set(Calendar.MILLISECOND, 4);
 						break;
-					case Calendar.DATE:
+					case Calendar.DAY_OF_MONTH:
 						calendar.set(Calendar.HOUR_OF_DAY, 0);
 						calendar.set(Calendar.MINUTE, 0);
 						calendar.set(Calendar.SECOND, 0);
@@ -749,27 +647,33 @@ public final class DateAxis extends Axis<Date> {
 						break;
 
 				}
+
 				evenDates.add(calendar.getTime());
+
 			}
 
 			return evenDates;
+
 		} else {
 			return dates;
 		}
+
 	}
 
 	/**
-	 * The intervals, which are used for the tick labels. Beginning with the largest interval, the axis tries to calculate the tick values for this interval.
-	 * If a smaller interval is better suited for, that one is taken.
+	 * The intervals, which are used for the tick labels. Beginning with the
+	 * largest interval, the axis tries to calculate the tick values for this
+	 * interval. If a smaller interval is better suited for, that one is taken.
 	 */
 	private enum Interval {
+
 		DECADE(Calendar.YEAR, 10),
 		YEAR(Calendar.YEAR, 1),
 		MONTH_6(Calendar.MONTH, 6),
 		MONTH_3(Calendar.MONTH, 3),
 		MONTH_1(Calendar.MONTH, 1),
 		WEEK(Calendar.WEEK_OF_YEAR, 1),
-		DAY(Calendar.DATE, 1),
+		DAY(Calendar.DAY_OF_MONTH, 1),
 		HOUR_12(Calendar.HOUR, 12),
 		HOUR_6(Calendar.HOUR, 6),
 		HOUR_3(Calendar.HOUR, 3),
@@ -782,14 +686,14 @@ public final class DateAxis extends Axis<Date> {
 		SECOND_1(Calendar.SECOND, 1),
 		MILLISECOND(Calendar.MILLISECOND, 1);
 
-		private final int amount;
-
-		private final int interval;
+		final int amount;
+		final int interval;
 
 		private Interval( int interval, int amount ) {
 			this.interval = interval;
 			this.amount = amount;
 		}
+
 	}
 
 }

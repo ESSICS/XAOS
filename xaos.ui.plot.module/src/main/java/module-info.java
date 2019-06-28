@@ -43,7 +43,7 @@ module xaos.ui.plot {
 	uses se.europeanspallationsource.xaos.ui.plot.spi.ToolbarContributor;
 	
 	provides se.europeanspallationsource.xaos.ui.plot.spi.ToolbarContributor
-		with se.europeanspallationsource.xaos.ui.plot.spi.impl.AxesPropertiesContributor,
+		with se.europeanspallationsource.xaos.ui.plot.spi.impl.AxisPropertiesContributor,
 			 se.europeanspallationsource.xaos.ui.plot.spi.impl.FitContributor,
 			 se.europeanspallationsource.xaos.ui.plot.spi.impl.SaveChartAsImageContributor,
 			 se.europeanspallationsource.xaos.ui.plot.spi.impl.SaveChartDataContributor,
