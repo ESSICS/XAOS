@@ -62,7 +62,7 @@ public interface Pluggable {
 	 * @return {@code true} if the series with the given name is not shown in
 	 *         chart {@link Legend}.
 	 */
-	boolean isNotShowInLegend( String seriesName );
+	boolean isNotShownInLegend( String seriesName );
 
 	/**
 	 * Specifies a series to not be shown in chart {@link Legend}.
@@ -70,6 +70,6 @@ public interface Pluggable {
 	 * @param seriesName The name of the series to not be shown in chart
 	 *                   {@link Legend}.
 	 */
-	void setNotShowInLegend( String seriesName );
+	void setNotShownInLegend( String seriesName );
 
 }

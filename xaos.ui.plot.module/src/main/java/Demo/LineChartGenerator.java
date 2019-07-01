@@ -104,11 +104,7 @@ public class LineChartGenerator implements ChartGenerator {
 		chart.getData().add(series6.getSeries());
 		chart.getData().add(series7.getSeries());
 
-//	TODO:CR Uncomment the following and remove the following 3 statements.
-//		chart.setHVLSeries(0, 1, 2);
-		chart.setSeriesAsHorizontal(0);//red
-		chart.setSeriesAsVertical(1);//blue
-		chart.setSeriesAsLongitudinal(2);//horrible green
+		chart.setHVLSeries(0, 1, 2);
 
 		return chart;
 

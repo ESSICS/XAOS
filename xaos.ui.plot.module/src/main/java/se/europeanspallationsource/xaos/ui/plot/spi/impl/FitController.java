@@ -418,7 +418,7 @@ public class FitController extends GridPane implements Initializable {
 		}
 
 		chart.getData().add(interpolatedVals);
-		pluggable.setNotShowInLegend(interpolatedVals.getName());
+		pluggable.setNotShownInLegend(interpolatedVals.getName());
 
 		interpolatedVals.getData().forEach(data -> data.getNode().setVisible(false));
 

@@ -17,10 +17,9 @@
 package se.europeanspallationsource.xaos.ui.plot;
 
 
-import se.europeanspallationsource.xaos.ui.plot.Plugin;
-import se.europeanspallationsource.xaos.ui.plot.PluginManager;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
@@ -29,37 +28,61 @@ import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.Chart;
 import org.apache.commons.lang3.Validate;
-import se.europeanspallationsource.xaos.ui.plot.Legend;
+import se.europeanspallationsource.xaos.core.util.LogUtils;
 import se.europeanspallationsource.xaos.ui.plot.Legend.LegendItem;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Pluggable;
 import se.europeanspallationsource.xaos.ui.plot.util.SeriesColorUtils;
 
+import static java.util.logging.Level.WARNING;
+
 
 /**
- * A thin extension of the FX {@link AreaChart} supporting custom {@link Plugin} plugin implementations.
+ * A thin extension of the FX {@link AreaChart} supporting custom
+ * {@link Plugin plugin} implementations.
  *
- * @param <X> type of X values
- * @param <Y> type of Y values
- * @author Grzegorz Kruk
+ * @param <X> Type of X values.
+ * @param <Y> Type of Y values.
+ * @author Grzegorz Kruk (original author).
+ * @author claudio.rosati@esss.se
  */
 public class AreaChartFX<X, Y> extends AreaChart<X, Y> implements Pluggable {
 
-	//Variables used to include plugIns in teh Chart
-	private final Group pluginsNodesGroup = new Group();
-	private final PluginManager pluginManager = new PluginManager(this, pluginsNodesGroup);
-
-	//Variables that controls the line that doens't show in the Legend or series that are not displayed at the chart at a given time
-	private final List<String> noShowInLegend = new ArrayList<>();
-	private final List<String> seriesDrawnInPlot = new ArrayList<>();
-
-	// Variable that stored the cumulative color line setup
-	private String colorStyle = new String();
+	private static final Logger LOGGER = Logger.getLogger(AreaChartFX.class.getName());
 
 	/**
-	 * Construct a new Area Chart with the given axis
+	 * Quick way of creating an area chart showing the given {@code data}. X
+	 * axis will contain the index in the data point in the given list.
 	 *
-	 * @param xAxis The x axis to use
-	 * @param yAxis The y axis to use
+	 * @param data The data list to be charted.
+	 * @return A {@link AreaChartFX} chart.
+	 */
+	public static AreaChartFX<Number, Number> of( ObservableList<Double> data ) {
+
+		Series<Number, Number> dataSet = new Series<>();
+		ObservableList<Data<Number, Number>> list = dataSet.getData();
+
+		for ( int i = 0; i < data.size(); i++ ) {
+			list.add(new Data<>(i, data.get(i)));
+		}
+
+		return new AreaChartFX<>(
+			new NumberAxis(),
+			new NumberAxis(),
+			FXCollections.singletonObservableList(dataSet)
+		);
+
+	}
+
+	private final List<String> notShownInLegend = new ArrayList<>(4);
+	private final Group pluginsNodesGroup = new Group();
+	private final PluginManager pluginManager = new PluginManager(this, pluginsNodesGroup);
+	private final List<String> seriesDrawnInPlot = new ArrayList<>(4);
+
+	/**
+	 * Construct a new area chart with the given axis.
+	 *
+	 * @param xAxis The x axis to use.
+	 * @param yAxis The y axis to use.
 	 * @see javafx.scene.chart.AreaChart#AreaChart(Axis, Axis)
 	 */
 	public AreaChartFX( Axis<X> xAxis, Axis<Y> yAxis ) {
@@ -67,17 +90,45 @@ public class AreaChartFX<X, Y> extends AreaChart<X, Y> implements Pluggable {
 	}
 
 	/**
-	 * Construct a new Area Chart with the given axis and data
+	 * Construct a new area chart with the given axis and data.
 	 *
-	 * @param xAxis The x axis to use
-	 * @param yAxis The y axis to use
-	 * @param data  The data to use, this is the actual list used so any changes to it will be reflected in the chart
+	 * @param xAxis The x axis to use.
+	 * @param yAxis The y axis to use.
+	 * @param data  The data to use, this is the actual list used so any changes
+	 *              to it will be reflected in the chart.
 	 * @see javafx.scene.chart.AreaChart#AreaChart(Axis, Axis, ObservableList)
 	 */
 	public AreaChartFX( Axis<X> xAxis, Axis<Y> yAxis, ObservableList<Series<X, Y>> data ) {
+
 		super(xAxis, yAxis, data);
-		getStylesheets().add(getClass().getResource("/styles/chart.css").toExternalForm());
+
+		getStylesheets().add(AreaChartFX.class.getResource("/styles/chart.css").toExternalForm());
 		getPlotChildren().add(pluginsNodesGroup);
+
+	}
+
+	/**
+	 * More robust method for adding plugins to chart.
+	 * <p>
+	 * <b>Note:</b> Only necessary if more than one plugin is being added at
+	 * once.</p>
+	 *
+	 * @param plugins List of {@link Plugin}s to be added.
+	 */
+	public void addChartPlugins( ObservableList<Plugin> plugins ) {
+		plugins.forEach(plugin -> {
+			try {
+				pluginManager.getPlugins().add(plugin);
+			} catch ( Exception ex ) {
+				LogUtils.log(
+					LOGGER,
+					WARNING,
+					"Error occured whilst adding {0} [{1}].",
+					plugin.getClass().getName(),
+					ex.getMessage()
+				);
+			}
+		});
 	}
 
 	@Override
@@ -91,7 +142,7 @@ public class AreaChartFX<X, Y> extends AreaChart<X, Y> implements Pluggable {
 		Node legend = getLegend();
 
 		if ( legend instanceof Legend ) {
-			return ((Legend) legend).getItems();
+			return ( (Legend) legend ).getItems();
 		} else {
 			return FXCollections.emptyObservableList();
 		}
@@ -99,38 +150,58 @@ public class AreaChartFX<X, Y> extends AreaChart<X, Y> implements Pluggable {
 	}
 
 	@Override
+	public final ObservableList<Node> getPlotChildren() {
+		return super.getPlotChildren();
+	}
+
+	@Override
 	public final ObservableList<Plugin> getPlugins() {
 		return pluginManager.getPlugins();
 	}
 
+	@Override
+	public boolean isNotShownInLegend( String name ) {
+		return notShownInLegend.contains(name);
+	}
+
+	public boolean isSeriesDrawn( String name ) {
+		return seriesDrawnInPlot.contains(name);
+	}
+
 	/**
-	 * More robust method for adding plugins to chart.
-	 * Note: Only necessary if more than one plugin is being added at once.
+	 * Sets which series has to be considered "horizontal", "vertical" and
+	 * "longitudinal". Special colors will be used to represent horizontal
+	 * (red), vertical (blue) and longitudinal (green) series.
 	 *
-	 * @param plugins list of XYChartPlugins to be added.
-	 *
-	 *
+	 * @param horizontal   Index of the horizontal series. Use -1 if no
+	 *                     horizontal series exists.
+	 * @param vertical     Index of the vertical series. Use -1 if no vertical
+	 *                     series exists.
+	 * @param longitudinal Index of the longitudinal series. Use -1 if no
+	 *                     longitudinal series exists.
 	 */
-	public void addChartPlugins( ObservableList<Plugin> plugins ) {
-		plugins.forEach(item -> {
-			try {
-				pluginManager.getPlugins().add(item);
-			} catch ( Exception e ) {
-				System.out.println("Error occured whilst adding" + item.getClass().toString());
-			}
-		});
+	public final void setHVLSeries( int horizontal, int vertical, int longitudinal ) {
+
+		int size = getData().size();
+
+		Validate.isTrue(horizontal < size, "Out of range 'horizontal' parameter.");
+		Validate.isTrue(vertical < size, "Out of range 'vertical' parameter.");
+		Validate.isTrue(longitudinal < size, "Out of range 'longitudinal' parameter.");
+
+		lookup(".chart").setStyle(SeriesColorUtils.styles(horizontal, vertical, longitudinal));
 
 	}
 
 	@Override
-	public ObservableList<Node> getPlotChildren() {
-		return super.getPlotChildren();
+	public final void setNotShownInLegend( String name ) {
+		notShownInLegend.add(name);
+		updateLegend();
 	}
 
 	@Override
 	protected void layoutPlotChildren() {
 
-		//	Move plugins nodes oo front.
+		//	Move plugins nodes to front.
 		ObservableList<Node> plotChildren = getPlotChildren();
 
 		plotChildren.remove(pluginsNodesGroup);
@@ -148,33 +219,6 @@ public class AreaChartFX<X, Y> extends AreaChart<X, Y> implements Pluggable {
 
 	}
 
-	public final void setHVLSeries( int horizontal, int vertical, int longitudinal ) {
-		
-		int size = getData().size();
-		
-		Validate.isTrue(  horizontal < size, "Out of range 'horizontal' parameter.");
-		Validate.isTrue(    vertical < size, "Out of range 'vertical' parameter.");
-		Validate.isTrue(longitudinal < size, "Out of range 'longitudinal' parameter.");
-
-		lookup(".chart").setStyle(SeriesColorUtils.styles(horizontal, vertical, longitudinal));
-
-	}
-
-	@Override
-	public final void setNotShowInLegend( String name ) {
-		noShowInLegend.add(name);
-		updateLegend();
-	}
-
-	@Override
-	public boolean isNotShowInLegend( String name ) {
-		return noShowInLegend.contains(name);
-	}
-
-	public boolean isSeriesDrawn( String name ) {
-		return seriesDrawnInPlot.contains(name);
-	}
-
 	@Override
 	protected void updateLegend() {
 
@@ -188,7 +232,7 @@ public class AreaChartFX<X, Y> extends AreaChart<X, Y> implements Pluggable {
 			Series<X, Y> series = getData().get(seriesIndex);
 			String seriesName = series.getName();
 
-			if ( !noShowInLegend.contains(seriesName) ) {
+			if ( !notShownInLegend.contains(seriesName) ) {
 
 				Legend.LegendItem legenditem = new Legend.LegendItem(seriesName, selected -> {
 

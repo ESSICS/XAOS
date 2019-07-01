@@ -148,13 +148,13 @@ public class BarChartFX<X, Y> extends BarChart<X, Y> implements Pluggable {
     }
     
 	@Override
-    public final void setNotShowInLegend(String name){
+    public final void setNotShownInLegend(String name){
         noShowInLegend.add(name);
         updateLegend();
     }    
     
 	@Override
-    public boolean isNotShowInLegend(String name){
+    public boolean isNotShownInLegend(String name){
         return noShowInLegend.contains(name);
     }
     

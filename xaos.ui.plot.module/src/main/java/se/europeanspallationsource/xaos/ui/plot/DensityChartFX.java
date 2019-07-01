@@ -228,7 +228,7 @@ public class DensityChartFX<X,Y> extends Chart implements Pluggable {
     };
 
 	@Override
-	public boolean isNotShowInLegend( String seriesName ) {
+	public boolean isNotShownInLegend( String seriesName ) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
@@ -251,7 +251,7 @@ public class DensityChartFX<X,Y> extends Chart implements Pluggable {
     }
 
 	@Override
-	public void setNotShowInLegend( String seriesName ) {
+	public void setNotShownInLegend( String seriesName ) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
