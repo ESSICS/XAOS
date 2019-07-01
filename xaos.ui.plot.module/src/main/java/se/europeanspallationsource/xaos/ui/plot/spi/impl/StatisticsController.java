@@ -52,6 +52,7 @@ import se.europeanspallationsource.xaos.ui.plot.Legend.LegendItem;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Pluggable;
 
 import static java.util.logging.Level.SEVERE;
+import static java.util.logging.Level.WARNING;
 import static javafx.stage.WindowEvent.WINDOW_CLOSE_REQUEST;
 
 
@@ -211,8 +212,15 @@ public class StatisticsController extends GridPane implements Initializable {
 
 		((TextFormatter<Double>) stdevXValue.getTextFormatter()).setValue(rmsX);
 		((TextFormatter<Double>) stdevYValue.getTextFormatter()).setValue(rmsY);
-		((TextFormatter<Double>) intFxValue.getTextFormatter()).setValue(trapezoidalRule(chart, series));
-		((TextFormatter<Double>) intAbsFxValue.getTextFormatter()).setValue(absTrapezoidalRule(chart, series));
+
+		try {
+			((TextFormatter<Double>) intFxValue.getTextFormatter()).setValue(trapezoidalRule(chart, series));
+			((TextFormatter<Double>) intAbsFxValue.getTextFormatter()).setValue(absTrapezoidalRule(chart, series));
+		} catch ( RuntimeException rex ) {
+			((TextFormatter<Double>) intFxValue.getTextFormatter()).setValue(null);
+			((TextFormatter<Double>) intAbsFxValue.getTextFormatter()).setValue(null);
+			LogUtils.log(LOGGER, WARNING, rex);
+		}
 
     }
 	

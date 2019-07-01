@@ -19,6 +19,7 @@ package se.europeanspallationsource.xaos.ui.plot.spi.impl;
 
 import javafx.beans.binding.Bindings;
 import javafx.scene.Node;
+import javafx.scene.chart.ValueAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Control;
 import javafx.scene.control.ToggleButton;
@@ -67,6 +68,8 @@ public class FitContributor implements ToolbarContributor {
 		button.disableProperty().bind(Bindings.createBooleanBinding(() -> {
 				return chartContainer.getPluggable() == null
 					|| !( chartContainer.getPluggable().getChart() instanceof XYChart )
+					|| !( ((XYChart<?, ?>) chartContainer.getPluggable().getChart()).getXAxis() instanceof ValueAxis )
+					|| !( ((XYChart<?, ?>) chartContainer.getPluggable().getChart()).getYAxis() instanceof ValueAxis )
 					|| button.isSelected();
 			},
 			chartContainer.pluggableProperty(),

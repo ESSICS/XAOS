@@ -32,6 +32,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.ValueAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
@@ -97,35 +98,57 @@ public class AxisPropertiesController extends GridPane implements Initializable 
 		XYChart<?, ?> chart = (XYChart<?, ?>) pluggable.getChart();
 
 		xGridValue.selectedProperty().bindBidirectional(chart.verticalGridLinesVisibleProperty());
+
+		if ( !( chart.getXAxis() instanceof CategoryAxis ) ) {
+
+			xScaleValue.selectedProperty().bindBidirectional(chart.getXAxis().autoRangingProperty());
+
+			xMinValue.disableProperty().bind(xScaleValue.selectedProperty());
+			xMinValue.setValueFactory(minXSpinnerValueFactory(chart));
+
+			xMaxValue.disableProperty().bind(xScaleValue.selectedProperty());
+			xMaxValue.setValueFactory(maxXSpinnerValueFactory(chart));
+
+			xMinValueExpression = minXProperty(chart);
+			xMaxValueExpression = maxXProperty(chart);
+
+			xMinValue.getValueFactory().valueProperty().bindBidirectional(xMinValueExpression);
+			xMaxValue.getValueFactory().valueProperty().bindBidirectional(xMaxValueExpression);
+
+		} else {
+			xScaleValue.setSelected(true);
+			xScaleValue.setDisable(true);
+			xMinValue.setDisable(true);
+			xMaxValue.setDisable(true);
+		}
+
 		yGridValue.selectedProperty().bindBidirectional(chart.horizontalGridLinesVisibleProperty());
 
-		xScaleValue.selectedProperty().bindBidirectional(chart.getXAxis().autoRangingProperty());
-		yScaleValue.selectedProperty().bindBidirectional(chart.getYAxis().autoRangingProperty());
+		if ( !( chart.getYAxis() instanceof CategoryAxis ) ) {
+
+			yScaleValue.selectedProperty().bindBidirectional(chart.getYAxis().autoRangingProperty());
+
+			yMinValue.disableProperty().bind(yScaleValue.selectedProperty());
+			yMinValue.setValueFactory(minYSpinnerValueFactory(chart));
+
+			yMaxValue.disableProperty().bind(yScaleValue.selectedProperty());
+			yMaxValue.setValueFactory(maxYSpinnerValueFactory(chart));
+
+			yMinValueExpression = minYProperty(chart);
+			yMaxValueExpression = maxYProperty(chart);
+
+			yMinValue.getValueFactory().valueProperty().bindBidirectional(yMinValueExpression);
+			yMaxValue.getValueFactory().valueProperty().bindBidirectional(yMaxValueExpression);
+
+		} else {
+			xScaleValue.setSelected(true);
+			yScaleValue.setDisable(true);
+			yMinValue.setDisable(true);
+			yMaxValue.setDisable(true);
+		}
 
 		minCaption.disableProperty().bind(Bindings.and(xScaleValue.selectedProperty(), yScaleValue.selectedProperty()));
 		maxCaption.disableProperty().bind(Bindings.and(xScaleValue.selectedProperty(), yScaleValue.selectedProperty()));
-
-		xMinValue.disableProperty().bind(xScaleValue.selectedProperty());
-		xMinValue.setValueFactory(minXSpinnerValueFactory(chart));
-		
-		xMaxValue.disableProperty().bind(xScaleValue.selectedProperty());
-		xMaxValue.setValueFactory(maxXSpinnerValueFactory(chart));
-
-		yMinValue.disableProperty().bind(yScaleValue.selectedProperty());
-		yMinValue.setValueFactory(minYSpinnerValueFactory(chart));
-
-		yMaxValue.disableProperty().bind(yScaleValue.selectedProperty());
-		yMaxValue.setValueFactory(maxYSpinnerValueFactory(chart));
-		
-		xMinValueExpression = minXProperty(chart);
-		xMaxValueExpression = maxXProperty(chart);
-		yMinValueExpression = minYProperty(chart);
-		yMaxValueExpression = maxYProperty(chart);
-		
-		xMinValue.getValueFactory().valueProperty().bindBidirectional(xMinValueExpression);
-		xMaxValue.getValueFactory().valueProperty().bindBidirectional(xMaxValueExpression);
-		yMinValue.getValueFactory().valueProperty().bindBidirectional(yMinValueExpression);
-		yMaxValue.getValueFactory().valueProperty().bindBidirectional(yMaxValueExpression);
 
 	}
 
@@ -138,18 +161,29 @@ public class AxisPropertiesController extends GridPane implements Initializable 
 	void dispose() {
 
 		@SuppressWarnings( "unchecked" )
-		XYChart<Number, Number> chart = (XYChart<Number, Number>) pluggable.getChart();
+		XYChart<?, ?> chart = (XYChart<?, ?>) pluggable.getChart();
 
 		xGridValue.selectedProperty().unbindBidirectional(chart.verticalGridLinesVisibleProperty());
+
+		if ( !( chart.getXAxis() instanceof CategoryAxis ) ) {
+
+			xScaleValue.selectedProperty().unbindBidirectional(chart.getXAxis().autoRangingProperty());
+
+			xMinValue.getValueFactory().valueProperty().unbindBidirectional(xMinValueExpression);
+			xMaxValue.getValueFactory().valueProperty().unbindBidirectional(xMaxValueExpression);
+
+		}
+
 		yGridValue.selectedProperty().unbindBidirectional(chart.horizontalGridLinesVisibleProperty());
 
-		xScaleValue.selectedProperty().unbindBidirectional(chart.getXAxis().autoRangingProperty());
-		yScaleValue.selectedProperty().unbindBidirectional(chart.getYAxis().autoRangingProperty());
+		if ( !( chart.getYAxis() instanceof CategoryAxis ) ) {
 
-		xMinValue.getValueFactory().valueProperty().unbindBidirectional(xMinValueExpression);
-		xMaxValue.getValueFactory().valueProperty().unbindBidirectional(xMaxValueExpression);
-		yMinValue.getValueFactory().valueProperty().unbindBidirectional(yMinValueExpression);
-		yMaxValue.getValueFactory().valueProperty().unbindBidirectional(yMaxValueExpression);
+			yScaleValue.selectedProperty().unbindBidirectional(chart.getYAxis().autoRangingProperty());
+
+			yMinValue.getValueFactory().valueProperty().unbindBidirectional(yMinValueExpression);
+			yMaxValue.getValueFactory().valueProperty().unbindBidirectional(yMaxValueExpression);
+
+		}
 
 		xMinValueExpression = null;
 		xMaxValueExpression = null;
