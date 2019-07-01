@@ -22,6 +22,7 @@ import javafx.scene.chart.XYChart;
 import se.europeanspallationsource.xaos.ui.plot.AreaChartFX;
 import se.europeanspallationsource.xaos.ui.plot.LogAxis;
 import se.europeanspallationsource.xaos.ui.plot.NumberAxis;
+import se.europeanspallationsource.xaos.ui.plot.TimeAxis;
 import se.europeanspallationsource.xaos.ui.plot.data.DataReducingSeries;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
 
@@ -32,21 +33,16 @@ import static Demo.ChartGenerator.generateData;
  * @author claudio.rosati@esss.se
  */
 @SuppressWarnings( "ClassWithoutLogger" )
-public class AreaChartGenerator implements ChartGenerator<Number, Number> {
+public class TimeAreaChartGenerator implements ChartGenerator<Number, Number> {
 
 	private DataReducingSeries<Number, Number> series0;
 	private DataReducingSeries<Number, Number> series1;
 	private DataReducingSeries<Number, Number> series2;
-	private DataReducingSeries<Number, Number> series3;
-	private DataReducingSeries<Number, Number> series4;
-	private DataReducingSeries<Number, Number> series5;
-	private DataReducingSeries<Number, Number> series6;
-	private DataReducingSeries<Number, Number> series7;
 
 	@Override
 	public XYChart<Number, Number> getNewChart( int numberOfPoints, boolean logXAxis, boolean logYAxis ) {
 
-		ValueAxis<Number> xAxis = logXAxis ? new LogAxis() : new NumberAxis();
+		ValueAxis<Number> xAxis = new TimeAxis();
 		ValueAxis<Number> yAxis = logYAxis ? new LogAxis() : new NumberAxis();
 
 		xAxis.setAnimated(false);
@@ -54,7 +50,7 @@ public class AreaChartGenerator implements ChartGenerator<Number, Number> {
 
 		AreaChartFX<Number, Number> chart = new AreaChartFX<Number, Number>(xAxis, yAxis);
 
-		chart.setTitle("Area Test Data");
+		chart.setTitle("Time Area Test Data");
 		chart.setAnimated(false);
 		chart.setOnMouseClicked(event -> chart.requestFocus());
 		chart.getPlugins().addAll(Plugins.all());
@@ -73,36 +69,11 @@ public class AreaChartGenerator implements ChartGenerator<Number, Number> {
 			series2.setName("Generated test data-longitudinal");
 			series2.setData(generateData(numberOfPoints));
 
-			series3 = new DataReducingSeries<>();
-			series3.setName("Generated test data 1");
-			series3.setData(generateData(numberOfPoints));
-
-			series4 = new DataReducingSeries<>();
-			series4.setName("Generated test data 2");
-			series4.setData(generateData(numberOfPoints));
-
-			series5 = new DataReducingSeries<>();
-			series5.setName("Generated test data 3");
-			series5.setData(generateData(numberOfPoints));
-
-			series6 = new DataReducingSeries<>();
-			series6.setName("Generated test data 4");
-			series6.setData(generateData(numberOfPoints));
-
-			series7 = new DataReducingSeries<>();
-			series7.setName("Generated test data 5");
-			series7.setData(generateData(numberOfPoints));
-
 		}
 
 		chart.getData().add(series0.getSeries());
 		chart.getData().add(series1.getSeries());
 		chart.getData().add(series2.getSeries());
-		chart.getData().add(series3.getSeries());
-		chart.getData().add(series4.getSeries());
-		chart.getData().add(series5.getSeries());
-		chart.getData().add(series6.getSeries());
-		chart.getData().add(series7.getSeries());
 
 		chart.setHVLSeries(0, 1, 2);
 

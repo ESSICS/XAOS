@@ -18,6 +18,7 @@ package Demo;
 
 
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -66,20 +67,23 @@ public class FXMLController implements Initializable {
 		"BarChartFX",
 		"DateAreaChartFX",
 		"LineChartFX",
-		"ScatterChartFX"
+		"ScatterChartFX",
+		"TimeAreaChartFX"
 	);
 
 	private AreaChartFX<Number, Number> areaChart;
 	private BarChartFX<String, Number> barChart;
-	private AreaChartFX<Number, Number> dateAreaChart;
+	private AreaChartFX<Date, Number> dateAreaChart;
 	private LineChartFX<Number, Number> lineChart;
 	private ScatterChartFX<Number, Number> scatterChart;
+	private AreaChartFX<Number, Number> timeAreaChart;
 
 	private final AreaChartGenerator areaChartGen = new AreaChartGenerator();
 	private final BarChartGenerator barChartGen = new BarChartGenerator();
 	private final DateAreaChartGenerator dateAreaChartGen = new DateAreaChartGenerator();
 	private final LineChartGenerator lineChartGen = new LineChartGenerator();
 	private final ScatterChartGenerator scatterChartGen = new ScatterChartGenerator();
+	private final TimeAreaChartGenerator timeAreaChartGen = new TimeAreaChartGenerator();
 
 	private final PluggableChartContainer chartContainer = new PluggableChartContainer();
 
@@ -110,12 +114,12 @@ public class FXMLController implements Initializable {
 						);
 						break;
 					case "DateAreaChartFX":
-						dateAreaChart = (AreaChartFX<Number, Number>) initializeChart(
+						dateAreaChart = (AreaChartFX<Date, Number>) initializeChart(
 							dateAreaChart,
 							dateAreaChartGen,
 							NB_OF_POINTS,
 							false,
-							( areaChart == null ) ? false : areaChart.getYAxis() instanceof LogAxis
+							( dateAreaChart == null ) ? false : dateAreaChart.getYAxis() instanceof LogAxis
 						);
 						break;
 					case "LineChartFX":
@@ -136,8 +140,17 @@ public class FXMLController implements Initializable {
 							( scatterChart == null ) ? false : scatterChart.getYAxis() instanceof LogAxis
 						);
 					break;
-						default:
-							break;
+					case "TimeAreaChartFX":
+						timeAreaChart = (AreaChartFX<Number, Number>) initializeChart(
+							timeAreaChart,
+							timeAreaChartGen,
+							NB_OF_POINTS,
+							false,
+							( timeAreaChart == null ) ? false : timeAreaChart.getYAxis() instanceof LogAxis
+						);
+						break;
+					default:
+						break;
 				}
 			}
 		});
@@ -212,6 +225,8 @@ public class FXMLController implements Initializable {
 				return lineChart;
 			case "ScatterChartFX":
 				return scatterChart;
+			case "TimeAreaChartFX":
+				return timeAreaChart;
 			default:
 				return null;
 		}
@@ -257,13 +272,16 @@ public class FXMLController implements Initializable {
 				barChart = (BarChartFX<String, Number>) initializeChart(barChart, barChartGen, NB_OF_POINTS);
 				break;
 			case "DateAreaChartFX":
-				dateAreaChart = (AreaChartFX<Number, Number>) initializeChart(dateAreaChart, dateAreaChartGen, NB_OF_POINTS);
+				dateAreaChart = (AreaChartFX<Date, Number>) initializeChart(dateAreaChart, dateAreaChartGen, NB_OF_POINTS);
 				break;
 			case "LineChartFX":
 				lineChart = (LineChartFX<Number, Number>) initializeChart(lineChart, lineChartGen, NB_OF_POINTS);
 				break;
 			case "ScatterChartFX":
 				scatterChart = (ScatterChartFX<Number, Number>) initializeChart(scatterChart, scatterChartGen, NB_OF_POINTS);
+				break;
+			case "TimeAreaChartFX":
+				timeAreaChart = (AreaChartFX<Number, Number>) initializeChart(timeAreaChart, timeAreaChartGen, NB_OF_POINTS);
 				break;
 			default:
 				break;
@@ -329,7 +347,7 @@ public class FXMLController implements Initializable {
 				);
 				break;
 			case "DateAreaChartFX":
-				dateAreaChart = (AreaChartFX<Number, Number>) initializeChart(
+				dateAreaChart = (AreaChartFX<Date, Number>) initializeChart(
 					dateAreaChart,
 					dateAreaChartGen,
 					NB_OF_POINTS,
@@ -352,6 +370,15 @@ public class FXMLController implements Initializable {
 					scatterChartGen,
 					NB_OF_POINTS,
 					scatterChart.getXAxis() instanceof LogAxis,
+					true
+				);
+				break;
+			case "TimeAreaChartFX":
+				timeAreaChart = (AreaChartFX<Number, Number>) initializeChart(
+					timeAreaChart,
+					timeAreaChartGen,
+					NB_OF_POINTS,
+					false,
 					true
 				);
 				break;

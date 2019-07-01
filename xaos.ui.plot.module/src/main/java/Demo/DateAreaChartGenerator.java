@@ -58,7 +58,7 @@ public class DateAreaChartGenerator implements ChartGenerator<Date, Number> {
 
 		AreaChartFX<Date, Number> chart = new AreaChartFX<>(xAxis, yAxis);
 
-		chart.setTitle("Area Test Data");
+		chart.setTitle("Date Area Test Data");
 		chart.setAnimated(false);
 		chart.setOnMouseClicked(event -> chart.requestFocus());
 		chart.getPlugins().addAll(Plugins.all());

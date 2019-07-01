@@ -384,7 +384,7 @@ public class NumberAxis extends ValueAxis<Number> {
 	 * Called to get the current axis range.
 	 *
 	 * @return A range object that can be passed to {@code setRange(...)} and
-	 *         {@code calculateTickValues(...)).
+	 *         {@code calculateTickValues(...)}.
 	 */
 	@Override
 	protected Object getRange() {
