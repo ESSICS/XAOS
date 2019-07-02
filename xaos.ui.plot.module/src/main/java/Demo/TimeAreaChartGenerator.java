@@ -27,8 +27,6 @@ import se.europeanspallationsource.xaos.ui.plot.data.DataReducingSeries;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
 
 import static Demo.ChartGenerator.generateData;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static java.util.concurrent.TimeUnit.SECONDS;
 
 
 /**
@@ -44,7 +42,8 @@ public class TimeAreaChartGenerator implements ChartGenerator<Number, Number> {
 	@Override
 	public XYChart<Number, Number> getNewChart( int numberOfPoints, boolean logXAxis, boolean logYAxis ) {
 
-		ValueAxis<Number> xAxis = new TimeAxis(SECONDS, MILLISECONDS);
+//		ValueAxis<Number> xAxis = new TimeAxis(SECONDS, MILLISECONDS);
+		ValueAxis<Number> xAxis = new TimeAxis();
 		ValueAxis<Number> yAxis = logYAxis ? new LogAxis() : new NumberAxis();
 
 		xAxis.setAnimated(false);

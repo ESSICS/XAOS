@@ -30,13 +30,13 @@ import static java.util.logging.Level.WARNING;
 
 
 /**
+ * An axis that interpret numerical data as milliseconds and format them as
+ * HOURS:MINUTES:SECONDS.MILLISECONDS.
+ *
  * @author claudio.rosati@esss.se
  */
+@SuppressWarnings( "ClassWithoutLogger" )
 public class TimeAxis extends NumberAxis {
-
-	private static final Logger LOGGER = Logger.getLogger(TimeAxis.class.getName());
-
-	private TimeConverter converter = new TimeConverter();
 
 	/**
 	 * Create a a non-auto-ranging {@link NumberAxis} with time values as major
@@ -49,6 +49,7 @@ public class TimeAxis extends NumberAxis {
 
 		super();
 
+		setTickLabelFormatter(new TimeConverter());
 		setForceZeroInRange(false);
 
 	}
@@ -65,6 +66,7 @@ public class TimeAxis extends NumberAxis {
 
 		super(lowerBound, upperBound, tickUnit);
 
+		setTickLabelFormatter(new TimeConverter());
 		setForceZeroInRange(false);
 
 	}
@@ -82,6 +84,7 @@ public class TimeAxis extends NumberAxis {
 
 		super(axisLabel, lowerBound, upperBound, tickUnit);
 
+		setTickLabelFormatter(new TimeConverter());
 		setForceZeroInRange(false);
 
 	}
@@ -96,15 +99,11 @@ public class TimeAxis extends NumberAxis {
 	 */
 	public TimeAxis( TimeUnit maxUnit, TimeUnit minUnit ) {
 
-		this();
+		super();
 
-		converter = new TimeConverter(minUnit, maxUnit);
+		setTickLabelFormatter(new TimeConverter(minUnit, maxUnit));
+		setForceZeroInRange(false);
 
-	}
-
-	@Override
-	protected String getTickMarkLabel( Number value ) {
-		return converter.toString(value);
 	}
 
 	/**
