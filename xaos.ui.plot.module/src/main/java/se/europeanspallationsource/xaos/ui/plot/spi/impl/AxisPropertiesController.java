@@ -20,8 +20,6 @@ package se.europeanspallationsource.xaos.ui.plot.spi.impl;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.ResourceBundle;
@@ -43,11 +41,13 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.SpinnerValueFactory.DoubleSpinnerValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.stage.WindowEvent;
-import javafx.util.StringConverter;
-import org.apache.commons.lang3.StringUtils;
 import se.europeanspallationsource.xaos.core.util.LogUtils;
 import se.europeanspallationsource.xaos.ui.plot.DateAxis;
+import se.europeanspallationsource.xaos.ui.plot.DateAxis.DateConverter;
+import se.europeanspallationsource.xaos.ui.plot.NumberAxis.DoubleConverter;
 import se.europeanspallationsource.xaos.ui.plot.Plugin;
+import se.europeanspallationsource.xaos.ui.plot.TimeAxis;
+import se.europeanspallationsource.xaos.ui.plot.TimeAxis.TimeConverter;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Pluggable;
 
 import static java.util.logging.Level.SEVERE;
@@ -222,7 +222,9 @@ public class AxisPropertiesController extends GridPane implements Initializable 
 	}
 
 	private ObjectProperty<?> maxXProperty( XYChart<?, ?> chart ) {
-		if ( chart.getXAxis() instanceof ValueAxis<?> ) {
+		if ( chart.getXAxis() instanceof TimeAxis ) {
+			return Plugin.getXValueAxis(chart).upperBoundProperty().asObject();
+		} else if ( chart.getXAxis() instanceof ValueAxis<?> ) {
 			return Plugin.getXValueAxis(chart).upperBoundProperty().asObject();
 		} else if ( chart.getXAxis() instanceof DateAxis ) {
 			return ((DateAxis) chart.getXAxis()).upperBoundProperty();
@@ -231,8 +233,10 @@ public class AxisPropertiesController extends GridPane implements Initializable 
 		}
 	}
 
-	private SpinnerValueFactory maxXSpinnerValueFactory( XYChart<?, ?> chart ) {
-		if ( chart.getXAxis() instanceof ValueAxis<?> ) {
+	private SpinnerValueFactory<?> maxXSpinnerValueFactory( XYChart<?, ?> chart ) {
+		if ( chart.getXAxis() instanceof TimeAxis ) {
+			return timeSpinnerValueFactory(Plugin.getXValueAxis(chart).getUpperBound());
+		} else if ( chart.getXAxis() instanceof ValueAxis<?> ) {
 			return doubleSpinnerValueFactory(Plugin.getXValueAxis(chart).getUpperBound());
 		} else if ( chart.getXAxis() instanceof DateAxis ) {
 			return dateSpinnerValueFactory((DateAxis) chart.getXAxis(), ((DateAxis) chart.getXAxis()).getUpperBound());
@@ -242,7 +246,9 @@ public class AxisPropertiesController extends GridPane implements Initializable 
 	}
 
 	private ObjectProperty<?> maxYProperty( XYChart<?, ?> chart ) {
-		if ( chart.getYAxis() instanceof ValueAxis<?> ) {
+		if ( chart.getYAxis() instanceof TimeAxis ) {
+			return Plugin.getYValueAxis(chart).upperBoundProperty().asObject();
+		} else if ( chart.getYAxis() instanceof ValueAxis<?> ) {
 			return Plugin.getYValueAxis(chart).upperBoundProperty().asObject();
 		} else if ( chart.getYAxis() instanceof DateAxis ) {
 			return ((DateAxis) chart.getYAxis()).upperBoundProperty();
@@ -251,8 +257,10 @@ public class AxisPropertiesController extends GridPane implements Initializable 
 		}
 	}
 
-	private SpinnerValueFactory maxYSpinnerValueFactory( XYChart<?, ?> chart ) {
-		if ( chart.getYAxis() instanceof ValueAxis<?> ) {
+	private SpinnerValueFactory<?> maxYSpinnerValueFactory( XYChart<?, ?> chart ) {
+		if ( chart.getYAxis() instanceof TimeAxis ) {
+			return timeSpinnerValueFactory(Plugin.getYValueAxis(chart).getUpperBound());
+		} else if ( chart.getYAxis() instanceof ValueAxis<?> ) {
 			return doubleSpinnerValueFactory(Plugin.getYValueAxis(chart).getUpperBound());
 		} else if ( chart.getYAxis() instanceof DateAxis ) {
 			return dateSpinnerValueFactory((DateAxis) chart.getYAxis(), ((DateAxis) chart.getYAxis()).getUpperBound());
@@ -262,7 +270,9 @@ public class AxisPropertiesController extends GridPane implements Initializable 
 	}
 
 	private ObjectProperty<?> minXProperty( XYChart<?, ?> chart ) {
-		if ( chart.getXAxis() instanceof ValueAxis<?> ) {
+		if ( chart.getXAxis() instanceof TimeAxis ) {
+			return Plugin.getXValueAxis(chart).lowerBoundProperty().asObject();
+		} else if ( chart.getXAxis() instanceof ValueAxis<?> ) {
 			return Plugin.getXValueAxis(chart).lowerBoundProperty().asObject();
 		} else if ( chart.getXAxis() instanceof DateAxis ) {
 			return ((DateAxis) chart.getXAxis()).lowerBoundProperty();
@@ -271,8 +281,10 @@ public class AxisPropertiesController extends GridPane implements Initializable 
 		}
 	}
 
-	private SpinnerValueFactory minXSpinnerValueFactory( XYChart<?, ?> chart ) {
-		if ( chart.getXAxis() instanceof ValueAxis<?> ) {
+	private SpinnerValueFactory<?> minXSpinnerValueFactory( XYChart<?, ?> chart ) {
+		if ( chart.getXAxis() instanceof TimeAxis ) {
+			return timeSpinnerValueFactory(Plugin.getXValueAxis(chart).getLowerBound());
+		} else if ( chart.getXAxis() instanceof ValueAxis<?> ) {
 			return doubleSpinnerValueFactory(Plugin.getXValueAxis(chart).getLowerBound());
 		} else if ( chart.getXAxis() instanceof DateAxis ) {
 			return dateSpinnerValueFactory((DateAxis) chart.getXAxis(), ((DateAxis) chart.getXAxis()).getLowerBound());
@@ -282,7 +294,9 @@ public class AxisPropertiesController extends GridPane implements Initializable 
 	}
 
 	private ObjectProperty<?> minYProperty( XYChart<?, ?> chart ) {
-		if ( chart.getYAxis() instanceof ValueAxis<?> ) {
+		if ( chart.getYAxis() instanceof TimeAxis ) {
+			return Plugin.getYValueAxis(chart).lowerBoundProperty().asObject();
+		} else if ( chart.getYAxis() instanceof ValueAxis<?> ) {
 			return Plugin.getYValueAxis(chart).lowerBoundProperty().asObject();
 		} else if ( chart.getYAxis() instanceof DateAxis ) {
 			return ((DateAxis) chart.getYAxis()).lowerBoundProperty();
@@ -291,8 +305,10 @@ public class AxisPropertiesController extends GridPane implements Initializable 
 		}
 	}
 
-	private SpinnerValueFactory minYSpinnerValueFactory( XYChart<?, ?> chart ) {
-		if ( chart.getYAxis() instanceof ValueAxis<?> ) {
+	private SpinnerValueFactory<?> minYSpinnerValueFactory( XYChart<?, ?> chart ) {
+		if ( chart.getYAxis() instanceof TimeAxis ) {
+			return timeSpinnerValueFactory(Plugin.getYValueAxis(chart).getLowerBound());
+		} else if ( chart.getYAxis() instanceof ValueAxis<?> ) {
 			return doubleSpinnerValueFactory(Plugin.getYValueAxis(chart).getLowerBound());
 		} else if ( chart.getYAxis() instanceof DateAxis ) {
 			return dateSpinnerValueFactory((DateAxis) chart.getYAxis(), ((DateAxis) chart.getYAxis()).getLowerBound());
@@ -301,51 +317,12 @@ public class AxisPropertiesController extends GridPane implements Initializable 
 		}
 	}
 
-	private static class DateConverter extends StringConverter<Date> {
-
-		private final DateFormat format;
-
-		public DateConverter( DateFormat format) {
-			this.format = format;
-		}
-
-		@Override
-		@SuppressWarnings( "AssignmentToMethodParameter" )
-		public Date fromString( String value ) {
-			try {
-
-				if ( StringUtils.isBlank(value) ) {
-					//	If the specified value is null, zero-length or blank, return null.
-					return null;
-				}
-
-				value = value.trim();
-
-				//	Perform the requested parsing.
-				return format.parse(value);
-
-			} catch ( ParseException ex ) {
-				throw new RuntimeException(ex);
-			}
-		}
-
-		@Override
-		public String toString( Date value ) {
-
-			if ( value == null ) {
-				//	If the specified value is null, return a zero-length String.
-				return "";
-			}
-
-			return format.format(value);
-
-		}
-
+	private TimeSpinnerValueFactory timeSpinnerValueFactory( double currentValue ) {
+		return new TimeSpinnerValueFactory(currentValue);
 	}
 
 	private static class DateSpinnerValueFactory extends SpinnerValueFactory<Date> {
 
-		private final DateFormat format;
 		private final int field;
 
 		/**
@@ -356,7 +333,6 @@ public class AxisPropertiesController extends GridPane implements Initializable 
 		 */
 		DateSpinnerValueFactory( DateFormat format, int field, Date initialValue ) {
 
-			this.format = format;
 			this.field = field;
 
 			setConverter(new DateConverter(format));
@@ -390,39 +366,32 @@ public class AxisPropertiesController extends GridPane implements Initializable 
 
 	}
 
-	private static class DoubleConverter extends StringConverter<Double> {
+	private static class TimeSpinnerValueFactory extends SpinnerValueFactory<Number> {
 
-		private final DecimalFormat format = new DecimalFormat("0.00##");
-
-		@Override
-		@SuppressWarnings( "AssignmentToMethodParameter" )
-		public Double fromString( String value ) {
-			try {
-
-				if ( StringUtils.isBlank(value) ) {
-					//	If the specified value is null, zero-length or blank, return null.
-					return null;
-				}
-
-				value = value.trim();
-
-				//	Perform the requested parsing.
-				return format.parse(value).doubleValue();
-
-			} catch ( ParseException ex ) {
-				throw new RuntimeException(ex);
-			}
+		TimeSpinnerValueFactory( Number currentValue ) {
+			setConverter(new TimeConverter());
+			setValue(currentValue);
 		}
 
 		@Override
-		public String toString( Double value ) {
+		public void decrement( int i ) {
 
-			if ( value == null ) {
-				//	If the specified value is null, return a zero-length String.
-				return "";
-			}
+			long value = getValue().longValue();
 
-			return format.format(value);
+			value -= 1000L * i;
+
+			setValue(value);
+
+		}
+
+		@Override
+		public void increment( int i ) {
+
+			long value = getValue().longValue();
+
+			value += 1000L * i;
+
+			setValue(value);
 
 		}
 

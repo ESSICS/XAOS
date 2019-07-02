@@ -43,6 +43,7 @@ import javafx.geometry.Dimension2D;
 import javafx.scene.chart.ValueAxis;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
+import org.apache.commons.lang3.StringUtils;
 import se.europeanspallationsource.xaos.core.util.LogUtils;
 
 import static java.util.logging.Level.WARNING;
@@ -785,6 +786,45 @@ public class NumberAxis extends ValueAxis<Number> {
 			} else {
 				return formatter.format(object);
 			}
+		}
+
+	}
+
+	@SuppressWarnings( "PublicInnerClass" )
+	public static class DoubleConverter extends StringConverter<Double> {
+
+		private final DecimalFormat format = new DecimalFormat("0.00##");
+
+		@Override
+		@SuppressWarnings( "AssignmentToMethodParameter" )
+		public Double fromString( String value ) {
+			try {
+
+				if ( StringUtils.isBlank(value) ) {
+					//	If the specified value is null, zero-length or blank, return null.
+					return null;
+				}
+
+				value = value.trim();
+
+				//	Perform the requested parsing.
+				return format.parse(value).doubleValue();
+
+			} catch ( ParseException ex ) {
+				throw new RuntimeException(ex);
+			}
+		}
+
+		@Override
+		public String toString( Double value ) {
+
+			if ( value == null ) {
+				//	If the specified value is null, return a zero-length String.
+				return "";
+			}
+
+			return format.format(value);
+
 		}
 
 	}

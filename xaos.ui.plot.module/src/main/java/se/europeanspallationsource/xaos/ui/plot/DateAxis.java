@@ -18,6 +18,7 @@ package se.europeanspallationsource.xaos.ui.plot;
 
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -33,6 +34,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.chart.Axis;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
+import org.apache.commons.lang3.StringUtils;
 
 
 /**
@@ -692,6 +694,49 @@ public final class DateAxis extends Axis<Date> {
 		private Interval( int interval, int amount ) {
 			this.interval = interval;
 			this.amount = amount;
+		}
+
+	}
+
+	@SuppressWarnings( "PublicInnerClass" )
+	public static class DateConverter extends StringConverter<Date> {
+
+		private final DateFormat format;
+
+		public DateConverter( DateFormat format) {
+			this.format = format;
+		}
+
+		@Override
+		@SuppressWarnings( "AssignmentToMethodParameter" )
+		public Date fromString( String value ) {
+			try {
+
+				if ( StringUtils.isBlank(value) ) {
+					//	If the specified value is null, zero-length or blank, return null.
+					return null;
+				}
+
+				value = value.trim();
+
+				//	Perform the requested parsing.
+				return format.parse(value);
+
+			} catch ( ParseException ex ) {
+				throw new RuntimeException(ex);
+			}
+		}
+
+		@Override
+		public String toString( Date value ) {
+
+			if ( value == null ) {
+				//	If the specified value is null, return a zero-length String.
+				return "";
+			}
+
+			return format.format(value);
+
 		}
 
 	}
