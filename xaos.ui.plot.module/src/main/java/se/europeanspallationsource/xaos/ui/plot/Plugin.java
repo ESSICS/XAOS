@@ -160,6 +160,7 @@ public abstract class Plugin {
 
 	}
 
+	private boolean bindFailed = false;
 	private Chart chart;
 	private final ObservableList<Node> plotChildren = FXCollections.observableArrayList();
 
@@ -190,6 +191,13 @@ public abstract class Plugin {
 	 */
 	public final ValueAxis<?> getYValueAxis() {
 		return getYValueAxis(getChart());
+	}
+
+	/**
+	 * @return {@code true} if binding failed.
+	 */
+	public boolean isBindFailed() {
+		return bindFailed;
 	}
 
 	/**
@@ -233,6 +241,10 @@ public abstract class Plugin {
 	@SuppressWarnings( "NoopMethodInAbstractClass" )
 	public <X, Y> void seriesVisibilityUpdated( Chart chart, Series<X, Y> series, int index, boolean visible ) {
 		//	Nothing done in the default implementation.
+	}
+
+	void setBindFailed( boolean bindFailed ) {
+		this.bindFailed = bindFailed;
 	}
 
 	/**

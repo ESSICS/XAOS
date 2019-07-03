@@ -79,7 +79,9 @@ class PluginManager {
 				plugin.setChart(chart);
 				plugin.getPlotChildren().addListener(pluginPlotChildrenChanged);
 				pluginsNodes.getChildren().addAll(plugin.getPlotChildren());
+				plugin.setBindFailed(false);
 			} catch ( Exception ex ) {
+				plugin.setBindFailed(true);
 				LogUtils.log(
 					LOGGER,
 					WARNING,
