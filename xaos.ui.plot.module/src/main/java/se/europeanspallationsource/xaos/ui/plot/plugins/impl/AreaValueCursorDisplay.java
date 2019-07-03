@@ -35,6 +35,8 @@ import se.europeanspallationsource.xaos.ui.plot.AreaChartFX;
 import se.europeanspallationsource.xaos.ui.plot.Plugin;
 import se.europeanspallationsource.xaos.ui.util.ColorUtils;
 
+import static se.europeanspallationsource.xaos.ui.plot.util.Assertions.assertValueAxis;
+
 
 /**
  * A {@link Plugin} displaying a {@link Label} next to the mouse cursor, showing
@@ -76,6 +78,8 @@ public class AreaValueCursorDisplay extends FormattedCursorDisplay {
 				chart.getClass().getSimpleName()
 			));
 		} else {
+			assertValueAxis(( (XYChart<?, ?>) chart ).getXAxis(), "X");
+			assertValueAxis(( (XYChart<?, ?>) chart ).getYAxis(), "Y");
 			super.chartConnected(chart);
 		}
 	}

@@ -23,6 +23,8 @@ import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.Label;
 import se.europeanspallationsource.xaos.ui.plot.Plugin;
 
+import static se.europeanspallationsource.xaos.ui.plot.Plugin.formattedValue;
+
 
 /**
  * A {@link Plugin} displaying a {@link Label} next to the mouse cursor, showing
@@ -52,6 +54,15 @@ public class AbscissaCursorDisplay extends FormattedCursorDisplay {
 
 	public AbscissaCursorDisplay( Position position, Format formatter ) {
 		super(NAME, position, formatter);
+	}
+
+	@Override
+	protected String formatValue( Object value ) {
+		if ( value == null ) {
+			return null;
+		} else {
+			return formattedValue(getXAxis(), value);
+		}
 	}
 
 	@Override

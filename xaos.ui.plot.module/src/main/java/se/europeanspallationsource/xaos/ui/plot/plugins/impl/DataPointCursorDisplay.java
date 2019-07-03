@@ -30,6 +30,9 @@ import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Paint;
+import javafx.scene.paint.RadialGradient;
 import javafx.util.Pair;
 import se.europeanspallationsource.xaos.ui.plot.Plugin;
 import se.europeanspallationsource.xaos.ui.util.ColorUtils;
@@ -51,7 +54,7 @@ import se.europeanspallationsource.xaos.ui.util.ColorUtils;
 @SuppressWarnings( "ClassWithoutLogger" )
 public class DataPointCursorDisplay extends FormattedCursorDisplay {
 
-	private static final MessageFormat FORMATTER = new MessageFormat("{0,number,0.000}:{1,number,0.000}");
+	private static final MessageFormat FORMATTER = new MessageFormat(" {0} ● {1} ");
 	private static final String NAME = "Data Point Cursor Display";
 
 	/* *********************************************************************** *
@@ -129,14 +132,25 @@ public class DataPointCursorDisplay extends FormattedCursorDisplay {
 			if ( node instanceof Region ) {
 				try {
 
-					Color dataColor = (Color) ((Region) node).getBackground().getFills().get(0).getFill();
+					Color dataColor = null;
+					Paint dataPaint = ((Region) node).getBackground().getFills().get(0).getFill();
 
-					getDisplay().setStyle(MessageFormat.format(
-						"-xaos-chart-cursor-display-background-color: {0}; "
-					  + "-xaos-chart-cursor-display-text-color: {1};",
-						ColorUtils.toWeb(ColorUtils.changeOpacity(dataColor.desaturate(), -0.2)),
-						ColorUtils.toWeb(ColorUtils.bestConstrasting(dataColor, Color.BLACK, Color.WHITE))
-					));
+					if ( dataPaint instanceof Color ) {
+						dataColor = (Color) dataPaint;
+					} else if ( dataPaint instanceof RadialGradient ) {
+						dataColor = ColorUtils.meanColor(((RadialGradient) dataPaint).getStops());
+					} else if ( dataPaint instanceof LinearGradient ) {
+						dataColor = ColorUtils.meanColor(((LinearGradient) dataPaint).getStops());
+					}
+
+					if ( dataColor != null ) {
+						getDisplay().setStyle(MessageFormat.format(
+							"-xaos-chart-cursor-display-background-color: {0}; "
+						  + "-xaos-chart-cursor-display-text-color: {1};",
+							ColorUtils.toWeb(ColorUtils.changeOpacity(dataColor.desaturate(), -0.2)),
+							ColorUtils.toWeb(ColorUtils.bestConstrasting(dataColor, Color.BLACK, Color.WHITE))
+						));
+					}
 
 				} catch ( NullPointerException npex ) {
 					//	Can happen that in certain situations dataColor evaluation
@@ -144,7 +158,10 @@ public class DataPointCursorDisplay extends FormattedCursorDisplay {
 				}
 			}
 
-			return getFormatter().format(new Object[] { dataPoint.getXValue(), dataPoint.getYValue() });
+			return getFormatter().format(new Object[] {
+				formattedValue(getXAxis(), dataPoint.getXValue()),
+				formattedValue(getYAxis(), dataPoint.getYValue())
+			});
 
 		}
 

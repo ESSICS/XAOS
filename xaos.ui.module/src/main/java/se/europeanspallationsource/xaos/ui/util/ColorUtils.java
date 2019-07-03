@@ -18,8 +18,11 @@ package se.europeanspallationsource.xaos.ui.util;
 
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Stop;
 import javafx.util.Pair;
 import org.apache.commons.lang3.Validate;
 import se.europeanspallationsource.xaos.core.util.MathUtils;
@@ -160,6 +163,47 @@ public class ColorUtils {
 
 		return Math.sqrt(0.299 * r * r + 0.587 * g * g + 0.114 * b * b);
 
+	}
+
+	/**
+	 * Returns the mean {@link Color} of the ones in the given {@link List}.
+	 *
+	 * @param colors The {@link List} of {@link Color}s whose mean must be
+	 *               returned.
+	 * @return A {@link Color} whose components are the mean of the given
+	 *         colors components.
+	 */
+	public static Color mean ( List<Color> colors ) {
+
+		double red = 0;
+		double green = 0;
+		double blue = 0;
+		double opacity = 0;
+
+		for ( Color c : colors ) {
+			red += c.getRed();
+			green += c.getGreen();
+			blue += c.getBlue();
+			opacity += c.getOpacity();
+		}
+
+		double size = colors.size();
+
+		return Color.color(red / size, green / size, blue / size, opacity / size);
+
+	}
+
+	/**
+	 * Returns the mean {@link Color} of the ones in the given {@link List} of
+	 * {@link Stop}s.
+	 *
+	 * @param stops The {@link List} of {@link Stop}s whose color mean must be
+	 *               returned.
+	 * @return A {@link Color} whose components are the mean of the given
+	 *         stops color components.
+	 */
+	public static Color meanColor ( List<Stop> stops ) {
+		return mean(stops.stream().map(s -> s.getColor()).collect(Collectors.toList()));
 	}
 
 	/**

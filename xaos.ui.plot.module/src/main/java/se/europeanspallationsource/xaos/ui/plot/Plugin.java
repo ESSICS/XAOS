@@ -17,6 +17,10 @@
 package se.europeanspallationsource.xaos.ui.plot;
 
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
@@ -33,6 +37,9 @@ import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.input.MouseEvent;
 import org.apache.commons.lang3.Validate;
+import se.europeanspallationsource.xaos.core.util.LogUtils;
+
+import static java.util.logging.Level.WARNING;
 
 
 /**
@@ -42,6 +49,28 @@ import org.apache.commons.lang3.Validate;
  * @author claudio.rosati@esss.se
  */
 public abstract class Plugin {
+
+	private static final Logger LOGGER = Logger.getLogger(Plugin.class.getName());
+
+	private static Method axisGetTickMarkLabelMethod = null;
+
+	/**
+	 * Return the X {@link Axis} for the given {@code chart}.
+	 *
+	 * @param <X> The type of the X axis.
+	 * @param chart The {@link Chart} whose X {@link Axis} must be returned.
+	 * @return The X {@link Axis} for the given {@code chart} or {@code null}.
+	 */
+	@SuppressWarnings( "unchecked" )
+	public static final <X> Axis<X> getXAxis( Chart chart ) {
+		if ( chart instanceof XYChart ) {
+			return ( (XYChart<X, ?>) chart ).getXAxis();
+		} else if ( chart instanceof DensityChartFX ) {
+			return ( (DensityChartFX<X, ?>) chart ).getXAxis();
+		} else {
+			return null;
+		}
+	}
 
 	/**
 	 * Return the X {@link ValueAxis} for the given {@code chart}.
@@ -58,6 +87,24 @@ public abstract class Plugin {
 			}
 		} else if ( chart instanceof DensityChartFX<?, ?> ) {
 			return (ValueAxis<?>) ( (DensityChartFX<?, ?>) chart ).getXAxis();
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * Return the Y {@link Axis} for the given {@code chart}.
+	 *
+	 * @param <Y> The type of the Y axis.
+	 * @param chart The {@link Chart} whose Y {@link Axis} must be returned.
+	 * @return The Y {@link Axis} for the given {@code chart} or {@code null}.
+	 */
+	@SuppressWarnings( "unchecked" )
+	public static final <Y> Axis<Y> getYAxis( Chart chart ) {
+		if ( chart instanceof XYChart ) {
+			return ( (XYChart<?, Y>) chart ).getYAxis();
+		} else if ( chart instanceof DensityChartFX ) {
+			return ( (DensityChartFX<?, Y>) chart ).getYAxis();
 		} else {
 			return null;
 		}
@@ -81,6 +128,36 @@ public abstract class Plugin {
 		} else {
 			return null;
 		}
+	}
+
+	/**
+	 * Invokes the protected {@link Axis#getTickMarkLabel(java.lang.Object)}
+	 * using introspection.
+	 *
+	 * @param <T>   The data type of the axis.
+	 * @param axis  The axis.
+	 * @param value The value to be formatted.
+	 * @return A string representing the formatted value or {@code null}.
+	 */
+	public static final <T> String formattedValue ( Axis<T> axis, T value ) {
+
+		try {
+
+			if ( axisGetTickMarkLabelMethod == null ) {
+				axisGetTickMarkLabelMethod = Arrays.asList(Axis.class.getDeclaredMethods()).parallelStream()
+					.filter(m -> "getTickMarkLabel".equals(m.getName()))
+					.findAny().get();
+			}
+
+			axisGetTickMarkLabelMethod.setAccessible(true);
+
+			return (String) axisGetTickMarkLabelMethod.invoke(axis, value);
+
+		} catch ( IllegalAccessException | IllegalArgumentException | SecurityException | InvocationTargetException ex ) {
+			LogUtils.log(LOGGER, WARNING, ex);
+			return null;
+		}
+
 	}
 
 	private Chart chart;
@@ -298,15 +375,27 @@ public abstract class Plugin {
 	}
 
 	/**
+	 * Return the X {@link Axis} for {@link #getChart()}.
+	 *
+	 * @param <X> The type of the X axis.
+	 * @return The X {@link Axis} or {@code null}.
+	 */
+	protected final <X> Axis<X> getXAxis() {
+		return getXAxis(getChart());
+	}
+
+	/**
+	 * @param <X> The type of the X axis.
 	 * @param xDisplayValue The display position on X axis.
 	 * @return The data value for the given display position on the X axis or
 	 *         {@code null}.
 	 */
-	protected final Object getXValueForDisplay( double xDisplayValue ) {
+	@SuppressWarnings( "unchecked" )
+	protected final <X> X getXValueForDisplay( double xDisplayValue ) {
 		if ( getChart() instanceof XYChart<?, ?> ) {
-			return ( (XYChart<?, ?>) getChart() ).getXAxis().getValueForDisplay(xDisplayValue);
+			return ( (XYChart<X, ?>) getChart() ).getXAxis().getValueForDisplay(xDisplayValue);
 		} else if ( getChart() instanceof DensityChartFX<?, ?> ) {
-			return ( (DensityChartFX<?, ?>) getChart() ).getXAxis().getValueForDisplay(xDisplayValue);
+			return ( (DensityChartFX<X, ?>) getChart() ).getXAxis().getValueForDisplay(xDisplayValue);
 		} else {
 			return null;
 		}
@@ -322,15 +411,27 @@ public abstract class Plugin {
 	}
 
 	/**
+	 * Return the Y {@link Axis} for {@link #getChart()}.
+	 *
+	 * @param <Y> The type of the Y axis.
+	 * @return The Y {@link Axis} or {@code null}.
+	 */
+	protected final <Y> Axis<Y> getYAxis() {
+		return getYAxis(getChart());
+	}
+
+	/**
+	 * @param <Y> The type of the Y axis.
 	 * @param yDisplayValue The display position on Y axis.
 	 * @return The data value for the given display position on the Y axis or
 	 *         {@code null}.
 	 */
-	protected final Object getYValueForDisplay( double yDisplayValue ) {
+	@SuppressWarnings( "unchecked" )
+	protected final <Y> Y getYValueForDisplay( double yDisplayValue ) {
 		if ( getChart() instanceof XYChart<?, ?> ) {
-			return ( (XYChart<?, ?>) getChart() ).getYAxis().getValueForDisplay(yDisplayValue);
+			return ( (XYChart<?, Y>) getChart() ).getYAxis().getValueForDisplay(yDisplayValue);
 		} else if ( getChart() instanceof DensityChartFX<?, ?> ) {
-			return ( (DensityChartFX<?, ?>) getChart() ).getYAxis().getValueForDisplay(yDisplayValue);
+			return ( (DensityChartFX<?, Y>) getChart() ).getYAxis().getValueForDisplay(yDisplayValue);
 		} else {
 			return null;
 		}
@@ -368,17 +469,21 @@ public abstract class Plugin {
 	protected final boolean isInsidePlotArea( Point2D mouseLocationInScene ) {
 
 		Point2D mouseLocation = getLocationInPlotArea(mouseLocationInScene);
-		double valueX = getXValueForDisplayAsDouble(mouseLocation.getX());
-		ValueAxis<?> xValueAxis = getXValueAxis();
+		Object xValueForDisplay = getXValueForDisplay(mouseLocation.getX());
+		Axis<Object> xAxis = getXAxis();
 
-		if ( valueX < xValueAxis.getLowerBound() || valueX > xValueAxis.getUpperBound() ) {
+		if ( !xAxis.isValueOnAxis(xValueForDisplay) ) {
 			return false;
 		}
 
-		double valueY = getYValueForDisplayAsDouble(mouseLocation.getY());
-		ValueAxis<?> yValueAxis = getYValueAxis();
+		Object yValueForDisplay = getYValueForDisplay(mouseLocation.getY());
+		Axis<Object> yAxis = getYAxis();
 
-		return !( valueY < yValueAxis.getLowerBound() || valueY > yValueAxis.getUpperBound() );
+		if ( !yAxis.isValueOnAxis(yValueForDisplay) ) {
+			return false;
+		}
+
+		return true;
 
 	}
 

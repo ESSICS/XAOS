@@ -17,12 +17,9 @@
 package se.europeanspallationsource.xaos.ui.plot.plugins;
 
 
-import java.text.MessageFormat;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
-import javafx.scene.chart.BarChart;
 import javafx.scene.chart.Chart;
-import javafx.scene.chart.XYChart;
 import javafx.scene.input.MouseEvent;
 import se.europeanspallationsource.xaos.ui.plot.DensityChartFX;
 
@@ -53,15 +50,7 @@ public abstract class AbstractCursorPlugin extends AbstractBoundedPlugin {
 	@SuppressWarnings( "null" )
 	protected void chartConnected( Chart chart ) {
 
-		if ( chart instanceof BarChart ) {
-			throw new UnsupportedOperationException(MessageFormat.format(
-				"{0} non supported.",
-				chart.getClass().getSimpleName()
-			));
-		} else if ( chart instanceof XYChart<?, ?> ) {
-			assertValueAxis(( (XYChart<?, ?>) chart ).getXAxis(), "X");
-			assertValueAxis(( (XYChart<?, ?>) chart ).getYAxis(), "Y");
-		} else if ( chart instanceof DensityChartFX<?, ?> ) {
+		if ( chart instanceof DensityChartFX<?, ?> ) {
 			assertValueAxis(( (DensityChartFX<?, ?>) chart ).getXAxis(), "X");
 			assertValueAxis(( (DensityChartFX<?, ?>) chart ).getYAxis(), "Y");
 		}

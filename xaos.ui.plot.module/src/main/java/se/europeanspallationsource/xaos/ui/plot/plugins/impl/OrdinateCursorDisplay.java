@@ -55,6 +55,15 @@ public class OrdinateCursorDisplay extends FormattedCursorDisplay {
 	}
 
 	@Override
+	protected String formatValue( Object value ) {
+		if ( value == null ) {
+			return null;
+		} else {
+			return formattedValue(getYAxis(), value);
+		}
+	}
+
+	@Override
 	protected Object valueAtPosition( Point2D mouseLocation ) {
 
 		Data<?, ?> dataPoint = toDataPoint(mouseLocation);

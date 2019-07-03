@@ -19,6 +19,7 @@ package se.europeanspallationsource.xaos.ui.plot.plugins;
 
 import javafx.beans.value.ChangeListener;
 import javafx.scene.chart.Chart;
+import javafx.scene.chart.ValueAxis;
 
 
 /**
@@ -48,16 +49,26 @@ public abstract class AbstractBoundedPlugin extends AbstractNamedPlugin {
 
 		super.chartConnected(chart);
 
-		getXValueAxis().scaleProperty().addListener(boundsListener);
-		getYValueAxis().scaleProperty().addListener(boundsListener);
+		if ( getXAxis() instanceof ValueAxis ) {
+			getXValueAxis().scaleProperty().addListener(boundsListener);
+		}
+
+		if ( getYAxis() instanceof ValueAxis ) {
+			getYValueAxis().scaleProperty().addListener(boundsListener);
+		}
 
 	}
 
 	@Override
 	protected void chartDisconnected( Chart chart ) {
 
-		getYValueAxis().scaleProperty().removeListener(boundsListener);
-		getXValueAxis().scaleProperty().removeListener(boundsListener);
+		if ( getYAxis() instanceof ValueAxis ) {
+			getYValueAxis().scaleProperty().removeListener(boundsListener);
+		}
+
+		if ( getXAxis() instanceof ValueAxis ) {
+			getXValueAxis().scaleProperty().removeListener(boundsListener);
+		}
 
 		super.chartDisconnected(chart);
 
