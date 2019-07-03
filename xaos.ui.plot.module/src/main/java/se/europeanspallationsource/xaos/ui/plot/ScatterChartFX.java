@@ -26,7 +26,6 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.Chart;
-import javafx.scene.chart.LineChart;
 import javafx.scene.chart.ScatterChart;
 import org.apache.commons.lang3.Validate;
 import se.europeanspallationsource.xaos.core.util.LogUtils;
@@ -46,7 +45,7 @@ import static java.util.logging.Level.WARNING;
  * @author Grzegorz Kruk (original author).
  * @author claudio.rosati@esss.se
  */
-public class ScatterChartFX<X, Y> extends LineChart<X, Y> implements Pluggable {
+public class ScatterChartFX<X, Y> extends ScatterChart<X, Y> implements Pluggable {
 
 	private static final Logger LOGGER = Logger.getLogger(ScatterChartFX.class.getName());
 
@@ -74,7 +73,7 @@ public class ScatterChartFX<X, Y> extends LineChart<X, Y> implements Pluggable {
 
 	}
 
-	private final List<String> notShowwInLegend = new ArrayList<>(4);
+	private final List<String> notShownInLegend = new ArrayList<>(4);
 	private final Group pluginsNodesGroup = new Group();
 	private final PluginManager pluginManager = new PluginManager(this, pluginsNodesGroup);
 	private final List<String> seriesDrawnInPlot = new ArrayList<>(4);
@@ -162,7 +161,7 @@ public class ScatterChartFX<X, Y> extends LineChart<X, Y> implements Pluggable {
 
 	@Override
 	public boolean isNotShownInLegend( String name ) {
-		return notShowwInLegend.contains(name);
+		return notShownInLegend.contains(name);
 	}
 
 	public boolean isSeriesDrawn( String name ) {
@@ -195,7 +194,7 @@ public class ScatterChartFX<X, Y> extends LineChart<X, Y> implements Pluggable {
 
 	@Override
 	public final void setNotShownInLegend( String name ) {
-		notShowwInLegend.add(name);
+		notShownInLegend.add(name);
 		updateLegend();
 	}
 
@@ -218,86 +217,57 @@ public class ScatterChartFX<X, Y> extends LineChart<X, Y> implements Pluggable {
 			.flatMap(series -> series.getData().stream())
 			.forEach(d -> d.getNode().setVisible(false));
 
-//		// update symbol positions
-//		List<LineTo> constructedPath = new ArrayList<>(this.getData().size());
-//		for ( Iterator<Series<X, Y>> sit = getDisplayedSeriesIterator(); sit.hasNext(); ) {
-//			Series<X, Y> series = sit.next();
-//			if ( notShowwInLegend.contains(series.getName()) ) {
-//				final ObservableList<PathElement> seriesLine = ( (Path) series.getNode() ).getElements();
-//				seriesLine.clear();
-//				constructedPath.clear();
-//				for ( Iterator<Data<X, Y>> it = getDisplayedDataIterator(series); it.hasNext(); ) {
-//					Data<X, Y> item = it.next();
-//					double x = getXAxis().getDisplayPosition(item.getXValue());
-//					double y = getYAxis().getDisplayPosition(item.getYValue());
-//					if ( Double.isNaN(x) || Double.isNaN(y) ) {
-//						continue;
-//					}
-//					constructedPath.add(new LineTo(x, y));
-//				}
-//				if ( !constructedPath.isEmpty() ) {
-//					LineTo first = constructedPath.get(0);
-//					seriesLine.add(new MoveTo(first.getX(), first.getY()));
-//					seriesLine.addAll(constructedPath);
-//				}
-//			} else {
-//				series.getNode().setVisible(false);
-//				for ( Iterator<Data<X, Y>> it = getDisplayedDataIterator(series); it.hasNext(); ) {
-//					Data<X, Y> item = it.next();
-//					double x = getXAxis().getDisplayPosition(item.getXValue());
-//					double y = getYAxis().getDisplayPosition(item.getYValue());
-//					if ( Double.isNaN(x) || Double.isNaN(y) ) {
-//						continue;
-//					}
-//					Node symbol = item.getNode();
-//					if ( symbol != null ) {
-//						final double w = symbol.prefWidth(-1);
-//						final double h = symbol.prefHeight(-1);
-//						symbol.resizeRelocate(x - ( w / 2 ), y - ( h / 2 ), w, h);
-//					}
-//				}
-//			}
-//		}
-//		movePluginsNodesToFront();
-
 	}
 
 	@Override
 	protected void updateLegend() {
-//        final Legend legend = new Legend();
-//        legend.getItems().clear();
-//        for (final Series<X, Y> series : getData())
-//        {
-//            if(!noShowInLegend.contains(series.getName())){
-//                Legend.LegendItem legenditem = new Legend.LegendItem(series.getName());
-//                final CheckBox cb = new CheckBox(series.getName());
-//                seriesDrawnInPlot.add(series.getName());
-//                cb.setUserData(series);
-//                cb.setSelected(true);
-//                //cb.setPadding(new Insets(0,10,0,0));
-//                cb.setStyle("-fx-text-fill: -color"+this.getData().indexOf(series)+" ;");
-//                cb.addEventHandler(ActionEvent.ACTION, e ->{
-//                    final CheckBox box = (CheckBox) e.getSource();
-//                    @SuppressWarnings("unchecked")
-//                    final Series<Number, Number> s = (Series<Number, Number>) box.getUserData();
-//                    s.getData().forEach(data ->{
-//                        StackPane stackPane = (StackPane) data.getNode();
-//                        stackPane.setVisible(box.isSelected());
-//                    });
-//                    if(box.isSelected()){
-//                        if (!seriesDrawnInPlot.contains(s.getName())){
-//                            seriesDrawnInPlot.add(s.getName());
-//                        }
-//                    } else {
-//                        seriesDrawnInPlot.remove(s.getName());
-//                    }
-//                });
-//                legenditem.setText("");
-//                legenditem.setSymbol(cb);
-//                legend.getItems().add(legenditem);
-//            }
-//        }
-//        setLegend(legend);
+
+		final Legend legend = new Legend();
+
+		seriesDrawnInPlot.clear();
+
+		for ( int i = 0; i < getData().size(); i++ ) {
+
+			final int seriesIndex = i;
+			Series<X, Y> series = getData().get(seriesIndex);
+			String seriesName = series.getName();
+
+			if ( !notShownInLegend.contains(seriesName) ) {
+
+				Legend.LegendItem legenditem = new Legend.LegendItem(seriesName, selected -> {
+
+					//	No series' note in scatter charts.
+					//series.getNode().setVisible(selected);
+					series.getData().forEach(d -> d.getNode().setVisible(selected));
+
+					if ( selected ) {
+						if ( !seriesDrawnInPlot.contains(seriesName) ) {
+							seriesDrawnInPlot.add(seriesName);
+						}
+					} else {
+						seriesDrawnInPlot.remove(seriesName);
+					}
+
+					getPlugins().forEach(p -> p.seriesVisibilityUpdated(this, series, seriesIndex, selected));
+
+				});
+
+				legenditem.getSymbol().getStyleClass().addAll(
+					"chart-symbol",
+					"area-legend-symbol",
+					"default-color" + ( seriesIndex % 8 ),
+					"series" + seriesIndex
+				);
+
+				seriesDrawnInPlot.add(seriesName);
+				legend.getItems().add(legenditem);
+
+			}
+
+		}
+
+		setLegend(legend);
+
 	}
 
 	private void movePluginsNodesToFront() {

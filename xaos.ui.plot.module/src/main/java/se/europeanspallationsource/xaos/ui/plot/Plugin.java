@@ -129,9 +129,17 @@ public abstract class Plugin {
 
 		Node node = series.getNode();
 
-		Validate.notNull(node, "Null 'series' parameter's node.");
+		if ( node != null ) {
+			return node.isVisible();
+		} else {
+			return series.getData().parallelStream().anyMatch(d -> {
 
-		return node.isVisible();
+				Node n = d.getNode();
+
+				return ( n != null ) && n.isVisible();
+
+			});
+		}
 
 	}
 

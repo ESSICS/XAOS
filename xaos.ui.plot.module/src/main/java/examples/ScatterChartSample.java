@@ -104,16 +104,15 @@ public class ScatterChartSample extends Application {
 			error2.add(new ErrorData<Number, Number>(series2.getData().get(ind), 0.05, 0.1));
 		}
 
+		chart.setHVLSeries(0, 1, 2);
+
 		//Series 0
-		chart.setSeriesAsHorizontal(0);//red
 		chart.getPlugins().add(new ErrorBars(new ErrorSeries(error0), 0));
 
 		//Series 1
-		chart.setSeriesAsVertical(1);//blue
 		chart.getPlugins().add(new ErrorBars(new ErrorSeries(error1), 1));
 
 		//Series 2
-		chart.setSeriesAsLongitudinal(2);//horrible green
 		chart.getPlugins().add(new ErrorBars(new ErrorSeries(error2), 2));
 
 		Label infoLabel = new Label();
