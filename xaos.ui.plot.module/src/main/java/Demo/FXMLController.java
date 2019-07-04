@@ -29,12 +29,15 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.Axis;
+import javafx.scene.chart.Chart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.BorderPane;
 import se.europeanspallationsource.xaos.ui.plot.AreaChartFX;
 import se.europeanspallationsource.xaos.ui.plot.BarChartFX;
+import se.europeanspallationsource.xaos.ui.plot.DensityChartFX;
 import se.europeanspallationsource.xaos.ui.plot.LineChartFX;
 import se.europeanspallationsource.xaos.ui.plot.LogAxis;
 import se.europeanspallationsource.xaos.ui.plot.PluggableChartContainer;
@@ -66,6 +69,7 @@ public class FXMLController implements Initializable {
 		"AreaChartFX",
 		"BarChartFX",
 		"DateAreaChartFX",
+		"DensityChartFX",
 		"LineChartFX",
 		"ScatterChartFX",
 		"TimeAreaChartFX"
@@ -74,6 +78,7 @@ public class FXMLController implements Initializable {
 	private AreaChartFX<Number, Number> areaChart;
 	private BarChartFX<String, Number> barChart;
 	private AreaChartFX<Date, Number> dateAreaChart;
+	private DensityChartFX<Number, Number> densityChart;
 	private LineChartFX<Number, Number> lineChart;
 	private ScatterChartFX<Number, Number> scatterChart;
 	private AreaChartFX<Number, Number> timeAreaChart;
@@ -81,6 +86,7 @@ public class FXMLController implements Initializable {
 	private final AreaChartGenerator areaChartGen = new AreaChartGenerator();
 	private final BarChartGenerator barChartGen = new BarChartGenerator();
 	private final DateAreaChartGenerator dateAreaChartGen = new DateAreaChartGenerator();
+	private final DensityChartGenerator densityChartGen = new DensityChartGenerator();
 	private final LineChartGenerator lineChartGen = new LineChartGenerator();
 	private final ScatterChartGenerator scatterChartGen = new ScatterChartGenerator();
 	private final TimeAreaChartGenerator timeAreaChartGen = new TimeAreaChartGenerator();
@@ -120,6 +126,15 @@ public class FXMLController implements Initializable {
 							NB_OF_POINTS,
 							false,
 							( dateAreaChart == null ) ? false : dateAreaChart.getYAxis() instanceof LogAxis
+						);
+						break;
+					case "DensityChartFX":
+						densityChart = (DensityChartFX<Number, Number>) initializeChart(
+							densityChart,
+							densityChartGen,
+							NB_OF_POINTS,
+							false,
+							false
 						);
 						break;
 					case "LineChartFX":
@@ -213,7 +228,7 @@ public class FXMLController implements Initializable {
 
 	}
 
-	private XYChart<?, Number> getSelectedChart() {
+	private Chart getSelectedChart() {
 		switch ( chartchoice.getValue() ) {
 			case "AreaChartFX":
 				return areaChart;
@@ -221,6 +236,8 @@ public class FXMLController implements Initializable {
 				return barChart;
 			case "DateAreaChartFX":
 				return dateAreaChart;
+			case "DensityChartFX":
+				return densityChart;
 			case "LineChartFX":
 				return lineChart;
 			case "ScatterChartFX":
@@ -232,20 +249,12 @@ public class FXMLController implements Initializable {
 		}
 	}
 
-	private boolean isBarChartSelected() {
-		return "BarChartFX".equals(chartchoice.getValue());
-	}
-
-	private boolean isDateAreaChartSelected() {
-		return "DateAreaChartFX".equals(chartchoice.getValue());
-	}
-
 	@FXML
 	@SuppressWarnings( "unchecked" )
 	private void handleErrorButton( ActionEvent event ) {
 		if ( chartchoice.getValue() != null ) {
 
-			XYChart<?, Number> chart = getSelectedChart();
+			Chart chart = getSelectedChart();
 			ObservableList<Plugin> plugins = ((Pluggable) chart).getPlugins();
 
 			if ( plugins.stream().filter(p -> p instanceof ErrorBars).count() == 0 ) {
@@ -273,6 +282,9 @@ public class FXMLController implements Initializable {
 				break;
 			case "DateAreaChartFX":
 				dateAreaChart = (AreaChartFX<Date, Number>) initializeChart(dateAreaChart, dateAreaChartGen, NB_OF_POINTS);
+				break;
+			case "DensityChartFX":
+				densityChart = (DensityChartFX<Number, Number>) initializeChart(densityChart, densityChartGen, NB_OF_POINTS);
 				break;
 			case "LineChartFX":
 				lineChart = (LineChartFX<Number, Number>) initializeChart(lineChart, lineChartGen, NB_OF_POINTS);
@@ -387,10 +399,10 @@ public class FXMLController implements Initializable {
 		}
 	}
 
-	private XYChart<?, Number> initializeChart ( ChartGenerator generator, int numberOfPoints, boolean logXAxis, boolean logYAxis ) {
+	private Chart initializeChart ( ChartGenerator generator, int numberOfPoints, boolean logXAxis, boolean logYAxis ) {
 
 		@SuppressWarnings( "unchecked" )
-		XYChart<?, Number> chart = generator.getNewChart(numberOfPoints, logXAxis, logYAxis);
+		Chart chart = generator.getNewChart(numberOfPoints, logXAxis, logYAxis);
 
 		chartContainer.setPluggable((Pluggable) chart);
 		updateButtons(chart);
@@ -399,11 +411,11 @@ public class FXMLController implements Initializable {
 
 	}
 
-	private XYChart<?, Number> initializeChart ( XYChart<?, Number> oldChart, ChartGenerator generator, int numberOfPoints ) {
+	private Chart initializeChart ( Chart oldChart, ChartGenerator generator, int numberOfPoints ) {
 		return initializeChart(oldChart, generator, numberOfPoints, false, false);
 	}
 
-	private XYChart<?, Number> initializeChart ( XYChart<?, Number> oldChart, ChartGenerator generator, int numberOfPoints, boolean logXAxis, boolean logYAxis ) {
+	private Chart initializeChart ( Chart oldChart, ChartGenerator generator, int numberOfPoints, boolean logXAxis, boolean logYAxis ) {
 
 		if ( oldChart != null ) {
 
@@ -412,7 +424,7 @@ public class FXMLController implements Initializable {
 				.filter(p -> p instanceof ErrorBars)
 				.collect(Collectors.toList());
 
-			XYChart<?, Number> chart = initializeChart(generator, numberOfPoints, logXAxis, logYAxis);
+			Chart chart = initializeChart(generator, numberOfPoints, logXAxis, logYAxis);
 
 			if ( !plugins.isEmpty() ) {
 				((Pluggable) chart).getPlugins().addAll(plugins);
@@ -427,10 +439,30 @@ public class FXMLController implements Initializable {
 
 	}
 
-	private void updateButtons( XYChart<?, Number> chart ) {
+	private boolean isBarChartSelected() {
+		return "BarChartFX".equals(chartchoice.getValue());
+	}
 
-		logXButton.setDisable(( chart.getXAxis() instanceof LogAxis ) || isBarChartSelected() || isDateAreaChartSelected());
-		logYButton.setDisable(( chart.getYAxis() instanceof LogAxis ));
+	private boolean isDateAreaChartSelected() {
+		return "DateAreaChartFX".equals(chartchoice.getValue());
+	}
+
+	private boolean isDensityChartSelected() {
+		return "DensityChartFX".equals(chartchoice.getValue());
+	}
+
+	@SuppressWarnings( "null" )
+	private void updateButtons( Chart chart ) {
+
+		Axis<?> xAxis = ( chart instanceof DensityChartFX )
+					  ? ((DensityChartFX<?, ?>) chart).getXAxis()
+					  : ((XYChart<?, ?>) chart).getXAxis();
+		Axis<?> yAxis = ( chart instanceof DensityChartFX )
+					  ? ((DensityChartFX<?, ?>) chart).getYAxis()
+					  : ((XYChart<?, ?>) chart).getYAxis();
+
+		logXButton.setDisable(( xAxis instanceof LogAxis ) || isBarChartSelected() || isDateAreaChartSelected());
+		logYButton.setDisable(( yAxis instanceof LogAxis ));
 
 		if ( chart instanceof Pluggable ) {
 
@@ -441,6 +473,7 @@ public class FXMLController implements Initializable {
 					.filter(p -> p instanceof ErrorBars)
 					.count() > 0
 				|| isDateAreaChartSelected()
+				|| isDensityChartSelected()
 			);
 
 		}

@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Random;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.chart.Chart;
 import javafx.scene.chart.XYChart;
 
 
@@ -36,7 +37,7 @@ public interface ChartGenerator<X, Y> {
 
 	static final Random RANDOM = new Random(System.currentTimeMillis());
 
-	XYChart<X, Y> getNewChart( int numberOfPoints, boolean logXAxis, boolean logYAxis );
+	Chart getNewChart( int numberOfPoints, boolean logXAxis, boolean logYAxis );
 
 	static int[] generateIntArray( int firstValue, int variance, int size ) {
 
