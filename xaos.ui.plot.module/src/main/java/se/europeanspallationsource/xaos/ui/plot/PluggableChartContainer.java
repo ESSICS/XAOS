@@ -45,9 +45,11 @@ import se.europeanspallationsource.xaos.tools.annotation.BundleItem;
 import se.europeanspallationsource.xaos.tools.annotation.BundleItems;
 import se.europeanspallationsource.xaos.tools.annotation.Bundles;
 import se.europeanspallationsource.xaos.tools.annotation.ServiceLoaderUtilities;
+import se.europeanspallationsource.xaos.ui.control.CommonIcons;
 import se.europeanspallationsource.xaos.ui.control.Icons;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Pluggable;
 import se.europeanspallationsource.xaos.ui.plot.spi.ToolbarContributor;
+import se.europeanspallationsource.xaos.ui.util.FXUtils;
 
 import static java.util.logging.Level.WARNING;
 import static javafx.geometry.Side.TOP;
@@ -229,7 +231,23 @@ public class PluggableChartContainer extends HiddenSidesPane {
 
 					view.getEngine().load(htmlResourceURL.toExternalForm());
 					view.setPrefSize(500, 250);
-					accordion.getPanes().add(new TitledPane(p.getName(), view));
+
+					TitledPane titledPane;
+
+					if ( p.isBindFailed() ) {
+
+						Node icon = Icons.iconFor(CommonIcons.WARNING, 16);
+						Tooltip tooltip = new Tooltip(p.getFailureMessage());
+
+						Tooltip.install(icon, tooltip);
+
+						titledPane = FXUtils.createTitlePane(p.getName(), view, icon);
+
+					} else {
+						titledPane = new TitledPane(p.getName(), view);
+					}
+
+					accordion.getPanes().add(titledPane);
 
 				}
 
@@ -249,7 +267,6 @@ public class PluggableChartContainer extends HiddenSidesPane {
 		popOver.setTitle(getString("infoPopOver.title"));
 
 		popOver.show(infoButton);
-
 
 	}
 

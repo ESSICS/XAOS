@@ -22,6 +22,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Paint;
+import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
 import javafx.util.Pair;
 import org.apache.commons.lang3.Validate;
@@ -204,6 +207,32 @@ public class ColorUtils {
 	 */
 	public static Color meanColor ( List<Stop> stops ) {
 		return mean(stops.stream().map(s -> s.getColor()).collect(Collectors.toList()));
+	}
+
+	/**
+	 * Converts the given {@link Paint} object to a {@link Color} one. If the
+	 * given {@code paint} object is already a {@link Color}, then simple cast
+	 * is performed. If the {@code paint} object is a {@link LinearGradient} or
+	 * a {@link RadialGradient}, the {@link #meanColor(java.util.List) mean}
+	 * color of its {@link Stop stops} is returned instead. In all other cases
+	 * {@code null} is returned.
+	 *
+	 * @param paint The {@link Paint} object to be converted.
+	 * @return The {@link Color} resulting from the conversion of the given
+	 *         {@code paint}, or {@code null}.
+	 */
+	public static Color toColor ( Paint paint ) {
+		if ( paint == null ) {
+			return null;
+		} else if ( paint instanceof Color ) {
+			return (Color) paint;
+		} else if ( paint instanceof LinearGradient ) {
+			return ColorUtils.meanColor(((LinearGradient) paint).getStops());
+		} else if ( paint instanceof RadialGradient ) {
+			return ColorUtils.meanColor(((RadialGradient) paint).getStops());
+		} else {
+			return null;
+		}
 	}
 
 	/**

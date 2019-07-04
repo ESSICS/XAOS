@@ -162,6 +162,7 @@ public abstract class Plugin {
 
 	private boolean bindFailed = false;
 	private Chart chart;
+	private String failureMessage = null;
 	private final ObservableList<Node> plotChildren = FXCollections.observableArrayList();
 
 	/**
@@ -172,6 +173,13 @@ public abstract class Plugin {
 	 */
 	public final Chart getChart() {
 		return chart;
+	}
+
+	/**
+	 * @return The binding failure message or {@code null}.
+	 */
+	public String getFailureMessage() {
+		return failureMessage;
 	}
 
 	/**
@@ -243,8 +251,9 @@ public abstract class Plugin {
 		//	Nothing done in the default implementation.
 	}
 
-	void setBindFailed( boolean bindFailed ) {
+	void setBindFailed( boolean bindFailed, String failureMessage ) {
 		this.bindFailed = bindFailed;
+		this.failureMessage = failureMessage;
 	}
 
 	/**

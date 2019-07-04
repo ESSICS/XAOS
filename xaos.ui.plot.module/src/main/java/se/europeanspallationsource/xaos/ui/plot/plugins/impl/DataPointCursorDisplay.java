@@ -30,9 +30,6 @@ import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Paint;
-import javafx.scene.paint.RadialGradient;
 import javafx.util.Pair;
 import se.europeanspallationsource.xaos.ui.plot.Plugin;
 import se.europeanspallationsource.xaos.ui.util.ColorUtils;
@@ -132,16 +129,7 @@ public class DataPointCursorDisplay extends FormattedCursorDisplay {
 			if ( node instanceof Region ) {
 				try {
 
-					Color dataColor = null;
-					Paint dataPaint = ((Region) node).getBackground().getFills().get(0).getFill();
-
-					if ( dataPaint instanceof Color ) {
-						dataColor = (Color) dataPaint;
-					} else if ( dataPaint instanceof RadialGradient ) {
-						dataColor = ColorUtils.meanColor(((RadialGradient) dataPaint).getStops());
-					} else if ( dataPaint instanceof LinearGradient ) {
-						dataColor = ColorUtils.meanColor(((LinearGradient) dataPaint).getStops());
-					}
+					Color dataColor = ColorUtils.toColor(((Region) node).getBackground().getFills().get(0).getFill());
 
 					if ( dataColor != null ) {
 						getDisplay().setStyle(MessageFormat.format(

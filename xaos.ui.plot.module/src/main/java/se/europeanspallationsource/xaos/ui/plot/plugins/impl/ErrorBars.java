@@ -291,7 +291,7 @@ public class ErrorBars<X, Y> extends AbstractCursorPlugin {
 							if ( highlightStyle == null && node instanceof Region ) {
 								try {
 
-									Color dataColor = (Color) ((Region) node).getBackground().getFills().get(0).getFill();
+									Color dataColor = ColorUtils.toColor(((Region) node).getBackground().getFills().get(0).getFill());
 
 									highlightStyle = MessageFormat.format(HIGHLIGHT_STYLE, ColorUtils.toWeb(dataColor));
 

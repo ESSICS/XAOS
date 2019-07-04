@@ -21,10 +21,17 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.control.TitledPane;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import se.europeanspallationsource.xaos.core.util.LogUtils;
 
 import static java.util.logging.Level.SEVERE;
+import static javafx.scene.control.ContentDisplay.GRAPHIC_ONLY;
 
 
 
@@ -36,6 +43,58 @@ import static java.util.logging.Level.SEVERE;
 public class FXUtils {
 
 	private static final Logger LOGGER = Logger.getLogger(FXUtils.class.getName());
+
+	/**
+	 * Creates a {@link TitledPane} with the given {@code title} and
+	 * {@code content}, and places the further {@link Node}s on the right.
+	 *
+	 * @param title         The titled pane title string.
+	 * @param content       The titled pane content.
+	 * @param rightElements The {@link Node}s to be displayed on the right side
+	 *                      of the returned titled pane.
+	 * @return A configured {@link TitledPane} object.
+	 */
+	public static TitledPane createTitlePane ( String title, Node content, Node... rightElements ) {
+
+		final TitledPane titledPane = new TitledPane(title, content);
+		final Label titleLabel = new Label(title);
+
+		titleLabel.textProperty().bind(titledPane.textProperty());
+
+		final HBox rightBox = new HBox(4);
+
+		if ( rightElements.length > 0 ) {
+			rightBox.getChildren().addAll(rightElements);
+		}
+
+		final AnchorPane titleGraphics = new AnchorPane();
+
+		AnchorPane.setLeftAnchor(titleLabel, 0.0);
+		AnchorPane.setRightAnchor(rightBox, 0.0);
+
+		titleGraphics.getChildren().addAll(titleLabel, rightBox);
+
+		titledPane.setGraphic(titleGraphics);
+		titledPane.setContentDisplay(GRAPHIC_ONLY);
+		titledPane.setExpanded(false);
+
+		Platform.runLater(() -> {
+
+			final Node titleRegion = titledPane.lookup(".title");
+			final Insets padding = ( (Region) titleRegion ).getPadding();
+			final Region arrow = (Region) titledPane.lookup(".arrow-button");
+
+			titleGraphics.prefWidthProperty().bind(
+				titledPane.widthProperty()
+					.subtract(arrow.widthProperty())
+					.subtract(padding.getLeft() + padding.getRight() + 2)
+			);
+
+		});
+
+		return titledPane;
+
+	}
 
 	/**
 	 * Sets the minimum and the preferred size of the given {@code region} to
