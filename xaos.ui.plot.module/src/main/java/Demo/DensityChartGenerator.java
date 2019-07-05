@@ -20,6 +20,8 @@ package Demo;
 import javafx.geometry.Side;
 import javafx.scene.chart.Chart;
 import se.europeanspallationsource.xaos.ui.plot.DensityChartFX;
+import se.europeanspallationsource.xaos.ui.plot.DensityChartFX.Data;
+import se.europeanspallationsource.xaos.ui.plot.DensityChartFX.DefaultData;
 import se.europeanspallationsource.xaos.ui.plot.NumberAxis;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
 
@@ -29,6 +31,44 @@ import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
  */
 @SuppressWarnings( "ClassWithoutLogger" )
 public class DensityChartGenerator implements ChartGenerator<Number, Number> {
+
+	private static final int NB_POINTS = 101;
+
+	private static Number[] toNumbers( double[] array ) {
+
+		Number[] result = new Number[array.length];
+
+		for ( int i = 0; i < result.length; i++ ) {
+			result[i] = array[i];
+		}
+
+		return result;
+
+	}
+
+	public Data<Number, Number> createImage( double meanx, double rmsx, double meany, double rmsy ) {
+
+		double[] xValues = new double[NB_POINTS];
+		double[] yValues = new double[NB_POINTS];
+		double[][] zValues = new double[xValues.length][yValues.length];
+
+		for ( int xIndex = 0; xIndex < xValues.length; xIndex++ ) {
+			xValues[xIndex] = ( meanx - 10.0 * rmsx ) + xIndex / ( xValues.length - 1.0 ) * 20.0 * rmsx;
+			yValues[xIndex] = ( meany - 10.0 * rmsy ) + xIndex / ( yValues.length - 1.0 ) * 20.0 * rmsy;
+		}
+
+		double minVal = 10.0;
+
+		for ( int yIndex = 0; yIndex < yValues.length; yIndex++ ) {
+			for ( int xIndex = 0; xIndex < xValues.length; xIndex++ ) {
+				zValues[xIndex][yIndex] = 100 * Math.exp(-( xValues[xIndex] - meanx ) * ( xValues[xIndex] - meanx ) / ( 2 * rmsx * rmsx )) * Math.exp(-( yValues[yIndex] - meany ) * ( yValues[yIndex] - meany ) / ( 2 * rmsy * rmsy )) + 0.05 * RANDOM.nextGaussian();
+				minVal = Math.min(zValues[xIndex][yIndex], minVal);
+			}
+		}
+
+		return new DefaultData<>(toNumbers(xValues), toNumbers(yValues), zValues);
+
+	}
 
 	@Override
 	public Chart getNewChart( int numberOfPoints, boolean logXAxis, boolean logYAxis ) {
@@ -55,6 +95,7 @@ public class DensityChartGenerator implements ChartGenerator<Number, Number> {
 
 		chart.setLegendVisible(true);
 		chart.setLegendSide(Side.RIGHT);
+		chart.setProjectionLinesVisible(true);
 
 		return chart;
 

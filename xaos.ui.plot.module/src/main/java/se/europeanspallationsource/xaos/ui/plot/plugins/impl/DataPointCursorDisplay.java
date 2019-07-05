@@ -24,13 +24,13 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.chart.Axis;
-import javafx.scene.chart.Chart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.util.Pair;
+import se.europeanspallationsource.xaos.ui.plot.DensityChartFX;
 import se.europeanspallationsource.xaos.ui.plot.Plugin;
 import se.europeanspallationsource.xaos.ui.util.ColorUtils;
 
@@ -103,18 +103,19 @@ public class DataPointCursorDisplay extends FormattedCursorDisplay {
 		super(NAME, position, formatter);
 	}
 
-	@Override
-	@SuppressWarnings( { "unchecked", "null" } )
-	protected void chartConnected( Chart chart ) {
-		if ( ! ( chart instanceof XYChart<?, ?> ) ) {
-			throw new UnsupportedOperationException(MessageFormat.format(
-				"{0} non supported.",
-				chart.getClass().getSimpleName()
-			));
-		} else {
-			super.chartConnected(chart);
-		}
-	}
+//	TODO:CR Can we remove the following code?
+//	@Override
+//	@SuppressWarnings( { "unchecked", "null" } )
+//	protected void chartConnected( Chart chart ) {
+//		if ( ! ( chart instanceof XYChart<?, ?> ) ) {
+//			throw new UnsupportedOperationException(MessageFormat.format(
+//				"{0} non supported.",
+//				chart.getClass().getSimpleName()
+//			));
+//		} else {
+//			super.chartConnected(chart);
+//		}
+//	}
 
 	@Override
 	protected String formatValue( Object value ) {
@@ -159,24 +160,41 @@ public class DataPointCursorDisplay extends FormattedCursorDisplay {
 	@SuppressWarnings( "unchecked" )
 	protected Object valueAtPosition( Point2D mouseLocation ) {
 
-		Axis xAxis = ( (XYChart<?, ?>) getChart() ).getXAxis();
-		Axis yAxis = ( (XYChart<?, ?>) getChart() ).getYAxis();
+		if ( getChart() instanceof DensityChartFX ) {
 
-		return ((XYChart<?, ?>) getChart())
-			.getData()
-			.parallelStream()
-			.filter(series -> isSeriesVisible(series))
-			.flatMap(series -> series.getData().stream())
-			.map(d -> new Pair<>(d, mouseLocation.distance(new Point2D(
-				xAxis.getDisplayPosition(d.getXValue()),
-				yAxis.getDisplayPosition(d.getYValue())
-			))))
-			.filter(p -> p.getValue() <= getPickingDistance())
-			.unordered()
-			.sorted(( p1, p2 ) -> p1.getValue() < p2.getValue() ? -1 : p1.getValue() > p2.getValue() ? 1 : 0)
-			.map(p -> p.getKey())
-			.findFirst()
-			.orElse(null);
+//	TODO:CR Can we obtain the value to be displayed?
+
+			Data<?, ?> dataPoint = toDataPoint(mouseLocation);
+			Object xValue = dataPoint.getXValue();
+			Object yValue = dataPoint.getYValue();
+			DensityChartFX.Data<?, ?> data = ( (DensityChartFX<?, ?>) getChart() ).getData();
+
+//			System.out.println("X: " + ( (DensityChartFX<?, ?>) getChart() ).getXAxis().toRealValue(0)getValueForDisplay(mouseLocation.getX()));
+
+			return null;
+
+		} else {
+
+			Axis xAxis = ( (XYChart<?, ?>) getChart() ).getXAxis();
+			Axis yAxis = ( (XYChart<?, ?>) getChart() ).getYAxis();
+
+			return ((XYChart<?, ?>) getChart())
+				.getData()
+				.parallelStream()
+				.filter(series -> isSeriesVisible(series))
+				.flatMap(series -> series.getData().stream())
+				.map(d -> new Pair<>(d, mouseLocation.distance(new Point2D(
+					xAxis.getDisplayPosition(d.getXValue()),
+					yAxis.getDisplayPosition(d.getYValue())
+				))))
+				.filter(p -> p.getValue() <= getPickingDistance())
+				.unordered()
+				.sorted(( p1, p2 ) -> p1.getValue() < p2.getValue() ? -1 : p1.getValue() > p2.getValue() ? 1 : 0)
+				.map(p -> p.getKey())
+				.findFirst()
+				.orElse(null);
+
+		}
 
 	}
 
