@@ -85,7 +85,7 @@ class PluginManager {
 					LOGGER,
 					WARNING,
 //	TODO: Uncomment the following line to debug invalidating exceptions.
-//					ex,
+					ex,
 					"Plugin ''{0}'' cannot be added to chart [reason: {1}].",
 					plugin.getName(),
 					ex.getMessage()

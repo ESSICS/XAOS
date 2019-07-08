@@ -35,20 +35,13 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.BorderPane;
-import se.europeanspallationsource.xaos.ui.plot.AreaChartFX;
-import se.europeanspallationsource.xaos.ui.plot.BarChartFX;
-import se.europeanspallationsource.xaos.ui.plot.DensityChartFX;
-import se.europeanspallationsource.xaos.ui.plot.LineChartFX;
-import se.europeanspallationsource.xaos.ui.plot.LogAxis;
-import se.europeanspallationsource.xaos.ui.plot.PluggableChartContainer;
-import se.europeanspallationsource.xaos.ui.plot.Plugin;
-import se.europeanspallationsource.xaos.ui.plot.ScatterChartFX;
 import se.europeanspallationsource.xaos.ui.plot.data.ErrorSeries;
 import se.europeanspallationsource.xaos.ui.plot.demo.AreaChartGenerator;
 import se.europeanspallationsource.xaos.ui.plot.demo.BarChartGenerator;
 import se.europeanspallationsource.xaos.ui.plot.demo.ChartGenerator;
 import se.europeanspallationsource.xaos.ui.plot.demo.DateAreaChartGenerator;
 import se.europeanspallationsource.xaos.ui.plot.demo.DensityChartGenerator;
+import se.europeanspallationsource.xaos.ui.plot.demo.HistogramChartGenerator;
 import se.europeanspallationsource.xaos.ui.plot.demo.LineChartGenerator;
 import se.europeanspallationsource.xaos.ui.plot.demo.ScatterChartGenerator;
 import se.europeanspallationsource.xaos.ui.plot.demo.TimeAreaChartGenerator;
@@ -78,6 +71,7 @@ public class FXMLController implements Initializable {
 		"BarChartFX",
 		"DateAreaChartFX",
 		"DensityChartFX",
+		"HistogramChartFX",
 		"LineChartFX",
 		"ScatterChartFX",
 		"TimeAreaChartFX"
@@ -87,6 +81,7 @@ public class FXMLController implements Initializable {
 	private BarChartFX<String, Number> barChart;
 	private AreaChartFX<Date, Number> dateAreaChart;
 	private DensityChartFX<Number, Number> densityChart;
+	private HistogramChartFX<Number, Number> histogramChart;
 	private LineChartFX<Number, Number> lineChart;
 	private ScatterChartFX<Number, Number> scatterChart;
 	private AreaChartFX<Number, Number> timeAreaChart;
@@ -95,6 +90,7 @@ public class FXMLController implements Initializable {
 	private final BarChartGenerator barChartGen = new BarChartGenerator();
 	private final DateAreaChartGenerator dateAreaChartGen = new DateAreaChartGenerator();
 	private final DensityChartGenerator densityChartGen = new DensityChartGenerator();
+	private final HistogramChartGenerator histogramChartGen = new HistogramChartGenerator();
 	private final LineChartGenerator lineChartGen = new LineChartGenerator();
 	private final ScatterChartGenerator scatterChartGen = new ScatterChartGenerator();
 	private final TimeAreaChartGenerator timeAreaChartGen = new TimeAreaChartGenerator();
@@ -140,6 +136,15 @@ public class FXMLController implements Initializable {
 						densityChart = (DensityChartFX<Number, Number>) initializeChart(
 							densityChart,
 							densityChartGen,
+							NB_OF_POINTS,
+							false,
+							false
+						);
+						break;
+					case "HistogramChartFX":
+						histogramChart = (HistogramChartFX<Number, Number>) initializeChart(
+							histogramChart,
+							histogramChartGen,
 							NB_OF_POINTS,
 							false,
 							false
@@ -246,6 +251,8 @@ public class FXMLController implements Initializable {
 				return dateAreaChart;
 			case "DensityChartFX":
 				return densityChart;
+			case "HistogramChartFX":
+				return histogramChart;
 			case "LineChartFX":
 				return lineChart;
 			case "ScatterChartFX":
@@ -293,6 +300,9 @@ public class FXMLController implements Initializable {
 				break;
 			case "DensityChartFX":
 				densityChart = (DensityChartFX<Number, Number>) initializeChart(densityChart, densityChartGen, NB_OF_POINTS);
+				break;
+			case "HistogramChartFX":
+				histogramChart = (HistogramChartFX<Number, Number>) initializeChart(histogramChart, histogramChartGen, NB_OF_POINTS);
 				break;
 			case "LineChartFX":
 				lineChart = (LineChartFX<Number, Number>) initializeChart(lineChart, lineChartGen, NB_OF_POINTS);
@@ -459,6 +469,10 @@ public class FXMLController implements Initializable {
 		return "DensityChartFX".equals(chartchoice.getValue());
 	}
 
+	private boolean isHistogramChartSelected() {
+		return "HistogramChartFX".equals(chartchoice.getValue());
+	}
+
 	@SuppressWarnings( "null" )
 	private void updateButtons( Chart chart ) {
 
@@ -469,8 +483,8 @@ public class FXMLController implements Initializable {
 					  ? ((DensityChartFX<?, ?>) chart).getYAxis()
 					  : ((XYChart<?, ?>) chart).getYAxis();
 
-		logXButton.setDisable(( xAxis instanceof LogAxis ) || isBarChartSelected() || isDateAreaChartSelected());
-		logYButton.setDisable(( yAxis instanceof LogAxis ));
+		logXButton.setDisable(( xAxis instanceof LogAxis ) || isBarChartSelected() || isDateAreaChartSelected() || isHistogramChartSelected() );
+		logYButton.setDisable(( yAxis instanceof LogAxis ) || isHistogramChartSelected() );
 
 		if ( chart instanceof Pluggable ) {
 
@@ -482,6 +496,7 @@ public class FXMLController implements Initializable {
 					.count() > 0
 				|| isDateAreaChartSelected()
 				|| isDensityChartSelected()
+				|| isHistogramChartSelected()
 			);
 
 		}
