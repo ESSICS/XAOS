@@ -17,8 +17,6 @@
 package se.europeanspallationsource.xaos.ui.plot;
 
 
-import se.europeanspallationsource.xaos.ui.plot.Legend;
-import se.europeanspallationsource.xaos.ui.plot.data.DataReducingSeries;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +38,7 @@ import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
 import se.europeanspallationsource.xaos.ui.plot.Legend.LegendItem;
+import se.europeanspallationsource.xaos.ui.plot.data.DataReducingSeries;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
 
 import static javafx.scene.input.MouseButton.PRIMARY;

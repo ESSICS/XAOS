@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package Demo;
+package se.europeanspallationsource.xaos.ui.plot;
 
 
 import java.net.URL;
@@ -44,6 +44,14 @@ import se.europeanspallationsource.xaos.ui.plot.PluggableChartContainer;
 import se.europeanspallationsource.xaos.ui.plot.Plugin;
 import se.europeanspallationsource.xaos.ui.plot.ScatterChartFX;
 import se.europeanspallationsource.xaos.ui.plot.data.ErrorSeries;
+import se.europeanspallationsource.xaos.ui.plot.demo.AreaChartGenerator;
+import se.europeanspallationsource.xaos.ui.plot.demo.BarChartGenerator;
+import se.europeanspallationsource.xaos.ui.plot.demo.ChartGenerator;
+import se.europeanspallationsource.xaos.ui.plot.demo.DateAreaChartGenerator;
+import se.europeanspallationsource.xaos.ui.plot.demo.DensityChartGenerator;
+import se.europeanspallationsource.xaos.ui.plot.demo.LineChartGenerator;
+import se.europeanspallationsource.xaos.ui.plot.demo.ScatterChartGenerator;
+import se.europeanspallationsource.xaos.ui.plot.demo.TimeAreaChartGenerator;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Pluggable;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
 import se.europeanspallationsource.xaos.ui.plot.plugins.impl.ErrorBars;

@@ -55,7 +55,7 @@ module xaos.ui.plot {
 	exports se.europeanspallationsource.xaos.ui.plot.spi;
 	exports se.europeanspallationsource.xaos.ui.plot.util;
 
-	opens se.europeanspallationsource.xaos.ui.plot to xaos.tools;
+	opens se.europeanspallationsource.xaos.ui.plot to javafx.fxml, xaos.tools;
 	opens se.europeanspallationsource.xaos.ui.plot.plugins to xaos.tools;
 	opens se.europeanspallationsource.xaos.ui.plot.spi.impl to xaos.tools;
 

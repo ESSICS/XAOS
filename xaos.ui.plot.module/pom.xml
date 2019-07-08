@@ -59,18 +59,13 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.6.0</version>
-				<configuration>
-					<mainClass>Demo.MainApp</mainClass>
-				</configuration>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>3.0.0-M3</version>
 				<configuration>
+					<argLine>
+						--add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED --add-opens javafx.controls/javafx.scene.chart=xaos.ui.plot
+					</argLine>
 
 					<!-- THE FOLLOWING "excludes" AND "includes" SHOULD BE   -->
 					<!-- USED TO ALLOW EXECUTION OF A SINGLE SPECIFIC TEST.  -->

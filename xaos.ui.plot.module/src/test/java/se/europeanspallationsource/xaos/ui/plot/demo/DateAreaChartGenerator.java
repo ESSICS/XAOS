@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package Demo;
+package se.europeanspallationsource.xaos.ui.plot.demo;
 
 
 import java.util.Date;
@@ -27,7 +27,7 @@ import se.europeanspallationsource.xaos.ui.plot.LogAxis;
 import se.europeanspallationsource.xaos.ui.plot.NumberAxis;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
 
-import static Demo.ChartGenerator.generateDateData;
+import static se.europeanspallationsource.xaos.ui.plot.demo.ChartGenerator.generateDateData;
 
 
 /**

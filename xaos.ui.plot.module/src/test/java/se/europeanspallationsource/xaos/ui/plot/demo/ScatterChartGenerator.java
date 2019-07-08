@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package Demo;
+package se.europeanspallationsource.xaos.ui.plot.demo;
 
 
 import javafx.scene.chart.ValueAxis;
@@ -25,7 +25,7 @@ import se.europeanspallationsource.xaos.ui.plot.ScatterChartFX;
 import se.europeanspallationsource.xaos.ui.plot.data.DataReducingSeries;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
 
-import static Demo.ChartGenerator.generateData;
+import static se.europeanspallationsource.xaos.ui.plot.demo.ChartGenerator.generateData;
 
 
 /**

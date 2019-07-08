@@ -14,25 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package Demo;
+package se.europeanspallationsource.xaos.ui.plot.demo;
 
 
 import javafx.scene.chart.ValueAxis;
 import javafx.scene.chart.XYChart;
-import se.europeanspallationsource.xaos.ui.plot.LineChartFX;
+import se.europeanspallationsource.xaos.ui.plot.AreaChartFX;
 import se.europeanspallationsource.xaos.ui.plot.LogAxis;
 import se.europeanspallationsource.xaos.ui.plot.NumberAxis;
 import se.europeanspallationsource.xaos.ui.plot.data.DataReducingSeries;
 import se.europeanspallationsource.xaos.ui.plot.plugins.Plugins;
 
-import static Demo.ChartGenerator.generateData;
+import static se.europeanspallationsource.xaos.ui.plot.demo.ChartGenerator.generateData;
 
 
 /**
- * @author reubenlindroos
  * @author claudio.rosati@esss.se
  */
-public class LineChartGenerator implements ChartGenerator {
+@SuppressWarnings( "ClassWithoutLogger" )
+public class AreaChartGenerator implements ChartGenerator<Number, Number> {
 
 	private DataReducingSeries<Number, Number> series0;
 	private DataReducingSeries<Number, Number> series1;
@@ -52,13 +52,13 @@ public class LineChartGenerator implements ChartGenerator {
 		xAxis.setAnimated(false);
 		yAxis.setAnimated(false);
 
-		LineChartFX<Number, Number> chart = new LineChartFX<>(xAxis, yAxis);
+		AreaChartFX<Number, Number> chart = new AreaChartFX<Number, Number>(xAxis, yAxis);
 
-		chart.setTitle("Line Test Data");
+		chart.setTitle("Area Test Data");
 		chart.setAnimated(false);
 		chart.setOnMouseClicked(event -> chart.requestFocus());
 		chart.getPlugins().addAll(Plugins.all());
-
+		
 		if ( series0 == null ) {
 
 			series0 = new DataReducingSeries<>();
