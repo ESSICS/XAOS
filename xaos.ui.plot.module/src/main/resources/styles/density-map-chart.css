@@ -38,6 +38,6 @@
 }
 
 .chart-projection-lines {
-    -fx-stroke: white;
+    -fx-stroke: darkgrey;
     -fx-stroke-width: 2;
 }
