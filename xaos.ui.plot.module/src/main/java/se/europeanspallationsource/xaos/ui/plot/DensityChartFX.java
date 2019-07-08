@@ -636,7 +636,11 @@ public class DensityChartFX<X, Y> extends Chart implements Pluggable {
 		layoutGridLines();
 		layoutProjections();
 
-		movePluginsNodesToFront();
+		//	Move plugins nodes to front.
+		ObservableList<Node> plotChildren = getPlotChildren();
+
+		plotChildren.remove(pluginsNodesGroup);
+		plotChildren.add(pluginsNodesGroup);
 
 	}
 
@@ -1005,11 +1009,6 @@ public class DensityChartFX<X, Y> extends Chart implements Pluggable {
 
 		}
 
-	}
-
-	private void movePluginsNodesToFront() {
-		getPlotChildren().remove(pluginsNodesGroup);
-		getPlotChildren().add(pluginsNodesGroup);
 	}
 
 	private void updateXAxisRange() {

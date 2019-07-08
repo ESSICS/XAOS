@@ -27,16 +27,6 @@
 	-fx-background-color: transparent;
 }
 
-.chart-vertical-grid-lines {
-    -fx-stroke: black;
-    visibility: visible;
-}
-
-.chart-horizontal-grid-lines {
-    -fx-stroke: black;
-    visibility: visible;
-}
-
 .chart-projection-lines {
     -fx-stroke: darkgrey;
     -fx-stroke-width: 2;

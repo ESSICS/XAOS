@@ -86,3 +86,17 @@
 	-fx-border-width: 1.7px;
 }
 
+.chart-plot-background {
+    -fx-background-color: white;
+}
+
+.chart-vertical-grid-lines {
+    -fx-stroke: black;
+    visibility: visible;
+}
+
+.chart-horizontal-grid-lines {
+    -fx-stroke: black;
+    visibility: visible;
+}
+

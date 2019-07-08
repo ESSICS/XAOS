@@ -185,12 +185,6 @@ public class BarChartFX<X, Y> extends BarChart<X, Y> implements Pluggable {
 	@Override
 	protected void layoutPlotChildren() {
 
-		//	Move plugins nodes to front.
-		ObservableList<Node> plotChildren = getPlotChildren();
-
-		plotChildren.remove(pluginsNodesGroup);
-		plotChildren.add(pluginsNodesGroup);
-
 		//	Layout plot children. This call will create fresh new symbols
 		//	that are by default visible.
 		super.layoutPlotChildren();
@@ -200,6 +194,12 @@ public class BarChartFX<X, Y> extends BarChart<X, Y> implements Pluggable {
 			.filter(series -> !seriesDrawnInPlot.contains(series.getName()))
 			.flatMap(series -> series.getData().stream())
 			.forEach(d -> d.getNode().setVisible(false));
+
+		//	Move plugins nodes to front.
+		ObservableList<Node> plotChildren = getPlotChildren();
+
+		plotChildren.remove(pluginsNodesGroup);
+		plotChildren.add(pluginsNodesGroup);
 
 	}
 

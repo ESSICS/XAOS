@@ -19,6 +19,7 @@ package se.europeanspallationsource.xaos.ui.plot;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 import javafx.beans.property.DoubleProperty;
@@ -30,6 +31,7 @@ import javafx.scene.Node;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.ValueAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
 import org.apache.commons.lang3.Validate;
@@ -48,7 +50,7 @@ import static java.util.logging.Level.WARNING;
  * @param <Y> Type of Y values.
  * @author claudio.rosati@esss.se
  */
-public class HistogramChartFX<X, Y> extends LineChart<X, Y> implements Pluggable {
+public class HistogramChartFX<X extends Number, Y extends Number> extends LineChart<X, Y> implements Pluggable {
 
 	private static final Logger LOGGER = Logger.getLogger(HistogramChartFX.class.getName());
 
@@ -214,7 +216,7 @@ public class HistogramChartFX<X, Y> extends LineChart<X, Y> implements Pluggable
 	 * @param yAxis The y axis to use.
 	 * @see javafx.scene.chart.LineChart#LineChart(Axis, Axis)
 	 */
-	public HistogramChartFX( Axis<X> xAxis, Axis<Y> yAxis ) {
+	public HistogramChartFX( ValueAxis<X> xAxis, ValueAxis<Y> yAxis ) {
 		this(xAxis, yAxis, FXCollections.<Series<X, Y>>observableArrayList());
 	}
 
@@ -225,7 +227,7 @@ public class HistogramChartFX<X, Y> extends LineChart<X, Y> implements Pluggable
 	 * @param yAxis The Y axis.
 	 * @param data  Data to included in the chart
 	 */
-	public HistogramChartFX( Axis<X> xAxis, Axis<Y> yAxis, ObservableList<Series<X, Y>> data ) {
+	public HistogramChartFX( ValueAxis<X> xAxis, ValueAxis<Y> yAxis, ObservableList<Series<X, Y>> data ) {
 
 		super(xAxis, yAxis, data);
 
@@ -328,21 +330,55 @@ public class HistogramChartFX<X, Y> extends LineChart<X, Y> implements Pluggable
 	@Override
 	protected void layoutPlotChildren() {
 
+		//	Layout plot children. This call will create fresh new symbols
+		//	that are by default visible.
+//		super.layoutPlotChildren();
+
+		@SuppressWarnings( "unchecked" )
+		final double zeroPos = ( ( (ValueAxis) getYAxis() ).getLowerBound() > 0 )
+							 ? ( (ValueAxis) getYAxis() ).getDisplayPosition(( (ValueAxis) getYAxis() ).getLowerBound())
+							 : ( (ValueAxis) getYAxis() ).getZeroPosition();
+		final double offset = getBarGap();
+
+
+
+
+		for ( Iterator<Series<X, Y>> sit = getDisplayedSeriesIterator(); sit.hasNext(); ) {
+
+			Series<X, Y> series = sit.next();
+			ObservableList<Data<X, Y>> data = series.getData();
+			final double barwidth = ( getXAxis().getDisplayPosition(data.get(1).getXValue()) - getXAxis().getDisplayPosition(data.get(0).getXValue()) ) - offset;
+
+			data.forEach(dataItem -> {
+				if ( dataItem != null ) {
+
+					final Node bar = dataItem.getNode();
+					final double xPos = getXAxis().getDisplayPosition(dataItem.getXValue());
+					final double yPos = getYAxis().getDisplayPosition(dataItem.getYValue());
+					final double bottom = Math.min(yPos, zeroPos);
+					final double top = Math.max(yPos, zeroPos);
+
+					bar.resizeRelocate(xPos - barwidth / 2, bottom, barwidth, top - bottom);
+				}
+			});
+
+		}
+
+
+
+
+
+		//	If the track is hidden, then hide the symbols.
+//		getData().stream()
+//			.filter(series -> !seriesDrawnInPlot.contains(series.getName()))
+//			.flatMap(series -> series.getData().stream())
+//			.forEach(d -> d.getNode().setVisible(false));
+
 		//	Move plugins nodes to front.
 		ObservableList<Node> plotChildren = getPlotChildren();
 
 		plotChildren.remove(pluginsNodesGroup);
 		plotChildren.add(pluginsNodesGroup);
-
-		//	Layout plot children. This call will create fresh new symbols
-		//	that are by default visible.
-		super.layoutPlotChildren();
-
-		//	If the track is hidden, then hide the symbols.
-		getData().stream()
-			.filter(series -> !seriesDrawnInPlot.contains(series.getName()))
-			.flatMap(series -> series.getData().stream())
-			.forEach(d -> d.getNode().setVisible(false));
 
 
 
