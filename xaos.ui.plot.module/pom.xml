@@ -64,7 +64,7 @@
 				<version>3.0.0-M3</version>
 				<configuration>
 					<argLine>
-						--add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED --add-opens javafx.controls/javafx.scene.chart=xaos.ui.plot
+						--add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED --add-opens javafx.controls/javafx.scene.chart=xaos.ui.plot --add-opens xaos.ui.plot/se.europeanspallationsource.xaos.ui.plot=javafx.fxml
 					</argLine>
 
 					<!-- THE FOLLOWING "excludes" AND "includes" SHOULD BE   -->
