@@ -44,6 +44,7 @@ import javafx.stage.WindowEvent;
 import se.europeanspallationsource.xaos.core.util.LogUtils;
 import se.europeanspallationsource.xaos.ui.plot.DateAxis;
 import se.europeanspallationsource.xaos.ui.plot.DateAxis.DateConverter;
+import se.europeanspallationsource.xaos.ui.plot.DensityChartFX;
 import se.europeanspallationsource.xaos.ui.plot.NumberAxis.DoubleConverter;
 import se.europeanspallationsource.xaos.ui.plot.Plugin;
 import se.europeanspallationsource.xaos.ui.plot.TimeAxis;
@@ -94,57 +95,116 @@ public class AxisPropertiesController extends GridPane implements Initializable 
 	@SuppressWarnings( "unchecked" )
 	public void initialize( URL url, ResourceBundle rb ) {
 
-		@SuppressWarnings( "unchecked" )
-		XYChart<?, ?> chart = (XYChart<?, ?>) pluggable.getChart();
+		if ( pluggable.getChart() instanceof XYChart ) {
 
-		xGridValue.selectedProperty().bindBidirectional(chart.verticalGridLinesVisibleProperty());
+			@SuppressWarnings( "unchecked" )
+			XYChart<?, ?> chart = (XYChart<?, ?>) pluggable.getChart();
 
-		if ( !( chart.getXAxis() instanceof CategoryAxis ) ) {
+			xGridValue.selectedProperty().bindBidirectional(chart.verticalGridLinesVisibleProperty());
 
-			xScaleValue.selectedProperty().bindBidirectional(chart.getXAxis().autoRangingProperty());
+			if ( !( chart.getXAxis() instanceof CategoryAxis ) ) {
 
-			xMinValue.disableProperty().bind(xScaleValue.selectedProperty());
-			xMinValue.setValueFactory(minXSpinnerValueFactory(chart));
+				xScaleValue.selectedProperty().bindBidirectional(chart.getXAxis().autoRangingProperty());
 
-			xMaxValue.disableProperty().bind(xScaleValue.selectedProperty());
-			xMaxValue.setValueFactory(maxXSpinnerValueFactory(chart));
+				xMinValue.disableProperty().bind(xScaleValue.selectedProperty());
+				xMinValue.setValueFactory(minXSpinnerValueFactory(chart));
 
-			xMinValueExpression = minXProperty(chart);
-			xMaxValueExpression = maxXProperty(chart);
+				xMaxValue.disableProperty().bind(xScaleValue.selectedProperty());
+				xMaxValue.setValueFactory(maxXSpinnerValueFactory(chart));
 
-			xMinValue.getValueFactory().valueProperty().bindBidirectional(xMinValueExpression);
-			xMaxValue.getValueFactory().valueProperty().bindBidirectional(xMaxValueExpression);
+				xMinValueExpression = minXProperty(chart);
+				xMaxValueExpression = maxXProperty(chart);
 
-		} else {
-			xScaleValue.setSelected(true);
-			xScaleValue.setDisable(true);
-			xMinValue.setDisable(true);
-			xMaxValue.setDisable(true);
-		}
+				xMinValue.getValueFactory().valueProperty().bindBidirectional(xMinValueExpression);
+				xMaxValue.getValueFactory().valueProperty().bindBidirectional(xMaxValueExpression);
 
-		yGridValue.selectedProperty().bindBidirectional(chart.horizontalGridLinesVisibleProperty());
+			} else {
+				xScaleValue.setSelected(true);
+				xScaleValue.setDisable(true);
+				xMinValue.setDisable(true);
+				xMaxValue.setDisable(true);
+			}
 
-		if ( !( chart.getYAxis() instanceof CategoryAxis ) ) {
+			yGridValue.selectedProperty().bindBidirectional(chart.horizontalGridLinesVisibleProperty());
 
-			yScaleValue.selectedProperty().bindBidirectional(chart.getYAxis().autoRangingProperty());
+			if ( !( chart.getYAxis() instanceof CategoryAxis ) ) {
 
-			yMinValue.disableProperty().bind(yScaleValue.selectedProperty());
-			yMinValue.setValueFactory(minYSpinnerValueFactory(chart));
+				yScaleValue.selectedProperty().bindBidirectional(chart.getYAxis().autoRangingProperty());
 
-			yMaxValue.disableProperty().bind(yScaleValue.selectedProperty());
-			yMaxValue.setValueFactory(maxYSpinnerValueFactory(chart));
+				yMinValue.disableProperty().bind(yScaleValue.selectedProperty());
+				yMinValue.setValueFactory(minYSpinnerValueFactory(chart));
 
-			yMinValueExpression = minYProperty(chart);
-			yMaxValueExpression = maxYProperty(chart);
+				yMaxValue.disableProperty().bind(yScaleValue.selectedProperty());
+				yMaxValue.setValueFactory(maxYSpinnerValueFactory(chart));
 
-			yMinValue.getValueFactory().valueProperty().bindBidirectional(yMinValueExpression);
-			yMaxValue.getValueFactory().valueProperty().bindBidirectional(yMaxValueExpression);
+				yMinValueExpression = minYProperty(chart);
+				yMaxValueExpression = maxYProperty(chart);
 
-		} else {
-			xScaleValue.setSelected(true);
-			yScaleValue.setDisable(true);
-			yMinValue.setDisable(true);
-			yMaxValue.setDisable(true);
+				yMinValue.getValueFactory().valueProperty().bindBidirectional(yMinValueExpression);
+				yMaxValue.getValueFactory().valueProperty().bindBidirectional(yMaxValueExpression);
+
+			} else {
+				xScaleValue.setSelected(true);
+				yScaleValue.setDisable(true);
+				yMinValue.setDisable(true);
+				yMaxValue.setDisable(true);
+			}
+
+		} else if ( pluggable.getChart() instanceof DensityChartFX ) {
+
+			@SuppressWarnings( "unchecked" )
+			DensityChartFX<?, ?> chart = (DensityChartFX<?, ?>) pluggable.getChart();
+
+			xGridValue.selectedProperty().bindBidirectional(chart.verticalGridLinesVisibleProperty());
+
+			if ( !( chart.getXAxis() instanceof CategoryAxis ) ) {
+
+				xScaleValue.selectedProperty().bindBidirectional(chart.getXAxis().autoRangingProperty());
+
+				xMinValue.disableProperty().bind(xScaleValue.selectedProperty());
+				xMinValue.setValueFactory(minXSpinnerValueFactory(chart));
+
+				xMaxValue.disableProperty().bind(xScaleValue.selectedProperty());
+				xMaxValue.setValueFactory(maxXSpinnerValueFactory(chart));
+
+				xMinValueExpression = minXProperty(chart);
+				xMaxValueExpression = maxXProperty(chart);
+
+				xMinValue.getValueFactory().valueProperty().bindBidirectional(xMinValueExpression);
+				xMaxValue.getValueFactory().valueProperty().bindBidirectional(xMaxValueExpression);
+
+			} else {
+				xScaleValue.setSelected(true);
+				xScaleValue.setDisable(true);
+				xMinValue.setDisable(true);
+				xMaxValue.setDisable(true);
+			}
+
+			yGridValue.selectedProperty().bindBidirectional(chart.horizontalGridLinesVisibleProperty());
+
+			if ( !( chart.getYAxis() instanceof CategoryAxis ) ) {
+
+				yScaleValue.selectedProperty().bindBidirectional(chart.getYAxis().autoRangingProperty());
+
+				yMinValue.disableProperty().bind(yScaleValue.selectedProperty());
+				yMinValue.setValueFactory(minYSpinnerValueFactory(chart));
+
+				yMaxValue.disableProperty().bind(yScaleValue.selectedProperty());
+				yMaxValue.setValueFactory(maxYSpinnerValueFactory(chart));
+
+				yMinValueExpression = minYProperty(chart);
+				yMaxValueExpression = maxYProperty(chart);
+
+				yMinValue.getValueFactory().valueProperty().bindBidirectional(yMinValueExpression);
+				yMaxValue.getValueFactory().valueProperty().bindBidirectional(yMaxValueExpression);
+
+			} else {
+				xScaleValue.setSelected(true);
+				yScaleValue.setDisable(true);
+				yMinValue.setDisable(true);
+				yMaxValue.setDisable(true);
+			}
+
 		}
 
 		minCaption.disableProperty().bind(Bindings.and(xScaleValue.selectedProperty(), yScaleValue.selectedProperty()));
@@ -160,28 +220,59 @@ public class AxisPropertiesController extends GridPane implements Initializable 
 	@SuppressWarnings( "unchecked" )
 	void dispose() {
 
-		@SuppressWarnings( "unchecked" )
-		XYChart<?, ?> chart = (XYChart<?, ?>) pluggable.getChart();
+		if ( pluggable.getChart() instanceof XYChart ) {
 
-		xGridValue.selectedProperty().unbindBidirectional(chart.verticalGridLinesVisibleProperty());
+			@SuppressWarnings( "unchecked" )
+			XYChart<?, ?> chart = (XYChart<?, ?>) pluggable.getChart();
 
-		if ( !( chart.getXAxis() instanceof CategoryAxis ) ) {
+			xGridValue.selectedProperty().unbindBidirectional(chart.verticalGridLinesVisibleProperty());
 
-			xScaleValue.selectedProperty().unbindBidirectional(chart.getXAxis().autoRangingProperty());
+			if ( !( chart.getXAxis() instanceof CategoryAxis ) ) {
 
-			xMinValue.getValueFactory().valueProperty().unbindBidirectional(xMinValueExpression);
-			xMaxValue.getValueFactory().valueProperty().unbindBidirectional(xMaxValueExpression);
+				xScaleValue.selectedProperty().unbindBidirectional(chart.getXAxis().autoRangingProperty());
 
-		}
+				xMinValue.getValueFactory().valueProperty().unbindBidirectional(xMinValueExpression);
+				xMaxValue.getValueFactory().valueProperty().unbindBidirectional(xMaxValueExpression);
 
-		yGridValue.selectedProperty().unbindBidirectional(chart.horizontalGridLinesVisibleProperty());
+			}
 
-		if ( !( chart.getYAxis() instanceof CategoryAxis ) ) {
+			yGridValue.selectedProperty().unbindBidirectional(chart.horizontalGridLinesVisibleProperty());
 
-			yScaleValue.selectedProperty().unbindBidirectional(chart.getYAxis().autoRangingProperty());
+			if ( !( chart.getYAxis() instanceof CategoryAxis ) ) {
 
-			yMinValue.getValueFactory().valueProperty().unbindBidirectional(yMinValueExpression);
-			yMaxValue.getValueFactory().valueProperty().unbindBidirectional(yMaxValueExpression);
+				yScaleValue.selectedProperty().unbindBidirectional(chart.getYAxis().autoRangingProperty());
+
+				yMinValue.getValueFactory().valueProperty().unbindBidirectional(yMinValueExpression);
+				yMaxValue.getValueFactory().valueProperty().unbindBidirectional(yMaxValueExpression);
+
+			}
+
+		} else if ( pluggable.getChart() instanceof DensityChartFX ) {
+
+			@SuppressWarnings( "unchecked" )
+			DensityChartFX<?, ?> chart = (DensityChartFX<?, ?>) pluggable.getChart();
+
+			xGridValue.selectedProperty().unbindBidirectional(chart.verticalGridLinesVisibleProperty());
+
+			if ( !( chart.getXAxis() instanceof CategoryAxis ) ) {
+
+				xScaleValue.selectedProperty().unbindBidirectional(chart.getXAxis().autoRangingProperty());
+
+				xMinValue.getValueFactory().valueProperty().unbindBidirectional(xMinValueExpression);
+				xMaxValue.getValueFactory().valueProperty().unbindBidirectional(xMaxValueExpression);
+
+			}
+
+			yGridValue.selectedProperty().unbindBidirectional(chart.horizontalGridLinesVisibleProperty());
+
+			if ( !( chart.getYAxis() instanceof CategoryAxis ) ) {
+
+				yScaleValue.selectedProperty().unbindBidirectional(chart.getYAxis().autoRangingProperty());
+
+				yMinValue.getValueFactory().valueProperty().unbindBidirectional(yMinValueExpression);
+				yMaxValue.getValueFactory().valueProperty().unbindBidirectional(yMaxValueExpression);
+
+			}
 
 		}
 
@@ -233,7 +324,31 @@ public class AxisPropertiesController extends GridPane implements Initializable 
 		}
 	}
 
+	private ObjectProperty<?> maxXProperty( DensityChartFX<?, ?> chart ) {
+		if ( chart.getXAxis() instanceof TimeAxis ) {
+			return Plugin.getXValueAxis(chart).upperBoundProperty().asObject();
+		} else if ( chart.getXAxis() instanceof ValueAxis<?> ) {
+			return Plugin.getXValueAxis(chart).upperBoundProperty().asObject();
+		} else if ( chart.getXAxis() instanceof DateAxis ) {
+			return ((DateAxis) chart.getXAxis()).upperBoundProperty();
+		} else {
+			return null;
+		}
+	}
+
 	private SpinnerValueFactory<?> maxXSpinnerValueFactory( XYChart<?, ?> chart ) {
+		if ( chart.getXAxis() instanceof TimeAxis ) {
+			return timeSpinnerValueFactory(Plugin.getXValueAxis(chart).getUpperBound());
+		} else if ( chart.getXAxis() instanceof ValueAxis<?> ) {
+			return doubleSpinnerValueFactory(Plugin.getXValueAxis(chart).getUpperBound());
+		} else if ( chart.getXAxis() instanceof DateAxis ) {
+			return dateSpinnerValueFactory((DateAxis) chart.getXAxis(), ((DateAxis) chart.getXAxis()).getUpperBound());
+		} else {
+			return null;
+		}
+	}
+
+	private SpinnerValueFactory<?> maxXSpinnerValueFactory( DensityChartFX<?, ?> chart ) {
 		if ( chart.getXAxis() instanceof TimeAxis ) {
 			return timeSpinnerValueFactory(Plugin.getXValueAxis(chart).getUpperBound());
 		} else if ( chart.getXAxis() instanceof ValueAxis<?> ) {
@@ -257,7 +372,31 @@ public class AxisPropertiesController extends GridPane implements Initializable 
 		}
 	}
 
+	private ObjectProperty<?> maxYProperty( DensityChartFX<?, ?> chart ) {
+		if ( chart.getYAxis() instanceof TimeAxis ) {
+			return Plugin.getYValueAxis(chart).upperBoundProperty().asObject();
+		} else if ( chart.getYAxis() instanceof ValueAxis<?> ) {
+			return Plugin.getYValueAxis(chart).upperBoundProperty().asObject();
+		} else if ( chart.getYAxis() instanceof DateAxis ) {
+			return ((DateAxis) chart.getYAxis()).upperBoundProperty();
+		} else {
+			return null;
+		}
+	}
+
 	private SpinnerValueFactory<?> maxYSpinnerValueFactory( XYChart<?, ?> chart ) {
+		if ( chart.getYAxis() instanceof TimeAxis ) {
+			return timeSpinnerValueFactory(Plugin.getYValueAxis(chart).getUpperBound());
+		} else if ( chart.getYAxis() instanceof ValueAxis<?> ) {
+			return doubleSpinnerValueFactory(Plugin.getYValueAxis(chart).getUpperBound());
+		} else if ( chart.getYAxis() instanceof DateAxis ) {
+			return dateSpinnerValueFactory((DateAxis) chart.getYAxis(), ((DateAxis) chart.getYAxis()).getUpperBound());
+		} else {
+			return null;
+		}
+	}
+
+	private SpinnerValueFactory<?> maxYSpinnerValueFactory( DensityChartFX<?, ?> chart ) {
 		if ( chart.getYAxis() instanceof TimeAxis ) {
 			return timeSpinnerValueFactory(Plugin.getYValueAxis(chart).getUpperBound());
 		} else if ( chart.getYAxis() instanceof ValueAxis<?> ) {
@@ -281,7 +420,31 @@ public class AxisPropertiesController extends GridPane implements Initializable 
 		}
 	}
 
+	private ObjectProperty<?> minXProperty( DensityChartFX<?, ?> chart ) {
+		if ( chart.getXAxis() instanceof TimeAxis ) {
+			return Plugin.getXValueAxis(chart).lowerBoundProperty().asObject();
+		} else if ( chart.getXAxis() instanceof ValueAxis<?> ) {
+			return Plugin.getXValueAxis(chart).lowerBoundProperty().asObject();
+		} else if ( chart.getXAxis() instanceof DateAxis ) {
+			return ((DateAxis) chart.getXAxis()).lowerBoundProperty();
+		} else {
+			return null;
+		}
+	}
+
 	private SpinnerValueFactory<?> minXSpinnerValueFactory( XYChart<?, ?> chart ) {
+		if ( chart.getXAxis() instanceof TimeAxis ) {
+			return timeSpinnerValueFactory(Plugin.getXValueAxis(chart).getLowerBound());
+		} else if ( chart.getXAxis() instanceof ValueAxis<?> ) {
+			return doubleSpinnerValueFactory(Plugin.getXValueAxis(chart).getLowerBound());
+		} else if ( chart.getXAxis() instanceof DateAxis ) {
+			return dateSpinnerValueFactory((DateAxis) chart.getXAxis(), ((DateAxis) chart.getXAxis()).getLowerBound());
+		} else {
+			return null;
+		}
+	}
+
+	private SpinnerValueFactory<?> minXSpinnerValueFactory( DensityChartFX<?, ?> chart ) {
 		if ( chart.getXAxis() instanceof TimeAxis ) {
 			return timeSpinnerValueFactory(Plugin.getXValueAxis(chart).getLowerBound());
 		} else if ( chart.getXAxis() instanceof ValueAxis<?> ) {
@@ -305,7 +468,31 @@ public class AxisPropertiesController extends GridPane implements Initializable 
 		}
 	}
 
+	private ObjectProperty<?> minYProperty( DensityChartFX<?, ?> chart ) {
+		if ( chart.getYAxis() instanceof TimeAxis ) {
+			return Plugin.getYValueAxis(chart).lowerBoundProperty().asObject();
+		} else if ( chart.getYAxis() instanceof ValueAxis<?> ) {
+			return Plugin.getYValueAxis(chart).lowerBoundProperty().asObject();
+		} else if ( chart.getYAxis() instanceof DateAxis ) {
+			return ((DateAxis) chart.getYAxis()).lowerBoundProperty();
+		} else {
+			return null;
+		}
+	}
+
 	private SpinnerValueFactory<?> minYSpinnerValueFactory( XYChart<?, ?> chart ) {
+		if ( chart.getYAxis() instanceof TimeAxis ) {
+			return timeSpinnerValueFactory(Plugin.getYValueAxis(chart).getLowerBound());
+		} else if ( chart.getYAxis() instanceof ValueAxis<?> ) {
+			return doubleSpinnerValueFactory(Plugin.getYValueAxis(chart).getLowerBound());
+		} else if ( chart.getYAxis() instanceof DateAxis ) {
+			return dateSpinnerValueFactory((DateAxis) chart.getYAxis(), ((DateAxis) chart.getYAxis()).getLowerBound());
+		} else {
+			return null;
+		}
+	}
+
+	private SpinnerValueFactory<?> minYSpinnerValueFactory( DensityChartFX<?, ?> chart ) {
 		if ( chart.getYAxis() instanceof TimeAxis ) {
 			return timeSpinnerValueFactory(Plugin.getYValueAxis(chart).getLowerBound());
 		} else if ( chart.getYAxis() instanceof ValueAxis<?> ) {
