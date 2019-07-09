@@ -19,6 +19,8 @@ package se.europeanspallationsource.xaos.ui.plot.spi.impl;
 
 import javafx.beans.binding.Bindings;
 import javafx.scene.Node;
+import javafx.scene.chart.Chart;
+import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.ValueAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Control;
@@ -30,7 +32,9 @@ import se.europeanspallationsource.xaos.tools.annotation.BundleItems;
 import se.europeanspallationsource.xaos.tools.annotation.Bundles;
 import se.europeanspallationsource.xaos.tools.annotation.ServiceProvider;
 import se.europeanspallationsource.xaos.ui.control.Icons;
+import se.europeanspallationsource.xaos.ui.plot.HistogramChartFX;
 import se.europeanspallationsource.xaos.ui.plot.PluggableChartContainer;
+import se.europeanspallationsource.xaos.ui.plot.plugins.Pluggable;
 import se.europeanspallationsource.xaos.ui.plot.spi.ToolbarContributor;
 
 import static org.controlsfx.control.PopOver.ArrowLocation.TOP_CENTER;
@@ -66,11 +70,24 @@ public class FitContributor implements ToolbarContributor {
 		button.setTooltip(new Tooltip(getString("button.tooltip")));
 		button.setOnAction(e -> handleButton(chartContainer, button));
 		button.disableProperty().bind(Bindings.createBooleanBinding(() -> {
-				return chartContainer.getPluggable() == null
-					|| !( chartContainer.getPluggable().getChart() instanceof XYChart )
-					|| !( ((XYChart<?, ?>) chartContainer.getPluggable().getChart()).getXAxis() instanceof ValueAxis )
-					|| !( ((XYChart<?, ?>) chartContainer.getPluggable().getChart()).getYAxis() instanceof ValueAxis )
-					|| button.isSelected();
+
+				Pluggable pluggable = chartContainer.getPluggable();
+
+				if ( pluggable == null ) {
+					return true;
+				} else {
+
+					Chart chart = pluggable.getChart();
+
+					return !( chart instanceof XYChart )
+						|| ( chart instanceof HistogramChartFX )
+						|| ( chart instanceof ScatterChart )
+						|| !( ((XYChart<?, ?>) chart).getXAxis() instanceof ValueAxis )
+						|| !( ((XYChart<?, ?>) chart).getYAxis() instanceof ValueAxis )
+						|| button.isSelected();
+
+				}
+
 			},
 			chartContainer.pluggableProperty(),
 			button.selectedProperty()
