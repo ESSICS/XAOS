@@ -3,7 +3,7 @@ digraph "xaos.tools" {
   edge [fontsize="10",fontname="Helvetica"]
 
   // Node Definitions:
-  "se.europeanspallationsource:xaos.tools:jar"[shape="box",style="rounded, filled",fillcolor="#7DE1FF",label=<se.europeanspallationsource<br/>xaos.tools<br/>0.4.0-SNAPSHOT>]
+  "se.europeanspallationsource:xaos.tools:jar"[shape="box",style="rounded, filled",fillcolor="#7DE1FF",label=<se.europeanspallationsource<br/>xaos.tools<br/>0.4.0>]
   "org.apache.commons:commons-lang3:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.apache.commons<br/>commons-lang3<br/>3.9>]
   "com.github.ben-manes.caffeine:caffeine:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<com.github.ben-manes.caffeine<br/>caffeine<br/>2.7.0>]
   "org.checkerframework:checker-qual:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.checkerframework<br/>checker-qual<br/>2.6.0>]
