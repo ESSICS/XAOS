@@ -23,7 +23,6 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
 import org.controlsfx.control.PopOver;
 import se.europeanspallationsource.xaos.tools.annotation.BundleItem;
-import se.europeanspallationsource.xaos.tools.annotation.BundleItems;
 import se.europeanspallationsource.xaos.tools.annotation.Bundles;
 import se.europeanspallationsource.xaos.tools.annotation.ServiceProvider;
 import se.europeanspallationsource.xaos.ui.control.Icons;
@@ -64,9 +63,7 @@ public class AxisPropertiesContributor implements ToolbarContributor {
 		return Bundles.get(AxisPropertiesContributor.class, key, parameters);
 	}
 
-	@BundleItems({
-		@BundleItem( key = "popOver.title", message = "Axes Properties")
-	})
+	@BundleItem( key = "popOver.title", message = "Axes Properties")
 	private void handleButton( PluggableChartContainer chartContainer, ToggleButton button ) {
 		
 		ToggleButton pinButton = chartContainer.getPinButton();
