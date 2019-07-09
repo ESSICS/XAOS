@@ -36,6 +36,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.XYChart;
@@ -423,20 +424,23 @@ public class FitController extends GridPane implements Initializable {
 		interpolatedVals.getData().forEach(data -> data.getNode().setVisible(false));
 
 		String[] styles = createStyles();
+		Node interpolatedValsNode = interpolatedVals.getNode();
 
-		if ( interpolatedVals.getNode() instanceof Group ) {
+		if ( interpolatedValsNode != null ) {
+			if ( interpolatedValsNode instanceof Group ) {
 
-			Group group = (Group) interpolatedVals.getNode();
+				Group group = (Group) interpolatedValsNode;
 
-			for ( int i = 0; i < group.getChildren().size() - 1; i++ ) {
-				group.getChildren().get(i).setStyle("-fx-fill: null;");
+				for ( int i = 0; i < group.getChildren().size() - 1; i++ ) {
+					group.getChildren().get(i).setStyle("-fx-fill: null;");
+				}
+
+				group.getChildren().get(group.getChildren().size() - 1).setStyle(styles[0]);
+
+
+			} else {
+				interpolatedValsNode.setStyle(styles[0]);
 			}
-
-			group.getChildren().get(group.getChildren().size() - 1).setStyle(styles[0]);
-
-
-		} else {
-			interpolatedVals.getNode().setStyle(styles[0]);
 		}
 
 		fittingSeriesList.add(interpolatedVals);
