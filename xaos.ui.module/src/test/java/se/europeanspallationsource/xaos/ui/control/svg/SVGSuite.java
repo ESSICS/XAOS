@@ -26,10 +26,10 @@ import org.junit.runners.Suite;
 @RunWith( Suite.class )
 @Suite.SuiteClasses( {
 	//	SVG
-	AtomTest.class,
-	GasCylinderTest.class,
-	SVGFromInputStreamTest.class,
-	SVGFromURLTest.class
+	AtomUITest.class,
+	GasCylinderUITest.class,
+	SVGFromInputStreamUITest.class,
+	SVGFromURLUITest.class
 } )
 @SuppressWarnings( { "ClassMayBeInterface", "ClassWithoutLogger", "UtilityClassWithoutPrivateConstructor" } )
 public class SVGSuite {

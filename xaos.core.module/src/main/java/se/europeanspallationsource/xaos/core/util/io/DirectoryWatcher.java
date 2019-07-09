@@ -48,6 +48,7 @@ import java.util.concurrent.RejectedExecutionException;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import se.europeanspallationsource.xaos.core.util.LogUtils;
 
 import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
@@ -55,6 +56,7 @@ import static java.nio.file.StandardOpenOption.WRITE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
+import static java.util.logging.Level.FINER;
 
 
 /**
@@ -83,7 +85,7 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
  *   watcher.watch(root);</pre>
  *
  * @author claudio.rosati@esss.se
- * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.DirWatcher</a>
+ * @see <a href="https://github.com/TomasMikula/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.DirWatcher</a>
  */
 public class DirectoryWatcher implements AutoCloseable {
 
@@ -697,7 +699,7 @@ public class DirectoryWatcher implements AutoCloseable {
 				if ( onError != null ) {
 					executeOnEventThread(() -> onError.accept(t));
 				} else {
-					LOGGER.throwing(DirectoryWatcher.class.getName(), "executeIOOperation", t);
+					LogUtils.log(LOGGER, DirectoryWatcher.class.getName(), "executeIOOperation", FINER, t, "THROW");
 				}
 			}
 		});

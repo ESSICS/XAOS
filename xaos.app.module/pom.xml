@@ -6,7 +6,7 @@
 	<parent>
         <groupId>se.europeanspallationsource</groupId>
         <artifactId>xaos</artifactId>
-        <version>0.3.0</version>
+        <version>0.4.0</version>
     </parent>
 
 	<artifactId>xaos.app</artifactId>
@@ -18,13 +18,19 @@
 	</description>
     <url>https://github.com/ESSICS/XAOS</url>
 
+	<properties>
+		<!-- Dependencies Versions -->
+		<javafx.version>12</javafx.version>
+		<xaos.version>${project.version}</xaos.version>
+	</properties>
+
 	<build>
 		<plugins>
 			<!-- ALPHABETICALLY SORTED BY groupId:artifactId -->
 			<plugin>
 				<groupId>com.github.ferstl</groupId>
 				<artifactId>depgraph-maven-plugin</artifactId>
-				<version>3.2.2</version>
+				<version>3.3.0</version>
 				<configuration>
 					<customStyleConfiguration>${project.basedir}/../doc/maven-dependencies.json</customStyleConfiguration>
 				</configuration>
@@ -34,23 +40,43 @@
 
     <dependencies>
 
+        <!-- JavaFX - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-base</artifactId>
+			<version>${javafx.version}</version>
+            <scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+			<version>${javafx.version}</version>
+            <scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-graphics</artifactId>
+			<version>${javafx.version}</version>
+            <scope>compile</scope>
+		</dependency>
+
         <!-- XAOS - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>xaos.tools</artifactId>
-            <version>${project.version}</version>
+            <version>${xaos.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>xaos.core</artifactId>
-            <version>${project.version}</version>
+            <version>${xaos.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>xaos.ui</artifactId>
-            <version>${project.version}</version>
+            <version>${xaos.version}</version>
         </dependency>
 
-	</dependencies>
+    </dependencies>
 
 </project>

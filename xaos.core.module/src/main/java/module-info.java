@@ -1,6 +1,6 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- * Copyright (C) 2018 by European Spallation Source ERIC.
+ * Copyright (C) 2018-2019 by European Spallation Source ERIC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,16 @@
 module xaos.core {
 
 	requires java.logging;
-	requires transitive io.reactivex.rxjava2;
+	requires io.reactivex.rxjava2;
+	requires xaos.tools;
+
+	uses se.europeanspallationsource.xaos.core.util.spi.LogHandlerProvider;
 
 	exports se.europeanspallationsource.xaos.core.util;
+	exports se.europeanspallationsource.xaos.core.util.function;
 	exports se.europeanspallationsource.xaos.core.util.io;
+	exports se.europeanspallationsource.xaos.core.util.spi;
+
+	opens se.europeanspallationsource.xaos.core.util to xaos.tools;
 
 }

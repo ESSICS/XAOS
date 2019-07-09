@@ -69,7 +69,7 @@ application's `pom.xml` file like the following one:
 <dependency>
   <groupId>se.europeanspallationsource</groupId>
   <artifactId>xaos.module</artifactId>
-  <version>0.3.0-SNAPSHOT</version>
+  <version>0.4.0</version>
   <scope>compile</scope>
 </dependency>
 ```
@@ -79,7 +79,7 @@ file of the module you need for more examples and information.
 
 Here the Maven dependencies of `xaos` project:
 
-![xaos dependencis](https://github.com/ESSICS/XAOS/blob/master/doc/parent-maven-dependencies.png)
+![xaos dependencis](https://github.com/ESSICS/XAOS/blob/master/doc/maven-dependencies.png)
 
 
 ### Java `module-info`
@@ -107,6 +107,16 @@ an application build on XAOS (using `java -D<name>=<value> ...` ):
 Property | Type | Default | Description
 -------- | ---- | ------- | -----------
 xaos.test.verbose | boolean | `false` | Some tests will be more verbose if set to `true`.
+
+### Running [TextFX](https://github.com/TestFX/TestFX) Tests
+
+When XAOS is built JUnit tests and UI ones (based on [TextFX](https://github.com/TestFX/TestFX))
+are automatically performed.
+
+On macOS since version 10.14 Mojave it is necessary to explicitly allow the IDE
+or the Terminal application performing the build to control the computer. This
+can be done in the Privacy tab of the Security & Privacy system preferences, by
+selecting the Accessibility category, the adding and enabling the applications.
 
 
 ## Contributing XAOS

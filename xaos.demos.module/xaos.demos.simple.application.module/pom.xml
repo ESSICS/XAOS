@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>se.europeanspallationsource</groupId>
+		<artifactId>xaos.demos</artifactId>
+		<version>0.4.0</version>
+	</parent>
+
+	<artifactId>xaos.demos.simple.application</artifactId>
+	<packaging>jar</packaging>
+	<name>XAOS - Demos [Simple Application]</name>
+	<description>
+		The very basic XAOS-based application.
+	</description>
+	<url>https://github.com/ESSICS/XAOS-Demos</url>
+
+	<properties>
+		<javafx.version>11.0.2</javafx.version>
+		<xaos.version>${project.version}</xaos.version>
+	</properties>
+
+	<build>
+		<plugins>
+			<!-- ALPHABETICALLY SORTED BY groupId:artifactId -->
+			<plugin>
+				<groupId>com.github.ferstl</groupId>
+				<artifactId>depgraph-maven-plugin</artifactId>
+				<version>3.3.0</version>
+				<configuration>
+					<customStyleConfiguration>${project.basedir}/../../doc/maven-dependencies.json</customStyleConfiguration>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.1.2</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+							<mainClass>se.europeanspallationsource.xaos.demos.simple.SimpleApplication</mainClass>
+						</manifest>
+						<manifestEntries>
+							<JavaFX-Application-Class>se.europeanspallationsource.xaos.demos.simple.SimpleApplication</JavaFX-Application-Class>
+							<JavaFX-Version>${javafx.version}</JavaFX-Version>
+							<ModuleMainClass>se.europeanspallationsource.xaos.demos.simple.SimpleApplication</ModuleMainClass>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.6.0</version>
+				<configuration>
+					<mainClass>se.europeanspallationsource.xaos.demos.simple.SimpleApplication</mainClass>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+
+		<!-- ESS  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>xaos.app</artifactId>
+			<version>${xaos.version}</version>
+		</dependency>
+
+	</dependencies>
+
+</project>

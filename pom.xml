@@ -5,7 +5,7 @@
 
 	<groupId>se.europeanspallationsource</groupId>
 	<artifactId>xaos</artifactId>
-	<version>0.3.0</version>
+	<version>0.4.0</version>
 	<packaging>pom</packaging>
 	<name>XAOS</name>
 	<description>
@@ -39,10 +39,18 @@
 	</scm>
 
 	<properties>
-		<java.release>11</java.release>
-		<maven.compiler.source>${java.release}</maven.compiler.source>
-		<maven.compiler.target>${java.release}</maven.compiler.target>
+		<java.release>12</java.release>
+		<maven.compiler.source>12</maven.compiler.source>
+		<maven.compiler.target>12</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- Auxiliary programs -->
+		<!-- - Graphviz: https://www.graphviz.org -->
+		<dot.executable>/usr/local/bin/dot</dot.executable>
+		<!-- Plugin Dependencies Versions -->
+		<asm.version>7.1</asm.version>
+		<!-- Dependencies Versions -->
+		<assertj.version>3.12.2</assertj.version>
+		<junit.version>4.12</junit.version>
 	</properties>
 
 	<modules>
@@ -58,6 +66,8 @@
 		<module>xaos.ui.gauge.module</module>
 		<module>xaos.ui.plot.module</module>
 		<module>xaos.app.module</module>
+		<module>xaos.app.preloader.module</module>
+		<module>xaos.demos.module</module>
 	</modules>
 
 	<build>
@@ -66,11 +76,11 @@
 			<plugin>
 				<groupId>com.github.ferstl</groupId>
 				<artifactId>depgraph-maven-plugin</artifactId>
-				<version>3.2.2</version>
+				<version>3.3.0</version>
 				<configuration>
 					<createImage>true</createImage>
 					<customStyleConfiguration>${project.basedir}/doc/maven-dependencies.json</customStyleConfiguration>
-					<dotExecutable>/usr/local/bin/dot</dotExecutable>
+					<dotExecutable>${dot.executable}</dotExecutable>
 					<graphFormat>dot</graphFormat>
 					<imageFormat>png</imageFormat>
 					<includeParentProjects>true</includeParentProjects>
@@ -104,7 +114,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.0</version>
+				<version>3.8.1</version>
 				<configuration>
 					<release>${java.release}</release>
 					<showDeprecation>true</showDeprecation>
@@ -125,7 +135,7 @@
 					<dependency>
 						<groupId>org.ow2.asm</groupId>
 						<artifactId>asm</artifactId>
-						<version>7.0</version>
+						<version>${asm.version}</version>
 					</dependency>
 				</dependencies>
 			</plugin>
@@ -139,6 +149,19 @@
 						<goals>
 							<goal>resolve</goal>
 						</goals>
+					</execution>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/product/mods</outputDirectory>
+							<overWriteIfNewer>true</overWriteIfNewer>
+							<overWriteReleases>false</overWriteReleases>
+							<overWriteSnapshots>false</overWriteSnapshots>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
@@ -160,7 +183,7 @@
 						<configuration>
 							<rules>
 								<requireMavenVersion>
-									<version>3.5.4</version>
+									<version>3.6.0</version>
 								</requireMavenVersion>
 							</rules>
 						</configuration>
@@ -170,7 +193,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>2.22.1</version>
+				<version>3.0.0-M3</version>
 				<configuration>
 					<argLine>
 						--illegal-access=permit
@@ -206,19 +229,50 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.0.1</version>
+				<version>3.1.0</version>
 				<configuration>
 					<additionalOptions>--javafx</additionalOptions>
-					<detectJavaApiLink>true</detectJavaApiLink>
-					<detectLinks>true</detectLinks>
+					<additionalJOptions>
+						<additionalJOption>-J-Djavafx.javadoc=true</additionalJOption>
+					</additionalJOptions>
+					<detectJavaApiLink>false</detectJavaApiLink>
+					<detectLinks>false</detectLinks>
 					<detectOfflineLinks>true</detectOfflineLinks>
 					<docfilessubdirs>true</docfilessubdirs>
+					<failOnError>false</failOnError>
 					<isOffline>false</isOffline>
 					<links>
-						<link>https://docs.oracle.com/en/java/javase/${java.release}/docs/api</link>
-						<link>https://openjfx.io/javadoc/${java.release}</link>
+						<link>https://docs.oracle.com/en/java/javase/${java.release}/docs/api/</link>
+						<link>https://openjfx.io/javadoc/${java.release}/</link>
 					</links>
 					<source>${java.release}</source>
+					<tags>
+						<tag>
+							<name>css.class</name>
+							<placement>a</placement>
+							<head>CSS Style Class Name:</head>
+						</tag>
+						<tag>
+							<name>def.val</name>
+							<placement>a</placement>
+							<head>Default Value:</head>
+						</tag>
+						<tag>
+							<name>api.note</name>
+							<placement>a</placement>
+							<head>API Note:</head>
+						</tag>
+						<tag>
+							<name>impl.note</name>
+							<placement>a</placement>
+							<head>Implementation Note:</head>
+						</tag>
+						<tag>
+							<name>srvc.order</name>
+							<placement>a</placement>
+							<head>Service Provider Order:</head>
+						</tag>
+					</tags>
 				</configuration>
 				<executions>
 					<execution>
@@ -232,7 +286,7 @@
 					<dependency>
 						<groupId>org.ow2.asm</groupId>
 						<artifactId>asm</artifactId>
-						<version>7.0</version>
+						<version>${asm.version}</version>
 					</dependency>
 				</dependencies>
 			</plugin>
@@ -244,7 +298,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>3.0.1</version>
+				<version>3.1.0</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
@@ -257,7 +311,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.1</version>
+				<version>3.0.0-M3</version>
 				<configuration>
 					<includes>
 						<include>**/*Suite.java</include>
@@ -270,7 +324,7 @@
 					<dependency>
 						<groupId>org.ow2.asm</groupId>
 						<artifactId>asm</artifactId>
-						<version>7.0</version>
+						<version>${asm.version}</version>
 					</dependency>
 				</dependencies>
 			</plugin>
@@ -278,6 +332,27 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>1.6.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>java</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>fixup</id>
+						<phase>install</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>${basedir}/bin/fixup.sh</executable>
+							<arguments>
+								<argument>${project.artifactId}-${project.version}.jar</argument>
+								<argument>${dot.executable}</argument>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -292,6 +367,7 @@
 						<id>maven-plugins-version-check</id>
 						<goals>
 							<goal>display-dependency-updates</goal>
+							<goal>display-plugin-updates</goal>
 						</goals>
 					</execution>
 				</executions>
@@ -318,7 +394,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
-						<version>2.22.1</version>
+						<version>3.0.0-M3</version>
 						<configuration>
 							<systemPropertyVariables>
 								<xaos.test.verbose>true</xaos.test.verbose>
@@ -336,11 +412,12 @@
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
-
+	
+<!--
 	<repositories>
 		<repository>
 			<id>central</id>
-			<url>https://repo1.maven.org/maven2</url>
+			<url>http://repo.maven.apache.org/maven2/</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
@@ -358,7 +435,18 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
+		<repository>
+			<id>apache-snapshots-repo</id>
+			<url>http://repository.apache.org/snapshots</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
 	</repositories>
+-->
 
 	<dependencies>
 
@@ -366,13 +454,13 @@
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
-			<version>3.11.1</version>
+			<version>${assertj.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.12</version>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 

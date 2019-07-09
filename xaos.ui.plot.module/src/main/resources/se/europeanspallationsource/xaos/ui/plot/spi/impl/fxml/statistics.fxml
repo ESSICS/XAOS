@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.TilePane?>
+
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="319.0" minWidth="400.0" type="GridPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+  <columnConstraints>
+      <ColumnConstraints hgrow="NEVER" maxWidth="20.0" minWidth="20.0" prefWidth="20.0" />
+    <ColumnConstraints hgrow="NEVER" />
+      <ColumnConstraints fillWidth="false" hgrow="NEVER" maxWidth="5.0" minWidth="5.0" prefWidth="5.0" />
+      <ColumnConstraints hgrow="NEVER" />
+      <ColumnConstraints fillWidth="false" hgrow="NEVER" maxWidth="5.0" minWidth="5.0" prefWidth="5.0" />
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+      <ColumnConstraints fillWidth="false" hgrow="NEVER" maxWidth="20.0" minWidth="20.0" prefWidth="20.0" />
+  </columnConstraints>
+  <rowConstraints>
+      <RowConstraints fillHeight="false" maxHeight="20.0" minHeight="20.0" prefHeight="20.0" vgrow="NEVER" />
+    <RowConstraints minHeight="10.0" vgrow="NEVER" />
+    <RowConstraints fillHeight="false" maxHeight="20.0" minHeight="20.0" prefHeight="20.0" vgrow="NEVER" />
+    <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
+      <RowConstraints fillHeight="false" maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="NEVER" />
+      <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
+      <RowConstraints fillHeight="false" maxHeight="10.0" minHeight="10.0" prefHeight="10.0" vgrow="NEVER" />
+      <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
+      <RowConstraints fillHeight="false" maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="NEVER" />
+      <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
+      <RowConstraints fillHeight="false" maxHeight="10.0" minHeight="10.0" prefHeight="10.0" vgrow="NEVER" />
+      <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
+      <RowConstraints fillHeight="false" maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="NEVER" />
+      <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
+      <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints fillHeight="false" minHeight="10.0" vgrow="NEVER" />
+      <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="20.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <Label alignment="CENTER_RIGHT" text="%data.set.caption" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+      <ComboBox fx:id="dataSetValue" maxWidth="1.7976931348623157E308" onAction="#dataSetSelected" prefWidth="240.0" GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.rowIndex="1" />
+      <Label alignment="CENTER_RIGHT" text="%mean.x.caption" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+      <Label alignment="CENTER" text="=" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+      <TextField fx:id="meanXValue" editable="false" maxWidth="-Infinity" GridPane.columnIndex="5" GridPane.rowIndex="3" />
+      <Label alignment="CENTER_RIGHT" text="%stdev.x.caption" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+      <Label alignment="CENTER" text="=" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+      <TextField fx:id="stdevXValue" editable="false" maxWidth="-Infinity" GridPane.columnIndex="5" GridPane.rowIndex="5" />
+      <Label alignment="CENTER_RIGHT" text="%mean.y.caption" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="7" GridPane.valignment="CENTER" />
+      <Label alignment="CENTER" text="=" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER" />
+      <TextField fx:id="meanYValue" editable="false" maxWidth="-Infinity" GridPane.columnIndex="5" GridPane.rowIndex="7" />
+      <Label alignment="CENTER_RIGHT" text="%stdev.y.caption" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="9" GridPane.valignment="CENTER" />
+      <Label alignment="CENTER" text="=" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="9" GridPane.valignment="CENTER" />
+      <TextField fx:id="stdevYValue" editable="false" maxWidth="-Infinity" GridPane.columnIndex="5" GridPane.rowIndex="9" />
+      <Label alignment="CENTER_RIGHT" text="%int.fx.caption" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="11" GridPane.valignment="CENTER" />
+      <Label alignment="CENTER" text="=" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="11" GridPane.valignment="CENTER" />
+      <TextField fx:id="intFxValue" editable="false" maxWidth="-Infinity" GridPane.columnIndex="5" GridPane.rowIndex="11" />
+      <Label alignment="CENTER_RIGHT" text="%int.abs.fx.caption" GridPane.columnIndex="1" GridPane.rowIndex="13" />
+      <Label alignment="CENTER" text="=" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="13" GridPane.valignment="CENTER" />
+      <TextField fx:id="intAbsFxValue" editable="false" maxWidth="-Infinity" GridPane.columnIndex="5" GridPane.rowIndex="13" />
+      <TilePane alignment="CENTER" hgap="10.0" GridPane.columnIndex="1" GridPane.columnSpan="5" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="15" GridPane.valignment="CENTER">
+         <children>
+            <Button fx:id="closeButton" cancelButton="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#close" text="%close.button" />
+         </children>
+      </TilePane>
+   </children>
+</fx:root>

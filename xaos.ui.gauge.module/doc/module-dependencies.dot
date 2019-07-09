@@ -1,0 +1,3 @@
+digraph "summary" {
+  "xaos.ui.gauge"                                    -> "java.base (java.base)";
+}

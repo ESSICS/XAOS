@@ -33,7 +33,7 @@ limitations under the License.
             physics applications, scripts and services.
         </p>
 		<p>
-			The framework is compose by a series of modules: the <i>XAOS Tools</i>
+			The framework is composed by a series of modules: the <i>XAOS Tools</i>
 			module provides tools used by the other modules (e.g. annotation
 			processors).
 		</p>
@@ -47,10 +47,12 @@ limitations under the License.
 		<h3>Service Providers</h3>
 
 		<p>
-			The {@link se.europeanspallationsource.xaos.tools.annotation.ServiceProvider}
-			annotation will simplify providing service implementations, taking care of
-			publishing them in the proper file inside the <code>META-INF/service</code>
-			folder.
+			The {@link se.europeanspallationsource.xaos.tools.annotation.ServiceProvider ServiceProvider}
+			annotation will simplify providing service implementations, taking 
+			care of publishing them in the proper file inside the <code>META-INF/service</code>
+			folder, and verifying the provider is valid and the required
+			 <b>provides … with</b> directive in the {@code module-info.java}
+			 file is present.
 		</p>
 
 <pre>
@@ -65,12 +67,12 @@ limitations under the License.
 </pre>
 
 		<p>
-			Moreover, the {@link se.europeanspallationsource.xaos.tools.annotation.ServiceLoaderUtilities}
+			Moreover, the {@link se.europeanspallationsource.xaos.tools.annotation.ServiceLoaderUtilities ServiceLoaderUtilities}
 			class will complement the {@link java.util.ServiceLoader} one with
 			few more methods.
 		</p>
 		<p>
-			<b>Note:</b> when using {@link se.europeanspallationsource.xaos.tools.annotation.ServiceProvider}
+			<b>Note:</b> when using {@link se.europeanspallationsource.xaos.tools.annotation.ServiceProvider ServiceProvider}
 			or {@link se.europeanspallationsource.xaos.tools.annotation.ServiceProviders}
 			the {@code service} class must be listed in the {@code module-info}
 			class inside a <b>uses</b> statement. Moreover a <b>provides … with</b>
@@ -78,20 +80,55 @@ limitations under the License.
 			provider for the parameter class.
 		</p>
 		<p>
-			<b>Note:</b> when using {@link se.europeanspallationsource.xaos.tools.annotation.ServiceLoaderUtilities}
+			<b>Note:</b> when using {@link se.europeanspallationsource.xaos.tools.annotation.ServiceLoaderUtilities ServiceLoaderUtilities}
 			the service provider interface type must be listed in the
 			{@code module-info} class inside a <b>uses</b> statement.
 		</p>
 
+		<h3>Bundle Annotations</h3>
+
+		<p>
+			The {@link se.europeanspallationsource.xaos.tools.annotation.Bundle Bundle},
+			{@link se.europeanspallationsource.xaos.tools.annotation.BundleItem BundleItem},
+			{@link se.europeanspallationsource.xaos.tools.annotation.BundleItems BundleItems}
+			annotations and the {@link se.europeanspallationsource.xaos.tools.annotation.Bundles Bundles}
+			class will simplify dealing with resource bundles allowing to define
+			the default bundle entries close to the code that uses them.
+		</p>
+
+<pre>
+  &#64;Bundle( name = "Messages" )
+  public class SomeClass {
+
+    &#64;BundleItem(
+      key = "exception.message",
+      comment = "Message used in the thrown illegal state exception.\n"
+              + "  {0} Message from the original exception.",
+      message = "Operation not permitted [original message: {0}]."
+    )
+    public void doSomething() {
+      try {
+        ...
+      } catch ( Exception ex ) {
+        throw new IllegalStateException(
+          Bundles.get(getClass(), "exception.message", ex.getMessage()),
+          ex
+        );
+      }
+    }
+
+  }
+</pre>
+
 		<h3>Java Language Tools</h3>
 
 		<p>
-			The {@link se.europeanspallationsource.xaos.tools.lang.Reflections}
+			The {@link se.europeanspallationsource.xaos.tools.lang.Reflections Reflections}
 			class provides few methods to handling fields and method access using
 			the Java Reflection API.
 		</p>
 		<p>
-			<b>Note:</b> when using {@link se.europeanspallationsource.xaos.tools.lang.Reflections}
+			<b>Note:</b> when using {@link se.europeanspallationsource.xaos.tools.lang.Reflections Reflections}
 			it is necessary to open the module/package being reflected to
 			<code>xaos.tools</code>. This can be achieved with the following flag
 			being added to the command line launching the application:
@@ -100,6 +137,11 @@ limitations under the License.
 <pre>
   --add-opens module/package=xaos.tools
 </pre>
+
+		<p>
+			The {@link se.europeanspallationsource.xaos.tools.lang.AbstractAnnotationProcessor AbstractAnnotationProcessor}
+			class provides a starting point to implement annotation processors.
+		</p>
 
     </body>
 

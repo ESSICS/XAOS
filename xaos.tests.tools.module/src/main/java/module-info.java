@@ -1,6 +1,6 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- * Copyright (C) 2018 by European Spallation Source ERIC.
+ * Copyright (C) 2018-2019 by European Spallation Source ERIC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,25 +18,29 @@
 /**
  * @author claudio.rosati@esss.se
  */
-module xaos.tests {
+module xaos.tests.tools {
 
 	requires xaos.tools;
-	requires org.apache.commons.collections4;
 
-	uses se.europeanspallationsource.xaos.tests.tools.BasicUsageInterface;
-	uses se.europeanspallationsource.xaos.tests.tools.MultipleRegistrationsInterface1;
-	uses se.europeanspallationsource.xaos.tests.tools.MultipleRegistrationsInterface2;
-	uses se.europeanspallationsource.xaos.tests.tools.OrderedInterface;
+	uses se.europeanspallationsource.xaos.tests.tools.services.BasicUsageInterface;
+	uses se.europeanspallationsource.xaos.tests.tools.services.MultipleRegistrationsInterface1;
+	uses se.europeanspallationsource.xaos.tests.tools.services.MultipleRegistrationsInterface2;
+	uses se.europeanspallationsource.xaos.tests.tools.services.OrderedInterface;
 
-	provides se.europeanspallationsource.xaos.tests.tools.BasicUsageInterface
-		with se.europeanspallationsource.xaos.tests.tools.BasicUsageImplementation;
-	provides se.europeanspallationsource.xaos.tests.tools.MultipleRegistrationsInterface1
-		with se.europeanspallationsource.xaos.tests.tools.MultipleRegistrationsImpl;
-	provides se.europeanspallationsource.xaos.tests.tools.MultipleRegistrationsInterface2
-		with se.europeanspallationsource.xaos.tests.tools.MultipleRegistrationsImpl;
-	provides se.europeanspallationsource.xaos.tests.tools.OrderedInterface
-		with se.europeanspallationsource.xaos.tests.tools.OrderedImpl1,
-			 se.europeanspallationsource.xaos.tests.tools.OrderedImpl2,
-			 se.europeanspallationsource.xaos.tests.tools.OrderedImpl3;
+	provides se.europeanspallationsource.xaos.tests.tools.services.BasicUsageInterface
+		with se.europeanspallationsource.xaos.tests.tools.services.BasicUsageImplementation;
+	provides se.europeanspallationsource.xaos.tests.tools.services.MultipleRegistrationsInterface1
+		with se.europeanspallationsource.xaos.tests.tools.services.MultipleRegistrationsImpl;
+	provides se.europeanspallationsource.xaos.tests.tools.services.MultipleRegistrationsInterface2
+		with se.europeanspallationsource.xaos.tests.tools.services.MultipleRegistrationsImpl;
+	provides se.europeanspallationsource.xaos.tests.tools.services.OrderedInterface
+		with se.europeanspallationsource.xaos.tests.tools.services.OrderedImpl1,
+			 se.europeanspallationsource.xaos.tests.tools.services.OrderedImpl2,
+			 se.europeanspallationsource.xaos.tests.tools.services.OrderedImpl3,
+			 se.europeanspallationsource.xaos.tests.tools.services.OrderedImpl4;
+
+	opens se.europeanspallationsource.xaos.tests.tools.bundles to xaos.tools;
+	opens se.europeanspallationsource.xaos.tests.tools.bundles.p1 to xaos.tools;
+	opens se.europeanspallationsource.xaos.tests.tools.services to xaos.tools;
 
 }

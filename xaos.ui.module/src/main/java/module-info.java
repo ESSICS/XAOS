@@ -1,6 +1,6 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- * Copyright (C) 2018 by European Spallation Source ERIC.
+ * Copyright (C) 2018-2019 by European Spallation Source ERIC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,10 @@ module xaos.ui {
 
 	requires java.logging;
 	requires java.xml;
-	requires javafx.base;
-	requires javafx.controls;
-	requires javafx.graphics;
+	requires transitive javafx.base;
+	requires transitive javafx.controls;
+	requires transitive javafx.fxml;
+	requires transitive javafx.graphics;
 	requires javafx.media;
 	requires javafx.swing;
 	requires javafx.web;
@@ -33,6 +34,7 @@ module xaos.ui {
 	requires org.kordamp.iconli.core;
 	requires org.kordamp.ikonli.fontawesome;
 	requires org.kordamp.ikonli.javafx;
+	requires org.kordamp.ikonli.materialdesign;
 	requires transitive xaos.core;
 	requires transitive xaos.tools;
 
@@ -55,5 +57,8 @@ module xaos.ui {
 	exports se.europeanspallationsource.xaos.ui.control.tree;
 	exports se.europeanspallationsource.xaos.ui.control.tree.directory;
 	exports se.europeanspallationsource.xaos.ui.spi;
+	exports se.europeanspallationsource.xaos.ui.util;
+
+	opens se.europeanspallationsource.xaos.ui.control to javafx.fxml;
 
 }

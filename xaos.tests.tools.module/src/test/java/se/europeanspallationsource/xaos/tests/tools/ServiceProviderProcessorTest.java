@@ -16,7 +16,24 @@
 package se.europeanspallationsource.xaos.tests.tools;
 
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.ServiceLoader;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import se.europeanspallationsource.xaos.tests.tools.services.BasicUsageImplementation;
+import se.europeanspallationsource.xaos.tests.tools.services.BasicUsageInterface;
+import se.europeanspallationsource.xaos.tests.tools.services.MultipleRegistrationsImpl;
+import se.europeanspallationsource.xaos.tests.tools.services.MultipleRegistrationsInterface1;
+import se.europeanspallationsource.xaos.tests.tools.services.MultipleRegistrationsInterface2;
+import se.europeanspallationsource.xaos.tests.tools.services.OrderedImpl1;
+import se.europeanspallationsource.xaos.tests.tools.services.OrderedImpl2;
+import se.europeanspallationsource.xaos.tests.tools.services.OrderedImpl3;
+import se.europeanspallationsource.xaos.tests.tools.services.OrderedImpl4;
+import se.europeanspallationsource.xaos.tests.tools.services.OrderedInterface;
+import se.europeanspallationsource.xaos.tools.annotation.ServiceLoaderUtilities;
+
+import static org.junit.Assert.assertEquals;
 
 
 /**
@@ -25,77 +42,54 @@ import org.junit.Test;
 @SuppressWarnings( { "ClassWithoutLogger", "UseOfSystemOutOrSystemErr" } )
 public class ServiceProviderProcessorTest {
 
-	@Test
-	public void test() {
+	@BeforeClass
+	public static void setUpClass() {
+		System.out.println("---- ServiceProviderProcessorTest ------------------------------");
 	}
 
-//	@BeforeClass
-//	public static void setUpClass() {
-//		System.out.println("---- ServiceProviderProcessorTest ------------------------------");
-//	}
-//
-//	@Test
-//	public void testBasicUsage() {
-//
-//		System.out.println("  Basic Usage");
-//
-//		assertEquals(
-//			Collections.singletonList(BasicUsageImplementation.class),
-//			ServiceLoaderUtilities.classesOf(BasicUsageInterface.class)
-//		);
-//
-//	}
-//
-//	@Test
-//    public void testMultipleRegistrations() throws Exception {
-//
-//		System.out.println("  Multiple Registrations Usage");
-//
-//        assertEquals(
-//			Collections.singletonList(MultipleRegistrationsImpl.class),
-//			ServiceLoaderUtilities.classesOf(MultipleRegistrationsInterface1.class)
-//		);
-//        assertEquals(
-//			Collections.singletonList(MultipleRegistrationsImpl.class),
-//			ServiceLoaderUtilities.classesOf(MultipleRegistrationsInterface2.class)
-//		);
-//
-//	}
-//
-//	@Test
-//	@SuppressWarnings("NestedAssignment")
-//	public void testOrder() throws Exception {
-//
-//		System.out.println("  Order Usage");
-//
-//		assertEquals(
-//			Arrays.<Class<?>>asList(OrderedImpl3.class, OrderedImpl2.class, OrderedImpl1.class),
-//			ServiceLoaderUtilities.classesOf(OrderedInterface.class)
-//		);
-//
-//		// Order in file should also be fixed, for benefit of ServiceLoader.
-//		BufferedReader r = new BufferedReader(
-//			new InputStreamReader(
-//				ServiceProviderProcessorTest.class.getResourceAsStream("/META-INF/services/" + OrderedInterface.class.getName())
-//			)
-//		);
-//		List<String> lines = new ArrayList<>(3);
-//		String line;
-//
-//		while ( ( line = r.readLine() ) != null ) {
-//			lines.add(line);
-//		}
-//
-//		assertEquals(Arrays.asList(
-//			OrderedImpl3.class.getName(),
-//			ServiceLoaderLine.ORDER + "100",
-//			OrderedImpl2.class.getName(),
-//			ServiceLoaderLine.ORDER + "200",
-//			OrderedImpl1.class.getName()
-//		),
-//			lines
-//		);
-//
-//	}
+	@Test
+	public void testBasicUsage() {
+
+		System.out.println("  Basic Usage...");
+
+		assertEquals(
+			Collections.singletonList(BasicUsageImplementation.class),
+			ServiceLoaderUtilities.classesOf(ServiceLoader.load(BasicUsageInterface.class))
+		);
+
+	}
+
+	@Test
+    public void testMultipleRegistrations() throws Exception {
+
+		System.out.println("  Multiple Registrations Usage...");
+
+        assertEquals(
+			Collections.singletonList(MultipleRegistrationsImpl.class),
+			ServiceLoaderUtilities.classesOf(ServiceLoader.load(MultipleRegistrationsInterface1.class))
+		);
+        assertEquals(
+			Collections.singletonList(MultipleRegistrationsImpl.class),
+			ServiceLoaderUtilities.classesOf(ServiceLoader.load(MultipleRegistrationsInterface2.class))
+		);
+
+	}
+
+	@Test
+	@SuppressWarnings("NestedAssignment")
+	public void testOrder() throws Exception {
+
+		System.out.println("  Order Usage...");
+
+		assertEquals(
+			Arrays.<Class<?>>asList(OrderedImpl3.class, OrderedImpl2.class, OrderedImpl1.class, OrderedImpl4.class),
+			ServiceLoaderUtilities.classesOf(ServiceLoader.load(OrderedInterface.class))
+		);
+        assertEquals(
+			OrderedImpl3.class,
+			ServiceLoaderUtilities.findFirst(ServiceLoader.load(OrderedInterface.class)).orElseThrow().getClass()
+		);
+
+	}
 
 }

@@ -18,7 +18,7 @@ tools for plotting data into a graph.
 <dependency>
   <groupId>se.europeanspallationsource</groupId>
   <artifactId>xaos.ui.plot</artifactId>
-  <version>0.3.0-SNAPSHOT</version>
+  <version>0.4.0</version>
   <scope>compile</scope>
 </dependency>
 ```
@@ -40,4 +40,8 @@ module your.application {
   ...
 }
 ```
+
+Here the Java module dependencies of `xaos.ui.plot` module:
+
+![xaos.ui.plot java dependencis](https://github.com/ESSICS/XAOS/blob/master/xaos.ui.plot.module/doc/module-dependencies.png)
 

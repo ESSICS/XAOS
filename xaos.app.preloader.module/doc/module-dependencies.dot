@@ -1,0 +1,15 @@
+digraph "summary" {
+  "xaos.app.preloader"                               -> "java.base (java.base)";
+  "xaos.app.preloader"                               -> "javafx.base";
+  "xaos.app.preloader"                               -> "javafx.controls";
+  "xaos.app.preloader"                               -> "javafx.graphics";
+  "javafx.base"                                      -> "java.base (java.base)";
+  "javafx.graphics"                                  -> "java.base (java.base)";
+  "javafx.graphics"                                  -> "java.desktop (java.desktop)";
+  "javafx.graphics"                                  -> "java.xml (java.xml)";
+  "javafx.graphics"                                  -> "javafx.base";
+  "javafx.graphics"                                  -> "jdk.unsupported (jdk.unsupported)";
+  "javafx.controls"                                  -> "java.base (java.base)";
+  "javafx.controls"                                  -> "javafx.base";
+  "javafx.controls"                                  -> "javafx.graphics";
+}

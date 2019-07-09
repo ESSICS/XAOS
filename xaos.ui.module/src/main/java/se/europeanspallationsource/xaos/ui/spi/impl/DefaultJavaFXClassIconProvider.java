@@ -24,14 +24,16 @@ import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.apache.commons.lang3.StringUtils;
+import se.europeanspallationsource.xaos.core.util.LogUtils;
 import se.europeanspallationsource.xaos.tools.annotation.ServiceProvider;
 import se.europeanspallationsource.xaos.ui.spi.ClassIconProvider;
+
+import static java.util.logging.Level.SEVERE;
 
 
 /**
@@ -39,10 +41,11 @@ import se.europeanspallationsource.xaos.ui.spi.ClassIconProvider;
  *
  * @author claudio.rosati@esss.se
  */
-@SuppressWarnings( { "ClassWithoutLogger", "NestedAssignment", "UseOfSystemOutOrSystemErr" } )
+@SuppressWarnings( { "NestedAssignment", "UseOfSystemOutOrSystemErr" } )
 @ServiceProvider( service = ClassIconProvider.class )
 public class DefaultJavaFXClassIconProvider extends BaseProvider implements ClassIconProvider {
 
+	private static final Logger LOGGER = Logger.getLogger(DefaultJavaFXClassIconProvider.class.getName());
 	private static final Map<String, String> RESOURCES_MAP;
 
 	/**
@@ -69,7 +72,7 @@ public class DefaultJavaFXClassIconProvider extends BaseProvider implements Clas
 			}
 
 		} catch ( IOException ex ) {
-			Logger.getLogger(DefaultJavaFXClassIconProvider.class.getName()).log(Level.SEVERE, null, ex);
+			LogUtils.log(LOGGER, SEVERE, ex);
 		}
 
 		//	Print map if xaos.test.verbose is set to true.

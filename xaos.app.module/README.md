@@ -9,6 +9,14 @@ The _XAOS App_ module (`xaos.app`) provides a JavaFX-based application
 framework for building UI-based applications with menus, toolbars, etc.
 
 
+## Application Types
+
+
+TODO:CR
+**** EXPLAIN THE DIFFERENT TYPES OF APPLICATIONS ****
+
+
+
 ## Application Layout
 
 The framework allows applications having a generic layout with the following components:
@@ -102,7 +110,7 @@ be chosen.
 <dependency>
   <groupId>se.europeanspallationsource</groupId>
   <artifactId>xaos.app</artifactId>
-  <version>0.3.0-SNAPSHOT</version>
+  <version>0.4.0</version>
   <scope>compile</scope>
 </dependency>
 ```
@@ -124,4 +132,8 @@ module your.application {
   ...
 }
 ```
+
+Here the Java module dependencies of `xaos.app` module:
+
+![xaos.app java dependencis](https://github.com/ESSICS/XAOS/blob/master/xaos.app.module/doc/module-dependencies.png)
 

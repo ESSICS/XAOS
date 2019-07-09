@@ -395,12 +395,12 @@ public class DefaultMIMETypeIconProvider extends BaseProvider implements MIMETyp
 		//	Presentation/Powerpoint files...
 //		icon = FontIcon.of(FontAwesome.FILE_POWERPOINT_O);
 //
-//		map.put("xxx/xxx", icon);
+//		map.put("directory/file", icon);
 
 		//	Spreadsheet files...
 //		icon = FontIcon.of(FontAwesome.FILE_EXCEL_O);
 //
-//		map.put("xxx/xxx", icon);
+//		map.put("directory/file", icon);
 
 
 		//	Text files...

@@ -57,7 +57,7 @@ watcher.watch(root);
 <dependency>
   <groupId>se.europeanspallationsource</groupId>
   <artifactId>xaos.core</artifactId>
-  <version>0.3.0-SNAPSHOT</version>
+  <version>0.4.0</version>
   <scope>compile</scope>
 </dependency>
 ```
@@ -79,4 +79,8 @@ module your.application {
   ...
 }
 ```
+
+Here the Java module dependencies of `xaos.core` module:
+
+![xaos.core java dependencis](https://github.com/ESSICS/XAOS/blob/master/xaos.core.module/doc/module-dependencies.png)
 

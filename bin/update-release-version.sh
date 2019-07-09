@@ -14,3 +14,7 @@ cd ..
 mvn versions:set -DnewVersion=$VERSION -DprocessAllModules
 mvn versions:commit -DprocessAllModules
 cd bin
+
+# TODO:CR sed README.md to update version number in the maven examples
+#
+# Could it be done via the Maven resource/filtering plugin?

@@ -23,18 +23,19 @@ import java.lang.annotation.Target;
 import java.util.ServiceLoader;
 
 import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.SOURCE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
 /**
- * Declarative registration of a singleton service provider. By marking an
- * implementation class with this annotation, you automatically register that
- * implementation to be loaded by {@link ServiceLoader}. The class must be
- * public and have a public no-argument constructor.
+ * Declarative verification of a singleton service provider. By marking an
+ * implementation class with this annotation, you automatically verify that the
+ * implementation to be loaded by {@link ServiceLoader} is valid and that a 
+ * corresponding <b>provides … with</b> directive is present into the
+ * {@code module-info.java} file. The service provider class must be public and
+ * have a public no-argument constructor.
  *
  * <p>
- * Example of usage:
- * </p>
+ * Example of usage:</p>
  *
  * <pre>
  *   package my.module;
@@ -47,33 +48,29 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
  *   }</pre>
  *
  * <p>
- * Would result in a resource file {@code META-INF/services/my.module.spi.SomeService}
- * containing the single line of text: {@code my.module.MyService}.
- * </p>
- * <p>
  * <b>Note:</b> when using {@link ServiceProvider} the {@link #service()} class
  * must be listed in the {@code module-info} class inside a <b>uses</b> statement.
  * Moreover a <b>provides … with</b> statement must also be added to declare the
- * annotated class as provider for the parameter class.
- * </p>
+ * annotated class as provider for the parameter class.</p>
  *
  * @author claudio.rosati@esss.se
  * @see <a href="http://bits.netbeans.org/8.1/javadoc/org-openide-util-lookup/overview-summary.html">NetBeans Lookup API</a>
  */
 @Documented
 @Repeatable(ServiceProviders.class)
-@Retention( SOURCE )
+@Retention( RUNTIME )
 @Target( TYPE )
 public @interface ServiceProvider {
 
     /**
      * An optional number determining the load order of this service relative to
 	 * others. Lower-numbered services are returned in the lookup result first.
-     * Services with no specified position are returned last (ordered by name).
+     * Services with no specified position are returned last (ordered by name),
+	 * followed by services registered using the standard Java mechanism.
 	 *
 	 * @return The load order of this service relative to others.
      */
-    int order() default Integer.MAX_VALUE;
+    int order() default Integer.MAX_VALUE - 1;
 
 	/**
 	 * The interface (or abstract class) to register this implementation under.

@@ -6,7 +6,7 @@
 	<parent>
         <groupId>se.europeanspallationsource</groupId>
         <artifactId>xaos</artifactId>
-        <version>0.3.0</version>
+        <version>0.4.0</version>
     </parent>
 
 	<artifactId>xaos.tests.tools</artifactId>
@@ -17,13 +17,18 @@
 	</description>
     <url>https://github.com/ESSICS/XAOS</url>
 
+	<properties>
+		<!-- Dependencies Versions -->
+		<xaos.version>${project.version}</xaos.version>
+	</properties>
+
 	<build>
 		<plugins>
 			<!-- ALPHABETICALLY SORTED BY groupId:artifactId -->
 			<plugin>
 				<groupId>com.github.ferstl</groupId>
 				<artifactId>depgraph-maven-plugin</artifactId>
-				<version>3.2.2</version>
+				<version>3.3.0</version>
 				<configuration>
 					<customStyleConfiguration>${project.basedir}/../doc/maven-dependencies.json</customStyleConfiguration>
 				</configuration>
@@ -37,6 +42,21 @@
 					<skipNexusStagingDeployMojo>true</skipNexusStagingDeployMojo>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>${project.groupId}</groupId>
+							<artifactId>xaos.tools</artifactId>
+							<version>${project.version}</version>
+						</path>
+						<!-- ... more ... -->
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -46,7 +66,7 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>xaos.tools</artifactId>
-            <version>${project.version}</version>
+            <version>${xaos.version}</version>
         </dependency>
 
     </dependencies>

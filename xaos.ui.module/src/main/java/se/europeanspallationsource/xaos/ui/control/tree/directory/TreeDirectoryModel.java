@@ -24,21 +24,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.FileTime;
-import java.text.MessageFormat;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import se.europeanspallationsource.xaos.core.util.TriFunction;
+import se.europeanspallationsource.xaos.core.util.LogUtils;
+import se.europeanspallationsource.xaos.core.util.function.TriFunction;
 import se.europeanspallationsource.xaos.ui.control.Icons;
 import se.europeanspallationsource.xaos.ui.control.tree.DirectoryModel;
 
+import static java.util.logging.Level.WARNING;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FILE;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FILE_EXECUTABLE;
 import static se.europeanspallationsource.xaos.ui.control.CommonIcons.FILE_HIDDEN;
@@ -62,9 +62,8 @@ import static se.europeanspallationsource.xaos.ui.control.Icons.DEFAULT_SIZE;
  * @param <I> Type of the initiator of changes to the model.
  * @param <T> Type of the object returned by {@link TreeItem#getValue()}.
  * @author claudio.rosati@esss.se
- * @see <a href="https://github.com/ESSICS/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.LiveDirsModel</a>
+ * @see <a href="https://github.com/TomasMikula/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.LiveDirsModel</a>
  */
-@SuppressWarnings( "ClassWithoutLogger" )
 public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 
 	/**
@@ -77,6 +76,8 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	 * Graphic factory that always returns {@code null}.
 	 */
 	public static final GraphicFactory NO_GRAPHIC_FACTORY = ( p, d, e ) -> null;
+
+	private static final Logger LOGGER = Logger.getLogger(TreeDirectoryModel.class.getName());
 
 	private final Subject<Update<I>> creations;
 	private final I defaultInitiator;
@@ -460,8 +461,6 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 	@SuppressWarnings( "PublicInnerClass" )
 	public static class DefaultGraphicFactory implements GraphicFactory {
 
-		private static final Logger LOGGER = Logger.getLogger(DefaultGraphicFactory.class.getName());
-
 		@Override
 		public Node createGraphic( Path path, boolean isDirectory, boolean isExpanded ) {
 			if ( isDirectory ) {
@@ -477,15 +476,11 @@ public class TreeDirectoryModel<I, T> implements DirectoryModel<I, T> {
 				try {
 					hidden = Files.isHidden(path);
 				} catch ( IOException ex ) {
-					LOGGER.log(
-						Level.WARNING, 
-						MessageFormat.format("Unable to check if the given path is hidden [{0}].", path.toString()), 
-						ex
-					);
+					LogUtils.log(LOGGER, WARNING, ex, "Unable to check if the given path is hidden [{0}].", path.toString());
 				}
 				
 				return hidden
-					   ?	 Icons.iconFor(FILE_HIDDEN, DEFAULT_SIZE)
+					   ? Icons.iconFor(FILE_HIDDEN, DEFAULT_SIZE)
 					   : Icons.iconFor(path, DEFAULT_SIZE, Icons.iconFor(FILE, DEFAULT_SIZE));
 				
 			}

@@ -33,7 +33,7 @@ limitations under the License.
             physics applications, scripts and services.
         </p>
 		<p>
-			The framework is compose by a series modules: the <i>XAOS Core</i>
+			The framework is composed by a series modules: the <i>XAOS Core</i>
 			module provides the non-UI classes part of the framework. Any
 			non-graphical application can use this module.
 		</p>
@@ -47,7 +47,7 @@ limitations under the License.
 		<h3>Directory Watcher</h3>
 
 		<p>
-			The {@link se.europeanspallationsource.xaos.core.util.io.DirectoryWatcher}
+			The {@link se.europeanspallationsource.xaos.core.util.io.DirectoryWatcher DirectoryWatcher}
 			class allows watching for changes in files and directories. Moreover
 			it allows also for standard operations on both files and directories.
 		</p>
@@ -72,6 +72,28 @@ limitations under the License.
 
   watcher.watch(root);
 </pre>
+
+		<h3>Delete File Visitor</h3>
+
+		<p>
+			THe {@link se.europeanspallationsource.xaos.core.util.io.DeleteFileVisitor DeleteFileVisitor}
+			will allow to delete a file tree: each directory will be deleted
+			after the entries in the directory are deleted.
+		</p>
+
+<pre>
+  Path root = ...
+
+  Files.walkFileTree(root, new DeleteFileVisitor());
+</pre>
+
+		<h3>Thread Utilities</h3>
+
+		<p>
+			The {@link se.europeanspallationsource.xaos.core.util.ThreadPools ThreadPools}
+			and {@link se.europeanspallationsource.xaos.core.util.ThreadUtils ThreadUtils}
+			classes provide various utilities to play with threads.
+		</p>
 
     </body>
 

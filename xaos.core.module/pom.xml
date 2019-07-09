@@ -6,7 +6,7 @@
 	<parent>
         <groupId>se.europeanspallationsource</groupId>
         <artifactId>xaos</artifactId>
-	    <version>0.3.0</version>
+	    <version>0.4.0</version>
     </parent>
 
 	<artifactId>xaos.core</artifactId>
@@ -17,13 +17,19 @@
 	</description>
     <url>https://github.com/ESSICS/XAOS</url>
 
+	<properties>
+		<!-- Dependencies Versions -->
+		<rxjava.version>2.2.10</rxjava.version>
+		<xaos.version>${project.version}</xaos.version>
+	</properties>
+
     <build>
         <plugins>
 			<!-- ALPHABETICALLY SORTED BY groupId:artifactId -->
 			<plugin>
 				<groupId>com.github.ferstl</groupId>
 				<artifactId>depgraph-maven-plugin</artifactId>
-				<version>3.2.2</version>
+				<version>3.3.0</version>
 				<configuration>
 					<customStyleConfiguration>${project.basedir}/../doc/maven-dependencies.json</customStyleConfiguration>
 				</configuration>
@@ -37,9 +43,17 @@
 		<dependency>
 			<groupId>io.reactivex.rxjava2</groupId>
 			<artifactId>rxjava</artifactId>
-			<version>2.2.4</version>
+			<version>${rxjava.version}</version>
 		</dependency>
 
+
+        <!-- XAOS - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>xaos.tools</artifactId>
+            <version>${xaos.version}</version>
+        </dependency>
+		
     </dependencies>
 
 </project>

@@ -16,7 +16,6 @@
 package se.europeanspallationsource.xaos.ui.control.svg;
 
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,6 +28,9 @@ import java.util.function.Function;
 import java.util.logging.Logger;
 import javax.xml.stream.events.StartElement;
 import org.apache.commons.lang3.StringUtils;
+import se.europeanspallationsource.xaos.core.util.LogUtils;
+
+import static java.util.logging.Level.WARNING;
 
 
 /**
@@ -51,6 +53,7 @@ class SVGAttributesStackFrame {
 	static final String ATTR_TRANSFORM = "transform";
 
 	private static final Logger LOGGER = Logger.getLogger(SVGAttributesStackFrame.class.getName());
+
 	private static final Set<String> SUPPORTED_ATTRIBUTES = new TreeSet<>(Arrays.asList(
 		ATTR_FILL,
 		ATTR_OPACITY,
@@ -128,13 +131,15 @@ class SVGAttributesStackFrame {
 			try {
 				consumer.accept(converter.apply(value));
 			} catch ( Exception ex ) {
-				LOGGER.warning(MessageFormat.format(
+				LogUtils.log(
+					LOGGER,
+					WARNING,
 					"The value of the ''{0}'' attribute cannot be used: value [{1}], exception [{2} – {3}].",
 					attribute,
 					value,
 					ex.getClass().getSimpleName(),
 					ex.getMessage()
-				));
+				);
 			}
 		}
 
