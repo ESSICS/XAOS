@@ -219,7 +219,7 @@ public class StatisticsController extends GridPane implements Initializable {
 		} catch ( RuntimeException rex ) {
 			((TextFormatter<Double>) intFxValue.getTextFormatter()).setValue(null);
 			((TextFormatter<Double>) intAbsFxValue.getTextFormatter()).setValue(null);
-			LogUtils.log(LOGGER, WARNING, rex);
+			LogUtils.log(LOGGER, WARNING, rex.getMessage());
 		}
 
     }
