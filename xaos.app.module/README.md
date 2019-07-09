@@ -110,7 +110,7 @@ be chosen.
 <dependency>
   <groupId>se.europeanspallationsource</groupId>
   <artifactId>xaos.app</artifactId>
-  <version>0.4.0-SNAPSHOT</version>
+  <version>0.4.0</version>
   <scope>compile</scope>
 </dependency>
 ```

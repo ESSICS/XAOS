@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>se.europeanspallationsource</groupId>
 		<artifactId>xaos.demos</artifactId>
-		<version>0.4.0-SNAPSHOT</version>
+		<version>0.4.0</version>
 	</parent>
 
 	<artifactId>xaos.demos.simple.application</artifactId>
