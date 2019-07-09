@@ -3,13 +3,107 @@ digraph "xaos.ui.plot" {
   edge [fontsize="10",fontname="Helvetica"]
 
   // Node Definitions:
+  "org.openjfx:javafx-base:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-base<br/>12>]
+  "org.openjfx:javafx-base:jar:mac"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-base<br/>12<br/>mac>]
   "se.europeanspallationsource:xaos.ui.plot:jar"[shape="box",style="rounded, filled",fillcolor="#7DE1FF",label=<se.europeanspallationsource<br/>xaos.ui.plot<br/>0.4.0-SNAPSHOT>]
-  "org.assertj:assertj-core:jar"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">org.assertj</font><br/>assertj-core<font color="grey55" point-size="10"><br/>3.11.1</font><font color="grey55" point-size="10"><br/>(test)</font>>]
-  "junit:junit:jar"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">junit</font><br/>junit<font color="grey55" point-size="10"><br/>4.12</font><font color="grey55" point-size="10"><br/>(test)</font>>]
+  "org.openjfx:javafx-controls:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-controls<br/>12>]
+  "org.openjfx:javafx-controls:jar:mac"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-controls<br/>12<br/>mac>]
+  "org.openjfx:javafx-graphics:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-graphics<br/>12>]
+  "org.openjfx:javafx-fxml:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-fxml<br/>12>]
+  "org.openjfx:javafx-fxml:jar:mac"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-fxml<br/>12<br/>mac>]
+  "org.openjfx:javafx-graphics:jar:mac"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-graphics<br/>12<br/>mac>]
+  "org.openjfx:javafx-swing:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-swing<br/>12>]
+  "org.openjfx:javafx-swing:jar:mac"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-swing<br/>12<br/>mac>]
+  "org.openjfx:javafx-web:jar:mac"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-web<br/>12<br/>mac>]
+  "org.openjfx:javafx-media:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-media<br/>12>]
+  "org.openjfx:javafx-web:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-web<br/>12>]
+  "org.openjfx:javafx-media:jar:mac"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.openjfx<br/>javafx-media<br/>12<br/>mac>]
+  "org.apache.commons:commons-lang3:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.apache.commons<br/>commons-lang3<br/>3.9>]
+  "org.apache.commons:commons-math3:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.apache.commons<br/>commons-math3<br/>3.6.1>]
+  "io.reactivex.rxjava2:rxjava:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<io.reactivex.rxjava2<br/>rxjava<br/>2.2.10>]
+  "org.reactivestreams:reactive-streams:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.reactivestreams<br/>reactive-streams<br/>1.0.2>]
+  "se.europeanspallationsource:xaos.core:jar"[shape="box",style="rounded, filled",fillcolor="#7DE1FF",label=<se.europeanspallationsource<br/>xaos.core<br/>0.4.0-SNAPSHOT>]
+  "se.europeanspallationsource:xaos.tools:jar"[shape="box",style="rounded, filled",fillcolor="#7DE1FF",label=<se.europeanspallationsource<br/>xaos.tools<br/>0.4.0-SNAPSHOT>]
+  "com.github.ben-manes.caffeine:caffeine:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<com.github.ben-manes.caffeine<br/>caffeine<br/>2.7.0>]
+  "org.checkerframework:checker-qual:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.checkerframework<br/>checker-qual<br/>2.6.0>]
+  "com.google.errorprone:error_prone_annotations:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<com.google.errorprone<br/>error_prone_annotations<br/>2.3.3>]
+  "se.europeanspallationsource:xaos.ui:jar"[shape="box",style="rounded, filled",fillcolor="#7DE1FF",label=<se.europeanspallationsource<br/>xaos.ui<br/>0.4.0-SNAPSHOT>]
+  "org.apache.commons:commons-text:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.apache.commons<br/>commons-text<br/>1.7>]
+  "org.kordamp.ikonli:ikonli-core:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.kordamp.ikonli<br/>ikonli-core<br/>11.3.4>]
+  "org.kordamp.ikonli:ikonli-javafx:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.kordamp.ikonli<br/>ikonli-javafx<br/>11.3.4>]
+  "org.kordamp.ikonli:ikonli-fontawesome-pack:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.kordamp.ikonli<br/>ikonli-fontawesome-pack<br/>11.3.4>]
+  "org.kordamp.ikonli:ikonli-materialdesign-pack:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.kordamp.ikonli<br/>ikonli-materialdesign-pack<br/>11.3.4>]
+  "org.controlsfx:controlsfx:jar"[shape="box",style="rounded, filled",fillcolor="khaki",label=<org.controlsfx<br/>controlsfx<br/>11.0.0>]
+  "org.testfx:testfx-core:jar"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">org.testfx</font><br/>testfx-core<font color="grey55" point-size="10"><br/>4.0.15-alpha</font><font color="grey55" point-size="10"><br/>(test)</font>>]
   "org.hamcrest:hamcrest-core:jar"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">org.hamcrest</font><br/>hamcrest-core<font color="grey55" point-size="10"><br/>1.3</font><font color="grey55" point-size="10"><br/>(test)</font>>]
+  "org.assertj:assertj-core:jar"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">org.assertj</font><br/>assertj-core<font color="grey55" point-size="10"><br/>3.12.2</font><font color="grey55" point-size="10"><br/>(test)</font>>]
+  "org.testfx:testfx-junit:jar"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">org.testfx</font><br/>testfx-junit<font color="grey55" point-size="10"><br/>4.0.15-alpha</font><font color="grey55" point-size="10"><br/>(test)</font>>]
+  "junit:junit:jar"[shape="box",style="rounded",color="grey55",fontname="Helvetica",fontsize="14",fontcolor="grey55",label=<<font color="grey55" point-size="10">junit</font><br/>junit<font color="grey55" point-size="10"><br/>4.12</font><font color="grey55" point-size="10"><br/>(test)</font>>]
 
   // Edge Definitions:
+  "org.openjfx:javafx-base:jar" -> "org.openjfx:javafx-base:jar:mac"
+  "se.europeanspallationsource:xaos.ui.plot:jar" -> "org.openjfx:javafx-base:jar"
+  "org.openjfx:javafx-controls:jar" -> "org.openjfx:javafx-controls:jar:mac"
+  "org.openjfx:javafx-controls:jar" -> "org.openjfx:javafx-graphics:jar"[style="dotted"]
+  "se.europeanspallationsource:xaos.ui.plot:jar" -> "org.openjfx:javafx-controls:jar"
+  "org.openjfx:javafx-fxml:jar" -> "org.openjfx:javafx-fxml:jar:mac"
+  "org.openjfx:javafx-fxml:jar" -> "org.openjfx:javafx-controls:jar"[style="dotted"]
+  "se.europeanspallationsource:xaos.ui.plot:jar" -> "org.openjfx:javafx-fxml:jar"
+  "org.openjfx:javafx-graphics:jar" -> "org.openjfx:javafx-graphics:jar:mac"
+  "se.europeanspallationsource:xaos.ui.plot:jar" -> "org.openjfx:javafx-graphics:jar"
+  "org.openjfx:javafx-swing:jar" -> "org.openjfx:javafx-swing:jar:mac"
+  "org.openjfx:javafx-swing:jar" -> "org.openjfx:javafx-graphics:jar"[style="dotted"]
+  "se.europeanspallationsource:xaos.ui.plot:jar" -> "org.openjfx:javafx-swing:jar"
+  "org.openjfx:javafx-web:jar:mac" -> "org.openjfx:javafx-media:jar"[style="dotted"]
+  "org.openjfx:javafx-web:jar" -> "org.openjfx:javafx-web:jar:mac"
+  "org.openjfx:javafx-web:jar" -> "org.openjfx:javafx-controls:jar"[style="dotted"]
+  "org.openjfx:javafx-media:jar" -> "org.openjfx:javafx-media:jar:mac"
+  "org.openjfx:javafx-web:jar" -> "org.openjfx:javafx-media:jar"
+  "se.europeanspallationsource:xaos.ui.plot:jar" -> "org.openjfx:javafx-web:jar"
+  "se.europeanspallationsource:xaos.ui.plot:jar" -> "org.apache.commons:commons-lang3:jar"
+  "se.europeanspallationsource:xaos.ui.plot:jar" -> "org.apache.commons:commons-math3:jar"
+  "io.reactivex.rxjava2:rxjava:jar" -> "org.reactivestreams:reactive-streams:jar"
+  "se.europeanspallationsource:xaos.core:jar" -> "io.reactivex.rxjava2:rxjava:jar"
+  "se.europeanspallationsource:xaos.core:jar" -> "se.europeanspallationsource:xaos.tools:jar"[style="dotted"]
+  "se.europeanspallationsource:xaos.ui.plot:jar" -> "se.europeanspallationsource:xaos.core:jar"
+  "se.europeanspallationsource:xaos.tools:jar" -> "org.apache.commons:commons-lang3:jar"[style="dotted"]
+  "com.github.ben-manes.caffeine:caffeine:jar" -> "org.checkerframework:checker-qual:jar"
+  "com.github.ben-manes.caffeine:caffeine:jar" -> "com.google.errorprone:error_prone_annotations:jar"
+  "se.europeanspallationsource:xaos.tools:jar" -> "com.github.ben-manes.caffeine:caffeine:jar"
+  "se.europeanspallationsource:xaos.ui.plot:jar" -> "se.europeanspallationsource:xaos.tools:jar"
+  "se.europeanspallationsource:xaos.ui:jar" -> "org.openjfx:javafx-base:jar"[style="dotted"]
+  "se.europeanspallationsource:xaos.ui:jar" -> "org.openjfx:javafx-controls:jar"[style="dotted"]
+  "se.europeanspallationsource:xaos.ui:jar" -> "org.openjfx:javafx-fxml:jar"[style="dotted"]
+  "se.europeanspallationsource:xaos.ui:jar" -> "org.openjfx:javafx-graphics:jar"[style="dotted"]
+  "se.europeanspallationsource:xaos.ui:jar" -> "org.openjfx:javafx-media:jar"[style="dotted"]
+  "se.europeanspallationsource:xaos.ui:jar" -> "org.openjfx:javafx-swing:jar"[style="dotted"]
+  "se.europeanspallationsource:xaos.ui:jar" -> "org.openjfx:javafx-web:jar"[style="dotted"]
+  "se.europeanspallationsource:xaos.ui:jar" -> "org.apache.commons:commons-lang3:jar"[style="dotted"]
+  "org.apache.commons:commons-text:jar" -> "org.apache.commons:commons-lang3:jar"[style="dotted"]
+  "se.europeanspallationsource:xaos.ui:jar" -> "org.apache.commons:commons-text:jar"
+  "se.europeanspallationsource:xaos.ui:jar" -> "org.kordamp.ikonli:ikonli-core:jar"
+  "org.kordamp.ikonli:ikonli-javafx:jar" -> "org.kordamp.ikonli:ikonli-core:jar"[style="dotted"]
+  "se.europeanspallationsource:xaos.ui:jar" -> "org.kordamp.ikonli:ikonli-javafx:jar"
+  "org.kordamp.ikonli:ikonli-fontawesome-pack:jar" -> "org.kordamp.ikonli:ikonli-core:jar"[style="dotted"]
+  "se.europeanspallationsource:xaos.ui:jar" -> "org.kordamp.ikonli:ikonli-fontawesome-pack:jar"
+  "org.kordamp.ikonli:ikonli-materialdesign-pack:jar" -> "org.kordamp.ikonli:ikonli-core:jar"[style="dotted"]
+  "se.europeanspallationsource:xaos.ui:jar" -> "org.kordamp.ikonli:ikonli-materialdesign-pack:jar"
+  "se.europeanspallationsource:xaos.ui:jar" -> "se.europeanspallationsource:xaos.tools:jar"[style="dotted"]
+  "se.europeanspallationsource:xaos.ui:jar" -> "se.europeanspallationsource:xaos.core:jar"[style="dotted"]
+  "se.europeanspallationsource:xaos.ui.plot:jar" -> "se.europeanspallationsource:xaos.ui:jar"
+  "org.controlsfx:controlsfx:jar" -> "org.openjfx:javafx-base:jar"[style="dashed",color="red",fontcolor="red",label="11"]
+  "org.controlsfx:controlsfx:jar" -> "org.openjfx:javafx-graphics:jar"[style="dashed",color="red",fontcolor="red",label="11"]
+  "org.controlsfx:controlsfx:jar" -> "org.openjfx:javafx-controls:jar"[style="dashed",color="red",fontcolor="red",label="11"]
+  "org.controlsfx:controlsfx:jar" -> "org.openjfx:javafx-media:jar"[style="dashed",color="red",fontcolor="red",label="11"]
+  "org.controlsfx:controlsfx:jar" -> "org.openjfx:javafx-web:jar"[style="dashed",color="red",fontcolor="red",label="11"]
+  "se.europeanspallationsource:xaos.ui.plot:jar" -> "org.controlsfx:controlsfx:jar"
+  "org.testfx:testfx-core:jar" -> "org.hamcrest:hamcrest-core:jar"
+  "org.testfx:testfx-core:jar" -> "org.assertj:assertj-core:jar"[style="dashed",color="red",fontcolor="red",label="3.11.1"]
+  "se.europeanspallationsource:xaos.ui.plot:jar" -> "org.testfx:testfx-core:jar"
+  "org.testfx:testfx-junit:jar" -> "org.testfx:testfx-core:jar"[style="dotted"]
+  "org.testfx:testfx-junit:jar" -> "junit:junit:jar"[style="dotted"]
+  "se.europeanspallationsource:xaos.ui.plot:jar" -> "org.testfx:testfx-junit:jar"
   "se.europeanspallationsource:xaos.ui.plot:jar" -> "org.assertj:assertj-core:jar"
-  "junit:junit:jar" -> "org.hamcrest:hamcrest-core:jar"
+  "junit:junit:jar" -> "org.hamcrest:hamcrest-core:jar"[style="dotted"]
   "se.europeanspallationsource:xaos.ui.plot:jar" -> "junit:junit:jar"
 }

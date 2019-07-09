@@ -25,6 +25,7 @@ import org.junit.runners.Suite;
  */
 @RunWith( Suite.class )
 @Suite.SuiteClasses( {
+	BundleProcessorTest.class,
 	ServiceProviderProcessorTest.class
 } )
 @SuppressWarnings( { "ClassMayBeInterface", "ClassWithoutLogger" } )

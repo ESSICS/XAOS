@@ -27,14 +27,15 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
 /**
- * Declarative registration of a singleton service provider. By marking an
- * implementation class with this annotation, you automatically register that
- * implementation to be loaded by {@link ServiceLoader}. The class must be
- * public and have a public no-argument constructor.
+ * Declarative verification of a singleton service provider. By marking an
+ * implementation class with this annotation, you automatically verify that the
+ * implementation to be loaded by {@link ServiceLoader} is valid and that a 
+ * corresponding <b>provides … with</b> directive is present into the
+ * {@code module-info.java} file. The service provider class must be public and
+ * have a public no-argument constructor.
  *
  * <p>
- * Example of usage:
- * </p>
+ * Example of usage:</p>
  *
  * <pre>
  *   package my.module;
@@ -47,15 +48,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *   }</pre>
  *
  * <p>
- * Would result in a resource file {@code META-INF/services/my.module.spi.SomeService}
- * containing the single line of text: {@code my.module.MyService}.
- * </p>
- * <p>
  * <b>Note:</b> when using {@link ServiceProvider} the {@link #service()} class
  * must be listed in the {@code module-info} class inside a <b>uses</b> statement.
  * Moreover a <b>provides … with</b> statement must also be added to declare the
- * annotated class as provider for the parameter class.
- * </p>
+ * annotated class as provider for the parameter class.</p>
  *
  * @author claudio.rosati@esss.se
  * @see <a href="http://bits.netbeans.org/8.1/javadoc/org-openide-util-lookup/overview-summary.html">NetBeans Lookup API</a>

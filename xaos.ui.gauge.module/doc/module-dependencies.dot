@@ -1,4 +1,3 @@
 digraph "summary" {
   "xaos.ui.gauge"                                    -> "java.base (java.base)";
-  "xaos.ui.gauge"                                    -> "java.logging (java.logging)";
 }

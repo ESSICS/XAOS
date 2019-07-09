@@ -19,7 +19,8 @@
 
 	<properties>
 		<!-- Dependencies Versions -->
-		<rxjava.version>2.2.6</rxjava.version>
+		<rxjava.version>2.2.10</rxjava.version>
+		<xaos.version>${project.version}</xaos.version>
 	</properties>
 
     <build>
@@ -28,7 +29,7 @@
 			<plugin>
 				<groupId>com.github.ferstl</groupId>
 				<artifactId>depgraph-maven-plugin</artifactId>
-				<version>3.2.2</version>
+				<version>3.3.0</version>
 				<configuration>
 					<customStyleConfiguration>${project.basedir}/../doc/maven-dependencies.json</customStyleConfiguration>
 				</configuration>
@@ -45,6 +46,14 @@
 			<version>${rxjava.version}</version>
 		</dependency>
 
+
+        <!-- XAOS - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>xaos.tools</artifactId>
+            <version>${xaos.version}</version>
+        </dependency>
+		
     </dependencies>
 
 </project>

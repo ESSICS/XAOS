@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javafx.beans.value.ChangeListener;
@@ -37,10 +38,11 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
+import se.europeanspallationsource.xaos.core.util.LogUtils;
 import se.europeanspallationsource.xaos.ui.control.tree.DirectoryModel;
 
 import static java.nio.file.attribute.FileTime.from;
-import static se.europeanspallationsource.xaos.ui.impl.Constants.LOGGER;
+import static java.util.logging.Level.WARNING;
 
 
 /**
@@ -49,7 +51,6 @@ import static se.europeanspallationsource.xaos.ui.impl.Constants.LOGGER;
  * @author claudio.rosati@esss.se
  * @see <a href="https://github.com/TomasMikula/LiveDirsFX">LiveDirsFX:org.fxmisc.livedirs.PathItem</a>
  */
-@SuppressWarnings( "ClassWithoutLogger" )
 public class TreeDirectoryItems {
 
 	/**
@@ -65,6 +66,8 @@ public class TreeDirectoryItems {
 	 * the {@link TreeItem} generic type is just {@link Path}.
 	 */
 	public static final Function<Path, Path> DEFAULT_PROJECTOR = v -> v;
+
+	private static final Logger LOGGER = Logger.getLogger(TreeDirectoryItems.class.getName());
 
 	/**
 	 * Creates a new instance of {@link DirectoryItem} for the given parameters.
@@ -670,12 +673,14 @@ public class TreeDirectoryItems {
 			try ( Stream<Path> dirStream = Files.list(dir) ) {
 				return dirStream.sorted(PATH_COMPARATOR).collect(Collectors.toList());
 			} catch ( IOException ex ) {
-				LOGGER.warning(MessageFormat.format(
+				LogUtils.log(
+					LOGGER,
+					WARNING,
 					"Exception getting files list for \"{0}\" [{1}: {2}].",
 					dir.toString(),
 					ex.getClass().getSimpleName(),
 					ex.getMessage()
-				));
+				);
 				return Collections.emptyList();
 			}
 		}
@@ -688,12 +693,14 @@ public class TreeDirectoryItems {
 				ft = Files.getLastModifiedTime(file);
 			} catch ( IOException ex ) {
 
-				LOGGER.warning(MessageFormat.format(
+				LogUtils.log(
+					LOGGER,
+					WARNING,
 					"Exception getting the last modified time for \"{0}\": using \"now\" instead [{1}: {2}].",
 					file.toString(),
 					ex.getClass().getSimpleName(),
 					ex.getMessage()
-				));
+				);
 
 				ft = from(Instant.now());
 

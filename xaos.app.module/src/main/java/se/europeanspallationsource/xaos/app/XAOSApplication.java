@@ -1,6 +1,6 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- * Copyright (C) 2018 by European Spallation Source ERIC.
+ * Copyright (C) 2018-2019 by European Spallation Source ERIC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package se.europeanspallationsource.xaos.app;
 
 
 import java.text.MessageFormat;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.application.Preloader;
@@ -31,12 +32,12 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import se.europeanspallationsource.xaos.core.util.LogUtils;
 import se.europeanspallationsource.xaos.core.util.ThreadPools;
 
 import static java.util.logging.Level.SEVERE;
 import static javafx.application.Preloader.StateChangeNotification.Type.BEFORE_START;
 import static javafx.scene.control.ProgressIndicator.INDETERMINATE_PROGRESS;
-import static se.europeanspallationsource.xaos.app.impl.Constants.LOGGER;
 
 
 /**
@@ -48,8 +49,9 @@ import static se.europeanspallationsource.xaos.app.impl.Constants.LOGGER;
  *
  * @author claudio.rosati@esss.se
  */
-@SuppressWarnings( { "ClassWithoutLogger" } )
 public class XAOSApplication extends Application {
+
+	private static final Logger LOGGER = Logger.getLogger(XAOSApplication.class.getName());
 
 	private volatile int currentStep = -1;
 	private volatile int currentSubStep = -1;
@@ -99,7 +101,7 @@ public class XAOSApplication extends Application {
 				//	Call the startApplication() method.
 				startApplication((BorderPane) scene.getRoot());
 			} catch ( Exception ex ) {
-				LOGGER.log(SEVERE, "Exception when starting the application.", ex);
+				LogUtils.log(LOGGER, SEVERE, ex, "Exception when starting the application.");
 				notifyPreloader(new ErrorNotification(
 					"XAOSApplication#startApplication",
 					"Exception when starting the application.",

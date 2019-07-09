@@ -1,6 +1,6 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- * Copyright (C) 2018 by European Spallation Source ERIC.
+ * Copyright (C) 2018-2019 by European Spallation Source ERIC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,10 @@
  */
 module xaos.tools {
 
+	requires com.github.benmanes.caffeine;
 	requires java.compiler;
 	requires java.logging;
+	requires org.apache.commons.lang3;
 
 	exports se.europeanspallationsource.xaos.tools.annotation;
 	exports se.europeanspallationsource.xaos.tools.lang;
@@ -29,6 +31,7 @@ module xaos.tools {
 	uses javax.annotation.processing.Processor;
 
 	provides javax.annotation.processing.Processor
-		with se.europeanspallationsource.xaos.tools.annotation.impl.ServiceProviderProcessor;
+		with se.europeanspallationsource.xaos.tools.annotation.impl.BundleProcessor,
+			 se.europeanspallationsource.xaos.tools.annotation.impl.ServiceProviderProcessor;
 
 }

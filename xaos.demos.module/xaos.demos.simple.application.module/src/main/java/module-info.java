@@ -17,7 +17,7 @@
 module xaos.demos.simple.application {
 
 	requires java.logging;
-	requires xaos.app;
+	requires transitive xaos.app;
 
 	exports se.europeanspallationsource.xaos.demos.simple;
 

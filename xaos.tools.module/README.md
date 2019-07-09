@@ -14,7 +14,8 @@ tasks.
 
 The _ServiceProvider_ annotation will simplify providing service implementations,
 taking care of publishing them in the proper file inside the `META-INF/service`
-folder.
+folder, and verifying the provider is valid and the required directive in the
+module-info.java file is present.
 
 ```java
 package my.module;
@@ -36,7 +37,39 @@ must be listed in the _module-info_ class inside a `uses` statement. Moreover a
 provider for the parameter class.
 
 **Note:** when using _ServiceLoaderUtilities_ the service provider interface
-type must be listed in the _module-info_ class inside a `uses` statement.
+type must be listed in the _module-info_ class inside a `opens ... to xaos.tools;`
+statement.
+
+
+## Bundle Annotations
+
+The _@Bundle_, _@BundleItem_, _@BundleItems_ annotations and the _Bundles_ 
+class will simplify dealing with resource bundles allowing to define the default
+bundle entries close to the code that uses them.
+
+```java
+@Bundle( name = "Messages" )
+public class SomeClass {
+
+  @BundleItem(
+    key = "exception.message",
+    comment = "Message used in the thrown illegal state exception.\n"
+            + "  {0} Message from the original exception.",
+    message = "Operation not permitted [original message: {0}]."
+  )
+  public void doSomething() {
+    try {
+      ...
+    } catch ( Exception ex ) {
+      throw new IllegalStateException(
+        Bundles.get(getClass(), "exception.message", ex.getMessage()),
+        ex
+      );
+    }
+  }
+
+}
+```
 
 
 ## Java Language Tools
@@ -51,6 +84,9 @@ following flag being added to the command line launching the application:
 ```
   --add-opens module/package=xaos.tools
 ```
+
+The _AbstractAnnotationProcessor_ class provides a starting point to implement
+annotation processors.
 
 
 ## Using XAOS Tools
@@ -67,8 +103,8 @@ following flag being added to the command line launching the application:
 </dependency>
 ```
 
-To use the _ServiceProvider_ annotation the following must be added to the
-project's plugin list:
+To use the various annotations the following must be added to the project's
+plugin list:
 
 ```xml
 <plugin>

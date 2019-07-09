@@ -16,7 +16,6 @@
 package se.europeanspallationsource.xaos.ui.control.svg;
 
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,10 +25,12 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.logging.Logger;
 import javax.xml.stream.events.StartElement;
 import org.apache.commons.lang3.StringUtils;
+import se.europeanspallationsource.xaos.core.util.LogUtils;
 
-import static se.europeanspallationsource.xaos.ui.impl.Constants.LOGGER;
+import static java.util.logging.Level.WARNING;
 
 
 /**
@@ -37,7 +38,6 @@ import static se.europeanspallationsource.xaos.ui.impl.Constants.LOGGER;
  *
  * @author claudio.rosati@esss.se
  */
-@SuppressWarnings( "ClassWithoutLogger" )
 class SVGAttributesStackFrame {
 
 	static final String ATTR_CLASS = "class";
@@ -51,6 +51,8 @@ class SVGAttributesStackFrame {
 	static final String ATTR_STROKE_WIDTH = "stroke-width";
 	static final String ATTR_STYLE = "style";
 	static final String ATTR_TRANSFORM = "transform";
+
+	private static final Logger LOGGER = Logger.getLogger(SVGAttributesStackFrame.class.getName());
 
 	private static final Set<String> SUPPORTED_ATTRIBUTES = new TreeSet<>(Arrays.asList(
 		ATTR_FILL,
@@ -129,13 +131,15 @@ class SVGAttributesStackFrame {
 			try {
 				consumer.accept(converter.apply(value));
 			} catch ( Exception ex ) {
-				LOGGER.warning(MessageFormat.format(
+				LogUtils.log(
+					LOGGER,
+					WARNING,
 					"The value of the ''{0}'' attribute cannot be used: value [{1}], exception [{2} – {3}].",
 					attribute,
 					value,
 					ex.getClass().getSimpleName(),
 					ex.getMessage()
-				));
+				);
 			}
 		}
 

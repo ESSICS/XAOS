@@ -19,7 +19,7 @@
 
 	<properties>
 		<!-- Dependencies Versions -->
-		<javafx.version>11.0.2</javafx.version>
+		<javafx.version>12</javafx.version>
 		<xaos.version>${project.version}</xaos.version>
 	</properties>
 
@@ -29,7 +29,7 @@
 			<plugin>
 				<groupId>com.github.ferstl</groupId>
 				<artifactId>depgraph-maven-plugin</artifactId>
-				<version>3.2.2</version>
+				<version>3.3.0</version>
 				<configuration>
 					<customStyleConfiguration>${project.basedir}/../doc/maven-dependencies.json</customStyleConfiguration>
 				</configuration>
