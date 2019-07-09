@@ -57,32 +57,36 @@ public class HistogramChartFX<X extends Number, Y extends Number> extends LineCh
 	/**
 	 * Quick way of creating a histogram chart showing the given {@code data}.
 	 *
-	 * @param data The data list to be charted.
-	 * @param bars The desired number of histogram bars.
+	 * @param data       The data list to be charted.
+	 * @param bars       The desired number of histogram bars.
 	 * @return A {@link AreaChartFX} chart.
+	 * @param seriesName The name of the {@link Series} created from the given
+	 *                   {@code data}.
 	 */
-	public static HistogramChartFX<Number, Number> of( List<Double> data, int bars ) {
+	public static HistogramChartFX<Number, Number> of( List<Double> data, int bars, String seriesName ) {
 		return new HistogramChartFX<>(
 			new NumberAxis(),
 			new NumberAxis(),
-			FXCollections.singletonObservableList(seriesOf(data, bars))
+			FXCollections.singletonObservableList(seriesOf(data, bars, seriesName))
 		);
 	}
 
 	/**
 	 * Quick way of creating a histogram chart showing the given {@code data}.
 	 *
-	 * @param data   The data list to be charted.
-	 * @param minVal Minimum data value.
-	 * @param maxVal Maximum data value.
-	 * @param bars   The desired number of histogram bars.
+	 * @param data       The data list to be charted.
+	 * @param minVal     Minimum data value.
+	 * @param maxVal     Maximum data value.
+	 * @param bars       The desired number of histogram bars.
+	 * @param seriesName The name of the {@link Series} created from the given
+	 *                   {@code data}.
 	 * @return A {@link AreaChartFX} chart.
 	 */
-	public static HistogramChartFX<Number, Number> of( List<Double> data, double minVal, double maxVal, int bars ) {
+	public static HistogramChartFX<Number, Number> of( List<Double> data, double minVal, double maxVal, int bars, String seriesName ) {
 		return new HistogramChartFX<>(
 			new NumberAxis(),
 			new NumberAxis(),
-			FXCollections.singletonObservableList(seriesOf(data, minVal, maxVal, bars))
+			FXCollections.singletonObservableList(seriesOf(data, minVal, maxVal, bars, seriesName))
 		);
 	}
 
@@ -90,17 +94,22 @@ public class HistogramChartFX<X extends Number, Y extends Number> extends LineCh
 	 * Quick way of creating a histogram chart series from the given
 	 * {@code data}.
 	 *
-	 * @param data   The data list to be charted.
-	 * @param bars   The desired number of histogram bars.
+	 * @param data       The data list to be charted.
+	 * @param bars       The desired number of histogram bars.
+	 * @param seriesName The name of the {@link Series} created from the given
+	 *                   {@code data}.
 	 * @return A {@link AreaChartFX} chart.
 	 */
-	public static Series<Number, Number> seriesOf( List<Double> data, int bars ) {
+	public static Series<Number, Number> seriesOf( List<Double> data, int bars, String seriesName ) {
 
 		List<Double> sortedData = new ArrayList<>(data);
 
 		Collections.sort(sortedData);
 
 		Series<Number, Number> series = new Series<>();
+
+		series.setName(seriesName);
+
 		double minVal = sortedData.get(0);
 		double maxVal = sortedData.get(sortedData.size() - 1);
 		double delta = ( maxVal - minVal ) / ( bars - 1 );
@@ -128,19 +137,24 @@ public class HistogramChartFX<X extends Number, Y extends Number> extends LineCh
 	 * Quick way of creating a histogram chart series from the given
 	 * {@code data}.
 	 *
-	 * @param data   The data list to be charted.
-	 * @param minVal Minimum data value.
-	 * @param maxVal Maximum data value.
-	 * @param bars   The desired number of histogram bars.
+	 * @param data       The data list to be charted.
+	 * @param minVal     Minimum data value.
+	 * @param maxVal     Maximum data value.
+	 * @param bars       The desired number of histogram bars.
+	 * @param seriesName The name of the {@link Series} created from the given
+	 *                   {@code data}.
 	 * @return A {@link AreaChartFX} chart.
 	 */
-	public static Series<Number, Number> seriesOf( List<Double> data, double minVal, double maxVal, int bars ) {
+	public static Series<Number, Number> seriesOf( List<Double> data, double minVal, double maxVal, int bars, String seriesName ) {
 
 		List<Double> sortedData = new ArrayList<>(data);
 
 		Collections.sort(sortedData);
 
 		Series<Number, Number> series = new Series<>();
+
+		series.setName(seriesName);
+
 		double delta = ( maxVal - minVal ) / ( bars - 1 );
 
 		for ( int bar = 0; bar < bars; bar++ ) {
@@ -162,10 +176,10 @@ public class HistogramChartFX<X extends Number, Y extends Number> extends LineCh
 
 	}
 
-	private final List<String> notShownInLegend = new ArrayList<>(4);
+	private List<String> notShownInLegend;
 	private final Group pluginsNodesGroup = new Group();
 	private final PluginManager pluginManager = new PluginManager(this, pluginsNodesGroup);
-	private final List<String> seriesDrawnInPlot = new ArrayList<>(4);
+	private List<String> seriesDrawnInPlot;
 
 	/* *********************************************************************** *
 	 * START OF JAVAFX PROPERTIES                                              *
@@ -290,11 +304,11 @@ public class HistogramChartFX<X extends Number, Y extends Number> extends LineCh
 
 	@Override
 	public boolean isNotShownInLegend( String name ) {
-		return notShownInLegend.contains(name);
+		return notShownInLegend().contains(name);
 	}
 
 	public boolean isSeriesDrawn( String name ) {
-		return seriesDrawnInPlot.contains(name);
+		return seriesDrawnInPlot().contains(name);
 	}
 
 	/**
@@ -323,25 +337,19 @@ public class HistogramChartFX<X extends Number, Y extends Number> extends LineCh
 
 	@Override
 	public final void setNotShownInLegend( String name ) {
-		notShownInLegend.add(name);
+		notShownInLegend().add(name);
 		updateLegend();
 	}
 
 	@Override
 	protected void layoutPlotChildren() {
 
-		//	Layout plot children. This call will create fresh new symbols
-		//	that are by default visible.
-//		super.layoutPlotChildren();
-
+		//	Layout plot children.
 		@SuppressWarnings( "unchecked" )
 		final double zeroPos = ( ( (ValueAxis) getYAxis() ).getLowerBound() > 0 )
 							 ? ( (ValueAxis) getYAxis() ).getDisplayPosition(( (ValueAxis) getYAxis() ).getLowerBound())
 							 : ( (ValueAxis) getYAxis() ).getZeroPosition();
 		final double offset = getBarGap();
-
-
-
 
 		for ( Iterator<Series<X, Y>> sit = getDisplayedSeriesIterator(); sit.hasNext(); ) {
 
@@ -359,20 +367,17 @@ public class HistogramChartFX<X extends Number, Y extends Number> extends LineCh
 					final double top = Math.max(yPos, zeroPos);
 
 					bar.resizeRelocate(xPos - barwidth / 2, bottom, barwidth, top - bottom);
+
 				}
 			});
 
 		}
 
-
-
-
-
 		//	If the track is hidden, then hide the symbols.
-//		getData().stream()
-//			.filter(series -> !seriesDrawnInPlot.contains(series.getName()))
-//			.flatMap(series -> series.getData().stream())
-//			.forEach(d -> d.getNode().setVisible(false));
+		getData().stream()
+			.filter(series -> !seriesDrawnInPlot().contains(series.getName()))
+			.flatMap(series -> series.getData().stream())
+			.forEach(d -> d.getNode().setVisible(false));
 
 		//	Move plugins nodes to front.
 		ObservableList<Node> plotChildren = getPlotChildren();
@@ -380,96 +385,78 @@ public class HistogramChartFX<X extends Number, Y extends Number> extends LineCh
 		plotChildren.remove(pluginsNodesGroup);
 		plotChildren.add(pluginsNodesGroup);
 
-
-
-
-
-//		final double zeroPos = ( ( (ValueAxis) getYAxis() ).getLowerBound() > 0 )
-//							   ? ( (ValueAxis) getYAxis() ).getDisplayPosition(( (ValueAxis) getYAxis() ).getLowerBound()) : ( (ValueAxis) getYAxis() ).getZeroPosition();
-//		final double offset = getBarGap();
-//		List<LineTo> constructedPath = new ArrayList<>(this.getData().size());
-//		for ( Iterator<Series<X, Y>> sit = getDisplayedSeriesIterator(); sit.hasNext(); ) {
-//			Series<X, Y> series = sit.next();
-//			if ( notShownInLegend.contains(series.getName()) ) {
-//				final ObservableList<PathElement> seriesLine = ( (Path) series.getNode() ).getElements();
-//				seriesLine.clear();
-//				constructedPath.clear();
-//				for ( Iterator<Data<X, Y>> it = getDisplayedDataIterator(series); it.hasNext(); ) {
-//					Data<X, Y> item = it.next();
-//					double x = getXAxis().getDisplayPosition(item.getXValue());
-//					double y = getYAxis().getDisplayPosition(item.getYValue());
-//					if ( Double.isNaN(x) || Double.isNaN(y) ) {
-//						continue;
-//					}
-//					constructedPath.add(new LineTo(x, y));
-//				}
-//				if ( !constructedPath.isEmpty() ) {
-//					LineTo first = constructedPath.get(0);
-//					seriesLine.add(new MoveTo(first.getX(), first.getY()));
-//					seriesLine.addAll(constructedPath);
-//				}
-//			} else {
-//				final double barwidth = ( getXAxis().getDisplayPosition(series.getData().get(1).getXValue()) - getXAxis().getDisplayPosition(series.getData().get(0).getXValue()) ) - offset;
-//				series.getData().forEach(dataItem -> {
-//					if ( dataItem != null ) {
-//						final Node bar = dataItem.getNode();
-//						final double xPos;
-//						final double yPos;
-//						xPos = getXAxis().getDisplayPosition(dataItem.getXValue());
-//						yPos = getYAxis().getDisplayPosition(dataItem.getYValue());
-//						final double bottom = Math.min(yPos, zeroPos);
-//						final double top = Math.max(yPos, zeroPos);
-//						bar.resizeRelocate(xPos - barwidth / 2, bottom, barwidth, top - bottom);
-//					}
-//				});
-//			}
-//		}
-//		movePluginsNodesToFront();
 	}
 
 	@Override
 	protected void updateLegend() {
-//        final Legend legend = new Legend();
-//        seriesDrawnInPlot.clear();
-//        legend.getItems().clear();
-//        for (final Series<X, Y> series : getData())
-//        {
-//            if(!noShowInLegend.contains(series.getName())){
-//                Legend.LegendItem legenditem = new Legend.LegendItem(series.getName());
-//                final CheckBox cb = new CheckBox(series.getName());
-//                seriesDrawnInPlot.add(series.getName());
-//                cb.setUserData(series);
-//                cb.setSelected(true);
-//                //cb.setPadding(new Insets(0,10,0,0));
-//                cb.setStyle("-fx-text-fill: -color"+this.getData().indexOf(series)+" ;");
-//                cb.addEventHandler(ActionEvent.ACTION, e ->{
-//                    final CheckBox box = (CheckBox) e.getSource();
-//                    @SuppressWarnings("unchecked")
-//                    final Series<Number, Number> s = (Series<Number, Number>) box.getUserData();
-//                    s.getNode().setVisible(box.isSelected());
-//                    s.getData().forEach(data ->{
-//                        StackPane stackPane = (StackPane) data.getNode();
-//                        stackPane.setVisible(box.isSelected());
-//                    });
-//                    if(box.isSelected()){
-//                        if (!seriesDrawnInPlot.contains(s.getName())){
-//                            seriesDrawnInPlot.add(s.getName());
-//                        }
-//                    } else {
-//                        seriesDrawnInPlot.remove(s.getName());
-//                    }
-//                });
-//                legenditem.setText("");
-//                legenditem.setSymbol(cb);
-//                legend.getItems().add(legenditem);
-//            }
-//        }
-//        setLegend(legend);
+
+		final Legend legend = new Legend();
+
+		seriesDrawnInPlot().clear();
+
+		for ( int i = 0; i < getData().size(); i++ ) {
+
+			final int seriesIndex = i;
+			Series<X, Y> series = getData().get(seriesIndex);
+			String seriesName = series.getName();
+
+			if ( !notShownInLegend().contains(seriesName) ) {
+
+				Legend.LegendItem legenditem = new Legend.LegendItem(seriesName, selected -> {
+
+					series.getNode().setVisible(selected);
+					series.getData().forEach(d -> d.getNode().setVisible(selected));
+
+					if ( selected ) {
+						if ( !seriesDrawnInPlot().contains(seriesName) ) {
+							seriesDrawnInPlot().add(seriesName);
+						}
+					} else {
+						seriesDrawnInPlot().remove(seriesName);
+					}
+
+					getPlugins().forEach(p -> p.seriesVisibilityUpdated(this, series, seriesIndex, selected));
+
+				});
+
+				legenditem.getSymbol().getStyleClass().addAll(
+					"chart-area-symbol",
+					"area-legend-symbol",
+					"default-color" + ( seriesIndex % 8 ),
+					"series" + seriesIndex
+				);
+
+				seriesDrawnInPlot().add(seriesName);
+				legend.getItems().add(legenditem);
+
+			}
+
+		}
+
+		setLegend(legend);
+
 	}
 
-	private void movePluginsNodesToFront() {
-		getPlotChildren().remove(pluginsNodesGroup);
-		getPlotChildren().add(pluginsNodesGroup);
+	@SuppressWarnings( "ReturnOfCollectionOrArrayField" )
+	private List<String> notShownInLegend() {
+
+		if ( notShownInLegend == null ) {
+			notShownInLegend = new ArrayList<>(4);
+		}
+
+		return notShownInLegend;
+
+	}
+
+	@SuppressWarnings( "ReturnOfCollectionOrArrayField" )
+	private List<String> seriesDrawnInPlot() {
+
+		if ( seriesDrawnInPlot == null ) {
+			seriesDrawnInPlot = new ArrayList<>(4);
+		}
+
+		return seriesDrawnInPlot;
+
 	}
 
 }

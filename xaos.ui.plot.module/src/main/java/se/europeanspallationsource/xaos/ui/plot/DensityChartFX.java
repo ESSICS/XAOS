@@ -105,6 +105,11 @@ public class DensityChartFX<X, Y> extends Chart implements Pluggable {
 		return StyleableProperties.STYLEABLES;
 	}
 
+	/**
+	 * @param array The array of scalar double values to be converted.
+	 * @return The array of {@link Double} containing converted values from the
+	 *         given {@code array}.
+	 */
 	private static Number[] toNumbers( double[] array ) {
 
 		Number[] result = new Number[array.length];

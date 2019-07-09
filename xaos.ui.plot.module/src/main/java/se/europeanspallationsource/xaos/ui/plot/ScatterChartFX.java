@@ -53,12 +53,17 @@ public class ScatterChartFX<X, Y> extends ScatterChart<X, Y> implements Pluggabl
 	 * Quick way of creating a scatter chart showing the given {@code data}. X
 	 * axis will contain the index in the data point in the given list.
 	 *
-	 * @param data The data list to be charted.
+	 * @param data       The data list to be charted.
+	 * @param seriesName The name of the {@link Series} created from the given
+	 *                   {@code data}.
 	 * @return A {@link AreaChartFX} chart.
 	 */
-	public static ScatterChartFX<Number, Number> of( ObservableList<Double> data ) {
+	public static ScatterChartFX<Number, Number> of( ObservableList<Double> data, String seriesName ) {
 
 		Series<Number, Number> dataSet = new Series<>();
+
+		dataSet.setName(seriesName);
+
 		ObservableList<Data<Number, Number>> list = dataSet.getData();
 
 		for ( int i = 0; i < data.size(); i++ ) {
@@ -73,10 +78,10 @@ public class ScatterChartFX<X, Y> extends ScatterChart<X, Y> implements Pluggabl
 
 	}
 
-	private final List<String> notShownInLegend = new ArrayList<>(4);
+	private List<String> notShownInLegend;
 	private final Group pluginsNodesGroup = new Group();
 	private final PluginManager pluginManager = new PluginManager(this, pluginsNodesGroup);
-	private final List<String> seriesDrawnInPlot = new ArrayList<>(4);
+	private List<String> seriesDrawnInPlot;
 
 	/**
 	 * Construct a new scatter chart with the given axis.
@@ -161,11 +166,11 @@ public class ScatterChartFX<X, Y> extends ScatterChart<X, Y> implements Pluggabl
 
 	@Override
 	public boolean isNotShownInLegend( String name ) {
-		return notShownInLegend.contains(name);
+		return notShownInLegend().contains(name);
 	}
 
 	public boolean isSeriesDrawn( String name ) {
-		return seriesDrawnInPlot.contains(name);
+		return seriesDrawnInPlot().contains(name);
 	}
 
 	/**
@@ -194,7 +199,7 @@ public class ScatterChartFX<X, Y> extends ScatterChart<X, Y> implements Pluggabl
 
 	@Override
 	public final void setNotShownInLegend( String name ) {
-		notShownInLegend.add(name);
+		notShownInLegend().add(name);
 		updateLegend();
 	}
 
@@ -207,7 +212,7 @@ public class ScatterChartFX<X, Y> extends ScatterChart<X, Y> implements Pluggabl
 
 		//	If the track is hidden, then hide the symbols.
 		getData().stream()
-			.filter(series -> !seriesDrawnInPlot.contains(series.getName()))
+			.filter(series -> !seriesDrawnInPlot().contains(series.getName()))
 			.flatMap(series -> series.getData().stream())
 			.forEach(d -> d.getNode().setVisible(false));
 
@@ -224,7 +229,7 @@ public class ScatterChartFX<X, Y> extends ScatterChart<X, Y> implements Pluggabl
 
 		final Legend legend = new Legend();
 
-		seriesDrawnInPlot.clear();
+		seriesDrawnInPlot().clear();
 
 		for ( int i = 0; i < getData().size(); i++ ) {
 
@@ -232,7 +237,7 @@ public class ScatterChartFX<X, Y> extends ScatterChart<X, Y> implements Pluggabl
 			Series<X, Y> series = getData().get(seriesIndex);
 			String seriesName = series.getName();
 
-			if ( !notShownInLegend.contains(seriesName) ) {
+			if ( !notShownInLegend().contains(seriesName) ) {
 
 				Legend.LegendItem legenditem = new Legend.LegendItem(seriesName, selected -> {
 
@@ -241,11 +246,11 @@ public class ScatterChartFX<X, Y> extends ScatterChart<X, Y> implements Pluggabl
 					series.getData().forEach(d -> d.getNode().setVisible(selected));
 
 					if ( selected ) {
-						if ( !seriesDrawnInPlot.contains(seriesName) ) {
-							seriesDrawnInPlot.add(seriesName);
+						if ( !seriesDrawnInPlot().contains(seriesName) ) {
+							seriesDrawnInPlot().add(seriesName);
 						}
 					} else {
-						seriesDrawnInPlot.remove(seriesName);
+						seriesDrawnInPlot().remove(seriesName);
 					}
 
 					getPlugins().forEach(p -> p.seriesVisibilityUpdated(this, series, seriesIndex, selected));
@@ -259,7 +264,7 @@ public class ScatterChartFX<X, Y> extends ScatterChart<X, Y> implements Pluggabl
 					"series" + seriesIndex
 				);
 
-				seriesDrawnInPlot.add(seriesName);
+				seriesDrawnInPlot().add(seriesName);
 				legend.getItems().add(legenditem);
 
 			}
@@ -270,9 +275,26 @@ public class ScatterChartFX<X, Y> extends ScatterChart<X, Y> implements Pluggabl
 
 	}
 
-	private void movePluginsNodesToFront() {
-		getPlotChildren().remove(pluginsNodesGroup);
-		getPlotChildren().add(pluginsNodesGroup);
+	@SuppressWarnings( "ReturnOfCollectionOrArrayField" )
+	private List<String> notShownInLegend() {
+
+		if ( notShownInLegend == null ) {
+			notShownInLegend = new ArrayList<>(4);
+		}
+
+		return notShownInLegend;
+
+	}
+
+	@SuppressWarnings( "ReturnOfCollectionOrArrayField" )
+	private List<String> seriesDrawnInPlot() {
+
+		if ( seriesDrawnInPlot == null ) {
+			seriesDrawnInPlot = new ArrayList<>(4);
+		}
+
+		return seriesDrawnInPlot;
+
 	}
 
 }

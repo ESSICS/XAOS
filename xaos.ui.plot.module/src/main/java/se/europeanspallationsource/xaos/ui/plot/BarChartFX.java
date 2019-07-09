@@ -50,10 +50,10 @@ public class BarChartFX<X, Y> extends BarChart<X, Y> implements Pluggable {
 
 	private static final Logger LOGGER = Logger.getLogger(BarChartFX.class.getName());
 
-	private final List<String> notShownInLegend = new ArrayList<>(4);
+	private List<String> notShownInLegend;
 	private final Group pluginsNodesGroup = new Group();
 	private final PluginManager pluginManager = new PluginManager(this, pluginsNodesGroup);
-	private final List<String> seriesDrawnInPlot = new ArrayList<>(4);
+	private List<String> seriesDrawnInPlot;
 
 	/**
 	 * Construct a new bar chart with the given axis. The two axis should be a
@@ -145,11 +145,11 @@ public class BarChartFX<X, Y> extends BarChart<X, Y> implements Pluggable {
 
 	@Override
 	public boolean isNotShownInLegend( String name ) {
-		return notShownInLegend.contains(name);
+		return notShownInLegend().contains(name);
 	}
 
 	public boolean isSeriesDrawn( String name ) {
-		return seriesDrawnInPlot.contains(name);
+		return seriesDrawnInPlot().contains(name);
 	}
 
 	/**
@@ -178,7 +178,7 @@ public class BarChartFX<X, Y> extends BarChart<X, Y> implements Pluggable {
 
 	@Override
 	public final void setNotShownInLegend( String name ) {
-		notShownInLegend.add(name);
+		notShownInLegend().add(name);
 		updateLegend();
 	}
 
@@ -191,7 +191,7 @@ public class BarChartFX<X, Y> extends BarChart<X, Y> implements Pluggable {
 
 		//	If the track is hidden, then hide the symbols.
 		getData().stream()
-			.filter(series -> !seriesDrawnInPlot.contains(series.getName()))
+			.filter(series -> !seriesDrawnInPlot().contains(series.getName()))
 			.flatMap(series -> series.getData().stream())
 			.forEach(d -> d.getNode().setVisible(false));
 
@@ -208,7 +208,7 @@ public class BarChartFX<X, Y> extends BarChart<X, Y> implements Pluggable {
 
 		final Legend legend = new Legend();
 
-		seriesDrawnInPlot.clear();
+		seriesDrawnInPlot().clear();
 
 		for ( int i = 0; i < getData().size(); i++ ) {
 
@@ -216,18 +216,18 @@ public class BarChartFX<X, Y> extends BarChart<X, Y> implements Pluggable {
 			Series<X, Y> series = getData().get(seriesIndex);
 			String seriesName = series.getName();
 
-			if ( !notShownInLegend.contains(seriesName) ) {
+			if ( !notShownInLegend().contains(seriesName) ) {
 
 				Legend.LegendItem legenditem = new Legend.LegendItem(seriesName, selected -> {
 
 					series.getData().forEach(d -> d.getNode().setVisible(selected));
 
 					if ( selected ) {
-						if ( !seriesDrawnInPlot.contains(seriesName) ) {
-							seriesDrawnInPlot.add(seriesName);
+						if ( !seriesDrawnInPlot().contains(seriesName) ) {
+							seriesDrawnInPlot().add(seriesName);
 						}
 					} else {
-						seriesDrawnInPlot.remove(seriesName);
+						seriesDrawnInPlot().remove(seriesName);
 					}
 
 					getPlugins().forEach(p -> p.seriesVisibilityUpdated(this, series, seriesIndex, selected));
@@ -241,7 +241,7 @@ public class BarChartFX<X, Y> extends BarChart<X, Y> implements Pluggable {
 					"series" + seriesIndex
 				);
 
-				seriesDrawnInPlot.add(seriesName);
+				seriesDrawnInPlot().add(seriesName);
 				legend.getItems().add(legenditem);
 
 			}
@@ -249,6 +249,28 @@ public class BarChartFX<X, Y> extends BarChart<X, Y> implements Pluggable {
 		}
 
 		setLegend(legend);
+
+	}
+
+	@SuppressWarnings( "ReturnOfCollectionOrArrayField" )
+	private List<String> notShownInLegend() {
+
+		if ( notShownInLegend == null ) {
+			notShownInLegend = new ArrayList<>(4);
+		}
+
+		return notShownInLegend;
+
+	}
+
+	@SuppressWarnings( "ReturnOfCollectionOrArrayField" )
+	private List<String> seriesDrawnInPlot() {
+
+		if ( seriesDrawnInPlot == null ) {
+			seriesDrawnInPlot = new ArrayList<>(4);
+		}
+
+		return seriesDrawnInPlot;
 
 	}
 

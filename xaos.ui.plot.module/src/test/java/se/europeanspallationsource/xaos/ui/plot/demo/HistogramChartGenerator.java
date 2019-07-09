@@ -48,7 +48,7 @@ public class HistogramChartGenerator implements ChartGenerator<Number, Number> {
 	public XYChart<Number, Number> getNewChart( int numberOfPoints, boolean logXAxis, boolean logYAxis ) {
 
 		ObservableList<Double> data = FXCollections.observableArrayList(generateDoubleArray(15.0, 100.0, numberOfPoints));
-		HistogramChartFX<Number, Number> chart = HistogramChartFX.of(data, 40);
+		HistogramChartFX<Number, Number> chart = HistogramChartFX.of(data, 40, "Histogram Data");
 
 		chart.getXAxis().setAnimated(false);
 		((NumberAxis) chart.getXAxis()).setForceZeroInRange(false);
