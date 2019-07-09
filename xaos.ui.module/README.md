@@ -102,7 +102,7 @@ _TreeItems_ provides methods to manipulate trees made of TreeItems.
 <dependency>
   <groupId>se.europeanspallationsource</groupId>
   <artifactId>xaos.ui</artifactId>
-  <version>0.4.0-SNAPSHOT</version>
+  <version>0.4.0</version>
   <scope>compile</scope>
 </dependency>
 ```
