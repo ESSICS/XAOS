@@ -1,9 +1,4 @@
 digraph "summary" {
-  "xaos.core"                                        -> "io.reactivex.rxjava2";
-  "xaos.core"                                        -> "java.base (java.base)";
-  "xaos.core"                                        -> "java.logging (java.logging)";
-  "xaos.core"                                        -> "org.apache.commons.lang3";
-  "xaos.core"                                        -> "xaos.tools";
   "javafx.graphics"                                  -> "java.base (java.base)";
   "javafx.graphics"                                  -> "java.desktop (java.desktop)";
   "javafx.graphics"                                  -> "java.xml (java.xml)";
@@ -17,11 +12,6 @@ digraph "summary" {
   "org.apache.commons.text"                          -> "java.base (java.base)";
   "org.kordamp.ikonli.materialdesign"                -> "java.base (java.base)";
   "org.kordamp.ikonli.materialdesign"                -> "org.kordamp.iconli.core";
-  "org.kordamp.ikonli.javafx"                        -> "java.base (java.base)";
-  "org.kordamp.ikonli.javafx"                        -> "javafx.base";
-  "org.kordamp.ikonli.javafx"                        -> "javafx.graphics";
-  "org.kordamp.ikonli.javafx"                        -> "org.kordamp.iconli.core";
-  "org.apache.commons.lang3"                         -> "java.base (java.base)";
   "xaos.ui"                                          -> "io.reactivex.rxjava2";
   "xaos.ui"                                          -> "java.base (java.base)";
   "xaos.ui"                                          -> "java.logging (java.logging)";
@@ -38,6 +28,11 @@ digraph "summary" {
   "xaos.ui"                                          -> "org.kordamp.ikonli.materialdesign";
   "xaos.ui"                                          -> "xaos.core";
   "xaos.ui"                                          -> "xaos.tools";
+  "org.kordamp.ikonli.javafx"                        -> "java.base (java.base)";
+  "org.kordamp.ikonli.javafx"                        -> "javafx.base";
+  "org.kordamp.ikonli.javafx"                        -> "javafx.graphics";
+  "org.kordamp.ikonli.javafx"                        -> "org.kordamp.iconli.core";
+  "org.apache.commons.lang3"                         -> "java.base (java.base)";
   "xaos.tools"                                       -> "java.base (java.base)";
   "javafx.fxml"                                      -> "java.base (java.base)";
   "javafx.fxml"                                      -> "java.scripting (java.scripting)";
@@ -47,6 +42,11 @@ digraph "summary" {
   "io.reactivex.rxjava2"                             -> "java.base (java.base)";
   "io.reactivex.rxjava2"                             -> "org.reactivestreams";
   "org.kordamp.iconli.core"                          -> "java.base (java.base)";
+  "xaos.core"                                        -> "io.reactivex.rxjava2";
+  "xaos.core"                                        -> "java.base (java.base)";
+  "xaos.core"                                        -> "java.logging (java.logging)";
+  "xaos.core"                                        -> "org.apache.commons.lang3";
+  "xaos.core"                                        -> "xaos.tools";
   "org.kordamp.ikonli.fontawesome"                   -> "java.base (java.base)";
   "org.kordamp.ikonli.fontawesome"                   -> "org.kordamp.iconli.core";
 }

@@ -2,7 +2,6 @@
 
 <!-- [![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/se.europeanspallationsource/xaos.svg)](https://oss.sonatype.org/content/repositories/snapshots/se/europeanspallationsource/xaos/) -->
 [![Maven Central](https://img.shields.io/maven-central/v/se.europeanspallationsource/xaos.svg)](https://repo1.maven.org/maven2/se/europeanspallationsource/xaos)
-[![javadoc](https://www.javadoc.io/badge/se.europeanspallationsource/xaos.svg)](https://www.javadoc.io/doc/se.europeanspallationsource/xaos)
 [![Apache License](https://img.shields.io/badge/license-Apache%20License%202.0-yellow.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
 A JavaFX application framework made initially to create accelerator physics
@@ -69,7 +68,7 @@ application's `pom.xml` file like the following one:
 <dependency>
   <groupId>se.europeanspallationsource</groupId>
   <artifactId>xaos.module</artifactId>
-  <version>0.4.0</version>
+  <version>0.4.1</version>
   <scope>compile</scope>
 </dependency>
 ```
