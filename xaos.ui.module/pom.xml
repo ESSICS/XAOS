@@ -20,9 +20,9 @@
 
 	<properties>
 		<!-- Dependencies Versions -->
-		<classgraph.version>4.8.41</classgraph.version>
+		<classgraph.version>4.8.43</classgraph.version>
 		<commons-lang3.version>3.9</commons-lang3.version>
-		<commons-text.version>1.6</commons-text.version>
+		<commons-text.version>1.7</commons-text.version>
 		<ikonli.version>11.3.4</ikonli.version>
 		<javafx.version>12</javafx.version>
 		<testfx.version>4.0.15-alpha</testfx.version>
