@@ -1,11 +1,15 @@
 digraph "summary" {
+  "org.apache.commons.lang3"                         -> "java.base (java.base)";
+  "xaos.core"                                        -> "java.base (java.base)";
+  "xaos.core"                                        -> "java.logging (java.logging)";
+  "xaos.core"                                        -> "org.apache.commons.lang3";
+  "xaos.core"                                        -> "xaos.tools";
   "xaos.app"                                         -> "java.base (java.base)";
   "xaos.app"                                         -> "java.logging (java.logging)";
   "xaos.app"                                         -> "javafx.base";
   "xaos.app"                                         -> "javafx.controls";
   "xaos.app"                                         -> "javafx.graphics";
   "xaos.app"                                         -> "xaos.core";
-  "org.apache.commons.lang3"                         -> "java.base (java.base)";
   "javafx.graphics"                                  -> "java.base (java.base)";
   "javafx.graphics"                                  -> "java.desktop (java.desktop)";
   "javafx.graphics"                                  -> "java.xml (java.xml)";
@@ -14,10 +18,6 @@ digraph "summary" {
   "javafx.controls"                                  -> "java.base (java.base)";
   "javafx.controls"                                  -> "javafx.base";
   "javafx.controls"                                  -> "javafx.graphics";
-  "javafx.base"                                      -> "java.base (java.base)";
-  "xaos.core"                                        -> "java.base (java.base)";
-  "xaos.core"                                        -> "java.logging (java.logging)";
-  "xaos.core"                                        -> "org.apache.commons.lang3";
-  "xaos.core"                                        -> "xaos.tools";
   "xaos.tools"                                       -> "java.base (java.base)";
+  "javafx.base"                                      -> "java.base (java.base)";
 }
