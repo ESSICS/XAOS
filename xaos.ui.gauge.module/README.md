@@ -18,7 +18,7 @@ controls and tools for building gauges, meters, knobs, etc.
 <dependency>
   <groupId>se.europeanspallationsource</groupId>
   <artifactId>xaos.ui.gauge</artifactId>
-  <version>0.4.2-SNAPSHOT</version>
+  <version>0.4.2</version>
   <scope>compile</scope>
 </dependency>
 ```
