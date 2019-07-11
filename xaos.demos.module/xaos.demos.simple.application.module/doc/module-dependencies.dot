@@ -8,6 +8,10 @@ digraph "summary" {
   "xaos.core"                                        -> "xaos.tools";
   "xaos.tools"                                       -> "java.base (java.base)";
   "org.apache.commons.lang3"                         -> "java.base (java.base)";
+  "xaos.demos.simple.application"                    -> "java.base (java.base)";
+  "xaos.demos.simple.application"                    -> "javafx.controls";
+  "xaos.demos.simple.application"                    -> "javafx.graphics";
+  "xaos.demos.simple.application"                    -> "xaos.app";
   "javafx.base"                                      -> "java.base (java.base)";
   "xaos.app"                                         -> "java.base (java.base)";
   "xaos.app"                                         -> "java.logging (java.logging)";
@@ -15,10 +19,6 @@ digraph "summary" {
   "xaos.app"                                         -> "javafx.controls";
   "xaos.app"                                         -> "javafx.graphics";
   "xaos.app"                                         -> "xaos.core";
-  "xaos.demos.simple.application"                    -> "java.base (java.base)";
-  "xaos.demos.simple.application"                    -> "javafx.controls";
-  "xaos.demos.simple.application"                    -> "javafx.graphics";
-  "xaos.demos.simple.application"                    -> "xaos.app";
   "javafx.graphics"                                  -> "java.base (java.base)";
   "javafx.graphics"                                  -> "java.desktop (java.desktop)";
   "javafx.graphics"                                  -> "java.xml (java.xml)";
