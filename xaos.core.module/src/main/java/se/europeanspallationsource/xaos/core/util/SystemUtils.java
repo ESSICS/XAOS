@@ -46,6 +46,7 @@ public class SystemUtils {
 	 * @param jvmArgs The JVM arguments.
 	 * @param args    The class arguments.
 	 * @return The {@link ProcessBuilder} ready to run the given class.
+	 * @see <a href="https://dzone.com/articles/running-a-java-class-as-a-subprocess">Running a Java Class as a Subprocess</a>
 	 */
 	public static ProcessBuilder build( Class<?> clazz, List<String> jvmArgs, List<String> args ) {
 
@@ -162,6 +163,7 @@ public class SystemUtils {
 	 * @return The class execution exist status.
 	 * @throws java.io.IOException            If an I/O error occurs.
 	 * @throws java.lang.InterruptedException If the execution is interrupted.
+	 * @see <a href="https://dzone.com/articles/running-a-java-class-as-a-subprocess">Running a Java Class as a Subprocess</a>
 	 */
 	public static int execute( Class<?> clazz, List<String> jvmArgs, List<String> args )
 		throws IOException, InterruptedException
