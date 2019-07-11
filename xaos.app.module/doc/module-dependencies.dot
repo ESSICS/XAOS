@@ -18,6 +18,6 @@ digraph "summary" {
   "javafx.controls"                                  -> "java.base (java.base)";
   "javafx.controls"                                  -> "javafx.base";
   "javafx.controls"                                  -> "javafx.graphics";
-  "javafx.base"                                      -> "java.base (java.base)";
   "xaos.tools"                                       -> "java.base (java.base)";
+  "javafx.base"                                      -> "java.base (java.base)";
 }

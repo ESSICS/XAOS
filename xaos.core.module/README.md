@@ -57,7 +57,7 @@ watcher.watch(root);
 <dependency>
   <groupId>se.europeanspallationsource</groupId>
   <artifactId>xaos.core</artifactId>
-  <version>0.4.1</version>
+  <version>0.4.2</version>
   <scope>compile</scope>
 </dependency>
 ```

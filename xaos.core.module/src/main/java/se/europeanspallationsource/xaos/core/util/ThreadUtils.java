@@ -25,42 +25,41 @@ import static java.util.logging.Level.WARNING;
 /**
  * Various utilities for threads.
  *
- * @author claudiorosati
+ * @author claudio.rosati@esss.se
+ * @see <a href="https://www.baeldung.com/java-delay-code-execution">How to Delay Code Execution in Java</a>
  */
 public class ThreadUtils {
 
 	private static final Logger LOGGER = Logger.getLogger(ThreadUtils.class.getName());
 
 	/**
-	 * Invokes {@link Thread#sleep(long)} taking care of possible exceptions.
+	 * Invokes {@link Thread#sleep(long)} taking care of possible
+	 * {@link InterruptedException}s by propagating the thread interruption.
 	 *
 	 * @param millis The sleep time in milliseconds.
-	 * @return {@code true} if an {@link InterruptedException} occurred.
 	 */
-	public static boolean sleep( long millis ) {
+	public static void sleep( long millis ) {
 		try {
 			Thread.sleep(millis);
-			return false;
 		} catch ( InterruptedException ex ) {
-			LogUtils.log(LOGGER, WARNING, ex, "Sleep interrupted.");
-			return true;
+			LogUtils.log(LOGGER, WARNING, ex, "Sleep interrupted: propagating thread interruption.");
+			Thread.currentThread().interrupt();
 		}
 	}
 
 	/**
-	 * Invokes {@link Thread#sleep(long)} taking care of possible exceptions.
+	 * Invokes {@link Thread#sleep(long)} taking care of possible possible
+	 * {@link InterruptedException}s by propagating the thread interruption.
 	 *
 	 * @param millis The sleep time in milliseconds.
 	 * @param nanos  0-999999 additional nanoseconds to sleep.
-	 * @return {@code true} if an {@link InterruptedException} occurred.
 	 */
-	public static boolean sleep( long millis, int nanos ) {
+	public static void sleep( long millis, int nanos ) {
 		try {
 			Thread.sleep(millis, nanos);
-			return false;
 		} catch ( InterruptedException ex ) {
-			LogUtils.log(LOGGER, WARNING, ex, "Sleep interrupted.");
-			return true;
+			LogUtils.log(LOGGER, WARNING, ex, "Sleep interrupted: propagating thread interruption.");
+			Thread.currentThread().interrupt();
 		}
 	}
 

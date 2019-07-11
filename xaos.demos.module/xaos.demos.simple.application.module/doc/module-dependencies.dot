@@ -6,15 +6,15 @@ digraph "summary" {
   "xaos.core"                                        -> "java.logging (java.logging)";
   "xaos.core"                                        -> "org.apache.commons.lang3";
   "xaos.core"                                        -> "xaos.tools";
+  "xaos.tools"                                       -> "java.base (java.base)";
+  "org.apache.commons.lang3"                         -> "java.base (java.base)";
+  "javafx.base"                                      -> "java.base (java.base)";
   "xaos.app"                                         -> "java.base (java.base)";
   "xaos.app"                                         -> "java.logging (java.logging)";
   "xaos.app"                                         -> "javafx.base";
   "xaos.app"                                         -> "javafx.controls";
   "xaos.app"                                         -> "javafx.graphics";
   "xaos.app"                                         -> "xaos.core";
-  "org.apache.commons.lang3"                         -> "java.base (java.base)";
-  "javafx.base"                                      -> "java.base (java.base)";
-  "xaos.tools"                                       -> "java.base (java.base)";
   "xaos.demos.simple.application"                    -> "java.base (java.base)";
   "xaos.demos.simple.application"                    -> "javafx.controls";
   "xaos.demos.simple.application"                    -> "javafx.graphics";
