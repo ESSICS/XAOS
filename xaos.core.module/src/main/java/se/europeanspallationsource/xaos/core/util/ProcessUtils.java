@@ -34,7 +34,8 @@ public class ProcessUtils {
 
 	/**
 	 * Creates a {@link ProcessBuilder} ready to execute the given class (that
-	 * needs to have a main method) as a detached sub-process.
+	 * needs to have a main method) as a detached sub-process. Current
+	 * class-path will be used to find the given class and its dependencies.
 	 *
 	 * @param clazz   The class to be executed.
 	 * @param jvmArgs The JVM arguments.
@@ -51,7 +52,7 @@ public class ProcessUtils {
 
 		command.add(javaBin);
 		command.addAll(jvmArgs);
-		command.add("-cp");
+		command.add("--class-path");
 		command.add(classpath);
 		command.add(className);
 		command.addAll(args);
@@ -61,8 +62,41 @@ public class ProcessUtils {
 	}
 
 	/**
+	 * Creates a {@link ProcessBuilder} ready to execute the given class (that
+	 * needs to have a main method) as a detached sub-process. Current
+	 * module-path will be used to find the given module and class and its
+	 * dependencies.
+	 *
+	 * @param module  The name of the module containing the class to be executed.
+	 * @param clazz   The class to be executed.
+	 * @param jvmArgs The JVM arguments.
+	 * @param args    The class arguments.
+	 * @return The {@link ProcessBuilder} ready to run the given class.
+	 */
+	public static ProcessBuilder build( String module, Class<?> clazz, List<String> jvmArgs, List<String> args ) {
+
+		String javaHome = System.getProperty("java.home");
+		String javaBin = javaHome + File.separator + "bin" + File.separator + "java";
+		String modulepath = System.getProperty("jdk.module.path");
+		String className = clazz.getName();
+		List<String> command = new ArrayList<>(1 + jvmArgs.size() + 4 + args.size());
+
+		command.add(javaBin);
+		command.addAll(jvmArgs);
+		command.add("--module-path");
+		command.add(modulepath);
+		command.add("--module");
+		command.add(module + "/" + className);
+		command.addAll(args);
+
+		return new ProcessBuilder(command);
+
+	}
+
+	/**
 	 * Executes the given class (that needs to have a main method) as a detached
-	 * sub-process, returning its exit value.
+	 * sub-process, returning its exit value. Current class-path will be used to
+	 * find the given class and its dependencies.
 	 *
 	 * @param clazz   The class to be executed.
 	 * @param jvmArgs The JVM arguments.
@@ -76,6 +110,32 @@ public class ProcessUtils {
 	{
 
 		ProcessBuilder builder = build(clazz, jvmArgs, args);
+		Process process = builder.inheritIO().start();
+
+		process.waitFor();
+
+		return process.exitValue();
+
+	}
+
+	/**
+	 * Executes the given class (that needs to have a main method) as a detached
+	 * sub-process, returning its exit value. Current module-path will be used
+	 * to find the given module and class and its dependencies.
+	 *
+	 * @param module  The name of the module containing the class to be executed.
+	 * @param clazz   The class to be executed.
+	 * @param jvmArgs The JVM arguments.
+	 * @param args    The class arguments.
+	 * @return The class execution exist status.
+	 * @throws java.io.IOException            If an I/O error occurs.
+	 * @throws java.lang.InterruptedException If the execution is interrupted.
+	 */
+	public static int exec( String module, Class<?> clazz, List<String> jvmArgs, List<String> args )
+		throws IOException, InterruptedException
+	{
+
+		ProcessBuilder builder = build(module, clazz, jvmArgs, args);
 		Process process = builder.inheritIO().start();
 
 		process.waitFor();
