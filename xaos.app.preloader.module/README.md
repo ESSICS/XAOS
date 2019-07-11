@@ -28,7 +28,7 @@ TODO:CR
 <dependency>
   <groupId>se.europeanspallationsource</groupId>
   <artifactId>xaos.app.preloader</artifactId>
-  <version>0.4.2</version>
+  <version>0.5.0-SNAPSHOT</version>
   <scope>compile</scope>
 </dependency>
 ```
