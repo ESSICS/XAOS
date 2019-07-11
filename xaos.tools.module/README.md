@@ -98,7 +98,7 @@ annotation processors.
 <dependency>
   <groupId>se.europeanspallationsource</groupId>
   <artifactId>xaos.tools</artifactId>
-  <version>0.4.2</version>
+  <version>0.4.3</version>
   <scope>compile</scope>
 </dependency>
 ```
@@ -116,7 +116,7 @@ plugin list:
       <path>
         <groupId>se.europeanspallationsource</groupId>
         <artifactId>xaos.tools</artifactId>
-        <version>0.4.2</version>
+        <version>0.4.3</version>
       </path>
       <!-- ... more ... -->
     </annotationProcessorPaths>

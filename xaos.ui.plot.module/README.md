@@ -18,7 +18,7 @@ tools for plotting data into a graph.
 <dependency>
   <groupId>se.europeanspallationsource</groupId>
   <artifactId>xaos.ui.plot</artifactId>
-  <version>0.4.2</version>
+  <version>0.4.3</version>
   <scope>compile</scope>
 </dependency>
 ```
