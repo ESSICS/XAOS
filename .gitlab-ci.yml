@@ -27,9 +27,6 @@ compile:
       - xaos.ui.module/target
       - xaos.ui.plot.module/target
     expire_in: 1 day
-  only:
-    - web
-    - schedules
 
 test:
   stage: test
@@ -45,9 +42,6 @@ test:
       - xaos.tools.module/target/surefire-reports/TEST-*.xml
       - xaos.ui.module/target/surefire-reports/TEST-*.xml
       - xaos.tests.tools.module/target/surefire-reports/TEST-*.xml
-  only:
-    - web
-    - schedules
 
 package:
   stage: package
@@ -57,9 +51,6 @@ package:
   script:
     - echo "${GPG_PRIVATE_KEY}" | gpg --batch --import
     - mvn --batch-mode -Dxaos.headless=true -Dgpg.passphrase=${GPG_PASSPHRASE} -Dmaven.test.skip clean install
-  only:
-    - web
-    - schedules
 
 sonar:
   stage: analyse
@@ -67,10 +58,9 @@ sonar:
   tags:
     - docker
   script:
-    - mvn --batch-mode sonar:sonar -Dsonar.login=$SONARQUBE_TOKEN -Dsonar.branch=$CI_COMMIT_REF_SLUG
+    - mvn --batch-mode sonar:sonar -Dsonar.login=$SONARQUBE_TOKEN
   only:
-    - web@ics-software/XAOS
-    - schedules@ics-software/XAOS
+    - master@ics-software/XAOS
 
 publish:
   stage: publish
@@ -80,5 +70,4 @@ publish:
   script:
     - mvn --batch-mode -Dxaos.headless=true -Dserver.id=ossrh -Dserver.username=${USERNAME} -Dserver.password='${PASSWORD}' clean deploy
   only:
-    - web@ics-software/XAOS
-    - schedules@ics-software/XAOS
+    - master@ics-software/XAOS
